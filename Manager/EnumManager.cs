@@ -13,7 +13,7 @@ public enum RouletteType
     StreetBet,
     SquareBet,
     FiveNumberBet,
-    SixNumberBet,
+    LineBet,
     ColumnBet,
     DozenBet,
     LowNumberBet,
@@ -24,7 +24,7 @@ public enum RouletteType
     BlackColorBet
 }
 
-public enum ColorType
+public enum BetMoneyColorType
 {
     Red = 0,
     Black

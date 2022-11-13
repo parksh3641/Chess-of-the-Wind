@@ -8,7 +8,10 @@ public class RouletteContent : MonoBehaviour
     public RouletteType rouletteType = RouletteType.Default;
     public int index = 0;
 
+    private int money = 0;
     private int bettingValue = 0;
+
+    private bool maxBetting = false;
 
     public GameObject main;
     public Text nameText;
@@ -39,13 +42,13 @@ public class RouletteContent : MonoBehaviour
 
         nameText.text = index.ToString();
 
-        SetStraightBet(ColorType.Black);
+        SetStraightBet(BetMoneyColorType.Black);
 
         for (int i = 1; i < redIndex.Length; i++)
         {
             if (index == redIndex[i])
             {
-                SetStraightBet(ColorType.Red);
+                SetStraightBet(BetMoneyColorType.Red);
                 break;
             }
         }
@@ -59,13 +62,13 @@ public class RouletteContent : MonoBehaviour
                 break;
             case RouletteType.StraightBet:
                 nameText.text = index.ToString();
-                SetStraightBet(ColorType.Black);
+                SetStraightBet(BetMoneyColorType.Black);
 
                 for (int i = 1; i < redIndex.Length; i ++)
                 {
                     if(index == redIndex[i])
                     {
-                        SetStraightBet(ColorType.Red);
+                        SetStraightBet(BetMoneyColorType.Red);
                         break;
                     }
                 }
@@ -86,7 +89,7 @@ public class RouletteContent : MonoBehaviour
                 backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
                 main.SetActive(false);
                 break;
-            case RouletteType.SixNumberBet:
+            case RouletteType.LineBet:
                 backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
                 main.SetActive(false);
                 break;
@@ -121,23 +124,23 @@ public class RouletteContent : MonoBehaviour
                 break;
             case RouletteType.RedColorBet:
                 nameText.text = "";
-                SetStraightBet(ColorType.Red);
+                SetStraightBet(BetMoneyColorType.Red);
                 break;
             case RouletteType.BlackColorBet:
                 nameText.text = "";
-                SetStraightBet(ColorType.Black);
+                SetStraightBet(BetMoneyColorType.Black);
                 break;
         }
     }
 
-    void SetStraightBet(ColorType type)
+    void SetStraightBet(BetMoneyColorType type)
     {
         switch (type)
         {
-            case ColorType.Red:
+            case BetMoneyColorType.Red:
                 backgroundImg.color = new Color(1, 0, 0);
                 break;
-            case ColorType.Black:
+            case BetMoneyColorType.Black:
                 backgroundImg.color = new Color(0, 0, 0);
                 break;
         }
@@ -148,46 +151,106 @@ public class RouletteContent : MonoBehaviour
         gameManager.Betting(rouletteType, index);
     }
 
+    public void ResetBettingMoney()
+    {
+        moneyContent.gameObject.SetActive(false);
+
+        money = 0;
+        maxBetting = false;
+    }
+
     public void SetBettingMoney(MoneyType type)
     {
-        moneyContent.gameObject.SetActive(true);
+        bettingValue = 0;
 
         switch (type)
         {
             case MoneyType.One:
-                bettingValue += 1;
+                bettingValue = 1;
                 break;
             case MoneyType.Two:
-                bettingValue += 2;
+                bettingValue = 2;
                 break;
             case MoneyType.Three:
-                bettingValue += 5;
+                bettingValue = 5;
                 break;
             case MoneyType.Four:
-                bettingValue += 10;
+                bettingValue = 10;
                 break;
             case MoneyType.Five:
-                bettingValue += 25;
+                bettingValue = 25;
                 break;
             case MoneyType.Six:
-                bettingValue += 50;
+                bettingValue = 50;
                 break;
             case MoneyType.Seven:
-                bettingValue += 100;
+                bettingValue = 100;
                 break;
             case MoneyType.Eight:
-                bettingValue += 500;
+                bettingValue = 500;
                 break;
             case MoneyType.Nine:
-                bettingValue += 1000;
+                bettingValue = 1000;
                 break;
         }
 
-        if (bettingValue >= 5000)
+        if (GameManager.instance.money - bettingValue < 0)
         {
-            bettingValue = 5000;
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            return;
         }
 
-        moneyContent.SetBettingMoney(bettingValue);
+        if (maxBetting)
+        {
+            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            return;
+        }
+        else
+        {
+            moneyContent.gameObject.SetActive(true);
+
+            gameManager.SetBettingMoney(bettingValue);
+
+            if (money + bettingValue > 1000)
+            {
+                gameManager.ReturnBettingMoney((money + bettingValue) - 1000);
+
+                money = 1000;
+
+                maxBetting = true;
+            }
+            else
+            {
+                money += bettingValue;
+            }
+
+            moneyContent.SetBettingMoney(money);
+        }
+    }
+
+    public void DoubleBetting()
+    {
+        if(money <= 0 || money >= 1000 || money + money >= 1000)
+        {
+            return;
+        }
+
+        if(GameManager.instance.saveBetMoney + money > 5000)
+        {
+            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            return;
+        }
+
+        if (GameManager.instance.money - money < 0)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            return;
+        }
+
+        gameManager.SetBettingMoney(money);
+
+        money = money * 2;
+
+        moneyContent.SetBettingMoney(money);
     }
 }

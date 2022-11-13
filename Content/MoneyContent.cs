@@ -13,7 +13,7 @@ public class MoneyContent : MonoBehaviour
 
     GameManager gameManager;
 
-    private int[] moneyArray = { 1, 2, 5, 10, 25, 50, 100, 500, 1000 };
+    private int[] moneyArray = { 1, 2, 5, 10, 25, 50, 100, 500, 1000, 99999 };
 
     private void Awake()
     {
@@ -72,7 +72,7 @@ public class MoneyContent : MonoBehaviour
 
         for(int i = 0; i < moneyArray.Length; i ++)
         {
-            if(number > moneyArray[i])
+            if(number >= moneyArray[i + 1])
             {
                 index++;
             }
