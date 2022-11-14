@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public MoneyType moneyType = MoneyType.One;
 
-    public int autoTargetNumber = 0;
+    public int autoTargetNumber = -1;
     public int startMoney = 50000;
 
     public RouletteContent rouletteContent;
@@ -82,6 +82,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        Application.targetFrameRate = 60;
+        
 
         BetInitialize();
 
@@ -447,13 +450,14 @@ public class GameManager : MonoBehaviour
     {
         getMoney = 0;
         saveBetMoney = 0;
+        bettingValue = 0;
 
         for (int i = 0; i < allContentList.Count; i++)
         {
             allContentList[i].ResetBettingMoney();
         }
 
-        straightBet = new int[36];
+        straightBet = new int[37];
         splitBet = new int[60];
         streetBet = new int[14];
         squareBet = new int[22];
@@ -504,7 +508,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RandomTargetNumber()
     {
-        if(autoTargetNumber == 0)
+        if(autoTargetNumber == -1)
         {
             targetNumber = Random.Range(0, 37);
         }
@@ -585,6 +589,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if(saveBetMoney >= 5000)
+        {
+            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            return;
+        }
+
 
         switch (rouletteType)
         {
@@ -602,7 +612,7 @@ public class GameManager : MonoBehaviour
                 {
                     rouletteContentList[number - 1].SetBettingMoney(moneyType);
 
-                    straightBet[number - 1] += bettingValue;
+                    straightBet[number] += bettingValue;
                 }
 
                 break;
@@ -884,7 +894,7 @@ public class GameManager : MonoBehaviour
 
     void CheckGame()
     {
-        getMoney += straightBet[targetNumber - 1] * 35; //Straight 베팅
+        getMoney += straightBet[targetNumber] * 35; //Straight 베팅
 
         for(int i = 0; i < column1Index.Length; i ++) //Column 베팅
         {

@@ -194,12 +194,6 @@ public class RouletteContent : MonoBehaviour
                 break;
         }
 
-        if (GameManager.instance.money - bettingValue < 0)
-        {
-            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-            return;
-        }
-
         if (maxBetting)
         {
             NotionManager.instance.UseNotion(NotionType.MaxBetting);
