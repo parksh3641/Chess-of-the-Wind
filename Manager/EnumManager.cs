@@ -24,13 +24,14 @@ public enum RouletteType
     BlackColorBet
 }
 
-public enum BetMoneyColorType
+public enum RouletteColorType
 {
     Red = 0,
-    Black
+    Black,
+    Yellow
 }
 
-public enum MoneyType
+public enum TestMoneyType
 {
     One,
     Two,
@@ -41,6 +42,18 @@ public enum MoneyType
     Seven,
     Eight,
     Nine
+}
+
+public enum BlockType
+{
+    Default,
+    I,
+    O,
+    T,
+    L,
+    J,
+    S,
+    Z,
 }
 
 public enum BetOptionType

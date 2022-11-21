@@ -2,249 +2,93 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using Sirenix.OdinInspector;
+using System.Linq;
 
-public class RouletteContent : MonoBehaviour
+public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
     public RouletteType rouletteType = RouletteType.Default;
-    public int index = 0;
+    public RouletteColorType rouletteColorType = RouletteColorType.Red;
+    public int[] index = new int[2];
 
-    private int money = 0;
-    private int bettingValue = 0;
+    [Title("Active")]
+    public BlockType blockType = BlockType.Default;
+    public bool isActive = false;
 
-    private bool maxBetting = false;
-
-    public GameObject main;
-    public Text nameText;
+    [Title("Main")]
+    public Text numberText;
     public Image backgroundImg;
 
-    public MoneyContent moneyContent;
+    private Transform blockParent;
+    GameManager gameManager;
 
-    public GameManager gameManager;
-
-    private int[] redIndex = { 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36 };
-
-    private void Awake()
+    void Awake()
     {
-        moneyContent.gameObject.SetActive(false);
+
     }
 
-    private void Start()
-    {
-        nameText.color = new Color(1, 1, 1);
-        Initialize();
-    }
 
-    public void Initialize(GameManager manager, RouletteType type, int number)
+    public void Initialize(GameManager manager, Transform parent, RouletteType type, int[] setIndex, int number)
     {
         gameManager = manager;
+        blockParent = parent;
         rouletteType = type;
-        index = number;
+        index = setIndex;
 
-        nameText.text = index.ToString();
+        numberText.text = (number + 1).ToString();
 
-        SetStraightBet(BetMoneyColorType.Black);
-
-        for (int i = 1; i < redIndex.Length; i++)
+        if (number % 2 == 0)
         {
-            if (index == redIndex[i])
-            {
-                SetStraightBet(BetMoneyColorType.Red);
-                break;
-            }
-        }
-    }
-
-    void Initialize()
-    {
-        switch (rouletteType)
-        {
-            case RouletteType.Default:
-                break;
-            case RouletteType.StraightBet:
-                nameText.text = index.ToString();
-                SetStraightBet(BetMoneyColorType.Black);
-
-                for (int i = 1; i < redIndex.Length; i ++)
-                {
-                    if(index == redIndex[i])
-                    {
-                        SetStraightBet(BetMoneyColorType.Red);
-                        break;
-                    }
-                }
-                break;
-            case RouletteType.SplitBet:
-                backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
-                main.SetActive(false);
-                break;
-            case RouletteType.StreetBet:
-                backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
-                main.SetActive(false);
-                break;
-            case RouletteType.SquareBet:
-                backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
-                main.SetActive(false);
-                break;
-            case RouletteType.FiveNumberBet:
-                backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
-                main.SetActive(false);
-                break;
-            case RouletteType.LineBet:
-                backgroundImg.color = new Color(0, 0, 0, 1 / 255f);
-                main.SetActive(false);
-                break;
-            case RouletteType.ColumnBet:
-                nameText.text = "2:1";
-                break;
-            case RouletteType.DozenBet:
-                switch(index)
-                {
-                    case 0:
-                        nameText.text = "1st - 12";
-                        break;
-                    case 1:
-                        nameText.text = "2st - 12";
-                        break;
-                    case 2:
-                        nameText.text = "3st - 12";
-                        break;
-                }
-                break;
-            case RouletteType.LowNumberBet:
-                nameText.text = "1 - 18";
-                break;
-            case RouletteType.HighNumberBet:
-                nameText.text = "19 - 36";
-                break;
-            case RouletteType.EvenNumberBet:
-                nameText.text = "EVEN";
-                break;
-            case RouletteType.OddNumberBet:
-                nameText.text = "ODD";
-                break;
-            case RouletteType.RedColorBet:
-                nameText.text = "";
-                SetStraightBet(BetMoneyColorType.Red);
-                break;
-            case RouletteType.BlackColorBet:
-                nameText.text = "";
-                SetStraightBet(BetMoneyColorType.Black);
-                break;
-        }
-    }
-
-    void SetStraightBet(BetMoneyColorType type)
-    {
-        switch (type)
-        {
-            case BetMoneyColorType.Red:
-                backgroundImg.color = new Color(1, 0, 0);
-                break;
-            case BetMoneyColorType.Black:
-                backgroundImg.color = new Color(0, 0, 0);
-                break;
-        }
-    }
-
-    public void OnClick()
-    {
-        gameManager.Betting(rouletteType, index);
-    }
-
-    public void ResetBettingMoney()
-    {
-        moneyContent.gameObject.SetActive(false);
-
-        money = 0;
-        maxBetting = false;
-    }
-
-    public void SetBettingMoney(MoneyType type)
-    {
-        bettingValue = 0;
-
-        switch (type)
-        {
-            case MoneyType.One:
-                bettingValue = 1;
-                break;
-            case MoneyType.Two:
-                bettingValue = 2;
-                break;
-            case MoneyType.Three:
-                bettingValue = 5;
-                break;
-            case MoneyType.Four:
-                bettingValue = 10;
-                break;
-            case MoneyType.Five:
-                bettingValue = 25;
-                break;
-            case MoneyType.Six:
-                bettingValue = 50;
-                break;
-            case MoneyType.Seven:
-                bettingValue = 100;
-                break;
-            case MoneyType.Eight:
-                bettingValue = 500;
-                break;
-            case MoneyType.Nine:
-                bettingValue = 1000;
-                break;
-        }
-
-        if (maxBetting)
-        {
-            NotionManager.instance.UseNotion(NotionType.MaxBetting);
-            return;
+            rouletteColorType = RouletteColorType.Red;
         }
         else
         {
-            moneyContent.gameObject.SetActive(true);
+            rouletteColorType = RouletteColorType.Black;
+        }
 
-            gameManager.SetBettingMoney(bettingValue);
+        SetBackgroundColor(rouletteColorType);
+    }
 
-            if (money + bettingValue > 1000)
-            {
-                gameManager.ReturnBettingMoney((money + bettingValue) - 1000);
-
-                money = 1000;
-
-                maxBetting = true;
-            }
-            else
-            {
-                money += bettingValue;
-            }
-
-            moneyContent.SetBettingMoney(money);
+    public void SetBackgroundColor(RouletteColorType type)
+    {
+        switch (type)
+        {
+            case RouletteColorType.Red:
+                backgroundImg.color = Color.red;
+                break;
+            case RouletteColorType.Black:
+                backgroundImg.color = Color.black;
+                break;
+            case RouletteColorType.Yellow:
+                backgroundImg.color = Color.yellow;
+                break;
         }
     }
 
-    public void DoubleBetting()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if(money <= 0 || money >= 1000 || money + money >= 1000)
+        if (gameManager.blockDrag)
         {
-            return;
-        }
+            SetBackgroundColor(RouletteColorType.Yellow);
 
-        if(GameManager.instance.saveBetMoney + money > 5000)
+            gameManager.EnterBlock(this);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetBackgroundColor(rouletteColorType);
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if(eventData.pointerDrag != null)
         {
-            NotionManager.instance.UseNotion(NotionType.MaxBetting);
-            return;
+            eventData.pointerDrag.transform.SetParent(blockParent);
+            eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+
+            gameManager.ExitBlock(this);
         }
-
-        if (GameManager.instance.money - money < 0)
-        {
-            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-            return;
-        }
-
-        gameManager.SetBettingMoney(money);
-
-        money = money * 2;
-
-        moneyContent.SetBettingMoney(money);
     }
 }

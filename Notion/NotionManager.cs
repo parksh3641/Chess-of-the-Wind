@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,22 +82,22 @@ public class NotionManager : MonoBehaviour
                 switch (type)
                 {
                     case NotionType.Test:
-                        notion.txt.text = "Å×½ºÆ®";
+                        notion.txt.text = "í…ŒìŠ¤íŠ¸";
                         break;
                     case NotionType.MaxBetting:
-                        notion.txt.text = "´õ ÀÌ»ó º£ÆÃÇÒ ¼ö ¾ø½À´Ï´Ù";
+                        notion.txt.text = "ë” ì´ìƒ ë² íŒ…í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
                         break;
                     case NotionType.NotEnoughMoney:
-                        notion.txt.text = "º£ÆÃ ÇÒ ±İ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù";
+                        notion.txt.text = "ë² íŒ… í•  ê¸ˆì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤";
                         break;
                     case NotionType.Double:
-                        notion.txt.text = "ÇöÀç º£ÆÃµÈ ±İ¾×À» 2¹è·Î ³ôÀÔ´Ï´Ù";
+                        notion.txt.text = "í˜„ì¬ ë² íŒ…ëœ ê¸ˆì•¡ì„ 2ë°°ë¡œ ë†’ì…ë‹ˆë‹¤";
                         break;
                     case NotionType.Cancle:
-                        notion.txt.text = "º£ÆÃÀ» Ãë¼ÒÇß½À´Ï´Ù";
+                        notion.txt.text = "ë² íŒ…ì„ ì·¨ì†Œí–ˆìŠµë‹ˆë‹¤";
                         break;
                     case NotionType.Repeat:
-                        notion.txt.text = "Àü¿¡ Çß´ø º£ÆÃ À§Ä¡¿Í ±İ¾×À» °¡Á®¿É´Ï´Ù";
+                        notion.txt.text = "ì „ì— í–ˆë˜ ë² íŒ… ìœ„ì¹˜ì™€ ê¸ˆì•¡ì„ ê°€ì ¸ì˜µë‹ˆë‹¤";
                         break;
                 }
                 SetColor(list.colorType);
