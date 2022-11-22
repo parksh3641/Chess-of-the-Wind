@@ -9,8 +9,9 @@ using System.Linq;
 public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
     public RouletteType rouletteType = RouletteType.Default;
-    public RouletteColorType rouletteColorType = RouletteColorType.Red;
+    public RouletteColorType rouletteColorType = RouletteColorType.White;
     public int[] index = new int[2];
+    public int number = 0;
 
     [Title("Active")]
     public BlockType blockType = BlockType.Default;
@@ -29,18 +30,19 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     }
 
 
-    public void Initialize(GameManager manager, Transform parent, RouletteType type, int[] setIndex, int number)
+    public void Initialize(GameManager manager, Transform parent, RouletteType type, int[] setIndex, int num)
     {
         gameManager = manager;
         blockParent = parent;
         rouletteType = type;
         index = setIndex;
 
-        numberText.text = (number + 1).ToString();
+        number = num + 1;
+        numberText.text = number.ToString();
 
         if (number % 2 == 0)
         {
-            rouletteColorType = RouletteColorType.Red;
+            rouletteColorType = RouletteColorType.White;
         }
         else
         {
@@ -54,8 +56,8 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     {
         switch (type)
         {
-            case RouletteColorType.Red:
-                backgroundImg.color = Color.red;
+            case RouletteColorType.White:
+                backgroundImg.color = Color.white;
                 break;
             case RouletteColorType.Black:
                 backgroundImg.color = Color.black;
@@ -66,29 +68,59 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         }
     }
 
+    public void ResetBackgroundColor()
+    {
+        SetBackgroundColor(rouletteColorType);
+    }
+
+    public void SetActiveTrue(BlockType type)
+    {
+        blockType = type;
+        isActive = true;
+
+        SetBackgroundColor(rouletteColorType);
+    }
+
+    public void SetActiveFalse()
+    {
+        blockType = BlockType.Default;
+
+        isActive = false;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (gameManager.blockDrag)
         {
-            SetBackgroundColor(RouletteColorType.Yellow);
-
-            gameManager.EnterBlock(this);
+            gameManager.EnterBlock(this, eventData.pointerDrag.transform.GetComponent<BlockContent>());
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        SetBackgroundColor(rouletteColorType);
+
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        if(eventData.pointerDrag != null)
+        if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
         {
-            eventData.pointerDrag.transform.SetParent(blockParent);
-            eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+            if(gameManager.money >= 4000)
+            {
+                eventData.pointerDrag.transform.SetParent(blockParent);
+                eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
 
-            gameManager.ExitBlock(this);
+                gameManager.ExitBlock(eventData.pointerDrag.GetComponent<BlockContent>());
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            }
+        }
+
+        if(gameManager.blockOverlap)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotBettingLocation);
         }
     }
 }

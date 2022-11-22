@@ -48,7 +48,7 @@ public class TestRouletteContent : MonoBehaviour
         {
             if (index == redIndex[i])
             {
-                SetStraightBet(RouletteColorType.Red);
+                SetStraightBet(RouletteColorType.White);
                 break;
             }
         }
@@ -68,7 +68,7 @@ public class TestRouletteContent : MonoBehaviour
                 {
                     if(index == redIndex[i])
                     {
-                        SetStraightBet(RouletteColorType.Red);
+                        SetStraightBet(RouletteColorType.White);
                         break;
                     }
                 }
@@ -124,7 +124,7 @@ public class TestRouletteContent : MonoBehaviour
                 break;
             case RouletteType.RedColorBet:
                 nameText.text = "";
-                SetStraightBet(RouletteColorType.Red);
+                SetStraightBet(RouletteColorType.White);
                 break;
             case RouletteType.BlackColorBet:
                 nameText.text = "";
@@ -137,7 +137,7 @@ public class TestRouletteContent : MonoBehaviour
     {
         switch (type)
         {
-            case RouletteColorType.Red:
+            case RouletteColorType.White:
                 backgroundImg.color = new Color(1, 0, 0);
                 break;
             case RouletteColorType.Black:
@@ -196,7 +196,7 @@ public class TestRouletteContent : MonoBehaviour
 
         if (maxBetting)
         {
-            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            //NotionManager.instance.UseNotion(NotionType.MaxBetting);
             return;
         }
         else
@@ -231,7 +231,7 @@ public class TestRouletteContent : MonoBehaviour
 
         if(TestGameManager.instance.saveBetMoney + money > 5000)
         {
-            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            //NotionManager.instance.UseNotion(NotionType.MaxBetting);
             return;
         }
 

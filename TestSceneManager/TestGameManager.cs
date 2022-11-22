@@ -591,7 +591,7 @@ public class TestGameManager : MonoBehaviour
 
         if(saveBetMoney >= 5000)
         {
-            NotionManager.instance.UseNotion(NotionType.MaxBetting);
+            //NotionManager.instance.UseNotion(NotionType.MaxBetting);
             return;
         }
 
@@ -871,8 +871,6 @@ public class TestGameManager : MonoBehaviour
                     allContentList[i].DoubleBetting();
                 }
 
-                NotionManager.instance.UseNotion(NotionType.Double);
-
                 break;
             case BetOptionType.Cancle:
 
@@ -885,8 +883,6 @@ public class TestGameManager : MonoBehaviour
 
                 break;
             case BetOptionType.Repeat:
-
-                NotionManager.instance.UseNotion(NotionType.Repeat);
 
                 break;
         }

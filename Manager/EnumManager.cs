@@ -26,7 +26,7 @@ public enum RouletteType
 
 public enum RouletteColorType
 {
-    Red = 0,
+    White = 0,
     Black,
     Yellow
 }

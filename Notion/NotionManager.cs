@@ -84,20 +84,14 @@ public class NotionManager : MonoBehaviour
                     case NotionType.Test:
                         notion.txt.text = "테스트";
                         break;
-                    case NotionType.MaxBetting:
-                        notion.txt.text = "더 이상 베팅할 수 없습니다";
-                        break;
                     case NotionType.NotEnoughMoney:
-                        notion.txt.text = "베팅 할 금액이 부족합니다";
+                        notion.txt.text = "돈이 없어요";
                         break;
-                    case NotionType.Double:
-                        notion.txt.text = "현재 베팅된 금액을 2배로 높입니다";
+                    case NotionType.NotBettingLocation:
+                        notion.txt.text = "그 위치에는 놓을 수 없어요";
                         break;
                     case NotionType.Cancle:
-                        notion.txt.text = "베팅을 취소했습니다";
-                        break;
-                    case NotionType.Repeat:
-                        notion.txt.text = "전에 했던 베팅 위치와 금액을 가져옵니다";
+                        notion.txt.text = "베팅을 취소했어요";
                         break;
                 }
                 SetColor(list.colorType);
@@ -160,10 +154,7 @@ public enum EffectType
 public enum NotionType
 {
     Test,
-    MaxBetting,
     NotEnoughMoney,
-    Double,
-    Cancle,
-    Repeat,
-    
+    NotBettingLocation,
+    Cancle
 }
