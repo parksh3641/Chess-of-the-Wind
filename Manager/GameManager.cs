@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public int autoTargetNumber = -1;
     public int setMoney = 50000;
     public int setTimer = 16;
+    public bool checkOverlap = false;
 
     [Title("Setting")]
     public GridLayoutGroup gridLayoutGroup;
@@ -59,14 +60,31 @@ public class GameManager : MonoBehaviour
     public RouletteContent rouletteContent;
     public RectTransform rouletteContentTransform;
 
+    public RectTransform rouletteContentTransformSplitBet_Horizontal;
+    public RectTransform rouletteContentTransformSplitBet_Vertical;
+
+    public RectTransform rouletteContentTransformSquareBet;
+
+    public NumberContent numberContent;
+    public RectTransform numberContentTransform;
+
     public BlockContent blockContent;
     public RectTransform blockContentTransform;
 
     List<RouletteContent> rouletteContentList = new List<RouletteContent>();
+    List<RouletteContent> rouletteSplitContentList_Horizontal = new List<RouletteContent>();
+    List<RouletteContent> rouletteSplitContentList_Vertical = new List<RouletteContent>();
+    List<RouletteContent> rouletteSquareContentList = new List<RouletteContent>();
+
+    List<RouletteContent> numberContentList = new List<RouletteContent>();
     List<BlockContent> blockContentList = new List<BlockContent>();
+
+    BlockDataBase blockDataBase;
 
     private void Awake()
     {
+        if(blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
+
         instance = this;
 
         Application.targetFrameRate = 60;
@@ -103,6 +121,91 @@ public class GameManager : MonoBehaviour
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
             rouletteContentList.Add(content);
+
+            NumberContent numContent = Instantiate(numberContent);
+            numContent.transform.parent = numberContentTransform;
+            numContent.transform.localPosition = Vector3.zero;
+            numContent.transform.localScale = Vector3.one;
+            numContent.Initialize(i);
+            numberContentList.Add(content);
+
+            index++;
+        }
+
+        index = 0;
+        count = 0;
+
+        for (int i = 0; i < 20; i ++)
+        {
+            int[] setIndex = new int[2];
+
+            if (index >= gridConstraintCount - 1)
+            {
+                index = 0;
+                count++;
+            }
+
+            setIndex[0] = index;
+            setIndex[1] = count;
+
+            RouletteContent content = Instantiate(rouletteContent);
+            content.transform.parent = rouletteContentTransformSplitBet_Horizontal;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockParent.transform, RouletteType.SplitBet_Horizontal, setIndex, i);
+            rouletteSplitContentList_Horizontal.Add(content);
+
+            index++;
+        }
+
+        index = 0;
+        count = 0;
+
+        for (int i = 0; i < 20; i++)
+        {
+            int[] setIndex = new int[2];
+
+            if (index >= gridConstraintCount)
+            {
+                index = 0;
+                count++;
+            }
+
+            setIndex[0] = index;
+            setIndex[1] = count;
+
+            RouletteContent content = Instantiate(rouletteContent);
+            content.transform.parent = rouletteContentTransformSplitBet_Vertical;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockParent.transform, RouletteType.SplitBet_Vertical, setIndex, i);
+            rouletteSplitContentList_Vertical.Add(content);
+
+            index++;
+        }
+
+        index = 0;
+        count = 0;
+
+        for (int i = 0; i < 16; i++)
+        {
+            int[] setIndex = new int[2];
+
+            if (index >= gridConstraintCount - 1)
+            {
+                index = 0;
+                count++;
+            }
+
+            setIndex[0] = index;
+            setIndex[1] = count;
+
+            RouletteContent content = Instantiate(rouletteContent);
+            content.transform.parent = rouletteContentTransformSquareBet;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockParent.transform, RouletteType.SquareBet, setIndex, i);
+            rouletteSquareContentList.Add(content);
 
             index++;
         }
@@ -179,9 +282,20 @@ public class GameManager : MonoBehaviour
 
         dontTouchObj.SetActive(true);
 
-        timerText.text = "3초 뒤에 다시 시작합니다.";
+        ResetRouletteContent();
 
-        yield return new WaitForSeconds(3f);
+        for(int i = 0; i < blockContentList.Count; i ++)
+        {
+            if(blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        timerText.text = "5초 뒤에 다시 시작합니다.";
+
+        yield return new WaitForSeconds(5f);
 
         for (int i = 0; i < blockContentList.Count; i++)
         {
@@ -281,26 +395,79 @@ public class GameManager : MonoBehaviour
     int[] index1 = new int[2];
     int[] index2 = new int[2];
     int[] index3 = new int[2];
+    int[] index4 = new int[2];
+    int[] index5 = new int[2];
+    int[] index6 = new int[2];
+    int[] index7 = new int[2];
+    int[] index8 = new int[2];
 
     public void EnterBlock(RouletteContent rouletteContent, BlockContent blockContent)
     {
         targetBlockContent = blockContent.transform;
 
-        for (int i = 0; i < rouletteContentList.Count; i ++)
+        switch (rouletteContent.rouletteType)
         {
-            if(rouletteContentList[i].blockType == blockContent.blockType)
-            {
-                rouletteContentList[i].SetActiveFalse();
+            case RouletteType.Default:
+                break;
+            case RouletteType.StraightBet:
+                for (int i = 0; i < rouletteContentList.Count; i++)
+                {
+                    if (rouletteContentList[i].blockType == blockContent.blockType)
+                    {
+                        rouletteContentList[i].SetActiveFalse();
 
-                bettingMoney -= 1000;
-                ChangeMoney(1000);
-            }
+                        bettingMoney -= 1000;
+                        ChangeMoney(1000);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Horizontal:
+                for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+                {
+                    if (rouletteSplitContentList_Horizontal[i].blockType == blockContent.blockType)
+                    {
+                        rouletteSplitContentList_Horizontal[i].SetActiveFalse();
+
+                        bettingMoney -= 1000;
+                        ChangeMoney(1000);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Vertical:
+                for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+                {
+                    if (rouletteSplitContentList_Vertical[i].blockType == blockContent.blockType)
+                    {
+                        rouletteSplitContentList_Vertical[i].SetActiveFalse();
+
+                        bettingMoney -= 1000;
+                        ChangeMoney(1000);
+                    }
+                }
+                break;
+            case RouletteType.SquareBet:
+                for (int i = 0; i < rouletteSquareContentList.Count; i++)
+                {
+                    if (rouletteSquareContentList[i].blockType == blockContent.blockType)
+                    {
+                        rouletteSquareContentList[i].SetActiveFalse();
+
+                        bettingMoney -= 1000;
+                        ChangeMoney(1000);
+                    }
+                }
+                break;
         }
 
         index0 = new int[2];
         index1 = new int[2];
         index2 = new int[2];
         index3 = new int[2];
+        index4 = new int[2];
+        index5 = new int[2];
+        index6 = new int[2];
+        index7 = new int[2];
+        index8 = new int[2];
 
         switch (blockContent.blockType)
         {
@@ -313,11 +480,26 @@ public class GameManager : MonoBehaviour
                 index1[0] = rouletteContent.index[0];
                 index1[1] = rouletteContent.index[1] - 1;
 
-                index2[0] = rouletteContent.index[0];
+                index2[0] = rouletteContent.index[0]; //마우스 포인터 기준점
                 index2[1] = rouletteContent.index[1];
 
                 index3[0] = rouletteContent.index[0];
                 index3[1] = rouletteContent.index[1] + 1;
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.O:
                 index0[0] = rouletteContent.index[0];
@@ -331,6 +513,21 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] + 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.T:
                 index0[0] = rouletteContent.index[0];
@@ -344,6 +541,21 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] + 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.L:
                 index0[0] = rouletteContent.index[0] + 1;
@@ -357,6 +569,21 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] + 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.J:
                 index0[0] = rouletteContent.index[0] - 1;
@@ -370,6 +597,21 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] + 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.S:
                 index0[0] = rouletteContent.index[0];
@@ -383,6 +625,21 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] - 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
             case BlockType.Z:
                 index0[0] = rouletteContent.index[0] - 1;
@@ -396,70 +653,334 @@ public class GameManager : MonoBehaviour
 
                 index3[0] = rouletteContent.index[0] + 1;
                 index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
+                break;
+            case BlockType.BigO:
+                index0[0] = rouletteContent.index[0] - 1;
+                index0[1] = rouletteContent.index[1] - 1;
+
+                index1[0] = rouletteContent.index[0];
+                index1[1] = rouletteContent.index[1] - 1;
+
+                index2[0] = rouletteContent.index[0] + 1;
+                index2[1] = rouletteContent.index[1] - 1;
+
+                index3[0] = rouletteContent.index[0] - 1;
+                index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0] + 1;
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0] - 1;
+                index6[1] = rouletteContent.index[1] + 1;
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1] + 1;
+
+                index8[0] = rouletteContent.index[0] + 1;
+                index8[1] = rouletteContent.index[1] + 1;
+                break;
+            case BlockType.I_Horizontal:
+                index0[0] = rouletteContent.index[0] - 1;
+                index0[1] = rouletteContent.index[1];
+
+                index1[0] = rouletteContent.index[0];
+                index1[1] = rouletteContent.index[1];
+
+                index2[0] = rouletteContent.index[0] + 1;
+                index2[1] = rouletteContent.index[1];
+
+                index3[0] = rouletteContent.index[0] + 2;
+                index3[1] = rouletteContent.index[1];
+
+                index4[0] = rouletteContent.index[0];
+                index4[1] = rouletteContent.index[1];
+
+                index5[0] = rouletteContent.index[0];
+                index5[1] = rouletteContent.index[1];
+
+                index6[0] = rouletteContent.index[0];
+                index6[1] = rouletteContent.index[1];
+
+                index7[0] = rouletteContent.index[0];
+                index7[1] = rouletteContent.index[1];
+
+                index8[0] = rouletteContent.index[0];
+                index8[1] = rouletteContent.index[1];
                 break;
         }
 
         ResetRouletteContent();
 
-        for (int i = 0; i < rouletteContentList.Count; i ++)
+        switch (rouletteContent.rouletteType)
         {
-            if(rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3))
-            {
-                rouletteContentList[i].SetBackgroundColor(RouletteColorType.Yellow);
-            }
+            case RouletteType.Default:
+                break;
+            case RouletteType.StraightBet:
+                for (int i = 0; i < rouletteContentList.Count; i++)
+                {
+                    if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
+                        || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
+                        || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
+                        || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
+                        || rouletteContentList[i].index.SequenceEqual(index8))
+                    {
+                        rouletteContentList[i].SetBackgroundColor(RouletteColorType.Yellow);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Horizontal:
+                for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+                {
+                    if (rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index0) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index1)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index2) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index3)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index4) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index5)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index6) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index7)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSplitContentList_Horizontal[i].SetBackgroundColor(RouletteColorType.Yellow);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Vertical:
+                for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+                {
+                    if (rouletteSplitContentList_Vertical[i].index.SequenceEqual(index0) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index1)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index2) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index3)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index4) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index5)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index6) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index7)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSplitContentList_Vertical[i].SetBackgroundColor(RouletteColorType.Yellow);
+                    }
+                }
+                break;
+            case RouletteType.SquareBet:
+                for (int i = 0; i < rouletteSquareContentList.Count; i++)
+                {
+                    if (rouletteSquareContentList[i].index.SequenceEqual(index0) || rouletteSquareContentList[i].index.SequenceEqual(index1)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index2) || rouletteSquareContentList[i].index.SequenceEqual(index3)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index4) || rouletteSquareContentList[i].index.SequenceEqual(index5)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index6) || rouletteSquareContentList[i].index.SequenceEqual(index7)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSquareContentList[i].SetBackgroundColor(RouletteColorType.Yellow);
+                    }
+                }
+                break;
         }
 
-        if(index0[0] < 0 || index0[1] < 0 || index1[0] < 0 || index1[1] < 0 || index2[0] < 0 || index2[1] < 0 || index3[0] < 0 || index3[1] < 0
-            || index0[0] >= gridConstraintCount || index0[1] >= gridConstraintCount || index1[0] >= gridConstraintCount || index1[1] >= gridConstraintCount
-            || index2[0] >= gridConstraintCount || index2[1] >= gridConstraintCount || index3[0] >= gridConstraintCount || index3[1] >= gridConstraintCount)
+        //범위 밖 넘어갔는지 체크
+
+        switch (rouletteContent.rouletteType)
         {
-            blockDrop = false;
-        }
-        else
-        {
-            blockDrop = true;
+            case RouletteType.Default:
+                break;
+            case RouletteType.StraightBet:
+                if (index0[0] < 0 || index0[1] < 0 || index1[0] < 0 || index1[1] < 0 || index2[0] < 0 || index2[1] < 0 || index3[0] < 0 || index3[1] < 0
+    || index0[0] >= gridConstraintCount || index0[1] >= gridConstraintCount || index1[0] >= gridConstraintCount || index1[1] >= gridConstraintCount
+    || index2[0] >= gridConstraintCount || index2[1] >= gridConstraintCount || index3[0] >= gridConstraintCount || index3[1] >= gridConstraintCount
+    || index4[0] >= gridConstraintCount || index4[1] >= gridConstraintCount || index5[0] >= gridConstraintCount || index5[1] >= gridConstraintCount
+    || index6[0] >= gridConstraintCount || index6[1] >= gridConstraintCount || index7[0] >= gridConstraintCount || index7[1] >= gridConstraintCount
+    || index8[0] >= gridConstraintCount || index8[1] >= gridConstraintCount)
+                {
+                    blockDrop = false;
+                }
+                else
+                {
+                    blockDrop = true;
+                }
+                break;
+            case RouletteType.SplitBet_Horizontal:
+                if (index0[0] < 0 || index0[1] < 0 || index1[0] < 0 || index1[1] < 0 || index2[0] < 0 || index2[1] < 0 || index3[0] < 0 || index3[1] < 0
+    || index0[0] >= gridConstraintCount - 1 || index0[1] >= gridConstraintCount - 1 || index1[0] >= gridConstraintCount - 1 || index1[1] >= gridConstraintCount - 1
+    || index2[0] >= gridConstraintCount - 1 || index2[1] >= gridConstraintCount - 1 || index3[0] >= gridConstraintCount - 1 || index3[1] >= gridConstraintCount - 1
+    || index4[0] >= gridConstraintCount - 1 || index4[1] >= gridConstraintCount - 1 || index5[0] >= gridConstraintCount - 1 || index5[1] >= gridConstraintCount - 1
+    || index6[0] >= gridConstraintCount - 1 || index6[1] >= gridConstraintCount - 1 || index7[0] >= gridConstraintCount - 1 || index7[1] >= gridConstraintCount - 1
+    || index8[0] >= gridConstraintCount - 1 || index8[1] >= gridConstraintCount - 1)
+                {
+                    blockDrop = false;
+                }
+                else
+                {
+                    blockDrop = true;
+                }
+                break;
+            case RouletteType.SplitBet_Vertical:
+                if (index0[0] < 0 || index0[1] < 0 || index1[0] < 0 || index1[1] < 0 || index2[0] < 0 || index2[1] < 0 || index3[0] < 0 || index3[1] < 0
+    || index0[0] >= gridConstraintCount || index0[1] >= gridConstraintCount || index1[0] >= gridConstraintCount || index1[1] >= gridConstraintCount
+    || index2[0] >= gridConstraintCount || index2[1] >= gridConstraintCount || index3[0] >= gridConstraintCount || index3[1] >= gridConstraintCount
+    || index4[0] >= gridConstraintCount || index4[1] >= gridConstraintCount || index5[0] >= gridConstraintCount || index5[1] >= gridConstraintCount
+    || index6[0] >= gridConstraintCount || index6[1] >= gridConstraintCount || index7[0] >= gridConstraintCount || index7[1] >= gridConstraintCount
+    || index8[0] >= gridConstraintCount || index8[1] >= gridConstraintCount)
+                {
+                    blockDrop = false;
+                }
+                else
+                {
+                    blockDrop = true;
+                }
+                break;
+            case RouletteType.SquareBet:
+                if (index0[0] < 0 || index0[1] < 0 || index1[0] < 0 || index1[1] < 0 || index2[0] < 0 || index2[1] < 0 || index3[0] < 0 || index3[1] < 0
+    || index0[0] >= gridConstraintCount - 1 || index0[1] >= gridConstraintCount - 1 || index1[0] >= gridConstraintCount - 1 || index1[1] >= gridConstraintCount - 1
+    || index2[0] >= gridConstraintCount - 1 || index2[1] >= gridConstraintCount - 1 || index3[0] >= gridConstraintCount - 1 || index3[1] >= gridConstraintCount - 1
+    || index4[0] >= gridConstraintCount - 1 || index4[1] >= gridConstraintCount - 1 || index5[0] >= gridConstraintCount - 1 || index5[1] >= gridConstraintCount - 1
+    || index6[0] >= gridConstraintCount - 1 || index6[1] >= gridConstraintCount - 1 || index7[0] >= gridConstraintCount - 1 || index7[1] >= gridConstraintCount - 1
+    || index8[0] >= gridConstraintCount - 1 || index8[1] >= gridConstraintCount - 1)
+                {
+                    blockDrop = false;
+                }
+                else
+                {
+                    blockDrop = true;
+                }
+                break;
         }
 
         //겹치는거 체크
 
         blockOverlap = false;
 
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        if (checkOverlap)
         {
-            if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3))
+            switch (rouletteContent.rouletteType)
             {
-                if (rouletteContentList[i].isActive) blockOverlap = true;
+                case RouletteType.Default:
+                    break;
+                case RouletteType.StraightBet:
+                    for (int i = 0; i < rouletteContentList.Count; i++)
+                    {
+                        if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
+                            || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
+                            || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
+                            || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
+                            || rouletteContentList[i].index.SequenceEqual(index8))
+                        {
+                            if (rouletteContentList[i].isActive) blockOverlap = true;
+                        }
+                    }
+                    break;
+                case RouletteType.SplitBet_Horizontal:
+                    for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+                    {
+                        if (rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index0) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index1)
+                            || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index2) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index3)
+                            || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index4) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index5)
+                            || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index6) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index7)
+                            || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index8))
+                        {
+                            if (rouletteSplitContentList_Horizontal[i].isActive) blockOverlap = true;
+                        }
+                    }
+                    break;
+                case RouletteType.SplitBet_Vertical:
+                    for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+                    {
+                        if (rouletteSplitContentList_Vertical[i].index.SequenceEqual(index0) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index1)
+                            || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index2) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index3)
+                            || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index4) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index5)
+                            || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index6) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index7)
+                            || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index8))
+                        {
+                            if (rouletteSplitContentList_Vertical[i].isActive) blockOverlap = true;
+                        }
+                    }
+                    break;
+                case RouletteType.SquareBet:
+                    for (int i = 0; i < rouletteSquareContentList.Count; i++)
+                    {
+                        if (rouletteSquareContentList[i].index.SequenceEqual(index0) || rouletteSquareContentList[i].index.SequenceEqual(index1)
+                            || rouletteSquareContentList[i].index.SequenceEqual(index2) || rouletteSquareContentList[i].index.SequenceEqual(index3)
+                            || rouletteSquareContentList[i].index.SequenceEqual(index4) || rouletteSquareContentList[i].index.SequenceEqual(index5)
+                            || rouletteSquareContentList[i].index.SequenceEqual(index6) || rouletteSquareContentList[i].index.SequenceEqual(index7)
+                            || rouletteSquareContentList[i].index.SequenceEqual(index8))
+                        {
+                            if (rouletteSquareContentList[i].isActive) blockOverlap = true;
+                        }
+                    }
+                    break;
             }
         }
-
-        numberCount = 0;
     }
-
-    int[] numberArray = new int[4];
-    int numberCount = 0;
 
     public void ExitBlock(BlockContent content)
     {
         ResetRouletteContent();
 
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        switch (rouletteContent.rouletteType)
         {
-            if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3))
-            {
-                rouletteContentList[i].SetActiveTrue(content.blockType);
-
-                numberArray[numberCount] = rouletteContentList[i].number;
-
-                numberCount++;
-            }
-        }
-
-        if(numberCount > 3)
-        {
-            content.SetNumber(numberArray);
+            case RouletteType.Default:
+                break;
+            case RouletteType.StraightBet:
+                for (int i = 0; i < rouletteContentList.Count; i++)
+                {
+                    if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
+                        || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
+                        || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
+                        || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
+                        || rouletteContentList[i].index.SequenceEqual(index8))
+                    {
+                        rouletteContentList[i].SetActiveTrue(content.blockType);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Horizontal:
+                for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+                {
+                    if (rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index0) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index1)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index2) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index3)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index4) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index5)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index6) || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index7)
+                        || rouletteSplitContentList_Horizontal[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSplitContentList_Horizontal[i].SetActiveTrue(content.blockType);
+                    }
+                }
+                break;
+            case RouletteType.SplitBet_Vertical:
+                for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+                {
+                    if (rouletteSplitContentList_Vertical[i].index.SequenceEqual(index0) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index1)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index2) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index3)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index4) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index5)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index6) || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index7)
+                        || rouletteSplitContentList_Vertical[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSplitContentList_Horizontal[i].SetActiveTrue(content.blockType);
+                    }
+                }
+                break;
+            case RouletteType.SquareBet:
+                for (int i = 0; i < rouletteSquareContentList.Count; i++)
+                {
+                    if (rouletteSquareContentList[i].index.SequenceEqual(index0) || rouletteSquareContentList[i].index.SequenceEqual(index1)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index2) || rouletteSquareContentList[i].index.SequenceEqual(index3)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index4) || rouletteSquareContentList[i].index.SequenceEqual(index5)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index6) || rouletteSquareContentList[i].index.SequenceEqual(index7)
+                        || rouletteSquareContentList[i].index.SequenceEqual(index8))
+                    {
+                        rouletteSquareContentList[i].SetActiveTrue(content.blockType);
+                    }
+                }
+                break;
         }
 
         bettingMoney += 4000;
@@ -473,6 +994,21 @@ public class GameManager : MonoBehaviour
         {
             rouletteContentList[i].ResetBackgroundColor();
         }
+
+        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+        {
+            rouletteSplitContentList_Horizontal[i].ResetBackgroundColor();
+        }
+
+        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+        {
+            rouletteSplitContentList_Vertical[i].ResetBackgroundColor();
+        }
+
+        for (int i = 0; i < rouletteSquareContentList.Count; i++)
+        {
+            rouletteSquareContentList[i].ResetBackgroundColor();
+        }
     }
 
     public void BetOptionCancleButton()
@@ -485,6 +1021,21 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < rouletteContentList.Count; i++)
         {
             rouletteContentList[i].SetActiveFalse();
+        }
+
+        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+        {
+            rouletteSplitContentList_Horizontal[i].SetActiveFalse();
+        }
+
+        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
+        {
+            rouletteSplitContentList_Vertical[i].SetActiveFalse();
+        }
+
+        for (int i = 0; i < rouletteSquareContentList.Count; i++)
+        {
+            rouletteSquareContentList[i].SetActiveFalse();
         }
 
         ChangeMoney(bettingMoney);

@@ -9,19 +9,9 @@ public enum RouletteType
 {
     Default = 0,
     StraightBet,
-    SplitBet,
-    StreetBet,
+    SplitBet_Horizontal,
+    SplitBet_Vertical,
     SquareBet,
-    FiveNumberBet,
-    LineBet,
-    ColumnBet,
-    DozenBet,
-    LowNumberBet,
-    HighNumberBet,
-    EvenNumberBet,
-    OddNumberBet,
-    RedColorBet,
-    BlackColorBet
 }
 
 public enum RouletteColorType
@@ -54,6 +44,8 @@ public enum BlockType
     J,
     S,
     Z,
+    BigO,
+    I_Horizontal
 }
 
 public enum BetOptionType

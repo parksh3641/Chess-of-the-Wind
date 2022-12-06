@@ -16,6 +16,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     [Title("Active")]
     public BlockType blockType = BlockType.Default;
     public bool isActive = false;
+    bool initialize = false;
 
     [Title("Main")]
     public Text numberText;
@@ -26,7 +27,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     void Awake()
     {
-
+        numberText.text = "";
     }
 
 
@@ -37,8 +38,21 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         rouletteType = type;
         index = setIndex;
 
+        switch (rouletteType)
+        {
+            case RouletteType.SplitBet_Horizontal:
+                backgroundImg.enabled = false;
+                break;
+            case RouletteType.SplitBet_Vertical:
+                backgroundImg.enabled = false;
+                break;
+            case RouletteType.SquareBet:
+                backgroundImg.enabled = false;
+                break;
+        }
+
         number = num + 1;
-        numberText.text = number.ToString();
+        //numberText.text = number.ToString();
 
         if (number % 2 == 0)
         {
@@ -50,10 +64,28 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         }
 
         SetBackgroundColor(rouletteColorType);
+
+        initialize = true;
     }
 
     public void SetBackgroundColor(RouletteColorType type)
     {
+        if(initialize)
+        {
+            switch (rouletteType)
+            {
+                case RouletteType.SplitBet_Horizontal:
+                    backgroundImg.enabled = true;
+                    break;
+                case RouletteType.SplitBet_Vertical:
+                    backgroundImg.enabled = true;
+                    break;
+                case RouletteType.SquareBet:
+                    backgroundImg.enabled = true;
+                    break;
+            }
+        }
+
         switch (type)
         {
             case RouletteColorType.White:
@@ -70,15 +102,55 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     public void ResetBackgroundColor()
     {
+        if (initialize)
+        {
+            switch (rouletteType)
+            {
+                case RouletteType.SplitBet_Horizontal:
+                    backgroundImg.enabled = false;
+                    break;
+                case RouletteType.SplitBet_Vertical:
+                    backgroundImg.enabled = false;
+                    break;
+                case RouletteType.SquareBet:
+                    backgroundImg.enabled = false;
+                    break;
+            }
+
+            initialize = false;
+        }
+
         SetBackgroundColor(rouletteColorType);
+
+        initialize = true;
     }
 
     public void SetActiveTrue(BlockType type)
     {
+        if (initialize)
+        {
+            switch (rouletteType)
+            {
+                case RouletteType.SplitBet_Horizontal:
+                    backgroundImg.enabled = false;
+                    break;
+                case RouletteType.SplitBet_Vertical:
+                    backgroundImg.enabled = false;
+                    break;
+                case RouletteType.SquareBet:
+                    backgroundImg.enabled = false;
+                    break;
+            }
+
+            initialize = false;
+        }
+
         blockType = type;
         isActive = true;
 
         SetBackgroundColor(rouletteColorType);
+
+        initialize = true;
     }
 
     public void SetActiveFalse()
@@ -105,7 +177,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     {
         if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
         {
-            if(gameManager.money >= 4000)
+            if (gameManager.money >= 4000)
             {
                 eventData.pointerDrag.transform.SetParent(blockParent);
                 eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
@@ -116,11 +188,6 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
             {
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
             }
-        }
-
-        if(gameManager.blockOverlap)
-        {
-            NotionManager.instance.UseNotion(NotionType.NotBettingLocation);
         }
     }
 }

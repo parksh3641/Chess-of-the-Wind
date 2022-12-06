@@ -8,12 +8,8 @@ public class BlockChild : MonoBehaviour
 {
     public BlockType blockType = BlockType.Default;
 
-    public Text numberText;
-
     void Awake()
     {
-        numberText.text = "";
-
         switch (blockType)
         {
             case BlockType.Default:
@@ -40,16 +36,12 @@ public class BlockChild : MonoBehaviour
             case BlockType.Z:
                 transform.GetComponent<Image>().color = Color.red;
                 break;
+            case BlockType.BigO:
+                transform.GetComponent<Image>().color = Color.cyan;
+                break;
+            case BlockType.I_Horizontal:
+                transform.GetComponent<Image>().color = new Color(0, 200 / 255f, 1);
+                break;
         }
-    }
-
-    private void OnDisable()
-    {
-        numberText.text = "";
-    }
-
-    public void ResetNumber()
-    {
-        numberText.text = "";
     }
 }

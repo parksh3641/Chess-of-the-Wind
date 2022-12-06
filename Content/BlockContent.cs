@@ -11,6 +11,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public Text infoText;
 
+    public GameObject blockMain;
     public BlockChildContent[] blockMainArray;
     public BlockChildContent[] blockArray;
 
@@ -18,12 +19,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Transform blockRootParent;
     private Transform previousParent;
     private CanvasGroup canvasGroup;
+    public bool isDrag = false;
 
     GameManager gameManager;
 
     void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+
+        blockMain.SetActive(true);
 
         for (int i = 0; i < blockMainArray.Length; i++)
         {
@@ -61,12 +65,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = true;
         gameManager.blockType = blockType;
 
+        blockMain.SetActive(false);
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
-        blockArray[(int)blockType - 1].ResetNumber();
+
+        isDrag = true;
     }
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position;
+        if(isDrag) transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -76,6 +82,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
+            blockMain.SetActive(true);
             blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
             gameManager.ResetRouletteContent();
@@ -86,13 +93,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         gameManager.blockDrag = false;
         gameManager.blockType = BlockType.Default;
-    }
 
-    public void SetNumber(int[] number)
-    {
-        blockArray[(int)blockType - 1].SetNumber(number);
+        isDrag = false;
     }
-
     public void ResetPos()
     {
         if (transform.parent != previousParent)
@@ -100,7 +103,26 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
+            blockMain.SetActive(true);
             blockArray[(int)blockType - 1].gameObject.SetActive(false);
+
+            isDrag = false;
         }
+    }
+
+    public void TimeOver()
+    {
+        transform.SetParent(previousParent);
+        transform.position = previousParent.GetComponent<RectTransform>().position;
+
+        blockMain.SetActive(true);
+        blockArray[(int)blockType - 1].gameObject.SetActive(false);
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+
+        gameManager.blockDrag = false;
+
+        isDrag = false;
     }
 }
