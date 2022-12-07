@@ -14,7 +14,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     public int number = 0;
 
     [Title("Active")]
-    public BlockType blockType = BlockType.Default;
+    public BlockType[] blockType;
     public bool isActive = false;
     bool initialize = false;
 
@@ -28,6 +28,8 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     void Awake()
     {
         numberText.text = "";
+
+        blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
     }
 
 
@@ -145,7 +147,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
             initialize = false;
         }
 
-        blockType = type;
+        blockType[(int)type] = type;
         isActive = true;
 
         SetBackgroundColor(rouletteColorType);
@@ -153,9 +155,14 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         initialize = true;
     }
 
-    public void SetActiveFalse()
+    public void SetActiveFalse(BlockType type)
     {
-        blockType = BlockType.Default;
+        blockType[(int)type] = BlockType.Default;
+    }
+
+    public void SetActiveFalseAll()
+    {
+        blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
 
         isActive = false;
     }
@@ -177,7 +184,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     {
         if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
         {
-            if (gameManager.money >= 4000)
+            if (gameManager.money >= gameManager.blockInformation.bettingPrice * gameManager.blockInformation.size)
             {
                 eventData.pointerDrag.transform.SetParent(blockParent);
                 eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
