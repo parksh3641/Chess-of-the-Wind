@@ -8,6 +8,8 @@ public class BlockChild : MonoBehaviour
 {
     public BlockType blockType = BlockType.Default;
 
+    public GameObject bettingMark;
+
     void Awake()
     {
         switch (blockType)
@@ -42,6 +44,16 @@ public class BlockChild : MonoBehaviour
             case BlockType.I_Horizontal:
                 transform.GetComponent<Image>().color = new Color(0, 200 / 255f, 1);
                 break;
+            case BlockType.One:
+                transform.GetComponent<Image>().color = Color.gray;
+                break;
         }
+
+        bettingMark.SetActive(false);
+    }
+
+    public void SetBettingMark(bool check)
+    {
+        bettingMark.SetActive(check);
     }
 }

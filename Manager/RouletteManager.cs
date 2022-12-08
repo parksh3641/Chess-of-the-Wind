@@ -7,12 +7,15 @@ public class RouletteManager : MonoBehaviour
 {
     public Rotate_Sphere sphere;
 
+    public GameObject rouletteCamera;
+    public GameObject sphereCamera;
+
     public Image powerFillAmount;
 
 
-    public float power = 0;
-    public float upPower = 0.05f;
-    public float maxPower = 2f;
+    private float power = 0;
+    private float upPower = 0.05f;
+    private float maxPower = 2f;
 
     private int targetNumber = 0;
     private int maxNumber = 0;
@@ -26,6 +29,7 @@ public class RouletteManager : MonoBehaviour
     bool click = false;
     bool start = false;
     bool check = false;
+    bool moveSphere = false;
 
 
     public GameManager gameManager;
@@ -33,11 +37,31 @@ public class RouletteManager : MonoBehaviour
     private void Awake()
     {
         click = false;
+
+        sphereCamera.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (moveSphere)
+        {
+            if (sphere.speed < 100)
+            {
+                rouletteCamera.SetActive(false);
+                sphereCamera.SetActive(true);
+            }
+            else
+            {
+                rouletteCamera.SetActive(true);
+                sphereCamera.SetActive(false);
+            }
+        }
     }
 
     public void Initialize(int number)
     {
         click = false;
+        moveSphere = true;
 
         power = 0;
         powerFillAmount.fillAmount = 0;
@@ -46,6 +70,8 @@ public class RouletteManager : MonoBehaviour
         targetView.SetActive(false);
 
         maxNumber = number;
+
+        sphere.StartSphere();
     }
 
     public void ButtonDown()
@@ -101,7 +127,7 @@ public class RouletteManager : MonoBehaviour
 
     IEnumerator RandomTargetNumber()
     {
-        sphere.SetSpeed(power);
+        sphere.AddSpeed(power);
 
         while (sphere.speed > 0) yield return null;
 
@@ -115,5 +141,9 @@ public class RouletteManager : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         gameManager.CloseRouletteView(targetNumber);
+
+        moveSphere = false;
+
+        sphereCamera.SetActive(false);
     }
 }

@@ -69,6 +69,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
 
         isDrag = true;
+
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
+        {
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
+        }
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -95,6 +100,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockType = BlockType.Default;
 
         isDrag = false;
+
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
+        {
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(true);
+        }
     }
     public void ResetPos()
     {
@@ -107,6 +117,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
             isDrag = false;
+        }
+
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
+        {
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
         }
     }
 

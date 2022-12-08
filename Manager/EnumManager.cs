@@ -45,7 +45,8 @@ public enum BlockType
     S,
     Z,
     BigO,
-    I_Horizontal
+    I_Horizontal,
+    One
 }
 
 public enum BetOptionType
