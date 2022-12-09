@@ -95,6 +95,7 @@ public class GameManager : MonoBehaviour
     private List<int[]> splitVerticalIndexList = new List<int[]>();
     private List<int[]> squareIndexList = new List<int[]>();
 
+    public SoundManager soundManager;
     public RouletteManager rouletteManager;
     BlockDataBase blockDataBase;
 
@@ -131,7 +132,7 @@ public class GameManager : MonoBehaviour
 
         gridConstraintCount = gridLayoutGroup.constraintCount;
 
-        bettingValue = new int[System.Enum.GetValues(typeof(BlockType)).Length - 1];
+        bettingValue = new int[System.Enum.GetValues(typeof(BlockType)).Length];
 
         int index = 0;
         int count = 0;
@@ -327,7 +328,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void ChangeMoney(float plus)
+    public void ChangeMoney(float plus)
     {
         money += plus;
         moneyText.text = "현재 돈 : ₩ " + money.ToString();
@@ -336,6 +337,12 @@ public class GameManager : MonoBehaviour
     void ChangeBettingMoney(float plus)
     {
         bettingMoney += plus;
+        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+    }
+
+    void ChangeResetBettingMoney()
+    {
+        bettingMoney = 0;
         bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
     }
 
@@ -548,8 +555,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ChangeMoney((int)getMoney);
-
         if (bettingMoney == 0)
         {
             NotionManager.instance.UseNotion("시간 초과 !", ColorType.Red);
@@ -558,15 +563,16 @@ public class GameManager : MonoBehaviour
         {
             if (getMoney > bettingMoney)
             {
-                NotionManager.instance.UseNotion((bettingMoney - getMoney) + " 만큼 돈을 잃었어요 ㅠㅠ", ColorType.Red);
+                NotionManager.instance.UseNotion(((int)getMoney - bettingMoney) + " 만큼 돈을 땄어요 !", ColorType.Green);
             }
             else
             {
-                NotionManager.instance.UseNotion(((int)getMoney - bettingMoney) + " 만큼 돈을 땄어요 !", ColorType.Green);
+                NotionManager.instance.UseNotion(Mathf.Abs((bettingMoney - getMoney)) + " 만큼 돈을 잃었어요 ㅠㅠ", ColorType.Red);
             }
         }
 
-        bettingMoney = 0;
+        ChangeMoney((int)getMoney);
+        ChangeResetBettingMoney();
     }
 
     void Update()
@@ -606,13 +612,20 @@ public class GameManager : MonoBehaviour
         mainRouletteContent = rouletteContent;
 
         blockInformation = blockDataBase.GetBlockInfomation(blockContent.blockType);
-        
+
         targetBlockContent = blockContent.transform;
 
-        ChangeMoney(bettingValue[(int)blockContent.blockType]);
-        ChangeBettingMoney(-bettingValue[(int)blockContent.blockType]);
+        if(bettingValue[(int)blockContent.blockType] > 0)
+        {
+            ChangeMoney(bettingValue[(int)blockContent.blockType]);
+            ChangeBettingMoney(-bettingValue[(int)blockContent.blockType]);
 
-        bettingValue[(int)blockContent.blockType] = 0;
+            string notion = bettingValue[(int)blockContent.blockType] + "만큼 배팅을 취소했습니다.\n총 배팅 금액은 " + bettingMoney + "입니다.";
+
+            TalkManager.instance.UseNotion(notion, Color.red);
+
+            bettingValue[(int)blockContent.blockType] = 0;
+        }
 
         switch (mainRouletteContent.rouletteType)
         {
@@ -1168,6 +1181,8 @@ public class GameManager : MonoBehaviour
 
     public void ExitBlock(BlockContent blockContent)
     {
+        soundManager.PlaySFX(GameSfxType.Click);
+
         ResetRouletteContent();
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
@@ -1233,10 +1248,10 @@ public class GameManager : MonoBehaviour
         ChangeMoney(-blockInformation.bettingPrice * blockInformation.size);
         ChangeBettingMoney(blockInformation.bettingPrice * blockInformation.size);
 
-        string notion = "₩ " + blockInformation.bettingPrice.ToString() + "짜리 " + blockInformation.size + "개를 배팅했습니다";
+        string notion = "₩ " + blockInformation.bettingPrice.ToString() + "짜리 " + blockInformation.size + "개를 배팅했습니다.";
 
         NotionManager.instance.UseNotion(notion, ColorType.Green);
-        TalkManager.instance.UseNotion(notion, Color.green);
+        TalkManager.instance.UseNotion(notion + "\n총 배팅 금액은 " + bettingMoney + "입니다.", Color.green);
     }
 
     public void ResetRouletteContent()
@@ -1290,8 +1305,7 @@ public class GameManager : MonoBehaviour
         }
 
         ChangeMoney(bettingMoney);
-
-        bettingMoney = 0;
+        ChangeResetBettingMoney();
 
         NotionManager.instance.UseNotion(NotionType.Cancle);
 

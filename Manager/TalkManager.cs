@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +40,7 @@ public class TalkManager : MonoBehaviour
         }
 
         talkContentList[talkIndex].GetComponent<Text>().color = color;
-        talkContentList[talkIndex].Initialize("Player1 ¥‘¿Ã " + text);
+        talkContentList[talkIndex].Initialize("Player1 ÎãòÏù¥ " + text);
         talkContentList[talkIndex].gameObject.SetActive(true);
         talkContentList[talkIndex].transform.SetAsLastSibling();
 

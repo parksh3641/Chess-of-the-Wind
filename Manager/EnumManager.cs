@@ -55,3 +55,9 @@ public enum BetOptionType
     Cancle,
     Repeat
 }
+
+public enum GameSfxType
+{
+    Click,
+    Roulette
+}

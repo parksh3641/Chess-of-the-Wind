@@ -1,27 +1,33 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RouletteManager : MonoBehaviour
 {
-    public Rotate_Sphere sphere;
+    public Pinball pinball;
+    public Rotation_Roulette roulette;
 
     public GameObject rouletteCamera;
-    public GameObject sphereCamera;
+    public GameObject pinballCamera;
+
+    public GameObject bounsView;
 
     public Image powerFillAmount;
 
 
-    private float power = 0;
+    private float power = 0.1f;
     private float upPower = 0.05f;
-    private float maxPower = 2f;
+    private float maxPower = 1f;
+    public int bounsCount = 2;
 
     private int targetNumber = 0;
     private int maxNumber = 0;
 
     public GameObject targetView;
     public Text targetText;
+    public Text titleText;
+    public Text bounsText;
 
 
 
@@ -30,48 +36,96 @@ public class RouletteManager : MonoBehaviour
     bool start = false;
     bool check = false;
     bool moveSphere = false;
+    bool moveRoulette = false;
+
+    float time = 0;
 
 
     public GameManager gameManager;
+    public SoundManager soundManager;
 
     private void Awake()
     {
         click = false;
 
-        sphereCamera.SetActive(false);
+        pinballCamera.SetActive(false);
+        bounsView.SetActive(false);
     }
 
     private void Update()
     {
         if (moveSphere)
         {
-            if (sphere.speed < 100)
+            if (pinball.rigid.velocity.magnitude < 0.5f)
             {
-                rouletteCamera.SetActive(false);
-                sphereCamera.SetActive(true);
-            }
-            else
-            {
-                rouletteCamera.SetActive(true);
-                sphereCamera.SetActive(false);
+                time += Time.deltaTime;
+
+                if(time >= 4)
+                {
+                    StartCoroutine(RandomTargetNumber());
+                }
             }
         }
+
+        if(moveRoulette)
+        {
+            if(roulette.speed <= 0)
+            {
+                StartCoroutine(BounsRoulette());
+            }
+        }
+    }
+
+    public void EnlargementPinball()
+    {
+        rouletteCamera.SetActive(false);
+        pinballCamera.SetActive(true);
     }
 
     public void Initialize(int number)
     {
         click = false;
-        moveSphere = true;
+        moveSphere = false;
+        moveRoulette = false;
+
+        time = 0;
 
         power = 0;
         powerFillAmount.fillAmount = 0;
-        sphere.speed = 0;
 
         targetView.SetActive(false);
+        bounsView.SetActive(false);
+
+        rouletteCamera.SetActive(true);
+        pinballCamera.SetActive(false);
 
         maxNumber = number;
 
-        sphere.StartSphere();
+        if(bounsCount > 0)
+        {
+            moveSphere = true;
+
+            pinball.StartPinball();
+
+            titleText.text = "숫자 룰렛";
+
+            bounsText.text = "보너스 룰렛까지 남은 턴 : " + bounsCount.ToString();
+        }
+        else
+        {
+            click = true;
+
+            moveRoulette = true;
+
+            titleText.text = "보너스 룰렛";
+
+            bounsView.SetActive(true);
+
+            roulette.StartRoulette();
+        }
+
+
+        soundManager.PlayLoopSFX(GameSfxType.Roulette);
     }
 
     public void ButtonDown()
@@ -90,60 +144,82 @@ public class RouletteManager : MonoBehaviour
         start = false;
         click = true;
 
-        StopAllCoroutines();
-        StartCoroutine(RandomTargetNumber());
+        pinball.AddSpeed(power);
     }
 
     IEnumerator PowerCoroution()
     {
-        if(!check)
+        if (start)
         {
-            if(power <= maxPower)
+            if (!check)
             {
-                power += upPower;
+                if (power <= maxPower)
+                {
+                    power += upPower;
+                }
+                else
+                {
+                    check = true;
+                }
             }
             else
             {
-                check = true;
+                if (power > 0.1f)
+                {
+                    power -= upPower;
+                }
+                else
+                {
+                    check = false;
+                }
             }
+
+            powerFillAmount.fillAmount = power / maxPower;
+
+            yield return new WaitForSeconds(0.01f);
+            StartCoroutine(PowerCoroution());
         }
         else
         {
-            if(power > 0)
-            {
-                power -= upPower;
-            }
-            else
-            {
-                check = false;
-            }
+            yield break;
         }
-
-        powerFillAmount.fillAmount = power / maxPower;
-
-        yield return new WaitForSeconds(0.01f);
-        StartCoroutine(PowerCoroution());
     }
 
     IEnumerator RandomTargetNumber()
     {
-        sphere.AddSpeed(power);
+        click = true;
+        moveSphere = false;
 
-        while (sphere.speed > 0) yield return null;
+        EnlargementPinball();
 
-        yield return new WaitForSeconds(0.5f);
+        soundManager.StopSFX(GameSfxType.Roulette);
 
         targetNumber = Random.Range(1, maxNumber);
 
         targetView.SetActive(true);
         targetText.text = targetNumber.ToString();
 
+        bounsCount -= 1;
+
         yield return new WaitForSeconds(3);
 
+        pinballCamera.SetActive(false);
+
         gameManager.CloseRouletteView(targetNumber);
+    }
 
-        moveSphere = false;
+    IEnumerator BounsRoulette()
+    {
+        moveRoulette = false;
 
-        sphereCamera.SetActive(false);
+        gameManager.ChangeMoney(5000);
+
+        bounsCount = 3;
+
+        NotionManager.instance.UseNotion("돈 5000 획득!", ColorType.Green);
+
+        yield return new WaitForSeconds(2);
+
+        Initialize(maxNumber);
     }
 }

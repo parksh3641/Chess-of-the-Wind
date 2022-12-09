@@ -10,14 +10,14 @@ public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointer
 
     void Awake()
     {
-        //clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
+        clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.localScale = Vector3.one * 0.95f;
 
-        //clickSoundEvent.Invoke();
+        clickSoundEvent.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
