@@ -5,20 +5,11 @@ using UnityEngine.UI;
 
 public class RouletteManager : MonoBehaviour
 {
-    public Pinball pinball;
+    public Pinball2D pinball;
     public Rotation_Roulette roulette;
-
-    public GameObject rouletteCamera;
-    public GameObject pinballCamera;
 
     public GameObject bounsView;
 
-    public Image powerFillAmount;
-
-
-    private float power = 0.1f;
-    private float upPower = 0.05f;
-    private float maxPower = 1f;
     public int bounsCount = 2;
 
     private int targetNumber = 0;
@@ -33,41 +24,39 @@ public class RouletteManager : MonoBehaviour
 
 
     bool click = false;
-    bool start = false;
-    bool check = false;
-    bool moveSphere = false;
-    bool moveRoulette = false;
+    bool movePinball = false;
+    bool bouns = false;
 
     float time = 0;
 
 
     public GameManager gameManager;
+    public PointerManager pointerManager;
     public SoundManager soundManager;
 
     private void Awake()
     {
         click = false;
 
-        pinballCamera.SetActive(false);
         bounsView.SetActive(false);
     }
 
     private void Update()
     {
-        if (moveSphere)
+        if (movePinball)
         {
-            if (pinball.rigid.velocity.magnitude < 0.5f)
+            if(pinball.speed <= 0)
             {
-                time += Time.deltaTime;
+                StartCoroutine(RandomTargetNumber());
+            }
 
-                if(time >= 4)
-                {
-                    StartCoroutine(RandomTargetNumber());
-                }
+            if(pinball.wind && pinball.rigid.velocity.x == 0)
+            {
+                StartCoroutine(RandomTargetNumber());
             }
         }
 
-        if(moveRoulette)
+        if(bouns)
         {
             if(roulette.speed <= 0)
             {
@@ -75,37 +64,24 @@ public class RouletteManager : MonoBehaviour
             }
         }
     }
-
-    public void EnlargementPinball()
-    {
-        rouletteCamera.SetActive(false);
-        pinballCamera.SetActive(true);
-    }
-
     public void Initialize(int number)
     {
         click = false;
-        moveSphere = false;
-        moveRoulette = false;
+        movePinball = false;
+        bouns = false;
 
         time = 0;
 
-        power = 0;
-        powerFillAmount.fillAmount = 0;
-
         targetView.SetActive(false);
         bounsView.SetActive(false);
-
-        rouletteCamera.SetActive(true);
-        pinballCamera.SetActive(false);
 
         maxNumber = number;
 
         if(bounsCount > 0)
         {
-            moveSphere = true;
+            movePinball = true;
 
-            pinball.StartPinball();
+            pinball.StartRotate();
 
             titleText.text = "숫자 룰렛";
 
@@ -115,7 +91,7 @@ public class RouletteManager : MonoBehaviour
         {
             click = true;
 
-            moveRoulette = true;
+            bouns = true;
 
             titleText.text = "보너스 룰렛";
 
@@ -128,73 +104,65 @@ public class RouletteManager : MonoBehaviour
         soundManager.PlayLoopSFX(GameSfxType.Roulette);
     }
 
-    public void ButtonDown()
+    public void BlowWind()
     {
         if (click) return;
 
-        start = true;
-
-        StartCoroutine(PowerCoroution());
-    }
-
-    public void ButtonUp()
-    {
-        if (click) return;
-
-        start = false;
         click = true;
 
-        pinball.AddSpeed(power);
+        pinball.StartPinball();
     }
 
-    IEnumerator PowerCoroution()
-    {
-        if (start)
-        {
-            if (!check)
-            {
-                if (power <= maxPower)
-                {
-                    power += upPower;
-                }
-                else
-                {
-                    check = true;
-                }
-            }
-            else
-            {
-                if (power > 0.1f)
-                {
-                    power -= upPower;
-                }
-                else
-                {
-                    check = false;
-                }
-            }
+    //IEnumerator PowerCoroution()
+    //{
+    //    if (start)
+    //    {
+    //        if (!check)
+    //        {
+    //            if (power <= maxPower)
+    //            {
+    //                power += upPower;
+    //            }
+    //            else
+    //            {
+    //                check = true;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            if (power > 0.1f)
+    //            {
+    //                power -= upPower;
+    //            }
+    //            else
+    //            {
+    //                check = false;
+    //            }
+    //        }
 
-            powerFillAmount.fillAmount = power / maxPower;
+    //        powerFillAmount.fillAmount = power / maxPower;
 
-            yield return new WaitForSeconds(0.01f);
-            StartCoroutine(PowerCoroution());
-        }
-        else
-        {
-            yield break;
-        }
-    }
+    //        yield return new WaitForSeconds(0.01f);
+    //        StartCoroutine(PowerCoroution());
+    //    }
+    //    else
+    //    {
+    //        yield break;
+    //    }
+    //}
 
     IEnumerator RandomTargetNumber()
     {
         click = true;
-        moveSphere = false;
-
-        EnlargementPinball();
+        movePinball = false;
 
         soundManager.StopSFX(GameSfxType.Roulette);
 
-        targetNumber = Random.Range(1, maxNumber);
+        yield return new WaitForSeconds(1f);
+
+        //targetNumber = Random.Range(1, maxNumber);
+
+        targetNumber = pointerManager.CheckNumber();
 
         targetView.SetActive(true);
         targetText.text = targetNumber.ToString();
@@ -203,14 +171,12 @@ public class RouletteManager : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        pinballCamera.SetActive(false);
-
         gameManager.CloseRouletteView(targetNumber);
     }
 
     IEnumerator BounsRoulette()
     {
-        moveRoulette = false;
+        bouns = false;
 
         gameManager.ChangeMoney(5000);
 

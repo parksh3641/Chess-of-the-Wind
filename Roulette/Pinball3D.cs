@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pinball : MonoBehaviour
+public class Pinball3D : MonoBehaviour
 {
     public Rigidbody rigid;
     public float power = 100f;
