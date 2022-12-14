@@ -32,15 +32,15 @@ public class TalkManager : MonoBehaviour
         }
     }
 
-    public void UseNotion(string text, Color color)
+    public void UseNotion(string text)
     {
         if (talkIndex > talkContentList.Count - 1)
         {
             talkIndex = 0;
         }
 
-        talkContentList[talkIndex].GetComponent<Text>().color = color;
-        talkContentList[talkIndex].Initialize("Player1 님이 " + text);
+        //talkContentList[talkIndex].GetComponent<Text>().color = color;
+        talkContentList[talkIndex].Initialize(text);
         talkContentList[talkIndex].gameObject.SetActive(true);
         talkContentList[talkIndex].transform.SetAsLastSibling();
 

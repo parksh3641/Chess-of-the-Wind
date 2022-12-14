@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,12 @@ public class PointerManager : MonoBehaviour
     public GameObject targetPointer;
 
     public float speed = 100.0f;
-    public float rotateSpeed = 3.59f;
+    public float rotateSpeed = 3.6f;
     private int pointerIndex = 0;
 
     bool move = false;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
 
     List<int> numberList = new List<int>();
 
@@ -26,30 +29,35 @@ public class PointerManager : MonoBehaviour
 
     private void Awake()
     {
-        CreateUnDuplicateRandom(maxNumber);
+        //CreateUnDuplicateRandom(maxNumber);
 
-        for (int i = 0; i < maxNumber; i ++)
-        {
-            Pointer content = Instantiate(pointer);
-            content.transform.parent = pointerTransform;
-            content.transform.localScale = Vector3.one;
-            content.transform.localPosition = new Vector3(0, 0, -0.5f);
-            content.Initialize(numberList[i]);
-            pointerList.Add(content);
-        }
+        //numberList.Clear();
 
-        numberList.Clear();
     }
 
     private void Start()
     {
-        move = true;
 
-        Initialize();
     }
 
-    void Initialize()
+    public void Initialize()
     {
+        //delay = rotateSpeed / (maxNumber + 1);
+
+        for (int i = 1; i < maxNumber; i++)
+        {
+            GameObject obj = PhotonNetwork.Instantiate("Pointer", Vector3.zero, Quaternion.identity, 0);
+            Pointer content = obj.GetComponent<Pointer>();
+            content.transform.parent = pointerTransform;
+            content.transform.localScale = Vector3.one;
+            content.transform.localPosition = new Vector3(0, 0, -0.5f);
+            //content.Initialize(numberList[i]);
+            content.Initialize(i);
+            pointerList.Add(content);
+        }
+
+        move = true;
+
         StartCoroutine(DeploymentCoroution());
     }
 
@@ -73,7 +81,7 @@ public class PointerManager : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(rotateSpeed / (maxNumber + 1));
+        yield return waitForSeconds;
         StartCoroutine(DeploymentCoroution());
     }
 

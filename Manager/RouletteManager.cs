@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ public class RouletteManager : MonoBehaviour
 {
     public Pinball2D pinball;
     public Rotation_Roulette roulette;
+
+    public GameObject rouletteCamera;
+    public GameObject rouletteView;
 
     public GameObject bounsView;
 
@@ -20,37 +24,41 @@ public class RouletteManager : MonoBehaviour
     public Text titleText;
     public Text bounsText;
 
-
-
-
     bool click = false;
     bool movePinball = false;
     bool bouns = false;
 
-    float time = 0;
-
-
     public GameManager gameManager;
     public PointerManager pointerManager;
     public SoundManager soundManager;
+
+    public PhotonView PV;
 
     private void Awake()
     {
         click = false;
 
         bounsView.SetActive(false);
+
+        rouletteCamera.SetActive(false);
+        rouletteView.SetActive(false);
     }
 
     private void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
         if (movePinball)
         {
-            if(pinball.speed <= 0)
+            if (pinball.speed <= 0)
             {
                 StartCoroutine(RandomTargetNumber());
             }
 
-            if(pinball.wind && pinball.rigid.velocity.x == 0)
+            if (pinball.wind && pinball.rigid.velocity.x == 0)
             {
                 StartCoroutine(RandomTargetNumber());
             }
@@ -64,53 +72,87 @@ public class RouletteManager : MonoBehaviour
             }
         }
     }
+
     public void Initialize(int number)
     {
-        click = false;
-        movePinball = false;
-        bouns = false;
+        maxNumber = number;
 
-        time = 0;
+        rouletteCamera.SetActive(true);
+        rouletteView.SetActive(true);
 
+        if(bounsCount > 0)
+        {
+            PV.RPC("PlayRoulette", RpcTarget.All, bounsCount);
+        }
+        else
+        {
+            PV.RPC("PlayBouns", RpcTarget.All);
+        }
+
+        soundManager.PlayLoopSFX(GameSfxType.Roulette);
+    }
+
+    [PunRPC]
+    void PlayRoulette(int number)
+    {
         targetView.SetActive(false);
         bounsView.SetActive(false);
 
-        maxNumber = number;
+        click = false;
+        movePinball = true;
+        bouns = false;
 
-        if(bounsCount > 0)
+        titleText.text = "숫자 룰렛";
+
+        bounsText.text = "보너스 룰렛까지 남은 턴 : " + number.ToString();
+
+        if (PhotonNetwork.IsMasterClient)
         {
             movePinball = true;
 
             pinball.StartRotate();
-
-            titleText.text = "숫자 룰렛";
-
-            bounsText.text = "보너스 룰렛까지 남은 턴 : " + bounsCount.ToString();
         }
-        else
+
+        Debug.Log("숫자 룰렛 실행");
+    }
+
+    [PunRPC]
+    void PlayBouns()
+    {
+        targetView.SetActive(false);
+        bounsView.SetActive(true);
+
+        click = true;
+        movePinball = false;
+        bouns = true;
+
+        titleText.text = "보너스 룰렛";
+
+        if (PhotonNetwork.IsMasterClient)
         {
-            click = true;
-
-            bouns = true;
-
-            titleText.text = "보너스 룰렛";
-
-            bounsView.SetActive(true);
-
+            bounsCount = 3;
             roulette.StartRoulette();
         }
 
+        Debug.Log("보너스 룰렛 실행");
+    }
 
-        soundManager.PlayLoopSFX(GameSfxType.Roulette);
+    public void CloseRouletteView()
+    {
+        rouletteCamera.SetActive(false);
+        rouletteView.SetActive(false);
     }
 
     public void BlowWind()
     {
         if (click) return;
 
-        click = true;
+        if(PhotonNetwork.IsMasterClient)
+        {
+            click = true;
 
-        pinball.StartPinball();
+            pinball.StartPinball();
+        }
     }
 
     //IEnumerator PowerCoroution()
@@ -160,32 +202,52 @@ public class RouletteManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        //targetNumber = Random.Range(1, maxNumber);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            bounsCount -= 1;
+            targetNumber = pointerManager.CheckNumber();
+        }
 
-        targetNumber = pointerManager.CheckNumber();
-
-        targetView.SetActive(true);
-        targetText.text = targetNumber.ToString();
-
-        bounsCount -= 1;
+        PV.RPC("CheckNumber", RpcTarget.All, targetNumber);
 
         yield return new WaitForSeconds(3);
 
-        gameManager.CloseRouletteView(targetNumber);
+        PV.RPC("ResultNumber", RpcTarget.All, targetNumber);
+    }
+
+    [PunRPC]
+    void CheckNumber(int number)
+    {
+        targetView.SetActive(true);
+        targetText.text = number.ToString();
+    }
+
+    [PunRPC]
+    void ResultNumber(int number)
+    {
+        gameManager.CloseRouletteView(number);
+
+        CloseRouletteView();
     }
 
     IEnumerator BounsRoulette()
     {
         bouns = false;
 
-        gameManager.ChangeMoney(5000);
-
-        bounsCount = 3;
-
-        NotionManager.instance.UseNotion("돈 5000 획득!", ColorType.Green);
+        PV.RPC("ChangeMoney", RpcTarget.All, 5000);
 
         yield return new WaitForSeconds(2);
 
-        Initialize(maxNumber);
+        PV.RPC("PlayRoulette", RpcTarget.All, bounsCount);
+
+        //Initialize(maxNumber);
+    }
+
+    [PunRPC]
+    void ChangeMoney(int number)
+    {
+        gameManager.ChangeMoney(number);
+
+        NotionManager.instance.UseNotion("돈 " + number + " 획득!", ColorType.Green);
     }
 }

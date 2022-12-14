@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Photon.Pun;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +24,17 @@ public class GameManager : MonoBehaviour
     public int setTimer = 16;
     public bool checkOverlap = false;
 
-    [Title("BettingView")]
-    public GameObject rouletteCamera;
+    [Title("View")]
+    public GameObject loginView;
     public GameObject mainView;
-    public GameObject rouletteView;
 
     [Title("Setting")]
     public GridLayoutGroup gridLayoutGroup;
 
     [Title("Timer")]
+    private int timer = 0;
     public Text timerText;
     public Image timerFillAmount;
-    private int timer = 0;
 
     [Title("Text")]
     public Text moneyText;
@@ -97,17 +97,12 @@ public class GameManager : MonoBehaviour
 
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
+    public PointerManager pointerManager;
     BlockDataBase blockDataBase;
 
-    int[] index0 = new int[2];
-    int[] index1 = new int[2];
-    int[] index2 = new int[2];
-    int[] index3 = new int[2];
-    int[] index4 = new int[2];
-    int[] index5 = new int[2];
-    int[] index6 = new int[2];
-    int[] index7 = new int[2];
-    int[] index8 = new int[2];
+    public PhotonView PV;
+
+    int[] index0, index1, index2, index3, index4, index5, index6, index7, index8 = new int[2];
 
     private void Awake()
     {
@@ -120,14 +115,16 @@ public class GameManager : MonoBehaviour
         dontTouchObj.SetActive(false);
         targetObj.SetActive(false);
 
-        rouletteCamera.SetActive(false);
-        mainView.SetActive(true);
-        rouletteView.SetActive(false);
+        loginView.SetActive(true);
+        mainView.SetActive(false);
 
         ChangeMoney(setMoney);
         ChangeBettingMoney(0);
 
-        targetText.text = "?";
+        timer = 0;
+        timerFillAmount.fillAmount = 0;
+
+        targetText.text = "-";
         recordText.text = "";
 
         gridConstraintCount = gridLayoutGroup.constraintCount;
@@ -254,17 +251,38 @@ public class GameManager : MonoBehaviour
             content.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + i + 1);
             blockContentList.Add(content);
         }
-    }
-
-    private void Start()
-    {
-        timer = setTimer;
-        timerFillAmount.fillAmount = 1;
-        StartCoroutine(TimerCoroution());
 
         SetSplitIndex();
         SetSquareIndex();
     }
+
+    [PunRPC]
+    public void GameStart()
+    {
+        loginView.SetActive(false);
+        mainView.SetActive(true);
+
+        timer = setTimer;
+        timerFillAmount.fillAmount = 1;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(TimerCoroution());
+        }
+
+        pointerManager.Initialize();
+    }
+
+    public void GameStop()
+    {
+        StopAllCoroutines();
+
+        loginView.SetActive(true);
+        mainView.SetActive(false);
+
+        rouletteManager.CloseRouletteView();
+    }
+
 
     void SetSplitIndex()
     {
@@ -346,33 +364,41 @@ public class GameManager : MonoBehaviour
         bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
     }
 
+    [PunRPC]
+    void ChangeTimer(int number)
+    {
+        timer = number;
+
+        timerFillAmount.fillAmount = timer / ((setTimer - 1) * 1.0f);
+        timerText.text = timer.ToString();
+    }
+
     IEnumerator TimerCoroution()
     {
         if (timer <= 0)
         {
-            //StartCoroutine(RandomTargetNumber());
-            OpenRouletteView();
+            //OpenRouletteView();
+            PV.RPC("OpenRouletteView", RpcTarget.All);
             yield break;
         }
 
-        targetText.text = "?";
-
         timer -= 1;
 
-        timerFillAmount.fillAmount = timer / ((setTimer - 1) * 1.0f);
-        timerText.text = timer.ToString();
+        PV.RPC("ChangeTimer", RpcTarget.All, timer);
+
+        //timerFillAmount.fillAmount = timer / ((setTimer - 1) * 1.0f);
+        //timerText.text = timer.ToString();
 
         yield return new WaitForSeconds(1f);
         StartCoroutine(TimerCoroution());
     }
 
+    [PunRPC]
     void OpenRouletteView()
     {
         if (autoTargetNumber == -1)
         {
-            rouletteCamera.SetActive(true);
             mainView.SetActive(false);
-            rouletteView.SetActive(true);
 
             rouletteManager.Initialize(rouletteContentList.Count + 1);
         }
@@ -384,13 +410,34 @@ public class GameManager : MonoBehaviour
 
     public void CloseRouletteView(int number)
     {
-        rouletteCamera.SetActive(false);
         mainView.SetActive(true);
-        rouletteView.SetActive(false);
 
         targetNumber = number;
 
-        StartCoroutine(RandomTargetNumber());
+        recordText.text += targetNumber + ", ";
+        targetText.text = targetNumber.ToString();
+
+        CheckTargetNumber();
+
+        dontTouchObj.SetActive(true);
+
+        ResetRouletteContent();
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        timerText.text = "5초 뒤에 다시 시작합니다.";
+
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(RandomTargetNumber());
+        }
     }
 
     IEnumerator RandomTargetNumber()
@@ -406,28 +453,14 @@ public class GameManager : MonoBehaviour
         //    str = "<color=#ff0000>" + targetNumber.ToString() + "</color>";
         //}
 
-        recordText.text += targetNumber + ", ";
-        targetText.text = targetNumber.ToString();
-
-        CheckTargetNumber();
-
-        dontTouchObj.SetActive(true);
-
-        ResetRouletteContent();
-
-        for(int i = 0; i < blockContentList.Count; i ++)
-        {
-            if(blockContentList[i].isDrag)
-            {
-                blockContentList[i].TimeOver();
-                break;
-            }
-        }
-
-        timerText.text = "5초 뒤에 다시 시작합니다.";
-
         yield return new WaitForSeconds(5f);
 
+        PV.RPC("RestartGame", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RestartGame()
+    {
         for (int i = 0; i < blockContentList.Count; i++)
         {
             blockContentList[i].ResetPos();
@@ -456,9 +489,13 @@ public class GameManager : MonoBehaviour
         dontTouchObj.SetActive(false);
         targetObj.SetActive(false);
 
-        timerFillAmount.fillAmount = 1;
         timer = setTimer;
-        StartCoroutine(TimerCoroution());
+        timerFillAmount.fillAmount = 1;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(TimerCoroution());
+        }
     }
 
     private void CheckTargetNumber()
@@ -620,9 +657,9 @@ public class GameManager : MonoBehaviour
             ChangeMoney(bettingValue[(int)blockContent.blockType]);
             ChangeBettingMoney(-bettingValue[(int)blockContent.blockType]);
 
-            string notion = bettingValue[(int)blockContent.blockType] + "만큼 배팅을 취소했습니다.\n총 배팅 금액은 " + bettingMoney + "입니다.";
+            //string notion = bettingValue[(int)blockContent.blockType] + "만큼 배팅을 취소했습니다.\n총 배팅 금액은 " + bettingMoney + "입니다.";
 
-            TalkManager.instance.UseNotion(notion, Color.red);
+            //TalkManager.instance.UseNotion(notion, Color.red);
 
             bettingValue[(int)blockContent.blockType] = 0;
         }
@@ -1248,10 +1285,12 @@ public class GameManager : MonoBehaviour
         ChangeMoney(-blockInformation.bettingPrice * blockInformation.size);
         ChangeBettingMoney(blockInformation.bettingPrice * blockInformation.size);
 
-        string notion = "₩ " + blockInformation.bettingPrice.ToString() + "짜리 " + blockInformation.size + "개를 배팅했습니다.";
+        string notion = "<color=#00FF00>" + PlayerPrefs.GetString("NickName") + " 님이 ₩ " + blockInformation.bettingPrice.ToString()
+            + " x " + blockInformation.size + " 베팅\n총 배팅 : " + bettingMoney + "</color>";
 
         NotionManager.instance.UseNotion(notion, ColorType.Green);
-        TalkManager.instance.UseNotion(notion + "\n총 배팅 금액은 " + bettingMoney + "입니다.", Color.green);
+
+        PV.RPC("ChatRPC", RpcTarget.All, notion);
     }
 
     public void ResetRouletteContent()
@@ -1308,7 +1347,11 @@ public class GameManager : MonoBehaviour
         ChangeResetBettingMoney();
 
         NotionManager.instance.UseNotion(NotionType.Cancle);
+    }
 
-        TalkManager.instance.UseNotion("베팅을 취소하였습니다.", Color.red);
+    [PunRPC] // RPC는 플레이어가 속해있는 방 모든 인원에게 전달한다
+    void ChatRPC(string msg)
+    {
+        TalkManager.instance.UseNotion(msg);
     }
 }
