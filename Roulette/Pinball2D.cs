@@ -2,6 +2,8 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Pinball2D : MonoBehaviour
 {
@@ -20,6 +22,8 @@ public class Pinball2D : MonoBehaviour
 
     public bool rotate = false;
     public bool wind = false;
+
+    public PhotonView PV;
 
     private void Awake()
     {
@@ -64,7 +68,7 @@ public class Pinball2D : MonoBehaviour
     }
 
     [Button]
-    public void StartPinball()
+    public void StartPinball(float power)
     {
         StopAllCoroutines();
 
@@ -75,11 +79,16 @@ public class Pinball2D : MonoBehaviour
 
         Vector2 dir = new Vector2(randomX, randomY).normalized;
 
-        rigid.AddForce(dir * wallSpeed);
+        rigid.AddForce(dir * (wallSpeed + (wallSpeed * power)));
 
-        rigid.drag = 0.1f;
+        rigid.drag = 0.2f;
 
         Invoke("Wait", 3f);
+    }
+
+    public void MyTurn()
+    {
+        PV.RequestOwnership();
     }
 
     void Wait()
@@ -114,7 +123,7 @@ public class Pinball2D : MonoBehaviour
         {
             if (Mathf.Abs(rigid.velocity.x) <= 0.1f)
             {
-                rigid.drag = 1;
+                rigid.drag = 2;
             }
         }
     }

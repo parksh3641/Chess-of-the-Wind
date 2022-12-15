@@ -182,6 +182,8 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (eventData.pointerDrag.transform.tag != "Block") return;
+
         if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
         {
             if (gameManager.money >= gameManager.blockInformation.bettingPrice * gameManager.blockInformation.size)

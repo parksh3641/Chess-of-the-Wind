@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -14,6 +15,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public PhotonView PV;
 
     public GameManager gameManager;
+    public CharacterManager characterManager;
 
 
     void Awake()
@@ -63,15 +65,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         statusText.text = "서버에 연결되었습니다";
 
-        if (nickNameInput.text.Length == 0)
-        {
-            nickNameInput.text = "Player_" + Random.Range(0,999).ToString();
-        }
-
-        PlayerPrefs.SetString("NickName", nickNameInput.text); 
-
-        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
-
         JoinLobby();
     }
 
@@ -101,8 +94,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         statusText.text = "로비에 연결되었습니다";
-
-        PhotonNetwork.LocalPlayer.NickName = PlayerPrefs.GetString("NickName");
     }
 
 
@@ -111,7 +102,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinRoom() => PhotonNetwork.JoinRoom("Master");
 
-    public void JoinOrCreateRoom() => PhotonNetwork.JoinOrCreateRoom("Master", new RoomOptions { MaxPlayers = 4 }, null);
+    public void JoinOrCreateRoom()
+    {
+        if (nickNameInput.text.Length == 0)
+        {
+            nickNameInput.text = "Player_" + Random.Range(0, 999).ToString();
+        }
+
+        PlayerPrefs.SetString("NickName", nickNameInput.text);
+
+        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
+
+        RoomOptions roomOption = new RoomOptions();
+        roomOption.MaxPlayers = 4;
+
+        PhotonNetwork.JoinOrCreateRoom("Master", roomOption, null);
+    }
 
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
@@ -131,20 +137,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         statusText.text = "방에 참가하였습니다.";
 
-        Debug.Log("방에 참가하였습니다.");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PlayerPrefs.GetString("NickName") } });
+        }
 
         gameManager.GameStart();
+
+        characterManager.AddAllPlayer();
+
     }
 
-    public override void OnCreateRoomFailed(short returnCode, string message) => print("방만들기실패");
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        statusText.text = "방 만들기 실패했습니다.";
+    }
 
-    public override void OnJoinRoomFailed(short returnCode, string message) => print("방참가실패");
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        statusText.text = "방 참가 실패했습니다.";
+    }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        statusText.text = "방이 없어서 새롭게 방을 만듭니다.";
-
-        JoinOrCreateRoom();
+        statusText.text = "랜덤방에 참가할 수 없습니다.";
     }
 
 
@@ -157,6 +175,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             print("현재 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
             print("현재 방 인원수 : " + PhotonNetwork.CurrentRoom.PlayerCount);
             print("현재 방 최대인원수 : " + PhotonNetwork.CurrentRoom.MaxPlayers);
+
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            print("현재 방 인게임 상태 : " + ht["Status"].ToString());
+            print("다음 핀볼 칠 사람 : " + ht["Pinball"].ToString());
 
             string playerStr = "방에 있는 플레이어 목록 : ";
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) playerStr += PhotonNetwork.PlayerList[i].NickName + ", ";
@@ -175,10 +197,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         PV.RPC("ChatRPC", RpcTarget.All, "<color=#00FF00>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
+
+        characterManager.AddPlayer(newPlayer.NickName);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         PV.RPC("ChatRPC", RpcTarget.All, "<color=#FF0000>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
+
+        characterManager.DeletePlayer(otherPlayer.NickName);
     }
 
     [PunRPC] // RPC는 플레이어가 속해있는 방 모든 인원에게 전달한다

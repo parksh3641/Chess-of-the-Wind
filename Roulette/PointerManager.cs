@@ -33,21 +33,11 @@ public class PointerManager : MonoBehaviour
 
         //numberList.Clear();
 
-    }
-
-    private void Start()
-    {
-
-    }
-
-    public void Initialize()
-    {
-        //delay = rotateSpeed / (maxNumber + 1);
-
         for (int i = 1; i < maxNumber; i++)
         {
-            GameObject obj = PhotonNetwork.Instantiate("Pointer", Vector3.zero, Quaternion.identity, 0);
-            Pointer content = obj.GetComponent<Pointer>();
+            //GameObject obj = PhotonNetwork.Instantiate("Pointer", Vector3.zero, Quaternion.identity, 0);
+            ///Pointer content = obj.GetComponent<Pointer>();
+            Pointer content = Instantiate(pointer);
             content.transform.parent = pointerTransform;
             content.transform.localScale = Vector3.one;
             content.transform.localPosition = new Vector3(0, 0, -0.5f);
@@ -55,10 +45,34 @@ public class PointerManager : MonoBehaviour
             content.Initialize(i);
             pointerList.Add(content);
         }
+    }
 
+    private void Start()
+    {
         move = true;
 
         StartCoroutine(DeploymentCoroution());
+    }
+
+    public void Initialize()
+    {
+        //delay = rotateSpeed / (maxNumber + 1);
+
+        //for (int i = 1; i < maxNumber; i++)
+        //{
+        //    GameObject obj = PhotonNetwork.Instantiate("Pointer", Vector3.zero, Quaternion.identity, 0);
+        //    Pointer content = obj.GetComponent<Pointer>();
+        //    content.transform.parent = pointerTransform;
+        //    content.transform.localScale = Vector3.one;
+        //    content.transform.localPosition = new Vector3(0, 0, -0.5f);
+        //    //content.Initialize(numberList[i]);
+        //    content.Initialize(i);
+        //    pointerList.Add(content);
+        //}
+
+        //move = true;
+
+        //StartCoroutine(DeploymentCoroution());
     }
 
     IEnumerator DeploymentCoroution()

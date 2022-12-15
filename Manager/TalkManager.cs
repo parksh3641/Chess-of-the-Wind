@@ -32,6 +32,16 @@ public class TalkManager : MonoBehaviour
         }
     }
 
+    public void Initialize()
+    {
+        talkIndex = 0;
+
+        for(int i = 0; i < talkContentList.Count; i ++)
+        {
+            talkContentList[i].gameObject.SetActive(false);
+        }
+    }
+
     public void UseNotion(string text)
     {
         if (talkIndex > talkContentList.Count - 1)

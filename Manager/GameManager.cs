@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     public int autoTargetNumber = -1;
     public int setMoney = 50000;
     public int setTimer = 16;
+    public int waitTimer = 10;
+    public int bounsCount = 3;
     public bool checkOverlap = false;
 
     [Title("View")]
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject dontTouchObj;
     public GameObject targetObj;
+    public GameObject waitingObj;
 
     [Title("Prefab")]
     public RouletteContent rouletteContent;
@@ -87,6 +91,8 @@ public class GameManager : MonoBehaviour
     List<RouletteContent> rouletteSplitContentList_Horizontal = new List<RouletteContent>();
     List<RouletteContent> rouletteSquareContentList = new List<RouletteContent>();
 
+    List<RouletteContent> allContentList = new List<RouletteContent>();
+
     List<RouletteContent> numberContentList = new List<RouletteContent>();
     List<BlockContent> blockContentList = new List<BlockContent>();
 
@@ -98,6 +104,7 @@ public class GameManager : MonoBehaviour
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
     public PointerManager pointerManager;
+    public TalkManager talkManager;
     BlockDataBase blockDataBase;
 
     public PhotonView PV;
@@ -114,12 +121,13 @@ public class GameManager : MonoBehaviour
 
         dontTouchObj.SetActive(false);
         targetObj.SetActive(false);
+        waitingObj.SetActive(false);
 
         loginView.SetActive(true);
         mainView.SetActive(false);
 
         ChangeMoney(setMoney);
-        ChangeBettingMoney(0);
+        ChangeResetBettingMoney();
 
         timer = 0;
         timerFillAmount.fillAmount = 0;
@@ -162,6 +170,8 @@ public class GameManager : MonoBehaviour
             numberContentList.Add(content);
 
             index++;
+
+            allContentList.Add(content);
         }
 
         index = 0;
@@ -188,6 +198,8 @@ public class GameManager : MonoBehaviour
             rouletteSplitContentList_Vertical.Add(content);
 
             index++;
+
+            allContentList.Add(content);
         }
 
         index = 0;
@@ -214,6 +226,8 @@ public class GameManager : MonoBehaviour
             rouletteSplitContentList_Horizontal.Add(content);
 
             index++;
+
+            allContentList.Add(content);
         }
 
         index = 0;
@@ -240,6 +254,8 @@ public class GameManager : MonoBehaviour
             rouletteSquareContentList.Add(content);
 
             index++;
+
+            allContentList.Add(content);
         }
 
         for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
@@ -256,31 +272,82 @@ public class GameManager : MonoBehaviour
         SetSquareIndex();
     }
 
-    [PunRPC]
     public void GameStart()
     {
         loginView.SetActive(false);
         mainView.SetActive(true);
+
+        talkManager.Initialize();
+        recordText.text = "";
 
         timer = setTimer;
         timerFillAmount.fillAmount = 1;
 
         if (PhotonNetwork.IsMasterClient)
         {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
+
             StartCoroutine(TimerCoroution());
         }
+        else
+        {
+            Invoke("CheckPlayer", 1f);
+        }
 
-        pointerManager.Initialize();
+        // pointerManager.Initialize();
+    }
+
+    void CheckPlayer()
+    {
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        switch (ht["Status"])
+        {
+            case "Waiting":
+
+                break;
+            case "Betting":
+                Waiting(true);
+                break;
+            case "Roulette":
+                OpenRouletteView();
+                Waiting(true);
+                break;
+            case "Bouns":
+                OpenRouletteView();
+                Waiting(true);
+                break;
+        }
     }
 
     public void GameStop()
     {
         StopAllCoroutines();
 
-        loginView.SetActive(true);
-        mainView.SetActive(false);
+        dontTouchObj.SetActive(false);
 
         rouletteManager.CloseRouletteView();
+
+        ResetRouletteContent();
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        BetOptionCancleButton();
+
+        loginView.SetActive(true);
+        mainView.SetActive(false);
+    }
+
+    public void Waiting(bool check)
+    {
+        waitingObj.SetActive(check);
     }
 
 
@@ -432,11 +499,20 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        timerText.text = "5초 뒤에 다시 시작합니다.";
+        timerText.text = waitTimer + "초 뒤에 다시 시작합니다.";
 
         if(PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(RandomTargetNumber());
+        }
+
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        switch (ht["Status"])
+        {
+            case "Waiting":
+                Waiting(false);
+                break;
         }
     }
 
@@ -453,7 +529,7 @@ public class GameManager : MonoBehaviour
         //    str = "<color=#ff0000>" + targetNumber.ToString() + "</color>";
         //}
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(waitTimer);
 
         PV.RPC("RestartGame", RpcTarget.All);
     }
@@ -466,24 +542,9 @@ public class GameManager : MonoBehaviour
             blockContentList[i].ResetPos();
         }
 
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        for (int i = 0; i < allContentList.Count; i++)
         {
-            rouletteContentList[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
-        {
-            rouletteSplitContentList_Vertical[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
-        {
-            rouletteSplitContentList_Horizontal[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSquareContentList.Count; i++)
-        {
-            rouletteSquareContentList[i].SetActiveFalseAll();
+            allContentList[i].SetActiveFalseAll();
         }
 
         dontTouchObj.SetActive(false);
@@ -600,11 +661,23 @@ public class GameManager : MonoBehaviour
         {
             if (getMoney > bettingMoney)
             {
-                NotionManager.instance.UseNotion(((int)getMoney - bettingMoney) + " 만큼 돈을 땄어요 !", ColorType.Green);
+                string notion = "<color=#0096FF>" + PlayerPrefs.GetString("NickName") + " 님 +" + ((int)getMoney - bettingMoney) +"</color>";
+
+                string notion2 = ((int)getMoney - bettingMoney) + " 만큼 획득";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Green);
+
+                PV.RPC("ChatRPC", RpcTarget.All, notion);
             }
             else
             {
-                NotionManager.instance.UseNotion(Mathf.Abs((bettingMoney - getMoney)) + " 만큼 돈을 잃었어요 ㅠㅠ", ColorType.Red);
+                string notion = "<color=#FF0000>" + PlayerPrefs.GetString("NickName") + " 님 -" + (int)Mathf.Abs((bettingMoney - getMoney)) + "</color>";
+
+                string notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Red);
+
+                PV.RPC("ChatRPC", RpcTarget.All, notion);
             }
         }
 
@@ -1288,31 +1361,18 @@ public class GameManager : MonoBehaviour
         string notion = "<color=#00FF00>" + PlayerPrefs.GetString("NickName") + " 님이 ₩ " + blockInformation.bettingPrice.ToString()
             + " x " + blockInformation.size + " 베팅\n총 배팅 : " + bettingMoney + "</color>";
 
-        NotionManager.instance.UseNotion(notion, ColorType.Green);
+        string notion2 = "₩ " + blockInformation.bettingPrice.ToString() + " x " + blockInformation.size + " 베팅";
+
+        NotionManager.instance.UseNotion(notion2, ColorType.Green);
 
         PV.RPC("ChatRPC", RpcTarget.All, notion);
     }
 
     public void ResetRouletteContent()
     {
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        for (int i = 0; i < allContentList.Count; i++)
         {
-            rouletteContentList[i].ResetBackgroundColor();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
-        {
-            rouletteSplitContentList_Vertical[i].ResetBackgroundColor();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
-        {
-            rouletteSplitContentList_Horizontal[i].ResetBackgroundColor();
-        }
-
-        for (int i = 0; i < rouletteSquareContentList.Count; i++)
-        {
-            rouletteSquareContentList[i].ResetBackgroundColor();
+            allContentList[i].ResetBackgroundColor();
         }
     }
 
@@ -1323,24 +1383,9 @@ public class GameManager : MonoBehaviour
             blockContentList[i].ResetPos();
         }
 
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        for (int i = 0; i < allContentList.Count; i++)
         {
-            rouletteContentList[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
-        {
-            rouletteSplitContentList_Vertical[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
-        {
-            rouletteSplitContentList_Horizontal[i].SetActiveFalseAll();
-        }
-
-        for (int i = 0; i < rouletteSquareContentList.Count; i++)
-        {
-            rouletteSquareContentList[i].SetActiveFalseAll();
+            allContentList[i].SetActiveFalseAll();
         }
 
         ChangeMoney(bettingMoney);
@@ -1352,6 +1397,6 @@ public class GameManager : MonoBehaviour
     [PunRPC] // RPC는 플레이어가 속해있는 방 모든 인원에게 전달한다
     void ChatRPC(string msg)
     {
-        TalkManager.instance.UseNotion(msg);
+        talkManager.UseNotion(msg);
     }
 }

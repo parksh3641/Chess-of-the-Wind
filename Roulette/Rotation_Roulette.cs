@@ -17,7 +17,7 @@ public class Rotation_Roulette : MonoBehaviour
 
     public void StartRoulette()
     {
-        speed = 300;
+        speed = Random.Range(300, 600);
 
         minusSpeed = 1f;
     }
