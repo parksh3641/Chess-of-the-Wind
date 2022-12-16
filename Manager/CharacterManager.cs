@@ -57,6 +57,14 @@ public class CharacterManager : MonoBehaviour
         index--;
     }
 
+    public void DeleteAllPlayer()
+    {
+        for (int i = 0; i < characterContents.Length; i++)
+        {
+            characterContents[i].gameObject.SetActive(false);
+        }
+    }
+
     public void CheckPlayer(string name)
     {
         for (int i = 0; i < characterContents.Length; i++)

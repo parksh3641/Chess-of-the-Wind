@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -37,10 +37,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Gosu()
     {
-        statusText.text = "ºê·ĞÁî1 ÀÌ»ó ·©Å©°¡ ÇÊ¿äÇÕ´Ï´Ù.";
+        statusText.text = "ë¸Œë¡ ì¦ˆ1 ì´ìƒ ë­í¬ê°€ í•„ìš”í•©ë‹ˆë‹¤.";
     }
 
-    void OnApplicationPause(bool pause) //¾ÛÀÌ ²¨Áú¶§
+    void OnApplicationPause(bool pause) //ì•±ì´ êº¼ì§ˆë•Œ
     {
         if (pause)
         {
@@ -54,7 +54,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
-        statusText.text = "¼­¹ö¿¡ Á¢¼ÓÁßÀÔ´Ï´Ù.";
+        statusText.text = "ì„œë²„ì— ì ‘ì†ì¤‘ì…ë‹ˆë‹¤.";
 
         //PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -63,7 +63,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        statusText.text = "¼­¹ö¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù";
+        statusText.text = "ì„œë²„ì— ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤";
 
         JoinLobby();
     }
@@ -74,7 +74,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        statusText.text = "¼­¹ö¿Í ¿¬°áÀÌ ²÷°å½À´Ï´Ù.";
+        statusText.text = "ì„œë²„ì™€ ì—°ê²°ì´ ëŠê²¼ìŠµë‹ˆë‹¤.";
 
         gameManager.GameStop();
 
@@ -85,7 +85,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinLobby()
     {
-        statusText.text = "¹æÀ» Ã£°í ÀÖ½À´Ï´Ù.";
+        statusText.text = "ë°©ì„ ì°¾ê³  ìˆìŠµë‹ˆë‹¤.";
 
         PhotonNetwork.JoinLobby();
     }
@@ -93,7 +93,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        statusText.text = "·Îºñ¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù";
+        statusText.text = "ë¡œë¹„ì— ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤";
     }
 
 
@@ -123,19 +123,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
-        Debug.Log("¹æÀ» ¶°³µ½À´Ï´Ù.");
+        Debug.Log("ë°©ì„ ë– ë‚¬ìŠµë‹ˆë‹¤.");
 
         PhotonNetwork.LeaveRoom();
     }
 
     public override void OnCreatedRoom()
     {
-        Debug.Log("¹æÀ» ¸¸µé¾ú½À´Ï´Ù.");
+        Debug.Log("ë°©ì„ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤.");
     }
 
     public override void OnJoinedRoom()
     {
-        statusText.text = "¹æ¿¡ Âü°¡ÇÏ¿´½À´Ï´Ù.";
+        statusText.text = "ë°©ì— ì°¸ê°€í•˜ì˜€ìŠµë‹ˆë‹¤.";
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -151,63 +151,63 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        statusText.text = "¹æ ¸¸µé±â ½ÇÆĞÇß½À´Ï´Ù.";
+        statusText.text = "ë°© ë§Œë“¤ê¸° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.";
     }
 
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        statusText.text = "¹æ Âü°¡ ½ÇÆĞÇß½À´Ï´Ù.";
+        statusText.text = "ë°© ì°¸ê°€ ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.";
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        statusText.text = "·£´ı¹æ¿¡ Âü°¡ÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        statusText.text = "ëœë¤ë°©ì— ì°¸ê°€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     }
 
 
 
-    [ContextMenu("Á¤º¸")]
+    [ContextMenu("ì •ë³´")]
     void Info()
     {
         if (PhotonNetwork.InRoom)
         {
-            print("ÇöÀç ¹æ ÀÌ¸§ : " + PhotonNetwork.CurrentRoom.Name);
-            print("ÇöÀç ¹æ ÀÎ¿ø¼ö : " + PhotonNetwork.CurrentRoom.PlayerCount);
-            print("ÇöÀç ¹æ ÃÖ´ëÀÎ¿ø¼ö : " + PhotonNetwork.CurrentRoom.MaxPlayers);
+            print("í˜„ì¬ ë°© ì´ë¦„ : " + PhotonNetwork.CurrentRoom.Name);
+            print("í˜„ì¬ ë°© ì¸ì›ìˆ˜ : " + PhotonNetwork.CurrentRoom.PlayerCount);
+            print("í˜„ì¬ ë°© ìµœëŒ€ì¸ì›ìˆ˜ : " + PhotonNetwork.CurrentRoom.MaxPlayers);
 
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-            print("ÇöÀç ¹æ ÀÎ°ÔÀÓ »óÅÂ : " + ht["Status"].ToString());
-            print("´ÙÀ½ ÇÉº¼ Ä¥ »ç¶÷ : " + ht["Pinball"].ToString());
+            print("í˜„ì¬ ë°© ì¸ê²Œì„ ìƒíƒœ : " + ht["Status"].ToString());
+            print("ë‹¤ìŒ í•€ë³¼ ì¹  ì‚¬ëŒ : " + ht["Pinball"].ToString());
 
-            string playerStr = "¹æ¿¡ ÀÖ´Â ÇÃ·¹ÀÌ¾î ¸ñ·Ï : ";
+            string playerStr = "ë°©ì— ìˆëŠ” í”Œë ˆì´ì–´ ëª©ë¡ : ";
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) playerStr += PhotonNetwork.PlayerList[i].NickName + ", ";
             print(playerStr);
         }
         else
         {
-            print("Á¢¼ÓÇÑ ÀÎ¿ø ¼ö : " + PhotonNetwork.CountOfPlayers);
-            print("¹æ °³¼ö : " + PhotonNetwork.CountOfRooms);
-            print("¸ğµç ¹æ¿¡ ÀÖ´Â ÀÎ¿ø ¼ö : " + PhotonNetwork.CountOfPlayersInRooms);
-            print("·Îºñ¿¡ ÀÖ´ÂÁö? : " + PhotonNetwork.InLobby);
-            print("¿¬°áµÆ´ÂÁö? : " + PhotonNetwork.IsConnected);
+            print("ì ‘ì†í•œ ì¸ì› ìˆ˜ : " + PhotonNetwork.CountOfPlayers);
+            print("ë°© ê°œìˆ˜ : " + PhotonNetwork.CountOfRooms);
+            print("ëª¨ë“  ë°©ì— ìˆëŠ” ì¸ì› ìˆ˜ : " + PhotonNetwork.CountOfPlayersInRooms);
+            print("ë¡œë¹„ì— ìˆëŠ”ì§€? : " + PhotonNetwork.InLobby);
+            print("ì—°ê²°ëëŠ”ì§€? : " + PhotonNetwork.IsConnected);
         }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        PV.RPC("ChatRPC", RpcTarget.All, "<color=#00FF00>" + newPlayer.NickName + "´ÔÀÌ Âü°¡ÇÏ¼Ì½À´Ï´Ù.</color>");
+        PV.RPC("ChatRPC", RpcTarget.All, "<color=#00FF00>" + newPlayer.NickName + "ë‹˜ì´ ì°¸ê°€í•˜ì…¨ìŠµë‹ˆë‹¤.</color>");
 
         characterManager.AddPlayer(newPlayer.NickName);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        PV.RPC("ChatRPC", RpcTarget.All, "<color=#FF0000>" + otherPlayer.NickName + "´ÔÀÌ ÅğÀåÇÏ¼Ì½À´Ï´Ù.</color>");
+        PV.RPC("ChatRPC", RpcTarget.All, "<color=#FF0000>" + otherPlayer.NickName + "ë‹˜ì´ í‡´ì¥í•˜ì…¨ìŠµë‹ˆë‹¤.</color>");
 
         characterManager.DeletePlayer(otherPlayer.NickName);
     }
 
-    [PunRPC] // RPC´Â ÇÃ·¹ÀÌ¾î°¡ ¼ÓÇØÀÖ´Â ¹æ ¸ğµç ÀÎ¿ø¿¡°Ô Àü´ŞÇÑ´Ù
+    [PunRPC] // RPCëŠ” í”Œë ˆì´ì–´ê°€ ì†í•´ìˆëŠ” ë°© ëª¨ë“  ì¸ì›ì—ê²Œ ì „ë‹¬í•œë‹¤
     void ChatRPC(string msg)
     {
         TalkManager.instance.UseNotion(msg);

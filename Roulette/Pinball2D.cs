@@ -12,7 +12,7 @@ public class Pinball2D : MonoBehaviour
     public Rigidbody2D rigid;
 
     public float rotateSpeed = 100;
-    public float wallSpeed = 300f;
+    public float ballSpeed = 300f;
     public float speed = 1f;
 
     public float downSpeed = 0.001f;
@@ -23,16 +23,12 @@ public class Pinball2D : MonoBehaviour
     public bool rotate = false;
     public bool wind = false;
 
+    public RouletteManager rouletteManager;
     public PhotonView PV;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
-        //StartRotate();
     }
 
     [Button]
@@ -57,43 +53,45 @@ public class Pinball2D : MonoBehaviour
         }
 
         speed = 1;
-
         rigid.drag = 0f;
 
-        StopAllCoroutines();
-        StartCoroutine(DownSpeed());
-
         rotate = true;
-        wind = false;
+
+        StartCoroutine(DownSpeed());
     }
 
     [Button]
     public void StartPinball(float power)
     {
-        StopAllCoroutines();
+        if (!wind)
+        {
+            StopAllCoroutines();
 
-        rotate = false;
+            rotate = false;
 
-        randomX = Random.Range(-1f, 1f);
-        randomY = Random.Range(-1f, 1f);
+            randomX = Random.Range(-1f, 1f);
+            randomY = Random.Range(-1f, 1f);
 
-        Vector2 dir = new Vector2(randomX, randomY).normalized;
+            Vector2 dir = new Vector2(randomX, randomY).normalized;
 
-        rigid.AddForce(dir * (wallSpeed + (wallSpeed * power)));
+            rigid.AddForce(dir * (ballSpeed + (ballSpeed * power)));
 
-        rigid.drag = 0.2f;
+            rigid.drag = 0.2f;
 
-        Invoke("Wait", 3f);
-    }
-
-    public void MyTurn()
-    {
-        PV.RequestOwnership();
+            Invoke("Wait", 3);
+        }
     }
 
     void Wait()
     {
         wind = true;
+    }
+
+    public void MyTurn()
+    {
+        PV.RequestOwnership();
+
+        StartRotate();
     }
 
     IEnumerator DownSpeed()
@@ -117,14 +115,32 @@ public class Pinball2D : MonoBehaviour
         if(rotate)
         {
             transform.RotateAround(target.transform.position, Vector3.forward, rotateSpeed * speed  * Time.deltaTime);
+
+            if(speed <= 0)
+            {
+                EndPinball();
+            }
         }
 
         if (wind)
         {
+            if (rigid.velocity.x == 0)
+            {
+                EndPinball();
+            }
+
             if (Mathf.Abs(rigid.velocity.x) <= 0.1f)
             {
                 rigid.drag = 2;
             }
         }
+    }
+
+    void EndPinball()
+    {
+        rotate = false;
+        wind = false;
+
+        rouletteManager.EndPinball();
     }
 }

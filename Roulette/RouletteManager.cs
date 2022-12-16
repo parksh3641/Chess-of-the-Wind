@@ -35,8 +35,7 @@ public class RouletteManager : MonoBehaviour
     public Text titleText;
     public Text bounsText;
 
-    bool click = false;
-    bool movePinball = false;
+    bool buttonClick = false;
     bool bouns = false;
 
     public GameManager gameManager;
@@ -48,8 +47,7 @@ public class RouletteManager : MonoBehaviour
 
     private void Awake()
     {
-        click = false;
-        movePinball = false;
+        buttonClick = false;
         bouns = false;
 
         bounsView.SetActive(false);
@@ -62,22 +60,9 @@ public class RouletteManager : MonoBehaviour
 
     private void Update()
     {
-        if (!PhotonNetwork.IsMasterClient)
+        if(!PhotonNetwork.IsMasterClient)
         {
             return;
-        }
-
-        if (movePinball)
-        {
-            if (pinball.speed <= 0)
-            {
-                StartCoroutine(RandomTargetNumber());
-            }
-
-            if (pinball.wind && pinball.rigid.velocity.x == 0)
-            {
-                StartCoroutine(RandomTargetNumber());
-            }
         }
 
         if(bouns)
@@ -119,8 +104,7 @@ public class RouletteManager : MonoBehaviour
         targetView.SetActive(false);
         bounsView.SetActive(false);
 
-        click = false;
-        movePinball = true;
+        buttonClick = false;
         bouns = false;
 
         power = 0;
@@ -143,9 +127,7 @@ public class RouletteManager : MonoBehaviour
 
             pinball.MyTurn();
 
-            pinball.StartRotate();
-
-            movePinball = true;
+            NotionManager.instance.UseNotion(NotionType.YourTurn);
 
             Debug.Log("내 차례입니다.");
         }
@@ -191,8 +173,7 @@ public class RouletteManager : MonoBehaviour
         targetView.SetActive(false);
         bounsView.SetActive(true);
 
-        click = true;
-        movePinball = false;
+        buttonClick = true;
         bouns = true;
 
         titleText.text = "보너스 룰렛";
@@ -216,7 +197,7 @@ public class RouletteManager : MonoBehaviour
     {
         if(pinball.PV.IsMine)
         {
-            if (click) return;
+            if (buttonClick) return;
 
             pinballPower = true;
 
@@ -228,10 +209,10 @@ public class RouletteManager : MonoBehaviour
     {
         if (pinball.PV.IsMine)
         {
-            if (click) return;
+            if (buttonClick) return;
 
+            buttonClick = true;
             pinballPower = false;
-            click = true;
 
             pinball.StartPinball(power);
         }
@@ -275,26 +256,25 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
-    IEnumerator RandomTargetNumber()
+    public void EndPinball()
     {
-        click = true;
-        movePinball = false;
+        PV.RPC("GetNumber", RpcTarget.MasterClient);
+    }
 
-        pinball.speed = 1;
-        pinball.wind = false;
+    [PunRPC]
+    void GetNumber()
+    {
+        StartCoroutine(GetNumberCoroution());
+    }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PV.RPC("StopLoopSFX", RpcTarget.All);
-        }
+    IEnumerator GetNumberCoroution()
+    {
+        PV.RPC("StopLoopSFX", RpcTarget.All);
 
         yield return new WaitForSeconds(1f);
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            gameManager.bounsCount -= 1;
-            targetNumber = pointerManager.CheckNumber();
-        }
+        gameManager.bounsCount -= 1;
+        targetNumber = pointerManager.CheckNumber();
 
         PV.RPC("CheckNumber", RpcTarget.All, targetNumber);
 

@@ -28,6 +28,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopAllSFX()
+    {
+        for (int i = 0; i < sfxAudio.Length; i++)
+        {
+            if (sfxAudio[i].isPlaying)
+            {
+                sfxAudio[i].Stop();
+                sfxAudio[i].loop = false;
+            }
+        }
+    }
+
     public void PlayLoopSFX(GameSfxType type)
     {
         for (int i = 0; i < sfxAudio.Length; i++)

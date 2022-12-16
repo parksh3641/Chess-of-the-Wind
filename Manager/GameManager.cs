@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     public bool blockDrop = false;
     public bool blockOverlap = false;
 
-
     public GameObject blockRootParent;
     public GameObject blockParent;
     public GameObject blockGridParent;
@@ -105,6 +104,7 @@ public class GameManager : MonoBehaviour
     public RouletteManager rouletteManager;
     public PointerManager pointerManager;
     public TalkManager talkManager;
+    public CharacterManager characterManager;
     BlockDataBase blockDataBase;
 
     public PhotonView PV;
@@ -272,92 +272,13 @@ public class GameManager : MonoBehaviour
         SetSquareIndex();
     }
 
-    public void GameStart()
-    {
-        loginView.SetActive(false);
-        mainView.SetActive(true);
-
-        talkManager.Initialize();
-        recordText.text = "";
-
-        timer = setTimer;
-        timerFillAmount.fillAmount = 1;
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
-
-            StartCoroutine(TimerCoroution());
-        }
-        else
-        {
-            Invoke("CheckPlayer", 1f);
-        }
-
-        // pointerManager.Initialize();
-    }
-
-    void CheckPlayer()
-    {
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-
-        switch (ht["Status"])
-        {
-            case "Waiting":
-
-                break;
-            case "Betting":
-                Waiting(true);
-                break;
-            case "Roulette":
-                OpenRouletteView();
-                Waiting(true);
-                break;
-            case "Bouns":
-                OpenRouletteView();
-                Waiting(true);
-                break;
-        }
-    }
-
-    public void GameStop()
-    {
-        StopAllCoroutines();
-
-        dontTouchObj.SetActive(false);
-
-        rouletteManager.CloseRouletteView();
-
-        ResetRouletteContent();
-
-        for (int i = 0; i < blockContentList.Count; i++)
-        {
-            if (blockContentList[i].isDrag)
-            {
-                blockContentList[i].TimeOver();
-                break;
-            }
-        }
-
-        BetOptionCancleButton();
-
-        loginView.SetActive(true);
-        mainView.SetActive(false);
-    }
-
-    public void Waiting(bool check)
-    {
-        waitingObj.SetActive(check);
-    }
-
-
     void SetSplitIndex()
     {
         int index = 0;
         int count = 0;
         int number = 0;
 
-        for (int i = 0; i < 20; i ++)
+        for (int i = 0; i < 20; i++)
         {
             if (index >= gridConstraintCount - 1)
             {
@@ -391,13 +312,14 @@ public class GameManager : MonoBehaviour
             index++;
         }
     }
+
     void SetSquareIndex()
     {
         int index = 0;
         int count = 0;
         int number = 0;
 
-        for (int i = 0; i < 16; i ++)
+        for (int i = 0; i < 16; i++)
         {
             if (index >= gridConstraintCount - 1)
             {
@@ -413,22 +335,164 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ChangeMoney(float plus)
+    public void GameStart()
     {
-        money += plus;
-        moneyText.text = "현재 돈 : ₩ " + money.ToString();
+        loginView.SetActive(false);
+        mainView.SetActive(true);
+
+        talkManager.Initialize();
+        recordText.text = "";
+
+        dontTouchObj.SetActive(true);
+        targetObj.SetActive(false);
+
+        timer = waitTimer;
+        timerFillAmount.fillAmount = 1;
+
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(WaitTimerCoroution());
+        }
+
+        Invoke("CheckPlayer", 0.5f);
     }
 
-    void ChangeBettingMoney(float plus)
+    void CheckPlayer()
     {
-        bettingMoney += plus;
-        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        switch (ht["Status"])
+        {
+            case "Betting":
+                Waiting(true);
+                break;
+            case "Roulette":
+                OpenRouletteView();
+                Waiting(true);
+                break;
+            case "Bouns":
+                OpenRouletteView();
+                Waiting(true);
+                break;
+        }
     }
 
-    void ChangeResetBettingMoney()
+    public void GameStop()
     {
-        bettingMoney = 0;
-        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+        StopAllCoroutines();
+
+        dontTouchObj.SetActive(false);
+        waitingObj.SetActive(false);
+
+        rouletteManager.CloseRouletteView();
+        characterManager.DeleteAllPlayer();
+        soundManager.StopAllSFX();
+
+        ResetRouletteContent();
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        BetOptionCancleButton();
+
+        loginView.SetActive(true);
+        mainView.SetActive(false);
+    }
+
+    public void Waiting(bool check)
+    {
+        waitingObj.SetActive(check);
+    }
+
+    IEnumerator TimerCoroution()
+    {
+        if (timer <= 0)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PV.RPC("OpenRouletteView", RpcTarget.All);
+            }
+            yield break;
+        }
+
+        timer -= 1;
+
+        PV.RPC("ChangeTimer", RpcTarget.All, timer);
+
+        timerFillAmount.fillAmount = timer / ((setTimer - 1) * 1.0f);
+        timerText.text = timer.ToString();
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(TimerCoroution());
+    }
+
+    IEnumerator WaitTimerCoroution()
+    {
+        if (timer <= 0)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PV.RPC("RestartGame", RpcTarget.All);
+            }
+            yield break;
+        }
+
+        timer -= 1;
+
+        PV.RPC("ChangeWaitTimer", RpcTarget.All, timer);
+
+        timerFillAmount.fillAmount = timer / ((waitTimer - 1) * 1.0f);
+        timerText.text = timer + "초 뒤에 게임을 시작합니다";
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(WaitTimerCoroution());
+    }
+
+    [PunRPC]
+    void RestartGame()
+    {
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            blockContentList[i].ResetPos();
+        }
+
+        for (int i = 0; i < allContentList.Count; i++)
+        {
+            allContentList[i].SetActiveFalseAll();
+        }
+
+        dontTouchObj.SetActive(false);
+        targetObj.SetActive(false);
+
+        timer = setTimer;
+        timerFillAmount.fillAmount = 1;
+
+        NotionManager.instance.UseNotion(NotionType.GoBetting);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
+        }
+
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        switch (ht["Status"])
+        {
+            case "Waiting":
+                Waiting(false);
+                break;
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(TimerCoroution());
+        }
     }
 
     [PunRPC]
@@ -440,24 +504,13 @@ public class GameManager : MonoBehaviour
         timerText.text = timer.ToString();
     }
 
-    IEnumerator TimerCoroution()
+    [PunRPC]
+    void ChangeWaitTimer(int number)
     {
-        if (timer <= 0)
-        {
-            //OpenRouletteView();
-            PV.RPC("OpenRouletteView", RpcTarget.All);
-            yield break;
-        }
+        timer = number;
 
-        timer -= 1;
-
-        PV.RPC("ChangeTimer", RpcTarget.All, timer);
-
-        //timerFillAmount.fillAmount = timer / ((setTimer - 1) * 1.0f);
-        //timerText.text = timer.ToString();
-
-        yield return new WaitForSeconds(1f);
-        StartCoroutine(TimerCoroution());
+        timerFillAmount.fillAmount = timer / ((waitTimer - 1) * 1.0f);
+        timerText.text = timer + "초 뒤에 게임을 시작합니다";
     }
 
     [PunRPC]
@@ -499,64 +552,31 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        timerText.text = waitTimer + "초 뒤에 다시 시작합니다.";
+        timer = waitTimer;
+        timerFillAmount.fillAmount = 1;
 
         if(PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(RandomTargetNumber());
-        }
-
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-
-        switch (ht["Status"])
-        {
-            case "Waiting":
-                Waiting(false);
-                break;
+            StartCoroutine(WaitTimerCoroution());
         }
     }
 
-    IEnumerator RandomTargetNumber()
+    public void ChangeMoney(float plus)
     {
-        //string str = "";
-
-        //targetText.color = new Color(0, 0, 0);
-        //str = "<color=#000000>" + targetNumber.ToString() + "</color>";
-
-        //if (targetNumber % 2 == 0)
-        //{
-        //    targetText.color = new Color(1, 0, 0);
-        //    str = "<color=#ff0000>" + targetNumber.ToString() + "</color>";
-        //}
-
-        yield return new WaitForSeconds(waitTimer);
-
-        PV.RPC("RestartGame", RpcTarget.All);
+        money += plus;
+        moneyText.text = "현재 돈 : ₩ " + money.ToString();
     }
 
-    [PunRPC]
-    void RestartGame()
+    void ChangeBettingMoney(float plus)
     {
-        for (int i = 0; i < blockContentList.Count; i++)
-        {
-            blockContentList[i].ResetPos();
-        }
+        bettingMoney += plus;
+        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+    }
 
-        for (int i = 0; i < allContentList.Count; i++)
-        {
-            allContentList[i].SetActiveFalseAll();
-        }
-
-        dontTouchObj.SetActive(false);
-        targetObj.SetActive(false);
-
-        timer = setTimer;
-        timerFillAmount.fillAmount = 1;
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(TimerCoroution());
-        }
+    void ChangeResetBettingMoney()
+    {
+        bettingMoney = 0;
+        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
     }
 
     private void CheckTargetNumber()
@@ -659,29 +679,25 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ChangeMoney((int)getMoney);
+
+            string notion, notion2 = "";
+
             if (getMoney > bettingMoney)
             {
-                string notion = "<color=#0096FF>" + PlayerPrefs.GetString("NickName") + " 님 +" + ((int)getMoney - bettingMoney) +"</color>";
-
-                string notion2 = ((int)getMoney - bettingMoney) + " 만큼 획득";
-
-                NotionManager.instance.UseNotion(notion2, ColorType.Green);
-
-                PV.RPC("ChatRPC", RpcTarget.All, notion);
+                notion = "<color=#00C8FF>" + PlayerPrefs.GetString("NickName") + " 님 +" + (int)(getMoney - bettingMoney) + "만큼 증가\n남은 금액 : " + money + "</color>";
+                notion2 = (int)(getMoney - bettingMoney) + " 만큼 획득";
             }
             else
             {
-                string notion = "<color=#FF0000>" + PlayerPrefs.GetString("NickName") + " 님 -" + (int)Mathf.Abs((bettingMoney - getMoney)) + "</color>";
-
-                string notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
-
-                NotionManager.instance.UseNotion(notion2, ColorType.Red);
-
-                PV.RPC("ChatRPC", RpcTarget.All, notion);
+                notion = "<color=#FF0000>" + PlayerPrefs.GetString("NickName") + " 님 " + (int)Mathf.Abs((bettingMoney - getMoney)) + "만큼 감소\n남은 금액 : " + money + "</color>";
+                notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
             }
+
+            PV.RPC("ChatRPC", RpcTarget.All, notion);
+            NotionManager.instance.UseNotion(notion2, ColorType.Green);
         }
 
-        ChangeMoney((int)getMoney);
         ChangeResetBettingMoney();
     }
 
