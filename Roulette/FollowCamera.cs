@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveCamera : MonoBehaviour
+public class FollowCamera : MonoBehaviour
 {
     public GameObject Target;               // Ä«¸Þ¶ó°¡ µû¶ó´Ù´Ò Å¸°Ù
 

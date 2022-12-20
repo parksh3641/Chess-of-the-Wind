@@ -8,13 +8,19 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RouletteManager : MonoBehaviour
 {
-    public Pinball2D pinball;
-    public Rotation_Roulette roulette;
+    public Pinball3D pinball;
 
+    public MoveCamera rouletteChoiceCamera;
     public GameObject rouletteCamera;
     public GameObject rouletteView;
 
     public GameObject bounsView;
+    public Rotation_Roulette bounsRoulette;
+
+    [Title("CameraPos")]
+    public Transform startCameraPos;
+    public Transform roulette1Pos;
+    public Transform roulette2Pos;
 
     [Title("Gauge")]
     public Image powerFillAmount;
@@ -52,6 +58,7 @@ public class RouletteManager : MonoBehaviour
 
         bounsView.SetActive(false);
 
+        rouletteChoiceCamera.gameObject.SetActive(false);
         rouletteCamera.SetActive(false);
         rouletteView.SetActive(false);
 
@@ -67,7 +74,7 @@ public class RouletteManager : MonoBehaviour
 
         if(bouns)
         {
-            if(roulette.speed <= 0)
+            if(bounsRoulette.speed <= 0)
             {
                 StartCoroutine(BounsRoulette());
             }
@@ -78,12 +85,42 @@ public class RouletteManager : MonoBehaviour
     {
         maxNumber = number;
 
-        rouletteCamera.SetActive(true);
+        rouletteChoiceCamera.gameObject.SetActive(true);
+        rouletteCamera.SetActive(false);
         rouletteView.SetActive(true);
 
         targetView.SetActive(false);
 
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
+        {
+            int random = Random.Range(0, 2);
+            PV.RPC("SelectRoulette", RpcTarget.All, random);
+        }
+    }
+
+    [PunRPC]
+    void SelectRoulette(int number)
+    {
+        rouletteChoiceCamera.gameObject.SetActive(true);
+        rouletteChoiceCamera.Initialize(startCameraPos);
+
+        if (number == 0)
+        {
+            rouletteChoiceCamera.SetTarget(roulette1Pos);
+        }
+        else
+        {
+            rouletteChoiceCamera.SetTarget(roulette2Pos);
+        }
+
+        Debug.Log(number + "번째 룰렛 당첨");
+    }
+
+    IEnumerator 
+
+    void CheckGameMode()
+    {
+        if (PhotonNetwork.IsMasterClient)
         {
             if (gameManager.bounsCount > 0)
             {
@@ -181,7 +218,7 @@ public class RouletteManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             gameManager.bounsCount = 3;
-            roulette.StartRoulette();
+            bounsRoulette.StartRoulette();
         }
 
         Debug.Log("보너스 룰렛 실행");
@@ -274,7 +311,7 @@ public class RouletteManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         gameManager.bounsCount -= 1;
-        targetNumber = pointerManager.CheckNumber();
+        targetNumber = Random.Range(1, 26);
 
         PV.RPC("CheckNumber", RpcTarget.All, targetNumber);
 

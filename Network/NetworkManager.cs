@@ -44,7 +44,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (pause)
         {
-            Disconnect();
+            //Disconnect();
         }
         else
         {
