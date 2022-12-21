@@ -9,6 +9,18 @@ public class NumberContent : MonoBehaviour
 
     public void Initialize(int number)
     {
-        numberText.text = (number + 1).ToString();
+        if(number < 12)
+        {
+            numberText.text = (number + 1).ToString();
+
+        }
+        else if(number == 12)
+        {
+            numberText.text = "Äý";
+        }
+        else if(number > 12)
+        {
+            numberText.text = number.ToString();
+        }
     }
 }

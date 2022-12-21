@@ -12,9 +12,7 @@ public class MoveCamera : MonoBehaviour
 
     private Vector3 velocity = Vector3.zero;
 
-    public static bool isActive = false;
-
-    public float zoomIn = -5f;
+    public bool isActive = false;
 
     public void Initialize(Transform target)
     {
@@ -33,7 +31,6 @@ public class MoveCamera : MonoBehaviour
         if (isActive)
         {
             camera.transform.position = Vector3.SmoothDamp(camera.transform.position, targetPosition.position, ref velocity, smoothTime);
-            //camera.transform.LookAt(target);
 
             if(Vector3.Distance(targetPosition.position, camera.transform.position) < 0.1f)
             {

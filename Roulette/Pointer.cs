@@ -13,4 +13,16 @@ public class Pointer : MonoBehaviour
         index = number;
         numberText.text = index.ToString();
     }
+
+    public void Betting(bool check)
+    {
+        if(check)
+        {
+            numberText.color = Color.red;
+        }
+        else
+        {
+            numberText.color = Color.white;
+        }
+    }
 }

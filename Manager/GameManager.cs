@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public BlockInformation blockInformation = new BlockInformation();
 
     public int[] bettingValue;
+    public List<int> bettingNumberList = new List<int>();
 
     [Title("Developer")]
     public int autoTargetNumber = -1;
@@ -53,6 +54,9 @@ public class GameManager : MonoBehaviour
     private int targetNumber = 0;
     private int gridConstraintCount = 0;
 
+    string[] insertBlock = new string[4];
+    string[] deleteBlock = new string[2];
+
     [Title("Drag")]
     private Transform dragPos;
     private bool checkDrag = false;
@@ -65,6 +69,7 @@ public class GameManager : MonoBehaviour
     public GameObject blockRootParent;
     public GameObject blockParent;
     public GameObject blockGridParent;
+    public Transform otherBlockParent;
 
     public GameObject dontTouchObj;
     public GameObject targetObj;
@@ -94,17 +99,19 @@ public class GameManager : MonoBehaviour
 
     List<RouletteContent> numberContentList = new List<RouletteContent>();
     List<BlockContent> blockContentList = new List<BlockContent>();
+    public List<BlockContent> otherBlockContentList = new List<BlockContent>();
 
     [Header("Betting")]
     private List<int[]> splitHorizontalIndexList = new List<int[]>();
     private List<int[]> splitVerticalIndexList = new List<int[]>();
     private List<int[]> squareIndexList = new List<int[]>();
 
+    [Header("Manager")]
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
-    public PointerManager pointerManager;
     public TalkManager talkManager;
     public CharacterManager characterManager;
+
     BlockDataBase blockDataBase;
 
     public PhotonView PV;
@@ -172,6 +179,7 @@ public class GameManager : MonoBehaviour
             index++;
 
             allContentList.Add(content);
+            bettingNumberList.Add(0);
         }
 
         index = 0;
@@ -272,7 +280,7 @@ public class GameManager : MonoBehaviour
         SetSquareIndex();
     }
 
-    void SetSplitIndex()
+    private void SetSplitIndex()
     {
         int index = 0;
         int count = 0;
@@ -313,7 +321,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SetSquareIndex()
+    private void SetSquareIndex()
     {
         int index = 0;
         int count = 0;
@@ -346,6 +354,8 @@ public class GameManager : MonoBehaviour
         dontTouchObj.SetActive(true);
         targetObj.SetActive(false);
 
+        ClearOtherPlayerBlock();
+
         timer = waitTimer;
         timerFillAmount.fillAmount = 1;
 
@@ -357,7 +367,7 @@ public class GameManager : MonoBehaviour
         Invoke("CheckPlayer", 0.5f);
     }
 
-    void CheckPlayer()
+    private void CheckPlayer()
     {
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
@@ -403,6 +413,15 @@ public class GameManager : MonoBehaviour
 
         loginView.SetActive(true);
         mainView.SetActive(false);
+    }
+
+    void ClearOtherPlayerBlock()
+    {
+        for (int i = 0; i < otherBlockContentList.Count; i++)
+        {
+            Destroy(otherBlockContentList[i].gameObject);
+        }
+        otherBlockContentList.Clear();
     }
 
     public void Waiting(bool check)
@@ -516,11 +535,14 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void OpenRouletteView()
     {
+        CheckBettingNumber();
+
         if (autoTargetNumber == -1)
         {
             mainView.SetActive(false);
 
             rouletteManager.Initialize(rouletteContentList.Count + 1);
+            rouletteManager.CheckBettingNumber();
         }
         else
         {
@@ -531,6 +553,7 @@ public class GameManager : MonoBehaviour
     public void CloseRouletteView(int number)
     {
         mainView.SetActive(true);
+        dontTouchObj.SetActive(true);
 
         targetNumber = number;
 
@@ -539,9 +562,9 @@ public class GameManager : MonoBehaviour
 
         CheckTargetNumber();
 
-        dontTouchObj.SetActive(true);
-
         ResetRouletteContent();
+
+        ClearOtherPlayerBlock();
 
         for (int i = 0; i < blockContentList.Count; i++)
         {
@@ -687,15 +710,18 @@ public class GameManager : MonoBehaviour
             {
                 notion = "<color=#00C8FF>" + PlayerPrefs.GetString("NickName") + " 님 +" + (int)(getMoney - bettingMoney) + "만큼 증가\n남은 금액 : " + money + "</color>";
                 notion2 = (int)(getMoney - bettingMoney) + " 만큼 획득";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Green);
             }
             else
             {
                 notion = "<color=#FF0000>" + PlayerPrefs.GetString("NickName") + " 님 " + (int)Mathf.Abs((bettingMoney - getMoney)) + "만큼 감소\n남은 금액 : " + money + "</color>";
                 notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Red);
             }
 
             PV.RPC("ChatRPC", RpcTarget.All, notion);
-            NotionManager.instance.UseNotion(notion2, ColorType.Green);
         }
 
         ChangeResetBettingMoney();
@@ -1382,6 +1408,62 @@ public class GameManager : MonoBehaviour
         NotionManager.instance.UseNotion(notion2, ColorType.Green);
 
         PV.RPC("ChatRPC", RpcTarget.All, notion);
+
+        insertBlock = new string[4];
+
+        insertBlock[0] = mainRouletteContent.rouletteType.ToString();
+        insertBlock[1] = blockContent.blockType.ToString();
+        insertBlock[2] = mainRouletteContent.number.ToString();
+        insertBlock[3] = PlayerPrefs.GetString("NickName");
+
+        PV.RPC("ShowOtherPlayerBlock", RpcTarget.All, insertBlock);
+    }
+
+    void CheckBettingNumber()
+    {
+        for (int i = 0; i < bettingNumberList.Count; i++)
+        {
+            bettingNumberList[i] = 0;
+        }
+
+        for (int i = 0; i < allContentList.Count; i ++)
+        {
+            if(allContentList[i].isActive)
+            {
+                switch (allContentList[i].rouletteType)
+                {
+                    case RouletteType.Default:
+                        break;
+                    case RouletteType.StraightBet:
+                        bettingNumberList[allContentList[i].number - 1] = 1;
+                        break;
+                    case RouletteType.SplitBet_Horizontal:
+                        bettingNumberList[allContentList[i].number - 1] = 1;
+
+                        if(allContentList[i].number - 1 + 5 < allContentList.Count)
+                        {
+                            bettingNumberList[allContentList[i].number - 1 + 5] = 1;
+                        }
+                        break;
+                    case RouletteType.SplitBet_Vertical:
+                        int revision = (allContentList[i].number - 1) / 4;
+
+                        bettingNumberList[allContentList[i].number - 1 + revision] = 1;
+                        bettingNumberList[allContentList[i].number - 1 + revision + 1] = 1;
+
+                        break;
+                    case RouletteType.SquareBet:
+                        int revision2 = (allContentList[i].number - 1) / 4;
+
+                        bettingNumberList[allContentList[i].number - 1 + revision2] = 1;
+                        bettingNumberList[allContentList[i].number - 1 + revision2 + 1] = 1;
+                        bettingNumberList[allContentList[i].number - 1 + revision2 + 5] = 1;
+                        bettingNumberList[allContentList[i].number - 1 + revision2 + 6] = 1;
+
+                        break;
+                }
+            }
+        }
     }
 
     public void ResetRouletteContent()
@@ -1390,6 +1472,18 @@ public class GameManager : MonoBehaviour
         {
             allContentList[i].ResetBackgroundColor();
         }
+    }
+
+    public void CancleBetting(BlockType type)
+    {
+        ResetRouletteContent();
+
+        deleteBlock = new string[2];
+
+        deleteBlock[0] = type.ToString();
+        deleteBlock[1] = PlayerPrefs.GetString("NickName");
+
+        PV.RPC("HideOtherPlayerBlock", RpcTarget.All, deleteBlock);
     }
 
     public void BetOptionCancleButton()
@@ -1414,5 +1508,62 @@ public class GameManager : MonoBehaviour
     void ChatRPC(string msg)
     {
         talkManager.UseNotion(msg);
+    }
+
+    [PunRPC]
+    void ShowOtherPlayerBlock(string[] block)
+    {
+        RouletteType rouletteType = (RouletteType)System.Enum.Parse(typeof(RouletteType), block[0]);
+        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[1]);
+
+        for (int i = 0; i < otherBlockContentList.Count; i++)
+        {
+            if (otherBlockContentList[i].blockType == blockType)
+            {
+                Destroy(otherBlockContentList[i].gameObject);
+                otherBlockContentList.Remove(otherBlockContentList[i]);
+            }
+        }
+
+        BlockContent content = Instantiate(blockContent);
+        content.transform.parent = otherBlockParent.transform;
+        content.transform.localPosition = Vector3.zero;
+        content.transform.localScale = Vector3.one;
+        content.ShowInitialize(blockType, block[3]);
+        otherBlockContentList.Add(content);
+
+
+        switch (rouletteType)
+        {
+            case RouletteType.Default:
+                break;
+            case RouletteType.StraightBet:
+                content.transform.position = rouletteContentList[int.Parse(block[2]) - 1].transform.position;
+                break;
+            case RouletteType.SplitBet_Horizontal:
+                content.transform.position = rouletteSplitContentList_Horizontal[int.Parse(block[2]) - 1].transform.position;
+                break;
+            case RouletteType.SplitBet_Vertical:
+                content.transform.position = rouletteSplitContentList_Vertical[int.Parse(block[2]) - 1].transform.position;
+                break;
+            case RouletteType.SquareBet:
+                content.transform.position = rouletteSquareContentList[int.Parse(block[2]) - 1].transform.position;
+                break;
+        }
+    }
+
+    [PunRPC]
+    void HideOtherPlayerBlock(string[] block)
+    {
+        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
+
+        for (int i = 0; i < otherBlockContentList.Count; i ++)
+        {
+            if(otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
+            {
+                Destroy(otherBlockContentList[i].gameObject);
+                otherBlockContentList.Remove(otherBlockContentList[i]);
+            }
+        }
     }
 }

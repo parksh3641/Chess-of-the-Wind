@@ -8,6 +8,7 @@ public class BlockChild : MonoBehaviour
 {
     public BlockType blockType = BlockType.Default;
 
+    public Text nickNameText;
     public GameObject bettingMark;
 
     void Awake()
@@ -55,5 +56,10 @@ public class BlockChild : MonoBehaviour
     public void SetBettingMark(bool check)
     {
         bettingMark.SetActive(check);
+    }
+
+    public void SetNickName(string name)
+    {
+        nickNameText.text = name;
     }
 }

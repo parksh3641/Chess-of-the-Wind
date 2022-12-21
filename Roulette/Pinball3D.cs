@@ -23,16 +23,24 @@ public class Pinball3D : MonoBehaviour
 
     }
 
-    public void MyTurn()
+    public void MyTurn(int number)
     {
         PV.RequestOwnership();
 
-        StartRotate();
+        StartRotate(number);
     }
 
-    public void StartRotate()
+    public void StartRotate(int number)
     {
-        transform.position = new Vector3(1.6f, 0.74f, 3.5f);
+        if(number == 0)
+        {
+            transform.position = new Vector3(1.6f, 0.74f, 3.5f);
+        }
+        else
+        {
+            transform.position = new Vector3(6.6f, 0.74f, 3.5f);
+        }
+
         transform.rotation = Quaternion.Euler(0, 15, 0);
 
         rigid.AddForce(vector.forward * power);
@@ -48,7 +56,7 @@ public class Pinball3D : MonoBehaviour
 
     public void StartPinball(float number)
     {
-        rigid.AddForce(vector.forward * power * number);
+        rigid.AddForce(vector.forward * (power * 2 * number));
 
         wind = true;
     }
@@ -57,7 +65,7 @@ public class Pinball3D : MonoBehaviour
     {
         if (!move) return;
 
-        if(rigid.velocity.magnitude < 0.5f)
+        if(rigid.velocity.magnitude < 0.3f)
         {
             time += Time.deltaTime;
 

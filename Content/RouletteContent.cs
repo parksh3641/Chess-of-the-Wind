@@ -21,6 +21,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     [Title("Main")]
     public Text numberText;
     public Image backgroundImg;
+    public GameObject queen;
 
     private Transform blockParent;
     GameManager gameManager;
@@ -30,6 +31,8 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         numberText.text = "";
 
         blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
+
+        queen.SetActive(false);
     }
 
 
@@ -63,6 +66,12 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         else
         {
             rouletteColorType = RouletteColorType.Black;
+        }
+
+        if (type == RouletteType.StraightBet && number == 13)
+        {
+            queen.SetActive(true);
+            rouletteColorType = RouletteColorType.White;
         }
 
         SetBackgroundColor(rouletteColorType);

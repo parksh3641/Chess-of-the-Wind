@@ -10,6 +10,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public BlockType blockType = BlockType.Default;
 
     public Text infoText;
+    public string nickName;
 
     public GameObject blockMain;
     public BlockChildContent[] blockMainArray;
@@ -20,6 +21,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Transform previousParent;
     private CanvasGroup canvasGroup;
     public bool isDrag = false;
+
+    public bool otherPlayerBlock = false;
 
     GameManager gameManager;
 
@@ -52,8 +55,25 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockMainArray[(int)blockType - 1].gameObject.SetActive(true);
     }
 
+    public void ShowInitialize(BlockType type, string name)
+    {
+        nickName = name;
+        blockType = type;
+
+        blockMain.SetActive(false);
+        blockArray[(int)blockType - 1].gameObject.SetActive(true);
+
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
+        {
+            blockArray[(int)blockType - 1].blockChildArray[i].SetNickName(nickName);
+        }
+
+        otherPlayerBlock = true;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (otherPlayerBlock) return;
         //previousParent = transform.parent;
 
         transform.SetParent(blockRootParent);
@@ -77,11 +97,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if(isDrag) transform.position = eventData.position;
+        if (otherPlayerBlock) return;
+
+        if (isDrag) transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (otherPlayerBlock) return;
+
         if (transform.parent == blockRootParent)
         {
             transform.SetParent(previousParent);
@@ -90,7 +114,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             blockMain.SetActive(true);
             blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
-            gameManager.ResetRouletteContent();
+            gameManager.CancleBetting(blockType);
         }
 
         canvasGroup.alpha = 1f;
