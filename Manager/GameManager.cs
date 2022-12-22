@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     public RectTransform numberContentTransform;
 
     public BlockContent blockContent;
+    public OtherBlockContent otherBlockContent;
     public RectTransform blockContentTransform;
 
     List<RouletteContent> rouletteContentList = new List<RouletteContent>();
@@ -99,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     List<RouletteContent> numberContentList = new List<RouletteContent>();
     List<BlockContent> blockContentList = new List<BlockContent>();
-    public List<BlockContent> otherBlockContentList = new List<BlockContent>();
+    public List<OtherBlockContent> otherBlockContentList = new List<OtherBlockContent>();
 
     [Header("Betting")]
     private List<int[]> splitHorizontalIndexList = new List<int[]>();
@@ -486,6 +487,8 @@ public class GameManager : MonoBehaviour
             allContentList[i].SetActiveFalseAll();
         }
 
+        ClearOtherPlayerBlock();
+
         dontTouchObj.SetActive(false);
         targetObj.SetActive(false);
 
@@ -563,8 +566,6 @@ public class GameManager : MonoBehaviour
         CheckTargetNumber();
 
         ResetRouletteContent();
-
-        ClearOtherPlayerBlock();
 
         for (int i = 0; i < blockContentList.Count; i++)
         {
@@ -1416,7 +1417,7 @@ public class GameManager : MonoBehaviour
         insertBlock[2] = mainRouletteContent.number.ToString();
         insertBlock[3] = PlayerPrefs.GetString("NickName");
 
-        PV.RPC("ShowOtherPlayerBlock", RpcTarget.All, insertBlock);
+        PV.RPC("ShowOtherPlayerBlock", RpcTarget.Others, insertBlock);
     }
 
     void CheckBettingNumber()
@@ -1483,7 +1484,7 @@ public class GameManager : MonoBehaviour
         deleteBlock[0] = type.ToString();
         deleteBlock[1] = PlayerPrefs.GetString("NickName");
 
-        PV.RPC("HideOtherPlayerBlock", RpcTarget.All, deleteBlock);
+        PV.RPC("HideOtherPlayerBlock", RpcTarget.Others, deleteBlock);
     }
 
     public void BetOptionCancleButton()
@@ -1525,7 +1526,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        BlockContent content = Instantiate(blockContent);
+        OtherBlockContent content = Instantiate(otherBlockContent);
         content.transform.parent = otherBlockParent.transform;
         content.transform.localPosition = Vector3.zero;
         content.transform.localScale = Vector3.one;

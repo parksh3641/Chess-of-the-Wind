@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ public class NumberContent : MonoBehaviour
         }
         else if(number == 12)
         {
-            numberText.text = "Äý";
+            numberText.text = "í€¸";
         }
         else if(number > 12)
         {

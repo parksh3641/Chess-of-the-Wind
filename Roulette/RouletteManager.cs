@@ -406,19 +406,6 @@ public class RouletteManager : MonoBehaviour
     public void EndPinball()
     {
         PV.RPC("GetNumber", RpcTarget.MasterClient);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            for (int i = 0; i < leftClock.Length; i++)
-            {
-                leftClock[i].StopClock();
-            }
-
-            for (int i = 0; i < rightClock.Length; i++)
-            {
-                rightClock[i].StopClock();
-            }
-        }
     }
 
     [PunRPC]
@@ -429,7 +416,7 @@ public class RouletteManager : MonoBehaviour
 
     IEnumerator GetNumberCoroution()
     {
-        PV.RPC("StopLoopSFX", RpcTarget.All);
+        PV.RPC("EndRoulette", RpcTarget.All);
 
         yield return new WaitForSeconds(1f);
 
@@ -459,9 +446,19 @@ public class RouletteManager : MonoBehaviour
     }
 
     [PunRPC]
-    void StopLoopSFX()
+    void EndRoulette()
     {
         soundManager.StopLoopSFX(GameSfxType.Roulette);
+
+        for (int i = 0; i < leftClock.Length; i++)
+        {
+            leftClock[i].StopClock();
+        }
+
+        for (int i = 0; i < rightClock.Length; i++)
+        {
+            rightClock[i].StopClock();
+        }
     }
 
     [PunRPC]
