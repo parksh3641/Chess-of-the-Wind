@@ -127,8 +127,8 @@ public class RouletteManager : MonoBehaviour
             rightPointerManager.pointerList[i].Betting(false);
         }
 
-        leftQueenText.color = Color.black;
-        rightQueenText.color = Color.black;
+        //leftQueenText.color = Color.black;
+        //rightQueenText.color = Color.black;
 
         for(int i = 0; i < gameManager.bettingNumberList.Count; i ++)
         {
@@ -149,8 +149,8 @@ public class RouletteManager : MonoBehaviour
 
         if (gameManager.bettingNumberList[12] == 1)
         {
-            leftQueenText.color = Color.red;
-            rightQueenText.color = Color.red;
+            //leftQueenText.color = Color.red;
+            //rightQueenText.color = Color.red;
         }
     }
 
