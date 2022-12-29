@@ -34,14 +34,14 @@ public class Pinball3D : MonoBehaviour
     {
         if(number == 0)
         {
-            transform.position = new Vector3(1.6f, 0.74f, 3.5f);
+            transform.position = new Vector3(-1.35f, 0.25f, 3.3f);
         }
         else
         {
-            transform.position = new Vector3(6.6f, 0.74f, 3.5f);
+            transform.position = new Vector3(4.7f, 0.25f, 3.3f);
         }
 
-        transform.rotation = Quaternion.Euler(0, 15, 0);
+        transform.rotation = Quaternion.Euler(0, 20, 0);
 
         rigid.AddForce(vector.forward * power);
 

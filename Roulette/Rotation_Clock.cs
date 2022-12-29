@@ -15,7 +15,7 @@ public class Rotation_Clock : MonoBehaviour
 
     public void Awake()
     {
-        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
+        transform.localRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
     }
 
     [Button]
@@ -34,7 +34,7 @@ public class Rotation_Clock : MonoBehaviour
     {
         if (move)
         {
-            transform.Rotate(Vector3.forward * speed * Time.deltaTime);
+            transform.Rotate(new Vector3(0,1,0) * speed * Time.deltaTime);
         }
     }
 }

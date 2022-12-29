@@ -22,7 +22,7 @@ public class Pointer : MonoBehaviour
         }
         else
         {
-            numberText.color = Color.white;
+            numberText.color = Color.black;
         }
     }
 }
