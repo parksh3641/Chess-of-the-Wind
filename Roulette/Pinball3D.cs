@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class Pinball3D : MonoBehaviour
 {
-    public Rigidbody rigid;
     public float power = 100f;
+    int index = 0;
+
+    Rigidbody rigid;
     private float time = 0f;
 
     public bool move = false;
@@ -32,7 +34,9 @@ public class Pinball3D : MonoBehaviour
 
     public void StartRotate(int number)
     {
-        if(number == 0)
+        index = number;
+
+        if (number == 0)
         {
             transform.position = new Vector3(-1.35f, 0.25f, 3.3f);
         }
@@ -61,15 +65,20 @@ public class Pinball3D : MonoBehaviour
         wind = true;
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (!move) return;
+
+        if(transform.position.y < -2)
+        {
+            StartRotate(index);
+        }
 
         if(rigid.velocity.magnitude < 0.3f)
         {
             time += Time.deltaTime;
 
-            if(time >= 3)
+            if(time >= 2)
             {
                 EndPinball();
             }

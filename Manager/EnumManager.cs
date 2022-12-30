@@ -51,8 +51,8 @@ public enum BlockType
 
 public enum BetOptionType
 {
-    Double,
     Cancle,
+    Double,
     Repeat
 }
 
@@ -60,4 +60,46 @@ public enum GameSfxType
 {
     Click,
     Roulette
+}
+
+public enum LanguageType
+{
+    Default = 0,
+    Korean,
+    English,
+    Japanese,
+    Chinese,
+    Indian,
+    Portuguese,
+    Russian,
+    German,
+    Spanish,
+    Arabic,
+    Bengali,
+    Indonesian,
+    Italian,
+    Dutch
+}
+public enum LoginType
+{
+    None = 0,
+    Guest,
+    Google,
+    Facebook,
+    Apple
+}
+
+public enum MoneyType
+{
+    Coin = 0,
+    Crystal
+}
+
+public enum ItemType
+{
+    Clock = 0,
+    Shield,
+    Combo,
+    Exp,
+    Slow
 }

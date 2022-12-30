@@ -10,11 +10,9 @@ public class RouletteManager : MonoBehaviour
 {
     public Pinball3D pinball;
 
-    public MoveCamera rouletteChoiceCamera;
-    public GameObject rouletteCamera;
-    public GameObject rouletteView;
+    public MoveCamera rouletteCamera;
+    public GameObject roulette3D;
 
-    public GameObject bounsView;
     public Rotation_Roulette bounsRoulette;
 
     [Title("CameraPos")]
@@ -64,6 +62,7 @@ public class RouletteManager : MonoBehaviour
     bool bouns = false;
 
     public GameManager gameManager;
+    public UIManager uIManager;
     public CharacterManager characterManager;
     public SoundManager soundManager;
     public WindCharacterManager windCharacterManager;
@@ -75,11 +74,8 @@ public class RouletteManager : MonoBehaviour
         buttonClick = false;
         bouns = false;
 
-        bounsView.SetActive(false);
-
-        rouletteChoiceCamera.gameObject.SetActive(false);
-        rouletteCamera.SetActive(false);
-        rouletteView.SetActive(false);
+        rouletteCamera.gameObject.SetActive(false);
+        roulette3D.SetActive(false);
 
         powerFillAmount.fillAmount = 0;
     }
@@ -104,9 +100,8 @@ public class RouletteManager : MonoBehaviour
     {
         maxNumber = number;
 
-        rouletteChoiceCamera.gameObject.SetActive(true);
-        rouletteCamera.SetActive(false);
-        rouletteView.SetActive(true);
+        rouletteCamera.gameObject.SetActive(true);
+        roulette3D.SetActive(false);
 
         targetView.SetActive(false);
 
@@ -157,10 +152,15 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void SelectRoulette(int number)
     {
+        roulette3D.SetActive(true);
+
         pinballIndex = number;
 
-        rouletteChoiceCamera.gameObject.SetActive(true);
-        rouletteChoiceCamera.Initialize(startCameraPos);
+        rouletteCamera.gameObject.SetActive(true);
+        rouletteCamera.Initialize(startCameraPos);
+
+        roulette1Obj.gameObject.SetActive(true);
+        roulette2Obj.gameObject.SetActive(true);
 
         leftFingerController.Initialize();
         rightFingerController.Initialize();
@@ -192,7 +192,7 @@ public class RouletteManager : MonoBehaviour
     {
         if (number == 0)
         {
-            rouletteChoiceCamera.SetTarget(roulette1Pos);
+            rouletteCamera.SetTarget(roulette1Pos);
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -202,11 +202,11 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(WaitWindCharacter(roulette1Obj));
+            StartCoroutine(WaitWindCharacter1(roulette1Obj));
         }
         else
         {
-            rouletteChoiceCamera.SetTarget(roulette2Pos);
+            rouletteCamera.SetTarget(roulette2Pos);
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -216,7 +216,7 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(WaitWindCharacter(roulette2Obj));
+            StartCoroutine(WaitWindCharacter2(roulette2Obj));
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -225,18 +225,30 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
-    IEnumerator WaitWindCharacter(Transform target)
+    IEnumerator WaitWindCharacter1(Transform target)
     {
         yield return new WaitForSeconds(1.0f);
         windCharacterManager.Initialize(target);
+
+        roulette2Obj.gameObject.SetActive(false);
+        leftFingerController.Disable();
+    }
+
+    IEnumerator WaitWindCharacter2(Transform target)
+    {
+        yield return new WaitForSeconds(1.0f);
+        windCharacterManager.Initialize(target);
+
+        roulette1Obj.gameObject.SetActive(false);
+        rightFingerController.Disable();
     }
 
     void CheckGameMode()
     {
-        if (gameManager.bounsCount > 0)
+        if (GameStateManager.instance.BounsCount > 0)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Roulette" } });
-            PV.RPC("PlayRoulette", RpcTarget.All, gameManager.bounsCount);
+            PV.RPC("PlayRoulette", RpcTarget.All, GameStateManager.instance.BounsCount);
         }
         else
         {
@@ -249,7 +261,7 @@ public class RouletteManager : MonoBehaviour
     void PlayRoulette(int number)
     {
         targetView.SetActive(false);
-        bounsView.SetActive(false);
+        uIManager.OpenBounsView(false);
 
         buttonClick = false;
         bouns = false;
@@ -268,9 +280,9 @@ public class RouletteManager : MonoBehaviour
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        if (ht["Pinball"].Equals(PlayerPrefs.GetString("NickName"))) //각자 내 차례인지 확인하도록!
+        if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {
-            PV.RPC("CheckPlayer", RpcTarget.All, PlayerPrefs.GetString("NickName"));
+            PV.RPC("CheckPlayer", RpcTarget.All, GameStateManager.instance.NickName);
 
             pinball.MyTurn(pinballIndex);
 
@@ -318,7 +330,7 @@ public class RouletteManager : MonoBehaviour
     void PlayBouns()
     {
         targetView.SetActive(false);
-        bounsView.SetActive(true);
+        uIManager.OpenBounsView(true);
 
         buttonClick = true;
         bouns = true;
@@ -327,7 +339,7 @@ public class RouletteManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            gameManager.bounsCount = 3;
+            GameStateManager.instance.BounsCount = 3;
             bounsRoulette.StartRoulette();
         }
 
@@ -336,8 +348,7 @@ public class RouletteManager : MonoBehaviour
 
     public void CloseRouletteView()
     {
-        rouletteCamera.SetActive(false);
-        rouletteView.SetActive(false);
+        roulette3D.SetActive(false);
     }
 
     public void BlowWindDown()
@@ -420,7 +431,7 @@ public class RouletteManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        gameManager.bounsCount -= 1;
+        GameStateManager.instance.BounsCount -= 1;
 
         if(rouletteIndex == 0)
         {
@@ -473,6 +484,9 @@ public class RouletteManager : MonoBehaviour
     {
         gameManager.CloseRouletteView(number);
         windCharacterManager.Stop();
+
+        roulette1Obj.gameObject.SetActive(false);
+        roulette2Obj.gameObject.SetActive(false);
 
         CloseRouletteView();
     }

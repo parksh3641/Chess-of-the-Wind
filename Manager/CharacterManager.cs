@@ -36,7 +36,7 @@ public class CharacterManager : MonoBehaviour
         {
             AddPlayer(PhotonNetwork.PlayerList[i].NickName);
 
-            if (PhotonNetwork.PlayerList[i].NickName.Equals(PlayerPrefs.GetString("NickName")))
+            if (PhotonNetwork.PlayerList[i].NickName.Equals(GameStateManager.instance.NickName))
             {
                 characterContents[i].CheckMy();
             }

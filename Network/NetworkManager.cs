@@ -9,36 +9,24 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public Text statusText;
-    public TMP_InputField nickNameInput;
-
     public PhotonView PV;
 
+    public StateManager stateManager;
     public GameManager gameManager;
     public CharacterManager characterManager;
 
 
     void Awake()
     {
-        statusText.text = "";
 
-        if (PlayerPrefs.GetString("NickName").Length > 0) nickNameInput.text = PlayerPrefs.GetString("NickName");
     }
 
-    private void Start()
+
+    public void Initialize()
     {
         Connect();
     }
 
-    void Update()
-    {
-        //statusText.text = PhotonNetwork.NetworkClientState.ToString();
-    }
-
-    public void Gosu()
-    {
-        statusText.text = "브론즈1 이상 랭크가 필요합니다.";
-    }
 
     void OnApplicationPause(bool pause) //앱이 꺼질때
     {
@@ -54,7 +42,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
-        statusText.text = "서버에 접속중입니다.";
+        Debug.Log("서버에 접속중입니다.");
 
         //PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -63,7 +51,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        statusText.text = "서버에 연결되었습니다";
+        Debug.Log("서버에 연결되었습니다.");
 
         JoinLobby();
     }
@@ -74,7 +62,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        statusText.text = "서버와 연결이 끊겼습니다.";
+        Debug.Log("서버와 연결이 끊겼습니다.");
 
         gameManager.GameStop();
 
@@ -85,7 +73,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinLobby()
     {
-        statusText.text = "방을 찾고 있습니다.";
+        Debug.Log("방을 찾고 있습니다.");
 
         PhotonNetwork.JoinLobby();
     }
@@ -93,7 +81,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        statusText.text = "로비에 연결되었습니다";
+        Debug.Log("로비에 연결되었습니다.");
+
+        stateManager.ServerConnectComplete();
     }
 
 
@@ -104,14 +94,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinOrCreateRoom()
     {
-        if (nickNameInput.text.Length == 0)
+        if (GameStateManager.instance.NickName.Length == 0)
         {
-            nickNameInput.text = "Player_" + Random.Range(0, 999).ToString();
+            GameStateManager.instance.NickName = "Player_" + Random.Range(0, 999).ToString();
         }
 
-        PlayerPrefs.SetString("NickName", nickNameInput.text);
+        PlayerPrefs.SetString("NickName", GameStateManager.instance.NickName);
 
-        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
+        PhotonNetwork.LocalPlayer.NickName = GameStateManager.instance.NickName;
 
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 4;
@@ -135,12 +125,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        statusText.text = "방에 참가하였습니다.";
+        Debug.Log("방에 참가하였습니다.");
 
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PlayerPrefs.GetString("NickName") } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
         }
 
         gameManager.GameStart();
@@ -151,18 +141,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        statusText.text = "방 만들기 실패했습니다.";
+        Debug.Log("방 만들기 실패했습니다.");
     }
 
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        statusText.text = "방 참가 실패했습니다.";
+        Debug.Log("방 참가 실패했습니다.");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        statusText.text = "랜덤방에 참가할 수 없습니다.";
+        Debug.Log("랜덤방에 참가할 수 없습니다.");
     }
 
 

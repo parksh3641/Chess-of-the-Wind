@@ -47,11 +47,20 @@ public class FingerController : MonoBehaviour
         fingerPush = false;
 
         buttonPush = false;
+
+        finger.SetActive(false);
+    }
+    
+    public void Disable()
+    {
+        finger.SetActive(false);
     }
 
     [Button]
     public void MoveFinger()
     {
+        finger.SetActive(true);
+
         fingerMove = true;
     }
 
