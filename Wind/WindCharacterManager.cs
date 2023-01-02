@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,11 @@ public class WindCharacterManager : MonoBehaviour
 {
     public WindCharacter[] windCharacters;
 
+    public ParticleSystem[] windParticleArray;
+
     public Transform main;
+
+    public PhotonView PV;
 
     private void Awake()
     {
@@ -32,5 +37,11 @@ public class WindCharacterManager : MonoBehaviour
         {
             windCharacters[i].gameObject.SetActive(false);
         }
+    }
+
+    [Button]
+    public void WindBlowing(int number)
+    {
+        windParticleArray[number].Play();
     }
 }

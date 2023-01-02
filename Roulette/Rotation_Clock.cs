@@ -8,10 +8,11 @@ public class Rotation_Clock : MonoBehaviour
 {
     public float speed = 40f;
 
-    public bool move = false;
-
     public PhotonView PV;
 
+    WaitForSeconds waitForSecond = new WaitForSeconds(0.01f);
+
+    Vector3 vector3 = new Vector3(0, 1, 0);
 
     public void Awake()
     {
@@ -21,20 +22,20 @@ public class Rotation_Clock : MonoBehaviour
     [Button]
     public void StartClock()
     {
-        move = true;
+        StopAllCoroutines();
+        StartCoroutine(MoveCoroution());
     }
 
     [Button]
     public void StopClock()
     {
-        move = false;
+        StopAllCoroutines();
     }
 
-    private void FixedUpdate()
+    IEnumerator MoveCoroution()
     {
-        if (move)
-        {
-            transform.Rotate(new Vector3(0,1,0) * speed * Time.deltaTime);
-        }
+        transform.Rotate(vector3 * speed * Time.deltaTime);
+        yield return waitForSecond;
+        StartCoroutine(MoveCoroution());
     }
 }

@@ -12,10 +12,11 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public RouletteContent mainRouletteContent;
-    public Transform targetBlockContent;
+    Transform targetBlockContent;
 
     public BlockType blockType = BlockType.Default;
     public BlockInformation blockInformation = new BlockInformation();
+    BlockMotherInformation blockMotherInformation;
 
     public int[] bettingValue;
     public List<int> bettingNumberList = new List<int>();
@@ -43,7 +44,10 @@ public class GameManager : MonoBehaviour
     private float getMoney = 0;
 
     private int targetNumber = 0;
+    private int targetQueenNumber = 0;
     private int gridConstraintCount = 0;
+
+    string notion, notion2 = "";
 
     string[] insertBlock = new string[4];
     string[] deleteBlock = new string[2];
@@ -334,6 +338,8 @@ public class GameManager : MonoBehaviour
         bettingTime = GameStateManager.instance.BettingTime;
         bettingWaitTime = GameStateManager.instance.BettingWaitTime;
 
+        blockMotherInformation = blockDataBase.blockMotherInformation;
+
         ChangeMoney(playerDataBase.Coin);
     }
 
@@ -353,6 +359,7 @@ public class GameManager : MonoBehaviour
 
         if(PhotonNetwork.IsMasterClient)
         {
+            GameStateManager.instance.BounsCount = 0;
             StartCoroutine(WaitTimerCoroution());
         }
 
@@ -369,12 +376,14 @@ public class GameManager : MonoBehaviour
                 uIManager.SetWaiting(true);
                 break;
             case "Roulette":
-                OpenRouletteView();
                 uIManager.SetWaiting(true);
+                OpenRouletteView();
+                rouletteManager.SpectatorRoulette();
                 break;
             case "Bouns":
-                OpenRouletteView();
                 uIManager.SetWaiting(true);
+                OpenRouletteView();
+                rouletteManager.SpectatorRoulette();
                 break;
         }
     }
@@ -520,14 +529,11 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void OpenRouletteView()
     {
-        CheckBettingNumber();
+        ShowBettingNumber();
 
         if (!GameStateManager.instance.AutoTarget)
         {
-            uIManager.OpenRouletteView();
-
-            rouletteManager.Initialize(rouletteContentList.Count + 1);
-            rouletteManager.CheckBettingNumber();
+            rouletteManager.Initialize();
         }
         else
         {
@@ -535,16 +541,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CloseRouletteView(int number)
+    public void CloseRouletteView(string[] target)
     {
         uIManager.CloseRouletteView();
 
-        targetNumber = number;
+        targetNumber = int.Parse(target[0]);
+        targetQueenNumber = int.Parse(target[1]);
 
         recordText.text += targetNumber + ", ";
         targetText.text = targetNumber.ToString();
 
-        CheckTargetNumber();
+        getMoney = 0;
+
+        CheckTargetNumber(targetNumber);
+        CheckTargetQueenNumber(targetQueenNumber);
+
+        ChangeMoney((int)getMoney);
+
+        if (getMoney == 0)
+        {
+            notion2 = "변동이 없습니다";
+            NotionManager.instance.UseNotion(notion2, ColorType.Green);
+        }
+        else
+        {
+            if (getMoney > bettingMoney)
+            {
+                notion = "<color=#00C8FF>" + GameStateManager.instance.NickName + " 님 +" + (int)(getMoney - bettingMoney) + "만큼 증가\n남은 금액 : " + money + "</color>";
+                notion2 = (int)(getMoney - bettingMoney) + " 만큼 획득";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Green);
+            }
+            else
+            {
+                notion = "<color=#FF0000>" + GameStateManager.instance.NickName + " 님 " + (int)Mathf.Abs((bettingMoney - getMoney)) + "만큼 감소\n남은 금액 : " + money + "</color>";
+                notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
+
+                NotionManager.instance.UseNotion(notion2, ColorType.Red);
+            }
+
+            PV.RPC("ChatRPC", RpcTarget.All, notion);
+        }
+
+        ChangeResetBettingMoney();
 
         ResetRouletteContent();
 
@@ -584,14 +623,17 @@ public class GameManager : MonoBehaviour
         bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
     }
 
-    private void CheckTargetNumber()
+    private void CheckTargetNumber(int target)
     {
-        getMoney = 0;
-
         targetObj.SetActive(true);
         targetObj.transform.SetAsLastSibling();
 
-        Transform trans = rouletteContentList[targetNumber - 1].transform;
+        if (targetNumber > 11)
+        {
+            targetNumber++;
+        }
+
+        Transform trans = rouletteContentList[target - 1].transform;
 
         targetObj.transform.position = trans.position;
 
@@ -599,14 +641,14 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < rouletteContentList.Count; i++)
         {
-            if (rouletteContentList[i].number == targetNumber && rouletteContentList[i].isActive)
+            if (rouletteContentList[i].number == target && rouletteContentList[i].isActive)
             {
                 for (int j = 0; j < rouletteContentList[i].blockType.Length; j++)
                 {
                     if (rouletteContentList[i].blockType[j] != BlockType.Default)
                     {
                         block = blockDataBase.GetBlockInfomation(rouletteContentList[i].blockType[j]);
-                        getMoney += (36.0f / block.size) * block.bettingPrice * block.magnification;
+                        getMoney += (blockMotherInformation.straightBet / block.size) * block.bettingPrice * block.magnification;
                     }
                 }
             }
@@ -622,10 +664,10 @@ public class GameManager : MonoBehaviour
                     {
                         for (int k = 0; k < splitHorizontalIndexList[rouletteContentList[i].number - 1].Length; k++)
                         {
-                            if (targetNumber == splitHorizontalIndexList[rouletteContentList[i].number - 1][k])
+                            if (target == splitHorizontalIndexList[rouletteContentList[i].number - 1][k])
                             {
                                 block = blockDataBase.GetBlockInfomation(rouletteSplitContentList_Vertical[i].blockType[j]);
-                                getMoney += (18.0f / block.size) * block.bettingPrice * block.magnification;
+                                getMoney += (blockMotherInformation.splitBet / block.size) * block.bettingPrice * block.magnification;
                                 break;
                             }
                         }
@@ -644,10 +686,10 @@ public class GameManager : MonoBehaviour
                     {
                         for (int k = 0; k < splitVerticalIndexList[rouletteContentList[i].number - 1].Length; k++)
                         {
-                            if (targetNumber == splitVerticalIndexList[rouletteContentList[i].number - 1][k])
+                            if (target == splitVerticalIndexList[rouletteContentList[i].number - 1][k])
                             {
                                 block = blockDataBase.GetBlockInfomation(rouletteSplitContentList_Horizontal[i].blockType[j]);
-                                getMoney += (18.0f / block.size) * block.bettingPrice * block.magnification;
+                                getMoney += (blockMotherInformation.splitBet / block.size) * block.bettingPrice * block.magnification;
                                 break;
                             }
                         }
@@ -666,10 +708,52 @@ public class GameManager : MonoBehaviour
                     {
                         for (int k = 0; k < squareIndexList[rouletteContentList[i].number - 1].Length; k++)
                         {
-                            if (targetNumber == squareIndexList[rouletteContentList[i].number - 1][k])
+                            if (target == squareIndexList[rouletteContentList[i].number - 1][k])
                             {
                                 block = blockDataBase.GetBlockInfomation(rouletteSquareContentList[i].blockType[j]);
-                                getMoney += (6.0f / block.size) * block.bettingPrice * block.magnification;
+                                getMoney += (blockMotherInformation.squareBet / block.size) * block.bettingPrice * block.magnification;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void CheckTargetQueenNumber(int target)
+    {
+        BlockInformation block = new BlockInformation();
+
+        for (int i = 0; i < rouletteContentList.Count; i++)
+        {
+            if (rouletteContentList[i].number == target && rouletteContentList[i].isActive)
+            {
+                for (int j = 0; j < rouletteContentList[i].blockType.Length; j++)
+                {
+                    if (rouletteContentList[i].blockType[j] != BlockType.Default)
+                    {
+                        block = blockDataBase.GetBlockInfomation(rouletteContentList[i].blockType[j]);
+                        getMoney += (blockMotherInformation.straightBet + blockMotherInformation.queenBet / block.size) * block.bettingPrice * block.magnification;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < rouletteSplitContentList_Vertical.Count; i++)
+        {
+            if (rouletteSplitContentList_Vertical[i].isActive)
+            {
+                for (int j = 0; j < rouletteSplitContentList_Vertical[i].blockType.Length; j++)
+                {
+                    if (rouletteSplitContentList_Vertical[i].blockType[j] != BlockType.Default)
+                    {
+                        for (int k = 0; k < splitHorizontalIndexList[rouletteContentList[i].number - 1].Length; k++)
+                        {
+                            if (target == splitHorizontalIndexList[rouletteContentList[i].number - 1][k])
+                            {
+                                block = blockDataBase.GetBlockInfomation(rouletteSplitContentList_Vertical[i].blockType[j]);
+                                getMoney += (blockMotherInformation.splitBet + blockMotherInformation.queenBet / block.size) * block.bettingPrice * block.magnification;
                                 break;
                             }
                         }
@@ -678,28 +762,49 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ChangeMoney((int)getMoney);
-
-        string notion, notion2 = "";
-
-        if (getMoney > bettingMoney)
+        for (int i = 0; i < rouletteSplitContentList_Horizontal.Count; i++)
         {
-            notion = "<color=#00C8FF>" + GameStateManager.instance.NickName + " 님 +" + (int)(getMoney - bettingMoney) + "만큼 증가\n남은 금액 : " + money + "</color>";
-            notion2 = (int)(getMoney - bettingMoney) + " 만큼 획득";
-
-            NotionManager.instance.UseNotion(notion2, ColorType.Green);
+            if (rouletteSplitContentList_Horizontal[i].isActive)
+            {
+                for (int j = 0; j < rouletteSplitContentList_Horizontal[i].blockType.Length; j++)
+                {
+                    if (rouletteSplitContentList_Horizontal[i].blockType[j] != BlockType.Default)
+                    {
+                        for (int k = 0; k < splitVerticalIndexList[rouletteContentList[i].number - 1].Length; k++)
+                        {
+                            if (target == splitVerticalIndexList[rouletteContentList[i].number - 1][k])
+                            {
+                                block = blockDataBase.GetBlockInfomation(rouletteSplitContentList_Horizontal[i].blockType[j]);
+                                getMoney += (blockMotherInformation.splitBet + blockMotherInformation.queenBet / block.size) * block.bettingPrice * block.magnification;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
-        else
+
+        for (int i = 0; i < rouletteSquareContentList.Count; i++)
         {
-            notion = "<color=#FF0000>" + GameStateManager.instance.NickName + " 님 " + (int)Mathf.Abs((bettingMoney - getMoney)) + "만큼 감소\n남은 금액 : " + money + "</color>";
-            notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
-
-            NotionManager.instance.UseNotion(notion2, ColorType.Red);
+            if (rouletteSquareContentList[i].isActive)
+            {
+                for (int j = 0; j < rouletteSquareContentList[i].blockType.Length; j++)
+                {
+                    if (rouletteSquareContentList[i].blockType[j] != BlockType.Default)
+                    {
+                        for (int k = 0; k < squareIndexList[rouletteContentList[i].number - 1].Length; k++)
+                        {
+                            if (target == squareIndexList[rouletteContentList[i].number - 1][k])
+                            {
+                                block = blockDataBase.GetBlockInfomation(rouletteSquareContentList[i].blockType[j]);
+                                getMoney += (blockMotherInformation.squareBet + blockMotherInformation.queenBet / block.size) * block.bettingPrice * block.magnification;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
-
-        PV.RPC("ChatRPC", RpcTarget.All, notion);
-
-        ChangeResetBettingMoney();
     }
 
     void Update()
@@ -1394,7 +1499,7 @@ public class GameManager : MonoBehaviour
         PV.RPC("ShowOtherPlayerBlock", RpcTarget.Others, insertBlock);
     }
 
-    void CheckBettingNumber()
+    void ShowBettingNumber()
     {
         for (int i = 0; i < bettingNumberList.Count; i++)
         {

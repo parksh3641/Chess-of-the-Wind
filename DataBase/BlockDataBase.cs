@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BlockDataBase", menuName = "ScriptableObjects/BlockDataBase")]
 public class BlockDataBase : ScriptableObject
 {
+    public BlockMotherInformation blockMotherInformation;
+
     public BlockInformation[] blockInformation;
 
     public BlockInformation GetBlockInfomation(BlockType type)
@@ -20,6 +22,14 @@ public class BlockDataBase : ScriptableObject
         }
         return block;
     }
+}
+[System.Serializable]
+public class BlockMotherInformation
+{
+    public float straightBet = 26;
+    public float splitBet = 13;
+    public float squareBet = 6;
+    public float queenBet = 2;
 }
 
 [System.Serializable]

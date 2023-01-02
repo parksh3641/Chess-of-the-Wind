@@ -7,10 +7,21 @@ public class Pointer : MonoBehaviour
 {
     public int index = 0;
     public Text numberText;
+    public GameObject focus;
 
     public void Initialize(int number)
     {
-        index = number;
+        focus.SetActive(false);
+
+        if (number > 24)
+        {
+            index = number - 24;
+        }
+        else
+        {
+            index = number;
+        }
+
         numberText.text = index.ToString();
     }
 
@@ -18,11 +29,16 @@ public class Pointer : MonoBehaviour
     {
         if(check)
         {
-            numberText.color = Color.red;
+            numberText.color = Color.blue;
         }
         else
         {
             numberText.color = Color.black;
         }
+    }
+
+    public void FocusOn()
+    {
+        focus.SetActive(true);
     }
 }

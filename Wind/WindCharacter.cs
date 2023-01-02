@@ -19,11 +19,13 @@ public class WindCharacter : MonoBehaviour
         transform.position = startPos.position;
 
         move = true;
+
+        StartCoroutine(MoveCoroution());
     }
 
-    private void Update()
+    IEnumerator MoveCoroution()
     {
-        if(move)
+        while(move)
         {
             transform.position = Vector3.SmoothDamp(transform.position, endPos.position, ref velocity, smoothTime);
 
@@ -31,6 +33,7 @@ public class WindCharacter : MonoBehaviour
             {
                 move = false;
             }
+            yield return null;
         }
     }
 }

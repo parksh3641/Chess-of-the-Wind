@@ -26,8 +26,6 @@ public class FingerController : MonoBehaviour
     public Transform firstButtonPos;
     public Transform endButtonPos;
 
-    public bool buttonPush = false;
-
     private Vector3 velocity = Vector3.zero;
 
     public RouletteManager rouletteManager;
@@ -46,8 +44,6 @@ public class FingerController : MonoBehaviour
         fingerMove = false;
         fingerPush = false;
 
-        buttonPush = false;
-
         finger.SetActive(false);
     }
     
@@ -62,11 +58,13 @@ public class FingerController : MonoBehaviour
         finger.SetActive(true);
 
         fingerMove = true;
+
+        StartCoroutine(FingerMoveCoroution());
     }
 
-    private void Update()
+    IEnumerator FingerMoveCoroution()
     {
-        if(fingerMove)
+        while(fingerMove)
         {
             finger.transform.position = Vector3.SmoothDamp(finger.transform.position, endFingerPos.position, ref velocity, fingerSmoothTime);
 
@@ -74,33 +72,24 @@ public class FingerController : MonoBehaviour
             {
                 fingerMove = false;
                 fingerPush = true;
-                buttonPush = true;
             }
+            yield return null;
         }
 
-        if(fingerPush)
+        while(fingerPush)
         {
             finger.transform.position = Vector3.SmoothDamp(finger.transform.position, pushFingerPos.position, ref velocity, fingerPushTime);
+            button.transform.position = Vector3.SmoothDamp(button.transform.position, endButtonPos.position, ref velocity, fingerPushTime);
 
             if (Vector3.Distance(pushFingerPos.position, finger.transform.position) < 0.1f)
             {
                 fingerPush = false;
-            }
-        }
-
-        if(buttonPush)
-        {
-            button.transform.position = Vector3.SmoothDamp(button.transform.position, endButtonPos.position, ref velocity, fingerPushTime);
-
-            if (Vector3.Distance(endButtonPos.position, button.transform.position) < 0.1f)
-            {
-                buttonPush = false;
 
                 EndMoveFinger();
             }
+            yield return null;
         }
     }
-
     public void EndMoveFinger()
     {
         rouletteManager.EndMoveFinger(index);

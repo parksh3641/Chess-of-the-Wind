@@ -24,18 +24,21 @@ public class MoveCamera : MonoBehaviour
         targetPosition = target;
 
         isActive = true;
+
+        StartCoroutine(MoveCameraCoroution());
     }
 
-    private void Update()
+    IEnumerator MoveCameraCoroution()
     {
-        if (isActive)
+        while(isActive)
         {
             camera.transform.position = Vector3.SmoothDamp(camera.transform.position, targetPosition.position, ref velocity, smoothTime);
 
-            if(Vector3.Distance(targetPosition.position, camera.transform.position) < 0.1f)
+            if (Vector3.Distance(targetPosition.position, camera.transform.position) < 0.1f)
             {
                 isActive = false;
-            } 
+            }
+            yield return null;
         }
     }
 }

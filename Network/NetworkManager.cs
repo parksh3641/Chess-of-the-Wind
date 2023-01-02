@@ -129,8 +129,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            int number = Random.Range(0, 24);
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Roulette", "Right" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", number.ToString() } });
         }
 
         gameManager.GameStart();

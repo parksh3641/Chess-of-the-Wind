@@ -14,13 +14,13 @@ public class PointerManager : MonoBehaviour
             pointerList.Add(child.GetComponent<Pointer>());
         }
 
-        for (int i = 0; i < pointerList.Count; i ++)
-        {
-            pointerList[i].Initialize(i + 1);
-        }
+        //for (int i = 0; i < pointerList.Count; i ++)
+        //{
+        //    pointerList[i].Initialize(i + 1);
+        //}
     }
 
-    public int CheckNumber(Transform pinball)
+    public int CheckNumber(Transform target)
     {
         int number = 0;
         float temp = 0;
@@ -28,7 +28,7 @@ public class PointerManager : MonoBehaviour
 
         for (int i = 0; i < pointerList.Count; i++)
         {
-            dist = Vector3.Distance(pointerList[i].transform.position, pinball.transform.position);
+            dist = Vector3.Distance(pointerList[i].transform.position, target.transform.position);
 
             //Debug.Log(i + 1 + "와의 거리 : " + dist);
 
@@ -46,7 +46,24 @@ public class PointerManager : MonoBehaviour
                 }
             }
         }
+
+        for(int i = 0; i < pointerList.Count; i ++)
+        {
+            if(pointerList[i].index == number)
+            {
+                pointerList[i].FocusOn();
+                break;
+            }
+        }
+
         return number;
     }
 
+    public void Initialize(int number)
+    {
+        for (int i = 0; i < pointerList.Count; i++)
+        {
+            pointerList[i].Initialize(number + i + 1);
+        }
+    }
 }

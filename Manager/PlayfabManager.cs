@@ -1,4 +1,4 @@
-//using Facebook.Unity;
+ï»¿//using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using PlayFab;
@@ -79,6 +79,13 @@ public class PlayfabManager : MonoBehaviour
 
     private void Start()
     {
+        if(GameStateManager.instance.IsLogin)
+        {
+            StateManager.instance.Initialize();
+
+            return;
+        }
+
         if (GameStateManager.instance.AutoLogin)
         {
             switch (GameStateManager.instance.Login)
@@ -461,7 +468,7 @@ public class PlayfabManager : MonoBehaviour
 
             GameStateManager.instance.AutoLogin = true;
             GameStateManager.instance.Login = LoginType.Apple;
-            optionContent.SuccessLink(LoginType.Apple);
+            //optionContent.SuccessLink(LoginType.Apple);
         }
         , DisplayPlayfabError);
     }
@@ -582,7 +589,7 @@ public class PlayfabManager : MonoBehaviour
 
     IEnumerator LoadDataCoroutine()
     {
-        infoText.text = "µ¥ÀÌÅÍ¸¦ ÀĞ´Â ÁßÀÔ´Ï´Ù.";
+        infoText.text = "ë°ì´í„°ë¥¼ ì½ê³  ìˆìŠµë‹ˆë‹¤.";
         Debug.Log("Load Data...");
 
         playerDataBase.Initialize();
@@ -604,7 +611,7 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
-        infoText.text = "¼­¹ö¿¡ Á¢¼ÓÁßÀÔ´Ï´Ù.";
+        infoText.text = "ì„œë²„ì— ì ‘ì†ì¤‘ì…ë‹ˆë‹¤.";
         Debug.Log("Load Data Complete");
 
         isActive = true;
