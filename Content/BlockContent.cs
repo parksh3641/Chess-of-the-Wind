@@ -9,8 +9,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
     public BlockType blockType = BlockType.Default;
 
-    public Text infoText;
-
     public GameObject blockMain;
     public BlockChildContent[] blockMainArray;
     public BlockChildContent[] blockArray;
@@ -47,7 +45,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockRootParent = root;
         previousParent = grid;
         blockType = type;
-        infoText.text = blockType.ToString() + "자형 블록";
 
         blockMainArray[(int)blockType - 1].gameObject.SetActive(true);
     }

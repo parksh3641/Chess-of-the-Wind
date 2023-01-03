@@ -18,12 +18,6 @@ public class GameStateManager : MonoBehaviour
     {
         [Title("Developer")]
         public bool isLogin = false;
-        public int bettingTime = 16;
-        public int bettingWaitTime = 5;
-        public int bounsCount = 3;
-        public bool autoTarget = false;
-        public int autoTargetNumber = 0;
-        public bool blockOverlap = false;
 
         [Space]
         [Title("GuestLogin")]
@@ -44,6 +38,19 @@ public class GameStateManager : MonoBehaviour
         public bool vibration = true;
         public bool sleepMode = false;
         public bool inAppReview = false;
+
+        [Space]
+        [Title("GuestLogin")]
+        public int bettingTime = 16;
+        public int bettingWaitTime = 5;
+        public bool autoTarget = false;
+        public int autoTargetNumber = 0;
+        public bool blockOverlap = false;
+
+        [Space]
+        [Title("Bouns")]
+        public bool firstBouns = false;
+        public int bounsCount = 3;
     }
     #region Data
 
@@ -82,6 +89,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.bettingWaitTime = value;
+            SaveFile();
+        }
+    }
+
+    public bool FirstBouns
+    {
+        get
+        {
+            return gameSettings.firstBouns;
+        }
+        set
+        {
+            gameSettings.firstBouns = value;
             SaveFile();
         }
     }

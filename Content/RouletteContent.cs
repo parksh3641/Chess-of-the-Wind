@@ -167,6 +167,8 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     public void SetActiveFalse(BlockType type)
     {
         blockType[(int)type] = BlockType.Default;
+
+        isActive = false;
     }
 
     public void SetActiveFalseAll()

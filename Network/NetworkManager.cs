@@ -64,7 +64,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("서버와 연결이 끊겼습니다.");
 
-        gameManager.GameStop();
+        gameManager.BetOptionLeaveGame();
 
         Connect();
     }
@@ -133,7 +133,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Roulette", "Right" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", number.ToString() } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", number } });
         }
 
         gameManager.GameStart();

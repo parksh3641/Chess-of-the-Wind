@@ -8,7 +8,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RouletteManager : MonoBehaviour
 {
-    public int windIndex = 0;
     public Pinball3D pinball;
 
     public MoveCamera rouletteCamera;
@@ -62,10 +61,12 @@ public class RouletteManager : MonoBehaviour
     public Text buttonText;
 
     [Title("Value")]
+    public int windIndex = 0;
     private int targetNumber = 0;
     private int targetQueenNumber = 0;
     private int rouletteIndex = 0;
     private int pinballIndex = 0;
+    private int pointerNumber = 0;
 
     bool buttonClick = false;
     bool bouns = false;
@@ -93,8 +94,6 @@ public class RouletteManager : MonoBehaviour
     {
         uIManager.OpenRouletteView();
 
-        ShowBettingNumber();
-
         rouletteCamera.gameObject.SetActive(true);
         roulette3D.SetActive(false);
         characterIndexUI.SetActive(false);
@@ -105,23 +104,20 @@ public class RouletteManager : MonoBehaviour
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        int pointNumber = int.Parse(ht["Number"].ToString());
-
-        leftPointerManager.Initialize(pointNumber);
-        rightPointerManager.Initialize(pointNumber);
+        pointerNumber = int.Parse(ht["Number"].ToString());
 
         if (PhotonNetwork.IsMasterClient)
         {
-            if(pointNumber + 1 > 23)
+            if(pointerNumber + 1 > 23)
             {
-                pointNumber = 0;
+                pointerNumber = 0;
             }
             else
             {
-                pointNumber++;
+                pointerNumber++;
             }
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", pointNumber.ToString() } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", pointerNumber } });
 
             if (rouletteIndex == 0)
             {
@@ -154,30 +150,49 @@ public class RouletteManager : MonoBehaviour
             rightPointerManager.pointerList[i].Betting(false);
         }
 
-        leftQueen.material = defaultQueenMat;
-        rightQueen.material = defaultQueenMat;
-
-        for(int i = 0; i < gameManager.bettingNumberList.Count; i ++)
+        for (int i = 0; i < gameManager.bettingNumberList.Count; i ++)
         {
-            if (gameManager.bettingNumberList[i] == 1)
+            for(int j = 0; j < leftPointerManager.pointerList.Count; j ++)
             {
-                if(i < 13)
+                if (gameManager.bettingNumberList[i] == 1 && i + 1 == leftPointerManager.pointerList[j].index)
                 {
-                    leftPointerManager.pointerList[i].Betting(true);
-                    rightPointerManager.pointerList[i].Betting(true);
-                }
-                else if (i > 13)
-                {
-                    leftPointerManager.pointerList[i - 1].Betting(true);
-                    rightPointerManager.pointerList[i - 1].Betting(true);
+                    if (i < 13)
+                    {
+                        leftPointerManager.pointerList[j].Betting(true);
+                        rightPointerManager.pointerList[j].Betting(true);
+                    }
+                    else if (i > 13)
+                    {
+                        leftPointerManager.pointerList[j - 1].Betting(true);
+                        rightPointerManager.pointerList[j - 1].Betting(true);
+                    }
+
+                    break;
                 }
             }
         }
 
-        if (gameManager.bettingNumberList[12] == 1)
+        if (gameManager.bettingNumberList[12] > 0) //퀸 예외 처리
         {
             leftQueen.material = choiceQueenMat;
             rightQueen.material = choiceQueenMat;
+        }
+        else
+        {
+            leftQueen.material = defaultQueenMat;
+            rightQueen.material = defaultQueenMat;
+        }
+
+        if(gameManager.bettingNumberList[24] > 0) //마지막 숫자 배팅 예외 처리
+        {
+            for(int i = 0; i < leftPointerManager.pointerList.Count; i ++)
+            {
+                if(leftPointerManager.pointerList[i].index == 24)
+                {
+                    leftPointerManager.pointerList[i].Betting(true);
+                    rightPointerManager.pointerList[i].Betting(true);
+                }
+            }
         }
     }
 
@@ -195,6 +210,9 @@ public class RouletteManager : MonoBehaviour
 
         roulette1Obj.gameObject.SetActive(true);
         roulette2Obj.gameObject.SetActive(true);
+
+        leftPointerManager.Initialize(pointerNumber);
+        rightPointerManager.Initialize(pointerNumber);
 
         leftFingerController.Initialize();
         rightFingerController.Initialize();
@@ -220,6 +238,8 @@ public class RouletteManager : MonoBehaviour
         {
             rightFingerController.MoveFinger();
         }
+
+        ShowBettingNumber();
     }
 
     public void EndMoveFinger(int number)
@@ -326,7 +346,7 @@ public class RouletteManager : MonoBehaviour
             {
                 windIndex = i; //내가 몇 번째 캐릭터지?
 
-                buttonText.text = "당신은 " + (windIndex + 1) + "번째 캐릭터 위치입니다. 꾹 눌러서 원하는 타이밍에 바람을 발사하세요!";
+                buttonText.text = "당신은 " + (windIndex + 1) + "번째 캐릭터 위치입니다.\n꾹 눌러서 원하는 타이밍에 바람을 발사하세요!";
             }
         }
 
@@ -465,7 +485,7 @@ public class RouletteManager : MonoBehaviour
 
             powerFillAmount.fillAmount = power / maxPower;
 
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.02f);
             StartCoroutine(PowerCoroution());
         }
         else
@@ -493,7 +513,9 @@ public class RouletteManager : MonoBehaviour
 
         GameStateManager.instance.BounsCount -= 1;
 
-        if(rouletteIndex == 0)
+        targetNumber = 0;
+
+        if (rouletteIndex == 0)
         {
             targetNumber = leftPointerManager.CheckNumber(pinball.transform);
 
@@ -508,6 +530,11 @@ public class RouletteManager : MonoBehaviour
             rightQueenPoint.parent = roulette2Obj;
             targetQueenNumber = rightPointerManager.CheckNumber(rightQueenPoint);
             rightQueenPoint.parent = rightClock[2].transform;
+        }
+
+        while(targetNumber == 0)
+        {
+            yield return null;
         }
 
         PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);

@@ -255,15 +255,22 @@ public class GameManager : MonoBehaviour
             allContentList.Add(content);
         }
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
-        {
-            BlockContent content = Instantiate(blockContent);
-            content.transform.parent = blockContentTransform;
-            content.transform.localPosition = Vector3.zero;
-            content.transform.localScale = Vector3.one;
-            content.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + i + 1);
-            blockContentList.Add(content);
-        }
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        //{
+        //    BlockContent content = Instantiate(blockContent);
+        //    content.transform.parent = blockContentTransform;
+        //    content.transform.localPosition = Vector3.zero;
+        //    content.transform.localScale = Vector3.one;
+        //    content.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + i + 1);
+        //    blockContentList.Add(content);
+        //}
+
+        BlockContent content2 = Instantiate(blockContent);
+        content2.transform.parent = blockContentTransform;
+        content2.transform.localPosition = Vector3.zero;
+        content2.transform.localScale = Vector3.one;
+        content2.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + 2);
+        blockContentList.Add(content2);
 
         SetSplitIndex();
         SetSquareIndex();
@@ -359,7 +366,14 @@ public class GameManager : MonoBehaviour
 
         if(PhotonNetwork.IsMasterClient)
         {
-            GameStateManager.instance.BounsCount = 0;
+            if(GameStateManager.instance.FirstBouns)
+            {
+                GameStateManager.instance.BounsCount = 0;
+            }
+            else
+            {
+                GameStateManager.instance.BounsCount = 3;
+            }
             StartCoroutine(WaitTimerCoroution());
         }
 
@@ -388,30 +402,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameStop()
-    {
-        StopAllCoroutines();
-
-        rouletteManager.CloseRouletteView();
-        characterManager.DeleteAllPlayer();
-        soundManager.StopAllSFX();
-
-        ResetRouletteContent();
-
-        for (int i = 0; i < blockContentList.Count; i++)
-        {
-            if (blockContentList[i].isDrag)
-            {
-                blockContentList[i].TimeOver();
-                break;
-            }
-        }
-
-        BetOptionCancleButton();
-
-        uIManager.OnGameStop();
-    }
-
     void ClearOtherPlayerBlock()
     {
         for (int i = 0; i < otherBlockContentList.Count; i++)
@@ -427,8 +417,16 @@ public class GameManager : MonoBehaviour
         {
             if (PhotonNetwork.IsMasterClient)
             {
+                PV.RPC("DelayRoulette", RpcTarget.All);
+            }
+
+            yield return new WaitForSeconds(1f);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
                 PV.RPC("OpenRouletteView", RpcTarget.All);
             }
+
             yield break;
         }
 
@@ -478,6 +476,11 @@ public class GameManager : MonoBehaviour
             allContentList[i].SetActiveFalseAll();
         }
 
+        for(int i = 0; i < bettingValue.Length; i ++)
+        {
+            bettingValue[i] = 0;
+        }
+
         ClearOtherPlayerBlock();
 
         uIManager.OnRestartGame();
@@ -487,11 +490,6 @@ public class GameManager : MonoBehaviour
         timerFillAmount.fillAmount = 1;
 
         NotionManager.instance.UseNotion(NotionType.GoBetting);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
-        }
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
@@ -505,6 +503,7 @@ public class GameManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(TimerCoroution());
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
         }
     }
 
@@ -527,8 +526,27 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
+    void DelayRoulette()
+    {
+        uIManager.dontTouchObj.SetActive(true);
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        ResetRouletteBackgroundColor();
+    }
+
+    [PunRPC]
     void OpenRouletteView()
     {
+        uIManager.dontTouchObj.SetActive(false);
+
         ShowBettingNumber();
 
         if (!GameStateManager.instance.AutoTarget)
@@ -558,7 +576,7 @@ public class GameManager : MonoBehaviour
 
         ChangeMoney((int)getMoney);
 
-        if (getMoney == 0)
+        if (bettingMoney == 0)
         {
             notion2 = "변동이 없습니다";
             NotionManager.instance.UseNotion(notion2, ColorType.Green);
@@ -567,15 +585,15 @@ public class GameManager : MonoBehaviour
         {
             if (getMoney > bettingMoney)
             {
-                notion = "<color=#00C8FF>" + GameStateManager.instance.NickName + " 님 +" + (int)(getMoney - bettingMoney) + "만큼 증가\n남은 금액 : " + money + "</color>";
-                notion2 = (int)(getMoney - bettingMoney) + " 만큼 획득";
+                notion = "<color=#00FF00>+" + (int)(getMoney - bettingMoney) + "   " + GameStateManager.instance.NickName + "</color>";
+                notion2 = "+" + (int)(getMoney - bettingMoney);
 
                 NotionManager.instance.UseNotion(notion2, ColorType.Green);
             }
             else
             {
-                notion = "<color=#FF0000>" + GameStateManager.instance.NickName + " 님 " + (int)Mathf.Abs((bettingMoney - getMoney)) + "만큼 감소\n남은 금액 : " + money + "</color>";
-                notion2 = (int)Mathf.Abs((bettingMoney - getMoney)) + " 만큼 감소";
+                notion = "<color=#FF0000>-" + (int)Mathf.Abs((bettingMoney - getMoney)) + "   " + GameStateManager.instance.NickName + "</color>";
+                notion2 = "-" + (int)Mathf.Abs((bettingMoney - getMoney));
 
                 NotionManager.instance.UseNotion(notion2, ColorType.Red);
             }
@@ -583,9 +601,9 @@ public class GameManager : MonoBehaviour
             PV.RPC("ChatRPC", RpcTarget.All, notion);
         }
 
-        ChangeResetBettingMoney();
+        ResetRouletteBackgroundColor();
 
-        ResetRouletteContent();
+        ChangeResetBettingMoney();
 
         for (int i = 0; i < blockContentList.Count; i++)
         {
@@ -608,19 +626,19 @@ public class GameManager : MonoBehaviour
     public void ChangeMoney(float plus)
     {
         money += plus;
-        moneyText.text = "현재 돈 : ₩ " + money.ToString();
+        moneyText.text = money.ToString();
     }
 
     void ChangeBettingMoney(float plus)
     {
         bettingMoney += plus;
-        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+        bettingMoneyText.text = bettingMoney.ToString();
     }
 
     void ChangeResetBettingMoney()
     {
         bettingMoney = 0;
-        bettingMoneyText.text = "베팅 금액 : ₩ " + bettingMoney.ToString();
+        bettingMoneyText.text = bettingMoney.ToString();
     }
 
     private void CheckTargetNumber(int target)
@@ -628,12 +646,12 @@ public class GameManager : MonoBehaviour
         targetObj.SetActive(true);
         targetObj.transform.SetAsLastSibling();
 
-        if (targetNumber > 11)
+        if (targetNumber < 12)
         {
-            targetNumber++;
+            targetNumber--;
         }
 
-        Transform trans = rouletteContentList[target - 1].transform;
+        Transform trans = rouletteContentList[target].transform;
 
         targetObj.transform.position = trans.position;
 
@@ -816,7 +834,7 @@ public class GameManager : MonoBehaviour
                 if (checkDrag)
                 {
                     checkDrag = false;
-                    ResetRouletteContent();
+                    ResetRouletteBackgroundColor();
                 }
             }
             else
@@ -829,7 +847,7 @@ public class GameManager : MonoBehaviour
                 if(checkDrag)
                 {
                     checkDrag = false;
-                    ResetRouletteContent();
+                    ResetRouletteBackgroundColor();
                 }
             }
             else
@@ -851,10 +869,6 @@ public class GameManager : MonoBehaviour
         {
             ChangeMoney(bettingValue[(int)blockContent.blockType]);
             ChangeBettingMoney(-bettingValue[(int)blockContent.blockType]);
-
-            //string notion = bettingValue[(int)blockContent.blockType] + "만큼 배팅을 취소했습니다.\n총 배팅 금액은 " + bettingMoney + "입니다.";
-
-            //TalkManager.instance.UseNotion(notion, Color.red);
 
             bettingValue[(int)blockContent.blockType] = 0;
         }
@@ -1209,7 +1223,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        ResetRouletteContent();
+        ResetRouletteBackgroundColor();
 
         switch (mainRouletteContent.rouletteType)
         {
@@ -1415,7 +1429,7 @@ public class GameManager : MonoBehaviour
     {
         soundManager.PlaySFX(GameSfxType.Click);
 
-        ResetRouletteContent();
+        ResetRouletteBackgroundColor();
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
         {
@@ -1480,14 +1494,9 @@ public class GameManager : MonoBehaviour
         ChangeMoney(-blockInformation.bettingPrice * blockInformation.size);
         ChangeBettingMoney(blockInformation.bettingPrice * blockInformation.size);
 
-        string notion = "<color=#00FF00>" + GameStateManager.instance.NickName + " 님이 ₩ " + blockInformation.bettingPrice.ToString()
-            + " x " + blockInformation.size + " 베팅\n총 배팅 : " + bettingMoney + "</color>";
+        string notion = blockInformation.bettingPrice.ToString() + " x " + blockInformation.size + " 블록 배치";
 
-        string notion2 = "₩ " + blockInformation.bettingPrice.ToString() + " x " + blockInformation.size + " 베팅";
-
-        NotionManager.instance.UseNotion(notion2, ColorType.Green);
-
-        PV.RPC("ChatRPC", RpcTarget.All, notion);
+        NotionManager.instance.UseNotion(notion, ColorType.Green);
 
         insertBlock = new string[4];
 
@@ -1546,7 +1555,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetRouletteContent()
+    public void ResetRouletteBackgroundColor()
     {
         for (int i = 0; i < allContentList.Count; i++)
         {
@@ -1556,7 +1565,7 @@ public class GameManager : MonoBehaviour
 
     public void CancleBetting(BlockType type)
     {
-        ResetRouletteContent();
+        ResetRouletteBackgroundColor();
 
         deleteBlock = new string[2];
 
@@ -1584,7 +1593,36 @@ public class GameManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.Cancle);
     }
 
-    [PunRPC] // RPC는 플레이어가 속해있는 방 모든 인원에게 전달한다
+    public void BetOptionLeaveGame()
+    {
+        StopAllCoroutines();
+
+        rouletteManager.CloseRouletteView();
+        characterManager.DeleteAllPlayer();
+        soundManager.StopAllSFX();
+
+        ResetRouletteBackgroundColor();
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        for (int i = 0; i < bettingValue.Length; i++)
+        {
+            bettingValue[i] = 0;
+        }
+
+        BetOptionCancleButton();
+
+        uIManager.OnGameStop();
+    }
+
+    [PunRPC]
     void ChatRPC(string msg)
     {
         talkManager.UseNotion(msg);
