@@ -15,6 +15,11 @@ public class Rotation_Roulette : MonoBehaviour
         minusSpeed = 0;
     }
 
+    public int GetRotate()
+    {
+        return (int)transform.rotation.eulerAngles.z;
+    }
+
     public void StartRoulette()
     {
         speed = Random.Range(300, 600);

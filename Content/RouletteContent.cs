@@ -14,7 +14,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     public int number = 0;
 
     [Title("Active")]
-    public BlockType[] blockType;
+    public BlockType blockType;
     public bool isActive = false;
     bool initialize = false;
 
@@ -30,7 +30,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     {
         numberText.text = "";
 
-        blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
+        //blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
 
         queen.SetActive(false);
     }
@@ -156,7 +156,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
             initialize = false;
         }
 
-        blockType[(int)type] = type;
+        blockType = type;
         isActive = true;
 
         SetBackgroundColor(rouletteColorType);
@@ -166,14 +166,16 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     public void SetActiveFalse(BlockType type)
     {
-        blockType[(int)type] = BlockType.Default;
+        blockType = BlockType.Default;
 
         isActive = false;
     }
 
     public void SetActiveFalseAll()
     {
-        blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
+        //blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
+
+        blockType = BlockType.Default;
 
         isActive = false;
     }

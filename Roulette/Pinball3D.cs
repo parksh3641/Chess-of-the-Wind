@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class Pinball3D : MonoBehaviour
 {
-    public float power = 100f;
+    private float power = 300f;
     public int index = 0;
     public int ballPos = 0;
 
     private float time = 0f;
+
+    private float midWindPower = 0.5f;
+    private float lowWindPower = 0.2f;
 
     public bool move = false;
 
@@ -64,48 +67,176 @@ public class Pinball3D : MonoBehaviour
 
     public void BlowingWind(float force, int number)
     {
-        if (number == ballPos)
+        Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
+
+        float windPower = 0;
+
+        if (index == 0) //왼쪽 오른쪽
         {
-            if (index == 0)
+            switch (number) //바람을 분 위치
             {
-                switch (ballPos)
-                {
-                    case 0:
-                        transform.LookAt(leftWindPoint[3].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 1:
-                        transform.LookAt(leftWindPoint[2].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 2:
-                        transform.LookAt(leftWindPoint[1].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 3:
-                        transform.LookAt(leftWindPoint[0].position + new Vector3(0, 0.5f, 0));
-                        break;
-                }
-            }
-            else
-            {
-                switch (ballPos)
-                {
-                    case 0:
-                        transform.LookAt(rightWindPoint[3].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 1:
-                        transform.LookAt(rightWindPoint[2].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 2:
-                        transform.LookAt(rightWindPoint[1].position + new Vector3(0, 0.5f, 0));
-                        break;
-                    case 3:
-                        transform.LookAt(rightWindPoint[0].position + new Vector3(0, 0.5f, 0));
-                        break;
-                }
+                case 0:
+                    transform.LookAt(leftWindPoint[3].position + new Vector3(-1, 0.5f, 1));
 
-            }
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power;
+                            break;
+                        case 1:
+                            windPower = power * midWindPower;
+                            break;
+                        case 2:
+                            windPower = power * midWindPower;
+                            break;
+                        case 3:
+                            windPower = power * lowWindPower;
+                            break;
+                    }
+                    break;
+                case 1:
+                    transform.LookAt(leftWindPoint[2].position + new Vector3(1, 0.5f, 1));
 
-            rigid.AddForce(vector.forward * (power * force));
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * midWindPower;
+                            break;
+                        case 1:
+                            windPower = power;
+                            break;
+                        case 2:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 3:
+                            windPower = power * midWindPower;
+                            break;
+                    }
+                    break;
+                case 2:
+                    transform.LookAt(leftWindPoint[1].position + new Vector3(-1, 0.5f, -1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * midWindPower;
+                            break;
+                        case 1:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 2:
+                            windPower = power;
+                            break;
+                        case 3:
+                            windPower = power * midWindPower;
+                            break;
+                    }
+                    break;
+                case 3:
+                    transform.LookAt(leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 1:
+                            windPower = power * midWindPower;
+                            break;
+                        case 2:
+                            windPower = power * midWindPower;
+                            break;
+                        case 3:
+                            windPower = power;
+                            break;
+                    }
+                    break;
+            }
         }
+        else
+        {
+            switch (number) //바람을 분 위치
+            {
+                case 0:
+                    transform.LookAt(rightWindPoint[3].position + new Vector3(-1, 0.5f, 1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power;
+                            break;
+                        case 1:
+                            windPower = power * midWindPower;
+                            break;
+                        case 2:
+                            windPower = power * midWindPower;
+                            break;
+                        case 3:
+                            windPower = power * lowWindPower;
+                            break;
+                    }
+                    break;
+                case 1:
+                    transform.LookAt(rightWindPoint[2].position + new Vector3(1, 0.5f, 1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * midWindPower;
+                            break;
+                        case 1:
+                            windPower = power;
+                            break;
+                        case 2:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 3:
+                            windPower = power * midWindPower;
+                            break;
+                    }
+                    break;
+                case 2:
+                    transform.LookAt(rightWindPoint[1].position + new Vector3(-1, 0.5f, -1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * midWindPower;
+                            break;
+                        case 1:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 2:
+                            windPower = power;
+                            break;
+                        case 3:
+                            windPower = power * midWindPower;
+                            break;
+                    }
+                    break;
+                case 3:
+                    transform.LookAt(rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                    switch (ballPos) //공이 서 있는 위치
+                    {
+                        case 0:
+                            windPower = power * lowWindPower;
+                            break;
+                        case 1:
+                            windPower = power * midWindPower;
+                            break;
+                        case 2:
+                            windPower = power * midWindPower;
+                            break;
+                        case 3:
+                            windPower = power;
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        rigid.AddForce(vector.forward * (windPower * (0.2f + force)));
     }
 
     private void FixedUpdate()

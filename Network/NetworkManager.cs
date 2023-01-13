@@ -129,11 +129,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            int number = Random.Range(0, 24);
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Roulette", "Right" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Number", number } });
+
+            int number = Random.Range(0, 24);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "LeftNumber", number } });
+
+            int number2 = Random.Range(0, 24);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", number2 } });
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player3_Total", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player4_Total", 0 } });
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player3_Minus", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player4_Minus", 0 } });
         }
 
         gameManager.GameStart();

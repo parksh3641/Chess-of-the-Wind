@@ -50,7 +50,6 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Bouns")]
         public bool firstBouns = false;
-        public int bounsCount = 3;
     }
     #region Data
 
@@ -102,19 +101,6 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.firstBouns = value;
-            SaveFile();
-        }
-    }
-
-    public int BounsCount
-    {
-        get
-        {
-            return gameSettings.bounsCount;
-        }
-        set
-        {
-            gameSettings.bounsCount = value;
             SaveFile();
         }
     }

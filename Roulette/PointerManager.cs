@@ -59,6 +59,36 @@ public class PointerManager : MonoBehaviour
         return number;
     }
 
+    public int CheckQueenNumber(Transform target)
+    {
+        int number = 0;
+        float temp = 0;
+        float dist = 0;
+
+        for (int i = 0; i < pointerList.Count; i++)
+        {
+            dist = Vector3.Distance(pointerList[i].transform.position, target.transform.position);
+
+            //Debug.Log(i + 1 + "와의 거리 : " + dist);
+
+            if (temp == 0)
+            {
+                temp = dist;
+                number = pointerList[i].index;
+            }
+            else
+            {
+                if (temp > dist)
+                {
+                    temp = dist;
+                    number = pointerList[i].index;
+                }
+            }
+        }
+
+        return number;
+    }
+
     public void Initialize(int number)
     {
         for (int i = 0; i < pointerList.Count; i++)
