@@ -5,6 +5,11 @@ using UnityEngine;
 public class EnumManager : MonoBehaviour
 {
 }
+public enum GameType
+{
+    NewBie,
+    Gosu
+}
 public enum RouletteType
 {
     Default = 0,

@@ -11,6 +11,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public PhotonView PV;
 
+    public bool isDelay = false;
+
     public StateManager stateManager;
     public GameManager gameManager;
     public CharacterManager characterManager;
@@ -73,7 +75,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinLobby()
     {
-        Debug.Log("방을 찾고 있습니다.");
+        Debug.Log("로비에 접속하고 있습니다.");
 
         PhotonNetwork.JoinLobby();
     }
@@ -88,11 +90,85 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
 
-    public void CreateRoom() => PhotonNetwork.CreateRoom("Master", new RoomOptions { MaxPlayers = 4 });
+    public void CreateRoom()
+    {
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            RoomOptions roomOption = new RoomOptions();
+            roomOption.MaxPlayers = 4;
 
-    public void JoinRoom() => PhotonNetwork.JoinRoom("Master");
+            PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
+        }
+        else
+        {
+            RoomOptions roomOption = new RoomOptions();
+            roomOption.MaxPlayers = 4;
 
-    public void JoinOrCreateRoom()
+            PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
+        }
+    }
+
+    public void JoinRoom()
+    {
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            PhotonNetwork.JoinRoom("NewBie");
+        }
+        else
+        {
+            PhotonNetwork.JoinRoom("Gosu");
+        }
+    }
+
+    public void JoinOrCreateRoom_Developer()
+    {
+        if (isDelay) return;
+
+        isDelay = true;
+
+        SetNickName();
+
+        RoomOptions roomOption = new RoomOptions();
+        roomOption.MaxPlayers = 4;
+
+        PhotonNetwork.JoinOrCreateRoom("Master", roomOption, null);
+
+        GameStateManager.instance.GameType = GameType.Gosu;
+    }
+
+    public void JoinOrCreateRoom_NewBie()
+    {
+        if (isDelay) return;
+
+        isDelay = true;
+
+        SetNickName();
+
+        RoomOptions roomOption = new RoomOptions();
+        roomOption.MaxPlayers = 4;
+
+        PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
+
+        GameStateManager.instance.GameType = GameType.NewBie;
+    }
+
+    public void JoinOrCreateRoom_Gosu()
+    {
+        if (isDelay) return;
+
+        isDelay = true;
+
+        SetNickName();
+
+        RoomOptions roomOption = new RoomOptions();
+        roomOption.MaxPlayers = 4;
+
+        PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
+
+        GameStateManager.instance.GameType = GameType.Gosu;
+    }
+
+    void SetNickName()
     {
         if (GameStateManager.instance.NickName.Length == 0)
         {
@@ -102,17 +178,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayerPrefs.SetString("NickName", GameStateManager.instance.NickName);
 
         PhotonNetwork.LocalPlayer.NickName = GameStateManager.instance.NickName;
-
-        RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 4;
-
-        PhotonNetwork.JoinOrCreateRoom("Master", roomOption, null);
     }
 
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
     public void LeaveRoom()
     {
+        isDelay = false;
+
         Debug.Log("방을 떠났습니다.");
 
         PhotonNetwork.LeaveRoom();
@@ -125,6 +198,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        isDelay = false;
+
         Debug.Log("방에 참가하였습니다.");
 
         if (PhotonNetwork.IsMasterClient)
@@ -150,25 +225,37 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player4_Minus", 0 } });
         }
 
-        gameManager.GameStart();
-
         characterManager.AddAllPlayer();
 
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            gameManager.GameStart_NewBie();
+        }
+        else
+        {
+            gameManager.GameStart_Gosu();
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        isDelay = false;
+
         Debug.Log("방 만들기 실패했습니다.");
     }
 
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
+        isDelay = false;
+
         Debug.Log("방 참가 실패했습니다.");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        isDelay = false;
+
         Debug.Log("랜덤방에 참가할 수 없습니다.");
     }
 

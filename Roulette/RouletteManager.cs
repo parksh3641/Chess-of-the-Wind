@@ -52,7 +52,7 @@ public class RouletteManager : MonoBehaviour
     public Image powerFillAmount;
 
     private float power = 0;
-    private float upPower = 0.05f;
+    private float upPower = 0.025f;
     private float maxPower = 1f;
 
     bool pinballPower = false;
@@ -219,8 +219,17 @@ public class RouletteManager : MonoBehaviour
         roulette1Obj.gameObject.SetActive(true);
         roulette2Obj.gameObject.SetActive(true);
 
-        leftPointerManager.Initialize(leftNumber);
-        rightPointerManager.Initialize(rightNumber);
+
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            leftPointerManager.Initialize_NewBie();
+            rightPointerManager.Initialize_NewBie();
+        }
+        else
+        {
+            leftPointerManager.Initialize(leftNumber);
+            rightPointerManager.Initialize(rightNumber);
+        }
 
         leftFingerController.Initialize();
         rightFingerController.Initialize();
@@ -487,7 +496,7 @@ public class RouletteManager : MonoBehaviour
             }
             else
             {
-                if (power > 0.1f)
+                if (power > 0f)
                 {
                     power -= upPower;
                 }

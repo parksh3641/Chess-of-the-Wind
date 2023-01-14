@@ -18,11 +18,9 @@ public class GameManager : MonoBehaviour
     public BlockInformation blockInformation = new BlockInformation();
     BlockMotherInformation blockMotherInformation;
 
+    [Title("Betting")]
     public int[] bettingValue;
     public List<int> bettingNumberList = new List<int>();
-
-    private int bettingTime = 0;
-    private int bettingWaitTime = 0;
 
     [Title("Setting")]
     public GridLayoutGroup gridLayoutGroup;
@@ -33,12 +31,16 @@ public class GameManager : MonoBehaviour
     public Image timerFillAmount;
 
     [Title("Text")]
+    public Text roomText;
     public Text moneyText;
     public Text bettingMoneyText;
     public Text targetText;
     public Text recordText;
 
     [Title("Value")]
+    private int bettingTime = 0;
+    private int bettingWaitTime = 0;
+
     public float money = 0;
     private float bettingMoney = 0;
     private float getMoney = 0;
@@ -66,6 +68,8 @@ public class GameManager : MonoBehaviour
     bool verticalReward = false;
     bool squareReward = false;
 
+    [Title("Parent")]
+
     public GameObject blockRootParent;
     public GameObject blockParent;
     public GameObject blockGridParent;
@@ -76,21 +80,28 @@ public class GameManager : MonoBehaviour
 
     [Title("Prefab")]
     public RouletteContent rouletteContent;
-    public RectTransform rouletteContentTransform;
-
-    public RectTransform rouletteContentTransformSplitBet_Vertical;
-    public RectTransform rouletteContentTransformSplitBet_Horizontal;
-
-    public RectTransform rouletteContentTransformSquareBet;
-
     public NumberContent numberContent;
-    public RectTransform numberContentTransform;
-
     public BlockContent blockContent;
     public OtherBlockContent otherBlockContent;
+
+    [Title("Grid")]
+    public RectTransform rouletteContentTransform;
+    public RectTransform rouletteContentTransformSplitBet_Vertical;
+    public RectTransform rouletteContentTransformSplitBet_Horizontal;
+    public RectTransform rouletteContentTransformSquareBet;
+    public RectTransform numberContentTransform;
+
     public RectTransform blockContentTransform;
 
-    List<RouletteContent> rouletteContentList = new List<RouletteContent>();
+    public RectTransform rouletteContentTransform_NewBie;
+    public RectTransform numberContentTransform_NewBie;
+
+    [Title("NewBie")]
+    List<RouletteContent> rouletteContentList_NewBie = new List<RouletteContent>();
+    List<RouletteContent> numberContentList_NewBie = new List<RouletteContent>();
+
+    [Title("Gosu")]
+    List<RouletteContent> rouletteContentList_Gosu = new List<RouletteContent>();
     List<RouletteContent> rouletteSplitContentList_Vertical = new List<RouletteContent>();
     List<RouletteContent> rouletteSplitContentList_Horizontal = new List<RouletteContent>();
     List<RouletteContent> rouletteSquareContentList = new List<RouletteContent>();
@@ -98,15 +109,15 @@ public class GameManager : MonoBehaviour
     List<RouletteContent> allContentList = new List<RouletteContent>();
 
     List<RouletteContent> numberContentList = new List<RouletteContent>();
+
+    [Title("Other")]
     List<BlockContent> blockContentList = new List<BlockContent>();
-    public List<OtherBlockContent> otherBlockContentList = new List<OtherBlockContent>();
+    List<OtherBlockContent> otherBlockContentList = new List<OtherBlockContent>();
 
-    [Header("Betting")]
-    private List<int[]> splitHorizontalIndexList = new List<int[]>();
-    private List<int[]> splitVerticalIndexList = new List<int[]>();
-    private List<int[]> squareIndexList = new List<int[]>();
+    [Title("Target")]
+    public List<RouletteContent> rouletteContentList_Target = new List<RouletteContent>();
 
-    [Header("Manager")]
+    [Title("Manager")]
     public UIManager uIManager;
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
@@ -163,7 +174,7 @@ public class GameManager : MonoBehaviour
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
-            rouletteContentList.Add(content);
+            rouletteContentList_Gosu.Add(content);
 
             NumberContent numContent = Instantiate(numberContent);
             numContent.transform.parent = numberContentTransform;
@@ -176,6 +187,39 @@ public class GameManager : MonoBehaviour
 
             allContentList.Add(content);
             bettingNumberList.Add(0);
+        }
+
+        index = 0;
+        count = 0;
+
+        for (int i = 0; i < 25; i++) //NewBie
+        {
+            int[] setIndex = new int[2];
+
+            if (index >= gridConstraintCount)
+            {
+                index = 0;
+                count++;
+            }
+
+            setIndex[0] = index;
+            setIndex[1] = count;
+
+            RouletteContent content = Instantiate(rouletteContent);
+            content.transform.parent = rouletteContentTransform_NewBie;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
+            rouletteContentList_NewBie.Add(content);
+
+            NumberContent numContent = Instantiate(numberContent);
+            numContent.transform.parent = numberContentTransform_NewBie;
+            numContent.transform.localPosition = Vector3.zero;
+            numContent.transform.localScale = Vector3.one;
+            numContent.Initialize_NewBie(i);
+            numberContentList_NewBie.Add(content);
+
+            index++;
         }
 
         index = 0;
@@ -288,6 +332,42 @@ public class GameManager : MonoBehaviour
         blockMotherInformation = blockDataBase.blockMotherInformation;
 
         ChangeMoney(playerDataBase.Coin);
+    }
+
+    public void GameStart_NewBie()
+    {
+        roomText.text = "초보방";
+
+        rouletteContentTransform.gameObject.SetActive(false);
+        rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
+        rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(false);
+        rouletteContentTransformSquareBet.gameObject.SetActive(false);
+        numberContentTransform.gameObject.SetActive(false);
+
+        rouletteContentTransform_NewBie.gameObject.SetActive(true);
+        numberContentTransform_NewBie.gameObject.SetActive(true);
+
+        rouletteContentList_Target = rouletteContentList_NewBie;
+
+        GameStart();
+    }
+
+    public void GameStart_Gosu()
+    {
+        roomText.text = "고수방";
+
+        rouletteContentTransform.gameObject.SetActive(true);
+        rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
+        rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(true);
+        rouletteContentTransformSquareBet.gameObject.SetActive(true);
+        numberContentTransform.gameObject.SetActive(true);
+
+        rouletteContentTransform_NewBie.gameObject.SetActive(false);
+        numberContentTransform_NewBie.gameObject.SetActive(false);
+
+        rouletteContentList_Target = rouletteContentList_Gosu;
+
+        GameStart();
     }
 
     public void GameStart()
@@ -523,7 +603,7 @@ public class GameManager : MonoBehaviour
         {
             targetQueenObj.SetActive(true);
             targetQueenObj.transform.SetAsLastSibling();
-            trans = rouletteContentList[12].transform;
+            trans = rouletteContentList_Target[12].transform;
             targetQueenObj.transform.position = trans.position;
 
             targetText.text = "퀸";
@@ -534,12 +614,12 @@ public class GameManager : MonoBehaviour
 
         if (targetNumber <= 12)
         {
-            trans = rouletteContentList[targetNumber - 1].transform;
+            trans = rouletteContentList_Target[targetNumber - 1].transform;
             targetObj.transform.position = trans.position;
         }
         else if (targetNumber >= 13)
         {
-            trans = rouletteContentList[targetNumber].transform;
+            trans = rouletteContentList_Target[targetNumber].transform;
             targetObj.transform.position = trans.position;
         }
 
@@ -690,24 +770,24 @@ public class GameManager : MonoBehaviour
 
     private void CheckTargetNumber(int target)
     {
-        for (int i = 0; i < rouletteContentList.Count; i++)
+        for (int i = 0; i < rouletteContentList_Target.Count; i++)
         {
-            if (rouletteContentList[i].isActive)
+            if (rouletteContentList_Target[i].isActive)
             {
                 if (straightReward) return;
 
                 if (i < 12)
                 {
-                    if (rouletteContentList[i].number == target)
+                    if (rouletteContentList_Target[i].number == target)
                     {
-                        ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList[i].blockType), RouletteType.StraightBet, false);
+                        ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList_Target[i].blockType), RouletteType.StraightBet, false);
                     }
                 }
                 else if(i >= 13)
                 {
-                    if (rouletteContentList[i].number == target + 1)
+                    if (rouletteContentList_Target[i].number == target + 1)
                     {
-                        ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList[i].blockType), RouletteType.StraightBet, false);
+                        ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList_Target[i].blockType), RouletteType.StraightBet, false);
                     }
                 }
             }
@@ -1088,9 +1168,9 @@ public class GameManager : MonoBehaviour
 
     private void CheckQueenNumber()
     {
-        if (rouletteContentList[12].isActive)
+        if (rouletteContentList_Target[12].isActive)
         {
-            ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList[12].blockType), RouletteType.StraightBet, true);
+            ChangeGetMoney(blockDataBase.GetBlockInfomation(rouletteContentList_Target[12].blockType), RouletteType.StraightBet, true);
         }
 
         if (rouletteSplitContentList_Horizontal[7].isActive)
@@ -1520,15 +1600,15 @@ public class GameManager : MonoBehaviour
             case RouletteType.Default:
                 break;
             case RouletteType.StraightBet:
-                for (int i = 0; i < rouletteContentList.Count; i++)
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
                 {
-                    if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                        || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
-                        || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
-                        || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
-                        || rouletteContentList[i].index.SequenceEqual(index8))
+                    if (rouletteContentList_Target[i].index.SequenceEqual(index0) || rouletteContentList_Target[i].index.SequenceEqual(index1)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index2) || rouletteContentList_Target[i].index.SequenceEqual(index3)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index4) || rouletteContentList_Target[i].index.SequenceEqual(index5)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index6) || rouletteContentList_Target[i].index.SequenceEqual(index7)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index8))
                     {
-                        rouletteContentList[i].SetBackgroundColor(RouletteColorType.Yellow);
+                        rouletteContentList_Target[i].SetBackgroundColor(RouletteColorType.Yellow);
                     }
                 }
                 break;
@@ -1660,15 +1740,15 @@ public class GameManager : MonoBehaviour
                 case RouletteType.Default:
                     break;
                 case RouletteType.StraightBet:
-                    for (int i = 0; i < rouletteContentList.Count; i++)
+                    for (int i = 0; i < rouletteContentList_Target.Count; i++)
                     {
-                        if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                            || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
-                            || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
-                            || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
-                            || rouletteContentList[i].index.SequenceEqual(index8))
+                        if (rouletteContentList_Target[i].index.SequenceEqual(index0) || rouletteContentList_Target[i].index.SequenceEqual(index1)
+                            || rouletteContentList_Target[i].index.SequenceEqual(index2) || rouletteContentList_Target[i].index.SequenceEqual(index3)
+                            || rouletteContentList_Target[i].index.SequenceEqual(index4) || rouletteContentList_Target[i].index.SequenceEqual(index5)
+                            || rouletteContentList_Target[i].index.SequenceEqual(index6) || rouletteContentList_Target[i].index.SequenceEqual(index7)
+                            || rouletteContentList_Target[i].index.SequenceEqual(index8))
                         {
-                            if (rouletteContentList[i].isActive) blockOverlap = true;
+                            if (rouletteContentList_Target[i].isActive) blockOverlap = true;
                         }
                     }
                     break;
@@ -1726,15 +1806,15 @@ public class GameManager : MonoBehaviour
             case RouletteType.Default:
                 break;
             case RouletteType.StraightBet:
-                for (int i = 0; i < rouletteContentList.Count; i++)
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
                 {
-                    if (rouletteContentList[i].index.SequenceEqual(index0) || rouletteContentList[i].index.SequenceEqual(index1)
-                        || rouletteContentList[i].index.SequenceEqual(index2) || rouletteContentList[i].index.SequenceEqual(index3)
-                        || rouletteContentList[i].index.SequenceEqual(index4) || rouletteContentList[i].index.SequenceEqual(index5)
-                        || rouletteContentList[i].index.SequenceEqual(index6) || rouletteContentList[i].index.SequenceEqual(index7)
-                        || rouletteContentList[i].index.SequenceEqual(index8))
+                    if (rouletteContentList_Target[i].index.SequenceEqual(index0) || rouletteContentList_Target[i].index.SequenceEqual(index1)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index2) || rouletteContentList_Target[i].index.SequenceEqual(index3)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index4) || rouletteContentList_Target[i].index.SequenceEqual(index5)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index6) || rouletteContentList_Target[i].index.SequenceEqual(index7)
+                        || rouletteContentList_Target[i].index.SequenceEqual(index8))
                     {
-                        rouletteContentList[i].SetActiveTrue(blockContent.blockType);
+                        rouletteContentList_Target[i].SetActiveTrue(blockContent.blockType);
                     }
                 }
                 break;
@@ -1847,9 +1927,19 @@ public class GameManager : MonoBehaviour
 
     public void ResetRouletteBackgroundColor()
     {
-        for (int i = 0; i < allContentList.Count; i++)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            allContentList[i].ResetBackgroundColor();
+            for (int i = 0; i < rouletteContentList_NewBie.Count; i++)
+            {
+                rouletteContentList_NewBie[i].ResetBackgroundColor();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].ResetBackgroundColor();
+            }
         }
     }
 
@@ -1946,7 +2036,7 @@ public class GameManager : MonoBehaviour
             case RouletteType.Default:
                 break;
             case RouletteType.StraightBet:
-                content.transform.position = rouletteContentList[int.Parse(block[2]) - 1].transform.position;
+                content.transform.position = rouletteContentList_Target[int.Parse(block[2]) - 1].transform.position;
                 break;
             case RouletteType.SplitBet_Horizontal:
                 content.transform.position = rouletteSplitContentList_Horizontal[int.Parse(block[2]) - 1].transform.position;

@@ -32,6 +32,10 @@ public class GameStateManager : MonoBehaviour
         public LanguageType language = LanguageType.Default;
 
         [Space]
+        [Title("InGame")]
+        public GameType gameType = GameType.NewBie;
+
+        [Space]
         [Title("Setting")]
         public bool music = true;
         public bool sfx = true;
@@ -217,6 +221,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.login = value;
+            SaveFile();
+        }
+    }
+
+    public GameType GameType
+    {
+        get
+        {
+            return gameSettings.gameType;
+        }
+        set
+        {
+            gameSettings.gameType = value;
             SaveFile();
         }
     }

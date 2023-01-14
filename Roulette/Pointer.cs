@@ -25,6 +25,20 @@ public class Pointer : MonoBehaviour
         numberText.text = index.ToString();
     }
 
+    public void Initialize_NewBie(int number)
+    {
+        focus.SetActive(false);
+
+        if (number % 2 == 0)
+        {
+            numberText.text = "»Ú";
+        }
+        else
+        {
+            numberText.text = "πÈ";
+        }
+    }
+
     public void Betting(bool check)
     {
         if(check)
