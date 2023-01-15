@@ -42,26 +42,16 @@ public enum TestMoneyType
 public enum BlockType
 {
     Default,
-    RightQueen_2,
-    LeftQueen_2,
-    RightQueen_3,
-    LeftQueen_3,
-    RightNight,
-    LeftNight,
-    RightDownNight,
-    LeftDownNight,
-    Rook_V2,
-    Rook_V2H2,
-    Pawn,
-    Spider,
-    Tetris_I,
-    Tetris_I_Hor,
-    Tetris_T,
-    Tetris_L,
-    Tetris_J,
-    Tetris_S,
-    Tetris_Z,
-    Tetris_Speical,
+    I,
+    O,
+    T,
+    L,
+    J,
+    S,
+    Z,
+    BigO,
+    I_Horizontal,
+    One
 }
 
 public enum BetOptionType

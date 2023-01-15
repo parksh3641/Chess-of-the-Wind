@@ -9,10 +9,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
     public BlockType blockType = BlockType.Default;
 
-    Image image;
     public GameObject blockMain;
-    public BlockChildContent[] blockUIArray;
     public BlockChildContent[] blockMainArray;
+    public BlockChildContent[] blockArray;
 
     [Title("Drag")]
     private Transform blockRootParent;
@@ -24,21 +23,21 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     void Awake()
     {
-        image = GetComponent<Image>();
         canvasGroup = GetComponent<CanvasGroup>();
 
         blockMain.SetActive(true);
-
-        for (int i = 0; i < blockUIArray.Length; i++)
-        {
-            blockUIArray[i].gameObject.SetActive(false);
-        }
 
         for (int i = 0; i < blockMainArray.Length; i++)
         {
             blockMainArray[i].gameObject.SetActive(false);
         }
+
+        for (int i = 0; i < blockArray.Length; i ++)
+        {
+            blockArray[i].gameObject.SetActive(false);
+        }
     }
+
 
     public void Initialize(GameManager manager, Transform root, Transform grid, BlockType type)
     {
@@ -47,7 +46,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         previousParent = grid;
         blockType = type;
 
-        blockUIArray[(int)blockType - 1].gameObject.SetActive(true);
+        blockMainArray[(int)blockType - 1].gameObject.SetActive(true);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -63,15 +62,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = true;
         gameManager.blockType = blockType;
 
-        image.color = new Color(1, 1, 1, 1 / 255f);
         blockMain.SetActive(false);
-        blockMainArray[(int)blockType - 1].gameObject.SetActive(true);
+        blockArray[(int)blockType - 1].gameObject.SetActive(true);
 
         isDrag = true;
 
-        for (int i = 0; i < blockMainArray[(int)blockType - 1].blockChildArray.Length; i++)
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
         {
-            blockMainArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
         }
     }
     public void OnDrag(PointerEventData eventData)
@@ -86,9 +84,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
-            image.color = new Color(1, 1, 1, 1);
             blockMain.SetActive(true);
-            blockMainArray[(int)blockType - 1].gameObject.SetActive(false);
+            blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
             gameManager.CancleBetting(blockType);
         }
@@ -101,9 +98,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         isDrag = false;
 
-        for (int i = 0; i < blockMainArray[(int)blockType - 1].blockChildArray.Length; i++)
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
         {
-            blockMainArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(true);
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(true);
         }
     }
     public void ResetPos()
@@ -113,16 +110,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
-            image.color = new Color(1, 1, 1, 1);
             blockMain.SetActive(true);
-            blockMainArray[(int)blockType - 1].gameObject.SetActive(false);
+            blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
             isDrag = false;
         }
 
-        for (int i = 0; i < blockMainArray[(int)blockType - 1].blockChildArray.Length; i++)
+        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
         {
-            blockMainArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
+            blockArray[(int)blockType - 1].blockChildArray[i].SetBettingMark(false);
         }
     }
 
@@ -131,9 +127,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         transform.SetParent(previousParent);
         transform.position = previousParent.GetComponent<RectTransform>().position;
 
-        image.color = new Color(1, 1, 1, 1);
         blockMain.SetActive(true);
-        blockMainArray[(int)blockType - 1].gameObject.SetActive(false);
+        blockArray[(int)blockType - 1].gameObject.SetActive(false);
 
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;

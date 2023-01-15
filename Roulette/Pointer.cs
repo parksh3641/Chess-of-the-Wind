@@ -27,8 +27,6 @@ public class Pointer : MonoBehaviour
 
     public void Initialize_NewBie(int number)
     {
-        index = number;
-
         focus.SetActive(false);
 
         if (number % 2 == 0)
@@ -37,7 +35,7 @@ public class Pointer : MonoBehaviour
         }
         else
         {
-            numberText.text = "°Ë";
+            numberText.text = "¹é";
         }
     }
 
