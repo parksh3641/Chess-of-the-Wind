@@ -76,7 +76,7 @@ public class Pinball3D : MonoBehaviour
             switch (number) //바람을 분 위치
             {
                 case 0:
-                    transform.LookAt(leftWindPoint[3].position + new Vector3(-1, 0.5f, 1));
+                    transform.LookAt(leftWindPoint[3].position + new Vector3(1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -84,7 +84,7 @@ public class Pinball3D : MonoBehaviour
                             windPower = power;
                             break;
                         case 1:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 2:
                             windPower = power * midWindPower;
@@ -95,7 +95,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 1:
-                    transform.LookAt(leftWindPoint[2].position + new Vector3(1, 0.5f, 1));
+                    transform.LookAt(leftWindPoint[2].position + new Vector3(-1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -109,17 +109,17 @@ public class Pinball3D : MonoBehaviour
                             windPower = power * lowWindPower;
                             break;
                         case 3:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                     }
                     break;
                 case 2:
-                    transform.LookAt(leftWindPoint[1].position + new Vector3(-1, 0.5f, -1));
+                    transform.LookAt(leftWindPoint[1].position + new Vector3(1, 0.5f, 1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
                         case 0:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 1:
                             windPower = power * lowWindPower;
@@ -133,7 +133,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 3:
-                    transform.LookAt(leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
+                    transform.LookAt(leftWindPoint[0].position + new Vector3(-1, 0.5f, 1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -144,7 +144,7 @@ public class Pinball3D : MonoBehaviour
                             windPower = power * midWindPower;
                             break;
                         case 2:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 3:
                             windPower = power;
@@ -158,7 +158,7 @@ public class Pinball3D : MonoBehaviour
             switch (number) //바람을 분 위치
             {
                 case 0:
-                    transform.LookAt(rightWindPoint[3].position + new Vector3(-1, 0.5f, 1));
+                    transform.LookAt(rightWindPoint[3].position + new Vector3(1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -166,7 +166,7 @@ public class Pinball3D : MonoBehaviour
                             windPower = power;
                             break;
                         case 1:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 2:
                             windPower = power * midWindPower;
@@ -177,7 +177,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 1:
-                    transform.LookAt(rightWindPoint[2].position + new Vector3(1, 0.5f, 1));
+                    transform.LookAt(rightWindPoint[2].position + new Vector3(-1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -191,17 +191,17 @@ public class Pinball3D : MonoBehaviour
                             windPower = power * lowWindPower;
                             break;
                         case 3:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                     }
                     break;
                 case 2:
-                    transform.LookAt(rightWindPoint[1].position + new Vector3(-1, 0.5f, -1));
+                    transform.LookAt(rightWindPoint[1].position + new Vector3(1, 0.5f, 1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
                         case 0:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 1:
                             windPower = power * lowWindPower;
@@ -215,7 +215,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 3:
-                    transform.LookAt(rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
+                    transform.LookAt(rightWindPoint[0].position + new Vector3(-1, 0.5f, 1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -226,7 +226,7 @@ public class Pinball3D : MonoBehaviour
                             windPower = power * midWindPower;
                             break;
                         case 2:
-                            windPower = power * midWindPower;
+                            windPower = power;
                             break;
                         case 3:
                             windPower = power;

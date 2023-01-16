@@ -18,18 +18,28 @@ public class GameManager : MonoBehaviour
     public BlockInformation blockInformation = new BlockInformation();
     BlockMotherInformation blockMotherInformation;
 
+    [Title("Developer")]
+    public InputField inputTargetNumber;
+    public Text developerInfo;
+
+    [Space]
     [Title("Betting")]
     public int[] bettingValue;
-    public List<int> bettingNumberList = new List<int>();
+    public int[] bettingSizeValue;
+    public int[] bettingNumberList_NewBie = new int[3];
+    public List<int> bettingNumberList_Gosu = new List<int>();
 
+    [Space]
     [Title("Setting")]
     public GridLayoutGroup gridLayoutGroup;
 
+    [Space]
     [Title("Timer")]
     private int timer = 0;
     public Text timerText;
     public Image timerFillAmount;
 
+    [Space]
     [Title("Text")]
     public Text roomText;
     public Text moneyText;
@@ -37,6 +47,7 @@ public class GameManager : MonoBehaviour
     public Text targetText;
     public Text recordText;
 
+    [Space]
     [Title("Value")]
     private int bettingTime = 0;
     private int bettingWaitTime = 0;
@@ -47,6 +58,8 @@ public class GameManager : MonoBehaviour
 
     private int targetNumber = 0;
     private int targetQueenNumber = 0;
+    private int blockCount = 0;
+
     private int gridConstraintCount = 0;
 
     string notion, notion2 = "";
@@ -54,36 +67,37 @@ public class GameManager : MonoBehaviour
     string[] insertBlock = new string[4];
     string[] deleteBlock = new string[2];
 
+    [Space]
     [Title("Drag")]
     private Transform dragPos;
     private bool checkDrag = false;
 
+    [Space]
     [Title("Bool")]
     public bool blockDrag = false;
     public bool blockDrop = false;
     public bool blockOverlap = false;
 
-    bool straightReward = false;
-    bool horizontalReward = false;
-    bool verticalReward = false;
-    bool squareReward = false;
-
+    [Space]
     [Title("Parent")]
-
     public GameObject blockRootParent;
     public GameObject blockParent;
-    public GameObject blockGridParent;
+    public GameObject blockGridParent_Developer;
+    public GameObject blockGridParent_NewBie;
+    public GameObject blockGridParent_Gosu;
     public Transform otherBlockParent;
 
     public GameObject targetObj;
     public GameObject targetQueenObj;
 
+    [Space]
     [Title("Prefab")]
     public RouletteContent rouletteContent;
     public NumberContent numberContent;
     public BlockContent blockContent;
     public OtherBlockContent otherBlockContent;
 
+    [Space]
     [Title("Grid")]
     public RectTransform rouletteContentTransform;
     public RectTransform rouletteContentTransformSplitBet_Vertical;
@@ -91,15 +105,19 @@ public class GameManager : MonoBehaviour
     public RectTransform rouletteContentTransformSquareBet;
     public RectTransform numberContentTransform;
 
-    public RectTransform blockContentTransform;
+    public RectTransform blockContentTransform_Developer;
+    public RectTransform blockContentTransform_NewBie;
+    public RectTransform blockContentTransform_Gosu;
 
     public RectTransform rouletteContentTransform_NewBie;
     public RectTransform numberContentTransform_NewBie;
 
+    [Space]
     [Title("NewBie")]
     List<RouletteContent> rouletteContentList_NewBie = new List<RouletteContent>();
     List<RouletteContent> numberContentList_NewBie = new List<RouletteContent>();
 
+    [Space]
     [Title("Gosu")]
     List<RouletteContent> rouletteContentList_Gosu = new List<RouletteContent>();
     List<RouletteContent> rouletteSplitContentList_Vertical = new List<RouletteContent>();
@@ -110,13 +128,16 @@ public class GameManager : MonoBehaviour
 
     List<RouletteContent> numberContentList = new List<RouletteContent>();
 
+    [Space]
     [Title("Other")]
     List<BlockContent> blockContentList = new List<BlockContent>();
     List<OtherBlockContent> otherBlockContentList = new List<OtherBlockContent>();
 
+    [Space]
     [Title("Target")]
     public List<RouletteContent> rouletteContentList_Target = new List<RouletteContent>();
 
+    [Space]
     [Title("Manager")]
     public UIManager uIManager;
     public SoundManager soundManager;
@@ -138,6 +159,8 @@ public class GameManager : MonoBehaviour
 
         instance = this;
 
+        inputTargetNumber.text = "";
+
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
 
@@ -152,6 +175,7 @@ public class GameManager : MonoBehaviour
         gridConstraintCount = gridLayoutGroup.constraintCount;
 
         bettingValue = new int[System.Enum.GetValues(typeof(BlockType)).Length];
+        bettingSizeValue = new int[System.Enum.GetValues(typeof(BlockType)).Length];
 
         int index = 0;
         int count = 0;
@@ -186,7 +210,7 @@ public class GameManager : MonoBehaviour
             index++;
 
             allContentList.Add(content);
-            bettingNumberList.Add(0);
+            bettingNumberList_Gosu.Add(0);
         }
 
         index = 0;
@@ -306,22 +330,46 @@ public class GameManager : MonoBehaviour
             allContentList.Add(content);
         }
 
-        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
-        //{
-        //    BlockContent content = Instantiate(blockContent);
-        //    content.transform.parent = blockContentTransform;
-        //    content.transform.localPosition = Vector3.zero;
-        //    content.transform.localScale = Vector3.one;
-        //    content.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + i + 1);
-        //    blockContentList.Add(content);
-        //}
+        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        {
+            BlockContent content = Instantiate(blockContent);
+            content.transform.parent = blockContentTransform_Developer;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockRootParent.transform, blockGridParent_Developer.transform, BlockType.Default + i + 1);
+            blockContentList.Add(content);
+        }
 
         BlockContent content2 = Instantiate(blockContent);
-        content2.transform.parent = blockContentTransform;
+        content2.transform.parent = blockContentTransform_NewBie;
         content2.transform.localPosition = Vector3.zero;
         content2.transform.localScale = Vector3.one;
-        content2.Initialize(this, blockRootParent.transform, blockGridParent.transform, BlockType.Default + 2);
+        content2.Initialize(this, blockRootParent.transform, blockGridParent_NewBie.transform, BlockType.Pawn);
         blockContentList.Add(content2);
+
+        int[] temp = new int[3];
+        temp[0] = 1;
+        temp[1] = 5;
+        temp[2] = 9;
+        for (int i = 0; i < 3; i++)
+        {
+            BlockContent content = Instantiate(blockContent);
+            content.transform.parent = blockContentTransform_Gosu;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.Initialize(this, blockRootParent.transform, blockGridParent_Gosu.transform, BlockType.Default + temp[i]);
+            blockContentList.Add(content);
+        }
+
+        index0 = new int[2];
+        index1 = new int[2];
+        index2 = new int[2];
+        index3 = new int[2];
+        index4 = new int[2];
+        index5 = new int[2];
+        index6 = new int[2];
+        index7 = new int[2];
+        index8 = new int[2];
     }
 
     public void Initialize()
@@ -338,6 +386,8 @@ public class GameManager : MonoBehaviour
     {
         roomText.text = "초보방";
 
+        developerInfo.text = "개발자 모드 (초보방)\n0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n빈칸 = 정상 진행";
+
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(false);
@@ -349,12 +399,17 @@ public class GameManager : MonoBehaviour
 
         rouletteContentList_Target = rouletteContentList_NewBie;
 
+        blockContentTransform_NewBie.gameObject.SetActive(true);
+        blockContentTransform_Gosu.gameObject.SetActive(false);
+
         GameStart();
     }
 
     public void GameStart_Gosu()
     {
         roomText.text = "고수방";
+
+        developerInfo.text = "개발자 모드 (고수방)\n0 = 퀸 당첨\n1 ~24 해당 숫자 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
@@ -366,6 +421,9 @@ public class GameManager : MonoBehaviour
         numberContentTransform_NewBie.gameObject.SetActive(false);
 
         rouletteContentList_Target = rouletteContentList_Gosu;
+
+        blockContentTransform_NewBie.gameObject.SetActive(false);
+        blockContentTransform_Gosu.gameObject.SetActive(true);
 
         GameStart();
     }
@@ -491,9 +549,15 @@ public class GameManager : MonoBehaviour
             allContentList[i].SetActiveFalseAll();
         }
 
-        for(int i = 0; i < bettingValue.Length; i ++)
+        for (int i = 0; i < rouletteContentList_Target.Count; i++)
+        {
+            rouletteContentList_Target[i].SetActiveFalseAll();
+        }
+
+        for (int i = 0; i < bettingValue.Length; i ++)
         {
             bettingValue[i] = 0;
+            bettingSizeValue[i] = 0;
         }
 
         ClearOtherPlayerBlock();
@@ -558,6 +622,39 @@ public class GameManager : MonoBehaviour
         ResetRouletteBackgroundColor();
     }
 
+    bool CheckDeveloper()
+    {
+        bool check = false;
+
+        if(inputTargetNumber.text.Length > 0)
+        {
+            int number = int.Parse(inputTargetNumber.text.ToString());
+
+            if(number <= 0)
+            {
+                targetNumber = 1;
+                targetQueenNumber = 1;
+            }
+            else
+            {
+                targetQueenNumber = 0;
+
+                if (number > 24)
+                {
+                    targetNumber = 24;
+                }
+                else
+                {
+                    targetNumber = number;
+                }
+            }
+
+            check = true;
+        }
+
+        return check;
+    }
+
     [PunRPC]
     void OpenRouletteView()
     {
@@ -565,7 +662,7 @@ public class GameManager : MonoBehaviour
 
         ShowBettingNumber();
 
-        if (!GameStateManager.instance.AutoTarget)
+        if (!CheckDeveloper())
         {
             rouletteManager.Initialize();
         }
@@ -581,21 +678,11 @@ public class GameManager : MonoBehaviour
     {
         uIManager.CloseRouletteView();
 
-        if (GameStateManager.instance.AutoTarget)
-        {
-            targetNumber = GameStateManager.instance.AutoTargetNumber;
-            targetQueenNumber = 1;
-        }
-        else
+        if (!CheckDeveloper())
         {
             targetNumber = int.Parse(target[0]);
             targetQueenNumber = int.Parse(target[1]);
         }
-
-        straightReward = false;
-        horizontalReward = false;
-        verticalReward = false;
-        squareReward = false;
 
         Transform trans;
 
@@ -623,17 +710,80 @@ public class GameManager : MonoBehaviour
             targetObj.transform.position = trans.position;
         }
 
-        targetText.text = targetNumber.ToString();
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            if(targetNumber % 2 == 0)
+            {
+                targetText.text = "흰";
+            }
+            else
+            {
+                targetText.text = "검";
+            }
+        }
+        else
+        {
+            targetText.text = targetNumber.ToString();
+        }
+
         recordText.text += targetNumber + ", ";
 
         getMoney = 0;
 
-        CheckTargetNumber(targetNumber);
-
-        if (targetQueenNumber == 1)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            Debug.Log("퀸 당첨");
-            CheckQueenNumber();
+            if (targetQueenNumber == 1)
+            {
+                if(rouletteContentList_Target[12].isActive)
+                {
+                    Debug.Log("초보방 퀸 당첨");
+                    getMoney += blockMotherInformation.straightBet_NewBie_Queen * blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice
+                        + blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
+                {
+                    if (rouletteContentList_Target[i].isActive)
+                    {
+                        if(targetNumber % 2 == 0 && rouletteContentList_Target[i].number % 2 == 0)
+                        {
+                            Debug.Log("초보방 흰색 당첨");
+                            getMoney += blockMotherInformation.straightBet_NewBie * blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice
+                                + blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice;
+                        }
+                        else if (targetNumber % 2 != 0 && rouletteContentList_Target[i].number % 2 != 0)
+                        {
+                            Debug.Log("초보방 검은색 당첨");
+                            getMoney += blockMotherInformation.straightBet_NewBie * blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice
+                                + blockDataBase.GetBlockInfomation(BlockType.Pawn).bettingPrice;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (targetQueenNumber == 1)
+            {
+                Debug.Log("고수방 퀸 당첨");
+                CheckQueenNumber();
+            }
+            else
+            {
+                Debug.Log("고수방 " + targetNumber + "번 당첨");
+                CheckTargetNumber(targetNumber);
+            }
+
+            for (int i = 0; i < bettingSizeValue.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
+            {
+                if (bettingSizeValue[i] > 0)
+                {
+                    int minus = blockDataBase.GetBlockInfomation(BlockType.Default + i).bettingPrice * i;
+                    ChangeMoney(-minus);
+                }
+            }
         }
 
         ChangeMoney((int)getMoney);
@@ -689,6 +839,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney(BlockInformation block, RouletteType type, bool queen)
     {
+        bettingSizeValue[(int)block.blockType] -= 1;
+
         switch (type)
         {
             case RouletteType.Default:
@@ -696,53 +848,45 @@ public class GameManager : MonoBehaviour
             case RouletteType.StraightBet:
                 if(queen)
                 {
-                    getMoney += ((blockMotherInformation.straightBet + blockMotherInformation.queenBet) / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.queenStraightBet * block.bettingPrice + block.bettingPrice;
                 }
                 else
                 {
-                    getMoney += (blockMotherInformation.straightBet / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.straightBet * block.bettingPrice + block.bettingPrice;
                 }
-
-                straightReward = true;
 
                 break;
             case RouletteType.SplitBet_Horizontal:
                 if (queen)
                 {
-                    getMoney += ((blockMotherInformation.splitBet + blockMotherInformation.queenBet) / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.queensplitBet * block.bettingPrice + block.bettingPrice;
                 }
                 else
                 {
-                    getMoney += (blockMotherInformation.splitBet / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.splitBet * block.bettingPrice + block.bettingPrice;
                 }
-
-                horizontalReward = true;
 
                 break;
             case RouletteType.SplitBet_Vertical:
                 if (queen)
                 {
-                    getMoney += ((blockMotherInformation.splitBet + blockMotherInformation.queenBet) / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.queensplitBet * block.bettingPrice + block.bettingPrice;
                 }
                 else
                 {
-                    getMoney += (blockMotherInformation.splitBet / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.splitBet * block.bettingPrice + block.bettingPrice;
                 }
-
-                verticalReward = true;
 
                 break;
             case RouletteType.SquareBet:
                 if (queen)
                 {
-                    getMoney += ((blockMotherInformation.squareBet + blockMotherInformation.queenBet) / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.queensquareBet * block.bettingPrice + block.bettingPrice;
                 }
                 else
                 {
-                    getMoney += (blockMotherInformation.squareBet / block.size) * block.bettingPrice * block.magnification;
+                    getMoney += blockMotherInformation.squareBet * block.bettingPrice + block.bettingPrice;
                 }
-
-                squareReward = true;
 
                 break;
         }
@@ -774,8 +918,6 @@ public class GameManager : MonoBehaviour
         {
             if (rouletteContentList_Target[i].isActive)
             {
-                if (straightReward) return;
-
                 if (i < 12)
                 {
                     if (rouletteContentList_Target[i].number == target)
@@ -797,8 +939,6 @@ public class GameManager : MonoBehaviour
         {
             if (rouletteSplitContentList_Horizontal[i].isActive)
             {
-                if (horizontalReward) return;
-
                 switch (i)
                 {
                     case 0:
@@ -929,8 +1069,6 @@ public class GameManager : MonoBehaviour
         {
             if (rouletteSplitContentList_Vertical[i].isActive)
             {
-                if (verticalReward) return;
-
                 switch (i)
                 {
                     case 0:
@@ -1061,8 +1199,6 @@ public class GameManager : MonoBehaviour
         {
             if (rouletteSquareContentList[i].isActive)
             {
-                if (squareReward) return;
-
                 switch (i)
                 {
                     case 0:
@@ -1260,11 +1396,22 @@ public class GameManager : MonoBehaviour
             ChangeBettingMoney(-bettingValue[(int)blockContent.blockType]);
 
             bettingValue[(int)blockContent.blockType] = 0;
+            bettingSizeValue[(int)blockContent.blockType] = 0;
         }
 
-        for (int i = 0; i < allContentList.Count; i++)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            allContentList[i].SetActiveFalse(blockContent.blockType);
+            for (int i = 0; i < rouletteContentList_NewBie.Count; i++)
+            {
+                rouletteContentList_NewBie[i].SetActiveFalse(blockContent.blockType);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalse(blockContent.blockType);
+            }
         }
 
         //switch (mainRouletteContent.rouletteType)
@@ -1297,301 +1444,32 @@ public class GameManager : MonoBehaviour
         //        break;
         //}
 
-        index0 = new int[2];
-        index1 = new int[2];
-        index2 = new int[2];
-        index3 = new int[2];
-        index4 = new int[2];
-        index5 = new int[2];
-        index6 = new int[2];
-        index7 = new int[2];
-        index8 = new int[2];
+        index0[0] = rouletteContent.index[0] + blockDataBase.GetIndex0(blockContent.blockType, 0);
+        index0[1] = rouletteContent.index[1] + blockDataBase.GetIndex0(blockContent.blockType, 1);
 
-        switch (blockContent.blockType)
-        {
-            case BlockType.Default:
-                break;
-            case BlockType.I:
-                index0[0] = rouletteContent.index[0];
-                index0[1] = rouletteContent.index[1] - 2;
+        index1[0] = rouletteContent.index[0] + blockDataBase.GetIndex1(blockContent.blockType, 0);
+        index1[1] = rouletteContent.index[1] + blockDataBase.GetIndex1(blockContent.blockType, 1);
 
-                index1[0] = rouletteContent.index[0];
-                index1[1] = rouletteContent.index[1] - 1;
+        index2[0] = rouletteContent.index[0] + blockDataBase.GetIndex2(blockContent.blockType, 0);
+        index2[1] = rouletteContent.index[1] + blockDataBase.GetIndex2(blockContent.blockType, 1);
 
-                index2[0] = rouletteContent.index[0]; //마우스 포인터 기준점
-                index2[1] = rouletteContent.index[1];
+        index3[0] = rouletteContent.index[0] + blockDataBase.GetIndex3(blockContent.blockType, 0);
+        index3[1] = rouletteContent.index[1] + blockDataBase.GetIndex3(blockContent.blockType, 1);
 
-                index3[0] = rouletteContent.index[0];
-                index3[1] = rouletteContent.index[1] + 1;
+        index4[0] = rouletteContent.index[0] + blockDataBase.GetIndex4(blockContent.blockType, 0);
+        index4[1] = rouletteContent.index[1] + blockDataBase.GetIndex4(blockContent.blockType, 1);
 
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
+        index5[0] = rouletteContent.index[0] + blockDataBase.GetIndex5(blockContent.blockType, 0);
+        index5[1] = rouletteContent.index[1] + blockDataBase.GetIndex5(blockContent.blockType, 1);
 
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
+        index6[0] = rouletteContent.index[0] + blockDataBase.GetIndex6(blockContent.blockType, 0);
+        index6[1] = rouletteContent.index[1] + blockDataBase.GetIndex6(blockContent.blockType, 1);
 
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
+        index7[0] = rouletteContent.index[0] + blockDataBase.GetIndex7(blockContent.blockType, 0);
+        index7[1] = rouletteContent.index[1] + blockDataBase.GetIndex7(blockContent.blockType, 1);
 
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.O:
-                index0[0] = rouletteContent.index[0];
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0] + 1;
-                index1[1] = rouletteContent.index[1] - 1;
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.T:
-                index0[0] = rouletteContent.index[0];
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0] - 1;
-                index1[1] = rouletteContent.index[1];
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.L:
-                index0[0] = rouletteContent.index[0] + 1;
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0] - 1;
-                index1[1] = rouletteContent.index[1];
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.J:
-                index0[0] = rouletteContent.index[0] - 1;
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0] - 1;
-                index1[1] = rouletteContent.index[1];
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.S:
-                index0[0] = rouletteContent.index[0];
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0] + 1;
-                index1[1] = rouletteContent.index[1] - 1;
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] - 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.Z:
-                index0[0] = rouletteContent.index[0] - 1;
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0];
-                index1[1] = rouletteContent.index[1] - 1;
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.BigO:
-                index0[0] = rouletteContent.index[0] - 1;
-                index0[1] = rouletteContent.index[1] - 1;
-
-                index1[0] = rouletteContent.index[0];
-                index1[1] = rouletteContent.index[1] - 1;
-
-                index2[0] = rouletteContent.index[0] + 1;
-                index2[1] = rouletteContent.index[1] - 1;
-
-                index3[0] = rouletteContent.index[0] - 1;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0] + 1;
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0] - 1;
-                index6[1] = rouletteContent.index[1] + 1;
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1] + 1;
-
-                index8[0] = rouletteContent.index[0] + 1;
-                index8[1] = rouletteContent.index[1] + 1;
-                break;
-            case BlockType.I_Horizontal:
-                index0[0] = rouletteContent.index[0] - 1;
-                index0[1] = rouletteContent.index[1];
-
-                index1[0] = rouletteContent.index[0];
-                index1[1] = rouletteContent.index[1];
-
-                index2[0] = rouletteContent.index[0] + 1;
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0] + 2;
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-            case BlockType.One:
-                index0[0] = rouletteContent.index[0];
-                index0[1] = rouletteContent.index[1];
-
-                index1[0] = rouletteContent.index[0];
-                index1[1] = rouletteContent.index[1];
-
-                index2[0] = rouletteContent.index[0];
-                index2[1] = rouletteContent.index[1];
-
-                index3[0] = rouletteContent.index[0];
-                index3[1] = rouletteContent.index[1];
-
-                index4[0] = rouletteContent.index[0];
-                index4[1] = rouletteContent.index[1];
-
-                index5[0] = rouletteContent.index[0];
-                index5[1] = rouletteContent.index[1];
-
-                index6[0] = rouletteContent.index[0];
-                index6[1] = rouletteContent.index[1];
-
-                index7[0] = rouletteContent.index[0];
-                index7[1] = rouletteContent.index[1];
-
-                index8[0] = rouletteContent.index[0];
-                index8[1] = rouletteContent.index[1];
-                break;
-        }
+        index8[0] = rouletteContent.index[0] + blockDataBase.GetIndex8(blockContent.blockType, 0);
+        index8[1] = rouletteContent.index[1] + blockDataBase.GetIndex8(blockContent.blockType, 1);
 
         ResetRouletteBackgroundColor();
 
@@ -1860,6 +1738,7 @@ public class GameManager : MonoBehaviour
         }
 
         bettingValue[(int)blockContent.blockType] = blockInformation.bettingPrice * blockInformation.size;
+        bettingSizeValue[(int)blockContent.blockType] = blockInformation.size;
 
         ChangeMoney(-blockInformation.bettingPrice * blockInformation.size);
         ChangeBettingMoney(blockInformation.bettingPrice * blockInformation.size);
@@ -1880,46 +1759,81 @@ public class GameManager : MonoBehaviour
 
     void ShowBettingNumber()
     {
-        for (int i = 0; i < bettingNumberList.Count; i++)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            bettingNumberList[i] = 0;
-        }
-
-        for (int i = 0; i < allContentList.Count; i ++)
-        {
-            if(allContentList[i].isActive)
+            for (int i = 0; i < bettingNumberList_NewBie.Length; i++)
             {
-                switch (allContentList[i].rouletteType)
+                bettingNumberList_NewBie[i] = 0;
+            }
+
+            for (int i = 0; i < rouletteContentList_NewBie.Count; i ++)
+            {
+                if(rouletteContentList_NewBie[i].isActive)
                 {
-                    case RouletteType.Default:
-                        break;
-                    case RouletteType.StraightBet:
-                        bettingNumberList[allContentList[i].number - 1] = 1;
-                        break;
-                    case RouletteType.SplitBet_Horizontal:
-                        bettingNumberList[allContentList[i].number - 1] = 1;
-
-                        if(allContentList[i].number - 1 + 5 < allContentList.Count)
+                    if(rouletteContentList_NewBie[i].number == 13) //퀸일때
+                    {
+                        bettingNumberList_NewBie[2] = 1;
+                    }
+                    else
+                    {
+                        if (rouletteContentList_NewBie[i].number % 2 == 0) //흰
                         {
-                            bettingNumberList[allContentList[i].number - 1 + 5] = 1;
+                            bettingNumberList_NewBie[0] = 1;
                         }
-                        break;
-                    case RouletteType.SplitBet_Vertical:
-                        int revision = (allContentList[i].number - 1) / 4;
+                        else
+                        {
+                            bettingNumberList_NewBie[1] = 1; //검
+                        }
+                    }
 
-                        bettingNumberList[allContentList[i].number - 1 + revision] = 1;
-                        bettingNumberList[allContentList[i].number - 1 + revision + 1] = 1;
+                    break;
+                }
+            }
 
-                        break;
-                    case RouletteType.SquareBet:
-                        int revision2 = (allContentList[i].number - 1) / 4;
+        }
+        else
+        {
+            for (int i = 0; i < bettingNumberList_Gosu.Count; i++)
+            {
+                bettingNumberList_Gosu[i] = 0;
+            }
 
-                        bettingNumberList[allContentList[i].number - 1 + revision2] = 1;
-                        bettingNumberList[allContentList[i].number - 1 + revision2 + 1] = 1;
-                        bettingNumberList[allContentList[i].number - 1 + revision2 + 5] = 1;
-                        bettingNumberList[allContentList[i].number - 1 + revision2 + 6] = 1;
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                if (allContentList[i].isActive)
+                {
+                    switch (allContentList[i].rouletteType)
+                    {
+                        case RouletteType.Default:
+                            break;
+                        case RouletteType.StraightBet:
+                            bettingNumberList_Gosu[allContentList[i].number - 1] = 1;
+                            break;
+                        case RouletteType.SplitBet_Horizontal:
+                            bettingNumberList_Gosu[allContentList[i].number - 1] = 1;
 
-                        break;
+                            if (allContentList[i].number - 1 + 5 < allContentList.Count)
+                            {
+                                bettingNumberList_Gosu[allContentList[i].number - 1 + 5] = 1;
+                            }
+                            break;
+                        case RouletteType.SplitBet_Vertical:
+                            int revision = (allContentList[i].number - 1) / 4;
+
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision] = 1;
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision + 1] = 1;
+
+                            break;
+                        case RouletteType.SquareBet:
+                            int revision2 = (allContentList[i].number - 1) / 4;
+
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision2] = 1;
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision2 + 1] = 1;
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision2 + 5] = 1;
+                            bettingNumberList_Gosu[allContentList[i].number - 1 + revision2 + 6] = 1;
+
+                            break;
+                    }
                 }
             }
         }
@@ -1995,6 +1909,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < bettingValue.Length; i++)
         {
             bettingValue[i] = 0;
+            bettingSizeValue[i] = 0;
         }
 
         BetOptionCancleButton();
