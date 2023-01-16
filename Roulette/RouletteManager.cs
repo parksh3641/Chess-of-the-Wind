@@ -169,35 +169,81 @@ public class RouletteManager : MonoBehaviour
 
     public void ShowBettingNumber()
     {
-        for (int i = 0; i < gameManager.bettingNumberList.Count - 1; i++)
+        leftQueen.material = defaultQueenMat;
+        rightQueen.material = defaultQueenMat;
+
+        for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
         {
             leftPointerManager.pointerList[i].Betting(false);
             rightPointerManager.pointerList[i].Betting(false);
         }
 
-        leftQueen.material = defaultQueenMat;
-        rightQueen.material = defaultQueenMat;
-
-        for (int i = 0; i < gameManager.bettingNumberList.Count; i ++)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
+            if(gameManager.bettingNumberList_NewBie[0] == 1)
             {
-                if (gameManager.bettingNumberList[i] == 1 && i == leftPointerManager.pointerList[j].index)
+                for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
                 {
-                    if (i > 12)
+                    if(leftPointerManager.pointerList[i].index % 2 == 0)
                     {
-                        leftPointerManager.pointerList[j].Betting(true);
-                        rightPointerManager.pointerList[j].Betting(true);
+                        leftPointerManager.pointerList[i].Betting(true);
+                        rightPointerManager.pointerList[i].Betting(true);
                     }
-                    else if (i == 12)
+                }
+            }
+            else if(gameManager.bettingNumberList_NewBie[1] == 1)
+            {
+                for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
+                {
+                    if (leftPointerManager.pointerList[i].index % 2 != 0)
                     {
-                        leftQueen.material = choiceQueenMat;
-                        rightQueen.material = choiceQueenMat;
+                        leftPointerManager.pointerList[i].Betting(true);
+                        rightPointerManager.pointerList[i].Betting(true);
                     }
-                    else
+                }
+            }
+            else if(gameManager.bettingNumberList_NewBie[2] == 1)
+            {
+                leftQueen.material = choiceQueenMat;
+                rightQueen.material = choiceQueenMat;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < gameManager.bettingNumberList_Gosu.Count; i++)
+            {
+                for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
+                {
+                    if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == leftPointerManager.pointerList[j].index)
                     {
-                        leftPointerManager.pointerList[j - 1].Betting(true);
-                        rightPointerManager.pointerList[j - 1].Betting(true);
+                        if (i < 12)
+                        {
+                            leftPointerManager.pointerList[j].Betting(true);
+                        }
+                        else if (i == 12)
+                        {
+                            leftQueen.material = choiceQueenMat;
+                        }
+                        else
+                        {
+                            leftPointerManager.pointerList[j - 1].Betting(true);
+                        }
+                    }
+
+                    if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == rightPointerManager.pointerList[j].index)
+                    {
+                        if (i < 12)
+                        {
+                            rightPointerManager.pointerList[j].Betting(true);
+                        }
+                        else if (i == 12)
+                        {
+                            rightQueen.material = choiceQueenMat;
+                        }
+                        else
+                        {
+                            rightPointerManager.pointerList[j - 1].Betting(true);
+                        }
                     }
                 }
             }
@@ -579,7 +625,21 @@ public class RouletteManager : MonoBehaviour
             yield return null;
         }
 
-        PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            if(targetNumber % 2 == 0)
+            {
+                PV.RPC("ShowTargetNumber_NewBie", RpcTarget.All, 0);
+            }
+            else
+            {
+                PV.RPC("ShowTargetNumber_NewBie", RpcTarget.All, 1);
+            }
+        }
+        else
+        {
+            PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+        }
 
         yield return new WaitForSeconds(3);
 
@@ -622,6 +682,21 @@ public class RouletteManager : MonoBehaviour
     {
         targetView.SetActive(true);
         targetText.text = number.ToString();
+    }
+
+    [PunRPC]
+    void ShowTargetNumber_NewBie(int number)
+    {
+        targetView.SetActive(true);
+
+        if(number == 0)
+        {
+            targetText.text = "흰";
+        }
+        else
+        {
+            targetText.text = "검";
+        }
     }
 
     [PunRPC]
