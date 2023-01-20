@@ -718,6 +718,9 @@ public class PlayfabManager : MonoBehaviour
                        //case "":
                        //    string text = statistics.Value.ToString();
                        //    break;
+                       case "Formation":
+                           playerDataBase.Formation = statistics.Value;
+                           break;
                    }
                }
            })

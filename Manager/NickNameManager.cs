@@ -19,6 +19,7 @@ public class NickNameManager : MonoBehaviour
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 
     public PlayerDataBase playerDataBase;
+    public FormationManager formationManager;
 
     private void Awake()
     {
@@ -33,6 +34,10 @@ public class NickNameManager : MonoBehaviour
         if(GameStateManager.instance.NickName.Length > 10)
         {
             nickNameFirstView.SetActive(true);
+        }
+        else
+        {
+            formationManager.Initialize();
         }
 
         string file = SystemPath.GetPath() + "BadWord.txt";
@@ -188,6 +193,8 @@ public class NickNameManager : MonoBehaviour
         //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameFirstView.SetActive(false);
+
+        formationManager.Initialize();
     }
 
     public void Failure()

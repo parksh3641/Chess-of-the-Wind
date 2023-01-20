@@ -10,6 +10,12 @@ public enum GameType
     NewBie,
     Gosu
 }
+
+public enum FormationType
+{
+    Winter,
+    UnderWorld
+}
 public enum RouletteType
 {
     Default = 0,

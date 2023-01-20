@@ -12,6 +12,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int crystal = 0;
 
+    [Title("User")]
+    [SerializeField]
+    private int formation = 0;
+
     public int Coin
     {
         get
@@ -36,9 +40,22 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int Formation
+    {
+        get
+        {
+            return formation;
+        }
+        set
+        {
+            formation = value;
+        }
+    }
+
     public void Initialize()
     {
         coin = 0;
         crystal = 0;
+        formation = 0;
     }
 }
