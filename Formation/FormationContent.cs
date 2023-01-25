@@ -1,38 +1,38 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FormationContent : MonoBehaviour
 {
-    public FormationType formationType = FormationType.Winter;
+    public WindCharacterType formationType = WindCharacterType.Winter;
 
     public Text titleText;
     public Text selectText;
 
-    public OtherBlockContent[] blockContents;
+    public BlockUIContent[] blockContents;
 
     void Start()
     {
-        if(formationType == FormationType.Winter)
+        if(formationType == WindCharacterType.Winter)
         {
-            blockContents[0].ShowInitialize(BlockType.LeftQueen_2,"");
-            blockContents[1].ShowInitialize(BlockType.LeftNight,"");
-            blockContents[2].ShowInitialize(BlockType.Rook_V2, "");
-            blockContents[3].ShowInitialize(BlockType.Pawn, "");
+            blockContents[0].Initialize(BlockType.LeftQueen_2);
+            blockContents[1].Initialize(BlockType.LeftNight);
+            blockContents[2].Initialize(BlockType.Rook_V2);
+            blockContents[3].Initialize(BlockType.Pawn);
 
-            titleText.text = "¥´¿« ºº∞Ë";
-            selectText.text = "¥´¿« ºº∞Ë\nº±≈√«œ±‚";
+            titleText.text = "ÎààÏùò ÏÑ∏Í≥Ñ";
         }
         else
         {
-            blockContents[0].ShowInitialize(BlockType.RightQueen_2, "");
-            blockContents[1].ShowInitialize(BlockType.RightNight, "");
-            blockContents[2].ShowInitialize(BlockType.Rook_V2H2, "");
-            blockContents[3].ShowInitialize(BlockType.Pawn, "");
+            blockContents[0].Initialize(BlockType.RightQueen_2);
+            blockContents[1].Initialize(BlockType.RightNight);
+            blockContents[2].Initialize(BlockType.Rook_V2H2);
+            blockContents[3].Initialize(BlockType.Pawn);
 
-            titleText.text = "¡ˆ«œ ºº∞Ë";
-            selectText.text = "¡ˆ«œ ºº∞Ë\nº±≈√«œ±‚";
+            titleText.text = "ÏßÄÌïò ÏÑ∏Í≥Ñ";
         }
+
+        selectText.text = "ÏÑ†ÌÉùÌïòÍ∏∞";
     }
 }

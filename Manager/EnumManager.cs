@@ -11,11 +11,39 @@ public enum GameType
     Gosu
 }
 
-public enum FormationType
+public enum WindCharacterType
 {
     Winter,
     UnderWorld
 }
+
+public enum PresentType
+{
+    A,
+    B,
+    C,
+    D,
+    E
+}
+
+public enum UpgradeTicketType
+{
+    Queen,
+    Night,
+    Rook,
+    Pawn,
+    Speical
+}
+
+public enum RankType
+{
+    D,
+    C,
+    B,
+    A,
+    S
+}
+
 public enum RouletteType
 {
     Default = 0,
