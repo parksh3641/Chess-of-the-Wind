@@ -60,8 +60,6 @@ public class RouletteManager : MonoBehaviour
 
     public GameObject targetView;
     public Text targetText;
-    public Text titleText;
-    public Text bounsText;
     public Text buttonText;
 
     [Title("Value")]
@@ -397,10 +395,6 @@ public class RouletteManager : MonoBehaviour
         pinballPower = false;
         pinballPowerReturn = false;
 
-        titleText.text = "숫자 룰렛";
-
-        bounsText.text = "";
-
         soundManager.PlayLoopSFX(GameSfxType.Roulette);
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -408,8 +402,6 @@ public class RouletteManager : MonoBehaviour
             if (PhotonNetwork.PlayerList[i].NickName.Equals(GameStateManager.instance.NickName))
             {
                 windIndex = i; //내가 몇 번째 캐릭터지?
-
-                buttonText.text = "당신은 " + (windIndex + 1) + "번째 캐릭터 위치입니다.\n꾹 눌러서 원하는 타이밍에 바람을 발사하세요!";
             }
         }
 
@@ -419,9 +411,13 @@ public class RouletteManager : MonoBehaviour
         {
             pinball.MyTurn(pinballIndex);
 
-            NotionManager.instance.UseNotion(NotionType.YourTurn);
+            buttonText.text = "당신은 " + (windIndex + 1) + "번째 캐릭터 위치입니다.\n꾹 눌러서 원하는 타이밍에 바람을 발사하세요!";
 
-            Debug.Log("내 차례입니다.");
+            NotionManager.instance.UseNotion(NotionType.YourTurn);
+        }
+        else
+        {
+            buttonText.text = "다음 차례에 바람을 불 수 있습니다.";
         }
 
         if(PhotonNetwork.IsMasterClient) //다음 사람 설정
@@ -462,8 +458,6 @@ public class RouletteManager : MonoBehaviour
         buttonClick = true;
         bouns = true;
 
-        titleText.text = "보너스 룰렛";
-
         if (PhotonNetwork.IsMasterClient)
         {
             bounsRoulette.StartRoulette();
@@ -487,7 +481,7 @@ public class RouletteManager : MonoBehaviour
 
     public void BlowWindDown()
     {
-        if (pinball.PV.IsMine && buttonClick) return;
+        if (!pinball.PV.IsMine && buttonClick) return;
 
         pinballPower = true;
 
@@ -496,7 +490,7 @@ public class RouletteManager : MonoBehaviour
 
     public void BlowWindUp()
     {
-        if (pinball.PV.IsMine && buttonClick) return;
+        if (!pinball.PV.IsMine && buttonClick) return;
 
         buttonClick = true;
         pinballPower = false;

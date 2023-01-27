@@ -91,5 +91,7 @@ public class BlockChild : MonoBehaviour
     public void SetNickName(string name)
     {
         nickNameText.text = name;
+
+        Debug.Log(name);
     }
 }

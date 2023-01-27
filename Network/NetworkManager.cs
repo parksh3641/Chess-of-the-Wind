@@ -95,14 +95,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if(GameStateManager.instance.GameType == GameType.NewBie)
         {
             RoomOptions roomOption = new RoomOptions();
-            roomOption.MaxPlayers = 4;
+            roomOption.MaxPlayers = 2;
 
             PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
         }
         else
         {
             RoomOptions roomOption = new RoomOptions();
-            roomOption.MaxPlayers = 4;
+            roomOption.MaxPlayers = 2;
 
             PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
         }
@@ -129,7 +129,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetNickName();
 
         RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 4;
+        roomOption.MaxPlayers = 2;
 
         PhotonNetwork.JoinOrCreateRoom("Master", roomOption, null);
 
@@ -145,7 +145,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetNickName();
 
         RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 4;
+        roomOption.MaxPlayers = 2;
 
         PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
 
@@ -161,7 +161,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetNickName();
 
         RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 4;
+        roomOption.MaxPlayers = 2;
 
         PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
 

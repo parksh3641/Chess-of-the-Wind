@@ -8,11 +8,6 @@ public class SystemManager : MonoBehaviour
     public GoogleSheetDownloader googleSheetDownloader;
 
 
-    private void Awake()
-    {
-        Application.targetFrameRate = 60;
-    }
-
     void Start()
     {
         if (GameStateManager.instance.Language == LanguageType.Default)

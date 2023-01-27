@@ -6,8 +6,11 @@ public class BlockChildContent : MonoBehaviour
 {
     public BlockChild[] blockChildArray;
 
-    private void Start()
+    private void OnEnable()
     {
-        blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+        if(blockChildArray.Length <= 0)
+        {
+            blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+        }
     }
 }

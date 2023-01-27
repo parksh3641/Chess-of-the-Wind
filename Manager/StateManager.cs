@@ -21,7 +21,9 @@ public class StateManager : MonoBehaviour
 
     public void Initialize()
     {
-        if(!isInit)
+        Application.targetFrameRate = 60;
+
+        if (!isInit)
         {
             isInit = true;
 

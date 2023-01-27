@@ -345,6 +345,7 @@ public class GameManager : MonoBehaviour
         content2.transform.localPosition = Vector3.zero;
         content2.transform.localScale = Vector3.one;
         content2.Initialize(this, blockRootParent.transform, blockGridParent_NewBie.transform, BlockType.Pawn);
+        content2.gameObject.SetActive(true);
         blockContentList.Add(content2);
 
         int[] temp = new int[3];
@@ -358,6 +359,7 @@ public class GameManager : MonoBehaviour
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockRootParent.transform, blockGridParent_Gosu.transform, BlockType.Default + temp[i]);
+            content.gameObject.SetActive(true);
             blockContentList.Add(content);
         }
 
@@ -1944,7 +1946,6 @@ public class GameManager : MonoBehaviour
         content.transform.localScale = Vector3.one;
         content.ShowInitialize(blockType, block[3]);
         otherBlockContentList.Add(content);
-
 
         switch (rouletteType)
         {

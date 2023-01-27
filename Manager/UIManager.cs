@@ -158,48 +158,48 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < bottmUIRect.Length; i++)
         {
             bottomUIImg[i].color = new Color(1, 1, 1, 1);
-            bottmUIRect[i].sizeDelta = new Vector2(400, 450);
+            bottmUIRect[i].sizeDelta = new Vector2(175, 200);
         }
 
-        bottmUIRect[number].sizeDelta = new Vector2(560, 450);
+        bottmUIRect[number].sizeDelta = new Vector2(250, 200);
         bottomUIImg[number].color = Color.yellow;
 
         switch (number)
         {
             case 0:
-                bottmUIRect[0].anchoredPosition = new Vector2(-800, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-320, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(80, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(480, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(880, 0);
+                bottmUIRect[0].anchoredPosition = new Vector2(-350, 0);
+                bottmUIRect[1].anchoredPosition = new Vector2(-137.5f, 0);
+                bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
+                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
+                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
                 break;
             case 1:
-                bottmUIRect[0].anchoredPosition = new Vector2(-880, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-400, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(80, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(480, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(880, 0);
+                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
+                bottmUIRect[1].anchoredPosition = new Vector2(-175f, 0);
+                bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
+                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
+                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
                 break;
             case 2:
-                bottmUIRect[0].anchoredPosition = new Vector2(-880, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-480, 0);
+                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
+                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
                 bottmUIRect[2].anchoredPosition = new Vector2(0, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(480, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(880, 0);
+                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
+                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
                 break;
             case 3:
-                bottmUIRect[0].anchoredPosition = new Vector2(-880, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-480, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(-80, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(400, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(880, 0);
+                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
+                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
+                bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
+                bottmUIRect[3].anchoredPosition = new Vector2(175f, 0);
+                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
                 break;
             case 4:
-                bottmUIRect[0].anchoredPosition = new Vector2(-880, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-480, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(-80, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(320, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(800, 0);
+                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
+                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
+                bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
+                bottmUIRect[3].anchoredPosition = new Vector2(137.5f, 0);
+                bottmUIRect[4].anchoredPosition = new Vector2(350, 0);
                 break;
         }    
     }

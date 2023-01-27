@@ -11,8 +11,6 @@ public class OtherBlockContent : MonoBehaviour
 
     public string nickName;
 
-    public GameObject blockMain;
-    public BlockChildContent[] blockMainArray;
     public BlockChildContent[] blockArray;
 
     private void Awake()
@@ -25,7 +23,11 @@ public class OtherBlockContent : MonoBehaviour
         nickName = name;
         blockType = type;
 
-        blockMain.SetActive(false);
+        for (int i = 0; i < blockArray.Length; i++)
+        {
+            blockArray[i].gameObject.SetActive(false);
+        }
+
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
 
         for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)

@@ -28,6 +28,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup = GetComponent<CanvasGroup>();
 
         blockMain.SetActive(true);
+    }
+
+    public void Initialize(GameManager manager, Transform root, Transform grid, BlockType type)
+    {
+        gameManager = manager;
+        blockRootParent = root;
+        previousParent = grid;
+        blockType = type;
 
         for (int i = 0; i < blockUIArray.Length; i++)
         {
@@ -38,14 +46,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             blockMainArray[i].gameObject.SetActive(false);
         }
-    }
-
-    public void Initialize(GameManager manager, Transform root, Transform grid, BlockType type)
-    {
-        gameManager = manager;
-        blockRootParent = root;
-        previousParent = grid;
-        blockType = type;
 
         blockUIArray[(int)blockType - 1].gameObject.SetActive(true);
     }
