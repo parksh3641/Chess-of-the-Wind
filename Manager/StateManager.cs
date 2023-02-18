@@ -17,12 +17,12 @@ public class StateManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+
+        Application.targetFrameRate = 60;
     }
 
     public void Initialize()
     {
-        Application.targetFrameRate = 60;
-
         if (!isInit)
         {
             isInit = true;

@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public class Collection_Block
+{
+    public BlockType blockType = BlockType.Default;
+    public RankType rankType = RankType.N;
+    public int level = 0;
+
+}
+
+[System.Serializable]
 public class BlockMotherInformation
 {
     [Title("NewBie")]

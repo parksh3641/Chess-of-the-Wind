@@ -37,11 +37,11 @@ public enum UpgradeTicketType
 
 public enum RankType
 {
-    D,
-    C,
-    B,
-    A,
-    S
+    N,
+    R,
+    SR,
+    SSR,
+    UR
 }
 
 public enum RouletteType

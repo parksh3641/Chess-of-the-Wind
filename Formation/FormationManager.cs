@@ -13,6 +13,8 @@ public class FormationManager : MonoBehaviour
 
     private int selectNumber = 0;
 
+    List<string> itemList = new List<string>();
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -56,15 +58,35 @@ public class FormationManager : MonoBehaviour
         {
             playerDataBase.Formation = 1;
 
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
+            if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
 
-            Debug.Log("눈의 세계 진형 선택");
+                itemList.Clear();
+                itemList.Add("LeftQueen_2_D");
+                itemList.Add("LeftNight_D");
+                itemList.Add("Rook_V2_D");
+                itemList.Add("Pawn_D");
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
+            }
         }
         else
         {
             playerDataBase.Formation = 2;
 
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
+            if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
+
+                itemList.Clear();
+                itemList.Add("RightQueen_2_D");
+                itemList.Add("RightNight_D");
+                itemList.Add("Rook_V2H2_D");
+                itemList.Add("Pawn_D");
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
+            }
 
             Debug.Log("지하 세계 진형 선택");
         }

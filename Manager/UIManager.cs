@@ -31,7 +31,8 @@ public class UIManager : MonoBehaviour
 
     [Space]
     [Title("MainCanvas")]
-    public GameObject[] mainPanelView;
+    public ShopManager shopManager;
+    public CollectionManager collectionManager;   
 
     public Image[] bottomUIImg;
     public GameObject[] bottomUIIcon;
@@ -172,6 +173,9 @@ public class UIManager : MonoBehaviour
                 bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
                 bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
                 bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
+
+                shopManager.OpenShopView();
+                collectionManager.CloseCollectionView();
                 break;
             case 1:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
@@ -179,6 +183,9 @@ public class UIManager : MonoBehaviour
                 bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
                 bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
                 bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
+
+                shopManager.CloseShopView();
+                collectionManager.OpenCollectionView();
                 break;
             case 2:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
@@ -186,6 +193,9 @@ public class UIManager : MonoBehaviour
                 bottmUIRect[2].anchoredPosition = new Vector2(0, 0);
                 bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
                 bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
+
+                shopManager.CloseShopView();
+                collectionManager.CloseCollectionView();
                 break;
             case 3:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
@@ -193,6 +203,9 @@ public class UIManager : MonoBehaviour
                 bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
                 bottmUIRect[3].anchoredPosition = new Vector2(175f, 0);
                 bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
+
+                shopManager.CloseShopView();
+                collectionManager.CloseCollectionView();
                 break;
             case 4:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
@@ -200,6 +213,9 @@ public class UIManager : MonoBehaviour
                 bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
                 bottmUIRect[3].anchoredPosition = new Vector2(137.5f, 0);
                 bottmUIRect[4].anchoredPosition = new Vector2(350, 0);
+
+                shopManager.CloseShopView();
+                collectionManager.CloseCollectionView();
                 break;
         }    
     }

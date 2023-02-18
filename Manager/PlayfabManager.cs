@@ -57,6 +57,8 @@ public class PlayfabManager : MonoBehaviour
 
     private List<ItemInstance> inventoryList = new List<ItemInstance>();
 
+    Dictionary<string, string> defaultCustomData = new Dictionary<string, string>() { { "Level", "0" } };
+
 
     private void Awake()
     {
@@ -624,21 +626,16 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
             var Inventory = result.Inventory;
-            int gold = result.VirtualCurrency["GO"]; //Get Money
-            int crystal = result.VirtualCurrency["ST"]; //Get Money
+            int gold = result.VirtualCurrency["GO"];
+            //int crystal = result.VirtualCurrency["ST"]; //Get Money
 
             if (gold > 1000000)
             {
                 gold = 1000000;
             }
 
-            if (crystal > 100000)
-            {
-                crystal = 100000;
-            }
-
             playerDataBase.Coin = gold;
-            playerDataBase.Crystal = crystal;
+            //playerDataBase.Crystal = crystal;
 
             if (Inventory != null)
             {
@@ -649,12 +646,20 @@ public class PlayfabManager : MonoBehaviour
 
                 foreach (ItemInstance list in inventoryList)
                 {
-                    //if (list.ItemId.Equals("RemoveAds"))
-                    //{
-                    //    playerDataBase.RemoveAd = true;
-                    //}
+                    for(int i = 0; i < Enum.GetValues(typeof(BlockType)).Length; i ++)
+                    {
+                        if(list.ItemId.Contains((BlockType.Default + i).ToString()))
+                        {
+                            if(list.CustomData == null)
+                            {
+                                SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
+                            }
 
-                    shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
+                            playerDataBase.SetBlock(list);
+                        }
+                    }
+
+                    //shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
             else
@@ -721,6 +726,12 @@ public class PlayfabManager : MonoBehaviour
                        case "Formation":
                            playerDataBase.Formation = statistics.Value;
                            break;
+                       case "SnowBox":
+                           playerDataBase.SnowBox = statistics.Value;
+                           break;
+                       case "UnderworldBox":
+                           playerDataBase.UnderworldBox = statistics.Value;
+                           break;
                    }
                }
            })
@@ -754,18 +765,30 @@ public class PlayfabManager : MonoBehaviour
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
-            //TrophyData trophyData = new TrophyData();
+            foreach(var eachData in result.Data)
+            {
+                string key = eachData.Key;
 
-            //foreach (var eachData in result.Data)
-            //{
-            //    string key = eachData.Key;
+                if (key.Contains("Armor"))
+                {
+                    playerDataBase.Armor = eachData.Value.Value;
+                }
 
-            //    if (key.Contains("GameChoice"))
-            //    {
-            //        trophyData = JsonUtility.FromJson<TrophyData>(eachData.Value.Value);
-            //        playerDataBase.SetTrophyData(trophyData);
-            //    }
-            //}
+                if (key.Contains("Weapon"))
+                {
+                    playerDataBase.Weapon = eachData.Value.Value;
+                }
+
+                if (key.Contains("Shield"))
+                {
+                    playerDataBase.Shield = eachData.Value.Value;
+                }
+
+                if (key.Contains("NewBie"))
+                {
+                    playerDataBase.Newbie = eachData.Value.Value;
+                }
+            }
         }, DisplayPlayfabError);
 
         return true;
@@ -1293,13 +1316,13 @@ public class PlayfabManager : MonoBehaviour
 
     #endregion
 
-    public void GrantItemsToUser(string itemIds, string catalogVersion)
+    public void GrantItemToUser(string itemIds, string catalogVersion)
     {
         try
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "GrantItemsToUser",
+                FunctionName = "GrantItemToUser",
                 FunctionParameter = new { ItemIds = itemIds, CatalogVersion = catalogVersion },
                 GeneratePlayStreamEvent = true,
             }, OnCloudUpdateStats, DisplayPlayfabError);
@@ -1310,21 +1333,24 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public void GrantItemToUser(string catalogversion, List<string> itemIds)
+    public void GrantItemsToUser(string catalogversion, List<string> itemIds)
     {
         try
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "GrantItemToUser",
+                FunctionName = "GrantItemsToUser",
                 FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
                 GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
+            }
+            , OnCloudUpdateStats, DisplayPlayfabError);
         }
         catch (Exception e)
         {
             Debug.LogError(e.Message);
         }
+
+        Invoke("GetUserInventory", 2.0f);
     }
 
     public void RestorePurchases()
@@ -1369,5 +1395,43 @@ public class PlayfabManager : MonoBehaviour
     void WaitDelay()
     {
         isDelay = false;
+    }
+
+    public void SetInventoryCustomData(string itemInstanceID, Dictionary<string, string> datas)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "UpdateUserInventoryItemCustomData",
+                FunctionParameter = new { Data = datas, ItemInstanceId = itemInstanceID },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
+    public void ReadDropTableData(string catalogVersion, string tableId)
+    {
+        PlayFabServerAPI.GetRandomResultTables(new PlayFab.ServerModels.GetRandomResultTablesRequest()
+        {
+            CatalogVersion = catalogVersion,
+            TableIDs = new List<string> { tableId }
+        }, result =>
+        {
+            Debug.Log(result.Tables["LeftQueen_2_D"].TableId);
+        }, fail =>
+        {
+            Debug.Log("Fail");
+        });
+    }
+
+    [Button]
+    public void Buasdas()
+    {
+        ReadDropTableData("Kingdom of Snow", "RandomBox");
     }
 }

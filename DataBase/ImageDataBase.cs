@@ -9,9 +9,16 @@ public class ImageDataBase : ScriptableObject
 {
     public Sprite[] iconArray;
 
+    public Sprite[] rankBackgroundArray;
+
 
     public Sprite[] GetIconArray()
     {
         return iconArray;
+    }
+
+    public Sprite[] GetRankBackgroundArray()
+    {
+        return rankBackgroundArray;
     }
 }
