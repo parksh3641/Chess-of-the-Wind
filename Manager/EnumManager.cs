@@ -26,15 +26,6 @@ public enum PresentType
     E
 }
 
-public enum UpgradeTicketType
-{
-    Queen,
-    Night,
-    Rook,
-    Pawn,
-    Speical
-}
-
 public enum RankType
 {
     N,
@@ -140,7 +131,7 @@ public enum LoginType
 
 public enum MoneyType
 {
-    Coin = 0,
+    Gold = 0,
     Crystal
 }
 
@@ -151,4 +142,38 @@ public enum ItemType
     Combo,
     Exp,
     Slow
+}
+
+public enum ShopType
+{
+    RemoveAds,
+    WatchAd,
+    DailyReward,
+    UpgradeTicket_N,
+    UpgradeTicket_R,
+    UpgradeTicket_SR,
+    UpgradeTicket_SSR,
+    UpgradeTicket_UR,
+    PresentA,
+    PresentB,
+    PresentC,
+    PresentD,
+    PresentE,
+    DefDestroyBlockTicket,
+
+}
+
+public enum NotionType
+{
+    Test,
+    NotEnoughMoney,
+    NotBettingLocation,
+    Cancle,
+    GoBetting,
+    YourTurn,
+    BuyTicket,
+    UpgradeSuccess,
+    UpgradeKeep,
+    UpgradeDown,
+    UpgradeDestroy
 }

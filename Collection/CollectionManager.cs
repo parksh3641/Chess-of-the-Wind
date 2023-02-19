@@ -7,6 +7,7 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
+
     [Title("Equip")]
     public BlockUIContent armorBlockUI;
     public BlockUIContent weaponBlockUI;
@@ -24,6 +25,8 @@ public class CollectionManager : MonoBehaviour
 
     bool check = false;
 
+    public UpgradeManager upgradeManager;
+    public PresentManager presentManager;
     PlayerDataBase playerDataBase;
 
     void Awake()
@@ -56,6 +59,13 @@ public class CollectionManager : MonoBehaviour
 
                 Initialize();
             }
+            else
+            {
+                if (playerDataBase.GetBlockClass().Count > blockList.Count)
+                {
+                    UpdateCollection();
+                }
+            }
         }
     }
 
@@ -66,7 +76,10 @@ public class CollectionManager : MonoBehaviour
 
     public void Initialize()
     {
-        blockList = playerDataBase.GetBlockClass();
+        for(int i = 0; i < playerDataBase.GetBlockClass().Count; i ++)
+        {
+            blockList.Add(playerDataBase.GetBlockClass()[i]);
+        }
 
         if(blockUIContentList.Count < blockList.Count)
         {
@@ -92,7 +105,19 @@ public class CollectionManager : MonoBehaviour
 
     public void UpdateCollection() //변경점이 생겼을 경우 업데이트
     {
+        Debug.Log("컬렉션 변경 점 업데이트");
 
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count - blockList.Count; i++)
+        {
+            blockList.Add(playerDataBase.GetBlockClass()[playerDataBase.GetBlockClass().Count - i - 1]);
+            blockUIContentList[playerDataBase.GetBlockClass().Count - i - 1].gameObject.SetActive(true);
+            blockUIContentList[playerDataBase.GetBlockClass().Count - i - 1].Collection_Initialize(blockList[i]);
+        }
+
+        if (blockUIContentList.Count < blockList.Count)
+        {
+            //생성한 것보다 보유한 게 많을 경우
+        }
     }
 
     public void CheckEquipArmor()
@@ -119,6 +144,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     EquipArmor(blockList[i]);
+                    equip = true;
                     break;
                 }
             }
@@ -155,6 +181,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     EquipWeapon(blockList[i]);
+                    equip = true;
                     break;
                 }
             }
@@ -191,6 +218,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     EquipShield(blockList[i]);
+                    equip = true;
                     break;
                 }
             }
@@ -296,4 +324,11 @@ public class CollectionManager : MonoBehaviour
 
         Debug.Log("뉴비 장착 : " + block.blockType);
     }
+
+    #region BlockInformation
+    public void OpenBlockInformation(string id)
+    {
+        upgradeManager.OpenUpgradeView(id);
+    }
+    #endregion
 }

@@ -70,7 +70,7 @@ public class NickNameManager : MonoBehaviour
 
     public void CheckNickName()
     {
-        if (playerDataBase.Coin >= 100)
+        if (playerDataBase.Gold >= 100)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
@@ -179,7 +179,7 @@ public class NickNameManager : MonoBehaviour
     {
         nickNameText.text = GameStateManager.instance.NickName;
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, 100);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100);
 
         //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 

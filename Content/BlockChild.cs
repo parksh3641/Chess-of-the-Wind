@@ -49,7 +49,7 @@ public class BlockChild : MonoBehaviour
                 transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
                 break;
             case BlockType.Pawn:
-                transform.GetComponent<Image>().color = Color.green;
+                transform.GetComponent<Image>().color = Color.black;
                 break;
             case BlockType.Spider:
                 transform.GetComponent<Image>().color = Color.red;

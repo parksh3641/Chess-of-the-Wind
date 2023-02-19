@@ -634,7 +634,7 @@ public class PlayfabManager : MonoBehaviour
                 gold = 1000000;
             }
 
-            playerDataBase.Coin = gold;
+            playerDataBase.Gold = gold;
             //playerDataBase.Crystal = crystal;
 
             if (Inventory != null)
@@ -864,12 +864,24 @@ public class PlayfabManager : MonoBehaviour
             {
                 OnCloudUpdateStats(result);
 
-                //switch (name)
-                //{
-                //    case "IconBox":
-                //        playerDataBase.IconBox += value;
-                //        break;
-                //}
+                switch (name)
+                {
+                    case "UpgradeTicket_N":
+                        playerDataBase.SetUpgradeTicket(RankType.N, value);
+                        break;
+                    case "UpgradeTicket_R":
+                        playerDataBase.SetUpgradeTicket(RankType.R, value);
+                        break;
+                    case "UpgradeTicket_SR":
+                        playerDataBase.SetUpgradeTicket(RankType.SR, value);
+                        break;
+                    case "UpgradeTicket_SSR":
+                        playerDataBase.SetUpgradeTicket(RankType.SSR, value);
+                        break;
+                    case "UpgradeTicket_UR":
+                        playerDataBase.SetUpgradeTicket(RankType.UR, value);
+                        break;
+                }
             }
             , DisplayPlayfabError);
         }
@@ -885,7 +897,7 @@ public class PlayfabManager : MonoBehaviour
 
         switch (type)
         {
-            case MoneyType.Coin:
+            case MoneyType.Gold:
                 currentType = "GO";
                 break;
             case MoneyType.Crystal:
@@ -907,13 +919,9 @@ public class PlayfabManager : MonoBehaviour
 
                 switch (type)
                 {
-                    case MoneyType.Coin:
+                    case MoneyType.Gold:
                         //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
-                        playerDataBase.Coin += number;
-                        break;
-                    case MoneyType.Crystal:
-                        //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Crystal, playerDataBase.Crystal, number);
-                        playerDataBase.Crystal += number;
+                        playerDataBase.Gold += number;
                         break;
                 }
 
@@ -937,7 +945,7 @@ public class PlayfabManager : MonoBehaviour
 
         switch (type)
         {
-            case MoneyType.Coin:
+            case MoneyType.Gold:
                 currentType = "GO";
                 break;
             case MoneyType.Crystal:
@@ -963,11 +971,8 @@ public class PlayfabManager : MonoBehaviour
 
             switch (type)
             {
-                case MoneyType.Coin:
-                    playerDataBase.Coin -= number;
-                    break;
-                case MoneyType.Crystal:
-                    playerDataBase.Crystal -= number;
+                case MoneyType.Gold:
+                    playerDataBase.Gold -= number;
                     break;
             }
 
@@ -979,7 +984,7 @@ public class PlayfabManager : MonoBehaviour
         }
 
 
-        //uiManager.RenewalVC();
+        uiManager.RenewalVC();
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
@@ -1060,6 +1065,21 @@ public class PlayfabManager : MonoBehaviour
                 Debug.Log(error.GenerateErrorReport());
 
                 action?.Invoke(false);
+            }
+        );
+    }
+
+    public void GetTitleInternalData(string name, Action<string> action)
+    {
+        PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
+            result =>
+            {
+                action(result.Data[name].ToString());
+            },
+            error =>
+            {
+                Debug.Log("Got error getting titleData:");
+                Debug.Log(error.GenerateErrorReport());
             }
         );
     }
@@ -1177,7 +1197,7 @@ public class PlayfabManager : MonoBehaviour
     #region PurchaseItem
     public void PurchaseCoin(int number)
     {
-        UpdateAddCurrency(MoneyType.Coin, number);
+        UpdateAddCurrency(MoneyType.Gold, number);
 
         //NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1255,10 +1275,7 @@ public class PlayfabManager : MonoBehaviour
                 switch (shopClass.virtualCurrency)
                 {
                     case "GO":
-                        playerDataBase.Coin -= (int)shopClass.price;
-                        break;
-                    case "ST":
-                        playerDataBase.Crystal -= (int)shopClass.price;
+                        playerDataBase.Gold -= (int)shopClass.price;
                         break;
                 }
             }, error =>
@@ -1412,26 +1429,5 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.LogError(e.Message);
         }
-    }
-
-    public void ReadDropTableData(string catalogVersion, string tableId)
-    {
-        PlayFabServerAPI.GetRandomResultTables(new PlayFab.ServerModels.GetRandomResultTablesRequest()
-        {
-            CatalogVersion = catalogVersion,
-            TableIDs = new List<string> { tableId }
-        }, result =>
-        {
-            Debug.Log(result.Tables["LeftQueen_2_D"].TableId);
-        }, fail =>
-        {
-            Debug.Log("Fail");
-        });
-    }
-
-    [Button]
-    public void Buasdas()
-    {
-        ReadDropTableData("Kingdom of Snow", "RandomBox");
     }
 }

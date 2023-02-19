@@ -381,7 +381,7 @@ public class GameManager : MonoBehaviour
 
         blockMotherInformation = blockDataBase.blockMotherInformation;
 
-        ChangeMoney(playerDataBase.Coin);
+        ChangeMoney(playerDataBase.Gold);
     }
 
     public void GameStart_NewBie()

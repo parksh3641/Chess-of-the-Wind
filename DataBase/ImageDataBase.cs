@@ -11,6 +11,8 @@ public class ImageDataBase : ScriptableObject
 
     public Sprite[] rankBackgroundArray;
 
+    public Sprite[] upgradeTicketArray;
+
 
     public Sprite[] GetIconArray()
     {
@@ -20,5 +22,10 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetRankBackgroundArray()
     {
         return rankBackgroundArray;
+    }
+
+    public Sprite[] GetUpgradeTicketArray()
+    {
+        return upgradeTicketArray;
     }
 }

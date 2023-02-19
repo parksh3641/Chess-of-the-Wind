@@ -72,7 +72,7 @@ public class PresentClass
 [System.Serializable]
 public class UpgradeTicketClass
 {
-    public UpgradeTicketType upgradeTicketType = UpgradeTicketType.Queen;
+    public RankType rankType = RankType.N;
 
     public int holdNumber = 0;
 }
@@ -83,9 +83,7 @@ public class PlayerDataBase : ScriptableObject
 {
     [Title("Money")]
     [SerializeField]
-    private int coin = 0;
-    [SerializeField]
-    private int crystal = 0;
+    private int gold = 0;
 
     [Title("User")]
     [SerializeField]
@@ -135,27 +133,15 @@ public class PlayerDataBase : ScriptableObject
 
     #region Data
 
-    public int Coin
+    public int Gold
     {
         get
         {
-            return coin;
+            return gold;
         }
         set
         {
-            coin = value;
-        }
-    }
-
-    public int Crystal
-    {
-        get
-        {
-            return crystal;
-        }
-        set
-        {
-            crystal = value;
+            gold = value;
         }
     }
 
@@ -257,8 +243,7 @@ public class PlayerDataBase : ScriptableObject
 
     public void Initialize()
     {
-        coin = 0;
-        crystal = 0;
+        gold = 0;
         formation = 0;
 
         armor = "";
@@ -298,21 +283,29 @@ public class PlayerDataBase : ScriptableObject
 
         upgradeTicketList.Clear();
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(UpgradeTicketType)).Length; i++)
+        for (int i = 0; i < System.Enum.GetValues(typeof(RankType)).Length; i++)
         {
             UpgradeTicketClass content = new UpgradeTicketClass();
-            content.upgradeTicketType = UpgradeTicketType.Queen + i;
+            content.rankType = RankType.N + i;
             upgradeTicketList.Add(content);
         }
     }
 
     public void SetBlock(ItemInstance item)
     {
+        for(int i = 0; i < blockList.Count; i ++)
+        {
+            if(item.ItemInstanceId.Equals(blockList[i].instanceId))
+            {
+                return;
+            }
+        }
+
         BlockClass blockClass = new BlockClass();
 
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
 
-        string rank = item.ItemId.Substring(item.ItemId.Length);
+        string rank = item.ItemId.Substring(item.ItemId.Length - 1);
 
         switch (rank)
         {
@@ -350,5 +343,58 @@ public class PlayerDataBase : ScriptableObject
     public List<BlockClass> GetBlockClass()
     {
         return blockList;
+    }
+
+    public BlockClass GetBlockClass(string id)
+    {
+        BlockClass blockClass = new BlockClass();
+
+        for(int i = 0; i < blockList.Count; i ++)
+        {
+            if(blockList[i].instanceId.Equals(id))
+            {
+                blockClass = blockList[i];
+                break;
+            }
+        }
+
+        return blockClass;
+    }
+
+    public void SetUpgradeTicket(RankType type, int number)
+    {
+        for(int i = 0; i < upgradeTicketList.Count; i ++)
+        {
+            if(upgradeTicketList[i].rankType.Equals(type))
+            {
+                upgradeTicketList[i].holdNumber += number;
+            }
+        }
+    }
+
+    public int GetUpgradeTicket(RankType type)
+    {
+        int ticket = 0;
+        for (int i = 0; i < upgradeTicketList.Count; i++)
+        {
+            if (upgradeTicketList[i].rankType.Equals(type))
+            {
+                ticket = upgradeTicketList[i].holdNumber;
+                break;
+            }
+        }
+        return ticket;
+    }
+
+    public void UseUpgradeTicket(RankType type)
+    {
+        for (int i = 0; i < upgradeTicketList.Count; i++)
+        {
+            if (upgradeTicketList[i].rankType.Equals(type))
+            {
+                upgradeTicketList[i].holdNumber -= 1;
+                break;
+            }
+        }
     }
 }

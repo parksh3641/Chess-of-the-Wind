@@ -97,7 +97,22 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "블럭을 배치하세요";
                         break;
                     case NotionType.YourTurn:
-                        notion.txt.text = "당신의 차례예요. 바람을 불어보세요 !";
+                        notion.txt.text = "당신의 차례예요. 바람을 불어보세요!";
+                        break;
+                    case NotionType.BuyTicket:
+                        notion.txt.text = "강화권을 구매했습니다";
+                        break;
+                    case NotionType.UpgradeSuccess:
+                        notion.txt.text = "강화 성공!";
+                        break;
+                    case NotionType.UpgradeKeep:
+                        notion.txt.text = "강화 유지";
+                        break;
+                    case NotionType.UpgradeDown:
+                        notion.txt.text = "강화 하락";
+                        break;
+                    case NotionType.UpgradeDestroy:
+                        notion.txt.text = "파괴되었습니다";
                         break;
                 }
                 SetColor(list.colorType);
@@ -155,14 +170,4 @@ public enum EffectType
 {
     Default = 0,
     Vibration
-}
-
-public enum NotionType
-{
-    Test,
-    NotEnoughMoney,
-    NotBettingLocation,
-    Cancle,
-    GoBetting,
-    YourTurn
 }

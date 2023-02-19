@@ -36,6 +36,7 @@ public class BlockMotherInformation
 public class BlockInformation
 {
     public BlockType blockType = BlockType.Default;
+    public string blockName = "";
     public int size = 0;
     public int bettingPrice = 0;
 
@@ -72,6 +73,20 @@ public class BlockDataBase : ScriptableObject
             }
         }
         return block;
+    }
+
+    public string GetBlockName(BlockType type)
+    {
+        string name = "";
+        for (int i = 0; i < blockInformation.Length; i++)
+        {
+            if (blockInformation[i].blockType.Equals(type))
+            {
+                name = blockInformation[i].blockName;
+                break;
+            }
+        }
+        return name;
     }
 
     public int GetIndex0(BlockType type, int number)
