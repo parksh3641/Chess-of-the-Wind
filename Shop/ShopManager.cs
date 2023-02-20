@@ -11,6 +11,8 @@ public class ShopManager : MonoBehaviour
 
     List<ShopContent> shopContentList = new List<ShopContent>();
 
+    bool isDelay = false;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -50,15 +52,25 @@ public class ShopManager : MonoBehaviour
     public void BuySnowBox(int number)
     {
         playerDataBase.SnowBox = number;
+
+        playerDataBase.BuySnowBox += number;
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
     }
 
     public void BuyUnderworldBox(int number)
     {
         playerDataBase.UnderworldBox = number;
+
+        playerDataBase.UnderworldBox += number;
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuySnowBox);
     }
 
     public void BuyItem(ShopType type)
     {
+        if (isDelay) return;
+
         switch (type)
         {
             case ShopType.RemoveAds:
@@ -70,22 +82,37 @@ public class ShopManager : MonoBehaviour
             case ShopType.UpgradeTicket_N:
                 Debug.Log("N 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.N, 5);
+
+                if (PlayfabManager.instance.isActive) 
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
                 break;
             case ShopType.UpgradeTicket_R:
                 Debug.Log("R 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.R, 5);
+
+                if (PlayfabManager.instance.isActive)
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.R));
                 break;
             case ShopType.UpgradeTicket_SR:
                 Debug.Log("SR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.SR, 5);
+
+                if (PlayfabManager.instance.isActive)
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SR));
                 break;
             case ShopType.UpgradeTicket_SSR:
                 Debug.Log("SSR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.SSR, 5);
+
+                if (PlayfabManager.instance.isActive)
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SSR));
                 break;
             case ShopType.UpgradeTicket_UR:
                 Debug.Log("UR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.UR, 5);
+
+                if (PlayfabManager.instance.isActive)
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.UR));
                 break;
             case ShopType.PresentA:
                 break;
@@ -100,6 +127,14 @@ public class ShopManager : MonoBehaviour
         }
 
         NotionManager.instance.UseNotion(NotionType.BuyTicket);
+
+        isDelay = true;
+        Invoke("Delay", 1f);
+    }
+
+    void Delay()
+    {
+        isDelay = false;
     }
 
     #endregion

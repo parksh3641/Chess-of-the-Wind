@@ -85,7 +85,7 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "테스트";
                         break;
                     case NotionType.NotEnoughMoney:
-                        notion.txt.text = "파산했어요";
+                        notion.txt.text = "골드가 부족합니다";
                         break;
                     case NotionType.NotBettingLocation:
                         notion.txt.text = "그 위치에는 놓을 수 없어요";
@@ -113,6 +113,18 @@ public class NotionManager : MonoBehaviour
                         break;
                     case NotionType.UpgradeDestroy:
                         notion.txt.text = "파괴되었습니다";
+                        break;
+                    case NotionType.SellBlock:
+                        notion.txt.text = "블럭을 판매했습니다";
+                        break;
+                    case NotionType.MaxBlockLevel:
+                        notion.txt.text = "최대 강화레벨입니다";
+                        break;
+                    case NotionType.DontSellEquipBlock:
+                        notion.txt.text = "장착한 블럭은 판매할 수 없습니다";
+                        break;
+                    case NotionType.NotEnoughTicket:
+                        notion.txt.text = "강화권이 부족합니다";
                         break;
                 }
                 SetColor(list.colorType);

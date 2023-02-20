@@ -7,7 +7,6 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
-
     [Title("Equip")]
     public BlockUIContent armorBlockUI;
     public BlockUIContent weaponBlockUI;
@@ -24,6 +23,11 @@ public class CollectionManager : MonoBehaviour
     Dictionary<string, string> blockData = new Dictionary<string, string>();
 
     bool check = false;
+
+    BlockClass armorBlockClass;
+    BlockClass weaponBlockClass;
+    BlockClass shieldBlockClass;
+    BlockClass newbieBlockClass;
 
     public UpgradeManager upgradeManager;
     public PresentManager presentManager;
@@ -42,9 +46,15 @@ public class CollectionManager : MonoBehaviour
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
+            content.Upgrade_Initialize(this);
 
             blockUIContentList.Add(content);
         }
+
+        armorBlockUI.Upgrade_Initialize(this);
+        weaponBlockUI.Upgrade_Initialize(this);
+        shieldBlockUI.Upgrade_Initialize(this);
+        newbieBlockUI.Upgrade_Initialize(this);
     }
 
     public void OpenCollectionView()
@@ -61,7 +71,7 @@ public class CollectionManager : MonoBehaviour
             }
             else
             {
-                if (playerDataBase.GetBlockClass().Count > blockList.Count)
+                if (blockList.Count != playerDataBase.GetBlockClass().Count)
                 {
                     UpdateCollection();
                 }
@@ -76,17 +86,31 @@ public class CollectionManager : MonoBehaviour
 
     public void Initialize()
     {
-        for(int i = 0; i < playerDataBase.GetBlockClass().Count; i ++)
+        blockList = new List<BlockClass>(blockList.Count);
+
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i ++)
         {
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
-        if(blockUIContentList.Count < blockList.Count)
+        if (blockUIContentList.Count < blockList.Count)
         {
-            //생성한 것보다 보유한 게 많을 경우
+            int number = blockList.Count - blockUIContentList.Count;
+
+            for (int i = 0; i < number; i++)
+            {
+                BlockUIContent content = Instantiate(blockUIContent);
+                content.transform.parent = blockUITransform;
+                content.transform.localPosition = Vector3.zero;
+                content.transform.localScale = Vector3.one;
+                content.gameObject.SetActive(false);
+                content.Upgrade_Initialize(this);
+
+                blockUIContentList.Add(content);
+            }
         }
 
-        for(int i = 0; i < blockUIContentList.Count; i ++)
+        for (int i = 0; i < blockUIContentList.Count; i ++)
         {
             blockUIContentList[i].gameObject.SetActive(false);
         }
@@ -107,18 +131,48 @@ public class CollectionManager : MonoBehaviour
     {
         Debug.Log("컬렉션 변경 점 업데이트");
 
-        for (int i = 0; i < playerDataBase.GetBlockClass().Count - blockList.Count; i++)
+        blockList = new List<BlockClass>(blockList.Count);
+
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
         {
-            blockList.Add(playerDataBase.GetBlockClass()[playerDataBase.GetBlockClass().Count - i - 1]);
-            blockUIContentList[playerDataBase.GetBlockClass().Count - i - 1].gameObject.SetActive(true);
-            blockUIContentList[playerDataBase.GetBlockClass().Count - i - 1].Collection_Initialize(blockList[i]);
+            blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
         if (blockUIContentList.Count < blockList.Count)
         {
-            //생성한 것보다 보유한 게 많을 경우
+            int number = blockList.Count - blockUIContentList.Count;
+
+            for (int i = 0; i < number; i++)
+            {
+                BlockUIContent content = Instantiate(blockUIContent);
+                content.transform.parent = blockUITransform;
+                content.transform.localPosition = Vector3.zero;
+                content.transform.localScale = Vector3.one;
+                content.gameObject.SetActive(false);
+                content.Upgrade_Initialize(this);
+
+                blockUIContentList.Add(content);
+            }
+        }
+
+        for (int i = 0; i < blockUIContentList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (!blockList[i].instanceId.Equals(armorBlockClass.instanceId) &&
+                !blockList[i].instanceId.Equals(weaponBlockClass.instanceId) &&
+                !blockList[i].instanceId.Equals(shieldBlockClass.instanceId) &&
+                !blockList[i].instanceId.Equals(newbieBlockClass.instanceId))
+            {
+                blockUIContentList[i].gameObject.SetActive(true);
+                blockUIContentList[i].Collection_Initialize(blockList[i]);
+            }
         }
     }
+   
 
     public void CheckEquipArmor()
     {
@@ -129,12 +183,13 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    armorBlockClass = blockList[i];
                     EquipArmor(blockList[i]);
                     break;
                 }
             }
         }
-        else
+        else //불러오기
         {
             bool equip = false;
 
@@ -143,6 +198,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Armor))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    armorBlockClass = blockList[i];
                     EquipArmor(blockList[i]);
                     equip = true;
                     break;
@@ -166,6 +222,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    weaponBlockClass = blockList[i];
                     EquipWeapon(blockList[i]);
                     break;
                 }
@@ -180,6 +237,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    weaponBlockClass = blockList[i];
                     EquipWeapon(blockList[i]);
                     equip = true;
                     break;
@@ -203,6 +261,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    shieldBlockClass = blockList[i];
                     EquipShield(blockList[i]);
                     break;
                 }
@@ -217,6 +276,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Shield))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    shieldBlockClass = blockList[i];
                     EquipShield(blockList[i]);
                     equip = true;
                     break;
@@ -240,6 +300,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Pawn)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    newbieBlockClass = blockList[i];
                     EquipNewBie(blockList[i]);
                     break;
                 }
@@ -254,6 +315,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
+                    newbieBlockClass = blockList[i];
                     EquipNewBie(blockList[i]);
                     equip = true;
 
@@ -261,7 +323,7 @@ public class CollectionManager : MonoBehaviour
                 }
             }
 
-            if(!equip)
+            if (!equip)
             {
                 playerDataBase.Newbie = "";
                 CheckEquipNewBie();
@@ -325,10 +387,51 @@ public class CollectionManager : MonoBehaviour
         Debug.Log("뉴비 장착 : " + block.blockType);
     }
 
+    public bool CheckEquipBlock(string id)
+    {
+        bool check = false;
+
+        if(armorBlockUI.instanceId.Equals(id) ||
+            weaponBlockUI.instanceId.Equals(id) ||
+            shieldBlockUI.instanceId.Equals(id) ||
+            newbieBlockUI.instanceId.Equals(id))
+        {
+            check = true;
+        }
+        return check;
+    }
+
     #region BlockInformation
     public void OpenBlockInformation(string id)
     {
         upgradeManager.OpenUpgradeView(id);
+    }
+
+    public void SetBlockLevel(string id, int level)
+    {
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                blockList[i].level = level;
+                blockUIContentList[i].SetLevel(level);
+                break;
+            }
+        }
+    }
+
+    public void SellBlock(string id)
+    {
+        for (int i = blockList.Count - 1; i > 0; i--)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                blockList.RemoveAt(i);
+                blockUIContentList[i].gameObject.SetActive(false);
+                blockUIContentList.RemoveAt(i);
+                break;
+            }
+        }
     }
     #endregion
 }

@@ -42,7 +42,7 @@ public class RandomBoxManager : MonoBehaviour
     public bool isStart = false; //준비완료
 
     private int random = 0;
-    private string rank = "";
+    private string block = "";
 
     public SoundManager soundManager;
     PlayerDataBase playerDataBase;
@@ -246,19 +246,19 @@ public class RandomBoxManager : MonoBehaviour
             }
 
             random = Random.Range(0, 100);
-            rank = "";
+            block = "";
 
             switch (windCharacterType)
             {
                 case WindCharacterType.Winter:
                     int snow = Random.Range(0, allowSnowBlockList.Count);
 
-                    rank = allowSnowBlockList[snow];
+                    block = allowSnowBlockList[snow];
                     break;
                 case WindCharacterType.UnderWorld:
                     int underworld = Random.Range(0, allowUnderworldBlockList.Count);
 
-                    rank = allowUnderworldBlockList[underworld];
+                    block = allowUnderworldBlockList[underworld];
                     break;
             }
 
@@ -266,20 +266,20 @@ public class RandomBoxManager : MonoBehaviour
             if (random <= percentBlock[2])
             {
                 Debug.Log("A 당첨");
-                rank += "_A";
+                block += "_A";
             }
             else if (random <= percentBlock[1])
             {
                 Debug.Log("B 당첨");
-                rank += "_B";
+                block += "_B";
             }
             else
             {
                 Debug.Log("C 당첨");
-                rank += "_C";
+                block += "_C";
             }
 
-            prizeBlockList.Add(rank);
+            prizeBlockList.Add(block);
 
             isWait = true;
             Invoke("Delay", 0.1f);
@@ -316,9 +316,9 @@ public class RandomBoxManager : MonoBehaviour
                 break;
         }
 
-        yield return new WaitForSeconds(0.5f);
-
         Debug.Log("유저 인벤토리 전송 완료");
+
+        yield return new WaitForSeconds(0.5f);
 
         switch (windCharacterType)
         {
@@ -333,8 +333,6 @@ public class RandomBoxManager : MonoBehaviour
 
                 break;
         }
-
-        isStart = true;
     }
 
     void Delay()

@@ -629,9 +629,9 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"];
             //int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if (gold > 1000000)
+            if (gold > 10000000)
             {
-                gold = 1000000;
+                gold = 10000000;
             }
 
             playerDataBase.Gold = gold;
@@ -731,6 +731,27 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "UnderworldBox":
                            playerDataBase.UnderworldBox = statistics.Value;
+                           break;
+                       case "BuySnowBox":
+                           playerDataBase.BuySnowBox = statistics.Value;
+                           break;
+                       case "BuyUnderworldBox":
+                           playerDataBase.BuyUnderworldBox = statistics.Value;
+                           break;
+                       case "UpgradeTicket_N":
+                           playerDataBase.SetUpgradeTicket(RankType.N, statistics.Value);
+                           break;
+                       case "UpgradeTicket_R":
+                           playerDataBase.SetUpgradeTicket(RankType.R, statistics.Value);
+                           break;
+                       case "UpgradeTicket_SR":
+                           playerDataBase.SetUpgradeTicket(RankType.SR, statistics.Value);
+                           break;
+                       case "UpgradeTicket_SSR":
+                           playerDataBase.SetUpgradeTicket(RankType.SSR, statistics.Value);
+                           break;
+                       case "UpgradeTicket_UR":
+                           playerDataBase.SetUpgradeTicket(RankType.UR, statistics.Value);
                            break;
                    }
                }
@@ -864,24 +885,24 @@ public class PlayfabManager : MonoBehaviour
             {
                 OnCloudUpdateStats(result);
 
-                switch (name)
-                {
-                    case "UpgradeTicket_N":
-                        playerDataBase.SetUpgradeTicket(RankType.N, value);
-                        break;
-                    case "UpgradeTicket_R":
-                        playerDataBase.SetUpgradeTicket(RankType.R, value);
-                        break;
-                    case "UpgradeTicket_SR":
-                        playerDataBase.SetUpgradeTicket(RankType.SR, value);
-                        break;
-                    case "UpgradeTicket_SSR":
-                        playerDataBase.SetUpgradeTicket(RankType.SSR, value);
-                        break;
-                    case "UpgradeTicket_UR":
-                        playerDataBase.SetUpgradeTicket(RankType.UR, value);
-                        break;
-                }
+                //switch (name)
+                //{
+                //    case "UpgradeTicket_N":
+                //        playerDataBase.SetUpgradeTicket(RankType.N, value);
+                //        break;
+                //    case "UpgradeTicket_R":
+                //        playerDataBase.SetUpgradeTicket(RankType.R, value);
+                //        break;
+                //    case "UpgradeTicket_SR":
+                //        playerDataBase.SetUpgradeTicket(RankType.SR, value);
+                //        break;
+                //    case "UpgradeTicket_SSR":
+                //        playerDataBase.SetUpgradeTicket(RankType.SSR, value);
+                //        break;
+                //    case "UpgradeTicket_UR":
+                //        playerDataBase.SetUpgradeTicket(RankType.UR, value);
+                //        break;
+                //}
             }
             , DisplayPlayfabError);
         }
@@ -920,12 +941,14 @@ public class PlayfabManager : MonoBehaviour
                 switch (type)
                 {
                     case MoneyType.Gold:
-                        //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
                         playerDataBase.Gold += number;
+                        //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
                         break;
                 }
 
                 //soundManager.PlaySFX(GameSfxType.GetMoney);
+
+                uiManager.RenewalVC();
             }
             catch (Exception e)
             {
@@ -976,15 +999,12 @@ public class PlayfabManager : MonoBehaviour
                     break;
             }
 
-            //uiManager.RenewalVC();
+            uiManager.RenewalVC();
         }
         else
         {
             Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
         }
-
-
-        uiManager.RenewalVC();
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
@@ -1297,23 +1317,6 @@ public class PlayfabManager : MonoBehaviour
         Debug.Log(shopClass.itemId + " Buy Success!");
     }
 
-    public void CheckConsumeItem()
-    {
-        StartCoroutine(ConsumeItemCorution());
-    }
-
-    IEnumerator ConsumeItemCorution()
-    {
-        //if (GameStateManager.instance.Clock)
-        //{
-        //    playerDataBase.Clock -= 1;
-
-        //    ConsumeItem(shopDataBase.GetItemInstanceId("Clock"));
-        //}
-
-        yield return new WaitForSeconds(0.5f);
-    }
-
     public void ConsumeItem(string itemInstanceID)
     {
         try
@@ -1322,6 +1325,23 @@ public class PlayfabManager : MonoBehaviour
             {
                 FunctionName = "ConsumeItem",
                 FunctionParameter = new { ConsumeCount = 1, ItemInstanceId = itemInstanceID },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
+    public void RevokeConsumeItem(string itemInstanceID)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "RevokeConsumeItem",
+                FunctionParameter = new { ItemInstanceId = itemInstanceID },
                 GeneratePlayStreamEvent = true,
             }, OnCloudUpdateStats, DisplayPlayfabError);
         }

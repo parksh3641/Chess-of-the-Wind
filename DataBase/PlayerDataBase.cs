@@ -105,6 +105,12 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int underworldBox = 0;
 
+    [Title("BuyCount")]
+    [SerializeField]
+    private int buySnowBox = 0;
+    [SerializeField]
+    private int buyUnderworldBox = 0;
+
     [Title("Wind Character")]
     [SerializeField]
     private List<WindCharacterClass> windCharacterList = new List<WindCharacterClass>();
@@ -239,6 +245,29 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int BuySnowBox
+    {
+        get
+        {
+            return buySnowBox;
+        }
+        set
+        {
+            buySnowBox = value;
+        }
+    }
+    public int BuyUnderworldBox
+    {
+        get
+        {
+            return buyUnderworldBox;
+        }
+        set
+        {
+            buyUnderworldBox = value;
+        }
+    }
+
     #endregion
 
     public void Initialize()
@@ -253,6 +282,9 @@ public class PlayerDataBase : ScriptableObject
 
         snowBox = 0;
         underworldBox = 0;
+
+        BuySnowBox = 0;
+        BuyUnderworldBox = 0;
 
         windCharacterList.Clear();
 
@@ -301,6 +333,8 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
+        Debug.Log(item.DisplayName + "가 추가됨");
+
         BlockClass blockClass = new BlockClass();
 
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
@@ -340,6 +374,31 @@ public class PlayerDataBase : ScriptableObject
         blockList.Add(blockClass);
     }
 
+    public void SetBlockLevel(string id, int level)
+    {
+        for(int i = 0; i < blockList.Count; i ++)
+        {
+            if(blockList[i].instanceId.Equals(id))
+            {
+                blockList[i].level = level;
+                break;
+            }
+        }
+    }
+
+    public void SellBlock(string id)
+    {
+        for (int i = blockList.Count - 1; i > 0; i--)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                Debug.Log(blockList[i].blockType + " 제거됨");
+                blockList.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
     public List<BlockClass> GetBlockClass()
     {
         return blockList;
@@ -368,6 +427,7 @@ public class PlayerDataBase : ScriptableObject
             if(upgradeTicketList[i].rankType.Equals(type))
             {
                 upgradeTicketList[i].holdNumber += number;
+                break;
             }
         }
     }

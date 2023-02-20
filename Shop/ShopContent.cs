@@ -30,6 +30,7 @@ public class ShopContent : MonoBehaviour
 
     public void Initialize(ShopType type, ShopManager manager)
     {
+        shopType = type;
         shopManager = manager;
 
         coin.SetActive(false);

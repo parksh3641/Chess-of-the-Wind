@@ -8,6 +8,7 @@ public class UpgradeValue
 {
     public RankType rankType = RankType.N;
     public int maxLevel = 5;
+    public int synthesisValue = 0;
 
     public List<string> valueList = new List<string>();
 
@@ -16,9 +17,14 @@ public class UpgradeValue
         return valueList;
     }
 
-    public string GetValueNumber(int number)
+    public int GetValueNumber(int number)
     {
-        return valueList[number];
+        return int.Parse(valueList[number]);
+    }
+
+    public int GetSynthesisValue()
+    {
+        return synthesisValue;
     }
 }
 

@@ -175,5 +175,10 @@ public enum NotionType
     UpgradeSuccess,
     UpgradeKeep,
     UpgradeDown,
-    UpgradeDestroy
+    UpgradeDestroy,
+    SellBlock,
+    MaxBlockLevel,
+    DontSellEquipBlock,
+    NotEnoughTicket
+
 }

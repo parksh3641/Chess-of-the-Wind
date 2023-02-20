@@ -35,6 +35,7 @@ public class BlockMotherInformation
 [System.Serializable]
 public class BlockInformation
 {
+    public WindCharacterType windCharacterType = WindCharacterType.Winter;
     public BlockType blockType = BlockType.Default;
     public string blockName = "";
     public int size = 0;
