@@ -29,9 +29,18 @@ public class UpgradeManager : MonoBehaviour
     public Text upgradeText;
     public Text sellText;
 
+    public GameObject defDestroyObj;
+    public Text defDestroyText;
+    public Text defDestroyNumberText;
+
+    public Image defCheckMark;
+
     int gold = 0;
     int upgradeTicket = 0;
     int level = 0;
+
+    bool isWait = false;
+    bool isDef = false;
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
 
@@ -53,6 +62,8 @@ public class UpgradeManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         upgradeView.SetActive(false);
+
+        defDestroyObj.SetActive(false);
     }
 
     public void OpenUpgradeView(string id)
@@ -101,12 +112,7 @@ public class UpgradeManager : MonoBehaviour
         ticketText.text = "강화권";
         ticketNumberText.text = upgradeTicket + " / 1";
 
-        if (gold >= upgradeInformation.needGold && upgradeTicket >= 1)
-        {
-            Debug.Log("강화 준비 완료");
-
-            //강화 버튼 색깔을 바꿔야함. 안되면 회색으로
-        }
+        defDestroyObj.SetActive(false);
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
@@ -120,15 +126,39 @@ public class UpgradeManager : MonoBehaviour
             goldNumberText.text = "-";
             ticketNumberText.text = "-";
         }
-    }
+        else
+        {
+            if (gold >= upgradeInformation.needGold && upgradeTicket >= 1)
+            {
+                Debug.Log("강화 준비 완료");
 
-    public void EquipButton()
-    {
+                //강화 버튼 색깔을 바꿔야함. 안되면 회색으로
+            }
 
+            if(upgradeInformation.destroy > 0f)
+            {
+                defDestroyObj.SetActive(true);
+                defDestroyText.text = "파괴 방지권";
+                defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
+
+                defCheckMark.enabled = false;
+                isDef = false;
+            }
+            else
+            {
+                defCheckMark.enabled = false;
+
+                isDef = false;
+            }
+        }
+
+        isWait = false;
     }
 
     public void UpgradeButton()
     {
+        if (isWait) return;
+
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
             Debug.Log("더 이상 강화가 불가능합니다");
@@ -176,13 +206,21 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
+       
         float random = Random.Range(0, 100.0f);
 
         if (random <= upgradeInformation.destroy)
         {
-            SellBlock(blockClass.instanceId);
+            if (isDef)
+            {
+                NotionManager.instance.UseNotion(NotionType.DefDestroy);
+            }
+            else
+            {
+                SellBlock(blockClass.instanceId);
 
-            NotionManager.instance.UseNotion(NotionType.UpgradeDestroy);
+                NotionManager.instance.UseNotion(NotionType.UpgradeDestroy);
+            }
         }
         else if (random <= upgradeInformation.down)
         {
@@ -221,19 +259,37 @@ public class UpgradeManager : MonoBehaviour
             NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
         }
 
+        if (isDef)
+        {
+            playerDataBase.DefDestroyTicket -= 1;
+
+            defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
+
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DefDestroyTicket", playerDataBase.DefDestroyTicket);
+
+            CheckDefDestroyTicket();
+        }
+
         Initialize(blockClass.instanceId);
+
+        isWait = true;
+        Invoke("Delay", 0.5f);
+    }
+
+    void Delay()
+    {
+        isWait = false;
     }
 
     public void SellBlock(string id)
     {
         PlayfabManager.instance.RevokeConsumeItem(id);
         playerDataBase.SellBlock(id);
-        collectionManager.SellBlock(id);
     }
 
     public void SellButton()
     {
-        if(!collectionManager.CheckEquipBlock(blockClass.instanceId))
+        if(!collectionManager.equipManager.CheckEquipBlock(blockClass.instanceId))
         {
             sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
         }
@@ -241,5 +297,41 @@ public class UpgradeManager : MonoBehaviour
         {
             NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
         }
+    }
+
+    void CheckDefDestroyTicket()
+    {
+        if(playerDataBase.DefDestroyTicket <= 0)
+        {
+            defCheckMark.enabled = false;
+
+            isDef = false;
+        }
+    }
+
+    public void UseDefDestroyTicket()
+    {
+        if(!isDef)
+        {
+            if(playerDataBase.DefDestroyTicket > 0)
+            {
+                defCheckMark.enabled = true;
+
+                isDef = true;
+            }
+        }
+        else
+        {
+            defCheckMark.enabled = false;
+
+            isDef = false;
+        }
+
+        Debug.Log("파괴 방지권 : " + isDef);
+    }
+
+    public void EquipButton()
+    {
+
     }
 }

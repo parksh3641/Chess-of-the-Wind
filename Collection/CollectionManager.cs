@@ -7,20 +7,15 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
-    [Title("Equip")]
-    public BlockUIContent armorBlockUI;
-    public BlockUIContent weaponBlockUI;
-    public BlockUIContent shieldBlockUI;
-    public BlockUIContent newbieBlockUI;
 
     public BlockUIContent blockUIContent;
     public Transform blockUITransform;
 
-    public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
-
     public List<BlockClass> blockList = new List<BlockClass>();
 
-    Dictionary<string, string> blockData = new Dictionary<string, string>();
+    public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
+
+
 
     bool check = false;
 
@@ -29,6 +24,7 @@ public class CollectionManager : MonoBehaviour
     BlockClass shieldBlockClass;
     BlockClass newbieBlockClass;
 
+    public EquipManager equipManager;
     public UpgradeManager upgradeManager;
     public PresentManager presentManager;
     PlayerDataBase playerDataBase;
@@ -50,11 +46,6 @@ public class CollectionManager : MonoBehaviour
 
             blockUIContentList.Add(content);
         }
-
-        armorBlockUI.Upgrade_Initialize(this);
-        weaponBlockUI.Upgrade_Initialize(this);
-        shieldBlockUI.Upgrade_Initialize(this);
-        newbieBlockUI.Upgrade_Initialize(this);
     }
 
     public void OpenCollectionView()
@@ -184,7 +175,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     armorBlockClass = blockList[i];
-                    EquipArmor(blockList[i]);
+                    equipManager.EquipArmor(blockList[i]);
                     break;
                 }
             }
@@ -199,7 +190,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     armorBlockClass = blockList[i];
-                    EquipArmor(blockList[i]);
+                    equipManager.EquipArmor(blockList[i]);
                     equip = true;
                     break;
                 }
@@ -223,7 +214,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     weaponBlockClass = blockList[i];
-                    EquipWeapon(blockList[i]);
+                    equipManager.EquipWeapon(blockList[i]);
                     break;
                 }
             }
@@ -238,7 +229,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     weaponBlockClass = blockList[i];
-                    EquipWeapon(blockList[i]);
+                    equipManager.EquipWeapon(blockList[i]);
                     equip = true;
                     break;
                 }
@@ -262,7 +253,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     shieldBlockClass = blockList[i];
-                    EquipShield(blockList[i]);
+                    equipManager.EquipShield(blockList[i]);
                     break;
                 }
             }
@@ -277,7 +268,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     shieldBlockClass = blockList[i];
-                    EquipShield(blockList[i]);
+                    equipManager.EquipShield(blockList[i]);
                     equip = true;
                     break;
                 }
@@ -301,7 +292,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     newbieBlockClass = blockList[i];
-                    EquipNewBie(blockList[i]);
+                    equipManager.EquipNewBie(blockList[i]);
                     break;
                 }
             }
@@ -316,7 +307,7 @@ public class CollectionManager : MonoBehaviour
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     newbieBlockClass = blockList[i];
-                    EquipNewBie(blockList[i]);
+                    equipManager.EquipNewBie(blockList[i]);
                     equip = true;
 
                     break;
@@ -329,76 +320,6 @@ public class CollectionManager : MonoBehaviour
                 CheckEquipNewBie();
             }
         }
-    }
-
-    public void EquipArmor(BlockClass block)
-    {
-        playerDataBase.Armor = block.instanceId;
-
-        armorBlockUI.Collection_Initialize(block);
-
-        blockData.Clear();
-        blockData.Add("Armor", block.instanceId);
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
-
-        Debug.Log("°©¿Ê ÀåÂø : " + block.blockType);
-    }
-
-    public void EquipWeapon(BlockClass block)
-    {
-        playerDataBase.Weapon = block.instanceId;
-
-        weaponBlockUI.Collection_Initialize(block);
-
-        blockData.Clear();
-        blockData.Add("Weapon", block.instanceId);
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
-
-        Debug.Log("°Ë ÀåÂø : " + block.blockType);
-    }
-
-    public void EquipShield(BlockClass block)
-    {
-        playerDataBase.Shield = block.instanceId;
-
-        shieldBlockUI.Collection_Initialize(block);
-
-        blockData.Clear();
-        blockData.Add("Shield", block.instanceId);
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
-
-        Debug.Log("¹æÆÐ ÀåÂø : " + block.blockType);
-    }
-
-    public void EquipNewBie(BlockClass block)
-    {
-        playerDataBase.Newbie = block.instanceId;
-
-        newbieBlockUI.Collection_Initialize(block);
-
-        blockData.Clear();
-        blockData.Add("NewBie", block.instanceId);
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
-
-        Debug.Log("´ººñ ÀåÂø : " + block.blockType);
-    }
-
-    public bool CheckEquipBlock(string id)
-    {
-        bool check = false;
-
-        if(armorBlockUI.instanceId.Equals(id) ||
-            weaponBlockUI.instanceId.Equals(id) ||
-            shieldBlockUI.instanceId.Equals(id) ||
-            newbieBlockUI.instanceId.Equals(id))
-        {
-            check = true;
-        }
-        return check;
     }
 
     #region BlockInformation
@@ -415,20 +336,6 @@ public class CollectionManager : MonoBehaviour
             {
                 blockList[i].level = level;
                 blockUIContentList[i].SetLevel(level);
-                break;
-            }
-        }
-    }
-
-    public void SellBlock(string id)
-    {
-        for (int i = blockList.Count - 1; i > 0; i--)
-        {
-            if (blockList[i].instanceId.Equals(id))
-            {
-                blockList.RemoveAt(i);
-                blockUIContentList[i].gameObject.SetActive(false);
-                blockUIContentList.RemoveAt(i);
                 break;
             }
         }

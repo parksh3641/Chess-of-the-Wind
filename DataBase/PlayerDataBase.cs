@@ -104,6 +104,8 @@ public class PlayerDataBase : ScriptableObject
     private int snowBox = 0;
     [SerializeField]
     private int underworldBox = 0;
+    [SerializeField]
+    private int defDestroyTicket = 0;
 
     [Title("BuyCount")]
     [SerializeField]
@@ -118,6 +120,8 @@ public class PlayerDataBase : ScriptableObject
     [Title("Block")]
     [SerializeField]
     private List<BlockClass> blockList = new List<BlockClass>();
+    public List<BlockClass> successionLevel = new List<BlockClass>();
+    public List<string> sellBlockList = new List<string>();
 
     [Title("Upgrade")]
     [SerializeField]
@@ -133,6 +137,8 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<UpgradeTicketClass> upgradeTicketList = new List<UpgradeTicketClass>();
 
+
+    Dictionary<string, string> levelCustomData = new Dictionary<string, string>();
 
     public delegate void BoxEvent();
     public static event BoxEvent eGetSnowBox, eGetUnderworldBox;
@@ -268,6 +274,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int DefDestroyTicket
+    {
+        get
+        {
+            return defDestroyTicket;
+        }
+        set
+        {
+            defDestroyTicket = value;
+        }
+    }
+
     #endregion
 
     public void Initialize()
@@ -282,6 +300,7 @@ public class PlayerDataBase : ScriptableObject
 
         snowBox = 0;
         underworldBox = 0;
+        defDestroyTicket = 0;
 
         BuySnowBox = 0;
         BuyUnderworldBox = 0;
@@ -296,6 +315,8 @@ public class PlayerDataBase : ScriptableObject
         }
 
         blockList.Clear();
+        sellBlockList.Clear();
+        successionLevel.Clear();
 
         //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length; i++)
         //{
@@ -323,6 +344,11 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public void Initialize_BlockList()
+    {
+        blockList = new List<BlockClass>();
+    }
+
     public void SetBlock(ItemInstance item)
     {
         for(int i = 0; i < blockList.Count; i ++)
@@ -333,29 +359,33 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        Debug.Log(item.DisplayName + "가 추가됨");
+        for(int i = 0; i < sellBlockList.Count; i ++)
+        {
+            if(item.ItemInstanceId.Equals(sellBlockList[i]))
+            {
+                return;
+            }
+        }
 
         BlockClass blockClass = new BlockClass();
 
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
 
-        string rank = item.ItemId.Substring(item.ItemId.Length - 1);
-
-        switch (rank)
+        switch (item.ItemClass)
         {
-            case "S":
+            case "UR":
                 blockClass.rankType = RankType.UR;
                 break;
-            case "A":
+            case "SSR":
                 blockClass.rankType = RankType.SSR;
                 break;
-            case "B":
+            case "SR":
                 blockClass.rankType = RankType.SR;
                 break;
-            case "C":
+            case "R":
                 blockClass.rankType = RankType.R;
                 break;
-            case "D":
+            case "N":
                 blockClass.rankType = RankType.N;
                 break;
             default:
@@ -369,6 +399,23 @@ public class PlayerDataBase : ScriptableObject
         if(item.CustomData != null)
         {
             blockClass.level = int.Parse(item.CustomData["Level"]);
+        }
+
+        for (int i = 0; i < successionLevel.Count; i++) //레벨 계승
+        {
+            if(blockClass.level == 0 && 
+                blockClass.blockType.Equals(successionLevel[i].blockType) && 
+                blockClass.rankType.Equals(successionLevel[i].rankType))
+            {
+                Debug.Log(blockClass.blockType + " / " + successionLevel[i].level+ " 레벨로 계승됨");
+                levelCustomData.Clear();
+                levelCustomData.Add("Level", successionLevel[i].level.ToString());
+
+                PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
+                blockClass.level = successionLevel[i].level;
+
+                successionLevel.RemoveAt(i);
+            }
         }
 
         blockList.Add(blockClass);
@@ -388,15 +435,7 @@ public class PlayerDataBase : ScriptableObject
 
     public void SellBlock(string id)
     {
-        for (int i = blockList.Count - 1; i > 0; i--)
-        {
-            if (blockList[i].instanceId.Equals(id))
-            {
-                Debug.Log(blockList[i].blockType + " 제거됨");
-                blockList.RemoveAt(i);
-                break;
-            }
-        }
+        sellBlockList.Add(id);
     }
 
     public List<BlockClass> GetBlockClass()
@@ -420,6 +459,12 @@ public class PlayerDataBase : ScriptableObject
         return blockClass;
     }
 
+    public void SetSuccessionLevel(BlockClass block)
+    {
+        successionLevel.Add(block);
+    }
+
+    #region Ticket
     public void SetUpgradeTicket(RankType type, int number)
     {
         for(int i = 0; i < upgradeTicketList.Count; i ++)
@@ -457,4 +502,5 @@ public class PlayerDataBase : ScriptableObject
             }
         }
     }
+    #endregion
 }

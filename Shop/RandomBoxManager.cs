@@ -36,7 +36,8 @@ public class RandomBoxManager : MonoBehaviour
     public int[] percentBlock;
     public List<string> allowSnowBlockList = new List<string>();
     public List<string> allowUnderworldBlockList = new List<string>();
-    public List<string> prizeBlockList = new List<string>(); //¥Á√∑µ» ∞Õ
+    public List<BlockClass> prizeBlockList = new List<BlockClass>(); //¥Á√∑µ» ∞Õ
+    public List<string> prizeBlockStringList = new List<string>();
 
     public bool isWait = false; //ªÛ¿⁄ ªÃ±‚ µÙ∑π¿Ã
     public bool isStart = false; //¡ÿ∫Òøœ∑·
@@ -76,6 +77,7 @@ public class RandomBoxManager : MonoBehaviour
         allowSnowBlockList.Clear();
         allowUnderworldBlockList.Clear();
         prizeBlockList.Clear();
+        prizeBlockStringList.Clear();
 
         isWait = false;
         isStart = false;
@@ -221,7 +223,7 @@ public class RandomBoxManager : MonoBehaviour
         for (int i = 0; i < prizeBlockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Initialize(prizeBlockList[i]);
+            blockUIContentList[i].Collection_Initialize(prizeBlockList[i]);
 
             boxCountSave -= 1;
             boxCountText.text = boxCountSave.ToString();
@@ -262,24 +264,31 @@ public class RandomBoxManager : MonoBehaviour
                     break;
             }
 
+            BlockClass blockClass = new BlockClass();
+
+            blockClass.blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block);
 
             if (random <= percentBlock[2])
             {
-                Debug.Log("A ¥Á√∑");
-                block += "_A";
+                blockClass.rankType = RankType.SSR;
+                block += "_SSR";
+                Debug.Log("SSR ¥Á√∑");
             }
             else if (random <= percentBlock[1])
             {
-                Debug.Log("B ¥Á√∑");
-                block += "_B";
+                blockClass.rankType = RankType.SR;
+                block += "_SR";
+                Debug.Log("SR ¥Á√∑");
             }
             else
             {
-                Debug.Log("C ¥Á√∑");
-                block += "_C";
+                blockClass.rankType = RankType.R;
+                block += "_R";
+                Debug.Log("R ¥Á√∑");
             }
 
-            prizeBlockList.Add(block);
+            prizeBlockList.Add(blockClass);
+            prizeBlockStringList.Add(block);
 
             isWait = true;
             Invoke("Delay", 0.1f);
@@ -309,10 +318,10 @@ public class RandomBoxManager : MonoBehaviour
         switch (windCharacterType)
         {
             case WindCharacterType.Winter:
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockList);
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
                 break;
             case WindCharacterType.UnderWorld:
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockList);
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
                 break;
         }
 

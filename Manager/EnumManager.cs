@@ -154,13 +154,12 @@ public enum ShopType
     UpgradeTicket_SR,
     UpgradeTicket_SSR,
     UpgradeTicket_UR,
+    DefDestroyTicket,
     PresentA,
     PresentB,
     PresentC,
     PresentD,
     PresentE,
-    DefDestroyBlockTicket,
-
 }
 
 public enum NotionType
@@ -179,6 +178,7 @@ public enum NotionType
     SellBlock,
     MaxBlockLevel,
     DontSellEquipBlock,
-    NotEnoughTicket
+    NotEnoughTicket,
+    DefDestroy,
 
 }

@@ -60,40 +60,6 @@ public class BlockUIContent : MonoBehaviour
         blockUIArray[(int)blockType - 1].gameObject.SetActive(true);
     }
 
-    public void Initialize(string name)
-    {
-        string block = name.Substring(0, name.Length - 2);
-        string rank = name.Substring(name.Length - 1);
-
-        blockType = (BlockType)Enum.Parse(typeof(BlockType), block);
-
-        Initialize(blockType);
-
-        switch (rank)
-        {
-            case "D":
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-            case "C":
-                backgroundImg.color = Color.green;
-                break;
-            case "B":
-                backgroundImg.color = Color.blue;
-                break;
-            case "A":
-                backgroundImg.color = new Color(1, 0, 1);
-                break;
-            case "S":
-                backgroundImg.color = Color.yellow;
-                break;
-            default:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-
-        }
-    }
-
-
     public void Collection_Initialize(BlockClass blockClass)
     {
         blockType = blockClass.blockType;
@@ -179,7 +145,8 @@ public class BlockUIContent : MonoBehaviour
 
         if(synthesisManager != null)
         {
-            synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
+            if(rankType != RankType.UR)
+                synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
         }
     }
 

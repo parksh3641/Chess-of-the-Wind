@@ -7,12 +7,18 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "ImageDataBase", menuName = "ScriptableObjects/ImageDataBase")]
 public class ImageDataBase : ScriptableObject
 {
+    public Sprite moneyIcon;
+
     public Sprite[] iconArray;
 
     public Sprite[] rankBackgroundArray;
 
-    public Sprite[] upgradeTicketArray;
+    public Sprite[] shopContentArray;
 
+    public Sprite GetMoneyIcon()
+    {
+        return moneyIcon;
+    }
 
     public Sprite[] GetIconArray()
     {
@@ -24,8 +30,8 @@ public class ImageDataBase : ScriptableObject
         return rankBackgroundArray;
     }
 
-    public Sprite[] GetUpgradeTicketArray()
+    public Sprite[] GetShopContentArray()
     {
-        return upgradeTicketArray;
+        return shopContentArray;
     }
 }

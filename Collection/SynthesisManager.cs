@@ -60,6 +60,7 @@ public class SynthesisManager : MonoBehaviour
     BlockClass blockClassMat2;
 
     UpgradeValue upgradeValue;
+    UpgradeValue upgradeValue2;
     UpgradeInformation upgradeInformation;
 
     public CollectionManager collectionManager;
@@ -193,9 +194,10 @@ public class SynthesisManager : MonoBehaviour
 
             blockClass = playerDataBase.GetBlockClass(id);
             windCharacterType = blockDataBase.GetBlockInfomation(blockClass.blockType).windCharacterType;
-            rankType = blockClass.rankType + 1;
+            rankType = blockClass.rankType;
 
             upgradeValue = upgradeDataBase.GetUpgradeValue(blockClass.rankType);
+            upgradeValue2 = upgradeDataBase.GetUpgradeValue(blockClass.rankType + 1);
             upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
             nextBlockUIContent.Collection_Initialize(blockClass);
@@ -211,7 +213,7 @@ public class SynthesisManager : MonoBehaviour
 
             titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
             upgradeLevelText.text = "최대 강화 레벨 : " + upgradeValue.maxLevel + " ▶ " + (upgradeValue.maxLevel + 5);
-            valueText.text = "가치 " + upgradeValue.GetValueNumber(upgradeValue.maxLevel - 1) + " ▶ " + upgradeValue.GetValueNumber(upgradeValue.maxLevel);
+            valueText.text = "가치 " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ " + upgradeValue2.GetValueNumber(blockClass.level);
 
             needGold = upgradeValue.GetSynthesisValue();
 
@@ -442,10 +444,40 @@ public class SynthesisManager : MonoBehaviour
 
                 upgradeManager.SellBlock(blockClass.instanceId);
                 upgradeManager.SellBlock(blockClassMat1.instanceId);
-                upgradeManager.SellBlock(blockClassMat2.instanceId);
+
+                switch (rankType)
+                {
+                    case RankType.N:
+                        upgradeManager.SellBlock(blockClassMat2.instanceId);
+                        break;
+                    case RankType.R:
+                        upgradeManager.SellBlock(blockClassMat2.instanceId);
+                        break;
+                    case RankType.SR:
+                        upgradeManager.SellBlock(blockClassMat2.instanceId);
+                        break;
+                    case RankType.SSR:
+                        break;
+                    case RankType.UR:
+                        break;
+                }
 
                 synthesisResultList.Clear();
-                synthesisResultList.Add(blockClass.blockType + "_" + rankType);
+                synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
+
+                Debug.Log("합성 결과 : " + blockClass.blockType + "_" + (rankType + 1));
+
+                if(updateLevel > 0)
+                {
+                    BlockClass block = new BlockClass();
+                    block.blockType = blockClass.blockType;
+                    block.rankType = rankType + 1;
+                    block.level = updateLevel;
+
+                    playerDataBase.SetSuccessionLevel(block);
+
+                    Debug.Log(updateLevel + "레벨로 계승 될 예정입니다");
+                }
 
                 switch (windCharacterType)
                 {
@@ -471,7 +503,8 @@ public class SynthesisManager : MonoBehaviour
         BlockClass block = new BlockClass();
 
         block.blockType = blockClass.blockType;
-        block.rankType = rankType;
+        block.rankType = rankType + 1;
+        block.level = updateLevel;
 
         for (int i = 0; i < synthesisResultList.Count; i++)
         {
@@ -479,11 +512,12 @@ public class SynthesisManager : MonoBehaviour
             synthesisResultContentList[i].Collection_Initialize(block);
         }
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2.5f);
 
         synthesisResultButton.SetActive(true);
 
         Initialize();
+        collectionManager.UpdateCollection();
     }
 
     public void ClosesSynthesisResultView()

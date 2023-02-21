@@ -16,7 +16,7 @@ public class ShopContent : MonoBehaviour
     public GameObject coin;
     public Text priceCoinText;
 
-    Sprite[] upgradeTicket;
+    Sprite[] shopContentArray;
 
     ImageDataBase imageDataBase;
     ShopManager shopManager;
@@ -25,7 +25,7 @@ public class ShopContent : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
-        upgradeTicket = imageDataBase.upgradeTicketArray;
+        shopContentArray = imageDataBase.shopContentArray;
     }
 
     public void Initialize(ShopType type, ShopManager manager)
@@ -34,6 +34,8 @@ public class ShopContent : MonoBehaviour
         shopManager = manager;
 
         coin.SetActive(false);
+
+        icon.sprite = shopContentArray[(int)type];
 
         switch (type)
         {
@@ -48,8 +50,6 @@ public class ShopContent : MonoBehaviour
 
                 titleText.text = "N 등급 강화권 x5";
 
-                icon.sprite = upgradeTicket[0];
-
                 priceRMText.text = "$ 5";
 
                 break;
@@ -58,15 +58,11 @@ public class ShopContent : MonoBehaviour
 
                 titleText.text = "R 등급 강화권 x5";
 
-                icon.sprite = upgradeTicket[1];
-
                 priceRMText.text = "$ 10";
 
                 break;
             case ShopType.UpgradeTicket_SR:
                 backgroundImg.color = Color.blue;
-
-                icon.sprite = upgradeTicket[2];
 
                 titleText.text = "SR 등급 강화권 x5";
 
@@ -76,8 +72,6 @@ public class ShopContent : MonoBehaviour
             case ShopType.UpgradeTicket_SSR:
                 backgroundImg.color = new Color(1, 0, 1);
 
-                icon.sprite = upgradeTicket[3];
-
                 titleText.text = "SSR 등급 강화권 x5";
 
                 priceRMText.text = "$ 20";
@@ -86,12 +80,17 @@ public class ShopContent : MonoBehaviour
             case ShopType.UpgradeTicket_UR:
                 backgroundImg.color = Color.yellow;
 
-                icon.sprite = upgradeTicket[4];
-
                 titleText.text = "UR 등급 강화권 x5";
 
                 priceRMText.text = "$ 25";
 
+                break;
+            case ShopType.DefDestroyTicket:
+                backgroundImg.color = new Color(1, 0, 1);
+
+                titleText.text = "파괴방지권 x5";
+
+                priceRMText.text = "$ 50";
                 break;
             case ShopType.PresentA:
                 break;

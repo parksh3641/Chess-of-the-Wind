@@ -21,7 +21,7 @@ public class ShopManager : MonoBehaviour
 
         shopView.SetActive(false);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             ShopContent monster = Instantiate(shopContent);
             monster.transform.parent = shopContentTransform;
@@ -83,7 +83,7 @@ public class ShopManager : MonoBehaviour
                 Debug.Log("N 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.N, 5);
 
-                if (PlayfabManager.instance.isActive) 
+                if (PlayfabManager.instance.isActive)
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
                 break;
             case ShopType.UpgradeTicket_R:
@@ -113,6 +113,13 @@ public class ShopManager : MonoBehaviour
 
                 if (PlayfabManager.instance.isActive)
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.UR));
+                break;
+            case ShopType.DefDestroyTicket:
+                Debug.Log("파괴 방지권 구매");
+                playerDataBase.DefDestroyTicket += 5;
+
+                if (PlayfabManager.instance.isActive)
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("DefDestroyTicket", playerDataBase.DefDestroyTicket);
                 break;
             case ShopType.PresentA:
                 break;

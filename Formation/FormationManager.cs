@@ -9,9 +9,12 @@ public class FormationManager : MonoBehaviour
 
     public GameObject warningView;
 
+    public GameObject animationView;
+
     public Text warningText;
 
     private int selectNumber = 0;
+    bool isWait = false;
 
     List<string> itemList = new List<string>();
 
@@ -22,6 +25,8 @@ public class FormationManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         formationView.SetActive(false);
+        warningView.SetActive(false);
+        animationView.SetActive(false);
     }
 
     public void Initialize()
@@ -54,7 +59,16 @@ public class FormationManager : MonoBehaviour
     }
     public void SelectedFormation()
     {
-        if(selectNumber == 0)
+        if (isWait) return;
+
+        isWait = true;
+
+        StartCoroutine(SelectedFormationCoroution());
+    }
+
+    IEnumerator SelectedFormationCoroution()
+    {
+        if (selectNumber == 0)
         {
             playerDataBase.Formation = 1;
 
@@ -63,10 +77,10 @@ public class FormationManager : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
 
                 itemList.Clear();
-                itemList.Add("LeftQueen_2_D");
-                itemList.Add("LeftNight_D");
-                itemList.Add("Rook_V2_D");
-                itemList.Add("Pawn_D");
+                itemList.Add("LeftQueen_2_N");
+                itemList.Add("LeftNight_N");
+                itemList.Add("Rook_V2_N");
+                itemList.Add("Pawn_N");
 
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
             }
@@ -80,16 +94,20 @@ public class FormationManager : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
 
                 itemList.Clear();
-                itemList.Add("RightQueen_2_D");
-                itemList.Add("RightNight_D");
-                itemList.Add("Rook_V2H2_D");
-                itemList.Add("Pawn_D");
+                itemList.Add("RightQueen_2_N");
+                itemList.Add("RightNight_N");
+                itemList.Add("Rook_V2H2_N");
+                itemList.Add("Pawn_N");
 
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
             }
 
             Debug.Log("지하 세계 진형 선택");
         }
+
+        animationView.SetActive(true);
+
+        yield return new WaitForSeconds(2);
 
         formationView.SetActive(false);
     }

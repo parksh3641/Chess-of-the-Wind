@@ -126,6 +126,9 @@ public class NotionManager : MonoBehaviour
                     case NotionType.NotEnoughTicket:
                         notion.txt.text = "강화권이 부족합니다";
                         break;
+                    case NotionType.DefDestroy:
+                        notion.txt.text = "파괴 방지!";
+                        break;
                 }
                 SetColor(list.colorType);
                 SetEffect(list.effectType);

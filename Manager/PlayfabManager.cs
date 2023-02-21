@@ -637,6 +637,8 @@ public class PlayfabManager : MonoBehaviour
             playerDataBase.Gold = gold;
             //playerDataBase.Crystal = crystal;
 
+            playerDataBase.Initialize_BlockList();
+
             if (Inventory != null)
             {
                 for (int i = 0; i < Inventory.Count; i++)
@@ -752,6 +754,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "UpgradeTicket_UR":
                            playerDataBase.SetUpgradeTicket(RankType.UR, statistics.Value);
+                           break;
+                       case "DefDestroyTicket":
+                           playerDataBase.DefDestroyTicket = statistics.Value;
                            break;
                    }
                }
