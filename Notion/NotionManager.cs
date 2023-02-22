@@ -129,6 +129,9 @@ public class NotionManager : MonoBehaviour
                     case NotionType.DefDestroy:
                         notion.txt.text = "파괴 방지!";
                         break;
+                    case NotionType.SameEquipBlock:
+                        notion.txt.text = "같은 종류의 블록을 중복 장착할 수 없습니다";
+                        break;
                 }
                 SetColor(list.colorType);
                 SetEffect(list.effectType);

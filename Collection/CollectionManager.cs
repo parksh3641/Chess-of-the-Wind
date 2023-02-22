@@ -19,11 +19,6 @@ public class CollectionManager : MonoBehaviour
 
     bool check = false;
 
-    BlockClass armorBlockClass;
-    BlockClass weaponBlockClass;
-    BlockClass shieldBlockClass;
-    BlockClass newbieBlockClass;
-
     public EquipManager equipManager;
     public UpgradeManager upgradeManager;
     public PresentManager presentManager;
@@ -153,14 +148,24 @@ public class CollectionManager : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; i++)
         {
-            if (!blockList[i].instanceId.Equals(armorBlockClass.instanceId) &&
-                !blockList[i].instanceId.Equals(weaponBlockClass.instanceId) &&
-                !blockList[i].instanceId.Equals(shieldBlockClass.instanceId) &&
-                !blockList[i].instanceId.Equals(newbieBlockClass.instanceId))
+            if (!blockList[i].instanceId.Equals(playerDataBase.Armor) &&
+                !blockList[i].instanceId.Equals(playerDataBase.Weapon) &&
+                !blockList[i].instanceId.Equals(playerDataBase.Shield) &&
+                !blockList[i].instanceId.Equals(playerDataBase.Newbie))
             {
                 blockUIContentList[i].gameObject.SetActive(true);
                 blockUIContentList[i].Collection_Initialize(blockList[i]);
             }
+        }
+
+        if(playerDataBase.EquipBlock > 0)
+        {
+            CheckEquipArmor();
+            CheckEquipWeapon();
+            CheckEquipShield();
+            CheckEquipNewBie();
+
+            playerDataBase.EquipBlock = 0;
         }
     }
    
@@ -174,7 +179,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    armorBlockClass = blockList[i];
                     equipManager.EquipArmor(blockList[i]);
                     break;
                 }
@@ -189,7 +193,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Armor))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    armorBlockClass = blockList[i];
                     equipManager.EquipArmor(blockList[i]);
                     equip = true;
                     break;
@@ -213,7 +216,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    weaponBlockClass = blockList[i];
                     equipManager.EquipWeapon(blockList[i]);
                     break;
                 }
@@ -228,7 +230,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    weaponBlockClass = blockList[i];
                     equipManager.EquipWeapon(blockList[i]);
                     equip = true;
                     break;
@@ -252,7 +253,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    shieldBlockClass = blockList[i];
                     equipManager.EquipShield(blockList[i]);
                     break;
                 }
@@ -267,7 +267,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Shield))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    shieldBlockClass = blockList[i];
                     equipManager.EquipShield(blockList[i]);
                     equip = true;
                     break;
@@ -291,7 +290,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Pawn)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    newbieBlockClass = blockList[i];
                     equipManager.EquipNewBie(blockList[i]);
                     break;
                 }
@@ -306,7 +304,6 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    newbieBlockClass = blockList[i];
                     equipManager.EquipNewBie(blockList[i]);
                     equip = true;
 
@@ -318,6 +315,31 @@ public class CollectionManager : MonoBehaviour
             {
                 playerDataBase.Newbie = "";
                 CheckEquipNewBie();
+            }
+        }
+    }
+
+
+    public void CheckEquip(string id)
+    {
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                blockUIContentList[i].gameObject.SetActive(false);
+                break;
+            }
+        }
+    }
+
+    public void CheckUnEquip(string id)
+    {
+        for(int i = 0; i < blockList.Count; i ++)
+        {
+            if(blockList[i].instanceId.Equals(id))
+            {
+                blockUIContentList[i].gameObject.SetActive(true);
+                break;
             }
         }
     }

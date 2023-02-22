@@ -1,7 +1,6 @@
 ﻿using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -51,9 +50,9 @@ public class RouletteManager : MonoBehaviour
     [Title("Gauge")]
     public Image powerFillAmount;
 
-    private float power = 0;
-    private float upPower = 0.025f;
-    private float maxPower = 1f;
+    private int power = 0;
+    private int upPower = 1;
+    private int maxPower = 20;
 
     bool pinballPower = false;
     bool pinballPowerReturn = false;
@@ -82,6 +81,8 @@ public class RouletteManager : MonoBehaviour
     public CharacterManager characterManager;
     public SoundManager soundManager;
     public WindCharacterManager windCharacterManager;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
 
     public PhotonView PV;
 
@@ -138,8 +139,6 @@ public class RouletteManager : MonoBehaviour
 
             Debug.Log(total + " / " + minus);
 
-            minus = 5000;
-
             if (total * 0.6f <= minus || GameStateManager.instance.FirstBouns) //전체적으로 60%이상 돈을 잃었을 경우
             {
                 averageMinus = minus;
@@ -149,7 +148,7 @@ public class RouletteManager : MonoBehaviour
                 bounsRewards[2] = (int)(averageMinus * 0.1f);
                 bounsRewards[3] = (int)(averageMinus * 0.3f);
 
-                for(int i = 0; i < bounsTexts.Length; i ++)
+                for (int i = 0; i < bounsTexts.Length; i++)
                 {
                     bounsTexts[i].text = "돈 " + bounsRewards[i];
                 }
@@ -178,18 +177,18 @@ public class RouletteManager : MonoBehaviour
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            if(gameManager.bettingNumberList_NewBie[0] == 1)
+            if (gameManager.bettingNumberList_NewBie[0] == 1)
             {
                 for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
                 {
-                    if(leftPointerManager.pointerList[i].index % 2 == 0)
+                    if (leftPointerManager.pointerList[i].index % 2 == 0)
                     {
                         leftPointerManager.pointerList[i].Betting(true);
                         rightPointerManager.pointerList[i].Betting(true);
                     }
                 }
             }
-            else if(gameManager.bettingNumberList_NewBie[1] == 1)
+            else if (gameManager.bettingNumberList_NewBie[1] == 1)
             {
                 for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
                 {
@@ -200,7 +199,7 @@ public class RouletteManager : MonoBehaviour
                     }
                 }
             }
-            else if(gameManager.bettingNumberList_NewBie[2] == 1)
+            else if (gameManager.bettingNumberList_NewBie[2] == 1)
             {
                 leftQueen.material = choiceQueenMat;
                 rightQueen.material = choiceQueenMat;
@@ -264,7 +263,7 @@ public class RouletteManager : MonoBehaviour
         roulette2Obj.gameObject.SetActive(true);
 
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             leftPointerManager.Initialize_NewBie();
             rightPointerManager.Initialize_NewBie();
@@ -311,7 +310,7 @@ public class RouletteManager : MonoBehaviour
 
             if (PhotonNetwork.IsMasterClient)
             {
-                for(int i = 0; i < leftClock.Length; i ++)
+                for (int i = 0; i < leftClock.Length; i++)
                 {
                     leftClock[i].StartClock();
                 }
@@ -420,9 +419,9 @@ public class RouletteManager : MonoBehaviour
             buttonText.text = "다음 차례에 바람을 불 수 있습니다.";
         }
 
-        if(PhotonNetwork.IsMasterClient) //다음 사람 설정
+        if (PhotonNetwork.IsMasterClient) //다음 사람 설정
         {
-            if(PhotonNetwork.PlayerList.Length > 1) //혼자가 아닐경우
+            if (PhotonNetwork.PlayerList.Length > 1) //혼자가 아닐경우
             {
                 for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                 {
@@ -481,7 +480,7 @@ public class RouletteManager : MonoBehaviour
 
     public void BlowWindDown()
     {
-        if (!pinball.PV.IsMine && buttonClick) return;
+        if (!pinball.PV.IsMine || buttonClick) return;
 
         pinballPower = true;
 
@@ -490,7 +489,7 @@ public class RouletteManager : MonoBehaviour
 
     public void BlowWindUp()
     {
-        if (!pinball.PV.IsMine && buttonClick) return;
+        if (!pinball.PV.IsMine || buttonClick) return;
 
         buttonClick = true;
         pinballPower = false;
@@ -505,7 +504,7 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void BlowingWind(float[] wind)
     {
-        if(pinball.PV.IsMine && pinball.move)
+        if (pinball.PV.IsMine && pinball.move)
         {
             pinball.BlowingWind(wind[0], (int)wind[1]);
         }
@@ -521,40 +520,39 @@ public class RouletteManager : MonoBehaviour
 
     IEnumerator PowerCoroution()
     {
-        if (pinballPower)
+        if (!pinballPower)
         {
-            if (!pinballPowerReturn)
+            yield break;
+
+        }
+
+        if (!pinballPowerReturn)
+        {
+            if (power <= maxPower)
             {
-                if (power <= maxPower)
-                {
-                    power += upPower;
-                }
-                else
-                {
-                    pinballPowerReturn = true;
-                }
+                power += upPower;
             }
             else
             {
-                if (power > 0f)
-                {
-                    power -= upPower;
-                }
-                else
-                {
-                    pinballPowerReturn = false;
-                }
+                pinballPowerReturn = true;
             }
-
-            powerFillAmount.fillAmount = power / maxPower;
-
-            yield return new WaitForSeconds(0.02f);
-            StartCoroutine(PowerCoroution());
         }
         else
         {
-            yield break;
+            if (power > 0f)
+            {
+                power -= upPower;
+            }
+            else
+            {
+                pinballPowerReturn = false;
+            }
         }
+
+        powerFillAmount.fillAmount = (power * 1.0f) / (maxPower * 1.0f);
+
+        yield return waitForSeconds;
+        StartCoroutine(PowerCoroution());
     }
 
     public void EndPinball()
@@ -614,14 +612,14 @@ public class RouletteManager : MonoBehaviour
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", rightNumber } });
         }
 
-        while(targetNumber == 0)
+        while (targetNumber == 0)
         {
             yield return null;
         }
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            if(targetNumber % 2 == 0)
+            if (targetNumber % 2 == 0)
             {
                 PV.RPC("ShowTargetNumber_NewBie", RpcTarget.All, 0);
             }
@@ -683,7 +681,7 @@ public class RouletteManager : MonoBehaviour
     {
         targetView.SetActive(true);
 
-        if(number == 0)
+        if (number == 0)
         {
             targetText.text = "흰";
         }
@@ -708,7 +706,7 @@ public class RouletteManager : MonoBehaviour
     #region Bouns
     IEnumerator CheckBouns()
     {
-        while(bouns)
+        while (bouns)
         {
             if (bounsRoulette.speed <= 0)
             {
@@ -721,11 +719,11 @@ public class RouletteManager : MonoBehaviour
     }
     IEnumerator BounsRoulette(int rotate)
     {
-        if(rotate >= 0 && rotate < 45)
+        if (rotate >= 0 && rotate < 45)
         {
             PV.RPC("ChangeMoney", RpcTarget.All, bounsRewards[0]);
         }
-        else if(rotate >= 45 && rotate < 90)
+        else if (rotate >= 45 && rotate < 90)
         {
             PV.RPC("ChangeMoney", RpcTarget.All, bounsRewards[3]);
         }
@@ -764,9 +762,9 @@ public class RouletteManager : MonoBehaviour
     {
         if (uIManager.waitingObj.activeInHierarchy) return;
 
-        gameManager.ChangeMoney(number);
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, number);
 
-        NotionManager.instance.UseNotion("돈 " + number + " 획득!", ColorType.Green);
+        NotionManager.instance.UseNotion("보너스 룰렛 보상 : 돈 " + number + " 만큼 획득!", ColorType.Green);
     }
 
     #endregion
@@ -777,7 +775,7 @@ public class RouletteManager : MonoBehaviour
     {
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        if(ht["Status"].ToString().Equals("Roulette"))
+        if (ht["Status"].ToString().Equals("Roulette"))
         {
             if (ht["Roulette"].ToString().Equals("Left"))
             {

@@ -34,6 +34,7 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("InGame")]
         public GameType gameType = GameType.NewBie;
+        public WindCharacterType windCharacterType = WindCharacterType.Winter;
 
         [Space]
         [Title("Setting")]
@@ -234,6 +235,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.gameType = value;
+            SaveFile();
+        }
+    }
+
+    public WindCharacterType WindCharacterType
+    {
+        get
+        {
+            return gameSettings.windCharacterType;
+        }
+        set
+        {
+            gameSettings.windCharacterType = value;
             SaveFile();
         }
     }

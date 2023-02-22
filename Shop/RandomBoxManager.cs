@@ -110,7 +110,6 @@ public class RandomBoxManager : MonoBehaviour
 
             windCharacterType = WindCharacterType.Winter;
 
-
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
         }
     }
@@ -347,5 +346,67 @@ public class RandomBoxManager : MonoBehaviour
     void Delay()
     {
         isWait = false;
+    }
+
+    public void GameReward()
+    {
+        int random = Random.Range(0, 4);
+
+        string prize = "";
+
+        prizeBlockStringList.Clear();
+
+        switch (GameStateManager.instance.WindCharacterType)
+        {
+            case WindCharacterType.Winter:
+                switch(random)
+                {
+                    case 0:
+                        prize = "LeftQueen_2";
+                        break;
+                    case 1:
+                        prize = "LeftNight";
+                        break;
+                    case 2:
+                        prize = "Rook_V2";
+                        break;
+                    case 3:
+                        prize = "Pawn";
+                        break;
+                }
+
+                name += "_N";
+
+                prizeBlockStringList.Add(prize);
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
+                break;
+            case WindCharacterType.UnderWorld:
+                switch (random)
+                {
+                    case 0:
+                        prize = "RightQueen_2";
+                        break;
+                    case 1:
+                        prize = "RightNight";
+                        break;
+                    case 2:
+                        prize = "Rook_V2H2";
+                        break;
+                    case 3:
+                        prize = "Pawn";
+                        break;
+                }
+
+                prize += "_N";
+
+                prizeBlockStringList.Add(prize);
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
+
+                break;
+        }
+
+        Debug.Log("게임 플레이 보상 : " + prize);
     }
 }

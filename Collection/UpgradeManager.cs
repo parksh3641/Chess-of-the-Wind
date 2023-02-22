@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +46,7 @@ public class UpgradeManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public SellManager sellManager;
+    public EquipManager equipManager;
 
     BlockClass blockClass;
     UpgradeValue upgradeValue;
@@ -91,36 +92,36 @@ public class UpgradeManager : MonoBehaviour
 
         titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
 
-        levelText.text = "·¹º§ " + (blockClass.level + 1).ToString() + " / " + upgradeValue.maxLevel;
+        levelText.text = "ë ˆë²¨ " + (blockClass.level + 1).ToString() + " / " + upgradeValue.maxLevel;
 
-        valueText.text = "ÇöÀç °¡Ä¡ : " + upgradeValue.GetValueNumber(blockClass.level);
+        valueText.text = "í˜„ì¬ ê°€ì¹˜ : " + upgradeValue.GetValueNumber(blockClass.level);
 
-        successText.text = "¼º°ø È®·ü : " + upgradeInformation.success + "%";
-        keepText.text = "½ÇÆĞ(À¯Áö) È®·ü : " + upgradeInformation.keep + "%";
-        downText.text = "½ÇÆĞ(ÇÏ¶ô) È®·ü : " + upgradeInformation.down + "%";
-        destroyText.text = "ÆÄ±« È®·ü : " + upgradeInformation.destroy + "%";
+        successText.text = "ì„±ê³µ í™•ë¥  : " + upgradeInformation.success + "%";
+        keepText.text = "ì‹¤íŒ¨(ìœ ì§€) í™•ë¥  : " + upgradeInformation.keep + "%";
+        downText.text = "ì‹¤íŒ¨(í•˜ë½) í™•ë¥  : " + upgradeInformation.down + "%";
+        destroyText.text = "íŒŒê´´ í™•ë¥  : " + upgradeInformation.destroy + "%";
 
-        valuePlusText.text = "°¡Ä¡ : " + upgradeValue.GetValueNumber(blockClass.level) + " ¢º " + upgradeValue.GetValueNumber(blockClass.level + 1);
+        valuePlusText.text = "ê°€ì¹˜ : " + upgradeValue.GetValueNumber(blockClass.level) + " â–¶ " + upgradeValue.GetValueNumber(blockClass.level + 1);
 
         gold = playerDataBase.Gold;
 
-        goldText.text = "ÇÊ¿ä °ñµå";
+        goldText.text = "í•„ìš” ê³¨ë“œ";
         goldNumberText.text = gold + " / " + upgradeInformation.needGold;
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
 
-        ticketText.text = "°­È­±Ç";
+        ticketText.text = "ê°•í™”ê¶Œ";
         ticketNumberText.text = upgradeTicket + " / 1";
 
         defDestroyObj.SetActive(false);
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
-            Debug.Log("ÃÖ´ë ·¹º§ÀÔ´Ï´Ù");
+            Debug.Log("ìµœëŒ€ ë ˆë²¨ì…ë‹ˆë‹¤");
 
             successText.text = "";
-            keepText.text = "ÇÕ¼º½Ã °­È­ ÃÖ´ë ·¹º§ÀÌ Áõ°¡ÇÕ´Ï´Ù";
-            downText.text = "ÇÕ¼º½Ã °­È­ ·¹º§Àº ±×´ë·Î ¿¬°èµË´Ï´Ù";
+            keepText.text = "í•©ì„±ì‹œ ê°•í™” ìµœëŒ€ ë ˆë²¨ì´ ì¦ê°€í•©ë‹ˆë‹¤";
+            downText.text = "í•©ì„±ì‹œ ê°•í™” ë ˆë²¨ì€ ê·¸ëŒ€ë¡œ ì—°ê³„ë©ë‹ˆë‹¤";
             destroyText.text = "";
 
             goldNumberText.text = "-";
@@ -130,15 +131,15 @@ public class UpgradeManager : MonoBehaviour
         {
             if (gold >= upgradeInformation.needGold && upgradeTicket >= 1)
             {
-                Debug.Log("°­È­ ÁØºñ ¿Ï·á");
+                Debug.Log("ê°•í™” ì¤€ë¹„ ì™„ë£Œ");
 
-                //°­È­ ¹öÆ° »ö±òÀ» ¹Ù²ã¾ßÇÔ. ¾ÈµÇ¸é È¸»öÀ¸·Î
+                //ê°•í™” ë²„íŠ¼ ìƒ‰ê¹”ì„ ë°”ê¿”ì•¼í•¨. ì•ˆë˜ë©´ íšŒìƒ‰ìœ¼ë¡œ
             }
 
             if(upgradeInformation.destroy > 0f)
             {
                 defDestroyObj.SetActive(true);
-                defDestroyText.text = "ÆÄ±« ¹æÁö±Ç";
+                defDestroyText.text = "íŒŒê´´ ë°©ì§€ê¶Œ";
                 defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
 
                 defCheckMark.enabled = false;
@@ -161,7 +162,7 @@ public class UpgradeManager : MonoBehaviour
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
-            Debug.Log("´õ ÀÌ»ó °­È­°¡ ºÒ°¡´ÉÇÕ´Ï´Ù");
+            Debug.Log("ë” ì´ìƒ ê°•í™”ê°€ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤");
 
             NotionManager.instance.UseNotion(NotionType.MaxBlockLevel);
             return;
@@ -287,6 +288,20 @@ public class UpgradeManager : MonoBehaviour
         playerDataBase.SellBlock(id);
     }
 
+    public void SellBlockOne(string id)
+    {
+        PlayfabManager.instance.RevokeConsumeItem(id);
+        playerDataBase.SellBlock(id);
+
+        for(int i = 0; i < collectionManager.blockUIContentList.Count; i ++)
+        {
+            if(collectionManager.blockUIContentList[i].instanceId.Equals(id))
+            {
+                collectionManager.blockUIContentList[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void SellButton()
     {
         if(!collectionManager.equipManager.CheckEquipBlock(blockClass.instanceId))
@@ -327,11 +342,18 @@ public class UpgradeManager : MonoBehaviour
             isDef = false;
         }
 
-        Debug.Log("ÆÄ±« ¹æÁö±Ç : " + isDef);
+        Debug.Log("íŒŒê´´ ë°©ì§€ê¶Œ : " + isDef);
     }
 
     public void EquipButton()
     {
-
+        if(blockClass.blockType != BlockType.Pawn)
+        {
+            equipManager.OpenEquipView(blockClass);
+        }
+        else
+        {
+            equipManager.ChangeNewbie(blockClass);
+        }
     }
 }

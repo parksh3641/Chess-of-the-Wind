@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+ï»¿using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ public class SynthesisManager : MonoBehaviour
     private int needGold = 0;
     private int updateLevel = 0;
 
-    private bool isStart = false; //ÇÕ¼º ½ÃÀÛ ¿©ºÎ
+    private bool isStart = false; //í•©ì„± ì‹œì‘ ì—¬ë¶€
     private bool isMat1 = false;
     private bool isMat2 = false;
     private bool isReady = false;
@@ -127,7 +127,7 @@ public class SynthesisManager : MonoBehaviour
     void Initialize()
     {
         titleText.text = "";
-        upgradeLevelText.text = "ÇÕ¼ºÀ» ¿øÇÏ´Â ºí·ÏÀ» ¼±ÅÃÇÏ¼¼¿ä!";
+        upgradeLevelText.text = "í•©ì„±ì„ ì›í•˜ëŠ” ë¸”ë¡ì„ ì„ íƒí•˜ì„¸ìš”!";
         valueText.text = "";
 
         nextBlockUIContent.Reset_Initalize();
@@ -187,12 +187,17 @@ public class SynthesisManager : MonoBehaviour
 
             action.Invoke();
 
+            playerDataBase.EquipBlock = 0;
+
             nextBlockUIContent.Reset_Initalize();
             targetBlockUIContent.Reset_Initalize();
             matBlockUIContent1.Reset_Initalize();
             matBlockUIContent2.Reset_Initalize();
 
             blockClass = playerDataBase.GetBlockClass(id);
+
+            playerDataBase.CheckEquipId(id);
+
             windCharacterType = blockDataBase.GetBlockInfomation(blockClass.blockType).windCharacterType;
             rankType = blockClass.rankType;
 
@@ -212,8 +217,8 @@ public class SynthesisManager : MonoBehaviour
             needObj.SetActive(true);
 
             titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
-            upgradeLevelText.text = "ÃÖ´ë °­È­ ·¹º§ : " + upgradeValue.maxLevel + " ¢º " + (upgradeValue.maxLevel + 5);
-            valueText.text = "°¡Ä¡ " + upgradeValue.GetValueNumber(blockClass.level) + " ¢º " + upgradeValue2.GetValueNumber(blockClass.level);
+            upgradeLevelText.text = "ìµœëŒ€ ê°•í™” ë ˆë²¨ : " + upgradeValue.maxLevel + " â–¶ " + (upgradeValue.maxLevel + 5);
+            valueText.text = "ê°€ì¹˜ " + upgradeValue.GetValueNumber(blockClass.level) + " â–¶ " + upgradeValue2.GetValueNumber(blockClass.level);
 
             needGold = upgradeValue.GetSynthesisValue();
 
@@ -222,17 +227,17 @@ public class SynthesisManager : MonoBehaviour
             switch (blockClass.rankType)
             {
                 case RankType.N:
-                    needText.text = "ÇÊ¼ö Àç·á : 2x Nµî±Ş " + titleText.text;
+                    needText.text = "í•„ìˆ˜ ì¬ë£Œ : 2x Në“±ê¸‰ " + titleText.text;
                     break;
                 case RankType.R:
-                    needText.text = "ÇÊ¼ö Àç·á : 2x Rµî±Ş " + titleText.text;
+                    needText.text = "í•„ìˆ˜ ì¬ë£Œ : 2x Rë“±ê¸‰ " + titleText.text;
                     break;
                 case RankType.SR:
-                    needText.text = "ÇÊ¼ö Àç·á : 2x SRµî±Ş " + titleText.text;
+                    needText.text = "í•„ìˆ˜ ì¬ë£Œ : 2x SRë“±ê¸‰ " + titleText.text;
                     break;
                 case RankType.SSR:
                     matObj2.SetActive(false);
-                    needText.text = "ÇÊ¼ö Àç·á : 1x SSRµî±Ş + 1 " + titleText.text;
+                    needText.text = "í•„ìˆ˜ ì¬ë£Œ : 1x SSRë“±ê¸‰ " + titleText.text;
                     break;
                 case RankType.UR:
                     matObj2.SetActive(false);
@@ -250,11 +255,13 @@ public class SynthesisManager : MonoBehaviour
 
             isStart = true;
         }
-        else //2¹øÂ° Àç·á ¼±ÅÃ
+        else //2ë²ˆì§¸ ì¬ë£Œ ì„ íƒ
         {
             if (!isMat1 && matObj1.activeSelf)
             {
                 blockClassMat1 = playerDataBase.GetBlockClass(id);
+
+                playerDataBase.CheckEquipId(id);
 
                 matBlockUIContent1.Collection_Initialize(blockClassMat1);
 
@@ -264,11 +271,13 @@ public class SynthesisManager : MonoBehaviour
 
                 CheckSynthesisMaterial();
 
-                Debug.Log("1¹øÂ° Àç·á ¼±ÅÃµÊ");
+                Debug.Log("1ë²ˆì§¸ ì¬ë£Œ ì„ íƒë¨");
             }
             else if (!isMat2 && matObj2.activeSelf)
             {
                 blockClassMat2 = playerDataBase.GetBlockClass(id);
+
+                playerDataBase.CheckEquipId(id);
 
                 matBlockUIContent2.Collection_Initialize(blockClassMat2);
 
@@ -278,7 +287,7 @@ public class SynthesisManager : MonoBehaviour
 
                 CheckSynthesisMaterial();
 
-                Debug.Log("2¹øÂ° Àç·á ¼±ÅÃµÊ");
+                Debug.Log("2ë²ˆì§¸ ì¬ë£Œ ì„ íƒë¨");
             }
         }
     }
@@ -362,16 +371,18 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisButton.SetActive(true);
 
-        Debug.Log("ÇÕ¼º ÁØºñ ¿Ï·á");
+        Debug.Log("í•©ì„± ì¤€ë¹„ ì™„ë£Œ");
     }
 
     public void CancleSynthesis(string id)
     {
-        if (id.Equals(blockClass.instanceId)) //ÇÕ¼º Ãë¼Ò
+        if (id.Equals(blockClass.instanceId)) //í•©ì„± ì·¨ì†Œ
         {
             titleText.text = "";
-            upgradeLevelText.text = "ÇÕ¼ºÀ» ¿øÇÏ´Â ºí·ÏÀ» ¼±ÅÃÇÏ¼¼¿ä!";
+            upgradeLevelText.text = "í•©ì„±ì„ ì›í•˜ëŠ” ë¸”ë¡ì„ ì„ íƒí•˜ì„¸ìš”!";
             valueText.text = "";
+
+            playerDataBase.EquipBlock = 0;
 
             nextBlockUIContent.Reset_Initalize();
             targetBlockUIContent.Reset_Initalize();
@@ -395,7 +406,7 @@ public class SynthesisManager : MonoBehaviour
             isMat1 = false;
             isMat2 = false;
         }
-        else //Àç·á Ãë¼Ò
+        else //ì¬ë£Œ ì·¨ì†Œ
         {
             if(blockClassMat1.instanceId.Equals(id))
             {
@@ -403,7 +414,7 @@ public class SynthesisManager : MonoBehaviour
 
                 isMat1 = false;
 
-                Debug.Log("1¹øÂ° Àç·á Ãë¼Ò");
+                Debug.Log("1ë²ˆì§¸ ì¬ë£Œ ì·¨ì†Œ");
             }
 
             if(blockClassMat2.instanceId.Equals(id))
@@ -412,7 +423,7 @@ public class SynthesisManager : MonoBehaviour
 
                 isMat2 = false;
 
-                Debug.Log("2¹øÂ° Àç·á Ãë¼Ò");
+                Debug.Log("2ë²ˆì§¸ ì¬ë£Œ ì·¨ì†Œ");
             }
 
             for (int i = 0; i < blockUIContentList.Count; i++)
@@ -465,7 +476,7 @@ public class SynthesisManager : MonoBehaviour
                 synthesisResultList.Clear();
                 synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
 
-                Debug.Log("ÇÕ¼º °á°ú : " + blockClass.blockType + "_" + (rankType + 1));
+                Debug.Log("í•©ì„± ê²°ê³¼ : " + blockClass.blockType + "_" + (rankType + 1));
 
                 if(updateLevel > 0)
                 {
@@ -476,7 +487,7 @@ public class SynthesisManager : MonoBehaviour
 
                     playerDataBase.SetSuccessionLevel(block);
 
-                    Debug.Log(updateLevel + "·¹º§·Î °è½Â µÉ ¿¹Á¤ÀÔ´Ï´Ù");
+                    Debug.Log(updateLevel + "ë ˆë²¨ë¡œ ê³„ìŠ¹ ë  ì˜ˆì •ì…ë‹ˆë‹¤");
                 }
 
                 switch (windCharacterType)
@@ -491,7 +502,7 @@ public class SynthesisManager : MonoBehaviour
 
                 StartCoroutine(SynthesisCoroution());
 
-                Debug.Log("ÇÕ¼º ¼º°ø!");
+                Debug.Log("í•©ì„± ì„±ê³µ!");
             }
         }
     }
@@ -499,6 +510,8 @@ public class SynthesisManager : MonoBehaviour
     IEnumerator SynthesisCoroution()
     {
         synthesisResultView.SetActive(true);
+
+        yield return new WaitForSeconds(2.5f);
 
         BlockClass block = new BlockClass();
 
@@ -511,8 +524,6 @@ public class SynthesisManager : MonoBehaviour
             synthesisResultContentList[i].gameObject.SetActive(true);
             synthesisResultContentList[i].Collection_Initialize(block);
         }
-
-        yield return new WaitForSeconds(2.5f);
 
         synthesisResultButton.SetActive(true);
 

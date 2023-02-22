@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,49 +48,49 @@ public class ShopContent : MonoBehaviour
             case ShopType.UpgradeTicket_N:
                 backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
 
-                titleText.text = "N µî±Þ °­È­±Ç x5";
+                titleText.text = "N ë“±ê¸‰ ê°•í™”ê¶Œ x5";
 
-                priceRMText.text = "$ 5";
+                priceRMText.text = "â‚© 1500";
 
                 break;
             case ShopType.UpgradeTicket_R:
                 backgroundImg.color = Color.green;
 
-                titleText.text = "R µî±Þ °­È­±Ç x5";
+                titleText.text = "R ë“±ê¸‰ ê°•í™”ê¶Œ x5";
 
-                priceRMText.text = "$ 10";
+                priceRMText.text = "â‚© 2500";
 
                 break;
             case ShopType.UpgradeTicket_SR:
                 backgroundImg.color = Color.blue;
 
-                titleText.text = "SR µî±Þ °­È­±Ç x5";
+                titleText.text = "SR ë“±ê¸‰ ê°•í™”ê¶Œ x5";
 
-                priceRMText.text = "$ 15";
+                priceRMText.text = "â‚© 5000";
 
                 break;
             case ShopType.UpgradeTicket_SSR:
                 backgroundImg.color = new Color(1, 0, 1);
 
-                titleText.text = "SSR µî±Þ °­È­±Ç x5";
+                titleText.text = "SSR ë“±ê¸‰ ê°•í™”ê¶Œ x5";
 
-                priceRMText.text = "$ 20";
+                priceRMText.text = "â‚© 10000";
 
                 break;
             case ShopType.UpgradeTicket_UR:
                 backgroundImg.color = Color.yellow;
 
-                titleText.text = "UR µî±Þ °­È­±Ç x5";
+                titleText.text = "UR ë“±ê¸‰ ê°•í™”ê¶Œ x5";
 
-                priceRMText.text = "$ 25";
+                priceRMText.text = "â‚© 15000";
 
                 break;
             case ShopType.DefDestroyTicket:
                 backgroundImg.color = new Color(1, 0, 1);
 
-                titleText.text = "ÆÄ±«¹æÁö±Ç x5";
+                titleText.text = "íŒŒê´´ë°©ì§€ê¶Œ x5";
 
-                priceRMText.text = "$ 50";
+                priceRMText.text = "â‚© 50000";
                 break;
             case ShopType.PresentA:
                 break;

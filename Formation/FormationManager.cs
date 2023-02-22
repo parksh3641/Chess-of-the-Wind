@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,7 +37,7 @@ public class FormationManager : MonoBehaviour
         }
     }
 
-    public void SelectFormationButton(int number) //ÁøÇü ¼±ÅÃ
+    public void SelectFormationButton(int number) //ì§„í˜• ì„ íƒ
     {
         OpenWarningView(number);
     }
@@ -50,11 +50,11 @@ public class FormationManager : MonoBehaviour
 
         if (selectNumber == 0)
         {
-            warningText.text = "Á¤¸»·Î ´«ÀÇ ¼¼°è ÁøÇüÀ»\n¼±ÅÃÇÏ½Ç °Ç°¡¿ä?";
+            warningText.text = "ì •ë§ë¡œ ëˆˆì˜ ì„¸ê³„ ì§„í˜•ì„\nì„ íƒí•˜ì‹¤ ê±´ê°€ìš”?";
         }
         else
         {
-            warningText.text = "Á¤¸»·Î ÁöÇÏ ¼¼°è ÁøÇüÀ»\n¼±ÅÃÇÏ½Ç °Ç°¡¿ä?";
+            warningText.text = "ì •ë§ë¡œ ì§€í•˜ ì„¸ê³„ ì§„í˜•ì„\nì„ íƒí•˜ì‹¤ ê±´ê°€ìš”?";
         }
     }
     public void SelectedFormation()
@@ -102,7 +102,7 @@ public class FormationManager : MonoBehaviour
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
             }
 
-            Debug.Log("ÁöÇÏ ¼¼°è ÁøÇü ¼±ÅÃ");
+            Debug.Log("ì§€í•˜ ì„¸ê³„ ì§„í˜• ì„ íƒ");
         }
 
         animationView.SetActive(true);

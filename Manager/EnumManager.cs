@@ -180,5 +180,6 @@ public enum NotionType
     DontSellEquipBlock,
     NotEnoughTicket,
     DefDestroy,
+    SameEquipBlock
 
 }

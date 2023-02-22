@@ -13,6 +13,8 @@ public class ShopManager : MonoBehaviour
 
     bool isDelay = false;
 
+    public UIManager uIManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -55,7 +57,19 @@ public class ShopManager : MonoBehaviour
 
         playerDataBase.BuySnowBox += number;
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
+        if (PlayfabManager.instance.isActive)
+        {
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
+
+            if(number == 1)
+            {
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1000);
+            }
+            else
+            {
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
+            }
+        }
     }
 
     public void BuyUnderworldBox(int number)
@@ -84,42 +98,66 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.SetUpgradeTicket(RankType.N, 5);
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1500);
+                }
                 break;
             case ShopType.UpgradeTicket_R:
                 Debug.Log("R 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.R, 5);
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.R));
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 2500);
+                }
                 break;
             case ShopType.UpgradeTicket_SR:
                 Debug.Log("SR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.SR, 5);
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SR));
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 5000);
+                }
                 break;
             case ShopType.UpgradeTicket_SSR:
                 Debug.Log("SSR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.SSR, 5);
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SSR));
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 10000);
+                }
                 break;
             case ShopType.UpgradeTicket_UR:
                 Debug.Log("UR 등급 강화권 구매");
                 playerDataBase.SetUpgradeTicket(RankType.UR, 5);
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.UR));
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 15000);
+                }
                 break;
             case ShopType.DefDestroyTicket:
                 Debug.Log("파괴 방지권 구매");
                 playerDataBase.DefDestroyTicket += 5;
 
                 if (PlayfabManager.instance.isActive)
+                {
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("DefDestroyTicket", playerDataBase.DefDestroyTicket);
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 50000);
+                }
                 break;
             case ShopType.PresentA:
                 break;
@@ -132,6 +170,8 @@ public class ShopManager : MonoBehaviour
             case ShopType.PresentE:
                 break;
         }
+
+        uIManager.RenewalVC();
 
         NotionManager.instance.UseNotion(NotionType.BuyTicket);
 

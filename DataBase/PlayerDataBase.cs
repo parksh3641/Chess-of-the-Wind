@@ -84,6 +84,8 @@ public class PlayerDataBase : ScriptableObject
     [Title("Money")]
     [SerializeField]
     private int gold = 0;
+    [SerializeField]
+    private int crystal = 0;
 
     [Title("User")]
     [SerializeField]
@@ -98,6 +100,8 @@ public class PlayerDataBase : ScriptableObject
     private string shield = "";
     [SerializeField]
     private string newbie = "";
+    [SerializeField]
+    private int equipBlock = 0;
 
     [Title("Item")]
     [SerializeField]
@@ -154,6 +158,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             gold = value;
+        }
+    }
+
+    public int Crystal
+    {
+        get
+        {
+            return crystal;
+        }
+        set
+        {
+            crystal = value;
         }
     }
 
@@ -214,6 +230,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             newbie = value;
+        }
+    }
+
+    public int EquipBlock
+    {
+        get
+        {
+            return equipBlock;
+        }
+        set
+        {
+            equipBlock = value;
         }
     }
 
@@ -297,6 +325,7 @@ public class PlayerDataBase : ScriptableObject
         weapon = "";
         shield = "";
         newbie = "";
+        equipBlock = 0;
 
         snowBox = 0;
         underworldBox = 0;
@@ -367,6 +396,22 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
+        switch(equipBlock)
+        {
+            case 1:
+                armor = item.ItemInstanceId;
+                break;
+            case 2:
+                weapon = item.ItemInstanceId;
+                break;
+            case 3:
+                shield = item.ItemInstanceId;
+                break;
+            case 4:
+                newbie = item.ItemInstanceId;
+                break;
+        }
+
         BlockClass blockClass = new BlockClass();
 
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
@@ -407,7 +452,6 @@ public class PlayerDataBase : ScriptableObject
                 blockClass.blockType.Equals(successionLevel[i].blockType) && 
                 blockClass.rankType.Equals(successionLevel[i].rankType))
             {
-                Debug.Log(blockClass.blockType + " / " + successionLevel[i].level+ " 레벨로 계승됨");
                 levelCustomData.Clear();
                 levelCustomData.Add("Level", successionLevel[i].level.ToString());
 
@@ -415,6 +459,8 @@ public class PlayerDataBase : ScriptableObject
                 blockClass.level = successionLevel[i].level;
 
                 successionLevel.RemoveAt(i);
+
+                Debug.Log(blockClass.blockType + " / " + successionLevel[i].level + " 레벨로 계승됨");
             }
         }
 
@@ -457,6 +503,61 @@ public class PlayerDataBase : ScriptableObject
         }
 
         return blockClass;
+    }
+
+    public void CheckEquipId(string id)
+    {
+        if(armor.Equals(id))
+        {
+            equipBlock = 1;
+        }
+
+        if (weapon.Equals(id))
+        {
+            equipBlock = 2;
+        }
+
+        if (shield.Equals(id))
+        {
+            equipBlock = 3;
+        }
+
+        if (newbie.Equals(id))
+        {
+            equipBlock = 4;
+        }
+    }
+
+    public bool CheckOverlapBlock(BlockClass block, int number)
+    {
+        bool check = false;
+
+        switch (number)
+        {
+            case 0:
+                if(GetBlockClass(weapon).blockType.Equals(block.blockType) || GetBlockClass(shield).blockType.Equals(block.blockType))
+                {
+                    check = true;
+                }
+
+                break;
+            case 1:
+                if (GetBlockClass(armor).blockType.Equals(block.blockType) || GetBlockClass(shield).blockType.Equals(block.blockType))
+                {
+                    check = true;
+                }
+
+                break;
+            case 2:
+                if (GetBlockClass(armor).blockType.Equals(block.blockType) || GetBlockClass(weapon).blockType.Equals(block.blockType))
+                {
+                    check = true;
+                }
+
+                break;
+        }
+
+        return check;
     }
 
     public void SetSuccessionLevel(BlockClass block)

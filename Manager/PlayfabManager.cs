@@ -627,7 +627,7 @@ public class PlayfabManager : MonoBehaviour
         {
             var Inventory = result.Inventory;
             int gold = result.VirtualCurrency["GO"];
-            //int crystal = result.VirtualCurrency["ST"]; //Get Money
+            int crystal = result.VirtualCurrency["ST"]; //Get Money
 
             if (gold > 10000000)
             {
@@ -635,7 +635,7 @@ public class PlayfabManager : MonoBehaviour
             }
 
             playerDataBase.Gold = gold;
-            //playerDataBase.Crystal = crystal;
+            playerDataBase.Crystal = crystal;
 
             playerDataBase.Initialize_BlockList();
 
@@ -949,6 +949,9 @@ public class PlayfabManager : MonoBehaviour
                         playerDataBase.Gold += number;
                         //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
                         break;
+                    case MoneyType.Crystal:
+                        playerDataBase.Crystal += number;
+                        break;
                 }
 
                 //soundManager.PlaySFX(GameSfxType.GetMoney);
@@ -1001,6 +1004,9 @@ public class PlayfabManager : MonoBehaviour
             {
                 case MoneyType.Gold:
                     playerDataBase.Gold -= number;
+                    break;
+                case MoneyType.Crystal:
+                    playerDataBase.Crystal -= number;
                     break;
             }
 

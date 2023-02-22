@@ -135,7 +135,8 @@ public class Pinball3D : MonoBehaviour
             }
         }
 
-        rigid.AddForce(vector.forward * (windPower * (0.2f + force)));
+        rigid.AddForce(vector.forward * windPower);
+        //rigid.AddForce(vector.forward * (windPower * (0.02f + force)));
     }
 
     private void FixedUpdate()

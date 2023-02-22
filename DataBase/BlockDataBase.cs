@@ -39,7 +39,6 @@ public class BlockInformation
     public BlockType blockType = BlockType.Default;
     public string blockName = "";
     public int size = 0;
-    public int bettingPrice = 0;
 
     public int[] index0 = new int[2];
     public int[] index1 = new int[2];
@@ -50,6 +49,11 @@ public class BlockInformation
     public int[] index6 = new int[2];
     public int[] index7 = new int[2];
     public int[] index8 = new int[2];
+
+    public int GetSize()
+    {
+        return size;
+    }
 }
 
 [CreateAssetMenu(fileName = "BlockDataBase", menuName = "ScriptableObjects/BlockDataBase")]

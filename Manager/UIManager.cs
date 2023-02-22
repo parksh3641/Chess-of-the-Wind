@@ -8,7 +8,8 @@ public class UIManager : MonoBehaviour
 {
     [Space]
     [Title("Main")]
-    public Text coinText;
+    public Text goldText;
+    public Text crystalText;
     public Text rankPointText;
     public Text nickNameText;
 
@@ -69,11 +70,13 @@ public class UIManager : MonoBehaviour
 
     public void RenewalVC()
     {
+        goldText.text = playerDataBase.Gold.ToString();
+        crystalText.text = playerDataBase.Crystal.ToString();
+
         Debug.Log("Renewal VC");
 
-        coinText.text = playerDataBase.Gold.ToString();
-        rankPointText.text = "0";
-        nickNameText.text = GameStateManager.instance.NickName;
+        //rankPointText.text = "0";
+        //nickNameText.text = GameStateManager.instance.NickName;
     }
 
 

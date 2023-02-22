@@ -14,7 +14,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     public int number = 0;
 
     [Title("Active")]
-    public BlockType blockType;
+    public BlockClass blockClass;
     public bool isActive = false;
     bool initialize = false;
 
@@ -136,7 +136,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         initialize = true;
     }
 
-    public void SetActiveTrue(BlockType type)
+    public void SetActiveTrue(BlockClass block)
     {
         if (initialize)
         {
@@ -156,7 +156,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
             initialize = false;
         }
 
-        blockType = type;
+        blockClass = block;
         isActive = true;
 
         SetBackgroundColor(rouletteColorType);
@@ -164,11 +164,13 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         initialize = true;
     }
 
-    public void SetActiveFalse(BlockType type)
+    public void SetActiveFalse(BlockClass block)
     {
-        if(blockType.Equals(type))
+        if (blockClass == null) return;
+
+        if(blockClass.Equals(block))
         {
-            blockType = BlockType.Default;
+            blockClass = null;
 
             isActive = false;
         }
@@ -176,9 +178,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     public void SetActiveFalseAll()
     {
-        //blockType = new BlockType[System.Enum.GetValues(typeof(BlockType)).Length];
-
-        blockType = BlockType.Default;
+        blockClass = null;
 
         isActive = false;
     }
@@ -202,17 +202,10 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
         if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
         {
-            if (gameManager.money >= gameManager.blockInformation.bettingPrice * gameManager.blockInformation.size)
-            {
-                eventData.pointerDrag.transform.SetParent(blockParent);
-                eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+            eventData.pointerDrag.transform.SetParent(blockParent);
+            eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
 
-                gameManager.ExitBlock(eventData.pointerDrag.GetComponent<BlockContent>());
-            }
-            else
-            {
-                NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-            }
+            gameManager.ExitBlock(eventData.pointerDrag.GetComponent<BlockContent>());
         }
     }
 }

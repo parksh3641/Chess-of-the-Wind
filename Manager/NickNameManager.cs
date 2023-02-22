@@ -11,7 +11,6 @@ public class NickNameManager : MonoBehaviour
 
     public GameObject nickNameFirstView;
 
-    public Text nickNameText;
     public InputField inputField;
     public InputField inputFieldFree;
 
@@ -177,7 +176,7 @@ public class NickNameManager : MonoBehaviour
 
     public void Success()
     {
-        nickNameText.text = GameStateManager.instance.NickName;
+        //nickNameText.text = GameStateManager.instance.NickName;
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100);
 
@@ -188,7 +187,7 @@ public class NickNameManager : MonoBehaviour
 
     public void FreeSuccess()
     {
-        nickNameText.text = GameStateManager.instance.NickName;
+        //nickNameText.text = GameStateManager.instance.NickName;
 
         //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
@@ -204,7 +203,7 @@ public class NickNameManager : MonoBehaviour
 
     public void CopyId()
     {
-        GUIUtility.systemCopyBuffer = nickNameText.text;
+        //GUIUtility.systemCopyBuffer = nickNameText.text;
 
         //NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
     }
