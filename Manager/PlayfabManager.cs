@@ -956,7 +956,7 @@ public class PlayfabManager : MonoBehaviour
 
                 //soundManager.PlaySFX(GameSfxType.GetMoney);
 
-                uiManager.RenewalVC();
+                uiManager.Renewal();
             }
             catch (Exception e)
             {
@@ -1010,7 +1010,7 @@ public class PlayfabManager : MonoBehaviour
                     break;
             }
 
-            uiManager.RenewalVC();
+            uiManager.Renewal();
         }
         else
         {

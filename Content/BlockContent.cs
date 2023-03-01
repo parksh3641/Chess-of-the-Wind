@@ -148,10 +148,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         isDrag = false;
 
-        for (int i = 0; i < blockMainArray[(int)blockClass.blockType - 1].blockChildArray.Length; i++)
-        {
-            blockMainArray[(int)blockClass.blockType - 1].blockChildArray[i].SetBettingMark(true);
-        }
+        blockMainArray[(int)blockClass.blockType - 1].Betting(true);
     }
     public void ResetPos()
     {
@@ -169,10 +166,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             gameManager.ResetPosBlock(index);
         }
 
-        for (int i = 0; i < blockMainArray[(int)blockClass.blockType - 1].blockChildArray.Length; i++)
-        {
-            blockMainArray[(int)blockClass.blockType - 1].blockChildArray[i].SetBettingMark(false);
-        }
+        blockMainArray[(int)blockClass.blockType - 1].Betting(false);
     }
 
     public void TimeOver()
@@ -180,7 +174,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         transform.SetParent(previousParent);
         transform.position = previousParent.GetComponent<RectTransform>().position;
 
-        backgroundImg.color = new Color(1, 1, 1, 1);
+        //backgroundImg.color = new Color(1, 1, 1, 1);
         blockMain.SetActive(true);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 

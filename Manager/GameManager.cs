@@ -350,14 +350,14 @@ public class GameManager : MonoBehaviour
         //    blockContentList.Add(content);
         //}
 
-        BlockContent content2 = Instantiate(blockContent);
-        content2.transform.parent = blockContentTransform_NewBie;
-        content2.transform.localPosition = Vector3.zero;
-        content2.transform.localScale = Vector3.one;
-        content2.Initialize(this, blockRootParent.transform, blockGridParent_NewBie.transform);
-        content2.gameObject.SetActive(false);
-        newbieBlockContent = content2;
+        blockContentList.Clear();
 
+        newbieBlockContent = Instantiate(blockContent);
+        newbieBlockContent.transform.parent = blockContentTransform_NewBie;
+        newbieBlockContent.transform.localPosition = Vector3.zero;
+        newbieBlockContent.transform.localScale = Vector3.one;
+        newbieBlockContent.Initialize(this, blockRootParent.transform, blockGridParent_NewBie.transform);
+        newbieBlockContent.gameObject.SetActive(false);
 
         for (int i = 0; i < 3; i++)
         {
@@ -391,11 +391,11 @@ public class GameManager : MonoBehaviour
         moneyText.text = playerDataBase.Gold.ToString();
     }
 
-    public void GameStart_NewBie()
+    public void GameStart_Newbie()
     {
         roomText.text = "초보방";
 
-        developerInfo.text = "개발자 모드 (초보방)\n0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
@@ -424,7 +424,7 @@ public class GameManager : MonoBehaviour
     {
         roomText.text = "고수방";
 
-        developerInfo.text = "개발자 모드 (고수방)\n0 = 퀸 당첨\n1 ~24 해당 숫자 당첨\n빈칸 = 정상 진행";
+        developerInfo.text = "\n0 = 퀸 당첨\n1 ~24 해당 숫자 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
@@ -482,7 +482,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(WaitTimerCoroution());
         }
 
-        Invoke("CheckPlayer", 0.5f);
+        //Invoke("CheckPlayer", 0.5f);
     }
 
     private void CheckPlayer()
@@ -513,6 +513,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(otherBlockContentList[i].gameObject);
         }
+
         otherBlockContentList.Clear();
     }
 
@@ -571,9 +572,16 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void RestartGame()
     {
-        for (int i = 0; i < blockContentList.Count; i++)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            blockContentList[i].ResetPos();
+            newbieBlockContent.ResetPos();
+        }
+        else
+        {
+            for (int i = 0; i < blockContentList.Count; i++)
+            {
+                blockContentList[i].ResetPos();
+            }
         }
 
         for (int i = 0; i < allContentList.Count; i++)
@@ -602,14 +610,16 @@ public class GameManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.GoBetting);
 
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        uIManager.SetWaiting(false);
 
-        switch (ht["Status"])
-        {
-            case "Waiting":
-                uIManager.SetWaiting(false);
-                break;
-        }
+        //Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        //switch (ht["Status"])
+        //{
+        //    case "Waiting":
+        //        uIManager.SetWaiting(false);
+        //        break;
+        //}
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -860,6 +870,8 @@ public class GameManager : MonoBehaviour
         if(getMoney > 0)
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)getMoney);
+
+            ChangeBettingMoney();
 
             Debug.Log(getMoney + " 만큼 돈 획득");
         }
@@ -1950,9 +1962,16 @@ public class GameManager : MonoBehaviour
 
     public void BetOptionCancleButton()
     {
-        for (int i = 0; i < blockContentList.Count; i++)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            blockContentList[i].ResetPos();
+            newbieBlockContent.ResetPos();
+        }
+        else
+        {
+            for (int i = 0; i < blockContentList.Count; i++)
+            {
+                blockContentList[i].ResetPos();
+            }
         }
 
         for (int i = 0; i < allContentList.Count; i++)

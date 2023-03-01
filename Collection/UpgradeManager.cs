@@ -207,7 +207,6 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
-       
         float random = Random.Range(0, 100.0f);
 
         if (random <= upgradeInformation.destroy)
@@ -218,7 +217,9 @@ public class UpgradeManager : MonoBehaviour
             }
             else
             {
-                SellBlock(blockClass.instanceId);
+                SellBlockOne(blockClass.instanceId);
+
+                CloseUpgradeView();
 
                 NotionManager.instance.UseNotion(NotionType.UpgradeDestroy);
             }
@@ -253,6 +254,7 @@ public class UpgradeManager : MonoBehaviour
 
             playerDataBase.SetBlockLevel(blockClass.instanceId, level);
             collectionManager.SetBlockLevel(blockClass.instanceId, level);
+            equipManager.SetBlockLevel(blockClass.instanceId, level);
             blockUIContent.SetLevel(level);
 
             PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, customData);

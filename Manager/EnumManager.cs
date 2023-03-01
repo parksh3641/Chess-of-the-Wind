@@ -180,6 +180,34 @@ public enum NotionType
     DontSellEquipBlock,
     NotEnoughTicket,
     DefDestroy,
-    SameEquipBlock
+    SameEquipBlock,
+    LimitMaxBlock
+}
 
+public enum GameRankType
+{
+    Bronze_4,
+    Bronze_3,
+    Bronze_2,
+    Bronze_1,
+    Sliver_4,
+    Sliver_3,
+    Sliver_2,
+    Sliver_1,
+    Gold_4,
+    Gold_3,
+    Gold_2,
+    Gold_1,
+    Platinum_4,
+    Platinum_3,
+    Platinum_2,
+    Platinum_1,
+    Diamond_4,
+    Diamond_3,
+    Diamond_2,
+    Diamond_1,
+    Legend_4,
+    Legend_3,
+    Legend_2,
+    Legend_1,
 }

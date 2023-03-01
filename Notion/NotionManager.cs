@@ -132,6 +132,9 @@ public class NotionManager : MonoBehaviour
                     case NotionType.SameEquipBlock:
                         notion.txt.text = "같은 종류의 블록을 중복 장착할 수 없습니다";
                         break;
+                    case NotionType.LimitMaxBlock:
+                        notion.txt.text = "최대 블럭 값을 초과했습니다";
+                        break;
                 }
                 SetColor(list.colorType);
                 SetEffect(list.effectType);

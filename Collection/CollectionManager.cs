@@ -16,6 +16,7 @@ public class CollectionManager : MonoBehaviour
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
 
     bool check = false;
 
@@ -57,10 +58,12 @@ public class CollectionManager : MonoBehaviour
             }
             else
             {
-                if (blockList.Count != playerDataBase.GetBlockClass().Count)
-                {
-                    UpdateCollection();
-                }
+                //if (blockList.Count != playerDataBase.GetBlockClass().Count)
+                //{
+                //    UpdateCollection();
+                //}
+
+                UpdateCollection();
             }
         }
     }
@@ -68,6 +71,8 @@ public class CollectionManager : MonoBehaviour
     public void CloseCollectionView()
     {
         collectionView.SetActive(false);
+
+        upgradeManager.CloseUpgradeView();
     }
 
     public void Initialize()
@@ -107,10 +112,7 @@ public class CollectionManager : MonoBehaviour
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
 
-        CheckEquipArmor();
-        CheckEquipWeapon();
-        CheckEquipShield();
-        CheckEquipNewBie();
+        StartCoroutine(DelayCheckEquip());
     }
 
     public void UpdateCollection() //변경점이 생겼을 경우 업데이트
@@ -160,13 +162,21 @@ public class CollectionManager : MonoBehaviour
 
         if(playerDataBase.EquipBlock > 0)
         {
-            CheckEquipArmor();
-            CheckEquipWeapon();
-            CheckEquipShield();
-            CheckEquipNewBie();
+            StartCoroutine(DelayCheckEquip());
 
             playerDataBase.EquipBlock = 0;
         }
+    }
+
+    IEnumerator DelayCheckEquip()
+    {
+        CheckEquipArmor();
+        yield return waitForSeconds;
+        CheckEquipWeapon();
+        yield return waitForSeconds;
+        CheckEquipShield();
+        yield return waitForSeconds;
+        CheckEquipNewBie();
     }
    
 

@@ -122,6 +122,8 @@ public class SynthesisManager : MonoBehaviour
     public void CloseSynthesisView()
     {
         synthesisView.SetActive(false);
+
+        synthesisResultView.SetActive(false);
     }
 
     void Initialize()

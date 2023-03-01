@@ -222,4 +222,27 @@ public class EquipManager : MonoBehaviour
         }
         return check;
     }
+
+    public void SetBlockLevel(string id, int level)
+    {
+        if(armorBlockUI.instanceId.Equals(id))
+        {
+            armorBlockUI.SetLevel(level);
+        }
+
+        if (weaponBlockUI.instanceId.Equals(id))
+        {
+            weaponBlockUI.SetLevel(level);
+        }
+
+        if (shieldBlockUI.instanceId.Equals(id))
+        {
+            shieldBlockUI.SetLevel(level);
+        }
+
+        if (newbieBlockUI.instanceId.Equals(id))
+        {
+            newbieBlockUI.SetLevel(level);
+        }
+    }
 }

@@ -35,6 +35,7 @@ public class GameStateManager : MonoBehaviour
         [Title("InGame")]
         public GameType gameType = GameType.NewBie;
         public WindCharacterType windCharacterType = WindCharacterType.Winter;
+        public GameRankType gameRankType = GameRankType.Bronze_4;
 
         [Space]
         [Title("Setting")]
@@ -248,6 +249,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.windCharacterType = value;
+            SaveFile();
+        }
+    }
+
+    public GameRankType GameRankType
+    {
+        get
+        {
+            return gameSettings.gameRankType;
+        }
+        set
+        {
+            gameSettings.gameRankType = value;
             SaveFile();
         }
     }

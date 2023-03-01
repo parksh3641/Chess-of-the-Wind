@@ -136,7 +136,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameStateManager.instance.GameType = GameType.Gosu;
     }
 
-    public void JoinOrCreateRoom_NewBie()
+    public void JoinOrCreateRoom_Newbie()
     {
         if (isDelay) return;
 
@@ -229,7 +229,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            gameManager.GameStart_NewBie();
+            gameManager.GameStart_Newbie();
         }
         else
         {

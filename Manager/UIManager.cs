@@ -7,16 +7,15 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [Space]
-    [Title("Main")]
-    public Text goldText;
-    public Text crystalText;
-    public Text rankPointText;
-    public Text nickNameText;
-
-    [Space]
     [Title("Login")]
     public GameObject loginUI;
     public GameObject[] loginButtonList;
+
+    [Space]
+    [Title("Main")]
+    public Text goldText;
+    public Text crystalText;
+    public Text nickNameText;
 
     [Space]
     [Title("View")]
@@ -40,11 +39,17 @@ public class UIManager : MonoBehaviour
 
     [Space]
     [Title("DataBase")]
+    RankDataBase rankDataBase;
     PlayerDataBase playerDataBase;
 
     private void Awake()
     {
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        goldText.text = "0";
+        crystalText.text = "0";
+        nickNameText.text = "";
 
         loginView.SetActive(true);
         mainView.SetActive(false);
@@ -65,18 +70,16 @@ public class UIManager : MonoBehaviour
 
     public void Initialize()
     {
-        RenewalVC();
+        Renewal();
     }
 
-    public void RenewalVC()
+    public void Renewal()
     {
         goldText.text = playerDataBase.Gold.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
+        nickNameText.text = "´Ð³×ÀÓ : " + GameStateManager.instance.NickName;
 
-        Debug.Log("Renewal VC");
-
-        //rankPointText.text = "0";
-        //nickNameText.text = GameStateManager.instance.NickName;
+        Debug.Log("Main UI Renewal");
     }
 
 

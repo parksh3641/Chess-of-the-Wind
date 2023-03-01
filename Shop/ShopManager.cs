@@ -171,7 +171,7 @@ public class ShopManager : MonoBehaviour
                 break;
         }
 
-        uIManager.RenewalVC();
+        uIManager.Renewal();
 
         NotionManager.instance.UseNotion(NotionType.BuyTicket);
 

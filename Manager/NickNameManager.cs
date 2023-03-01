@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class NickNameManager : MonoBehaviour
 {
     public GameObject nickNameView;
-
     public GameObject nickNameFirstView;
 
     public InputField inputField;
@@ -17,6 +16,7 @@ public class NickNameManager : MonoBehaviour
     public string[] lines;
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 
+    public UIManager uIManager;
     public PlayerDataBase playerDataBase;
     public FormationManager formationManager;
 
@@ -176,7 +176,7 @@ public class NickNameManager : MonoBehaviour
 
     public void Success()
     {
-        //nickNameText.text = GameStateManager.instance.NickName;
+        uIManager.Renewal();
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100);
 
@@ -187,7 +187,7 @@ public class NickNameManager : MonoBehaviour
 
     public void FreeSuccess()
     {
-        //nickNameText.text = GameStateManager.instance.NickName;
+        uIManager.Renewal();
 
         //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
