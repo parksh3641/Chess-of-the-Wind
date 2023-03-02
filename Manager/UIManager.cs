@@ -19,11 +19,28 @@ public class UIManager : MonoBehaviour
 
     [Space]
     [Title("View")]
+    public Canvas mainCanvas;
+    public Canvas gameCanvas;
+
     public GameObject loginView;
     public GameObject mainView;
+
+    public GameObject vsView;
+    public Text player1Text;
+    public Text player2Text;
+    public FadeInOut fadeInOut;
+
+    [Space]
     public GameObject bettingView;
     public GameObject rouletteView;
     public GameObject bounsView;
+
+    [Space]
+    public GameObject resultView;
+    public Text resultPlayer1Text;
+    public Text resultPlayer2Text;
+    public Text resultPlayer1ValueText;
+    public Text resultPlayer2ValueText;
 
     public GameObject dontTouchObj;
     public GameObject waitingObj;
@@ -31,7 +48,8 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("MainCanvas")]
     public ShopManager shopManager;
-    public CollectionManager collectionManager;   
+    public CollectionManager collectionManager;
+    public GameManager gameManager;
 
     public Image[] bottomUIImg;
     public GameObject[] bottomUIIcon;
@@ -51,11 +69,17 @@ public class UIManager : MonoBehaviour
         crystalText.text = "0";
         nickNameText.text = "";
 
+        mainCanvas.enabled = true;
+        gameCanvas.enabled = false;
+
         loginView.SetActive(true);
         mainView.SetActive(false);
+
+        vsView.SetActive(false);
         bettingView.SetActive(false);
         rouletteView.SetActive(false);
         bounsView.SetActive(false);
+        resultView.SetActive(false);
 
         dontTouchObj.SetActive(false);
         waitingObj.SetActive(false);
@@ -111,6 +135,41 @@ public class UIManager : MonoBehaviour
         mainView.SetActive(true);
     }
 
+    public void OnMatchingSuccess(string player1, string player2)
+    {
+        StartCoroutine(MatchingCoroution(player1, player2));
+    }
+
+    IEnumerator MatchingCoroution(string player1, string player2)
+    {
+        yield return new WaitForSeconds(1f);
+
+        mainCanvas.enabled = false;
+        gameCanvas.enabled = true;
+
+        vsView.SetActive(true);
+
+        player1Text.text = player1;
+        player2Text.text = player2;
+
+        yield return new WaitForSeconds(3f);
+
+        OnGameStart();
+
+        fadeInOut.FadeOut();
+
+        yield return new WaitForSeconds(1.5f);
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            gameManager.GameStart_Newbie();
+        }
+        else
+        {
+            gameManager.GameStart_Gosu();
+        }
+    }
+
     public void OnGameStart()
     {
         mainView.SetActive(false);
@@ -126,12 +185,17 @@ public class UIManager : MonoBehaviour
 
     public void OnGameStop()
     {
+        mainCanvas.enabled = true;
+        gameCanvas.enabled = false;
+
         mainView.SetActive(true);
         bettingView.SetActive(false);
         rouletteView.SetActive(false);
 
         dontTouchObj.SetActive(false);
         waitingObj.SetActive(false);
+
+        resultView.SetActive(false);
     }
 
     public void OpenRouletteView()
@@ -148,7 +212,7 @@ public class UIManager : MonoBehaviour
         dontTouchObj.SetActive(true);
     }
 
-    public void SetWaiting(bool check)
+    public void SetWaitingView(bool check)
     {
         waitingObj.SetActive(check);
     }
@@ -156,6 +220,17 @@ public class UIManager : MonoBehaviour
     public void OpenBounsView(bool check)
     {
         bounsView.SetActive(check);
+    }
+
+    public void OpenResultView(string player1, int value1, string player2, int value2)
+    {
+        resultView.SetActive(true);
+
+        resultPlayer1Text.text = player1;
+        resultPlayer1ValueText.text = "+" + value1.ToString();
+
+        resultPlayer2Text.text = player2;
+        resultPlayer2ValueText.text = "-" + value2.ToString();
     }
 
     public void OpenMainCanvas(int number)

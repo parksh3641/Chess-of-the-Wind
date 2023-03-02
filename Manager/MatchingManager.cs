@@ -1,16 +1,17 @@
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LimitManager : MonoBehaviour
+public class MatchingManager : MonoBehaviour
 {
     GameRankType gameRankType = GameRankType.Bronze_4;
     RankInformation rankInformation = new RankInformation();
 
+    [Title("Limit")]
     public GameObject limitView;
-
     public Text rankText;
     public Text newbieEnterText;
     public Text newbieMaxBlockText;
@@ -18,15 +19,22 @@ public class LimitManager : MonoBehaviour
     public Text gosuMaxBlockText;
 
 
+    [Title("Matching")]
+    public GameObject matchingView;
+    public Text matchingText;
 
-    int limitValue = 0;
+
+    private int stakes = 0;
+    private int limitBlock = 0;
+    private int matchingWaitTime = 0;
 
     BlockClass blockClass;
     BlockClass blockClass2;
     BlockClass blockClass3;
 
-
+    public FadeInOut fadeInOut;
     public NetworkManager networkManager;
+    public UIManager uIManager;
 
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
@@ -42,6 +50,7 @@ public class LimitManager : MonoBehaviour
         rankText.text = "";
 
         limitView.SetActive(false);
+        matchingView.SetActive(false);
     }
 
     public void Initialize()
@@ -129,7 +138,8 @@ public class LimitManager : MonoBehaviour
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
-        limitValue = rankInformation.limitBlockValue;
+        stakes = rankInformation.stakes;
+        limitBlock = rankInformation.limitBlockValue;
 
         newbieEnterText.text = "입장료 : " + rankInformation.stakes;
         newbieMaxBlockText.text = "최대 블럭 값 : " + rankInformation.limitBlockValue;
@@ -146,14 +156,26 @@ public class LimitManager : MonoBehaviour
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
-        if(number > limitValue)
+        if(playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        {
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+
+            return;
+        }
+
+        if(number > limitBlock) //블럭 제한을 넘지 않는지?
         {
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+
+            return;
         }
-        else
-        {
-            networkManager.JoinOrCreateRoom_Newbie();
-        }
+
+
+        OpenMacthingView();
+
+        networkManager.JoinRandomRoom_Newbie();
+
+        Debug.Log("초보방 매칭중입니다.");
     }
 
     public void GameStartButton_Gosu()
@@ -166,13 +188,84 @@ public class LimitManager : MonoBehaviour
         int number2 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
         int number3 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
-        if (number > limitValue || number2 > limitValue || number3 > limitValue)
+        if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        {
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+
+            return;
+        }
+
+        if (number > limitBlock || number2 > limitBlock || number3 > limitBlock) //블럭 제한을 넘지 않는지?
         {
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+
+            return;
+        }
+
+        OpenMacthingView();
+
+        networkManager.JoinRandomRoom_Gosu();
+
+        Debug.Log("고수방 매칭중입니다.");
+    }
+
+    public void OpenMacthingView()
+    {
+        if (!matchingView.activeSelf)
+        {
+            matchingView.SetActive(true);
+
+            GameStateManager.instance.Stakes = stakes;
+
+            matchingWaitTime = 5;
+            StartCoroutine(WaitingPlayer());
         }
         else
         {
-            networkManager.JoinOrCreateRoom_Gosu();
+            StopAllCoroutines();
+
+            networkManager.LeaveRoom();
+
+            matchingView.SetActive(false);
         }
+    }
+
+    IEnumerator WaitingPlayer()
+    {
+        while(matchingWaitTime > 0)
+        {
+            matchingWaitTime -= 1;
+            matchingText.text = "상대방을 찾고 있습니다...\n예상 대기 시간 : " + matchingWaitTime + "초";
+
+            yield return new WaitForSeconds(1);
+        }
+
+        AlMatching();
+    }
+
+    public void PlayerMatching(string player1, string player2)
+    {
+        StopAllCoroutines();
+
+        matchingView.SetActive(false);
+
+        uIManager.OnMatchingSuccess(player1, player2);
+
+        fadeInOut.FadeOutToIn();
+
+        Debug.Log("플레이어와 매칭됩니다.");
+    }
+
+    public void AlMatching()
+    {
+        StopAllCoroutines();
+
+        matchingView.SetActive(false);
+
+        uIManager.OnMatchingSuccess(GameStateManager.instance.NickName, "인공지능");
+
+        fadeInOut.FadeOutToIn();
+
+        Debug.Log("사람이 없는 관계로 인공지능과 매칭됩니다.");
     }
 }

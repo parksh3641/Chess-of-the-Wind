@@ -12,7 +12,7 @@ public class StateManager : MonoBehaviour
     public GameManager gameManager;
     public UIManager uIManager;
     public NickNameManager nickNameManager;
-    public LimitManager limitManager;
+    public MatchingManager matchingManager;
 
 
     void Awake()
@@ -32,7 +32,7 @@ public class StateManager : MonoBehaviour
             gameManager.Initialize();
             uIManager.Initialize();
             nickNameManager.Initialize();
-            limitManager.Initialize();
+            matchingManager.Initialize();
         }
     }
 

@@ -11,18 +11,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public PhotonView PV;
 
+    RoomOptions roomOption;
+
     public bool isDelay = false;
 
-    public StateManager stateManager;
     public GameManager gameManager;
+    public StateManager stateManager;
     public CharacterManager characterManager;
+    public MatchingManager matchingManager;
 
 
     void Awake()
     {
 
     }
-
 
     public void Initialize()
     {
@@ -90,69 +92,53 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
 
-    public void CreateRoom()
-    {
-        if(GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            RoomOptions roomOption = new RoomOptions();
-            roomOption.MaxPlayers = 2;
+    //public void CreateRoom()
+    //{
+    //    if(GameStateManager.instance.GameType == GameType.NewBie)
+    //    {
+    //        RoomOptions roomOption = new RoomOptions();
+    //        roomOption.MaxPlayers = 2;
 
-            PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
-        }
-        else
-        {
-            RoomOptions roomOption = new RoomOptions();
-            roomOption.MaxPlayers = 2;
+    //        PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
+    //    }
+    //    else
+    //    {
+    //        RoomOptions roomOption = new RoomOptions();
+    //        roomOption.MaxPlayers = 2;
 
-            PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
-        }
-    }
+    //        PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
+    //    }
+    //}
 
-    public void JoinRoom()
-    {
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            PhotonNetwork.JoinRoom("NewBie");
-        }
-        else
-        {
-            PhotonNetwork.JoinRoom("Gosu");
-        }
-    }
+    //public void JoinRoom()
+    //{
+    //    if (GameStateManager.instance.GameType == GameType.NewBie)
+    //    {
+    //        PhotonNetwork.JoinRoom("NewBie");
+    //    }
+    //    else
+    //    {
+    //        PhotonNetwork.JoinRoom("Gosu");
+    //    }
+    //}
 
-    public void JoinOrCreateRoom_Developer()
-    {
-        if (isDelay) return;
 
-        isDelay = true;
-
-        SetNickName();
-
-        RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 2;
-
-        PhotonNetwork.JoinOrCreateRoom("Master", roomOption, null);
-
-        GameStateManager.instance.GameType = GameType.Gosu;
-    }
-
-    public void JoinOrCreateRoom_Newbie()
+    public void JoinRandomRoom_Newbie()
     {
         if (isDelay) return;
 
         isDelay = true;
 
         SetNickName();
-
-        RoomOptions roomOption = new RoomOptions();
-        roomOption.MaxPlayers = 2;
-
-        PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
 
         GameStateManager.instance.GameType = GameType.NewBie;
+
+        Hashtable roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, };
+
+        PhotonNetwork.JoinRandomRoom(roomProperties, 2);
     }
 
-    public void JoinOrCreateRoom_Gosu()
+    public void JoinRandomRoom_Gosu()
     {
         if (isDelay) return;
 
@@ -160,12 +146,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         SetNickName();
 
+        GameStateManager.instance.GameType = GameType.Gosu;
+
+        Hashtable roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, };
+
+        PhotonNetwork.JoinRandomRoom(roomProperties, 2);
+    }
+
+    void JoinOrCreateRoom_Newbie()
+    {
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
+        roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType } };
+
+        PhotonNetwork.JoinOrCreateRoom("NewBie", roomOption, null);
+    }
+
+    void JoinOrCreateRoom_Gosu()
+    {
+        RoomOptions roomOption = new RoomOptions();
+        roomOption.MaxPlayers = 2;
+        roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType } };
 
         PhotonNetwork.JoinOrCreateRoom("Gosu", roomOption, null);
-
-        GameStateManager.instance.GameType = GameType.Gosu;
     }
 
     void SetNickName()
@@ -175,12 +178,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             GameStateManager.instance.NickName = "Player_" + Random.Range(0, 999).ToString();
         }
 
-        PlayerPrefs.SetString("NickName", GameStateManager.instance.NickName);
-
         PhotonNetwork.LocalPlayer.NickName = GameStateManager.instance.NickName;
     }
-
-    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
     public void LeaveRoom()
     {
@@ -200,8 +199,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isDelay = false;
 
-        Debug.Log("방에 참가하였습니다.");
-
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
@@ -216,24 +213,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", 0 } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player3_Total", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player4_Total", 0 } });
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Plus", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Plus", 0 } });
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", 0 } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player3_Minus", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player4_Minus", 0 } });
         }
 
         characterManager.AddAllPlayer();
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            gameManager.GameStart_Newbie();
-        }
-        else
-        {
-            gameManager.GameStart_Gosu();
+            matchingManager.PlayerMatching(PhotonNetwork.PlayerList[0].NickName, PhotonNetwork.PlayerList[1].NickName);
         }
     }
 
@@ -256,7 +248,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isDelay = false;
 
-        Debug.Log("랜덤방에 참가할 수 없습니다.");
+        Debug.Log("랜덤방이 없어서 방을 만듭니다.");
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            JoinOrCreateRoom_Newbie();
+        }
+        else
+        {
+            JoinOrCreateRoom_Gosu();
+        }
     }
 
 

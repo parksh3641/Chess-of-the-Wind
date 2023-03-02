@@ -129,13 +129,9 @@ public class RouletteManager : MonoBehaviour
 
             int total = int.Parse(ht["Player1_Total"].ToString());
             total += int.Parse(ht["Player2_Total"].ToString());
-            total += int.Parse(ht["Player3_Total"].ToString());
-            total += int.Parse(ht["Player4_Total"].ToString());
 
             int minus = int.Parse(ht["Player1_Minus"].ToString());
             minus += int.Parse(ht["Player2_Minus"].ToString());
-            minus += int.Parse(ht["Player3_Minus"].ToString());
-            minus += int.Parse(ht["Player4_Minus"].ToString());
 
             Debug.Log(total + " / " + minus);
 
@@ -694,7 +690,7 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void GameResult(string[] target)
     {
-        gameManager.CloseRouletteView(target);
+        gameManager.GameResult(target);
         windCharacterManager.Stop();
 
         roulette1Obj.gameObject.SetActive(false);
