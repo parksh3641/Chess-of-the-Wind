@@ -18,4 +18,17 @@ public class BlockChildContent : MonoBehaviour
             blockChildArray[i].SetBettingMark(check);
         }
     }
+
+    public void SetNickName(string name)
+    {
+        if (blockChildArray.Length <= 0)
+        {
+            blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+        }
+
+        for (int i = 0; i < blockChildArray.Length; i++)
+        {
+            blockChildArray[i].SetNickName(name);
+        }
+    }
 }

@@ -33,10 +33,12 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("InGame")]
-        public GameType gameType = GameType.NewBie;
         public WindCharacterType windCharacterType = WindCharacterType.Winter;
+        public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
+        public bool playing = false;
         public int stakes = 0;
+        public int penalty = 0;
 
         [Space]
         [Title("Setting")]
@@ -228,19 +230,6 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public GameType GameType
-    {
-        get
-        {
-            return gameSettings.gameType;
-        }
-        set
-        {
-            gameSettings.gameType = value;
-            SaveFile();
-        }
-    }
-
     public WindCharacterType WindCharacterType
     {
         get
@@ -250,6 +239,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.windCharacterType = value;
+            SaveFile();
+        }
+    }
+
+    public GameType GameType
+    {
+        get
+        {
+            return gameSettings.gameType;
+        }
+        set
+        {
+            gameSettings.gameType = value;
             SaveFile();
         }
     }
@@ -267,6 +269,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public bool Playing
+    {
+        get
+        {
+            return gameSettings.playing;
+        }
+        set
+        {
+            gameSettings.playing = value;
+            SaveFile();
+        }
+    }
+
     public int Stakes
     {
         get
@@ -276,6 +291,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.stakes = value;
+            SaveFile();
+        }
+    }
+
+    public int Penalty
+    {
+        get
+        {
+            return gameSettings.penalty;
+        }
+        set
+        {
+            gameSettings.penalty = value;
             SaveFile();
         }
     }

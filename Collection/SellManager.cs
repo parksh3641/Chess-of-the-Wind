@@ -60,16 +60,13 @@ public class SellManager : MonoBehaviour
 
     public void SellButton()
     {
-        if(PlayfabManager.instance.isActive)
-        {
-            upgradeManager.SellBlockOne(blockClass.instanceId);
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+        upgradeManager.SellBlockOne(blockClass.instanceId);
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
 
-            upgradeManager.CloseUpgradeView();
-            CloseSellView();
+        upgradeManager.CloseUpgradeView();
+        CloseSellView();
 
-            NotionManager.instance.UseNotion(NotionType.SellBlock);
-        }
+        NotionManager.instance.UseNotion(NotionType.SellBlock);
     }
     public void CloseSellView()
     {

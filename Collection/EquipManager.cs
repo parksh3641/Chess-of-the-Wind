@@ -78,7 +78,7 @@ public class EquipManager : MonoBehaviour
             return;
         }
 
-        EquipArmor(blockClass);
+        EquipArmor(blockClass, false);
 
         upgradeManager.CloseUpgradeView();
 
@@ -93,7 +93,7 @@ public class EquipManager : MonoBehaviour
             return;
         }
 
-        EquipWeapon(blockClass);
+        EquipWeapon(blockClass, false);
 
         upgradeManager.CloseUpgradeView();
 
@@ -108,7 +108,7 @@ public class EquipManager : MonoBehaviour
             return;
         }
 
-        EquipShield(blockClass);
+        EquipShield(blockClass, false);
 
         upgradeManager.CloseUpgradeView();
 
@@ -117,7 +117,7 @@ public class EquipManager : MonoBehaviour
 
     public void ChangeNewbie(BlockClass block)
     {
-        EquipNewBie(block);
+        EquipNewBie(block, false);
 
         upgradeManager.CloseUpgradeView();
 
@@ -125,86 +125,94 @@ public class EquipManager : MonoBehaviour
     }
 
 
-    public void EquipArmor(BlockClass block)
+    public void EquipArmor(BlockClass block, bool first)
     {
-        if(playerDataBase.Armor.Length > 0)
+        if(!first)
         {
             collectionManager.CheckUnEquip(playerDataBase.Armor);
         }
 
         playerDataBase.Armor = block.instanceId;
 
-        collectionManager.CheckEquip(playerDataBase.Armor);
-
-        armorBlockUI.Collection_Initialize(block);
+        if (!first)
+        {
+            collectionManager.CheckEquip(playerDataBase.Armor);
+            armorBlockUI.Collection_Initialize(block);
+        }
 
         blockData.Clear();
         blockData.Add("Armor", block.instanceId);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
+        PlayfabManager.instance.SetPlayerData(blockData);
 
         Debug.Log("°©¿Ê ÀåÂø : " + block.blockType);
     }
 
-    public void EquipWeapon(BlockClass block)
+    public void EquipWeapon(BlockClass block, bool first)
     {
-        if (playerDataBase.Weapon.Length > 0)
+        if(!first)
         {
             collectionManager.CheckUnEquip(playerDataBase.Weapon);
         }
 
         playerDataBase.Weapon = block.instanceId;
 
-        collectionManager.CheckEquip(playerDataBase.Weapon);
-
-        weaponBlockUI.Collection_Initialize(block);
+        if (!first)
+        {
+            collectionManager.CheckEquip(playerDataBase.Weapon);
+            weaponBlockUI.Collection_Initialize(block);
+        }
 
         blockData.Clear();
         blockData.Add("Weapon", block.instanceId);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
+        PlayfabManager.instance.SetPlayerData(blockData);
 
         Debug.Log("°Ë ÀåÂø : " + block.blockType);
     }
 
-    public void EquipShield(BlockClass block)
+    public void EquipShield(BlockClass block, bool first)
     {
-        if (playerDataBase.Shield.Length > 0)
+        if (!first)
         {
             collectionManager.CheckUnEquip(playerDataBase.Shield);
         }
 
         playerDataBase.Shield = block.instanceId;
 
-        collectionManager.CheckEquip(playerDataBase.Shield);
-
-        shieldBlockUI.Collection_Initialize(block);
+        if (!first)
+        {
+            collectionManager.CheckEquip(playerDataBase.Shield);
+            shieldBlockUI.Collection_Initialize(block);
+        }
 
         blockData.Clear();
         blockData.Add("Shield", block.instanceId);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
+        PlayfabManager.instance.SetPlayerData(blockData);
 
         Debug.Log("¹æÆÐ ÀåÂø : " + block.blockType);
     }
 
-    public void EquipNewBie(BlockClass block)
+    public void EquipNewBie(BlockClass block, bool first)
     {
-        if (playerDataBase.Newbie.Length > 0)
+        if (!first)
         {
             collectionManager.CheckUnEquip(playerDataBase.Newbie);
         }
 
         playerDataBase.Newbie = block.instanceId;
 
-        collectionManager.CheckEquip(playerDataBase.Newbie);
-
-        newbieBlockUI.Collection_Initialize(block);
+        if (!first)
+        {
+            collectionManager.CheckEquip(playerDataBase.Newbie);
+            newbieBlockUI.Collection_Initialize(block);
+        }
 
         blockData.Clear();
         blockData.Add("NewBie", block.instanceId);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(blockData);
+        PlayfabManager.instance.SetPlayerData(blockData);
 
         Debug.Log("´ººñ ÀåÂø : " + block.blockType);
     }

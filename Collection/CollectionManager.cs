@@ -16,7 +16,7 @@ public class CollectionManager : MonoBehaviour
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.03f);
 
     bool check = false;
 
@@ -179,6 +179,47 @@ public class CollectionManager : MonoBehaviour
         CheckEquipNewBie();
     }
    
+    public void FirstEquipCheck()
+    {
+        StartCoroutine(FirstEquipCoroution());
+    }
+
+    IEnumerator FirstEquipCoroution()
+    {
+        blockList = new List<BlockClass>(blockList.Count);
+
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
+        {
+            blockList.Add(playerDataBase.GetBlockClass()[i]);
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
+            {
+                equipManager.EquipArmor(blockList[i], true);
+                yield return waitForSeconds;
+            }
+
+            if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
+            {
+                equipManager.EquipWeapon(blockList[i], true);
+                yield return waitForSeconds;
+            }
+
+            if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
+            {
+                equipManager.EquipShield(blockList[i], true);
+                yield return waitForSeconds;
+            }
+
+            if (blockList[i].blockType == BlockType.Pawn)
+            {
+                equipManager.EquipNewBie(blockList[i], false);
+                yield return waitForSeconds;
+            }
+        }
+    }
 
     public void CheckEquipArmor()
     {
@@ -189,7 +230,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipArmor(blockList[i]);
+                    equipManager.EquipArmor(blockList[i], false);
                     break;
                 }
             }
@@ -203,7 +244,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Armor))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipArmor(blockList[i]);
+                    equipManager.EquipArmor(blockList[i], false);
                     equip = true;
                     break;
                 }
@@ -226,7 +267,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipWeapon(blockList[i]);
+                    equipManager.EquipWeapon(blockList[i], false);
                     break;
                 }
             }
@@ -240,7 +281,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipWeapon(blockList[i]);
+                    equipManager.EquipWeapon(blockList[i], false);
                     equip = true;
                     break;
                 }
@@ -263,7 +304,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipShield(blockList[i]);
+                    equipManager.EquipShield(blockList[i], false);
                     break;
                 }
             }
@@ -277,7 +318,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Shield))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipShield(blockList[i]);
+                    equipManager.EquipShield(blockList[i], false);
                     equip = true;
                     break;
                 }
@@ -300,7 +341,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].blockType == BlockType.Pawn)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipNewBie(blockList[i]);
+                    equipManager.EquipNewBie(blockList[i], false);
                     break;
                 }
             }
@@ -314,7 +355,7 @@ public class CollectionManager : MonoBehaviour
                 if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipNewBie(blockList[i]);
+                    equipManager.EquipNewBie(blockList[i], false);
                     equip = true;
 
                     break;

@@ -52,7 +52,7 @@ public class RouletteManager : MonoBehaviour
 
     private int power = 0;
     private int upPower = 1;
-    private int maxPower = 20;
+    private int maxPower = 60;
 
     bool pinballPower = false;
     bool pinballPowerReturn = false;
@@ -71,8 +71,6 @@ public class RouletteManager : MonoBehaviour
     private int leftNumber = 0;
     private int rightNumber = 0;
 
-    private int averageMinus = 0;
-
     bool buttonClick = false;
     bool bouns = false;
 
@@ -82,7 +80,7 @@ public class RouletteManager : MonoBehaviour
     public SoundManager soundManager;
     public WindCharacterManager windCharacterManager;
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
 
     public PhotonView PV;
 
@@ -127,22 +125,21 @@ public class RouletteManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Roulette", "Left" } });
             }
 
-            int total = int.Parse(ht["Player1_Total"].ToString());
-            total += int.Parse(ht["Player2_Total"].ToString());
+            bool check = (bool)ht["Bouns"];
+
+            int total = GameStateManager.instance.Stakes * 2;
 
             int minus = int.Parse(ht["Player1_Minus"].ToString());
             minus += int.Parse(ht["Player2_Minus"].ToString());
 
             Debug.Log(total + " / " + minus);
 
-            if (total * 0.6f <= minus || GameStateManager.instance.FirstBouns) //전체적으로 60%이상 돈을 잃었을 경우
+            if (total * 0.7f <= minus || GameStateManager.instance.FirstBouns && !check) //공중 분해된 돈이 전체 판돈에 30% 이상일 경우 매판 1번 등장.
             {
-                averageMinus = minus;
-
-                bounsRewards[0] = (int)(averageMinus * 0.01f);
-                bounsRewards[1] = (int)(averageMinus * 0.05f);
-                bounsRewards[2] = (int)(averageMinus * 0.1f);
-                bounsRewards[3] = (int)(averageMinus * 0.3f);
+                bounsRewards[0] = (int)(minus * 0.05f);
+                bounsRewards[1] = (int)(minus * 0.1f);
+                bounsRewards[2] = (int)(minus * 0.25f);
+                bounsRewards[3] = (int)(minus * 0.5f);
 
                 for (int i = 0; i < bounsTexts.Length; i++)
                 {
@@ -150,6 +147,7 @@ public class RouletteManager : MonoBehaviour
                 }
 
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Bouns" } });
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Bouns", true } });
                 PV.RPC("PlayBouns", RpcTarget.All);
             }
             else
@@ -757,6 +755,9 @@ public class RouletteManager : MonoBehaviour
     void ChangeMoney(int number)
     {
         if (uIManager.waitingObj.activeInHierarchy) return;
+
+        gameManager.money += number;
+        gameManager.otherMoney += number;
 
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, number);
 

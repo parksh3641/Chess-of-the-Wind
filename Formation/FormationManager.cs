@@ -18,6 +18,7 @@ public class FormationManager : MonoBehaviour
 
     List<string> itemList = new List<string>();
 
+    public CollectionManager collectionManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -72,42 +73,38 @@ public class FormationManager : MonoBehaviour
         {
             playerDataBase.Formation = 1;
 
-            if (PlayfabManager.instance.isActive)
-            {
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
 
-                itemList.Clear();
-                itemList.Add("LeftQueen_2_N");
-                itemList.Add("LeftNight_N");
-                itemList.Add("Rook_V2_N");
-                itemList.Add("Pawn_N");
+            itemList.Clear();
+            itemList.Add("LeftQueen_2_N");
+            itemList.Add("LeftNight_N");
+            itemList.Add("Rook_V2_N");
+            itemList.Add("Pawn_N");
 
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
-            }
+            PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
         }
         else
         {
             playerDataBase.Formation = 2;
 
-            if (PlayfabManager.instance.isActive)
-            {
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
 
-                itemList.Clear();
-                itemList.Add("RightQueen_2_N");
-                itemList.Add("RightNight_N");
-                itemList.Add("Rook_V2H2_N");
-                itemList.Add("Pawn_N");
+            itemList.Clear();
+            itemList.Add("RightQueen_2_N");
+            itemList.Add("RightNight_N");
+            itemList.Add("Rook_V2H2_N");
+            itemList.Add("Pawn_N");
 
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
-            }
+            PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
             Debug.Log("지하 세계 진형 선택");
         }
 
         animationView.SetActive(true);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
+
+        collectionManager.FirstEquipCheck();
 
         formationView.SetActive(false);
     }

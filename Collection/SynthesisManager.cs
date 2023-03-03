@@ -445,67 +445,64 @@ public class SynthesisManager : MonoBehaviour
 
         if (synthesisButton.activeSelf)
         {
-            if(playerDataBase.Gold < needGold)
+            if (playerDataBase.Gold < needGold)
             {
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                 return;
             }
 
-            if (PlayfabManager.instance.isActive)
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, needGold);
+
+            upgradeManager.SellBlock(blockClass.instanceId);
+            upgradeManager.SellBlock(blockClassMat1.instanceId);
+
+            switch (rankType)
             {
-                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, needGold);
-
-                upgradeManager.SellBlock(blockClass.instanceId);
-                upgradeManager.SellBlock(blockClassMat1.instanceId);
-
-                switch (rankType)
-                {
-                    case RankType.N:
-                        upgradeManager.SellBlock(blockClassMat2.instanceId);
-                        break;
-                    case RankType.R:
-                        upgradeManager.SellBlock(blockClassMat2.instanceId);
-                        break;
-                    case RankType.SR:
-                        upgradeManager.SellBlock(blockClassMat2.instanceId);
-                        break;
-                    case RankType.SSR:
-                        break;
-                    case RankType.UR:
-                        break;
-                }
-
-                synthesisResultList.Clear();
-                synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
-
-                Debug.Log("합성 결과 : " + blockClass.blockType + "_" + (rankType + 1));
-
-                if(updateLevel > 0)
-                {
-                    BlockClass block = new BlockClass();
-                    block.blockType = blockClass.blockType;
-                    block.rankType = rankType + 1;
-                    block.level = updateLevel;
-
-                    playerDataBase.SetSuccessionLevel(block);
-
-                    Debug.Log(updateLevel + "레벨로 계승 될 예정입니다");
-                }
-
-                switch (windCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        PlayfabManager.instance.GrantItemsToUser("Kingdom of The Underworld", synthesisResultList);
-                        break;
-                }
-
-                StartCoroutine(SynthesisCoroution());
-
-                Debug.Log("합성 성공!");
+                case RankType.N:
+                    upgradeManager.SellBlock(blockClassMat2.instanceId);
+                    break;
+                case RankType.R:
+                    upgradeManager.SellBlock(blockClassMat2.instanceId);
+                    break;
+                case RankType.SR:
+                    upgradeManager.SellBlock(blockClassMat2.instanceId);
+                    break;
+                case RankType.SSR:
+                    break;
+                case RankType.UR:
+                    break;
             }
+
+            synthesisResultList.Clear();
+            synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
+
+            Debug.Log("합성 결과 : " + blockClass.blockType + "_" + (rankType + 1));
+
+            if (updateLevel > 0)
+            {
+                BlockClass block = new BlockClass();
+                block.blockType = blockClass.blockType;
+                block.rankType = rankType + 1;
+                block.level = updateLevel;
+
+                playerDataBase.SetSuccessionLevel(block);
+
+                Debug.Log(updateLevel + "레벨로 계승 될 예정입니다");
+            }
+
+            switch (windCharacterType)
+            {
+                case WindCharacterType.Winter:
+                    PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                    break;
+                case WindCharacterType.UnderWorld:
+                    PlayfabManager.instance.GrantItemsToUser("Kingdom of The Underworld", synthesisResultList);
+                    break;
+            }
+
+            StartCoroutine(SynthesisCoroution());
+
+            Debug.Log("합성 성공!");
         }
     }
 

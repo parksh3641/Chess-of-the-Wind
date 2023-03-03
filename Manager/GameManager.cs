@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     private int gridConstraintCount = 0;
 
-    string notion, notion2 = "";
+    string worldNotion, localNotion = "";
 
     string[] insertBlock = new string[4];
     string[] deleteBlock = new string[2];
@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Manager")]
+    public NetworkManager networkManager;
     public UIManager uIManager;
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
@@ -378,6 +379,15 @@ public class GameManager : MonoBehaviour
         index8 = new int[2];
     }
 
+    private void OnApplicationQuit()
+    {
+        if(GameStateManager.instance.Playing)
+        {
+            int number = (int)(money * 0.1f);
+            GameStateManager.instance.Penalty = number;
+        }
+    }
+
     public void Initialize()
     {
         bettingTime = GameStateManager.instance.BettingTime;
@@ -388,6 +398,8 @@ public class GameManager : MonoBehaviour
 
     void GameReset()
     {
+        StopAllCoroutines();
+
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
 
@@ -397,7 +409,9 @@ public class GameManager : MonoBehaviour
         timerText.text = timer.ToString();
         timerFillAmount.fillAmount = 1;
 
+        moneyText.text = "0";
         bettingMoneyText.text = "0";
+        otherMoneyText.text = "0";
 
         talkManager.Initialize();
         recordText.text = "";
@@ -405,11 +419,48 @@ public class GameManager : MonoBehaviour
         inputTargetNumber.text = "";
     }
 
+    public void Penalty()
+    {
+        int number = (int)(money * 0.1f);
+
+        GameStateManager.instance.Penalty = number;
+
+        uIManager.OpenDisconnectedView();
+    }
+
+    public void ExitRoom()
+    {
+        StopAllCoroutines();
+
+        GameReset();
+
+        rouletteManager.CloseRouletteView();
+        characterManager.DeleteAllPlayer();
+        soundManager.StopAllSFX();
+
+        ResetRouletteBackgroundColor();
+
+        for (int i = 0; i < blockContentList.Count; i++)
+        {
+            if (blockContentList[i].isDrag)
+            {
+                blockContentList[i].TimeOver();
+                break;
+            }
+        }
+
+        BetOptionCancleButton();
+
+        uIManager.GameEnd();
+
+        networkManager.LeaveRoom();
+    }
+
     public void GameStart_Newbie()
     {
         roomText.text = "초보방";
 
-        developerInfo.text = "0 = 퀸 당첨(28배)\n1 = 검은색, 2 = 흰색 당첨(26배)\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
@@ -438,7 +489,7 @@ public class GameManager : MonoBehaviour
     {
         roomText.text = "고수방";
 
-        developerInfo.text = "0 = 퀸 당첨(28배)\n1 ~24 해당 숫자 당첨(26배)\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 ~24 해당 숫자 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
@@ -490,14 +541,12 @@ public class GameManager : MonoBehaviour
         GameReset();
 
         ClearOtherPlayerBlock();
-
         ResetBettingMoney();
+        SetStakes();
+        SetTotalMoney();
 
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
-
-        SetStakes();
-        SetTotalMoney();
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -507,45 +556,45 @@ public class GameManager : MonoBehaviour
         //Invoke("CheckPlayerState", 0.5f);
     }
 
-    private void CheckPlayerState() //게임이 이미 시작중일 경우 대기상태
-    {
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+    //private void CheckPlayerState() //게임이 이미 시작중일 경우 대기상태
+    //{
+    //    Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        switch (ht["Status"])
-        {
-            case "Betting":
-                uIManager.SetWaitingView(true);
-                break;
-            case "Roulette":
-                uIManager.SetWaitingView(true);
-                OpenRouletteView();
-                rouletteManager.SpectatorRoulette();
-                break;
-            case "Bouns":
-                uIManager.SetWaitingView(true);
-                OpenRouletteView();
-                rouletteManager.SpectatorRoulette();
-                break;
-        }
-    }
+    //    switch (ht["Status"])
+    //    {
+    //        case "Betting":
+    //            uIManager.SetWaitingView(true);
+    //            break;
+    //        case "Roulette":
+    //            uIManager.SetWaitingView(true);
+    //            OpenRouletteView();
+    //            rouletteManager.SpectatorRoulette();
+    //            break;
+    //        case "Bouns":
+    //            uIManager.SetWaitingView(true);
+    //            OpenRouletteView();
+    //            rouletteManager.SpectatorRoulette();
+    //            break;
+    //    }
+    //}
 
     private void CheckWinnerPlayer() //게임 누가 승리했는지 체크
     {
-        if(money <= 0)
+        if(money <= 0) //내돈이 다 떨어졌을 때
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                PV.RPC("GameResult", RpcTarget.All, 0);
+                PV.RPC("GameEnd", RpcTarget.All, 1);
             }
 
             return;
         }
 
-        if(otherMoney <= 0)
+        if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PV.RPC("GameResult", RpcTarget.All, 1);
+                PV.RPC("GameEnd", RpcTarget.All, 0);
             }
 
             return;
@@ -560,29 +609,34 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
-    void GameResult(int number)
+    void GameEnd(int number)
     {
         if(number == 0)
         {
-            uIManager.OpenResultView(PhotonNetwork.PlayerList[1].NickName, otherMoney - stakes, GameStateManager.instance.NickName, money - stakes);
-
-            Debug.Log("상대방의 승리입니다.");
-        }
-        else
-        {
-            if(PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                uIManager.OpenResultView(GameStateManager.instance.NickName, money - stakes, PhotonNetwork.PlayerList[1].NickName, otherMoney - stakes);
+                uIManager.OpenResultView(GameStateManager.instance.NickName, money - stakes, "인공지능", stakes - otherMoney - stakes);
             }
             else
             {
-                uIManager.OpenResultView(GameStateManager.instance.NickName, money - stakes, "인공지능", stakes - otherMoney - stakes);
+                uIManager.OpenResultView(GameStateManager.instance.NickName, money - stakes, PhotonNetwork.PlayerList[1].NickName, otherMoney - stakes);
             }
 
             Debug.Log("내 승리입니다.");
         }
+        else
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                uIManager.OpenResultView("인공지능", otherMoney - stakes, GameStateManager.instance.NickName, money - stakes);
+            }
+            else
+            {
+                uIManager.OpenResultView(PhotonNetwork.PlayerList[1].NickName, otherMoney - stakes, GameStateManager.instance.NickName, money - stakes);
+            }
 
-        uIManager.OnRestartGame();
+            Debug.Log("상대방의 승리입니다.");
+        }
     }
 
     private void ClearOtherPlayerBlock()
@@ -658,7 +712,7 @@ public class GameManager : MonoBehaviour
 
         ClearOtherPlayerBlock();
 
-        uIManager.OnRestartGame();
+        uIManager.RestartGame();
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
 
@@ -909,78 +963,79 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        plusMoney -= minusMoney; //당첨된 금액 - 당첨 안 된 블럭 값 뺌
+        plusMoney -= minusMoney; //당첨된 금액 - 당첨 안 된 블럭값 빼기
 
         if (bettingMoney == 0)
         {
-            notion2 = "변동이 없습니다";
-            NotionManager.instance.UseNotion(notion2, ColorType.Green);
+            localNotion = "변동이 없습니다";
+            NotionManager.instance.UseNotion(localNotion, ColorType.Green);
         }
         else
         {
             if (plusMoney > bettingMoney)
             {
-                notion = "<color=#00FF00>+" + (int)(plusMoney - bettingMoney) + "   " + GameStateManager.instance.NickName + "</color>";
-                notion2 = "+" + (int)(plusMoney - bettingMoney);
+                int plus = (int)(plusMoney);
 
-                NotionManager.instance.UseNotion(notion2, ColorType.Green);
+                worldNotion = "<color=#00FF00>+" + plus + "   " + GameStateManager.instance.NickName + "</color>";
+                localNotion = "+" + plus;
+
+                NotionManager.instance.UseNotion(localNotion, ColorType.Green);
+
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, plus);
+
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1) //인공지능이랑 할 경우
+                {
+                    money += plus;
+                    moneyText.text = money.ToString();
+
+                    otherMoney -= plus;
+                    otherMoneyText.text = otherMoney.ToString();
+                }
+                else
+                {
+                    if (!PhotonNetwork.IsMasterClient) //플레이어2가 자신의 현황을 알려줍니다.
+                    {
+                        PV.RPC("CompareMoney", RpcTarget.MasterClient, plus);
+                    }
+                }
+
+                SetMinusMoney(-plus);
+
+                Debug.Log(plusMoney + " 만큼 돈 획득");
             }
             else
             {
-                notion = "<color=#FF0000>-" + (int)Mathf.Abs((bettingMoney - plusMoney)) + "   " + GameStateManager.instance.NickName + "</color>";
-                notion2 = "-" + (int)Mathf.Abs((bettingMoney - plusMoney));
+                int plus = (int)plusMoney;
+                int minus = (int)Mathf.Abs((bettingMoney - plusMoney));
 
-                NotionManager.instance.UseNotion(notion2, ColorType.Red);
+                worldNotion = "<color=#FF0000>-" + minus + "   " + GameStateManager.instance.NickName + "</color>";
+                localNotion = "-" + minus;
+
+                NotionManager.instance.UseNotion(localNotion, ColorType.Red);
+
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1) //인공지능이랑 할 경우
+                {
+                    money += plus; //딴 돈 돌려받기
+                    moneyText.text = money.ToString();
+
+                    otherMoney -= plus;
+                    otherMoneyText.text = otherMoney.ToString();
+                }
+                else
+                {
+                    if(!PhotonNetwork.IsMasterClient) //플레이어2가 자신의 현황을 알려줍니다
+                    {
+                        PV.RPC("CompareMoney", RpcTarget.MasterClient, plus);
+                    }
+                }
+
+                SetMinusMoney(plus);
+
+                Debug.Log(minus + " 만큼 돈 감소");
             }
 
-            PV.RPC("ChatRPC", RpcTarget.All, notion);
-        }
+            PV.RPC("ChatRPC", RpcTarget.All, worldNotion);
 
-        //돈 계산
-        if(plusMoney > 0)
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)plusMoney);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                money += (int)plusMoney;
-
-                moneyText.text = money.ToString();
-
-                otherMoney -= (int)plusMoney;
-
-                otherMoneyText.text = otherMoney.ToString();
-            }
-            else
-            {
-                PV.RPC("SetServerMoney", RpcTarget.Others, (int)plusMoney); //서버에 나 얼마 얻었다고 알려주기
-            }
-
-            Debug.Log(plusMoney + " 만큼 돈 획득");
-        }
-        else
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                money -= bettingMoney;
-
-                moneyText.text = money.ToString();
-
-                otherMoney += bettingMoney;
-
-                otherMoneyText.text = otherMoney.ToString();
-            }
-            else
-            {
-                PV.RPC("SetServerMoney", RpcTarget.Others, bettingMoney); //서버에 나 잃기만 했다고 알려주기
-            }
-
-            Debug.Log(bettingMoney + " 만큼 돈 감소");
-        }
-
-
-        if(bettingMoney > 0)
-        {
             randomBoxManager.GameReward();
         }
 
@@ -2079,40 +2134,14 @@ public class GameManager : MonoBehaviour
             allContentList[i].SetActiveFalseAll();
         }
 
-        ResetBettingMoney();
-
-        //NotionManager.instance.UseNotion(NotionType.Cancle);
-    }
-
-    public void BetOptionLeaveGame()
-    {
-        StopAllCoroutines();
-
-        GameReset();
-
-        rouletteManager.CloseRouletteView();
-        characterManager.DeleteAllPlayer();
-        soundManager.StopAllSFX();
-
-        ResetRouletteBackgroundColor();
-
-        for (int i = 0; i < blockContentList.Count; i++)
-        {
-            if (blockContentList[i].isDrag)
-            {
-                blockContentList[i].TimeOver();
-                break;
-            }
-        }
-
         for (int i = 0; i < bettingList.Length; i++)
         {
             bettingList[i] = 0;
         }
 
-        BetOptionCancleButton();
+        ResetBettingMoney();
 
-        uIManager.OnGameStop();
+        //NotionManager.instance.UseNotion(NotionType.Cancle);
     }
 
     [PunRPC]
@@ -2202,8 +2231,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetMinusMoney(int number) //배팅 후 결과값에 따라 잃은 돈 저장하기
+    {
+        int myNumber = 0;
+
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].NickName.Equals(GameStateManager.instance.NickName))
+            {
+                myNumber = i;
+            }
+        }
+
+        switch (myNumber)
+        {
+            case 0:
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", int.Parse(ht["Player1_Minus"].ToString()) + number } });
+                break;
+            case 1:
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", int.Parse(ht["Player2_Minus"].ToString()) + number } });
+                break;
+        }
+    }
+
     [PunRPC]
-    public void SetServerMoney(int other)
+    public void CompareMoney(int other)
     {
         int my = (int)plusMoney;
         int number = 0;
@@ -2214,63 +2268,44 @@ public class GameManager : MonoBehaviour
         {
             number = my - other;
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", int.Parse(ht["Player1_Total"].ToString()) + number } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", int.Parse(ht["Player2_Total"].ToString()) - number } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", money + number } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", otherMoney - number } });
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                money += number;
+            money += number;
+            moneyText.text = money.ToString();
 
-                moneyText.text = money.ToString();
+            otherMoney -= number;
+            otherMoneyText.text = otherMoney.ToString();
 
-                otherMoney -= number;
-
-                otherMoneyText.text = otherMoney.ToString();
-
-                Debug.Log("상대편의 돈이 감소하였습니다");
-            }
-            else
-            {
-                PV.RPC("SubtractMoney", RpcTarget.Others, number);
-            }
+            PV.RPC("SubtractMoney", RpcTarget.Others, number);
         }
         else
         {
             number = other - my;
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", int.Parse(ht["Player1_Total"].ToString()) - number } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", int.Parse(ht["Player2_Total"].ToString()) + number } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", money - number } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", otherMoney + number } });
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                money -= number;
+            money -= number;
+            moneyText.text = money.ToString();
 
-                moneyText.text = money.ToString();
+            otherMoney += number;
+            otherMoneyText.text = otherMoney.ToString();
 
-                otherMoney += number;
-
-                otherMoneyText.text = otherMoney.ToString();
-
-                Debug.Log("상대편의 돈이 증가하였습니다");
-            }
-            else
-            {
-                PV.RPC("AddMoney", RpcTarget.Others, number);
-            }
+            PV.RPC("AddMoney", RpcTarget.Others, number);
         }
 
         Debug.Log("포톤 서버 값 갱신완료");
     }
 
+
     [PunRPC]
     void AddMoney(int number)
     {
         money += number;
-
         moneyText.text = money.ToString();
 
         otherMoney -= number;
-
         otherMoneyText.text = otherMoney.ToString();
     }
 
@@ -2278,11 +2313,69 @@ public class GameManager : MonoBehaviour
     void SubtractMoney(int number)
     {
         money -= number;
-
         moneyText.text = money.ToString();
 
         otherMoney += number;
-
         otherMoneyText.text = otherMoney.ToString();
+    }
+
+    public void SurrenderButton() //기권하기
+    {
+        StopAllCoroutines();
+
+        uIManager.OpenSurrenderView();
+
+        int number = (int)(money * 0.1f);
+
+        money -= number;
+        otherMoney += number;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, number);
+
+            GameEnd(1);
+
+            PV.RPC("Surrender", RpcTarget.Others, 1);
+        }
+        else
+        {
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, number);
+
+            GameEnd(0);
+
+            PV.RPC("Surrender", RpcTarget.MasterClient, 0);
+        }
+    }
+
+    [PunRPC]
+    public void Surrender(int num)
+    {
+        StopAllCoroutines();
+
+        int number = (int)(otherMoney * 0.1f); //상대방 보유 금액의 10%
+
+        money += number;
+        otherMoney -= number;
+
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, number);
+
+        GameEnd(num);
+    }
+
+    public void Winner(string name)
+    {
+        StopAllCoroutines();
+
+        int number = (int)(otherMoney * 0.1f); //상대방 보유 금액의 10%
+
+        money += number;
+        otherMoney -= number;
+
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, number);
+
+        uIManager.OpenResultView(GameStateManager.instance.NickName, money - stakes, name, otherMoney - stakes);
+
+        Debug.Log("상대방이 방에서 튕겼습니다.");
     }
 }

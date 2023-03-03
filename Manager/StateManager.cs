@@ -33,6 +33,15 @@ public class StateManager : MonoBehaviour
             uIManager.Initialize();
             nickNameManager.Initialize();
             matchingManager.Initialize();
+
+            if(GameStateManager.instance.Penalty > 0)
+            {
+                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Penalty);
+
+                GameStateManager.instance.Penalty = 0;
+        
+                Debug.Log("패널티가 적용되었습니다");
+            }
         }
     }
 

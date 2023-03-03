@@ -1,7 +1,8 @@
-using Sirenix.OdinInspector;
+ï»¿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -25,25 +26,32 @@ public class UIManager : MonoBehaviour
     public GameObject loginView;
     public GameObject mainView;
 
-    public GameObject vsView;
-    public Text player1Text;
-    public Text player2Text;
-    public FadeInOut fadeInOut;
-
     [Space]
     public GameObject bettingView;
     public GameObject rouletteView;
     public GameObject bounsView;
+    public GameObject surrenderView;
+    public GameObject disconnectedView;
 
     [Space]
+    public GameObject dontTouchObj;
+    public GameObject waitingObj;
+
+    [Space]
+    [Title("VS")]
+    public GameObject vsView;
+    public Text player1Text;
+    public Text player2Text;
+    public FadeInOut vsFadeInOut;
+    public FadeInOut mainFadeInOut;
+
+    [Space]
+    [Title("Result")]
     public GameObject resultView;
     public Text resultPlayer1Text;
     public Text resultPlayer2Text;
     public Text resultPlayer1ValueText;
     public Text resultPlayer2ValueText;
-
-    public GameObject dontTouchObj;
-    public GameObject waitingObj;
 
     [Space]
     [Title("MainCanvas")]
@@ -80,6 +88,8 @@ public class UIManager : MonoBehaviour
         rouletteView.SetActive(false);
         bounsView.SetActive(false);
         resultView.SetActive(false);
+        surrenderView.SetActive(false);
+        disconnectedView.SetActive(false);
 
         dontTouchObj.SetActive(false);
         waitingObj.SetActive(false);
@@ -87,6 +97,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        GameStateManager.instance.Playing = false;
+
         SetLoginUI();
 
         OpenMainCanvas(2);
@@ -101,7 +113,7 @@ public class UIManager : MonoBehaviour
     {
         goldText.text = playerDataBase.Gold.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
-        nickNameText.text = "´Ð³×ÀÓ : " + GameStateManager.instance.NickName;
+        nickNameText.text = "ë‹‰ë„¤ìž„ : " + GameStateManager.instance.NickName;
 
         Debug.Log("Main UI Renewal");
     }
@@ -142,6 +154,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator MatchingCoroution(string player1, string player2)
     {
+        GameStateManager.instance.Playing = true;
+
         yield return new WaitForSeconds(1f);
 
         mainCanvas.enabled = false;
@@ -154,9 +168,9 @@ public class UIManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        OnGameStart();
+        GameStart();
 
-        fadeInOut.FadeOut();
+        vsFadeInOut.FadeOut();
 
         yield return new WaitForSeconds(1.5f);
 
@@ -170,7 +184,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnGameStart()
+    public void GameStart()
     {
         mainView.SetActive(false);
         bettingView.SetActive(true);
@@ -178,13 +192,24 @@ public class UIManager : MonoBehaviour
         dontTouchObj.SetActive(true);
     }
 
-    public void OnRestartGame()
+    public void RestartGame()
     {
         dontTouchObj.SetActive(false);
     }
 
-    public void OnGameStop()
+    public void GameEnd()
     {
+        mainFadeInOut.FadeOutToIn();
+
+        StartCoroutine(GameEndCoroution());
+    }
+
+    IEnumerator GameEndCoroution()
+    {
+        GameStateManager.instance.Playing = false;
+
+        yield return new WaitForSeconds(1f);
+
         mainCanvas.enabled = true;
         gameCanvas.enabled = false;
 
@@ -227,10 +252,48 @@ public class UIManager : MonoBehaviour
         resultView.SetActive(true);
 
         resultPlayer1Text.text = player1;
-        resultPlayer1ValueText.text = "+" + value1.ToString();
+
+        if (value1 > 0)
+        {
+            resultPlayer1ValueText.text = "+" + value1.ToString();
+        }
+        else
+        {
+            resultPlayer1ValueText.text = value1.ToString();
+        }
 
         resultPlayer2Text.text = player2;
-        resultPlayer2ValueText.text = "-" + value2.ToString();
+
+        if(value2 > 0)
+        {
+            resultPlayer2ValueText.text = "+" + value2.ToString();
+        }
+        else
+        {
+            resultPlayer2ValueText.text = value2.ToString();
+        }
+    }
+
+    public void OpenSurrenderView()
+    {
+        if (!surrenderView.activeSelf)
+        {
+            surrenderView.SetActive(true);
+        }
+        else
+        {
+            surrenderView.SetActive(false);
+        }
+    }
+
+    public void OpenDisconnectedView()
+    {
+        disconnectedView.SetActive(true);
+    }
+
+    public void GoToMain()
+    {
+        SceneManager.LoadScene("LoginScene");
     }
 
     public void OpenMainCanvas(int number)

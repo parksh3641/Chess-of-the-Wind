@@ -1,4 +1,4 @@
-using Photon.Pun;
+ï»¿using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ public class MatchingManager : MonoBehaviour
     BlockClass blockClass2;
     BlockClass blockClass3;
 
-    public FadeInOut fadeInOut;
+    public FadeInOut mainFadeInOut;
     public NetworkManager networkManager;
     public UIManager uIManager;
 
@@ -58,81 +58,81 @@ public class MatchingManager : MonoBehaviour
         int rank = rankDataBase.GetRank(playerDataBase.Gold);
         gameRankType = GameRankType.Bronze_4 + rank;
 
-        rankText.text = "ÇöÀç ·©Å© : ";
+        rankText.text = "í˜„ì¬ ë­í¬ : ";
 
         switch (gameRankType)
         {
             case GameRankType.Bronze_4:
-                rankText.text += "ºê·ĞÁî 4";
+                rankText.text += "ë¸Œë¡ ì¦ˆ 4";
                 break;
             case GameRankType.Bronze_3:
-                rankText.text += "ºê·ĞÁî 3";
+                rankText.text += "ë¸Œë¡ ì¦ˆ 3";
                 break;
             case GameRankType.Bronze_2:
-                rankText.text += "ºê·ĞÁî 2";
+                rankText.text += "ë¸Œë¡ ì¦ˆ 2";
                 break;
             case GameRankType.Bronze_1:
-                rankText.text += "ºê·ĞÁî 1";
+                rankText.text += "ë¸Œë¡ ì¦ˆ 1";
                 break;
             case GameRankType.Sliver_4:
-                rankText.text += "½Ç¹ö 4";
+                rankText.text += "ì‹¤ë²„ 4";
                 break;
             case GameRankType.Sliver_3:
-                rankText.text += "½Ç¹ö 3";
+                rankText.text += "ì‹¤ë²„ 3";
                 break;
             case GameRankType.Sliver_2:
-                rankText.text += "½Ç¹ö 2";
+                rankText.text += "ì‹¤ë²„ 2";
                 break;
             case GameRankType.Sliver_1:
-                rankText.text += "½Ç¹ö 1";
+                rankText.text += "ì‹¤ë²„ 1";
                 break;
             case GameRankType.Gold_4:
-                rankText.text += "°ñµå 4";
+                rankText.text += "ê³¨ë“œ 4";
                 break;
             case GameRankType.Gold_3:
-                rankText.text += "°ñµå 3";
+                rankText.text += "ê³¨ë“œ 3";
                 break;
             case GameRankType.Gold_2:
-                rankText.text += "°ñµå 2";
+                rankText.text += "ê³¨ë“œ 2";
                 break;
             case GameRankType.Gold_1:
-                rankText.text += "°ñµå 1";
+                rankText.text += "ê³¨ë“œ 1";
                 break;
             case GameRankType.Platinum_4:
-                rankText.text += "ÇÃ·¡Æ¼³Ñ 4";
+                rankText.text += "í”Œë˜í‹°ë„˜ 4";
                 break;
             case GameRankType.Platinum_3:
-                rankText.text += "ÇÃ·¡Æ¼³Ñ 3";
+                rankText.text += "í”Œë˜í‹°ë„˜ 3";
                 break;
             case GameRankType.Platinum_2:
-                rankText.text += "ÇÃ·¡Æ¼³Ñ 2";
+                rankText.text += "í”Œë˜í‹°ë„˜ 2";
                 break;
             case GameRankType.Platinum_1:
-                rankText.text += "ÇÃ·¡Æ¼³Ñ 1";
+                rankText.text += "í”Œë˜í‹°ë„˜ 1";
                 break;
             case GameRankType.Diamond_4:
-                rankText.text += "´ÙÀÌ¾Æ 4";
+                rankText.text += "ë‹¤ì´ì•„ 4";
                 break;
             case GameRankType.Diamond_3:
-                rankText.text += "´ÙÀÌ¾Æ 3";
+                rankText.text += "ë‹¤ì´ì•„ 3";
                 break;
             case GameRankType.Diamond_2:
-                rankText.text += "´ÙÀÌ¾Æ 2";
+                rankText.text += "ë‹¤ì´ì•„ 2";
                 break;
             case GameRankType.Diamond_1:
-                rankText.text += "´ÙÀÌ¾Æ 1";
+                rankText.text += "ë‹¤ì´ì•„ 1";
                 break;
             case GameRankType.Legend_4:
-                rankText.text += "Àü¼³";
+                rankText.text += "ì „ì„¤";
                 break;
             case GameRankType.Legend_3:
-                rankText.text += "Àü¼³";
+                rankText.text += "ì „ì„¤";
                 break;
             case GameRankType.Legend_2:
-                rankText.text += "Àü¼³";
+                rankText.text += "ì „ì„¤";
                 break;
             case GameRankType.Legend_1:
-                rankText.text += "Àü¼³";
+                rankText.text += "ì „ì„¤";
                 break;
         }
 
@@ -141,11 +141,11 @@ public class MatchingManager : MonoBehaviour
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockValue;
 
-        newbieEnterText.text = "ÀÔÀå·á : " + rankInformation.stakes;
-        newbieMaxBlockText.text = "ÃÖ´ë ºí·° °ª : " + rankInformation.limitBlockValue;
+        newbieEnterText.text = "ì…ì¥ë£Œ : " + rankInformation.stakes;
+        newbieMaxBlockText.text = "ìµœëŒ€ ë¸”ëŸ­ ê°’ : " + rankInformation.limitBlockValue;
 
-        gosuEnterText.text = "ÀÔÀå·á : " + rankInformation.stakes;
-        gosuMaxBlockText.text = "ÃÖ´ë ºí·° °ª : " + rankInformation.limitBlockValue;
+        gosuEnterText.text = "ì…ì¥ë£Œ : " + rankInformation.stakes;
+        gosuMaxBlockText.text = "ìµœëŒ€ ë¸”ëŸ­ ê°’ : " + rankInformation.limitBlockValue;
 
         GameStateManager.instance.GameRankType = gameRankType;
     }
@@ -156,14 +156,14 @@ public class MatchingManager : MonoBehaviour
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
-        if(playerDataBase.Gold < stakes) //ÀÔÀå·á¸¦ °¡Áö°í ÀÖ´ÂÁö?
+        if(playerDataBase.Gold < stakes) //ì…ì¥ë£Œë¥¼ ê°€ì§€ê³  ìˆëŠ”ì§€?
         {
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
             return;
         }
 
-        if(number > limitBlock) //ºí·° Á¦ÇÑÀ» ³ÑÁö ¾Ê´ÂÁö?
+        if(number > limitBlock) //ë¸”ëŸ­ ì œí•œì„ ë„˜ì§€ ì•ŠëŠ”ì§€?
         {
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
@@ -175,7 +175,7 @@ public class MatchingManager : MonoBehaviour
 
         networkManager.JoinRandomRoom_Newbie();
 
-        Debug.Log("ÃÊº¸¹æ ¸ÅÄªÁßÀÔ´Ï´Ù.");
+        Debug.Log("ì´ˆë³´ë°© ë§¤ì¹­ì¤‘ì…ë‹ˆë‹¤.");
     }
 
     public void GameStartButton_Gosu()
@@ -188,14 +188,14 @@ public class MatchingManager : MonoBehaviour
         int number2 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
         int number3 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
-        if (playerDataBase.Gold < stakes) //ÀÔÀå·á¸¦ °¡Áö°í ÀÖ´ÂÁö?
+        if (playerDataBase.Gold < stakes) //ì…ì¥ë£Œë¥¼ ê°€ì§€ê³  ìˆëŠ”ì§€?
         {
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
             return;
         }
 
-        if (number > limitBlock || number2 > limitBlock || number3 > limitBlock) //ºí·° Á¦ÇÑÀ» ³ÑÁö ¾Ê´ÂÁö?
+        if (number > limitBlock || number2 > limitBlock || number3 > limitBlock) //ë¸”ëŸ­ ì œí•œì„ ë„˜ì§€ ì•ŠëŠ”ì§€?
         {
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
@@ -206,7 +206,7 @@ public class MatchingManager : MonoBehaviour
 
         networkManager.JoinRandomRoom_Gosu();
 
-        Debug.Log("°í¼ö¹æ ¸ÅÄªÁßÀÔ´Ï´Ù.");
+        Debug.Log("ê³ ìˆ˜ë°© ë§¤ì¹­ì¤‘ì…ë‹ˆë‹¤.");
     }
 
     public void OpenMacthingView()
@@ -235,7 +235,7 @@ public class MatchingManager : MonoBehaviour
         while(matchingWaitTime > 0)
         {
             matchingWaitTime -= 1;
-            matchingText.text = "»ó´ë¹æÀ» Ã£°í ÀÖ½À´Ï´Ù...\n¿¹»ó ´ë±â ½Ã°£ : " + matchingWaitTime + "ÃÊ";
+            matchingText.text = "ìƒëŒ€ë°©ì„ ì°¾ê³  ìˆìŠµë‹ˆë‹¤...\nì˜ˆìƒ ëŒ€ê¸° ì‹œê°„ : " + matchingWaitTime + "ì´ˆ";
 
             yield return new WaitForSeconds(1);
         }
@@ -251,9 +251,9 @@ public class MatchingManager : MonoBehaviour
 
         uIManager.OnMatchingSuccess(player1, player2);
 
-        fadeInOut.FadeOutToIn();
+        mainFadeInOut.FadeOutToIn();
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î¿Í ¸ÅÄªµË´Ï´Ù.");
+        Debug.Log("í”Œë ˆì´ì–´ì™€ ë§¤ì¹­ë©ë‹ˆë‹¤.");
     }
 
     public void AlMatching()
@@ -262,10 +262,10 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(GameStateManager.instance.NickName, "ÀÎ°øÁö´É");
+        uIManager.OnMatchingSuccess(GameStateManager.instance.NickName, "ì¸ê³µì§€ëŠ¥");
 
-        fadeInOut.FadeOutToIn();
+        mainFadeInOut.FadeOutToIn();
 
-        Debug.Log("»ç¶÷ÀÌ ¾ø´Â °ü°è·Î ÀÎ°øÁö´É°ú ¸ÅÄªµË´Ï´Ù.");
+        Debug.Log("ì‚¬ëŒì´ ì—†ëŠ” ê´€ê³„ë¡œ ì¸ê³µì§€ëŠ¥ê³¼ ë§¤ì¹­ë©ë‹ˆë‹¤.");
     }
 }

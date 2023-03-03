@@ -29,11 +29,7 @@ public class OtherBlockContent : MonoBehaviour
         }
 
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
-
-        for (int i = 0; i < blockArray[(int)blockType - 1].blockChildArray.Length; i++)
-        {
-            blockArray[(int)blockType - 1].blockChildArray[i].SetNickName(nickName);
-        }
+        blockArray[(int)blockType - 1].SetNickName(nickName);
 
         main.raycastTarget = false;
     }

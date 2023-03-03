@@ -181,30 +181,27 @@ public class UpgradeManager : MonoBehaviour
         }
 
 
-        if (PlayfabManager.instance.isActive)
+        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, upgradeInformation.needGold);
+
+        playerDataBase.UseUpgradeTicket(upgradeValue.rankType);
+
+        switch (upgradeValue.rankType)
         {
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, upgradeInformation.needGold);
-
-            playerDataBase.UseUpgradeTicket(upgradeValue.rankType);
-
-            switch (upgradeValue.rankType)
-            {
-                case RankType.N:
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
-                    break;
-                case RankType.R:
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_R", upgradeTicket - 1);
-                    break;
-                case RankType.SR:
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SR", upgradeTicket - 1);
-                    break;
-                case RankType.SSR:
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SSR", upgradeTicket - 1);
-                    break;
-                case RankType.UR:
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_UR", upgradeTicket - 1);
-                    break;
-            }
+            case RankType.N:
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
+                break;
+            case RankType.R:
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_R", upgradeTicket - 1);
+                break;
+            case RankType.SR:
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SR", upgradeTicket - 1);
+                break;
+            case RankType.SSR:
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SSR", upgradeTicket - 1);
+                break;
+            case RankType.UR:
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_UR", upgradeTicket - 1);
+                break;
         }
 
         float random = Random.Range(0, 100.0f);

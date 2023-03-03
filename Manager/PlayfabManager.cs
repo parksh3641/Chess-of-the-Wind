@@ -771,14 +771,30 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetPlayerData(Dictionary<string, string> data)
     {
-        var request = new UpdateUserDataRequest() { Data = data, Permission = UserDataPermission.Public };
         try
         {
-            PlayFabClientAPI.UpdateUserData(request, (result) =>
+            if (NetworkConnect.instance.CheckConnectInternet())
             {
-                Debug.Log("Update Player Data!");
+                if (!isActive) return;
 
-            }, DisplayPlayfabError);
+                var request = new UpdateUserDataRequest() { Data = data, Permission = UserDataPermission.Public };
+                try
+                {
+                    PlayFabClientAPI.UpdateUserData(request, (result) =>
+                    {
+                        Debug.Log("Update Player Data!");
+
+                    }, DisplayPlayfabError);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+            else
+            {
+                uiManager.OpenDisconnectedView();
+            }
         }
         catch (Exception e)
         {
@@ -842,79 +858,42 @@ public class PlayfabManager : MonoBehaviour
         });
     }
 
-    public void UpdatePlayerStatistics(List<StatisticUpdate> data)
+    public void UpdatePlayerStatisticsInsert(string name, int value)
     {
-        if (NetworkConnect.instance.CheckConnectInternet())
+        try
         {
-            try
+            if (NetworkConnect.instance.CheckConnectInternet())
             {
+                if (!isActive) return;
+
                 PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
                 {
                     FunctionName = "UpdatePlayerStatistics",
                     FunctionParameter = new
                     {
-                        Statistics = data
-                    },
-                    GeneratePlayStreamEvent = true,
-                }, OnCloudUpdateStats
-                , DisplayPlayfabError);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-        }
-        else
-        {
-            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
-        }
-    }
-
-    public void UpdatePlayerStatisticsInsert(string name, int value)
-    {
-        try
-        {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "UpdatePlayerStatistics",
-                FunctionParameter = new
-                {
-                    Statistics = new List<StatisticUpdate>
+                        Statistics = new List<StatisticUpdate>
                 {
                     new StatisticUpdate {StatisticName = name, Value = value}
                 }
+                    },
+                    GeneratePlayStreamEvent = true,
                 },
-                GeneratePlayStreamEvent = true,
-            },
             result =>
             {
                 OnCloudUpdateStats(result);
-
-                //switch (name)
-                //{
-                //    case "UpgradeTicket_N":
-                //        playerDataBase.SetUpgradeTicket(RankType.N, value);
-                //        break;
-                //    case "UpgradeTicket_R":
-                //        playerDataBase.SetUpgradeTicket(RankType.R, value);
-                //        break;
-                //    case "UpgradeTicket_SR":
-                //        playerDataBase.SetUpgradeTicket(RankType.SR, value);
-                //        break;
-                //    case "UpgradeTicket_SSR":
-                //        playerDataBase.SetUpgradeTicket(RankType.SSR, value);
-                //        break;
-                //    case "UpgradeTicket_UR":
-                //        playerDataBase.SetUpgradeTicket(RankType.UR, value);
-                //        break;
-                //}
             }
             , DisplayPlayfabError);
+            }
+            else
+            {
+                uiManager.OpenDisconnectedView();
+            }
         }
         catch (Exception e)
         {
             Debug.LogError(e.Message);
         }
+
     }
 
     public void UpdateAddCurrency(MoneyType type, int number)
@@ -931,10 +910,12 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
 
-        if (NetworkConnect.instance.CheckConnectInternet())
+        try
         {
-            try
+            if (NetworkConnect.instance.CheckConnectInternet())
             {
+                if (!isActive) return;
+
                 PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
                 {
                     FunctionName = "AddMoney",
@@ -958,16 +939,15 @@ public class PlayfabManager : MonoBehaviour
 
                 uiManager.Renewal();
             }
-            catch (Exception e)
+            else
             {
-                Debug.LogError(e.Message);
+                uiManager.OpenDisconnectedView();
             }
         }
-        else
+        catch (Exception e)
         {
-            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+            Debug.LogError(e.Message);
         }
-
     }
 
     public void UpdateSubtractCurrency(MoneyType type, int number)
@@ -984,46 +964,54 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
 
-        if (NetworkConnect.instance.CheckConnectInternet())
+        try
         {
-            try
+            if (NetworkConnect.instance.CheckConnectInternet())
             {
+                if (!isActive) return;
+
                 PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
                 {
                     FunctionName = "SubtractMoney",
                     FunctionParameter = new { currencyType = currentType, currencyAmount = number },
                     GeneratePlayStreamEvent = true,
                 }, OnCloudUpdateStats, DisplayPlayfabError);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
 
-            switch (type)
-            {
-                case MoneyType.Gold:
-                    playerDataBase.Gold -= number;
-                    break;
-                case MoneyType.Crystal:
-                    playerDataBase.Crystal -= number;
-                    break;
-            }
+                switch (type)
+                {
+                    case MoneyType.Gold:
+                        playerDataBase.Gold -= number;
+                        break;
+                    case MoneyType.Crystal:
+                        playerDataBase.Crystal -= number;
+                        break;
+                }
 
-            uiManager.Renewal();
+                uiManager.Renewal();
+            }
+            else
+            {
+                uiManager.OpenDisconnectedView();
+            }
         }
-        else
+        catch (Exception e)
         {
-            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+            Debug.LogError(e.Message);
         }
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
     {
-        PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
+        try
         {
-            DisplayName = nickname
-        },
+            if (NetworkConnect.instance.CheckConnectInternet())
+            {
+                if (!isActive) return;
+
+                PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
+                {
+                    DisplayName = nickname
+                },
         result =>
         {
             Debug.Log("Update NickName : " + result.DisplayName);
@@ -1042,6 +1030,16 @@ public class PlayfabManager : MonoBehaviour
 
             //NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
         });
+            }
+            else
+            {
+                uiManager.OpenDisconnectedView();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     public void UpdateDisplayName(string nickname)
@@ -1385,20 +1383,29 @@ public class PlayfabManager : MonoBehaviour
     {
         try
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            if (NetworkConnect.instance.CheckConnectInternet())
             {
-                FunctionName = "GrantItemsToUser",
-                FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
-                GeneratePlayStreamEvent = true,
-            }
+                if (!isActive) return;
+
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "GrantItemsToUser",
+                    FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
+                    GeneratePlayStreamEvent = true,
+                }
             , OnCloudUpdateStats, DisplayPlayfabError);
+
+                Invoke("GetUserInventory", 2.0f);
+            }
+            else
+            {
+                uiManager.OpenDisconnectedView();
+            }
         }
         catch (Exception e)
         {
             Debug.LogError(e.Message);
         }
-
-        Invoke("GetUserInventory", 2.0f);
     }
 
     public void RestorePurchases()
