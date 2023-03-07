@@ -58,7 +58,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Bouns")]
-        public bool firstBouns = false;
+        public bool checkBouns = false;
     }
     #region Data
 
@@ -101,15 +101,15 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public bool FirstBouns
+    public bool CheckBouns
     {
         get
         {
-            return gameSettings.firstBouns;
+            return gameSettings.checkBouns;
         }
         set
         {
-            gameSettings.firstBouns = value;
+            gameSettings.checkBouns = value;
             SaveFile();
         }
     }

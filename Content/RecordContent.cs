@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TalkContent : MonoBehaviour
+public class RecordContent : MonoBehaviour
 {
     Text talkText;
 

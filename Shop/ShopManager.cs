@@ -155,7 +155,7 @@ public class ShopManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.BuyTicket);
 
         isDelay = true;
-        Invoke("Delay", 1f);
+        Invoke("Delay", 0.5f);
     }
 
     void Delay()

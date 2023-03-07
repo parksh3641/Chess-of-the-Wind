@@ -375,7 +375,7 @@ public class RandomBoxManager : MonoBehaviour
                         break;
                 }
 
-                name += "_N";
+                prize += "_N";
 
                 prizeBlockStringList.Add(prize);
 

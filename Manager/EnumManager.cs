@@ -79,7 +79,7 @@ public enum BlockType
     Rook_V2H2,
     Pawn,
     Spider,
-    Tetris_I,
+    Rook_V4,
     Tetris_I_Hor,
     Tetris_T,
     Tetris_L,

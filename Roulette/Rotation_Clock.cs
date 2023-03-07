@@ -8,6 +8,9 @@ public class Rotation_Clock : MonoBehaviour
 {
     public float speed = 40f;
 
+    public MeshRenderer meshRenderer;
+    public Transform point;
+
     public PhotonView PV;
 
     WaitForSeconds waitForSecond = new WaitForSeconds(0.01f);
@@ -17,6 +20,8 @@ public class Rotation_Clock : MonoBehaviour
     public void Awake()
     {
         transform.localRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+        PV = GetComponent<PhotonView>();
     }
 
     [Button]

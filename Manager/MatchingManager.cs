@@ -11,7 +11,6 @@ public class MatchingManager : MonoBehaviour
     RankInformation rankInformation = new RankInformation();
 
     [Title("Limit")]
-    public GameObject limitView;
     public Text rankText;
     public Text newbieEnterText;
     public Text newbieMaxBlockText;
@@ -49,7 +48,6 @@ public class MatchingManager : MonoBehaviour
 
         rankText.text = "";
 
-        limitView.SetActive(false);
         matchingView.SetActive(false);
     }
 
@@ -152,6 +150,11 @@ public class MatchingManager : MonoBehaviour
 
     public void GameStartButton_Newbie()
     {
+        rankInformation = rankDataBase.GetRankInformation(gameRankType);
+
+        stakes = rankInformation.stakes;
+        limitBlock = rankInformation.limitBlockValue;
+
         blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
@@ -253,7 +256,7 @@ public class MatchingManager : MonoBehaviour
 
         mainFadeInOut.FadeOutToIn();
 
-        Debug.Log("플레이어와 매칭됩니다.");
+        Debug.Log("플레이어와 매칭되었습니다.");
     }
 
     public void AlMatching()

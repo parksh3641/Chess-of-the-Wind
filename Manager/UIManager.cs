@@ -48,10 +48,8 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("Result")]
     public GameObject resultView;
-    public Text resultPlayer1Text;
-    public Text resultPlayer2Text;
-    public Text resultPlayer1ValueText;
-    public Text resultPlayer2ValueText;
+    public Text resultTitleText;
+    public Text resultGoldText;
 
     [Space]
     [Title("MainCanvas")]
@@ -111,8 +109,8 @@ public class UIManager : MonoBehaviour
 
     public void Renewal()
     {
-        goldText.text = playerDataBase.Gold.ToString();
-        crystalText.text = playerDataBase.Crystal.ToString();
+        goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Gold);
+        crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
         nickNameText.text = "닉네임 : " + GameStateManager.instance.NickName;
 
         Debug.Log("Main UI Renewal");
@@ -206,8 +204,6 @@ public class UIManager : MonoBehaviour
 
     IEnumerator GameEndCoroution()
     {
-        GameStateManager.instance.Playing = false;
-
         yield return new WaitForSeconds(1f);
 
         mainCanvas.enabled = true;
@@ -247,31 +243,33 @@ public class UIManager : MonoBehaviour
         bounsView.SetActive(check);
     }
 
-    public void OpenResultView(string player1, int value1, string player2, int value2)
+    public void OpenResultView(int number, int gold)
     {
         resultView.SetActive(true);
 
-        resultPlayer1Text.text = player1;
-
-        if (value1 > 0)
+        if(number == 0)
         {
-            resultPlayer1ValueText.text = "+" + value1.ToString();
+            resultTitleText.text = "승리";
+        }
+        else if(number == 1)
+        {
+            resultTitleText.text = "패배";
         }
         else
         {
-            resultPlayer1ValueText.text = value1.ToString();
+            resultTitleText.text = "무승부";
         }
 
-        resultPlayer2Text.text = player2;
-
-        if(value2 > 0)
+        if(gold > 0)
         {
-            resultPlayer2ValueText.text = "+" + value2.ToString();
+            resultGoldText.text = "+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold));
         }
         else
         {
-            resultPlayer2ValueText.text = value2.ToString();
+            resultGoldText.text = "-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold));
         }
+
+        RecordManager.instance.OpenRecord();
     }
 
     public void OpenSurrenderView()

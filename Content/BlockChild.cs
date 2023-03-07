@@ -54,7 +54,7 @@ public class BlockChild : MonoBehaviour
             case BlockType.Spider:
                 transform.GetComponent<Image>().color = Color.red;
                 break;
-            case BlockType.Tetris_I:
+            case BlockType.Rook_V4:
                 transform.GetComponent<Image>().color = new Color(240 / 255f, 240 / 255f, 1);
                 break;
             case BlockType.Tetris_I_Hor:

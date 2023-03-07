@@ -7,8 +7,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RouletteManager : MonoBehaviour
 {
-    public Pinball3D pinball;
-
     public MoveCamera rouletteCamera;
     public GameObject roulette3D;
     public GameObject characterIndexUI;
@@ -34,20 +32,25 @@ public class RouletteManager : MonoBehaviour
     public PointerManager leftPointerManager;
     public PointerManager rightPointerManager;
 
-    [Title("Clock")]
-    public Rotation_Clock[] leftClock;
-    public Rotation_Clock[] rightClock;
+    [Title("Photon Obj")]
+    public Pinball3D pinball;
 
-    public Transform leftQueenPoint;
-    public Transform rightQueenPoint;
+    public Transform[] leftWindPoint;
+    public Transform[] rightWindPoint;
 
-    public MeshRenderer leftQueen;
-    public MeshRenderer rightQueen;
+    Rotation_Clock[] leftClock = new Rotation_Clock[3];
+    Rotation_Clock[] rightClock = new Rotation_Clock[3];
+
+    MeshRenderer leftQueen;
+    MeshRenderer rightQueen;
+
+    Transform leftQueenPoint;
+    Transform rightQueenPoint;
 
     public Material defaultQueenMat;
     public Material choiceQueenMat;
 
-    [Title("Gauge")]
+   [Title("Gauge")]
     public Image powerFillAmount;
 
     private int power = 0;
@@ -91,8 +94,43 @@ public class RouletteManager : MonoBehaviour
 
         rouletteCamera.gameObject.SetActive(false);
         roulette3D.SetActive(false);
+    }
 
-        powerFillAmount.fillAmount = 0;
+    public void CreateObj()
+    {
+        if (pinball != null)
+        {
+            PhotonNetwork.Destroy(pinball.gameObject);
+        }
+
+        pinball = PhotonNetwork.Instantiate("PinballObj", Vector3.zero, Quaternion.identity, 0).GetComponent<Pinball3D>();
+        pinball.transform.parent = roulette3D.transform;
+        pinball.rouletteManager = this;
+
+        for (int i = 0; i < leftClock.Length; i++)
+        {
+            if(leftClock[i] != null)
+            {
+                PhotonNetwork.Destroy(leftClock[i].gameObject);
+                PhotonNetwork.Destroy(rightClock[i].gameObject);
+            }
+        }
+
+        leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+        leftQueen = leftClock[2].meshRenderer;
+        leftQueenPoint = leftClock[2].point;
+
+        rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+        rightQueen = rightClock[2].meshRenderer;
+        rightQueenPoint = rightClock[2].point;
+
+        Debug.Log("포톤 오브젝트 재생성 완료");
     }
 
     public void Initialize()
@@ -104,6 +142,9 @@ public class RouletteManager : MonoBehaviour
         characterIndexUI.SetActive(false);
 
         targetView.SetActive(false);
+
+        power = 0;
+        powerFillAmount.fillAmount = 0;
 
         buttonText.text = "";
 
@@ -132,9 +173,9 @@ public class RouletteManager : MonoBehaviour
             int minus = int.Parse(ht["Player1_Minus"].ToString());
             minus += int.Parse(ht["Player2_Minus"].ToString());
 
-            Debug.Log(total + " / " + minus);
+            Debug.Log("보너스 룰렛 체크 : " + total + " / " + minus);
 
-            if (total * 0.7f <= minus || GameStateManager.instance.FirstBouns && !check) //공중 분해된 돈이 전체 판돈에 30% 이상일 경우 매판 1번 등장.
+            if (total * 0.7f <= minus || GameStateManager.instance.CheckBouns && !check) //공중 분해된 돈이 전체 판돈에 30% 이상일 경우 매판 1번 등장.
             {
                 bounsRewards[0] = (int)(minus * 0.05f);
                 bounsRewards[1] = (int)(minus * 0.1f);
@@ -149,6 +190,8 @@ public class RouletteManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Bouns" } });
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Bouns", true } });
                 PV.RPC("PlayBouns", RpcTarget.All);
+
+                GameStateManager.instance.CheckBouns = false;
             }
             else
             {
@@ -203,37 +246,55 @@ public class RouletteManager : MonoBehaviour
         {
             for (int i = 0; i < gameManager.bettingNumberList_Gosu.Count; i++)
             {
-                for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
+                if(rouletteIndex == 0)
                 {
-                    if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == leftPointerManager.pointerList[j].index)
+                    for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
                     {
-                        if (i < 12)
+                        if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == leftPointerManager.pointerList[j].index)
+                        {
+                            if (i < 12)
+                            {
+                                leftPointerManager.pointerList[j].Betting(true);
+                            }
+                            else if (i == 12)
+                            {
+                                leftQueen.material = choiceQueenMat;
+                            }
+                            else
+                            {
+                                leftPointerManager.pointerList[j - 1].Betting(true);
+                            }
+                        }
+
+                        if (gameManager.bettingNumberList_Gosu[24] == 1 && leftPointerManager.pointerList[j].index == 24)
                         {
                             leftPointerManager.pointerList[j].Betting(true);
                         }
-                        else if (i == 12)
-                        {
-                            leftQueen.material = choiceQueenMat;
-                        }
-                        else
-                        {
-                            leftPointerManager.pointerList[j - 1].Betting(true);
-                        }
                     }
-
-                    if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == rightPointerManager.pointerList[j].index)
+                }
+                else
+                {
+                    for (int j = 0; j < rightPointerManager.pointerList.Count; j++)
                     {
-                        if (i < 12)
+                        if (gameManager.bettingNumberList_Gosu[i] == 1 && i + 1 == rightPointerManager.pointerList[j].index)
+                        {
+                            if (i < 12)
+                            {
+                                rightPointerManager.pointerList[j].Betting(true);
+                            }
+                            else if (i == 12)
+                            {
+                                rightQueen.material = choiceQueenMat;
+                            }
+                            else
+                            {
+                                rightPointerManager.pointerList[j - 1].Betting(true);
+                            }
+                        }
+
+                        if (gameManager.bettingNumberList_Gosu[24] == 1 && rightPointerManager.pointerList[j].index == 24)
                         {
                             rightPointerManager.pointerList[j].Betting(true);
-                        }
-                        else if (i == 12)
-                        {
-                            rightQueen.material = choiceQueenMat;
-                        }
-                        else
-                        {
-                            rightPointerManager.pointerList[j - 1].Betting(true);
                         }
                     }
                 }

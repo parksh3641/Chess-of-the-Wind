@@ -5,20 +5,17 @@ using UnityEngine;
 
 public class Pinball3D : MonoBehaviour
 {
-    private float power = 300f;
+    private float power = 200f;
     public int index = 0;
     public int ballPos = 0;
 
     private float time = 0f;
 
-    private float midWindPower = 0.5f;
+    private float midWindPower = 0f;
 
     public bool move = false;
 
     public Transform vector;
-
-    public Transform[] leftWindPoint;
-    public Transform[] rightWindPoint;
 
     Rigidbody rigid;
 
@@ -66,7 +63,7 @@ public class Pinball3D : MonoBehaviour
 
     public void BlowingWind(float force, int number)
     {
-        Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
+        //Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
 
         float windPower = 0;
 
@@ -75,7 +72,7 @@ public class Pinball3D : MonoBehaviour
             switch (number) //바람을 분 위치
             {
                 case 0:
-                    transform.LookAt(leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                    transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -88,7 +85,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 1:
-                    transform.LookAt(leftWindPoint[0].position + new Vector3(-1, 0.5f, -1));
+                    transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(-1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -107,7 +104,7 @@ public class Pinball3D : MonoBehaviour
             switch (number) //바람을 분 위치
             {
                 case 0:
-                    transform.LookAt(rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                    transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
@@ -120,7 +117,7 @@ public class Pinball3D : MonoBehaviour
                     }
                     break;
                 case 1:
-                    transform.LookAt(rightWindPoint[0].position + new Vector3(-1, 0.5f, -1));
+                    transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(-1, 0.5f, -1));
 
                     switch (ballPos) //공이 서 있는 위치
                     {
