@@ -456,15 +456,13 @@ public class GameManager : MonoBehaviour
         BetOptionCancleButton();
 
         uIManager.GameEnd();
-
-        networkManager.LeaveRoom();
     }
 
     public void GameStart_Newbie()
     {
         roomText.text = "초보방";
 
-        developerInfo.text = "0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n25 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n25 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
@@ -493,7 +491,7 @@ public class GameManager : MonoBehaviour
     {
         roomText.text = "고수방";
 
-        developerInfo.text = "0 = 퀸 당첨\n1 ~24 해당 숫자 당첨\n25 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 ~24 = 해당 숫자 당첨\n25 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
 
 
         rouletteContentTransform.gameObject.SetActive(true);
@@ -626,6 +624,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void GameEnd(int number)
     {
+        networkManager.LeaveRoom();
+
         if (number == 0)
         {
             Debug.Log("승리");
@@ -638,8 +638,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("무승부");
         }
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "End" } });
 
         GameStateManager.instance.Playing = false;
 

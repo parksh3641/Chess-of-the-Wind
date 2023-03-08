@@ -60,4 +60,20 @@ public class CharacterManager : MonoBehaviour
             characterContents[i].gameObject.SetActive(false);
         }
     }
+    
+    public void CheckMyTurn(string str)
+    {
+        for (int i = 0; i < characterContents.Length; i++)
+        {
+            characterContents[i].focus.SetActive(false);
+        }
+
+        for (int i = 0; i < characterContents.Length; i++)
+        {
+            if(characterContents[i].nickNameText.Equals(str))
+            {
+                characterContents[i].focus.SetActive(true);
+            }
+        }
+    }
 }

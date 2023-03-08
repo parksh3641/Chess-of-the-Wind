@@ -284,6 +284,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void CloseSurrenderView()
+    {
+        surrenderView.SetActive(false);
+    }
+
     public void OpenDisconnectedView()
     {
         disconnectedView.SetActive(true);

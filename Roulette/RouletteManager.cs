@@ -116,19 +116,25 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
 
         leftQueen = leftClock[2].meshRenderer;
-        leftQueenPoint = leftClock[2].point;
+        leftQueenPoint = leftClock[2].queenPoint;
 
-        rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+        rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
 
         rightQueen = rightClock[2].meshRenderer;
-        rightQueenPoint = rightClock[2].point;
+        rightQueenPoint = rightClock[2].queenPoint;
+
+        for (int i = 0; i < leftClock.Length; i++)
+        {
+            leftClock[i].transform.parent = roulette1Obj.transform;
+            rightClock[i].transform.parent = roulette2Obj.transform;
+        }
 
         Debug.Log("포톤 오브젝트 재생성 완료");
     }
@@ -136,6 +142,7 @@ public class RouletteManager : MonoBehaviour
     public void Initialize()
     {
         uIManager.OpenRouletteView();
+        uIManager.CloseSurrenderView();
 
         rouletteCamera.gameObject.SetActive(true);
         roulette3D.SetActive(false);
@@ -201,6 +208,88 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    void SelectRoulette(int number)
+    {
+        uIManager.OpenBounsView(false);
+
+        roulette3D.SetActive(true);
+
+        if(!PhotonNetwork.IsMasterClient && pinball == null)
+        {
+            pinball = GameObject.FindWithTag("Pinball").GetComponent<Pinball3D>();
+            pinball.transform.parent = roulette3D.transform;
+            pinball.rouletteManager = this;
+
+            leftClock[0] = GameObject.FindWithTag("ClockSecObj_Left").GetComponent<Rotation_Clock>();
+            leftClock[1] = GameObject.FindWithTag("ClockMinObj_Left").GetComponent<Rotation_Clock>();
+            leftClock[2] = GameObject.FindWithTag("ClockQueenObj_Left").GetComponent<Rotation_Clock>();
+
+            leftQueen = leftClock[2].meshRenderer;
+            leftQueenPoint = leftClock[2].queenPoint;
+
+            rightClock[0] = GameObject.FindWithTag("ClockSecObj_Right").GetComponent<Rotation_Clock>();
+            rightClock[1] = GameObject.FindWithTag("ClockMinObj_Right").GetComponent<Rotation_Clock>();
+            rightClock[2] = GameObject.FindWithTag("ClockQueenObj_Right").GetComponent<Rotation_Clock>();
+
+            rightQueen = rightClock[2].meshRenderer;
+            rightQueenPoint = rightClock[2].queenPoint;
+
+            for (int i = 0; i < leftClock.Length; i++)
+            {
+                leftClock[i].transform.parent = roulette1Obj.transform;
+                rightClock[i].transform.parent = roulette2Obj.transform;
+            }
+        }
+
+        pinballIndex = number;
+
+        rouletteCamera.gameObject.SetActive(true);
+        rouletteCamera.Initialize(startCameraPos);
+
+        roulette1Obj.gameObject.SetActive(true);
+        roulette2Obj.gameObject.SetActive(true);
+
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            leftPointerManager.Initialize_NewBie();
+            rightPointerManager.Initialize_NewBie();
+        }
+        else
+        {
+            leftPointerManager.Initialize(leftNumber);
+            rightPointerManager.Initialize(rightNumber);
+        }
+
+        leftFingerController.Initialize();
+        rightFingerController.Initialize();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < leftClock.Length; i++)
+            {
+                leftClock[i].StopClock();
+            }
+
+            for (int i = 0; i < rightClock.Length; i++)
+            {
+                rightClock[i].StopClock();
+            }
+        }
+
+        if (number == 0)
+        {
+            leftFingerController.MoveFinger();
+        }
+        else
+        {
+            rightFingerController.MoveFinger();
+        }
+
+        ShowBettingNumber();
+    }
+
     public void ShowBettingNumber()
     {
         leftQueen.material = defaultQueenMat;
@@ -246,7 +335,7 @@ public class RouletteManager : MonoBehaviour
         {
             for (int i = 0; i < gameManager.bettingNumberList_Gosu.Count; i++)
             {
-                if(rouletteIndex == 0)
+                if (rouletteIndex == 0)
                 {
                     for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
                     {
@@ -300,61 +389,6 @@ public class RouletteManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    [PunRPC]
-    void SelectRoulette(int number)
-    {
-        uIManager.OpenBounsView(false);
-
-        roulette3D.SetActive(true);
-
-        pinballIndex = number;
-
-        rouletteCamera.gameObject.SetActive(true);
-        rouletteCamera.Initialize(startCameraPos);
-
-        roulette1Obj.gameObject.SetActive(true);
-        roulette2Obj.gameObject.SetActive(true);
-
-
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            leftPointerManager.Initialize_NewBie();
-            rightPointerManager.Initialize_NewBie();
-        }
-        else
-        {
-            leftPointerManager.Initialize(leftNumber);
-            rightPointerManager.Initialize(rightNumber);
-        }
-
-        leftFingerController.Initialize();
-        rightFingerController.Initialize();
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            for (int i = 0; i < leftClock.Length; i++)
-            {
-                leftClock[i].StopClock();
-            }
-
-            for (int i = 0; i < rightClock.Length; i++)
-            {
-                rightClock[i].StopClock();
-            }
-        }
-
-        if (number == 0)
-        {
-            leftFingerController.MoveFinger();
-        }
-        else
-        {
-            rightFingerController.MoveFinger();
-        }
-
-        ShowBettingNumber();
     }
 
     public void EndMoveFinger(int number)
@@ -460,6 +494,8 @@ public class RouletteManager : MonoBehaviour
         }
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        characterManager.CheckMyTurn(ht["Pinball"].ToString());
 
         if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {

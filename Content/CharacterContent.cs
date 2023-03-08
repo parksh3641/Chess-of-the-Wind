@@ -7,6 +7,7 @@ public class CharacterContent : MonoBehaviour
 {
     public Image icon;
     public Text nickNameText;
+    public GameObject focus;
 
     public void Initialize(string name)
     {

@@ -13,11 +13,6 @@ public class PointerManager : MonoBehaviour
         {
             pointerList.Add(child.GetComponent<Pointer>());
         }
-
-        //for (int i = 0; i < pointerList.Count; i ++)
-        //{
-        //    pointerList[i].Initialize(i + 1);
-        //}
     }
 
     public int CheckNumber(Transform target)

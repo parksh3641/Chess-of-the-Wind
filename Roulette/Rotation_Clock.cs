@@ -8,8 +8,11 @@ public class Rotation_Clock : MonoBehaviour
 {
     public float speed = 40f;
 
+    bool start = false;
+
+    public Transform parentTransform;
     public MeshRenderer meshRenderer;
-    public Transform point;
+    public Transform queenPoint;
 
     public PhotonView PV;
 
@@ -24,23 +27,20 @@ public class Rotation_Clock : MonoBehaviour
         PV = GetComponent<PhotonView>();
     }
 
-    [Button]
     public void StartClock()
     {
-        StopAllCoroutines();
-        StartCoroutine(MoveCoroution());
+        start = true;
     }
 
-    [Button]
     public void StopClock()
     {
-        StopAllCoroutines();
+        start = false;
     }
 
-    IEnumerator MoveCoroution()
+    void Update()
     {
+        if (!start) return;
+
         transform.Rotate(vector3 * speed * Time.deltaTime);
-        yield return waitForSecond;
-        StartCoroutine(MoveCoroution());
     }
 }

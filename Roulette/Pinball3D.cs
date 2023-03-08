@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class Pinball3D : MonoBehaviour
 {
+    public bool move = false;
+
     private float power = 200f;
     public int index = 0;
     public int ballPos = 0;
 
     private float time = 0f;
-
     private float midWindPower = 0f;
-
-    public bool move = false;
 
     public Transform vector;
 
@@ -29,6 +28,30 @@ public class Pinball3D : MonoBehaviour
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
+    }
+
+    void Update()
+    {
+        if (!move) return;
+
+        if (transform.position.y < -2)
+        {
+            StartRotate(index);
+        }
+
+        if (rigid.velocity.magnitude < 0.3f)
+        {
+            time += Time.deltaTime;
+
+            if (time >= 2)
+            {
+                EndPinball();
+            }
+        }
+        else
+        {
+            time = 0;
+        }
     }
 
     public void MyTurn(int number)
@@ -134,30 +157,6 @@ public class Pinball3D : MonoBehaviour
 
         rigid.AddForce(vector.forward * windPower);
         //rigid.AddForce(vector.forward * (windPower * (0.02f + force)));
-    }
-
-    private void FixedUpdate()
-    {
-        if (!move) return;
-
-        if(transform.position.y < -2)
-        {
-            StartRotate(index);
-        }
-
-        if(rigid.velocity.magnitude < 0.3f)
-        {
-            time += Time.deltaTime;
-
-            if(time >= 2)
-            {
-                EndPinball();
-            }
-        }
-        else
-        {
-            time = 0;
-        }
     }
 
     void EndPinball()
