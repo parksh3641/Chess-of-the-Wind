@@ -70,7 +70,7 @@ public class CharacterManager : MonoBehaviour
 
         for (int i = 0; i < characterContents.Length; i++)
         {
-            if(characterContents[i].nickNameText.Equals(str))
+            if(characterContents[i].nickNameText.text.Equals(str))
             {
                 characterContents[i].focus.SetActive(true);
             }
