@@ -220,7 +220,7 @@ public class MatchingManager : MonoBehaviour
 
             GameStateManager.instance.Stakes = stakes;
 
-            matchingWaitTime = 5;
+            matchingWaitTime = GameStateManager.instance.MatchingTime;
             StartCoroutine(WaitingPlayer());
         }
         else

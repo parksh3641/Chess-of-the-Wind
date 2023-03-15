@@ -7,7 +7,8 @@ public class Pinball3D : MonoBehaviour
 {
     public bool move = false;
 
-    private float power = 200f;
+    private float power = 150f;
+    private float windPower = 0;
     public int index = 0;
     public int ballPos = 0;
 
@@ -79,7 +80,7 @@ public class Pinball3D : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 20, 0);
 
-        rigid.AddForce(vector.forward * power);
+        rigid.AddForce(vector.forward * 200);
 
         move = true;
     }
@@ -88,75 +89,100 @@ public class Pinball3D : MonoBehaviour
     {
         //Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
 
-        float windPower = 0;
+        windPower = power;
 
-        if (index == 0) //왼쪽 오른쪽
+        if (index == 0) //현재 룰렛 위치는? 왼쪽 오른쪽
         {
-            switch (number) //바람을 분 위치
+            if(number == 0)
             {
-                case 0:
-                    transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                switch(ballPos)
+                {
+                    case 0:
+                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
 
-                    switch (ballPos) //공이 서 있는 위치
-                    {
-                        case 0:
-                            windPower = power;
-                            break;
-                        case 1:
-                            windPower = power * midWindPower;
-                            break;
-                    }
-                    break;
-                case 1:
-                    transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(-1, 0.5f, -1));
+                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        break;
+                    case 1:
+                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
 
-                    switch (ballPos) //공이 서 있는 위치
-                    {
-                        case 0:
-                            windPower = power * midWindPower;
-                            break;
-                        case 1:
-                            windPower = power;
-                            break;
-                    }
-                    break;
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 2:
+                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                }
+            }
+            else
+            {
+                switch (ballPos)
+                {
+                    case 3:
+                        transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 4:
+                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 5:
+                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        break;
+                }
             }
         }
         else
         {
-            switch (number) //바람을 분 위치
+            if (number == 0)
             {
-                case 0:
-                    transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                switch (ballPos)
+                {
+                    case 0:
+                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
 
-                    switch (ballPos) //공이 서 있는 위치
-                    {
-                        case 0:
-                            windPower = power;
-                            break;
-                        case 1:
-                            windPower = power * midWindPower;
-                            break;
-                    }
-                    break;
-                case 1:
-                    transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(-1, 0.5f, -1));
+                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        break;
+                    case 1:
+                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
 
-                    switch (ballPos) //공이 서 있는 위치
-                    {
-                        case 0:
-                            windPower = power * midWindPower;
-                            break;
-                        case 1:
-                            windPower = power;
-                            break;
-                    }
-                    break;
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 2:
+                        transform.LookAt(rouletteManager.rightWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                }
+            }
+            else
+            {
+                switch (ballPos)
+                {
+                    case 3:
+                        transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 4:
+                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 5:
+                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        break;
+                }
             }
         }
 
-        rigid.AddForce(vector.forward * windPower);
-        //rigid.AddForce(vector.forward * (windPower * (0.02f + force)));
+        Debug.Log(index + " / " + number + " / " + ballPos);
     }
 
     void EndPinball()
@@ -173,27 +199,29 @@ public class Pinball3D : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(index == 0)
+        if (other.transform.tag == "WindPoint1")
         {
-            if (other.transform.tag == "LeftWindPoint1")
-            {
-                ballPos = 0;
-            }
-            else if (other.transform.tag == "LeftWindPoint2")
-            {
-                ballPos = 1;
-            }
+            ballPos = 0;
         }
-        else
+        else if (other.transform.tag == "WindPoint2")
         {
-            if (other.transform.tag == "RightWindPoint1")
-            {
-                ballPos = 0;
-            }
-            else if (other.transform.tag == "RightWindPoint2")
-            {
-                ballPos = 1;
-            }
+            ballPos = 1;
+        }
+        else if (other.transform.tag == "WindPoint3")
+        {
+            ballPos = 2;
+        }
+        else if (other.transform.tag == "WindPoint4")
+        {
+            ballPos = 3;
+        }
+        else if (other.transform.tag == "WindPoint5")
+        {
+            ballPos = 4;
+        }
+        else if (other.transform.tag == "WindPoint6")
+        {
+            ballPos = 5;
         }
     }
 }

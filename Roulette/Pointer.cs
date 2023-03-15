@@ -9,6 +9,8 @@ public class Pointer : MonoBehaviour
     public Text numberText;
     public GameObject focus;
 
+    public int betting = 0;
+
     public void Initialize(int number)
     {
         focus.SetActive(false);
@@ -31,6 +33,8 @@ public class Pointer : MonoBehaviour
 
         focus.SetActive(false);
 
+        numberText.text = "";
+
         if (number % 2 == 0)
         {
             numberText.text = "»Ú";
@@ -41,15 +45,43 @@ public class Pointer : MonoBehaviour
         }
     }
 
-    public void Betting(bool check)
+    public void Betting_Newbie(int number)
     {
-        if(check)
+        if (number == 0)
+        {
+            numberText.color = Color.black;
+
+            betting = 0;
+        }
+        else if (number == 1)
+        {
+            numberText.color = Color.green;
+        }
+        else if (number == 2)
         {
             numberText.color = Color.blue;
         }
         else
         {
-            numberText.color = Color.black;
+            numberText.color = Color.red;
+        }
+    }
+
+    public void Betting_Gosu()
+    {
+        betting = 1;
+        numberText.color = Color.blue;
+    }
+
+    public void Betting_Gosu_Other()
+    {
+        if(betting == 0)
+        {
+            numberText.color = Color.red;
+        }
+        else
+        {
+            numberText.color = Color.green;
         }
     }
 

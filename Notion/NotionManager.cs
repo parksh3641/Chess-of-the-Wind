@@ -135,6 +135,9 @@ public class NotionManager : MonoBehaviour
                     case NotionType.LimitMaxBlock:
                         notion.txt.text = "최대 블럭 값을 초과했습니다";
                         break;
+                    case NotionType.OverBettingBlock:
+                        notion.txt.text = "1개 이상 배팅할 수 없습니다";
+                        break;
                 }
                 SetColor(list.colorType);
                 SetEffect(list.effectType);

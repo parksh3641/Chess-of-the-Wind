@@ -9,6 +9,7 @@ public class BlockChild : MonoBehaviour
     public BlockType blockType = BlockType.Default;
 
     public Text nickNameText;
+    public Text valueText;
     public GameObject bettingMark;
 
     void Awake()
@@ -88,10 +89,9 @@ public class BlockChild : MonoBehaviour
         bettingMark.SetActive(check);
     }
 
-    public void SetNickName(string name)
+    public void SetBlock(string name, string value)
     {
         nickNameText.text = name;
-
-        Debug.Log(name);
+        valueText.text = MoneyUnitString.ToCurrencyString(int.Parse(value));
     }
 }

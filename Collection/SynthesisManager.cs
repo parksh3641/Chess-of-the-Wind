@@ -453,56 +453,14 @@ public class SynthesisManager : MonoBehaviour
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, needGold);
 
-            upgradeManager.SellBlock(blockClass.instanceId);
-            upgradeManager.SellBlock(blockClassMat1.instanceId);
 
-            switch (rankType)
+            for (int i = 0; i < synthesisResultContentList.Count; i++)
             {
-                case RankType.N:
-                    upgradeManager.SellBlock(blockClassMat2.instanceId);
-                    break;
-                case RankType.R:
-                    upgradeManager.SellBlock(blockClassMat2.instanceId);
-                    break;
-                case RankType.SR:
-                    upgradeManager.SellBlock(blockClassMat2.instanceId);
-                    break;
-                case RankType.SSR:
-                    break;
-                case RankType.UR:
-                    break;
-            }
-
-            synthesisResultList.Clear();
-            synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
-
-            Debug.Log("합성 결과 : " + blockClass.blockType + "_" + (rankType + 1));
-
-            if (updateLevel > 0)
-            {
-                BlockClass block = new BlockClass();
-                block.blockType = blockClass.blockType;
-                block.rankType = rankType + 1;
-                block.level = updateLevel;
-
-                playerDataBase.SetSuccessionLevel(block);
-
-                Debug.Log(updateLevel + "레벨로 계승 될 예정입니다");
-            }
-
-            switch (windCharacterType)
-            {
-                case WindCharacterType.Winter:
-                    PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
-                    break;
-                case WindCharacterType.UnderWorld:
-                    PlayfabManager.instance.GrantItemsToUser("Kingdom of The Underworld", synthesisResultList);
-                    break;
+                synthesisResultContentList[i].gameObject.SetActive(false);
             }
 
             StartCoroutine(SynthesisCoroution());
 
-            Debug.Log("합성 성공!");
         }
     }
 
@@ -510,24 +468,74 @@ public class SynthesisManager : MonoBehaviour
     {
         synthesisResultView.SetActive(true);
 
+        upgradeManager.SellBlock(blockClass.instanceId);
+        yield return new WaitForSeconds(0.1f);
+
+        upgradeManager.SellBlock(blockClassMat1.instanceId);
+        yield return new WaitForSeconds(0.1f);
+
+        switch (rankType)
+        {
+            case RankType.N:
+                upgradeManager.SellBlock(blockClassMat2.instanceId);
+                break;
+            case RankType.R:
+                upgradeManager.SellBlock(blockClassMat2.instanceId);
+                break;
+            case RankType.SR:
+                upgradeManager.SellBlock(blockClassMat2.instanceId);
+                break;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (updateLevel > 0)
+        {
+            BlockClass block = new BlockClass();
+            block.blockType = blockClass.blockType;
+            block.rankType = rankType + 1;
+            block.level = updateLevel;
+
+            playerDataBase.SetSuccessionLevel(block);
+
+            Debug.Log(updateLevel + 1 + "레벨 계승 될 예정입니다");
+        }
+
+        synthesisResultList.Clear();
+        synthesisResultList.Add(blockClass.blockType + "_" + (rankType + 1));
+
+        Debug.LogError("합성 결과 : " + blockClass.blockType + "_" + (rankType + 1));
+
+        switch (windCharacterType)
+        {
+            case WindCharacterType.Winter:
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                break;
+            case WindCharacterType.UnderWorld:
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of The Underworld", synthesisResultList);
+                break;
+        }
+
         yield return new WaitForSeconds(2.5f);
 
-        BlockClass block = new BlockClass();
+        BlockClass block2 = new BlockClass();
 
-        block.blockType = blockClass.blockType;
-        block.rankType = rankType + 1;
-        block.level = updateLevel;
+        block2.blockType = blockClass.blockType;
+        block2.rankType = rankType + 1;
+        block2.level = updateLevel;
 
         for (int i = 0; i < synthesisResultList.Count; i++)
         {
             synthesisResultContentList[i].gameObject.SetActive(true);
-            synthesisResultContentList[i].Collection_Initialize(block);
+            synthesisResultContentList[i].Collection_Initialize(block2);
         }
 
         synthesisResultButton.SetActive(true);
 
         Initialize();
         collectionManager.UpdateCollection();
+
+        Debug.Log("합성 성공!");
     }
 
     public void ClosesSynthesisResultView()

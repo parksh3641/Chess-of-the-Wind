@@ -218,11 +218,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 
-            int number = Random.Range(0, 24);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "LeftNumber", number } });
+            int number = Random.Range(0, 2);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "WindCharacter", number.ToString() } });
 
             int number2 = Random.Range(0, 24);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", number2 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "LeftNumber", number2 } });
+
+            int number3 = Random.Range(0, 24);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", number3 } });
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", 0 } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", 0 } });
@@ -321,7 +324,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (GameStateManager.instance.Playing)
         {
-            gameManager.Winner(playerNickName2);
+            gameManager.Winner();
         }
     }
 

@@ -6,18 +6,35 @@ using UnityEngine.EventSystems;
 using Sirenix.OdinInspector;
 using System.Linq;
 
+[System.Serializable]
+public class NumberClass
+{
+    public int[] numberList = new int[4];
+
+    public int[] GetNumberList()
+    {
+        return numberList;
+    }
+}
+
 public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
     public RouletteType rouletteType = RouletteType.Default;
     public RouletteColorType rouletteColorType = RouletteColorType.White;
     public int[] index = new int[2];
-    public int number = 0;
 
+    [Space]
+    [Title("Number")]
+    public int number = 0;
+    public int[] numberList = new int[4];
+
+    [Space]
     [Title("Active")]
     public BlockClass blockClass;
     public bool isActive = false;
     bool initialize = false;
 
+    [Space]
     [Title("Main")]
     public Text numberText;
     public Image backgroundImg;
@@ -25,6 +42,11 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     private Transform blockParent;
     GameManager gameManager;
+
+    public List<NumberClass> splitBet_HorizontalNumberList = new List<NumberClass>();
+    public List<NumberClass> splitBet_VerticalNumberList = new List<NumberClass>();
+    public List<NumberClass> squareBetNumberList = new List<NumberClass>();
+
 
     void Awake()
     {
@@ -45,36 +67,47 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
         switch (rouletteType)
         {
+            case RouletteType.StraightBet:
+
+                number = num + 1;
+
+                if (number % 2 == 0)
+                {
+                    rouletteColorType = RouletteColorType.White;
+                }
+                else
+                {
+                    rouletteColorType = RouletteColorType.Black;
+                }
+
+                if (type == RouletteType.StraightBet && number == 13)
+                {
+                    queen.SetActive(true);
+                    rouletteColorType = RouletteColorType.White;
+                }
+
+                SetBackgroundColor(rouletteColorType);
+
+                break;
             case RouletteType.SplitBet_Horizontal:
+
+                numberList = splitBet_HorizontalNumberList[num].GetNumberList();
+
                 backgroundImg.enabled = false;
                 break;
             case RouletteType.SplitBet_Vertical:
+
+                numberList = splitBet_VerticalNumberList[num].GetNumberList();
+
                 backgroundImg.enabled = false;
                 break;
             case RouletteType.SquareBet:
+
+                numberList = squareBetNumberList[num].GetNumberList();
+
                 backgroundImg.enabled = false;
                 break;
         }
-
-        number = num + 1;
-        //numberText.text = number.ToString();
-
-        if (number % 2 == 0)
-        {
-            rouletteColorType = RouletteColorType.White;
-        }
-        else
-        {
-            rouletteColorType = RouletteColorType.Black;
-        }
-
-        if (type == RouletteType.StraightBet && number == 13)
-        {
-            queen.SetActive(true);
-            rouletteColorType = RouletteColorType.White;
-        }
-
-        SetBackgroundColor(rouletteColorType);
 
         initialize = true;
     }

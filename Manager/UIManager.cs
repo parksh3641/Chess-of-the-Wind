@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     public ShopManager shopManager;
     public CollectionManager collectionManager;
     public GameManager gameManager;
+    public MatchingManager matchingManager;
 
     public Image[] bottomUIImg;
     public GameObject[] bottomUIIcon;
@@ -63,12 +64,10 @@ public class UIManager : MonoBehaviour
 
     [Space]
     [Title("DataBase")]
-    RankDataBase rankDataBase;
     PlayerDataBase playerDataBase;
 
     private void Awake()
     {
-        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         goldText.text = "0";
@@ -341,6 +340,7 @@ public class UIManager : MonoBehaviour
 
                 shopManager.CloseShopView();
                 collectionManager.CloseCollectionView();
+                matchingManager.Initialize();
                 break;
             case 3:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);

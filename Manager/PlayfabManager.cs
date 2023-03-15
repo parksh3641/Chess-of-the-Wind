@@ -575,12 +575,12 @@ public class PlayfabManager : MonoBehaviour
     }
     private void OnCloudUpdateStats(ExecuteCloudScriptResult result)
     {
-        SetEditorOnlyMessage(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
+        //SetEditorOnlyMessage(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
         JsonObject jsonResult = (JsonObject)result.FunctionResult;
-        foreach (var json in jsonResult)
-        {
-            SetEditorOnlyMessage(json.Key + " / " + json.Value);
-        }
+        //foreach (var json in jsonResult)
+        //{
+        //    SetEditorOnlyMessage(json.Key + " / " + json.Value);
+        //}
         object messageValue;
         jsonResult.TryGetValue("OnCloudUpdateStats() messageValue", out messageValue);
         SetEditorOnlyMessage((string)messageValue);
@@ -629,9 +629,9 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"];
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if (gold > 10000000)
+            if (gold > 100000000)
             {
-                gold = 10000000;
+                gold = 100000000;
             }
 
             playerDataBase.Gold = gold;

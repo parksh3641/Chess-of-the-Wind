@@ -106,7 +106,7 @@ public class UpgradeManager : MonoBehaviour
         gold = playerDataBase.Gold;
 
         goldText.text = "필요 골드";
-        goldNumberText.text = gold + " / " + upgradeInformation.needGold;
+        goldNumberText.text = MoneyUnitString.ToCurrencyString(gold) + " / " + MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
 

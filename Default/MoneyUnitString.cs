@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MoneyUnitString
 {
-    static readonly string[] CurrencyUnits = new string[] { "", "k", "m", "g", "t", "p", "e", "g", "z", "y" };
+    static readonly string[] CurrencyUnits = new string[] { "", "a", "b", "c", "d", "e", "f", "g", "h", "i" };
 
     /// <summary>
     /// double 형 데이터를 클리커 게임의 화폐 단위로 표현
@@ -26,7 +26,8 @@ public static class MoneyUnitString
         }
 
         //  부호 출력 문자열
-        string significant = (number < 0) ? "-" : string.Empty;
+        //string significant = (number < 0) ? "-" : string.Empty;
+        string significant = "";
 
         //  보여줄 숫자
         string showNumber = string.Empty;
@@ -67,7 +68,7 @@ public static class MoneyUnitString
             var temp = double.Parse(partsSplit[0].Replace("E", "")) * System.Math.Pow(10, remainder);
 
             //  소수 둘째자리까지만 출력한다.
-            showNumber = temp.ToString("F").Replace(".00", "");
+            showNumber = temp.ToString("F3");
         }
 
         unityString = CurrencyUnits[quotient];

@@ -19,7 +19,7 @@ public class BlockChildContent : MonoBehaviour
         }
     }
 
-    public void SetNickName(string name)
+    public void SetBlock(string name,string value)
     {
         if (blockChildArray.Length <= 0)
         {
@@ -28,7 +28,7 @@ public class BlockChildContent : MonoBehaviour
 
         for (int i = 0; i < blockChildArray.Length; i++)
         {
-            blockChildArray[i].SetNickName(name);
+            blockChildArray[i].SetBlock(name, value);
         }
     }
 }

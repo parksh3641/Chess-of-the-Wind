@@ -181,7 +181,8 @@ public enum NotionType
     NotEnoughTicket,
     DefDestroy,
     SameEquipBlock,
-    LimitMaxBlock
+    LimitMaxBlock,
+    OverBettingBlock
 }
 
 public enum GameRankType

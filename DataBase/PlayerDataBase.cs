@@ -458,9 +458,9 @@ public class PlayerDataBase : ScriptableObject
                 PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
                 blockClass.level = successionLevel[i].level;
 
-                successionLevel.RemoveAt(i);
+                Debug.LogError(blockClass.blockType + "_" + blockClass.rankType + " 가 " + (successionLevel[i].level + 1) + " 레벨로 계승되었습니다");
 
-                Debug.Log(blockClass.blockType + " / " + successionLevel[i].level + " 레벨로 계승됨");
+                successionLevel.RemoveAt(i);
             }
         }
 
@@ -563,6 +563,8 @@ public class PlayerDataBase : ScriptableObject
     public void SetSuccessionLevel(BlockClass block)
     {
         successionLevel.Add(block);
+
+        Debug.Log("계승 정보를 저장했습니다");
     }
 
     #region Ticket

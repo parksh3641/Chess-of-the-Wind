@@ -37,6 +37,7 @@ public class GameStateManager : MonoBehaviour
         public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
         public bool playing = false;
+        public int matchingTime = 15;
         public int stakes = 0;
         public int penalty = 0;
 
@@ -278,6 +279,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.playing = value;
+            SaveFile();
+        }
+    }
+
+    public int MatchingTime
+    {
+        get
+        {
+            return gameSettings.matchingTime;
+        }
+        set
+        {
+            gameSettings.matchingTime = value;
             SaveFile();
         }
     }

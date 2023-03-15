@@ -18,7 +18,7 @@ public class OtherBlockContent : MonoBehaviour
         main = GetComponent<Image>();
     }
 
-    public void ShowInitialize(BlockType type, string name)
+    public void SetOtherBlock(BlockType type, string name, string value)
     {
         nickName = name;
         blockType = type;
@@ -29,7 +29,7 @@ public class OtherBlockContent : MonoBehaviour
         }
 
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
-        blockArray[(int)blockType - 1].SetNickName(nickName);
+        blockArray[(int)blockType - 1].SetBlock(nickName, value);
 
         main.raycastTarget = false;
     }
