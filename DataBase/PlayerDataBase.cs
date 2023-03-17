@@ -528,6 +528,33 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public bool CheckEquipId2(string id)
+    {
+        bool check = false;
+
+        if (armor.Equals(id))
+        {
+            check = true;
+        }
+
+        if (weapon.Equals(id))
+        {
+            check = true;
+        }
+
+        if (shield.Equals(id))
+        {
+            check = true;
+        }
+
+        if (newbie.Equals(id))
+        {
+            check = true;
+        }
+
+        return check;
+    }
+
     public bool CheckOverlapBlock(BlockClass block, int number)
     {
         bool check = false;

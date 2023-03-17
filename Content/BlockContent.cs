@@ -9,11 +9,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
     public BlockClass blockClass;
     public int index = 0;
+    public int value = 0;
 
     Image backgroundImg;
-    [Title("Level")]
-    public Text levelText;
-    public int level = 0;
+    [Title("Info")]
+    public Text valueText;
 
     [Title("Block")]
     public GameObject blockMain;
@@ -44,10 +44,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         previousParent = grid;
     }
 
-    public void Collection_Initialize(BlockClass block, int number)
+    public void InGame_Initialize(BlockClass block, int number, int value)
     {
         blockClass = block;
         index = number;
+        this.value = value;
 
         for (int i = 0; i < blockUIArray.Length; i++)
         {
@@ -83,16 +84,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 break;
         }
 
-        level = blockClass.level;
-
-        if (level > 0)
-        {
-            levelText.text = (level + 1).ToString();
-        }
-        else
-        {
-            levelText.text = "";
-        }
+        valueText.text = MoneyUnitString.ToCurrencyString(this.value);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -149,6 +141,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         isDrag = false;
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(true);
+        //blockMainArray[(int)blockClass.blockType - 1].SetBlock(GameStateManager.instance.NickName, value.ToString());
     }
     public void ResetPos()
     {

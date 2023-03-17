@@ -42,6 +42,8 @@ public class UIManager : MonoBehaviour
     public GameObject vsView;
     public Text player1Text;
     public Text player2Text;
+    public Text player1GoldText;
+    public Text player2GoldText;
     public FadeInOut vsFadeInOut;
     public FadeInOut mainFadeInOut;
 
@@ -144,12 +146,16 @@ public class UIManager : MonoBehaviour
         mainView.SetActive(true);
     }
 
-    public void OnMatchingSuccess(string player1, string player2)
+    public void OnMatchingSuccess(string player1, string player2, int stakes)
     {
-        StartCoroutine(MatchingCoroution(player1, player2));
+        StartCoroutine(MatchingCoroution(player1, player2, stakes, false));
     }
 
-    IEnumerator MatchingCoroution(string player1, string player2)
+    public void OnMatchingAi(int stakes)
+    {
+        StartCoroutine(MatchingCoroution(GameStateManager.instance.NickName, "인공지능", stakes, true));
+    }
+    IEnumerator MatchingCoroution(string player1, string player2, int stakes, bool aiMode)
     {
         GameStateManager.instance.Playing = true;
 
@@ -163,6 +169,9 @@ public class UIManager : MonoBehaviour
         player1Text.text = player1;
         player2Text.text = player2;
 
+        player1GoldText.text = "GOLD <size=25>" + stakes + "</size>";
+        player2GoldText.text = "GOLD <size=25>" + stakes + "</size>";
+
         yield return new WaitForSeconds(3f);
 
         GameStart();
@@ -171,13 +180,27 @@ public class UIManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
+        if(!aiMode)
         {
-            gameManager.GameStart_Newbie();
+            if (GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                gameManager.GameStart_Newbie();
+            }
+            else
+            {
+                gameManager.GameStart_Gosu();
+            }
         }
         else
         {
-            gameManager.GameStart_Gosu();
+            if (GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                gameManager.GameStart_Newbie_Ai();
+            }
+            else
+            {
+                gameManager.GameStart_Gosu_Ai();
+            }
         }
     }
 

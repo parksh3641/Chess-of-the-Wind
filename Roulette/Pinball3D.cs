@@ -181,8 +181,6 @@ public class Pinball3D : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log(index + " / " + number + " / " + ballPos);
     }
 
     void EndPinball()

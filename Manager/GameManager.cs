@@ -9,8 +9,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
-
     public RouletteContent mainRouletteContent;
     Transform targetBlockContent;
 
@@ -70,6 +68,10 @@ public class GameManager : MonoBehaviour
     private float plusMoney = 0; //획득한 돈
     private int tempMoney = 0;
 
+    private int bettingAiMoney = 0;
+    private float plusAiMoney = 0; //Ai가 획득한 돈
+    private int tempAiMoney = 0;
+
     private int[] compareMoney = new int[2];
 
     private string otherBettingList = "";
@@ -92,6 +94,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Bool")]
+    public bool aiMode = false;
     public bool blockDrag = false;
     public bool blockDrop = false;
     public bool blockOverlap = false;
@@ -154,7 +157,13 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Target")]
-    List<RouletteContent> rouletteContentList_Target = new List<RouletteContent>();
+    public List<RouletteContent> rouletteContentList_Target = new List<RouletteContent>();
+
+
+    BlockClass blockClassArmor = new BlockClass();
+    BlockClass blockClassWeapon = new BlockClass();
+    BlockClass blockClassShield = new BlockClass();
+    BlockClass blockClassNewbie = new BlockClass();
 
     [Space]
     [Title("Manager")]
@@ -162,6 +171,7 @@ public class GameManager : MonoBehaviour
     public UIManager uIManager;
     public SoundManager soundManager;
     public RouletteManager rouletteManager;
+    public AiManager aiManager;
     public CharacterManager characterManager;
     public RandomBoxManager randomBoxManager;
 
@@ -178,8 +188,6 @@ public class GameManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
-
-        instance = this;
 
         bettingValue = new int[4];
         bettingSizeList = new int[4];
@@ -486,10 +494,15 @@ public class GameManager : MonoBehaviour
         blockContentTransform_Gosu.gameObject.SetActive(false);
 
         newbieBlockContent.gameObject.SetActive(true);
-        newbieBlockContent.Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Newbie), 3);
 
-        bettingValue[3] = upgradeDataBase.GetUpgradeValue(newbieBlockContent.blockClass.rankType).GetValueNumber(newbieBlockContent.level);
-        bettingSizeList[3] = blockDataBase.GetBlockInfomation(newbieBlockContent.blockClass.blockType).GetSize();
+        blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
+
+        int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
+
+        newbieBlockContent.InGame_Initialize(blockClassNewbie, 3, value);
+
+        bettingValue[3] = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
+        bettingSizeList[3] = blockDataBase.GetBlockInfomation(blockClassNewbie.blockType).GetSize();
 
         GameStart();
     }
@@ -499,7 +512,6 @@ public class GameManager : MonoBehaviour
         roomText.text = "고수방";
 
         developerInfo.text = "0 = 퀸 당첨\n1 ~24 = 해당 숫자 당첨\n25 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
-
 
         rouletteContentTransform.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
@@ -520,19 +532,51 @@ public class GameManager : MonoBehaviour
             blockContentList[i].gameObject.SetActive(true);
         }
 
-        blockContentList[0].Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Armor), 0);
-        blockContentList[1].Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Weapon), 1);
-        blockContentList[2].Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Shield), 2);
+        blockClassArmor = playerDataBase.GetBlockClass(playerDataBase.Armor);
+        blockClassWeapon = playerDataBase.GetBlockClass(playerDataBase.Weapon);
+        blockClassShield = playerDataBase.GetBlockClass(playerDataBase.Shield);
+        blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
-        bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockContentList[0].blockClass.rankType).GetValueNumber(blockContentList[0].level);
-        bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockContentList[1].blockClass.rankType).GetValueNumber(blockContentList[1].level);
-        bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockContentList[2].blockClass.rankType).GetValueNumber(blockContentList[2].level);
+        int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
+        int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
+        int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
 
-        bettingSizeList[0] = blockDataBase.GetBlockInfomation(blockContentList[0].blockClass.blockType).GetSize();
-        bettingSizeList[1] = blockDataBase.GetBlockInfomation(blockContentList[1].blockClass.blockType).GetSize();
-        bettingSizeList[2] = blockDataBase.GetBlockInfomation(blockContentList[2].blockClass.blockType).GetSize();
+        blockContentList[0].InGame_Initialize(blockClassArmor, 0, value);
+        blockContentList[1].InGame_Initialize(blockClassWeapon, 1, value2);
+        blockContentList[2].InGame_Initialize(blockClassShield, 2, value3);
+
+        bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
+        bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
+        bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
+
+        bettingSizeList[0] = blockDataBase.GetBlockInfomation(blockClassArmor.blockType).GetSize();
+        bettingSizeList[1] = blockDataBase.GetBlockInfomation(blockClassWeapon.blockType).GetSize();
+        bettingSizeList[2] = blockDataBase.GetBlockInfomation(blockClassShield.blockType).GetSize();
 
         GameStart();
+    }
+
+    public void GameStart_Newbie_Ai()
+    {
+        aiManager.Initialize();
+
+        aiMode = true;
+
+        characterManager.AddPlayer("인공지능");
+
+        GameStart_Newbie();
+
+    }
+
+    public void GameStart_Gosu_Ai()
+    {
+        aiManager.Initialize();
+
+        aiMode = true;
+
+        characterManager.AddPlayer("인공지능");
+
+        GameStart_Gosu();
     }
 
     void SetStakes() //판돈 설정
@@ -605,7 +649,7 @@ public class GameManager : MonoBehaviour
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                GameEnd(0);
+                GameEnd(1);
                 PV.RPC("GameEnd", RpcTarget.Others, 1);
             }
 
@@ -616,7 +660,7 @@ public class GameManager : MonoBehaviour
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                GameEnd(1);
+                GameEnd(0);
                 PV.RPC("GameEnd", RpcTarget.Others, 0);
             }
 
@@ -729,6 +773,8 @@ public class GameManager : MonoBehaviour
 
         ClearOtherPlayerBlock();
 
+        if(aiMode) aiManager.RestartGame();
+
         uIManager.RestartGame();
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
@@ -773,6 +819,14 @@ public class GameManager : MonoBehaviour
             }
 
             yield break;
+        }
+
+        if (aiMode)
+        {
+            if (timer <= 5)
+            {
+                aiManager.PutBlock();
+            }
         }
 
         timer -= 1;
@@ -937,15 +991,43 @@ public class GameManager : MonoBehaviour
         }
 
         plusMoney = 0; //획득한 돈
+        plusAiMoney = 0;
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
+
+            if(aiMode)
+            {
+                if(otherBettingNumberList_Newbie[2] == 1 && targetQueenNumber == 1)
+                {
+                    plusAiMoney += blockMotherInformation.straightBet_NewBie_Queen * aiManager.bettingValue[0] 
+                        + aiManager.bettingValue[0];
+                    Debug.Log("Ai 초보방 퀸 당첨");
+                }
+                else
+                {
+                    if (targetNumber % 2 == 0 && aiManager.index % 2 == 0)
+                    {
+                        plusAiMoney += blockMotherInformation.straightBet_NewBie * aiManager.bettingValue[0] 
+                            + aiManager.bettingValue[0];
+                        Debug.Log("Ai 초보방 흰색 당첨");
+                    }
+                    else if (targetNumber % 2 != 0 && aiManager.index % 2 != 0)
+                    {
+                        plusAiMoney += blockMotherInformation.straightBet_NewBie * aiManager.bettingValue[0] 
+                            + aiManager.bettingValue[0];
+                        Debug.Log("Ai 초보방 검은색 당첨");
+                    }
+                }
+            }
+
+
             if (targetQueenNumber == 1)
             {
                 if(rouletteContentList_Target[12].isActive)
                 {
-                    plusMoney += blockMotherInformation.straightBet_NewBie_Queen * bettingList[3]
-                        + bettingList[3];
+                    plusMoney += blockMotherInformation.straightBet_NewBie_Queen * bettingValue[3]
+                        + bettingValue[3];
                     Debug.Log("초보방 퀸 당첨");
                 }
             }
@@ -957,14 +1039,14 @@ public class GameManager : MonoBehaviour
                     {
                         if(targetNumber % 2 == 0 && rouletteContentList_Target[i].number % 2 == 0)
                         {
-                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingList[3]
-                        + bettingList[3];
+                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingValue[3]
+                        + bettingValue[3];
                             Debug.Log("초보방 흰색 당첨");
                         }
                         else if (targetNumber % 2 != 0 && rouletteContentList_Target[i].number % 2 != 0)
                         {
-                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingList[3]
-                        + bettingList[3];
+                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingValue[3]
+                        + bettingValue[3];
                             Debug.Log("초보방 검은색 당첨");
                         }
                     }
@@ -975,8 +1057,8 @@ public class GameManager : MonoBehaviour
         {
             if (targetQueenNumber == 1)
             {
-                Debug.Log("고수방 퀸 당첨");
                 CheckQueenNumber();
+                Debug.Log("고수방 퀸 당첨");
             }
             else
             {
@@ -1033,9 +1115,33 @@ public class GameManager : MonoBehaviour
 
         Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 돈을 획득하였습니다");
 
-        if (!PhotonNetwork.IsMasterClient) //플레이어2가 자신이 얻은 돈을 알려줍니다.
+        if(PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
-            PV.RPC("CompareMoney", RpcTarget.MasterClient, tempMoney);
+            if (!PhotonNetwork.IsMasterClient) //플레이어2가 자신이 얻은 돈을 알려줍니다.
+            {
+                PV.RPC("CompareMoney", RpcTarget.MasterClient, tempMoney);
+            }
+        }
+        else
+        {
+            bettingAiMoney = aiManager.bettingValue[0]; //초보방일때만 가능
+
+            if ((int)(plusAiMoney) - bettingAiMoney >= 0) //인공지능 결과 기록하기
+            {
+                tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
+
+                worldNotion = "<color=#00FF00>" + MoneyUnitString.ToCurrencyString(tempAiMoney) + "   " + "인공지능</color>";
+            }
+            else
+            {
+                tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
+
+                worldNotion = "<color=#FF0000>" + MoneyUnitString.ToCurrencyString(tempAiMoney) + "   " + "인공지능</color>";
+            }
+
+            RecordManager.instance.SetGameRecord(worldNotion);
+
+            CompareMoney(tempAiMoney);
         }
 
         ResetRouletteBackgroundColor();
@@ -2051,8 +2157,36 @@ public class GameManager : MonoBehaviour
                 otherBettingList += bettingNumberList_NewBie[i].ToString() + "/";
             }
 
-            PV.RPC("ShowOtherBetting_Newbie", RpcTarget.Others, otherBettingList);
 
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            {
+                PV.RPC("ShowOtherBetting_Newbie", RpcTarget.Others, otherBettingList);
+            }
+            else
+            {
+                for (int i = 0; i < otherBettingNumberList_Newbie.Length; i++)
+                {
+                    otherBettingNumberList_Newbie[i] = 0;
+                }
+
+                if (aiManager.index == 13)
+                {
+                    otherBettingNumberList_Newbie[2] = 1;
+                }
+                else
+                {
+                    if (aiManager.index % 2 == 0)
+                    {
+                        otherBettingNumberList_Newbie[0] = 1;
+                    }
+                    else
+                    {
+                        otherBettingNumberList_Newbie[1] = 1;
+                    }
+                }
+
+                Debug.Log("Ai 배팅한 위치값을 받아왔습니다");
+            }
         }
         else
         {
@@ -2085,7 +2219,14 @@ public class GameManager : MonoBehaviour
                 otherBettingList += bettingNumberList_Gosu[i].ToString() + "/";
             }
 
-            PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList);
+            if(PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            {
+                PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList);
+            }
+            else
+            {
+
+            }
         }
     }
 
@@ -2216,6 +2357,11 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void ShowOtherBetting_Newbie(string str)
     {
+        for(int i = 0; i < otherBettingNumberList_Newbie.Length; i ++)
+        {
+            otherBettingNumberList_Newbie[i] = 0;
+        }
+
         string[] list = str.Split("/");
 
         otherBettingNumberList_Newbie[0] = int.Parse(list[0]);

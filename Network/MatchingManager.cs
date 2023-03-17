@@ -139,11 +139,11 @@ public class MatchingManager : MonoBehaviour
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockValue;
 
-        newbieEnterText.text = "입장료 : " + rankInformation.stakes;
-        newbieMaxBlockText.text = "최대 블럭 값 : " + rankInformation.limitBlockValue;
+        newbieEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(rankInformation.stakes);
+        newbieMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(rankInformation.limitBlockValue);
 
-        gosuEnterText.text = "입장료 : " + rankInformation.stakes;
-        gosuMaxBlockText.text = "최대 블럭 값 : " + rankInformation.limitBlockValue;
+        gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(rankInformation.stakes);
+        gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(rankInformation.limitBlockValue);
 
         GameStateManager.instance.GameRankType = gameRankType;
     }
@@ -252,7 +252,7 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(player1, player2);
+        uIManager.OnMatchingSuccess(player1, player2, stakes);
 
         mainFadeInOut.FadeOutToIn();
 
@@ -265,7 +265,7 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(GameStateManager.instance.NickName, "인공지능");
+        uIManager.OnMatchingAi(stakes);
 
         mainFadeInOut.FadeOutToIn();
 

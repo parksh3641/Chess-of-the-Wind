@@ -479,7 +479,9 @@ public class PlayfabManager : MonoBehaviour
 
     public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
-        SetEditorOnlyMessage("Playfab Login Success");
+        //SetEditorOnlyMessage("Playfab Login Success");
+
+        Debug.Log("Playfab Login Success");
 
         customId = result.PlayFabId;
         entityId = result.EntityToken.Entity.Id;
@@ -577,13 +579,13 @@ public class PlayfabManager : MonoBehaviour
     {
         //SetEditorOnlyMessage(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
         JsonObject jsonResult = (JsonObject)result.FunctionResult;
-        //foreach (var json in jsonResult)
-        //{
-        //    SetEditorOnlyMessage(json.Key + " / " + json.Value);
-        //}
-        object messageValue;
-        jsonResult.TryGetValue("OnCloudUpdateStats() messageValue", out messageValue);
-        SetEditorOnlyMessage((string)messageValue);
+        foreach (var json in jsonResult)
+        {
+            SetEditorOnlyMessage(json.Key + " / " + json.Value);
+        }
+        //object messageValue;
+        //jsonResult.TryGetValue("OnCloudUpdateStats() messageValue", out messageValue);
+        //SetEditorOnlyMessage((string)messageValue);
 
         //GetUserInventory();
     }
@@ -652,7 +654,7 @@ public class PlayfabManager : MonoBehaviour
                     {
                         if(list.ItemId.Contains((BlockType.Default + i).ToString()))
                         {
-                            if(list.CustomData == null)
+                            if(list.CustomData == null && !playerDataBase.CheckEquipId2(list.ItemInstanceId))
                             {
                                 SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
                             }

@@ -10,6 +10,7 @@ public class OtherBlockContent : MonoBehaviour
     Image main;
 
     public string nickName;
+    public string value;
 
     public BlockChildContent[] blockArray;
 
@@ -21,6 +22,7 @@ public class OtherBlockContent : MonoBehaviour
     public void SetOtherBlock(BlockType type, string name, string value)
     {
         nickName = name;
+        this.value = value;
         blockType = type;
 
         for (int i = 0; i < blockArray.Length; i++)

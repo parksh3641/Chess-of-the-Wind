@@ -1,18 +1,27 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
+    public Text sortText;
 
+    [Space]
+    [Title("Value")]
+    public int sortCount;
+    
+
+    [Space]
+    [Title("Prefab")]
     public BlockUIContent blockUIContent;
     public Transform blockUITransform;
 
     public List<BlockClass> blockList = new List<BlockClass>();
-
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
@@ -24,6 +33,7 @@ public class CollectionManager : MonoBehaviour
     public UpgradeManager upgradeManager;
     public PresentManager presentManager;
     PlayerDataBase playerDataBase;
+
 
     void Awake()
     {
@@ -42,6 +52,10 @@ public class CollectionManager : MonoBehaviour
 
             blockUIContentList.Add(content);
         }
+
+        sortCount = 0;
+
+        sortText.text = "등급 순 ▲";
     }
 
     public void OpenCollectionView()
@@ -84,6 +98,8 @@ public class CollectionManager : MonoBehaviour
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
+        blockList = blockList.OrderByDescending(x => x.rankType).ToList();
+
         if (blockUIContentList.Count < blockList.Count)
         {
             int number = blockList.Count - blockUIContentList.Count;
@@ -125,6 +141,8 @@ public class CollectionManager : MonoBehaviour
         {
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
+
+        blockList = blockList.OrderByDescending(x => x.rankType).ToList();
 
         if (blockUIContentList.Count < blockList.Count)
         {
@@ -413,5 +431,57 @@ public class CollectionManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Sort
+
+    public void SortButton()
+    {
+        if(sortCount == 0)
+        {
+            blockList = blockList.OrderBy(x => x.rankType).ToList();
+
+            sortText.text = "등급 순 ▼";
+
+            sortCount = 1;
+        }
+        else if(sortCount == 1)
+        {
+            blockList = blockList.OrderByDescending(x => x.blockType).ToList();
+
+            sortText.text = "종류 순 ▲";
+
+            sortCount = 2;
+        }
+        else if (sortCount == 2)
+        {
+            blockList = blockList.OrderBy(x => x.blockType).ToList();
+
+            sortText.text = "종류 순 ▼";
+
+            sortCount = 3;
+        }
+        else
+        {
+            blockList = blockList.OrderByDescending(x => x.rankType).ToList();
+
+            sortText.text = "등급 순 ▲";
+
+            sortCount = 0;
+        }
+
+
+        for (int i = 0; i < blockUIContentList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(true);
+            blockUIContentList[i].Collection_Initialize(blockList[i]);
+        }
+    }
+
     #endregion
 }

@@ -60,6 +60,14 @@ public class CharacterManager : MonoBehaviour
             characterContents[i].gameObject.SetActive(false);
         }
     }
+
+    public void ResetFocus()
+    {
+        for (int i = 0; i < characterContents.Length; i++)
+        {
+            characterContents[i].focus.SetActive(false);
+        }
+    }
     
     public void CheckMyTurn(string str)
     {

@@ -94,14 +94,15 @@ public class UpgradeManager : MonoBehaviour
 
         levelText.text = "레벨 " + (blockClass.level + 1).ToString() + " / " + upgradeValue.maxLevel;
 
-        valueText.text = "현재 가치 : " + upgradeValue.GetValueNumber(blockClass.level);
+        valueText.text = "현재 가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level));
 
         successText.text = "성공 확률 : " + upgradeInformation.success + "%";
         keepText.text = "실패(유지) 확률 : " + upgradeInformation.keep + "%";
         downText.text = "실패(하락) 확률 : " + upgradeInformation.down + "%";
         destroyText.text = "파괴 확률 : " + upgradeInformation.destroy + "%";
 
-        valuePlusText.text = "가치 : " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ " + upgradeValue.GetValueNumber(blockClass.level + 1);
+        valuePlusText.text = "가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
+            " ▶ " + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1)));
 
         gold = playerDataBase.Gold;
 

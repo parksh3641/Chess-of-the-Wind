@@ -79,4 +79,26 @@ public class UpgradeDataBase : ScriptableObject
 
         return upgradeInformation;
     }
+
+    public int CheckUpgradeValue(RankType type, int value) //이 값에 안 넘는 강화 단계 알려주세요
+    {
+        int level = 0;
+
+        for (int i = 0; i < upgradeValueList.Count; i++)
+        {
+            if (upgradeValueList[i].rankType.Equals(type))
+            {
+                for(int j = 0; j < upgradeValueList[i].valueList.Count - 1; j ++)
+                {
+                    if(int.Parse(upgradeValueList[i].valueList[j + 1]) <= value)
+                    {
+                        level++;
+                    }
+                }
+                break;
+            }
+        }
+
+        return level;
+    }
 }
