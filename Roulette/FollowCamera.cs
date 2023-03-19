@@ -14,12 +14,20 @@ public class FollowCamera : MonoBehaviour
 
     Vector3 TargetPos;
 
+    public void SetBall(GameObject ball)
+    {
+        target = ball;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        TargetPos = new Vector3(target.transform.position.x + offsetX,target.transform.position.y + offsetY,target.transform.position.z + offsetZ
-            );
+        if (target != null)
+        {
+            TargetPos = new Vector3(target.transform.position.x + offsetX, target.transform.position.y + offsetY, target.transform.position.z + offsetZ
+                );
 
-        transform.position = TargetPos;
+            transform.position = TargetPos;
+        }
     }
 }

@@ -92,7 +92,7 @@ public class FormationManager : MonoBehaviour
             itemList.Clear();
             itemList.Add("RightQueen_2_N");
             itemList.Add("RightNight_N");
-            itemList.Add("Rook_V2H2_N");
+            itemList.Add("Rook_V4_N");
             itemList.Add("Pawn_N");
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);

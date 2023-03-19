@@ -43,6 +43,11 @@ public class RecordManager : MonoBehaviour
             Destroy(endRecordContentList[i].gameObject);
         }
 
+        for (int i = 0; i < gameRecordContentList.Count; i++)
+        {
+            gameRecordContentList[i].gameObject.SetActive(false);
+        }
+
         endRecordContentList.Clear();
 
         recordList.Clear();

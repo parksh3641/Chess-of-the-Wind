@@ -30,6 +30,7 @@ public class BlockClass
     public string instanceId = "";
 
     public int level = 0;
+    public int equipInfo = 0;
 }
 
 [System.Serializable]
@@ -100,8 +101,6 @@ public class PlayerDataBase : ScriptableObject
     private string shield = "";
     [SerializeField]
     private string newbie = "";
-    [SerializeField]
-    private int equipBlock = 0;
 
     [Title("Item")]
     [SerializeField]
@@ -125,6 +124,7 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<BlockClass> blockList = new List<BlockClass>();
     public List<BlockClass> successionLevel = new List<BlockClass>();
+    public List<BlockClass> equipBlockInfo = new List<BlockClass>();
     public List<string> sellBlockList = new List<string>();
 
     [Title("Upgrade")]
@@ -233,18 +233,6 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int EquipBlock
-    {
-        get
-        {
-            return equipBlock;
-        }
-        set
-        {
-            equipBlock = value;
-        }
-    }
-
     public int SnowBox
     {
         get
@@ -325,7 +313,6 @@ public class PlayerDataBase : ScriptableObject
         weapon = "";
         shield = "";
         newbie = "";
-        equipBlock = 0;
 
         snowBox = 0;
         underworldBox = 0;
@@ -346,6 +333,7 @@ public class PlayerDataBase : ScriptableObject
         blockList.Clear();
         sellBlockList.Clear();
         successionLevel.Clear();
+        equipBlockInfo.Clear();
 
         //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length; i++)
         //{
@@ -394,22 +382,6 @@ public class PlayerDataBase : ScriptableObject
             {
                 return;
             }
-        }
-
-        switch(equipBlock)
-        {
-            case 1:
-                armor = item.ItemInstanceId;
-                break;
-            case 2:
-                weapon = item.ItemInstanceId;
-                break;
-            case 3:
-                shield = item.ItemInstanceId;
-                break;
-            case 4:
-                newbie = item.ItemInstanceId;
-                break;
         }
 
         BlockClass blockClass = new BlockClass();
@@ -464,6 +436,41 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
+        for (int i = 0; i < equipBlockInfo.Count; i++) //장착 계승
+        {
+            if (blockClass.level == equipBlockInfo[i].level &&
+                blockClass.blockType.Equals(equipBlockInfo[i].blockType) &&
+                blockClass.rankType.Equals(equipBlockInfo[i].rankType))
+            {
+                if (equipBlockInfo[i].equipInfo == 1)
+                {
+                    armor = blockClass.instanceId;
+
+                    Debug.Log("아머로 장비가 계승되었습니다");
+                }
+                else if (equipBlockInfo[i].equipInfo == 2)
+                {
+                    weapon = blockClass.instanceId;
+
+                    Debug.Log("검으로 장비가 계승되었습니다");
+                }
+                else if (equipBlockInfo[i].equipInfo == 3)
+                {
+                    shield = blockClass.instanceId;
+
+                    Debug.Log("쉴드로 장비가 계승되었습니다");
+                }
+                else if (equipBlockInfo[i].equipInfo == 4)
+                {
+                    newbie = blockClass.instanceId;
+
+                    Debug.Log("뉴비로 장비가 계승되었습니다");
+                }
+
+                equipBlockInfo.RemoveAt(i);
+            }
+        }
+
         blockList.Add(blockClass);
     }
 
@@ -505,27 +512,39 @@ public class PlayerDataBase : ScriptableObject
         return blockClass;
     }
 
-    public void CheckEquipId(string id)
+    public int CheckEquipId(string id)
     {
+        int number = 0;
+
         if(armor.Equals(id))
         {
-            equipBlock = 1;
+            number = 1;
+
+            Debug.Log("장착 중인 아머가 선택되었습니다");
         }
 
         if (weapon.Equals(id))
         {
-            equipBlock = 2;
+            number = 2;
+
+            Debug.Log("장착 중인 검이 선택되었습니다");
         }
 
         if (shield.Equals(id))
         {
-            equipBlock = 3;
+            number = 3;
+
+            Debug.Log("장착 중인 쉴드가 선택되었습니다");
         }
 
         if (newbie.Equals(id))
         {
-            equipBlock = 4;
+            number = 4;
+
+            Debug.Log("장착 중인 뉴비가 선택되었습니다");
         }
+
+        return number;
     }
 
     public bool CheckEquipId2(string id)
@@ -592,6 +611,13 @@ public class PlayerDataBase : ScriptableObject
         successionLevel.Add(block);
 
         Debug.Log("계승 정보를 저장했습니다");
+    }
+
+    public void SetEquipInfo(BlockClass block)
+    {
+        equipBlockInfo.Add(block);
+
+        Debug.Log("장착할 정보를 저장했습니다");
     }
 
     #region Ticket

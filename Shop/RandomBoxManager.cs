@@ -391,7 +391,7 @@ public class RandomBoxManager : MonoBehaviour
                         prize = "RightNight";
                         break;
                     case 2:
-                        prize = "Rook_V2H2";
+                        prize = "Rook_V4";
                         break;
                     case 3:
                         prize = "Pawn";

@@ -25,7 +25,7 @@ public class CollectionManager : MonoBehaviour
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.03f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
 
     bool check = false;
 
@@ -128,7 +128,10 @@ public class CollectionManager : MonoBehaviour
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
 
-        StartCoroutine(DelayCheckEquip());
+        CheckEquipArmor();
+        CheckEquipWeapon();
+        CheckEquipShield();
+        CheckEquipNewBie();
     }
 
     public void UpdateCollection() //변경점이 생겼을 경우 업데이트
@@ -178,25 +181,12 @@ public class CollectionManager : MonoBehaviour
             }
         }
 
-        if(playerDataBase.EquipBlock > 0)
-        {
-            StartCoroutine(DelayCheckEquip());
-
-            playerDataBase.EquipBlock = 0;
-        }
-    }
-
-    IEnumerator DelayCheckEquip()
-    {
         CheckEquipArmor();
-        yield return waitForSeconds;
         CheckEquipWeapon();
-        yield return waitForSeconds;
         CheckEquipShield();
-        yield return waitForSeconds;
         CheckEquipNewBie();
     }
-   
+
     public void FirstEquipCheck()
     {
         StartCoroutine(FirstEquipCoroution());
@@ -216,25 +206,40 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
             {
                 equipManager.EquipArmor(blockList[i], true);
-                yield return waitForSeconds;
+                break;
             }
+        }
 
+        yield return waitForSeconds;
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
             if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
             {
                 equipManager.EquipWeapon(blockList[i], true);
-                yield return waitForSeconds;
+                break;
             }
+        }
 
+        yield return waitForSeconds;
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
             if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
             {
                 equipManager.EquipShield(blockList[i], true);
-                yield return waitForSeconds;
+                break;
             }
+        }
 
+        yield return waitForSeconds;
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
             if (blockList[i].blockType == BlockType.Pawn)
             {
                 equipManager.EquipNewBie(blockList[i], false);
-                yield return waitForSeconds;
+                break;
             }
         }
     }
@@ -447,7 +452,7 @@ public class CollectionManager : MonoBehaviour
         }
         else if(sortCount == 1)
         {
-            blockList = blockList.OrderByDescending(x => x.blockType).ToList();
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
             sortText.text = "종류 순 ▲";
 
@@ -455,7 +460,7 @@ public class CollectionManager : MonoBehaviour
         }
         else if (sortCount == 2)
         {
-            blockList = blockList.OrderBy(x => x.blockType).ToList();
+            blockList = blockList.OrderBy(x => x.blockType).OrderBy(x => x.rankType).ToList();
 
             sortText.text = "종류 순 ▼";
 
@@ -470,7 +475,6 @@ public class CollectionManager : MonoBehaviour
             sortCount = 0;
         }
 
-
         for (int i = 0; i < blockUIContentList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(false);
@@ -481,6 +485,11 @@ public class CollectionManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
+
+        CheckEquip(playerDataBase.Armor);
+        CheckEquip(playerDataBase.Weapon);
+        CheckEquip(playerDataBase.Shield);
+        CheckEquip(playerDataBase.Newbie);
     }
 
     #endregion

@@ -13,6 +13,7 @@ public class OtherBlockContent : MonoBehaviour
     public string value;
 
     public BlockChildContent[] blockArray;
+    public RectTransform[] rectTransformArray;
 
     private void Awake()
     {

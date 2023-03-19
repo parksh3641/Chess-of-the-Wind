@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Pinball3D : MonoBehaviour
 {
-    public bool move = false;
+    public Transform vector;
+    public Rigidbody rigid;
 
     private float power = 150f;
     private float windPower = 0;
@@ -15,9 +16,7 @@ public class Pinball3D : MonoBehaviour
     private float time = 0f;
     private float midWindPower = 0f;
 
-    public Transform vector;
-
-    Rigidbody rigid;
+    public bool move = false;
 
     public RouletteManager rouletteManager;
     public PhotonView PV;

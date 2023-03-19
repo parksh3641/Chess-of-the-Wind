@@ -8,6 +8,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class RouletteManager : MonoBehaviour
 {
     public MoveCamera rouletteCamera;
+    public FollowCamera rouletteBallCamera;
+
     public GameObject roulette3D;
     public GameObject characterIndexUI;
 
@@ -95,6 +97,7 @@ public class RouletteManager : MonoBehaviour
     bool buttonClick = false;
     bool bouns = false;
     bool aiMode = false;
+    bool playing = false;
 
     public GameManager gameManager;
     public UIManager uIManager;
@@ -113,6 +116,7 @@ public class RouletteManager : MonoBehaviour
         bouns = false;
 
         rouletteCamera.gameObject.SetActive(false);
+        rouletteBallCamera.gameObject.SetActive(false);
         roulette3D.SetActive(false);
     }
 
@@ -126,6 +130,7 @@ public class RouletteManager : MonoBehaviour
         pinball = PhotonNetwork.Instantiate("PinballObj", Vector3.zero, Quaternion.identity, 0).GetComponent<Pinball3D>();
         pinball.transform.parent = roulette3D.transform;
         pinball.rouletteManager = this;
+        rouletteBallCamera.SetBall(pinball.gameObject);
 
         for (int i = 0; i < leftClock.Length; i++)
         {
@@ -237,11 +242,13 @@ public class RouletteManager : MonoBehaviour
 
         roulette3D.SetActive(true);
 
-        if(!PhotonNetwork.IsMasterClient && pinball == null)
+        if (!PhotonNetwork.IsMasterClient && pinball == null)
         {
             pinball = GameObject.FindWithTag("Pinball").GetComponent<Pinball3D>();
             pinball.transform.parent = roulette3D.transform;
             pinball.rouletteManager = this;
+
+            rouletteBallCamera.SetBall(pinball.gameObject);
 
             leftClock[0] = GameObject.FindWithTag("ClockSecObj_Left").GetComponent<Rotation_Clock>();
             leftClock[1] = GameObject.FindWithTag("ClockMinObj_Left").GetComponent<Rotation_Clock>();
@@ -395,8 +402,8 @@ public class RouletteManager : MonoBehaviour
             }
             else if (gameManager.bettingNumberList_NewBie[2] == 1)
             {
-                leftQueen.material.color = Color.blue;
-                rightQueen.material.color = Color.blue;
+                leftQueen.material.color = new Color(0, 1, 1);
+                rightQueen.material.color = new Color(0, 1, 1);
             }
             else if (gameManager.otherBettingNumberList_Newbie[2] == 1)
             {
@@ -424,7 +431,7 @@ public class RouletteManager : MonoBehaviour
                         }
                         else if (gameManager.bettingNumberList_Gosu.Contains(13))
                         {
-                            leftQueen.material.color = Color.blue;
+                            leftQueen.material.color = new Color(0, 1, 1);
                         }
                         else if(gameManager.otherBettingNumberList_Gosu.Contains(13))
                         {
@@ -447,7 +454,7 @@ public class RouletteManager : MonoBehaviour
                         }
                         else if (gameManager.bettingNumberList_Gosu.Contains(13))
                         {
-                            rightQueen.material.color = Color.blue;
+                            rightQueen.material.color = new Color(0, 1, 1);
                         }
                         else if (gameManager.otherBettingNumberList_Gosu.Contains(13))
                         {
@@ -545,6 +552,27 @@ public class RouletteManager : MonoBehaviour
         rightFingerController.Disable();
 
         buttonClick = false;
+    }
+
+    IEnumerator CheckBall()
+    {
+        yield return new WaitForSeconds(5);
+
+        while(playing)
+        {
+            if (pinball.rigid.velocity.magnitude < 0.5f)
+            {
+                rouletteCamera.gameObject.SetActive(false);
+                rouletteBallCamera.gameObject.SetActive(true);
+            }
+
+            yield return waitForSeconds2;
+        }
+
+        yield return new WaitForSeconds(2);
+
+        rouletteCamera.gameObject.SetActive(true);
+        rouletteBallCamera.gameObject.SetActive(false);
     }
 
     //void CheckGameMode()
@@ -674,8 +702,8 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-
-        Debug.Log("숫자 룰렛 실행");
+        playing = true;
+        StartCoroutine(CheckBall());
     }
 
     [PunRPC]
@@ -867,7 +895,7 @@ public class RouletteManager : MonoBehaviour
             PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
         }
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 
@@ -890,6 +918,8 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void EndRoulette()
     {
+        playing = false;
+
         soundManager.StopLoopSFX(GameSfxType.Roulette);
 
         for (int i = 0; i < leftClock.Length; i++)
@@ -1070,7 +1100,7 @@ public class RouletteManager : MonoBehaviour
     #region Ai
     IEnumerator AiBlowWindCoroution()
     {
-        yield return new WaitForSeconds(Random.Range(10, 15));
+        yield return new WaitForSeconds(Random.Range(3, 10));
 
         while(!buttonClick)
         {

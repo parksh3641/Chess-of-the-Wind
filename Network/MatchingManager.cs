@@ -243,6 +243,8 @@ public class MatchingManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         AlMatching();
     }
 

@@ -172,9 +172,9 @@ public class UIManager : MonoBehaviour
         player1GoldText.text = "GOLD <size=25>" + stakes + "</size>";
         player2GoldText.text = "GOLD <size=25>" + stakes + "</size>";
 
-        yield return new WaitForSeconds(3f);
-
         GameStart();
+
+        yield return new WaitForSeconds(3f);
 
         vsFadeInOut.FadeOut();
 
@@ -210,11 +210,6 @@ public class UIManager : MonoBehaviour
         bettingView.SetActive(true);
 
         dontTouchObj.SetActive(true);
-    }
-
-    public void RestartGame()
-    {
-        dontTouchObj.SetActive(false);
     }
 
     public void GameEnd()

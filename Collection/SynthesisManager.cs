@@ -36,6 +36,7 @@ public class SynthesisManager : MonoBehaviour
     [Title("Value")]
     private int needGold = 0;
     private int updateLevel = 0;
+    private int equipInfo = 0;
 
     private bool isStart = false; //합성 시작 여부
     private bool isMat1 = false;
@@ -144,6 +145,8 @@ public class SynthesisManager : MonoBehaviour
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
+        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
+
         if (blockUIContentList.Count < blockList.Count)
         {
             int number = blockList.Count - blockUIContentList.Count;
@@ -189,7 +192,7 @@ public class SynthesisManager : MonoBehaviour
 
             action.Invoke();
 
-            playerDataBase.EquipBlock = 0;
+            equipInfo = 0;
 
             nextBlockUIContent.Reset_Initalize();
             targetBlockUIContent.Reset_Initalize();
@@ -198,7 +201,7 @@ public class SynthesisManager : MonoBehaviour
 
             blockClass = playerDataBase.GetBlockClass(id);
 
-            playerDataBase.CheckEquipId(id);
+            equipInfo = playerDataBase.CheckEquipId(id);
 
             windCharacterType = blockDataBase.GetBlockInfomation(blockClass.blockType).windCharacterType;
             rankType = blockClass.rankType;
@@ -384,7 +387,7 @@ public class SynthesisManager : MonoBehaviour
             upgradeLevelText.text = "합성을 원하는 블록을 선택하세요!";
             valueText.text = "";
 
-            playerDataBase.EquipBlock = 0;
+            equipInfo = 0;
 
             nextBlockUIContent.Reset_Initalize();
             targetBlockUIContent.Reset_Initalize();
@@ -496,9 +499,22 @@ public class SynthesisManager : MonoBehaviour
             block.rankType = rankType + 1;
             block.level = updateLevel;
 
-            playerDataBase.SetSuccessionLevel(block);
+            Debug.Log(updateLevel + 1 + "레벨로 계승 될 예정입니다");
 
-            Debug.Log(updateLevel + 1 + "레벨 계승 될 예정입니다");
+            playerDataBase.SetSuccessionLevel(block);
+        }
+
+        if (equipInfo > 0)
+        {
+            BlockClass block = new BlockClass();
+            block.blockType = blockClass.blockType;
+            block.rankType = rankType + 1;
+            block.level = updateLevel;
+            block.equipInfo = equipInfo;
+
+            Debug.Log(equipInfo + "번째 장비가 바뀔 예정입니다");
+
+            playerDataBase.SetEquipInfo(block);
         }
 
         synthesisResultList.Clear();

@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -27,7 +28,8 @@ public class AiManager : MonoBehaviour
     public int limitBlockLevel_SSR = 0;
     private int value = 0;
 
-    public int index = 0;
+    public int blockIndex = 0;
+    public int blockPos = 0;
 
 
     [Space]
@@ -40,6 +42,11 @@ public class AiManager : MonoBehaviour
     public BlockType[] blockTypeArray;
 
     public int[] bettingValue = new int[3]; //각 블럭에 배팅 금액
+
+    public int[] dontBettingZone1;
+    public int[] dontBettingZone2;
+    public int[] dontBettingZone3;
+
 
     RankInformation rankInformation = new RankInformation();
 
@@ -126,6 +133,10 @@ public class AiManager : MonoBehaviour
                 blockTypeArray[1] = BlockType.LeftNight;
                 blockTypeArray[2] = BlockType.Rook_V2;
 
+                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
+                dontBettingZone3 = new int[] { };
+
                 SetBlockClass();
             }
             else
@@ -134,7 +145,11 @@ public class AiManager : MonoBehaviour
 
                 blockTypeArray[0] = BlockType.RightQueen_2;
                 blockTypeArray[1] = BlockType.RightNight;
-                blockTypeArray[2] = BlockType.Rook_V2H2;
+                blockTypeArray[2] = BlockType.Rook_V4;
+
+                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
+                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
 
                 SetBlockClass();
             }
@@ -186,17 +201,50 @@ public class AiManager : MonoBehaviour
 
         if (gameType == GameType.NewBie)
         {
+            blockIndex = 0;
+
             otherBlockContentList[0].gameObject.SetActive(true);
 
-            index = Random.Range(1, 26);
+            blockPos = Random.Range(1, 26);
 
-            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[index - 1].transform.position;
+            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
 
-            Debug.Log("Ai가 초보방 블럭을 " + index + "번에 놓았습니다");
+            Debug.Log("Ai가 초보방 블럭을 " + blockPos + "번에 놓았습니다");
         }
         else
         {
-            Debug.Log("Ai가 고수방 블럭을 놓았습니다");
+            blockIndex = Random.Range(0, 3);
+
+            otherBlockContentList[blockIndex].gameObject.SetActive(true);
+
+            if(blockIndex == 0)
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone1);
+            }
+            else if(blockIndex == 1)
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone2);
+            }
+            else
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone3);
+            }
+
+            Debug.Log(blockPos);
+
+            otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+
+            Debug.Log("Ai가 고수방 블럭을 " + (blockPos - 1) + "번에 놓았습니다");
         }
+    }
+
+    private int GenerateRandomNumber(int[] exclusionList)
+    {
+        int randomValue = Random.Range(6, 26);
+        while (exclusionList.Contains(randomValue))
+        {
+            randomValue = Random.Range(6, 26);
+        }
+        return randomValue;
     }
 }
