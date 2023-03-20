@@ -438,6 +438,13 @@ public class GameManager : MonoBehaviour
         inputTargetNumber.text = "";
 
         ClearOtherPlayerBlock();
+
+        for (int i = 0; i < otherBettingNumberList_Newbie.Length; i++)
+        {
+            otherBettingNumberList_Newbie[i] = 0;
+        }
+
+        otherBettingNumberList_Gosu.Clear();
     }
 
     public void Penalty()
@@ -721,14 +728,12 @@ public class GameManager : MonoBehaviour
         while(timer > 0)
         {
             timer -= 1;
-            PV.RPC("ChangeWaitTimer", RpcTarget.All, timer);
+            PV.RPC("ChangeWaitTimer", RpcTarget.Others, timer);
 
             timerFillAmount.fillAmount = timer / ((bettingWaitTime - 1) * 1.0f);
             timerText.text = timer + "초 뒤에 게임을 시작합니다";
             yield return waitForSeconds;
         }
-
-        uIManager.dontTouchObj.SetActive(false);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -746,8 +751,19 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
+    void ChangeWaitTimer(int number)
+    {
+        timer = number;
+
+        timerFillAmount.fillAmount = timer / ((bettingWaitTime - 1) * 1.0f);
+        timerText.text = timer + "초 뒤에 게임을 시작합니다";
+    }
+
+    [PunRPC]
     void RestartGame()
     {
+        uIManager.dontTouchObj.SetActive(false);
+
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             newbieBlockContent.ResetPos();
@@ -774,8 +790,6 @@ public class GameManager : MonoBehaviour
         {
             bettingList[i] = 0;
         }
-
-        RecordManager.instance.Initialize();
 
         ClearOtherPlayerBlock();
 
@@ -816,7 +830,7 @@ public class GameManager : MonoBehaviour
                 PV.RPC("DelayRoulette", RpcTarget.All);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -836,22 +850,13 @@ public class GameManager : MonoBehaviour
 
         timer -= 1;
 
-        PV.RPC("ChangeTimer", RpcTarget.All, timer);
+        PV.RPC("ChangeTimer", RpcTarget.Others, timer);
 
         timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
         timerText.text = timer.ToString();
 
         yield return new WaitForSeconds(1f);
         StartCoroutine(TimerCoroution());
-    }
-
-    [PunRPC]
-    void ChangeWaitTimer(int number)
-    {
-        timer = number;
-
-        timerFillAmount.fillAmount = timer / ((bettingWaitTime - 1) * 1.0f);
-        timerText.text = timer + "초 뒤에 게임을 시작합니다";
     }
 
     [PunRPC]
@@ -869,6 +874,8 @@ public class GameManager : MonoBehaviour
         }
 
         ResetRouletteBackgroundColor();
+
+        ShowBettingNumber();
     }
 
     bool CheckDeveloper()
@@ -914,12 +921,14 @@ public class GameManager : MonoBehaviour
 
         if(bettingMoney > 0)
         {
+            SetMinusMoney(bettingMoney);
+
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, bettingMoney);
+
+            Debug.LogError(bettingMoney + "만큼 배팅했습니다.");
         }
 
-        Debug.LogError(bettingMoney + "만큼 배팅했습니다.");
-
-        ShowBettingNumber();
+        RecordManager.instance.GameRecordInitialize();
 
         if (!CheckDeveloper())
         {
@@ -1104,8 +1113,6 @@ public class GameManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, tempMoney);
 
-                SetMinusMoney(-tempMoney);
-
                 worldNotion = "<color=#00FF00>+" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
                 localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
 
@@ -1116,8 +1123,6 @@ public class GameManager : MonoBehaviour
             {
                 tempMoney = (int)(plusMoney) - bettingMoney;
 
-                SetMinusMoney(tempMoney);
-
                 worldNotion = "<color=#FF0000>" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
                 localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
 
@@ -1127,7 +1132,7 @@ public class GameManager : MonoBehaviour
 
             PV.RPC("ChatRPC", RpcTarget.All, worldNotion);
 
-            randomBoxManager.GameReward();
+            //randomBoxManager.GameReward();
         }
 
         Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 돈을 획득하였습니다");
@@ -1183,7 +1188,10 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
-        CheckWinnerPlayer();
+        if(PhotonNetwork.IsMasterClient)
+        {
+            CheckWinnerPlayer();
+        }
     }
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
@@ -2176,15 +2184,17 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            otherBettingList = "";
+
             for (int i = 0; i < bettingNumberList_NewBie.Length; i++)
             {
                 otherBettingList += bettingNumberList_NewBie[i].ToString() + "/";
             }
 
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
             {
-                PV.RPC("ShowOtherBetting_Newbie", RpcTarget.Others, otherBettingList);
+                PV.RPC("ShowOtherBetting_Newbie", RpcTarget.Others, otherBettingList.TrimEnd('/'));
             }
             else
             {
@@ -2209,7 +2219,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                Debug.Log("Ai 배팅한 위치값을 받아왔습니다");
+                Debug.Log("초보방 Ai 배팅한 위치값을 받아왔습니다");
             }
         }
         else
@@ -2238,18 +2248,23 @@ public class GameManager : MonoBehaviour
             bettingNumberList_Gosu = bettingNumberList_Gosu.Distinct().ToList();
             bettingNumberList_Gosu.Sort();
 
-            for(int i = 0; i < bettingNumberList_Gosu.Count; i ++)
+            otherBettingList = "";
+
+            for (int i = 0; i < bettingNumberList_Gosu.Count; i ++)
             {
                 otherBettingList += bettingNumberList_Gosu[i].ToString() + "/";
             }
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            if(PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
             {
-                PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList);
+                PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList.TrimEnd('/'));
             }
             else
             {
+                //아직 미구현
 
+
+                Debug.Log("고수방 Ai 배팅한 위치값을 받아왔습니다");
             }
         }
     }
@@ -2391,6 +2406,8 @@ public class GameManager : MonoBehaviour
         otherBettingNumberList_Newbie[0] = int.Parse(list[0]);
         otherBettingNumberList_Newbie[1] = int.Parse(list[1]);
         otherBettingNumberList_Newbie[2] = int.Parse(list[2]);
+
+        Debug.Log("초보방 상대 배팅 위치값을 받아왔습니다");
     }
 
     [PunRPC]
@@ -2403,7 +2420,13 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < list.Length; i ++)
         {
             otherBettingNumberList_Gosu.Add(int.Parse(list[i]));
+            list[i].Replace("/", "");
         }
+
+        otherBettingNumberList_Gosu = otherBettingNumberList_Gosu.Distinct().ToList();
+        otherBettingNumberList_Gosu.Sort();
+
+        Debug.Log("고수방 상대 배팅 위치값을 받아왔습니다");
     }
 
     #endregion

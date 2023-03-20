@@ -65,11 +65,11 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         rouletteType = type;
         index = setIndex;
 
+        number = num + 1;
+
         switch (rouletteType)
         {
             case RouletteType.StraightBet:
-
-                number = num + 1;
 
                 if (number % 2 == 0)
                 {

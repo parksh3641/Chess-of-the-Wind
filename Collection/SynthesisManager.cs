@@ -21,6 +21,8 @@ public class SynthesisManager : MonoBehaviour
     public Text upgradeLevelText;
     public Text valueText;
 
+    public Text sortText;
+
     public GameObject plusObj;
     public GameObject matObj1;
     public GameObject matObj2;
@@ -37,6 +39,7 @@ public class SynthesisManager : MonoBehaviour
     private int needGold = 0;
     private int updateLevel = 0;
     private int equipInfo = 0;
+    private int sortCount = 0;
 
     private bool isStart = false; //합성 시작 여부
     private bool isMat1 = false;
@@ -557,5 +560,52 @@ public class SynthesisManager : MonoBehaviour
     public void ClosesSynthesisResultView()
     {
         synthesisResultView.SetActive(false);
+    }
+
+    public void SortButton()
+    {
+        if (sortCount == 0)
+        {
+            blockList = blockList.OrderBy(x => x.rankType).ToList();
+
+            sortText.text = "등급 순 ▼";
+
+            sortCount = 1;
+        }
+        else if (sortCount == 1)
+        {
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
+
+            sortText.text = "종류 순 ▲";
+
+            sortCount = 2;
+        }
+        else if (sortCount == 2)
+        {
+            blockList = blockList.OrderBy(x => x.blockType).OrderBy(x => x.rankType).ToList();
+
+            sortText.text = "종류 순 ▼";
+
+            sortCount = 3;
+        }
+        else
+        {
+            blockList = blockList.OrderByDescending(x => x.rankType).ToList();
+
+            sortText.text = "등급 순 ▲";
+
+            sortCount = 0;
+        }
+
+        for (int i = 0; i < blockUIContentList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(true);
+            blockUIContentList[i].Collection_Initialize(blockList[i]);
+        }
     }
 }

@@ -164,4 +164,14 @@ public class ShopManager : MonoBehaviour
     }
 
     #endregion
+
+    public void PlusMoney()
+    {
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 100000);
+    }
+
+    public void MinusMoney()
+    {
+        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100000);
+    }
 }

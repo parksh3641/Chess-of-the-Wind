@@ -53,6 +53,16 @@ public class RecordManager : MonoBehaviour
         recordList.Clear();
     }
 
+    public void GameRecordInitialize()
+    {
+        recordIndex = 0;
+
+        for (int i = 0; i < gameRecordContentList.Count; i++)
+        {
+            gameRecordContentList[i].gameObject.SetActive(false);
+        }
+    }
+
     public void SetRecord(string text)
     {
         recordList.Add(text);

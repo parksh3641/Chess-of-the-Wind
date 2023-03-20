@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,11 +37,11 @@ public class Pointer : MonoBehaviour
 
         if (number % 2 == 0)
         {
-            numberText.text = "»Ú";
+            numberText.text = "Ìù∞";
         }
         else
         {
-            numberText.text = "∞À";
+            numberText.text = "Í≤Ä";
         }
     }
 

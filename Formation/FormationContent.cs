@@ -27,7 +27,7 @@ public class FormationContent : MonoBehaviour
         {
             blockContents[0].Initialize(BlockType.RightQueen_2);
             blockContents[1].Initialize(BlockType.RightNight);
-            blockContents[2].Initialize(BlockType.Rook_V2H2);
+            blockContents[2].Initialize(BlockType.Rook_V4);
             blockContents[3].Initialize(BlockType.Pawn);
 
             titleText.text = "지하 세계";

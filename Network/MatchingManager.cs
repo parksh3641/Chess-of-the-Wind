@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MatchingManager : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class MatchingManager : MonoBehaviour
     BlockClass blockClass;
     BlockClass blockClass2;
     BlockClass blockClass3;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     public FadeInOut mainFadeInOut;
     public NetworkManager networkManager;
@@ -240,7 +243,7 @@ public class MatchingManager : MonoBehaviour
             matchingWaitTime -= 1;
             matchingText.text = "상대방을 찾고 있습니다...\n예상 대기 시간 : " + matchingWaitTime + "초";
 
-            yield return new WaitForSeconds(1);
+            yield return waitForSeconds;
         }
 
         PhotonNetwork.CurrentRoom.IsOpen = false;

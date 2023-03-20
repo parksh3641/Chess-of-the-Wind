@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+ï»¿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +55,7 @@ public class CollectionManager : MonoBehaviour
 
         sortCount = 0;
 
-        sortText.text = "µî±Ş ¼ø ¡ã";
+        sortText.text = "ë“±ê¸‰ ìˆœ â–²";
     }
 
     public void OpenCollectionView()
@@ -64,7 +64,7 @@ public class CollectionManager : MonoBehaviour
         {
             collectionView.SetActive(true);
 
-            if (!check) //µü ÇÑ¹ø¸¸ Ã¼Å©ÇÔ
+            if (!check) //ë”± í•œë²ˆë§Œ ì²´í¬í•¨
             {
                 check = true;
 
@@ -134,9 +134,9 @@ public class CollectionManager : MonoBehaviour
         CheckEquipNewBie();
     }
 
-    public void UpdateCollection() //º¯°æÁ¡ÀÌ »ı°åÀ» °æ¿ì ¾÷µ¥ÀÌÆ®
+    public void UpdateCollection() //ë³€ê²½ì ì´ ìƒê²¼ì„ ê²½ìš° ì—…ë°ì´íŠ¸
     {
-        Debug.Log("ÄÃ·º¼Ç º¯°æ Á¡ ¾÷µ¥ÀÌÆ®");
+        Debug.Log("ì»¬ë ‰ì…˜ ë³€ê²½ ì  ì—…ë°ì´íŠ¸");
 
         blockList = new List<BlockClass>(blockList.Count);
 
@@ -246,7 +246,7 @@ public class CollectionManager : MonoBehaviour
 
     public void CheckEquipArmor()
     {
-        if (playerDataBase.Armor.Length <= 0) //ÀåÂøÇÑ°Ô ¾øÀ» °æ¿ì ±âº» ¼¼ÆÃÇØÁÖ±â
+        if (playerDataBase.Armor.Length <= 0) //ì¥ì°©í•œê²Œ ì—†ì„ ê²½ìš° ê¸°ë³¸ ì„¸íŒ…í•´ì£¼ê¸°
         {
             for (int i = 0; i < blockList.Count; i++)
             {
@@ -258,7 +258,7 @@ public class CollectionManager : MonoBehaviour
                 }
             }
         }
-        else //ºÒ·¯¿À±â
+        else //ë¶ˆëŸ¬ì˜¤ê¸°
         {
             bool equip = false;
 
@@ -446,7 +446,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderBy(x => x.rankType).ToList();
 
-            sortText.text = "µî±Ş ¼ø ¡å";
+            sortText.text = "ë“±ê¸‰ ìˆœ â–¼";
 
             sortCount = 1;
         }
@@ -454,7 +454,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "Á¾·ù ¼ø ¡ã";
+            sortText.text = "ì¢…ë¥˜ ìˆœ â–²";
 
             sortCount = 2;
         }
@@ -462,7 +462,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderBy(x => x.blockType).OrderBy(x => x.rankType).ToList();
 
-            sortText.text = "Á¾·ù ¼ø ¡å";
+            sortText.text = "ì¢…ë¥˜ ìˆœ â–¼";
 
             sortCount = 3;
         }
@@ -470,7 +470,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "µî±Ş ¼ø ¡ã";
+            sortText.text = "ë“±ê¸‰ ìˆœ â–²";
 
             sortCount = 0;
         }

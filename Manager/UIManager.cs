@@ -114,6 +114,8 @@ public class UIManager : MonoBehaviour
         crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
         nickNameText.text = "닉네임 : " + GameStateManager.instance.NickName;
 
+        matchingManager.Initialize();
+
         Debug.Log("Main UI Renewal");
     }
 
@@ -358,7 +360,6 @@ public class UIManager : MonoBehaviour
 
                 shopManager.CloseShopView();
                 collectionManager.CloseCollectionView();
-                matchingManager.Initialize();
                 break;
             case 3:
                 bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);

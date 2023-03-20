@@ -230,8 +230,6 @@ public class AiManager : MonoBehaviour
                 blockPos = GenerateRandomNumber(dontBettingZone3);
             }
 
-            Debug.Log(blockPos);
-
             otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
 
             Debug.Log("Ai가 고수방 블럭을 " + (blockPos - 1) + "번에 놓았습니다");
