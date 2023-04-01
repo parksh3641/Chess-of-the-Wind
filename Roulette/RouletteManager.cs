@@ -414,9 +414,19 @@ public class RouletteManager : MonoBehaviour
                 {
                     for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
                     {
-                        if (gameManager.bettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
+                        if(gameManager.bettingNumberList_Gosu[i] > 13)
                         {
-                            leftPointerManager.pointerList[j].Betting_Gosu();
+                            if (gameManager.bettingNumberList_Gosu[i] - 1 == leftPointerManager.pointerList[j].index)
+                            {
+                                leftPointerManager.pointerList[j].Betting_Gosu();
+                            }
+                        }
+                        else
+                        {
+                            if (gameManager.bettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
+                            {
+                                leftPointerManager.pointerList[j].Betting_Gosu();
+                            }
                         }
 
                         if (gameManager.bettingNumberList_Gosu.Contains(13) && gameManager.otherBettingNumberList_Gosu.Contains(13))
@@ -437,9 +447,19 @@ public class RouletteManager : MonoBehaviour
                 {
                     for (int j = 0; j < rightPointerManager.pointerList.Count; j++)
                     {
-                        if (gameManager.bettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
+                        if (gameManager.bettingNumberList_Gosu[i] > 13)
                         {
-                            rightPointerManager.pointerList[j].Betting_Gosu();
+                            if (gameManager.bettingNumberList_Gosu[i] - 1 == rightPointerManager.pointerList[j].index)
+                            {
+                                rightPointerManager.pointerList[j].Betting_Gosu();
+                            }
+                        }
+                        else
+                        {
+                            if (gameManager.bettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
+                            {
+                                rightPointerManager.pointerList[j].Betting_Gosu();
+                            }
                         }
 
                         if (gameManager.bettingNumberList_Gosu.Contains(13) && gameManager.otherBettingNumberList_Gosu.Contains(13))
@@ -464,10 +484,19 @@ public class RouletteManager : MonoBehaviour
                 {
                     for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
                     {
-                        if (gameManager.otherBettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
+                        if (gameManager.otherBettingNumberList_Gosu[i] > 13)
                         {
-                            leftPointerManager.pointerList[j].Betting_Gosu_Other();
-                            break;
+                            if (gameManager.otherBettingNumberList_Gosu[i] - 1 == leftPointerManager.pointerList[j].index)
+                            {
+                                leftPointerManager.pointerList[j].Betting_Gosu_Other();
+                            }
+                        }
+                        else
+                        {
+                            if (gameManager.otherBettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
+                            {
+                                leftPointerManager.pointerList[j].Betting_Gosu_Other();
+                            }
                         }
                     }
                 }
@@ -475,10 +504,19 @@ public class RouletteManager : MonoBehaviour
                 {
                     for (int j = 0; j < rightPointerManager.pointerList.Count; j++)
                     {
-                        if (gameManager.otherBettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
+                        if (gameManager.otherBettingNumberList_Gosu[i] > 13)
                         {
-                            rightPointerManager.pointerList[j].Betting_Gosu_Other();
-                            break;
+                            if (gameManager.otherBettingNumberList_Gosu[i] - 1 == rightPointerManager.pointerList[j].index)
+                            {
+                                rightPointerManager.pointerList[j].Betting_Gosu_Other();
+                            }
+                        }
+                        else
+                        {
+                            if (gameManager.otherBettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
+                            {
+                                rightPointerManager.pointerList[j].Betting_Gosu_Other();
+                            }
                         }
                     }
                 }
@@ -558,7 +596,7 @@ public class RouletteManager : MonoBehaviour
 
             while (playing && !check)
             {
-                if (pinball.rigid.velocity.magnitude < 0.3f)
+                if (pinball.rigid.velocity.magnitude < 0.1f)
                 {
                     rouletteCamera.gameObject.SetActive(false);
                     rouletteBallCamera.gameObject.SetActive(true);
@@ -881,17 +919,6 @@ public class RouletteManager : MonoBehaviour
             leftQueenPoint.parent = roulette1Obj;
             targetQueenNumber = leftPointerManager.CheckQueenNumber(leftQueenPoint);
             leftQueenPoint.parent = leftClock[2].transform;
-
-            if (leftNumber + 1 > 23)
-            {
-                leftNumber = 0;
-            }
-            else
-            {
-                leftNumber++;
-            }
-
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "LeftNumber", leftNumber } });
         }
         else
         {
@@ -900,18 +927,29 @@ public class RouletteManager : MonoBehaviour
             rightQueenPoint.parent = roulette2Obj;
             targetQueenNumber = rightPointerManager.CheckQueenNumber(rightQueenPoint);
             rightQueenPoint.parent = rightClock[2].transform;
-
-            if (rightNumber + 1 > 23)
-            {
-                rightNumber = 0;
-            }
-            else
-            {
-                rightNumber++;
-            }
-
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", rightNumber } });
         }
+
+        if (leftNumber + 1 > 23)
+        {
+            leftNumber = 0;
+        }
+        else
+        {
+            leftNumber++;
+        }
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "LeftNumber", leftNumber } });
+
+        if (rightNumber + 1 > 23)
+        {
+            rightNumber = 0;
+        }
+        else
+        {
+            rightNumber++;
+        }
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", rightNumber } });
 
         while (targetNumber == 0)
         {
@@ -939,6 +977,8 @@ public class RouletteManager : MonoBehaviour
         PV.RPC("PlayParticle", RpcTarget.All);
 
         yield return new WaitForSeconds(2.5f);
+
+        Handheld.Vibrate();
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 

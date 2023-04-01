@@ -428,9 +428,9 @@ public class GameManager : MonoBehaviour
         timerText.text = timer.ToString();
         timerFillAmount.fillAmount = 1;
 
-        moneyText.text = "0";
+        moneyText.text = moneyText.text = "GOLD <size=25>0</size>";
         bettingMoneyText.text = "0";
-        otherMoneyText.text = "0";
+        otherMoneyText.text = moneyText.text = "GOLD <size=25>0</size>";
 
         RecordManager.instance.Initialize();
         recordText.text = "";
@@ -595,8 +595,8 @@ public class GameManager : MonoBehaviour
         money = stakes;
         otherMoney = stakes;
 
-        moneyText.text = MoneyUnitString.ToCurrencyString(money); //현재 보유한 금액
-        otherMoneyText.text = MoneyUnitString.ToCurrencyString(otherMoney); //상대방 보유 금액
+        moneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
     public void GameStart()
@@ -645,41 +645,21 @@ public class GameManager : MonoBehaviour
     {
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                GameEnd(2);
-                PV.RPC("GameEnd", RpcTarget.Others, 2);
-            }
-
-            return;
+            GameEnd(2);
+            PV.RPC("GameEnd", RpcTarget.Others, 2);
         }
-
-        if(money <= 0) //내돈이 다 떨어졌을 때
+        else if(money <= 0) //내돈이 다 떨어졌을 때
         {
-            if(PhotonNetwork.IsMasterClient)
-            {
-                GameEnd(1);
-                PV.RPC("GameEnd", RpcTarget.Others, 1);
-            }
-
-            return;
+            GameEnd(1);
+            PV.RPC("GameEnd", RpcTarget.Others, 1);
         }
-
-        if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
+        else if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                GameEnd(0);
-                PV.RPC("GameEnd", RpcTarget.Others, 0);
-            }
-
-            return;
+            GameEnd(0);
+            PV.RPC("GameEnd", RpcTarget.Others, 0);
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(WaitTimerCoroution());
-        }
+        StartCoroutine(WaitTimerCoroution());
 
         Debug.Log("승패가 나지 않았습니다.");
     }
@@ -762,8 +742,6 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void RestartGame()
     {
-        uIManager.dontTouchObj.SetActive(false);
-
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             newbieBlockContent.ResetPos();
@@ -813,6 +791,8 @@ public class GameManager : MonoBehaviour
         //        uIManager.SetWaiting(false);
         //        break;
         //}
+
+        uIManager.dontTouchObj.SetActive(false);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -938,6 +918,9 @@ public class GameManager : MonoBehaviour
         {
             string[] init = new string[2];
 
+            init[0] = targetNumber.ToString();
+            init[1] = targetQueenNumber.ToString();
+
             GameResult(init);
         }
     }
@@ -963,6 +946,8 @@ public class GameManager : MonoBehaviour
             targetQueenObj.transform.position = trans.position;
 
             targetText.text = "퀸";
+
+            Debug.Log("퀸 당첨!");
         }
         else
         {
@@ -970,18 +955,18 @@ public class GameManager : MonoBehaviour
             targetObj.transform.SetAsLastSibling();
         }
 
-        if (targetNumber <= 12)
-        {
-            trans = rouletteContentList_Target[targetNumber - 1].transform;
-            targetObj.transform.position = trans.position;
-        }
-        else if (targetNumber >= 13)
+        if (targetNumber > 12)
         {
             trans = rouletteContentList_Target[targetNumber].transform;
             targetObj.transform.position = trans.position;
         }
+        else
+        {
+            trans = rouletteContentList_Target[targetNumber - 1].transform;
+            targetObj.transform.position = trans.position;
+        }
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             if(targetNumber % 2 == 0)
             {
@@ -1087,9 +1072,14 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                CheckTargetNumber(targetNumber);
-
                 Debug.Log("고수방 " + targetNumber + "번 당첨");
+
+                if (targetNumber > 12)
+                {
+                    targetNumber += 1;
+                }
+
+                CheckTargetNumber(targetNumber);
             }
 
             for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
@@ -1255,13 +1245,11 @@ public class GameManager : MonoBehaviour
 
                 break;
         }
-
-        Debug.Log(type + " / " + plusMoney + " / " + queen);
     }
 
     void ChangeBettingMoney()
     {
-        moneyText.text = MoneyUnitString.ToCurrencyString(money - bettingMoney);
+        moneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>"; ;
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -1282,22 +1270,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < rouletteContentList_Target.Count; i++)
         {
-            if (rouletteContentList_Target[i].isActive)
+            if (rouletteContentList_Target[i].isActive && target == rouletteContentList_Target[i].number)
             {
-                if (i < 12)
-                {
-                    if (rouletteContentList_Target[i].number == target)
-                    {
-                        ChangeGetMoney(rouletteContentList_Target[i].blockClass, RouletteType.StraightBet, false);
-                    }
-                }
-                else if(i >= 13)
-                {
-                    if (rouletteContentList_Target[i].number == target + 1)
-                    {
-                        ChangeGetMoney(rouletteContentList_Target[i].blockClass, RouletteType.StraightBet, false);
-                    }
-                }
+                ChangeGetMoney(rouletteContentList_Target[i].blockClass, RouletteType.StraightBet, false);
+                break;
             }
         }
 
@@ -1356,73 +1332,73 @@ public class GameManager : MonoBehaviour
                         }
                         break;
                     case 8:
-                        if (target == 9 || target == 13)
+                        if (target == 9 || target == 14)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
                     case 9:
-                        if (target == 10 || target == 14)
+                        if (target == 10 || target == 15)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
                     case 10:
-                        if (target == 11 || target == 15)
+                        if (target == 11 || target == 16)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
                     case 11:
-                        if (target == 12 || target == 16)
+                        if (target == 12 || target == 17)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
                     case 12:
-                        if (target == 17)
+                        if (target == 18)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
                     case 13:
-                        if (target == 13 || target == 18)
-                        {
-                            ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
-                        }
-                        break;
-                    case 14:
                         if (target == 14 || target == 19)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
-                    case 15:
+                    case 14:
                         if (target == 15 || target == 20)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
-                    case 16:
+                    case 15:
                         if (target == 16 || target == 21)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
-                    case 17:
+                    case 16:
                         if (target == 17 || target == 22)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
-                    case 18:
+                    case 17:
                         if (target == 18 || target == 23)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
                         break;
-                    case 19:
+                    case 18:
                         if (target == 19 || target == 24)
+                        {
+                            ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
+                        }
+                        break;
+                    case 19:
+                        if (target == 20 || target == 25)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Horizontal[i].blockClass, RouletteType.SplitBet_Horizontal, false);
                         }
@@ -1504,55 +1480,55 @@ public class GameManager : MonoBehaviour
                         }
                         break;
                     case 11:
-                        if (target == 13 || target == 14)
+                        if (target == 14 || target == 15)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
                     case 12:
-                        if (target == 15 || target == 16)
-                        {
-                            ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
-                        }
-                        break;
-                    case 13:
                         if (target == 16 || target == 17)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 14:
+                    case 13:
                         if (target == 17 || target == 18)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 15:
+                    case 14:
                         if (target == 18 || target == 19)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 16:
-                        if (target == 20 || target == 21)
+                    case 15:
+                        if (target == 19 || target == 20)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 17:
+                    case 16:
                         if (target == 21 || target == 22)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 18:
+                    case 17:
                         if (target == 22 || target == 23)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
                         break;
-                    case 19:
+                    case 18:
                         if (target == 23 || target == 24)
+                        {
+                            ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
+                        }
+                        break;
+                    case 19:
+                        if (target == 24 || target == 25)
                         {
                             ChangeGetMoney(rouletteSplitContentList_Vertical[i].blockClass, RouletteType.SplitBet_Vertical, false);
                         }
@@ -1604,7 +1580,7 @@ public class GameManager : MonoBehaviour
                         }
                         break;
                     case 6:
-                        if (target == 8 || target == 9 || target == 13)
+                        if (target == 8 || target == 9 || target == 14)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
@@ -1616,49 +1592,49 @@ public class GameManager : MonoBehaviour
                         }
                         break;
                     case 8:
-                        if (target == 11 || target == 12 || target == 15 || target == 16)
+                        if (target == 11 || target == 12 || target == 16 || target == 17)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
                     case 9:
-                        if (target == 12 || target == 16 || target == 17)
+                        if (target == 12 || target == 17 || target == 18)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
                     case 10:
-                        if (target == 13 || target == 17 || target == 18)
+                        if (target == 14 || target == 18 || target == 19)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
                     case 11:
-                        if (target == 13 || target == 14 || target == 18 || target == 19)
+                        if (target == 14 || target == 15 || target == 19 || target == 20)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
                     case 12:
-                        if (target == 15 || target == 16 || target == 20 || target == 21)
-                        {
-                            ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
-                        }
-                        break;
-                    case 13:
                         if (target == 16 || target == 17 || target == 21 || target == 22)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
-                    case 14:
+                    case 13:
                         if (target == 17 || target == 18 || target == 22 || target == 23)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
                         break;
-                    case 15:
+                    case 14:
                         if (target == 18 || target == 19 || target == 23 || target == 24)
+                        {
+                            ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
+                        }
+                        break;
+                    case 15:
+                        if (target == 19 || target == 20 || target == 24 || target == 25)
                         {
                             ChangeGetMoney(rouletteSquareContentList[i].blockClass, RouletteType.SquareBet, false);
                         }
@@ -2255,7 +2231,9 @@ public class GameManager : MonoBehaviour
                 otherBettingList += bettingNumberList_Gosu[i].ToString() + "/";
             }
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
+            otherBettingNumberList_Gosu.Clear();
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
             {
                 PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList.TrimEnd('/'));
             }
@@ -2415,8 +2393,6 @@ public class GameManager : MonoBehaviour
     {
         string[] list = str.Split("/");
 
-        otherBettingNumberList_Gosu.Clear();
-
         for(int i = 0; i < list.Length; i ++)
         {
             otherBettingNumberList_Gosu.Add(int.Parse(list[i]));
@@ -2499,8 +2475,6 @@ public class GameManager : MonoBehaviour
 
                 money += number;
                 otherMoney -= number;
-
-                Debug.Log("1");
             }
             else //상대방이 더 많이 땃을 경우
             {
@@ -2508,50 +2482,38 @@ public class GameManager : MonoBehaviour
 
                 money -= number;
                 otherMoney += number;
-
-                Debug.Log("2");
             }
         }
         else if (tempMoney > 0 && other[1] <= 0) //상대방은 잃었는데 나만 땃을 경우 
         {
             money += tempMoney;
             otherMoney -= tempMoney + Mathf.Abs(other[1]);
-
-            Debug.Log("3");
         }
         else if (tempMoney <= 0 && other[1] > 0) //난 잃었는데 상대방만 땃을 경우
         {
             money -= other[1] + Mathf.Abs(tempMoney);
             otherMoney += other[1];
-
-            Debug.Log("4");
         }
         else if (tempMoney < 0 && other[1] < 0) //둘다 못 땃을 경우
         {
             money += Mathf.Abs(tempMoney);
             otherMoney += Mathf.Abs(other[1]);
-
-            Debug.Log("5");
         }
         else if (tempMoney > 0 && other[1] == 0) //상대방이 배팅 안 했을 경우
         {
             money += tempMoney;
             otherMoney -= tempMoney;
-
-            Debug.Log("6");
         }
         else if (tempMoney == 0 && other[1] > 0) //내가 배팅 안 했을 경우 
         {
             money -= other[1];
             otherMoney += other[1];
-
-            Debug.Log("7");
         }
 
-        moneyText.text = MoneyUnitString.ToCurrencyString(money); //갱신
-        otherMoneyText.text = MoneyUnitString.ToCurrencyString(otherMoney);
+        moneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-        if(PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
             compareMoney[0] = otherMoney;
             compareMoney[1] = money;
@@ -2566,10 +2528,10 @@ public class GameManager : MonoBehaviour
     void SyncMoney(int[] compare)
     {
         money = compare[0];
-        moneyText.text = MoneyUnitString.ToCurrencyString(money);
+        moneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
         otherMoney = compare[1];
-        otherMoneyText.text = MoneyUnitString.ToCurrencyString(otherMoney);
+        otherMoneyText.text = "GOLD <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
     public void SurrenderButton() //기권하기

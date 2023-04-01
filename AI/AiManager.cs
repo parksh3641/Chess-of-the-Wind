@@ -106,7 +106,7 @@ public class AiManager : MonoBehaviour
             {
                 windCharacterType = WindCharacterType.Winter;
 
-                blockTypeArray[0] = BlockType.Pawn;
+                blockTypeArray[0] = BlockType.Pawn_Snow;
 
                 SetBlockClass();
             }
@@ -114,7 +114,7 @@ public class AiManager : MonoBehaviour
             {
                 windCharacterType = WindCharacterType.UnderWorld;
 
-                blockTypeArray[0] = BlockType.Pawn;
+                blockTypeArray[0] = BlockType.Pawn_Under;
 
                 SetBlockClass();
             }

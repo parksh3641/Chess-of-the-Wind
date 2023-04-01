@@ -555,18 +555,15 @@ public class PlayerDataBase : ScriptableObject
         {
             check = true;
         }
-
-        if (weapon.Equals(id))
+        else if (weapon.Equals(id))
         {
             check = true;
         }
-
-        if (shield.Equals(id))
+        else if(shield.Equals(id))
         {
             check = true;
         }
-
-        if (newbie.Equals(id))
+        else if(newbie.Equals(id))
         {
             check = true;
         }

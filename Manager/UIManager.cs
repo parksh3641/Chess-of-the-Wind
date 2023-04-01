@@ -42,8 +42,6 @@ public class UIManager : MonoBehaviour
     public GameObject vsView;
     public Text player1Text;
     public Text player2Text;
-    public Text player1GoldText;
-    public Text player2GoldText;
     public FadeInOut vsFadeInOut;
     public FadeInOut mainFadeInOut;
 
@@ -170,9 +168,6 @@ public class UIManager : MonoBehaviour
 
         player1Text.text = player1;
         player2Text.text = player2;
-
-        player1GoldText.text = "GOLD <size=25>" + stakes + "</size>";
-        player2GoldText.text = "GOLD <size=25>" + stakes + "</size>";
 
         GameStart();
 

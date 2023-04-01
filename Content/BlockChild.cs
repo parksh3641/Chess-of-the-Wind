@@ -49,7 +49,7 @@ public class BlockChild : MonoBehaviour
             case BlockType.Rook_V2H2:
                 transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
                 break;
-            case BlockType.Pawn:
+            case BlockType.Pawn_Under:
                 transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
                 break;
             case BlockType.Spider:

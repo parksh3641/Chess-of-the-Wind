@@ -111,6 +111,8 @@ public class SynthesisManager : MonoBehaviour
 
             synthesisResultContentList.Add(content);
         }
+
+        sortText.text = "레벨 순";
     }
 
     public void OpenSynthesisView()
@@ -148,7 +150,7 @@ public class SynthesisManager : MonoBehaviour
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
-        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
+        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
 
         if (blockUIContentList.Count < blockList.Count)
         {
@@ -564,38 +566,7 @@ public class SynthesisManager : MonoBehaviour
 
     public void SortButton()
     {
-        if (sortCount == 0)
-        {
-            blockList = blockList.OrderBy(x => x.rankType).ToList();
-
-            sortText.text = "등급 순 ▼";
-
-            sortCount = 1;
-        }
-        else if (sortCount == 1)
-        {
-            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
-
-            sortText.text = "종류 순 ▲";
-
-            sortCount = 2;
-        }
-        else if (sortCount == 2)
-        {
-            blockList = blockList.OrderBy(x => x.blockType).OrderBy(x => x.rankType).ToList();
-
-            sortText.text = "종류 순 ▼";
-
-            sortCount = 3;
-        }
-        else
-        {
-            blockList = blockList.OrderByDescending(x => x.rankType).ToList();
-
-            sortText.text = "등급 순 ▲";
-
-            sortCount = 0;
-        }
+        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
 
         for (int i = 0; i < blockUIContentList.Count; i++)
         {

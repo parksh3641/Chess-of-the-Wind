@@ -19,7 +19,7 @@ public class FormationContent : MonoBehaviour
             blockContents[0].Initialize(BlockType.LeftQueen_2);
             blockContents[1].Initialize(BlockType.LeftNight);
             blockContents[2].Initialize(BlockType.Rook_V2);
-            blockContents[3].Initialize(BlockType.Pawn);
+            blockContents[3].Initialize(BlockType.Pawn_Snow);
 
             titleText.text = "눈의 세계";
         }
@@ -28,7 +28,7 @@ public class FormationContent : MonoBehaviour
             blockContents[0].Initialize(BlockType.RightQueen_2);
             blockContents[1].Initialize(BlockType.RightNight);
             blockContents[2].Initialize(BlockType.Rook_V4);
-            blockContents[3].Initialize(BlockType.Pawn);
+            blockContents[3].Initialize(BlockType.Pawn_Under);
 
             titleText.text = "지하 세계";
         }

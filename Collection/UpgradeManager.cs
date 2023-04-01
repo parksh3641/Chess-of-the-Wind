@@ -347,13 +347,15 @@ public class UpgradeManager : MonoBehaviour
 
     public void EquipButton()
     {
-        if(blockClass.blockType != BlockType.Pawn)
-        {
-            equipManager.OpenEquipView(blockClass);
-        }
-        else
-        {
-            equipManager.ChangeNewbie(blockClass);
-        }
+        //if(blockClass.blockType != BlockType.Pawn_Under)
+        //{
+        //    equipManager.OpenEquipView(blockClass);
+        //}
+        //else
+        //{
+        //    equipManager.ChangeNewbie(blockClass);
+        //}
+
+        equipManager.OpenEquipView(blockClass);
     }
 }

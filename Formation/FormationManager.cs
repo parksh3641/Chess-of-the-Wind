@@ -79,7 +79,7 @@ public class FormationManager : MonoBehaviour
             itemList.Add("LeftQueen_2_N");
             itemList.Add("LeftNight_N");
             itemList.Add("Rook_V2_N");
-            itemList.Add("Pawn_N");
+            itemList.Add("Pawn_Snow_N");
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
         }
@@ -93,7 +93,7 @@ public class FormationManager : MonoBehaviour
             itemList.Add("RightQueen_2_N");
             itemList.Add("RightNight_N");
             itemList.Add("Rook_V4_N");
-            itemList.Add("Pawn_N");
+            itemList.Add("Pawn_Under_N");
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 

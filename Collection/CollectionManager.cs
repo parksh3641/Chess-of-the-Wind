@@ -55,7 +55,7 @@ public class CollectionManager : MonoBehaviour
 
         sortCount = 0;
 
-        sortText.text = "등급 순 ▲";
+        sortText.text = "등급 순";
     }
 
     public void OpenCollectionView()
@@ -236,7 +236,7 @@ public class CollectionManager : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; i++)
         {
-            if (blockList[i].blockType == BlockType.Pawn)
+            if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
             {
                 equipManager.EquipNewBie(blockList[i], false);
                 break;
@@ -361,7 +361,7 @@ public class CollectionManager : MonoBehaviour
         {
             for (int i = 0; i < blockList.Count; i++)
             {
-                if (blockList[i].blockType == BlockType.Pawn)
+                if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                     equipManager.EquipNewBie(blockList[i], false);
@@ -442,35 +442,34 @@ public class CollectionManager : MonoBehaviour
 
     public void SortButton()
     {
-        if(sortCount == 0)
+        blockList = new List<BlockClass>(blockList.Count);
+
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
         {
-            blockList = blockList.OrderBy(x => x.rankType).ToList();
-
-            sortText.text = "등급 순 ▼";
-
-            sortCount = 1;
+            blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
-        else if(sortCount == 1)
+
+        if (sortCount == 0)
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "종류 순 ▲";
+            sortText.text = "종류 순";
+
+            sortCount = 1;
+        }
+        else if (sortCount == 1)
+        {
+            blockList = blockList.OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
+
+            sortText.text = "레벨 순";
 
             sortCount = 2;
-        }
-        else if (sortCount == 2)
-        {
-            blockList = blockList.OrderBy(x => x.blockType).OrderBy(x => x.rankType).ToList();
-
-            sortText.text = "종류 순 ▼";
-
-            sortCount = 3;
         }
         else
         {
             blockList = blockList.OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "등급 순 ▲";
+            sortText.text = "등급 순";
 
             sortCount = 0;
         }

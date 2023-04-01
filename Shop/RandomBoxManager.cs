@@ -371,7 +371,7 @@ public class RandomBoxManager : MonoBehaviour
                         prize = "Rook_V2";
                         break;
                     case 3:
-                        prize = "Pawn";
+                        prize = "Pawn_Snow";
                         break;
                 }
 
@@ -394,7 +394,7 @@ public class RandomBoxManager : MonoBehaviour
                         prize = "Rook_V4";
                         break;
                     case 3:
-                        prize = "Pawn";
+                        prize = "Pawn_Under";
                         break;
                 }
 

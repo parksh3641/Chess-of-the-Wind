@@ -8,7 +8,7 @@ public class Pinball3D : MonoBehaviour
     public Transform vector;
     public Rigidbody rigid;
 
-    private float power = 150f;
+    private float power = 50f;
     private float windPower = 0;
     public int index = 0;
     public int ballPos = 0;
@@ -97,7 +97,7 @@ public class Pinball3D : MonoBehaviour
                 switch(ballPos)
                 {
                     case 0:
-                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[3].position + new Vector3(-1, 0.5f, -1));
 
                         rigid.AddForce(vector.forward * (windPower * 1.5f + force));
                         break;
@@ -130,7 +130,7 @@ public class Pinball3D : MonoBehaviour
                     case 5:
                         transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         break;
                 }
             }
@@ -142,7 +142,7 @@ public class Pinball3D : MonoBehaviour
                 switch (ballPos)
                 {
                     case 0:
-                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[3].position + new Vector3(-1, 0.5f, -1));
 
                         rigid.AddForce(vector.forward * (windPower * 1.5f + force));
                         break;
@@ -175,7 +175,7 @@ public class Pinball3D : MonoBehaviour
                     case 5:
                         transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         break;
                 }
             }

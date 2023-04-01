@@ -657,6 +657,8 @@ public class PlayfabManager : MonoBehaviour
                             if(list.CustomData == null && !playerDataBase.CheckEquipId2(list.ItemInstanceId))
                             {
                                 SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
+
+                                Debug.Log(list.ItemInstanceId + " 블럭이 초기화 되었습니다");
                             }
 
                             playerDataBase.SetBlock(list);
