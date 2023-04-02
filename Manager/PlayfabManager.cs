@@ -46,6 +46,8 @@ public class PlayfabManager : MonoBehaviour
 
 #endif
 
+    public CollectionManager collectionManager;
+
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
 
@@ -643,6 +645,8 @@ public class PlayfabManager : MonoBehaviour
 
             if (Inventory != null)
             {
+                inventoryList.Clear();
+
                 for (int i = 0; i < Inventory.Count; i++)
                 {
                     inventoryList.Add(Inventory[i]);
@@ -654,7 +658,7 @@ public class PlayfabManager : MonoBehaviour
                     {
                         if(list.ItemId.Contains((BlockType.Default + i).ToString()))
                         {
-                            if(list.CustomData == null && !playerDataBase.CheckEquipId2(list.ItemInstanceId))
+                            if(list.CustomData == null)
                             {
                                 SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
 
@@ -676,6 +680,49 @@ public class PlayfabManager : MonoBehaviour
         }, DisplayPlayfabError);
 
         return true;
+    }
+
+    public void ChangeUserInventory()
+    {
+        Debug.Log("인벤토리에서 유저 블럭을 다시 가져옵니다");
+
+        collectionManager.change = true;
+
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
+        {
+            var Inventory = result.Inventory;
+
+            inventoryList.Clear();
+
+            if (Inventory != null)
+            {
+                for (int i = 0; i < Inventory.Count; i++)
+                {
+                    inventoryList.Add(Inventory[i]);
+                }
+
+                foreach (ItemInstance list in inventoryList)
+                {
+                    for (int i = 0; i < Enum.GetValues(typeof(BlockType)).Length; i++)
+                    {
+                        if (list.ItemId.Contains((BlockType.Default + i).ToString()))
+                        {
+                            //if (list.CustomData == null)
+                            //{
+                            //    SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
+
+                            //    Debug.Log(list.ItemInstanceId + " 블럭이 초기화 되었습니다");
+                            //}
+
+                            playerDataBase.SetBlock(list);
+                        }
+                    }
+
+                    //shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
+                }
+            }
+
+        }, DisplayPlayfabError);
     }
 
     public bool GetCatalog()
@@ -1397,9 +1444,13 @@ public class PlayfabManager : MonoBehaviour
                     FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
                     GeneratePlayStreamEvent = true,
                 }
-            , OnCloudUpdateStats, DisplayPlayfabError);
+            , result =>
+            {
+                OnCloudUpdateStats(result);
 
-                Invoke("GetUserInventory", 2.0f);
+                Invoke("ChangeUserInventory", 1.5f);
+
+                }, DisplayPlayfabError);
             }
             else
             {

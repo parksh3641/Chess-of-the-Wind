@@ -11,7 +11,6 @@ public class RouletteManager : MonoBehaviour
     public FollowCamera rouletteBallCamera;
 
     public GameObject roulette3D;
-    public GameObject characterIndexUI;
 
     [Space]
     [Title("Bouns")]
@@ -172,7 +171,8 @@ public class RouletteManager : MonoBehaviour
 
         rouletteCamera.gameObject.SetActive(true);
         roulette3D.SetActive(false);
-        characterIndexUI.SetActive(false);
+
+        windCharacterManager.Stop();
 
         targetView.SetActive(false);
 
@@ -538,7 +538,7 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            InitializeWindCharacter1(roulette1Obj);
+            StartCoroutine(InitializeWindCharacter1(roulette1Obj));
         }
         else
         {
@@ -552,7 +552,7 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            InitializeWindCharacter2(roulette2Obj);
+            StartCoroutine(InitializeWindCharacter2(roulette2Obj));
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -562,26 +562,28 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
-    void InitializeWindCharacter1(Transform target)
+    IEnumerator InitializeWindCharacter1(Transform target)
     {
         windCharacterManager.Initialize(target);
 
-        characterIndexUI.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
 
         roulette2Obj.gameObject.SetActive(false);
+        rightFingerController.Disable();
         leftFingerController.Disable();
 
         buttonClick = false;
     }
 
-    void InitializeWindCharacter2(Transform target)
+    IEnumerator InitializeWindCharacter2(Transform target)
     {
         windCharacterManager.Initialize(target);
 
-        characterIndexUI.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
 
         roulette1Obj.gameObject.SetActive(false);
         rightFingerController.Disable();
+        leftFingerController.Disable();
 
         buttonClick = false;
     }
@@ -732,7 +734,7 @@ public class RouletteManager : MonoBehaviour
                 StartCoroutine(AiBlowWindCoroution());
             }
 
-            buttonText.text = "다음 차례에 바람을 불 수 있습니다.";
+            buttonText.text = "다음 차례 " + (windIndex + 1) + "번째 위치에서 바람을 불 수 있습니다.";
         }
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정

@@ -124,7 +124,6 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<BlockClass> blockList = new List<BlockClass>();
     public List<BlockClass> successionLevel = new List<BlockClass>();
-    public List<BlockClass> equipBlockInfo = new List<BlockClass>();
     public List<string> sellBlockList = new List<string>();
 
     [Title("Upgrade")]
@@ -140,7 +139,6 @@ public class PlayerDataBase : ScriptableObject
     [Title("UpgradeTicket")]
     [SerializeField]
     private List<UpgradeTicketClass> upgradeTicketList = new List<UpgradeTicketClass>();
-
 
     Dictionary<string, string> levelCustomData = new Dictionary<string, string>();
 
@@ -333,7 +331,6 @@ public class PlayerDataBase : ScriptableObject
         blockList.Clear();
         sellBlockList.Clear();
         successionLevel.Clear();
-        equipBlockInfo.Clear();
 
         //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length; i++)
         //{
@@ -376,13 +373,13 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        for(int i = 0; i < sellBlockList.Count; i ++)
-        {
-            if(item.ItemInstanceId.Equals(sellBlockList[i]))
-            {
-                return;
-            }
-        }
+        //for(int i = 0; i < sellBlockList.Count; i ++)
+        //{
+        //    if(item.ItemInstanceId.Equals(sellBlockList[i]))
+        //    {
+        //        return;
+        //    }
+        //}
 
         BlockClass blockClass = new BlockClass();
 
@@ -430,46 +427,38 @@ public class PlayerDataBase : ScriptableObject
                 PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
                 blockClass.level = successionLevel[i].level;
 
-                Debug.LogError(blockClass.blockType + "_" + blockClass.rankType + " 가 " + (successionLevel[i].level + 1) + " 레벨로 계승되었습니다");
-
-                successionLevel.RemoveAt(i);
-            }
-        }
-
-        for (int i = 0; i < equipBlockInfo.Count; i++) //장착 계승
-        {
-            if (blockClass.level == equipBlockInfo[i].level &&
-                blockClass.blockType.Equals(equipBlockInfo[i].blockType) &&
-                blockClass.rankType.Equals(equipBlockInfo[i].rankType))
-            {
-                if (equipBlockInfo[i].equipInfo == 1)
+                if (successionLevel[i].equipInfo == 1)
                 {
                     armor = blockClass.instanceId;
 
                     Debug.Log("아머로 장비가 계승되었습니다");
                 }
-                else if (equipBlockInfo[i].equipInfo == 2)
+                else if (successionLevel[i].equipInfo == 2)
                 {
                     weapon = blockClass.instanceId;
 
                     Debug.Log("검으로 장비가 계승되었습니다");
                 }
-                else if (equipBlockInfo[i].equipInfo == 3)
+                else if (successionLevel[i].equipInfo == 3)
                 {
                     shield = blockClass.instanceId;
 
                     Debug.Log("쉴드로 장비가 계승되었습니다");
                 }
-                else if (equipBlockInfo[i].equipInfo == 4)
+                else if (successionLevel[i].equipInfo == 4)
                 {
                     newbie = blockClass.instanceId;
 
                     Debug.Log("뉴비로 장비가 계승되었습니다");
                 }
 
-                equipBlockInfo.RemoveAt(i);
+                Debug.LogError(blockClass.blockType + "_" + blockClass.rankType + " 가 " + (successionLevel[i].level + 1) + " 레벨로 계승되었습니다");
+
+                successionLevel.RemoveAt(i);
             }
         }
+
+        Debug.Log(blockClass.blockType + "_" + blockClass.rankType + " 블럭이 추가되었습니다");
 
         blockList.Add(blockClass);
     }
@@ -547,60 +536,28 @@ public class PlayerDataBase : ScriptableObject
         return number;
     }
 
-    public bool CheckEquipId2(string id)
+    public int CheckOverlapBlock(BlockClass block, int number)
     {
-        bool check = false;
+        int index = 0;
 
-        if (armor.Equals(id))
+        if(GetBlockClass(armor).blockType.Equals(block.blockType))
         {
-            check = true;
+            index = 1;
         }
-        else if (weapon.Equals(id))
+        else if (GetBlockClass(weapon).blockType.Equals(block.blockType))
         {
-            check = true;
+            index = 2;
         }
-        else if(shield.Equals(id))
+        else if (GetBlockClass(shield).blockType.Equals(block.blockType))
         {
-            check = true;
+            index = 3;
         }
-        else if(newbie.Equals(id))
+        else
         {
-            check = true;
-        }
-
-        return check;
-    }
-
-    public bool CheckOverlapBlock(BlockClass block, int number)
-    {
-        bool check = false;
-
-        switch (number)
-        {
-            case 0:
-                if(GetBlockClass(weapon).blockType.Equals(block.blockType) || GetBlockClass(shield).blockType.Equals(block.blockType))
-                {
-                    check = true;
-                }
-
-                break;
-            case 1:
-                if (GetBlockClass(armor).blockType.Equals(block.blockType) || GetBlockClass(shield).blockType.Equals(block.blockType))
-                {
-                    check = true;
-                }
-
-                break;
-            case 2:
-                if (GetBlockClass(armor).blockType.Equals(block.blockType) || GetBlockClass(weapon).blockType.Equals(block.blockType))
-                {
-                    check = true;
-                }
-
-                break;
+            index = 0;
         }
 
-        return check;
+        return index;
     }
 
     public void SetSuccessionLevel(BlockClass block)
@@ -608,13 +565,6 @@ public class PlayerDataBase : ScriptableObject
         successionLevel.Add(block);
 
         Debug.Log("계승 정보를 저장했습니다");
-    }
-
-    public void SetEquipInfo(BlockClass block)
-    {
-        equipBlockInfo.Add(block);
-
-        Debug.Log("장착할 정보를 저장했습니다");
     }
 
     #region Ticket

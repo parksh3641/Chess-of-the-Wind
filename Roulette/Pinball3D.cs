@@ -8,7 +8,7 @@ public class Pinball3D : MonoBehaviour
     public Transform vector;
     public Rigidbody rigid;
 
-    private float power = 50f;
+    private float power = 130f;
     private float windPower = 0;
     public int index = 0;
     public int ballPos = 0;
@@ -70,11 +70,11 @@ public class Pinball3D : MonoBehaviour
 
         if (number == 0)
         {
-            transform.position = new Vector3(-1.4f, 0.25f, 3.3f);
+            transform.position = new Vector3(-0.9f, 0.25f, 3.3f);
         }
         else
         {
-            transform.position = new Vector3(4.55f, 0.25f, 3.3f);
+            transform.position = new Vector3(4.05f, 0.25f, 3.3f);
         }
 
         transform.rotation = Quaternion.Euler(0, 20, 0);

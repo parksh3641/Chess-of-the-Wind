@@ -181,6 +181,17 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
 
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            for (int j = 0; j < playerDataBase.sellBlockList.Count; j++)
+            {
+                if (blockList[i].instanceId.Equals(playerDataBase.sellBlockList[j]))
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         isStart = false;
         isMat1 = false;
         isMat2 = false;
@@ -256,8 +267,8 @@ public class SynthesisManager : MonoBehaviour
 
             for (int i = 0; i < blockUIContentList.Count; i++)
             {
-                if (!blockUIContentList[i].blockType.Equals(blockClass.blockType) ||
-                    !blockUIContentList[i].rankType.Equals(blockClass.rankType))
+                if (!blockUIContentList[i].blockClass.blockType.Equals(blockClass.blockType) ||
+                    !blockUIContentList[i].blockClass.rankType.Equals(blockClass.rankType))
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                 }
@@ -503,23 +514,16 @@ public class SynthesisManager : MonoBehaviour
             block.blockType = blockClass.blockType;
             block.rankType = rankType + 1;
             block.level = updateLevel;
-
-            Debug.Log(updateLevel + 1 + "레벨로 계승 될 예정입니다");
-
-            playerDataBase.SetSuccessionLevel(block);
-        }
-
-        if (equipInfo > 0)
-        {
-            BlockClass block = new BlockClass();
-            block.blockType = blockClass.blockType;
-            block.rankType = rankType + 1;
-            block.level = updateLevel;
             block.equipInfo = equipInfo;
 
-            Debug.Log(equipInfo + "번째 장비가 바뀔 예정입니다");
+            Debug.Log(updateLevel + 1 + " 레벨로 계승 될 예정입니다");
 
-            playerDataBase.SetEquipInfo(block);
+            if(equipInfo > 0)
+            {
+                Debug.Log(equipInfo + " 로 장착이 계승 될 예정입니다");
+            }
+
+            playerDataBase.SetSuccessionLevel(block);
         }
 
         synthesisResultList.Clear();
@@ -553,10 +557,10 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisResultButton.SetActive(true);
 
-        Initialize();
-        collectionManager.UpdateCollection();
-
         Debug.Log("합성 성공!");
+
+        collectionManager.UpdateCollection();
+        Initialize();
     }
 
     public void ClosesSynthesisResultView()

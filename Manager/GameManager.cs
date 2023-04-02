@@ -641,7 +641,7 @@ public class GameManager : MonoBehaviour
     //    }
     //}
 
-    private void CheckWinnerPlayer() //게임 누가 승리했는지 체크
+    void CheckWinnerPlayer() //게임 누가 승리했는지 체크
     {
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
@@ -658,10 +658,10 @@ public class GameManager : MonoBehaviour
             GameEnd(0);
             PV.RPC("GameEnd", RpcTarget.Others, 0);
         }
-
-        StartCoroutine(WaitTimerCoroution());
-
-        Debug.Log("승패가 나지 않았습니다.");
+        else
+        {
+            Debug.Log("승패가 나지 않았습니다.");
+        }
     }
 
     [PunRPC]
@@ -1178,10 +1178,7 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            CheckWinnerPlayer();
-        }
+        StartCoroutine(WaitTimerCoroution());
     }
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
@@ -2522,6 +2519,8 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("서버 돈 동기화 갱신완료");
         }
+
+        CheckWinnerPlayer();
     }
 
     [PunRPC]

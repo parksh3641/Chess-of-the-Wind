@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class BlockUIContent : MonoBehaviour
 {
-    public BlockType blockType = BlockType.Default;
-    public RankType rankType = RankType.N;
+    public BlockClass blockClass;
     public string instanceId = "";
 
     public Image backgroundImg;
@@ -50,23 +49,22 @@ public class BlockUIContent : MonoBehaviour
 
     public void Initialize(BlockType type)
     {
-        blockType = type;
+        blockClass.blockType = type;
 
         for (int i = 0; i < blockUIArray.Length; i++)
         {
             blockUIArray[i].gameObject.SetActive(false);
         }
 
-        blockUIArray[(int)blockType - 1].gameObject.SetActive(true);
+        blockUIArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
     }
 
-    public void Collection_Initialize(BlockClass blockClass)
+    public void Collection_Initialize(BlockClass block)
     {
-        blockType = blockClass.blockType;
-        rankType = blockClass.rankType;
+        blockClass = block;
         instanceId = blockClass.instanceId;
 
-        Initialize(blockType);
+        Initialize(blockClass.blockType);
 
         switch (blockClass.rankType)
         {
@@ -95,7 +93,7 @@ public class BlockUIContent : MonoBehaviour
 
     public void NextLevel_Initialize()
     {
-        switch (rankType)
+        switch (blockClass.rankType)
         {
             case RankType.N:
                 backgroundImg.color = Color.green;
@@ -145,7 +143,7 @@ public class BlockUIContent : MonoBehaviour
 
         if(synthesisManager != null)
         {
-            if(rankType != RankType.UR)
+            if(blockClass.rankType != RankType.UR)
                 synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
         }
     }

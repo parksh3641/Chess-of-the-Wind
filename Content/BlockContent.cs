@@ -8,10 +8,12 @@ using Sirenix.OdinInspector;
 public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public BlockClass blockClass;
+
     public int index = 0;
     public int value = 0;
 
     Image backgroundImg;
+
     [Title("Info")]
     public Text valueText;
 

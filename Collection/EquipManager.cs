@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EquipManager : MonoBehaviour
 {
-    public GameObject equipView;
+    public GameObject[] equipView;
 
     [Title("Colletion")]
     public BlockUIContent armorBlockUI;
@@ -14,10 +14,7 @@ public class EquipManager : MonoBehaviour
     public BlockUIContent newbieBlockUI;
 
     [Title("Equip")]
-    public BlockUIContent armorBlockEquip;
-    public BlockUIContent weaponBlockEquip;
-    public BlockUIContent shieldBlockEquip;
-    public BlockUIContent targetBlockEquip;
+    public BlockEquipUIContent blockEquipUIContent;
 
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
@@ -34,7 +31,8 @@ public class EquipManager : MonoBehaviour
         if (blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        equipView.SetActive(false);
+        equipView[0].SetActive(false);
+        equipView[1].SetActive(false);
 
         armorBlockUI.Upgrade_Initialize(collectionManager);
         weaponBlockUI.Upgrade_Initialize(collectionManager);
@@ -44,38 +42,37 @@ public class EquipManager : MonoBehaviour
 
     public void OpenEquipView(BlockClass block)
     {
-        if(!equipView.activeSelf)
+        if(!equipView[0].activeSelf)
         {
-            equipView.SetActive(true);
+            equipView[0].SetActive(true);
+            equipView[1].SetActive(true);
 
-            Initialize(block);
+            blockClass = block;
+
+            blockEquipUIContent.Initialize(block);
         }
     }
 
     public void CloseEquipView()
     {
-        equipView.SetActive(false);
+        equipView[0].SetActive(false);
+        equipView[1].SetActive(false);
     }
 
-
-    void Initialize(BlockClass block)
-    {
-        blockClass = block;
-
-        armorBlockEquip.Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Armor));
-        weaponBlockEquip.Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Weapon));
-        shieldBlockEquip.Collection_Initialize(playerDataBase.GetBlockClass(playerDataBase.Shield));
-
-        targetBlockEquip.Collection_Initialize(block);
-
-    }
 
     public void ChangeArmor()
     {
-        if (playerDataBase.CheckOverlapBlock(blockClass, 0))
+        switch (playerDataBase.CheckOverlapBlock(blockClass, 0))
         {
-            NotionManager.instance.UseNotion(NotionType.SameEquipBlock);
-            return;
+            case 1:
+
+                break;
+            case 2:
+                EquipWeapon(armorBlockUI.blockClass, false);
+                break;
+            case 3:
+                EquipShield(armorBlockUI.blockClass, false);
+                break;
         }
 
         EquipArmor(blockClass, false);
@@ -87,10 +84,17 @@ public class EquipManager : MonoBehaviour
 
     public void ChangeWeapon()
     {
-        if (playerDataBase.CheckOverlapBlock(blockClass, 1))
+        switch (playerDataBase.CheckOverlapBlock(blockClass, 0))
         {
-            NotionManager.instance.UseNotion(NotionType.SameEquipBlock);
-            return;
+            case 1:
+                EquipArmor(weaponBlockUI.blockClass, false);
+                break;
+            case 2:
+
+                break;
+            case 3:
+                EquipShield(weaponBlockUI.blockClass, false);
+                break;
         }
 
         EquipWeapon(blockClass, false);
@@ -102,10 +106,17 @@ public class EquipManager : MonoBehaviour
 
     public void ChangeShield()
     {
-        if (playerDataBase.CheckOverlapBlock(blockClass, 2))
+        switch (playerDataBase.CheckOverlapBlock(blockClass, 0))
         {
-            NotionManager.instance.UseNotion(NotionType.SameEquipBlock);
-            return;
+            case 1:
+                EquipArmor(shieldBlockUI.blockClass, false);
+                break;
+            case 2:
+                EquipWeapon(shieldBlockUI.blockClass, false);
+                break;
+            case 3:
+
+                break;
         }
 
         EquipShield(blockClass, false);
@@ -115,9 +126,9 @@ public class EquipManager : MonoBehaviour
         CloseEquipView();
     }
 
-    public void ChangeNewbie(BlockClass block)
+    public void ChangeNewbie()
     {
-        EquipNewBie(block, false);
+        EquipNewBie(blockClass, false);
 
         upgradeManager.CloseUpgradeView();
 

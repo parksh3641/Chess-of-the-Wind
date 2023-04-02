@@ -356,6 +356,8 @@ public class UpgradeManager : MonoBehaviour
         //    equipManager.ChangeNewbie(blockClass);
         //}
 
+        CloseUpgradeView();
+
         equipManager.OpenEquipView(blockClass);
     }
 }

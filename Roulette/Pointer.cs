@@ -59,7 +59,7 @@ public class Pointer : MonoBehaviour
         }
         else if (number == 2)
         {
-            numberText.color = Color.blue;
+            numberText.color = new Color(0, 1, 1);
         }
         else
         {
@@ -70,7 +70,7 @@ public class Pointer : MonoBehaviour
     public void Betting_Gosu()
     {
         betting = 1;
-        numberText.color = Color.blue;
+        numberText.color = new Color(0, 1, 1);
     }
 
     public void Betting_Gosu_Other()

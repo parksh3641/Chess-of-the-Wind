@@ -18,24 +18,24 @@ public class WindCharacter : MonoBehaviour
 
         transform.position = endPos.position;
 
-        //transform.position = startPos.position;
+        transform.position = startPos.position;
 
-        //move = true;
+        move = true;
 
-        //StartCoroutine(MoveCoroution());
+        StartCoroutine(MoveCoroution());
     }
 
-    //IEnumerator MoveCoroution()
-    //{
-    //    while(move)
-    //    {
-    //        transform.position = Vector3.SmoothDamp(transform.position, endPos.position, ref velocity, smoothTime);
+    IEnumerator MoveCoroution()
+    {
+        while (move)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, endPos.position, ref velocity, smoothTime);
 
-    //        if (Vector3.Distance(endPos.position, transform.position) < 0.1f)
-    //        {
-    //            move = false;
-    //        }
-    //        yield return null;
-    //    }
-    //}
+            if (Vector3.Distance(endPos.position, transform.position) < 0.1f)
+            {
+                move = false;
+            }
+            yield return null;
+        }
+    }
 }

@@ -14,6 +14,8 @@ public class CollectionManager : MonoBehaviour
     [Space]
     [Title("Value")]
     public int sortCount;
+
+    public bool change = false;
     
 
     [Space]
@@ -77,7 +79,12 @@ public class CollectionManager : MonoBehaviour
                 //    UpdateCollection();
                 //}
 
-                UpdateCollection();
+                if(change)
+                {
+                    change = false;
+
+                    UpdateCollection();
+                }
             }
         }
     }
@@ -126,6 +133,17 @@ public class CollectionManager : MonoBehaviour
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            for (int j = 0; j < playerDataBase.sellBlockList.Count; j++)
+            {
+                if (blockList[i].instanceId.Equals(playerDataBase.sellBlockList[j]))
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
+            }
         }
 
         CheckEquipArmor();
@@ -178,6 +196,17 @@ public class CollectionManager : MonoBehaviour
             {
                 blockUIContentList[i].gameObject.SetActive(true);
                 blockUIContentList[i].Collection_Initialize(blockList[i]);
+            }
+        }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            for (int j = 0; j < playerDataBase.sellBlockList.Count; j++)
+            {
+                if (blockList[i].instanceId.Equals(playerDataBase.sellBlockList[j]))
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
             }
         }
 
