@@ -49,11 +49,8 @@ public class GameManager : MonoBehaviour
     public int[] bettingList = new int[4];//블럭이 배팅했는지 여부
     public int[] bettingMinusList = new int[4]; //당첨 안된 블럭 빼기
 
-    public int[] bettingNumberList_NewBie = new int[3]; //어디 블럭에 배팅했는지 (나중에 룰렛에 표시할 용도)
-    public List<int> bettingNumberList_Gosu = new List<int>();
-
-    public int[] otherBettingNumberList_Newbie = new int[3];
-    public List<int> otherBettingNumberList_Gosu = new List<int>();
+    public List<int> bettingNumberList = new List<int>();
+    public List<int> otherBettingNumberList = new List<int>();
 
     [Space]
     [Title("Value")]
@@ -103,7 +100,6 @@ public class GameManager : MonoBehaviour
     [Title("Parent")]
     public GameObject blockRootParent;
     public GameObject blockParent;
-    public GameObject blockGridParent_Developer;
     public GameObject blockGridParent_NewBie;
     public GameObject blockGridParent_Gosu;
     public Transform otherBlockParent;
@@ -120,36 +116,39 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Grid")]
+    public RectTransform rouletteContentTransform_NewBie;
     public RectTransform rouletteContentTransform;
+
+    [Space]
     public RectTransform rouletteContentTransformSplitBet_Vertical;
     public RectTransform rouletteContentTransformSplitBet_Horizontal;
     public RectTransform rouletteContentTransformSquareBet;
-    public RectTransform numberContentTransform;
 
-    public RectTransform blockContentTransform_Developer;
+    [Space]
+    [Title("Block")]
     public RectTransform blockContentTransform_NewBie;
     public RectTransform blockContentTransform_Gosu;
 
-    public RectTransform rouletteContentTransform_NewBie;
+    [Space]
+    [Title("Number")]
     public RectTransform numberContentTransform_NewBie;
+    public RectTransform numberContentTransform;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     [Space]
-    [Title("NewBie")]
-    List<RouletteContent> rouletteContentList_NewBie = new List<RouletteContent>();
-    List<RouletteContent> numberContentList_NewBie = new List<RouletteContent>();
-
-    [Space]
-    [Title("Gosu")]
+    [Title("Roulette")]
     List<RouletteContent> rouletteContentList_Gosu = new List<RouletteContent>();
     List<RouletteContent> rouletteSplitContentList_Vertical = new List<RouletteContent>();
     List<RouletteContent> rouletteSplitContentList_Horizontal = new List<RouletteContent>();
     List<RouletteContent> rouletteSquareContentList = new List<RouletteContent>();
 
+    List<RouletteContent> rouletteContentList_NewBie = new List<RouletteContent>();
+
     List<RouletteContent> allContentList = new List<RouletteContent>();
 
     List<RouletteContent> numberContentList = new List<RouletteContent>();
+    List<RouletteContent> numberContentList_NewBie = new List<RouletteContent>();
 
     [Space]
     [Title("Other")]
@@ -195,7 +194,6 @@ public class GameManager : MonoBehaviour
         bettingSizeList = new int[4];
         bettingList = new int[4];
         bettingMinusList = new int[4];
-        bettingNumberList_NewBie = new int[3];
 
         gridConstraintCount = gridLayoutGroup.constraintCount;
 
@@ -237,11 +235,11 @@ public class GameManager : MonoBehaviour
         index = 0;
         count = 0;
 
-        for (int i = 0; i < 25; i++) //NewBie
+        for (int i = 0; i < 9; i++) //NewBie
         {
             int[] setIndex = new int[2];
 
-            if (index >= gridConstraintCount)
+            if (index >= 3)
             {
                 index = 0;
                 count++;
@@ -254,7 +252,7 @@ public class GameManager : MonoBehaviour
             content.transform.parent = rouletteContentTransform_NewBie;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.Initialize(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
+            content.Initialize_NewBie(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
             rouletteContentList_NewBie.Add(content);
 
             NumberContent numContent = Instantiate(numberContent);
@@ -392,12 +390,7 @@ public class GameManager : MonoBehaviour
         index8 = new int[2];
     }
 
-    private void Start()
-    {
-        GameReset();
-    }
-
-    private void OnApplicationQuit()
+    void OnApplicationQuit()
     {
         if(GameStateManager.instance.Playing)
         {
@@ -405,6 +398,11 @@ public class GameManager : MonoBehaviour
 
             GameStateManager.instance.Penalty = number;
         }
+    }
+
+    private void Start()
+    {
+        GameReset();
     }
 
     public void Initialize()
@@ -415,7 +413,7 @@ public class GameManager : MonoBehaviour
         blockMotherInformation = blockDataBase.blockMotherInformation;
     }
 
-    void GameReset()
+    private void GameReset()
     {
         StopAllCoroutines();
 
@@ -438,13 +436,6 @@ public class GameManager : MonoBehaviour
         inputTargetNumber.text = "";
 
         ClearOtherPlayerBlock();
-
-        for (int i = 0; i < otherBettingNumberList_Newbie.Length; i++)
-        {
-            otherBettingNumberList_Newbie[i] = 0;
-        }
-
-        otherBettingNumberList_Gosu.Clear();
     }
 
     public void Penalty()
@@ -482,27 +473,44 @@ public class GameManager : MonoBehaviour
         uIManager.GameEnd();
     }
 
+    public void GameStart_Initialize()
+    {
+        rouletteContentTransform_NewBie.gameObject.SetActive(false);
+        rouletteContentTransform.gameObject.SetActive(false);
+        rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
+        rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(false);
+        rouletteContentTransformSquareBet.gameObject.SetActive(false);
+
+        blockGridParent_NewBie.SetActive(false);
+        blockGridParent_Gosu.SetActive(false);
+
+        blockContentTransform_NewBie.gameObject.SetActive(false);
+        blockContentTransform_Gosu.gameObject.SetActive(false);
+
+        numberContentTransform_NewBie.gameObject.SetActive(false);
+        numberContentTransform.gameObject.SetActive(false);
+    }
+
     public void GameStart_Newbie()
     {
         roomText.text = "초보방";
 
-        developerInfo.text = "0 = 퀸 당첨\n1 = 검은색, 2 = 흰색 당첨\n25 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n9 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(false);
         rouletteContentTransformSquareBet.gameObject.SetActive(false);
-        numberContentTransform.gameObject.SetActive(false);
 
         rouletteContentTransform_NewBie.gameObject.SetActive(true);
+        blockGridParent_NewBie.SetActive(true);
+        blockContentTransform_NewBie.gameObject.SetActive(true);
         numberContentTransform_NewBie.gameObject.SetActive(true);
 
         rouletteContentList_Target = rouletteContentList_NewBie;
 
-        blockContentTransform_NewBie.gameObject.SetActive(true);
-        blockContentTransform_Gosu.gameObject.SetActive(false);
-
         newbieBlockContent.gameObject.SetActive(true);
+
 
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
@@ -526,17 +534,14 @@ public class GameManager : MonoBehaviour
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(true);
         rouletteContentTransformSquareBet.gameObject.SetActive(true);
-        numberContentTransform.gameObject.SetActive(true);
 
-        rouletteContentTransform_NewBie.gameObject.SetActive(false);
-        numberContentTransform_NewBie.gameObject.SetActive(false);
+        blockGridParent_Gosu.SetActive(true);
+        blockContentTransform_Gosu.gameObject.SetActive(true);
+        numberContentTransform.gameObject.SetActive(true);
 
         rouletteContentList_Target = rouletteContentList_Gosu;
 
-        blockContentTransform_NewBie.gameObject.SetActive(false);
-        blockContentTransform_Gosu.gameObject.SetActive(true);
-
-        for(int i = 0; i < 3; i ++)
+        for (int i = 0; i < 3; i ++)
         {
             blockContentList[i].gameObject.SetActive(true);
         }
@@ -868,24 +873,49 @@ public class GameManager : MonoBehaviour
 
             targetQueenNumber = 0;
 
-            if (number <= 0)
+            if(GameStateManager.instance.GameType == GameType.NewBie)
             {
-                targetNumber = 1;
-                targetQueenNumber = 1;
+                if (number <= 0)
+                {
+                    targetNumber = 1;
+                    targetQueenNumber = 1;
 
-                check = true;
-            }
-            else if(number <= 24)
-            {
-                targetNumber = number;
+                    check = true;
+                }
+                else if (number <= 8)
+                {
+                    targetNumber = number;
 
-                check = true;
+                    check = true;
+                }
+                else
+                {
+                    GameStateManager.instance.CheckBouns = true;
+
+                    check = false;
+                }
             }
             else
             {
-                GameStateManager.instance.CheckBouns = true;
+                if (number <= 0)
+                {
+                    targetNumber = 1;
+                    targetQueenNumber = 1;
 
-                check = false;
+                    check = true;
+                }
+                else if (number <= 24)
+                {
+                    targetNumber = number;
+
+                    check = true;
+                }
+                else
+                {
+                    GameStateManager.instance.CheckBouns = true;
+
+                    check = false;
+                }
             }
         }
 
@@ -942,12 +972,18 @@ public class GameManager : MonoBehaviour
             targetObj.SetActive(false);
             targetQueenObj.SetActive(true);
             targetQueenObj.transform.SetAsLastSibling();
-            trans = rouletteContentList_Target[12].transform;
+
+            if(GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                trans = rouletteContentList_Target[4].transform;
+            }
+            else
+            {
+                trans = rouletteContentList_Target[12].transform;
+            }
             targetQueenObj.transform.position = trans.position;
 
             targetText.text = "퀸";
-
-            Debug.Log("퀸 당첨!");
         }
         else
         {
@@ -955,41 +991,35 @@ public class GameManager : MonoBehaviour
             targetObj.transform.SetAsLastSibling();
         }
 
-        if (targetNumber > 12)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            trans = rouletteContentList_Target[targetNumber].transform;
-            targetObj.transform.position = trans.position;
-        }
-        else
-        {
-            trans = rouletteContentList_Target[targetNumber - 1].transform;
-            targetObj.transform.position = trans.position;
-        }
-
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            if(targetNumber % 2 == 0)
+            if (targetNumber > 4)
             {
-                targetText.text = "흰";
+                trans = rouletteContentList_Target[targetNumber].transform;
+                targetObj.transform.position = trans.position;
             }
             else
             {
-                targetText.text = "검";
+                trans = rouletteContentList_Target[targetNumber - 1].transform;
+                targetObj.transform.position = trans.position;
             }
         }
         else
         {
-            targetText.text = targetNumber.ToString();
+            if (targetNumber > 12)
+            {
+                trans = rouletteContentList_Target[targetNumber].transform;
+                targetObj.transform.position = trans.position;
+            }
+            else
+            {
+                trans = rouletteContentList_Target[targetNumber - 1].transform;
+                targetObj.transform.position = trans.position;
+            }
         }
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            recordText.text += targetText.text + ", ";
-        }
-        else
-        {
-            recordText.text += targetNumber + ", ";
-        }
+        targetText.text = targetNumber.ToString();
+        recordText.text += targetNumber + ", ";
 
         plusMoney = 0; //획득한 돈
         plusAiMoney = 0;
@@ -997,83 +1027,44 @@ public class GameManager : MonoBehaviour
         tempMoney = 0;
         tempAiMoney = 0;
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
+        if (targetQueenNumber == 1)
         {
-            if(aiMode)
+            if(GameStateManager.instance.GameType == GameType.NewBie)
             {
-                if(otherBettingNumberList_Newbie[2] == 1 && targetQueenNumber == 1)
+                if(rouletteContentList_Target[4].isActive)
                 {
-                    plusAiMoney += blockMotherInformation.straightBet_NewBie_Queen * aiManager.bettingValue[0] 
-                        + aiManager.bettingValue[0];
-
-                    Debug.Log("Ai 초보방 퀸 당첨");
-                }
-                else
-                {
-                    if (targetNumber % 2 == 0 && aiManager.blockPos % 2 == 0)
-                    {
-                        plusAiMoney += blockMotherInformation.straightBet_NewBie * aiManager.bettingValue[0] 
-                            + aiManager.bettingValue[0];
-
-                        Debug.Log("Ai 초보방 흰색 당첨");
-                    }
-                    else if (targetNumber % 2 != 0 && aiManager.blockPos % 2 != 0)
-                    {
-                        plusAiMoney += blockMotherInformation.straightBet_NewBie * aiManager.bettingValue[0] 
-                            + aiManager.bettingValue[0];
-
-                        Debug.Log("Ai 초보방 검은색 당첨");
-                    }
-                }
-            }
-
-
-            if (targetQueenNumber == 1)
-            {
-                if(rouletteContentList_Target[12].isActive)
-                {
-                    plusMoney += blockMotherInformation.straightBet_NewBie_Queen * bettingValue[3]
-                        + bettingValue[3];
-
-                    Debug.Log("초보방 퀸 당첨");
+                    ChangeGetMoney(rouletteContentList_Target[4].blockClass, RouletteType.StraightBet, true);
                 }
             }
             else
             {
-                for (int i = 0; i < rouletteContentList_Target.Count; i++)
-                {
-                    if (rouletteContentList_Target[i].isActive)
-                    {
-                        if(targetNumber % 2 == 0 && rouletteContentList_Target[i].number % 2 == 0)
-                        {
-                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingValue[3]
-                        + bettingValue[3];
-
-                            Debug.Log("초보방 흰색 당첨");
-                        }
-                        else if (targetNumber % 2 != 0 && rouletteContentList_Target[i].number % 2 != 0)
-                        {
-                            plusMoney += blockMotherInformation.straightBet_NewBie * bettingValue[3]
-                        + bettingValue[3];
-
-                            Debug.Log("초보방 검은색 당첨");
-                        }
-                    }
-                }
+                CheckQueenNumber();
             }
+
+            Debug.Log("퀸 당첨");
         }
         else
         {
-            if (targetQueenNumber == 1)
-            {
-                CheckQueenNumber();
+            Debug.Log(targetNumber + "번 당첨");
 
-                Debug.Log("고수방 퀸 당첨");
+            if(GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                if (targetNumber > 4)
+                {
+                    targetNumber += 1;
+                }
+
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
+                {
+                    if (rouletteContentList_Target[i].isActive && targetNumber == rouletteContentList_Target[i].number)
+                    {
+                        ChangeGetMoney(rouletteContentList_Target[i].blockClass, RouletteType.StraightBet, false);
+                        break;
+                    }
+                }
             }
             else
             {
-                Debug.Log("고수방 " + targetNumber + "번 당첨");
-
                 if (targetNumber > 12)
                 {
                     targetNumber += 1;
@@ -1081,11 +1072,11 @@ public class GameManager : MonoBehaviour
 
                 CheckTargetNumber(targetNumber);
             }
+        }
 
-            for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
-            {
-                plusMoney -= (bettingList[i] / (bettingSizeList[i] + 1)) * bettingMinusList[i];
-            }
+        for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
+        {
+            plusMoney -= (bettingList[i] / (bettingSizeList[i] + 1)) * bettingMinusList[i];
         }
 
         if (bettingMoney == 0)
@@ -1183,11 +1174,11 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
     {
-        int money = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level);
+        int value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level);
 
         for(int i = 0; i < bettingValue.Length; i ++) //당첨된 블럭 빼주기
         {
-            if(money.Equals(bettingValue))
+            if(value.Equals(bettingValue))
             {
                 bettingMinusList[i] -= 1;
             }
@@ -1200,44 +1191,44 @@ public class GameManager : MonoBehaviour
             case RouletteType.StraightBet:
                 if(queen)
                 {
-                    plusMoney += blockMotherInformation.queenStraightBet * money + money;
+                    plusMoney += blockMotherInformation.queenStraightBet * value + value;
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.straightBet * money + money;
+                    plusMoney += blockMotherInformation.straightBet * value + value;
                 }
 
                 break;
             case RouletteType.SplitBet_Horizontal:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensplitBet * money + money;
+                    plusMoney += blockMotherInformation.queensplitBet * value + value;
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.splitBet * money + money;
+                    plusMoney += blockMotherInformation.splitBet * value + value;
                 }
 
                 break;
             case RouletteType.SplitBet_Vertical:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensplitBet * money + money;
+                    plusMoney += blockMotherInformation.queensplitBet * value + value;
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.splitBet * money + money;
+                    plusMoney += blockMotherInformation.splitBet * value + value;
                 }
 
                 break;
             case RouletteType.SquareBet:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensquareBet * money + money;
+                    plusMoney += blockMotherInformation.queensquareBet * value + value;
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.squareBet * money + money;
+                    plusMoney += blockMotherInformation.squareBet * value + value;
                 }
 
                 break;
@@ -2124,81 +2115,38 @@ public class GameManager : MonoBehaviour
         ChangeBettingMoney();
     }
 
+    public void SetBettingNumber_Ai(BlockType type, int number)
+    {
+
+    }
+
     void ShowBettingNumber()
     {
-        if (GameStateManager.instance.GameType == GameType.NewBie)
+        bettingNumberList.Clear();
+
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            for (int i = 0; i < bettingNumberList_NewBie.Length; i++)
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
             {
-                bettingNumberList_NewBie[i] = 0;
-            }
-
-            for (int i = 0; i < rouletteContentList_NewBie.Count; i ++)
-            {
-                if(rouletteContentList_NewBie[i].isActive)
+                if (rouletteContentList_Target[i].isActive)
                 {
-                    if(rouletteContentList_NewBie[i].number == 13) //퀸일때
+                    switch (rouletteContentList_Target[i].rouletteType)
                     {
-                        bettingNumberList_NewBie[2] = 1;
-                    }
-                    else
-                    {
-                        if (rouletteContentList_NewBie[i].number % 2 == 0) //흰
-                        {
-                            bettingNumberList_NewBie[0] = 1;
-                        }
-                        else
-                        {
-                            bettingNumberList_NewBie[1] = 1; //검
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            otherBettingList = "";
-
-            for (int i = 0; i < bettingNumberList_NewBie.Length; i++)
-            {
-                otherBettingList += bettingNumberList_NewBie[i].ToString() + "/";
-            }
-
-
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
-            {
-                PV.RPC("ShowOtherBetting_Newbie", RpcTarget.Others, otherBettingList.TrimEnd('/'));
-            }
-            else
-            {
-                for (int i = 0; i < otherBettingNumberList_Newbie.Length; i++)
-                {
-                    otherBettingNumberList_Newbie[i] = 0;
-                }
-
-                if (aiManager.blockPos == 13)
-                {
-                    otherBettingNumberList_Newbie[2] = 1;
-                }
-                else
-                {
-                    if (aiManager.blockPos % 2 == 0)
-                    {
-                        otherBettingNumberList_Newbie[0] = 1;
-                    }
-                    else
-                    {
-                        otherBettingNumberList_Newbie[1] = 1;
+                        case RouletteType.StraightBet:
+                            bettingNumberList.Add(rouletteContentList_Target[i].number);
+                            break;
+                        default:
+                            for (int j = 0; j < rouletteContentList_Target[i].numberList.Length; j++)
+                            {
+                                bettingNumberList.Add(rouletteContentList_Target[i].numberList[j]);
+                            }
+                            break; ;
                     }
                 }
-
-                Debug.Log("초보방 Ai 배팅한 위치값을 받아왔습니다");
             }
         }
         else
         {
-            bettingNumberList_Gosu.Clear();
-
             for (int i = 0; i < allContentList.Count; i++)
             {
                 if (allContentList[i].isActive)
@@ -2206,41 +2154,41 @@ public class GameManager : MonoBehaviour
                     switch (allContentList[i].rouletteType)
                     {
                         case RouletteType.StraightBet:
-                            bettingNumberList_Gosu.Add(allContentList[i].number);
+                            bettingNumberList.Add(allContentList[i].number);
                             break;
                         default:
-                            for(int j = 0; j < allContentList[i].numberList.Length; j ++)
+                            for (int j = 0; j < allContentList[i].numberList.Length; j++)
                             {
-                                bettingNumberList_Gosu.Add(allContentList[i].numberList[j]);
+                                bettingNumberList.Add(allContentList[i].numberList[j]);
                             }
-                            break;;
+                            break; ;
                     }
                 }
             }
+        }
 
-            bettingNumberList_Gosu = bettingNumberList_Gosu.Distinct().ToList();
-            bettingNumberList_Gosu.Sort();
+        bettingNumberList = bettingNumberList.Distinct().ToList();
+        bettingNumberList.Sort();
 
-            otherBettingList = "";
+        otherBettingList = "";
 
-            for (int i = 0; i < bettingNumberList_Gosu.Count; i ++)
-            {
-                otherBettingList += bettingNumberList_Gosu[i].ToString() + "/";
-            }
+        for (int i = 0; i < bettingNumberList.Count; i++)
+        {
+            otherBettingList += bettingNumberList[i].ToString() + "/";
+        }
 
-            otherBettingNumberList_Gosu.Clear();
+        otherBettingNumberList.Clear();
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
-            {
-                PV.RPC("ShowOtherBetting_Gosu", RpcTarget.Others, otherBettingList.TrimEnd('/'));
-            }
-            else
-            {
-                //아직 미구현
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && otherBettingList.Length > 0)
+        {
+            PV.RPC("ShowOtherBetting", RpcTarget.Others, otherBettingList.TrimEnd('/'));
+        }
+        else
+        {
+            //아직 미구현
 
 
-                Debug.Log("고수방 Ai 배팅한 위치값을 받아왔습니다");
-            }
+            Debug.Log("Ai 배팅한 위치값을 받아왔습니다");
         }
     }
 
@@ -2367,37 +2315,19 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     [PunRPC]
-    void ShowOtherBetting_Newbie(string str)
-    {
-        for(int i = 0; i < otherBettingNumberList_Newbie.Length; i ++)
-        {
-            otherBettingNumberList_Newbie[i] = 0;
-        }
-
-        string[] list = str.Split("/");
-
-        otherBettingNumberList_Newbie[0] = int.Parse(list[0]);
-        otherBettingNumberList_Newbie[1] = int.Parse(list[1]);
-        otherBettingNumberList_Newbie[2] = int.Parse(list[2]);
-
-        Debug.Log("초보방 상대 배팅 위치값을 받아왔습니다");
-    }
-
-    [PunRPC]
-    void ShowOtherBetting_Gosu(string str)
+    void ShowOtherBetting(string str)
     {
         string[] list = str.Split("/");
 
         for(int i = 0; i < list.Length; i ++)
         {
-            otherBettingNumberList_Gosu.Add(int.Parse(list[i]));
+            otherBettingNumberList.Add(int.Parse(list[i]));
             list[i].Replace("/", "");
         }
 
-        otherBettingNumberList_Gosu = otherBettingNumberList_Gosu.Distinct().ToList();
-        otherBettingNumberList_Gosu.Sort();
+        otherBettingNumberList = otherBettingNumberList.Distinct().ToList();
+        otherBettingNumberList.Sort();
 
         Debug.Log("고수방 상대 배팅 위치값을 받아왔습니다");
     }

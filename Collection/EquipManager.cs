@@ -128,11 +128,19 @@ public class EquipManager : MonoBehaviour
 
     public void ChangeNewbie()
     {
-        EquipNewBie(blockClass, false);
+        if(blockClass.blockType == BlockType.Pawn_Under || blockClass.blockType == BlockType.Pawn_Snow)
+        {
+            EquipNewBie(blockClass, false);
 
-        upgradeManager.CloseUpgradeView();
+            upgradeManager.CloseUpgradeView();
 
-        CloseEquipView();
+            CloseEquipView();
+        }
+        else
+        {
+            NotionManager.instance.UseNotion(NotionType.OnlyPawn);
+            return;
+        }
     }
 
 

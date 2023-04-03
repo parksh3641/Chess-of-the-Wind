@@ -179,5 +179,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = false;
 
         isDrag = false;
+
+        gameManager.ResetPosBlock(index);
     }
 }

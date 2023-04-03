@@ -138,6 +138,9 @@ public class NotionManager : MonoBehaviour
                     case NotionType.OverBettingBlock:
                         notion.txt.text = "1개 이상 배팅할 수 없습니다";
                         break;
+                    case NotionType.OnlyPawn:
+                        notion.txt.text = "초보방은 폰만 장착할 수 있습니다";
+                        break;
                 }
                 SetColor(list.colorType);
                 SetEffect(list.effectType);

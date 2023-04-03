@@ -8,76 +8,83 @@ public class BlockChild : MonoBehaviour
 {
     public BlockType blockType = BlockType.Default;
 
+    private Image image;
+
     public Text nickNameText;
     public Text valueText;
     public GameObject bettingMark;
 
     void Awake()
     {
+        image = GetComponent<Image>();
+
         switch (blockType)
         {
             case BlockType.Default:
-                transform.GetComponent<Image>().color = Color.white;
+                image.color = Color.white;
                 break;
             case BlockType.RightQueen_2:
-                transform.GetComponent<Image>().color = new Color(1, 200 / 255f, 0);
+                image.color = new Color(1, 200 / 255f, 0);
                 break;
             case BlockType.LeftQueen_2:
-                transform.GetComponent<Image>().color = new Color(1, 200 / 255f, 0);
+                image.color = new Color(1, 200 / 255f, 0);
                 break;
             case BlockType.RightQueen_3:
-                transform.GetComponent<Image>().color = new Color(1, 200 / 255f, 0);
+                image.color = new Color(1, 200 / 255f, 0);
                 break;
             case BlockType.LeftQueen_3:
-                transform.GetComponent<Image>().color = new Color(1, 200 / 255f, 0);
+                image.color = new Color(1, 200 / 255f, 0);
                 break;
             case BlockType.RightNight:
-                transform.GetComponent<Image>().color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = new Color(200 / 255f, 100 / 255f, 0);
                 break;
             case BlockType.LeftNight:
-                transform.GetComponent<Image>().color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = new Color(200 / 255f, 100 / 255f, 0);
                 break;
             case BlockType.RightDownNight:
-                transform.GetComponent<Image>().color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = new Color(200 / 255f, 100 / 255f, 0);
                 break;
             case BlockType.LeftDownNight:
-                transform.GetComponent<Image>().color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = new Color(200 / 255f, 100 / 255f, 0);
                 break;
             case BlockType.Rook_V2:
-                transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
+                image.color = new Color(0, 150 / 255f, 1);
                 break;
             case BlockType.Rook_V2H2:
-                transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
+                image.color = new Color(0, 150 / 255f, 1);
                 break;
             case BlockType.Pawn_Under:
-                transform.GetComponent<Image>().color = new Color(0, 150 / 255f, 1);
+                image.color = new Color(0, 150 / 255f, 1);
+                break;
+            case BlockType.Pawn_Snow:
+                image.color = new Color(0, 150 / 255f, 1);
                 break;
             case BlockType.Spider:
-                transform.GetComponent<Image>().color = Color.red;
+                image.color = Color.red;
                 break;
             case BlockType.Rook_V4:
-                transform.GetComponent<Image>().color = new Color(240 / 255f, 240 / 255f, 1);
+                image.color = new Color(240 / 255f, 240 / 255f, 1);
                 break;
             case BlockType.Tetris_I_Hor:
-                transform.GetComponent<Image>().color = new Color(240 / 255f, 240 / 255f, 1);
+                image.color = new Color(240 / 255f, 240 / 255f, 1);
                 break;
             case BlockType.Tetris_T:
-                transform.GetComponent<Image>().color = new Color(160 / 255f, 0, 240 / 255f);
+                image.color = new Color(160 / 255f, 0, 240 / 255f);
                 break;
             case BlockType.Tetris_L:
-                transform.GetComponent<Image>().color = new Color(0, 0, 240 / 255f);
+                image.color = new Color(0, 0, 240 / 255f);
                 break;
             case BlockType.Tetris_J:
-                transform.GetComponent<Image>().color = new Color(240 / 255f, 160 / 255f, 0);
+                image.color = new Color(240 / 255f, 160 / 255f, 0);
                 break;
             case BlockType.Tetris_S:
-                transform.GetComponent<Image>().color = new Color(0, 240 / 255f, 0);
+                image.color = new Color(0, 240 / 255f, 0);
                 break;
             case BlockType.Tetris_Z:
-                transform.GetComponent<Image>().color = new Color(240 / 255f, 0, 0);
+                image.color = new Color(240 / 255f, 0, 0);
                 break;
             case BlockType.Tetris_Speical:
-                transform.GetComponent<Image>().color = new Color(0, 240 / 255f, 240 / 255f);
+                image.color = new Color(0, 240 / 255f, 240 / 255f);
                 break;
         }
 

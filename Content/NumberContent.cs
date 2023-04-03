@@ -25,17 +25,17 @@ public class NumberContent : MonoBehaviour
 
     public void Initialize_NewBie(int number)
     {
-        if (number < 12)
+        if (number < 4)
         {
-            numberText.text = "";
+            numberText.text = (number + 1).ToString();
         }
-        else if (number == 12)
+        else if (number == 4)
         {
             numberText.text = "퀸";
         }
-        else if (number > 12)
+        else if (number > 4)
         {
-            numberText.text = "";
+            numberText.text = number.ToString();
         }
     }
 }

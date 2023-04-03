@@ -183,7 +183,8 @@ public enum NotionType
     DefDestroy,
     SameEquipBlock,
     LimitMaxBlock,
-    OverBettingBlock
+    OverBettingBlock,
+    OnlyPawn
 }
 
 public enum GameRankType

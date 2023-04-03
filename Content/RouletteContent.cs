@@ -70,7 +70,6 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         switch (rouletteType)
         {
             case RouletteType.StraightBet:
-
                 if (number % 2 == 0)
                 {
                     rouletteColorType = RouletteColorType.White;
@@ -80,7 +79,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
                     rouletteColorType = RouletteColorType.Black;
                 }
 
-                if (type == RouletteType.StraightBet && number == 13)
+                if (number == 13)
                 {
                     queen.SetActive(true);
                     rouletteColorType = RouletteColorType.White;
@@ -108,6 +107,35 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
                 backgroundImg.enabled = false;
                 break;
         }
+
+        initialize = true;
+    }
+
+    public void Initialize_NewBie(GameManager manager, Transform parent, RouletteType type, int[] setIndex, int num)
+    {
+        gameManager = manager;
+        blockParent = parent;
+        rouletteType = type;
+        index = setIndex;
+
+        number = num + 1;
+
+        if (number % 2 == 0)
+        {
+            rouletteColorType = RouletteColorType.White;
+        }
+        else
+        {
+            rouletteColorType = RouletteColorType.Black;
+        }
+
+        if (number == 5)
+        {
+            queen.SetActive(true);
+            rouletteColorType = RouletteColorType.White;
+        }
+
+        SetBackgroundColor(rouletteColorType);
 
         initialize = true;
     }

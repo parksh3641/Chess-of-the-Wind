@@ -70,11 +70,11 @@ public class Pinball3D : MonoBehaviour
 
         if (number == 0)
         {
-            transform.position = new Vector3(-0.9f, 0.25f, 3.3f);
+            transform.position = new Vector3(-0.9f, 0.5f, 3.3f);
         }
         else
         {
-            transform.position = new Vector3(4.05f, 0.25f, 3.3f);
+            transform.position = new Vector3(4.05f, 0.5f, 3.3f);
         }
 
         transform.rotation = Quaternion.Euler(0, 20, 0);

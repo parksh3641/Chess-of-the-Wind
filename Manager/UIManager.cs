@@ -171,6 +171,8 @@ public class UIManager : MonoBehaviour
 
         GameStart();
 
+        gameManager.GameStart_Initialize();
+
         yield return new WaitForSeconds(3f);
 
         vsFadeInOut.FadeOut();

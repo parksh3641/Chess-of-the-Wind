@@ -205,9 +205,11 @@ public class AiManager : MonoBehaviour
 
             otherBlockContentList[0].gameObject.SetActive(true);
 
-            blockPos = Random.Range(1, 26);
+            blockPos = Random.Range(1, 10);
 
             otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+
+            gameManager.SetBettingNumber_Ai(blockTypeArray[0], blockPos);
 
             Debug.Log("Ai가 초보방 블럭을 " + blockPos + "번에 놓았습니다");
         }
@@ -232,8 +234,12 @@ public class AiManager : MonoBehaviour
 
             otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
 
+            gameManager.SetBettingNumber_Ai(otherBlockContentList[blockIndex].blockType, blockPos - 1);
+
             Debug.Log("Ai가 고수방 블럭을 " + (blockPos - 1) + "번에 놓았습니다");
         }
+
+
     }
 
     private int GenerateRandomNumber(int[] exclusionList)

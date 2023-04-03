@@ -27,11 +27,9 @@ public class RouletteManager : MonoBehaviour
 
     [Space]
     [Title("Roulette")]
-    public Transform roulette1Obj;
-    public Transform roulette2Obj;
-
-    public MeshRenderer roulette1Mesh;
-    public MeshRenderer roulette2Mesh;
+    public GameObject[] roulettePlane;
+    public Transform[] roulette1Obj;
+    public Transform[] roulette2Obj;
 
     [Space]
     [Title("Roulette_Particle")]
@@ -43,8 +41,11 @@ public class RouletteManager : MonoBehaviour
     public FingerController leftFingerController;
     public FingerController rightFingerController;
 
-    public PointerManager leftPointerManager;
-    public PointerManager rightPointerManager;
+    public PointerManager[] leftPointerManager;
+    public PointerManager[] rightPointerManager;
+
+    public PointerManager mainLeftPointerManager;
+    public PointerManager mainRightPointerManager;
 
     [Space]
     [Title("Photon Obj")]
@@ -79,6 +80,7 @@ public class RouletteManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
+    private int queenNumber = 0;
     public int windIndex = 0;
     private int targetNumber = 0;
     private int targetQueenNumber = 0;
@@ -139,24 +141,49 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Left", roulette1Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-
-        leftQueen = leftClock[2].meshRenderer;
-        leftQueenPoint = leftClock[2].queenPoint;
-
-        rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-        rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Right", roulette2Obj.transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
-
-        rightQueen = rightClock[2].meshRenderer;
-        rightQueenPoint = rightClock[2].queenPoint;
-
-        for (int i = 0; i < leftClock.Length; i++)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            leftClock[i].transform.parent = roulette1Obj.transform;
-            rightClock[i].transform.parent = roulette2Obj.transform;
+            leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Left", roulette1Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Left", roulette1Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Left", roulette1Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+            leftQueen = leftClock[2].meshRenderer;
+            leftQueenPoint = leftClock[2].queenPoint;
+
+            rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Right", roulette2Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Right", roulette2Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Right", roulette2Obj[0].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+            rightQueen = rightClock[2].meshRenderer;
+            rightQueenPoint = rightClock[2].queenPoint;
+
+            for (int i = 0; i < leftClock.Length; i++)
+            {
+                leftClock[i].transform.parent = roulette1Obj[0].transform;
+                rightClock[i].transform.parent = roulette2Obj[0].transform;
+            }
+        }
+        else
+        {
+            leftClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Left", roulette1Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            leftClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Left", roulette1Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            leftClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Left", roulette1Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+            leftQueen = leftClock[2].meshRenderer;
+            leftQueenPoint = leftClock[2].queenPoint;
+
+            rightClock[0] = PhotonNetwork.Instantiate("ClockSecObj_Right", roulette2Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            rightClock[1] = PhotonNetwork.Instantiate("ClockMinObj_Right", roulette2Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+            rightClock[2] = PhotonNetwork.Instantiate("ClockQueenObj_Right", roulette2Obj[1].transform.localPosition, Quaternion.identity, 0).GetComponent<Rotation_Clock>();
+
+            rightQueen = rightClock[2].meshRenderer;
+            rightQueenPoint = rightClock[2].queenPoint;
+
+            for (int i = 0; i < leftClock.Length; i++)
+            {
+                leftClock[i].transform.parent = roulette1Obj[1].transform;
+                rightClock[i].transform.parent = roulette2Obj[1].transform;
+            }
         }
 
         Debug.Log("포톤 오브젝트 재생성 완료");
@@ -171,6 +198,35 @@ public class RouletteManager : MonoBehaviour
 
         rouletteCamera.gameObject.SetActive(true);
         roulette3D.SetActive(false);
+
+        roulettePlane[0].SetActive(false);
+        roulettePlane[1].SetActive(false);
+
+        roulette1Obj[0].gameObject.SetActive(false);
+        roulette2Obj[0].gameObject.SetActive(false);
+
+        roulette1Obj[1].gameObject.SetActive(false);
+        roulette2Obj[1].gameObject.SetActive(false);
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            roulettePlane[0].SetActive(true);
+        }
+        else
+        {
+            roulettePlane[1].SetActive(true);
+        }
+
+        queenNumber = 0;
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            queenNumber = 5;
+        }
+        else
+        {
+            queenNumber = 13;
+        }
 
         windCharacterManager.Stop();
 
@@ -259,10 +315,21 @@ public class RouletteManager : MonoBehaviour
             rightQueen = rightClock[2].meshRenderer;
             rightQueenPoint = rightClock[2].queenPoint;
 
-            for (int i = 0; i < leftClock.Length; i++)
+            if (GameStateManager.instance.GameType == GameType.NewBie)
             {
-                leftClock[i].transform.parent = roulette1Obj.transform;
-                rightClock[i].transform.parent = roulette2Obj.transform;
+                for (int i = 0; i < leftClock.Length; i++)
+                {
+                    leftClock[i].transform.parent = roulette1Obj[0].transform;
+                    rightClock[i].transform.parent = roulette2Obj[0].transform;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < leftClock.Length; i++)
+                {
+                    leftClock[i].transform.parent = roulette1Obj[1].transform;
+                    rightClock[i].transform.parent = roulette2Obj[1].transform;
+                }
             }
         }
 
@@ -280,28 +347,27 @@ public class RouletteManager : MonoBehaviour
         rouletteCamera.Initialize(startCameraPos);
         rouletteBallCamera.gameObject.SetActive(false);
 
-        roulette1Obj.gameObject.SetActive(true);
-        roulette2Obj.gameObject.SetActive(true);
-
-        roulette1Mesh.materials[1].color = Color.white;
-        roulette1Mesh.materials[2].color = Color.white;
-
-        roulette2Mesh.materials[1].color = Color.white;
-        roulette2Mesh.materials[2].color = Color.white;
-
-
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            leftPointerManager.Initialize_NewBie();
-            rightPointerManager.Initialize_NewBie();
+            roulette1Obj[0].gameObject.SetActive(true);
+            roulette2Obj[0].gameObject.SetActive(true);
 
-            roulette1Mesh.materials[2].color = Color.black;
-            roulette2Mesh.materials[2].color = Color.black;
+            leftPointerManager[0].Initialize(0);
+            rightPointerManager[0].Initialize(0);
+
+            mainLeftPointerManager = leftPointerManager[0];
+            mainRightPointerManager = rightPointerManager[0];
         }
         else
         {
-            leftPointerManager.Initialize(leftNumber);
-            rightPointerManager.Initialize(rightNumber);
+            roulette1Obj[1].gameObject.SetActive(true);
+            roulette2Obj[1].gameObject.SetActive(true);
+
+            leftPointerManager[1].Initialize(leftNumber);
+            rightPointerManager[1].Initialize(rightNumber);
+
+            mainLeftPointerManager = leftPointerManager[1];
+            mainRightPointerManager = rightPointerManager[1];
         }
 
         leftFingerController.Initialize();
@@ -340,183 +406,120 @@ public class RouletteManager : MonoBehaviour
         colorNumber = 0;
         colorNumber2 = 0;
 
-        for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
+        for (int i = 0; i < mainLeftPointerManager.pointerList.Count; i++)
         {
-            leftPointerManager.pointerList[i].Betting_Newbie(0);
-            rightPointerManager.pointerList[i].Betting_Newbie(0);
+            mainLeftPointerManager.pointerList[i].Betting_Newbie(0);
+            mainRightPointerManager.pointerList[i].Betting_Newbie(0);
         }
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
+        for (int i = 0; i < gameManager.bettingNumberList.Count; i++)
         {
-            if (gameManager.bettingNumberList_NewBie[0] == 1 && gameManager.otherBettingNumberList_Newbie[0] == 1)
+            if (rouletteIndex == 0)
             {
-                colorNumber = 1;
-            }
-            else if (gameManager.bettingNumberList_NewBie[0] == 1)
-            {
-                colorNumber = 2;
-            }
-            else if (gameManager.otherBettingNumberList_Newbie[0] == 1)
-            {
-                colorNumber = 3;
-            }
-
-            if (gameManager.bettingNumberList_NewBie[1] == 1 && gameManager.otherBettingNumberList_Newbie[1] == 1)
-            {
-                colorNumber2 = 1;
-            }
-            else if (gameManager.bettingNumberList_NewBie[1] == 1)
-            {
-                colorNumber2 = 2;
-            }
-            else if (gameManager.otherBettingNumberList_Newbie[1] == 1)
-            {
-                colorNumber2 = 3;
-            }
-
-            for (int i = 0; i < leftPointerManager.pointerList.Count; i++)
-            {
-                if (leftPointerManager.pointerList[i].index % 2 == 0)
+                for (int j = 0; j < mainLeftPointerManager.pointerList.Count; j++)
                 {
-                    leftPointerManager.pointerList[i].Betting_Newbie(colorNumber);
-                    rightPointerManager.pointerList[i].Betting_Newbie(colorNumber);
-                }
+                    if (gameManager.bettingNumberList[i] > queenNumber)
+                    {
+                        if (gameManager.bettingNumberList[i] - 1 == mainLeftPointerManager.pointerList[j].index)
+                        {
+                            mainLeftPointerManager.pointerList[j].Betting_Gosu();
+                        }
+                    }
+                    else
+                    {
+                        if (gameManager.bettingNumberList[i] == mainLeftPointerManager.pointerList[j].index)
+                        {
+                            mainLeftPointerManager.pointerList[j].Betting_Gosu();
+                        }
+                    }
 
-                if (leftPointerManager.pointerList[i].index % 2 != 0)
-                {
-                    leftPointerManager.pointerList[i].Betting_Newbie(colorNumber2);
-                    rightPointerManager.pointerList[i].Betting_Newbie(colorNumber2);
+                    if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
+                    {
+                        leftQueen.material.color = Color.green;
+                    }
+                    else if (gameManager.bettingNumberList.Contains(queenNumber))
+                    {
+                        leftQueen.material.color = new Color(0, 1, 1);
+                    }
+                    else if (gameManager.otherBettingNumberList.Contains(queenNumber))
+                    {
+                        leftQueen.material.color = Color.red;
+                    }
                 }
             }
+            else
+            {
+                for (int j = 0; j < mainRightPointerManager.pointerList.Count; j++)
+                {
+                    if (gameManager.bettingNumberList[i] > queenNumber)
+                    {
+                        if (gameManager.bettingNumberList[i] - 1 == mainRightPointerManager.pointerList[j].index)
+                        {
+                            mainRightPointerManager.pointerList[j].Betting_Gosu();
+                        }
+                    }
+                    else
+                    {
+                        if (gameManager.bettingNumberList[i] == mainRightPointerManager.pointerList[j].index)
+                        {
+                            mainRightPointerManager.pointerList[j].Betting_Gosu();
+                        }
+                    }
 
-            if (gameManager.bettingNumberList_NewBie[2] == 1 && gameManager.otherBettingNumberList_Newbie[2] == 1)
-            {
-                leftQueen.material.color = Color.green;
-                rightQueen.material.color = Color.green;
+                    if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
+                    {
+                        rightQueen.material.color = Color.green;
+                    }
+                    else if (gameManager.bettingNumberList.Contains(queenNumber))
+                    {
+                        rightQueen.material.color = new Color(0, 1, 1);
+                    }
+                    else if (gameManager.otherBettingNumberList.Contains(queenNumber))
+                    {
+                        rightQueen.material.color = Color.red;
+                    }
+                }
             }
-            else if (gameManager.bettingNumberList_NewBie[2] == 1)
-            {
-                leftQueen.material.color = new Color(0, 1, 1);
-                rightQueen.material.color = new Color(0, 1, 1);
-            }
-            else if (gameManager.otherBettingNumberList_Newbie[2] == 1)
-            {
-                leftQueen.material.color = Color.red;
-                rightQueen.material.color = Color.red;
-            }
-
         }
-        else
-        {
-            for (int i = 0; i < gameManager.bettingNumberList_Gosu.Count; i++)
-            {
-                if (rouletteIndex == 0)
-                {
-                    for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
-                    {
-                        if(gameManager.bettingNumberList_Gosu[i] > 13)
-                        {
-                            if (gameManager.bettingNumberList_Gosu[i] - 1 == leftPointerManager.pointerList[j].index)
-                            {
-                                leftPointerManager.pointerList[j].Betting_Gosu();
-                            }
-                        }
-                        else
-                        {
-                            if (gameManager.bettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
-                            {
-                                leftPointerManager.pointerList[j].Betting_Gosu();
-                            }
-                        }
 
-                        if (gameManager.bettingNumberList_Gosu.Contains(13) && gameManager.otherBettingNumberList_Gosu.Contains(13))
+        for (int i = 0; i < gameManager.otherBettingNumberList.Count; i++)
+        {
+            if (rouletteIndex == 0)
+            {
+                for (int j = 0; j < mainLeftPointerManager.pointerList.Count; j++)
+                {
+                    if (gameManager.otherBettingNumberList[i] > queenNumber)
+                    {
+                        if (gameManager.otherBettingNumberList[i] - 1 == mainLeftPointerManager.pointerList[j].index)
                         {
-                            leftQueen.material.color = Color.green;
-                        }
-                        else if (gameManager.bettingNumberList_Gosu.Contains(13))
-                        {
-                            leftQueen.material.color = new Color(0, 1, 1);
-                        }
-                        else if(gameManager.otherBettingNumberList_Gosu.Contains(13))
-                        {
-                            leftQueen.material.color = Color.red;
+                            mainLeftPointerManager.pointerList[j].Betting_Gosu_Other();
                         }
                     }
-                }
-                else
-                {
-                    for (int j = 0; j < rightPointerManager.pointerList.Count; j++)
+                    else
                     {
-                        if (gameManager.bettingNumberList_Gosu[i] > 13)
+                        if (gameManager.otherBettingNumberList[i] == mainLeftPointerManager.pointerList[j].index)
                         {
-                            if (gameManager.bettingNumberList_Gosu[i] - 1 == rightPointerManager.pointerList[j].index)
-                            {
-                                rightPointerManager.pointerList[j].Betting_Gosu();
-                            }
-                        }
-                        else
-                        {
-                            if (gameManager.bettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
-                            {
-                                rightPointerManager.pointerList[j].Betting_Gosu();
-                            }
-                        }
-
-                        if (gameManager.bettingNumberList_Gosu.Contains(13) && gameManager.otherBettingNumberList_Gosu.Contains(13))
-                        {
-                            rightQueen.material.color = Color.green;
-                        }
-                        else if (gameManager.bettingNumberList_Gosu.Contains(13))
-                        {
-                            rightQueen.material.color = new Color(0, 1, 1);
-                        }
-                        else if (gameManager.otherBettingNumberList_Gosu.Contains(13))
-                        {
-                            rightQueen.material.color = Color.red;
+                            mainLeftPointerManager.pointerList[j].Betting_Gosu_Other();
                         }
                     }
                 }
             }
-
-            for (int i = 0; i < gameManager.otherBettingNumberList_Gosu.Count; i++)
+            else
             {
-                if (rouletteIndex == 0)
+                for (int j = 0; j < mainRightPointerManager.pointerList.Count; j++)
                 {
-                    for (int j = 0; j < leftPointerManager.pointerList.Count; j++)
+                    if (gameManager.otherBettingNumberList[i] > queenNumber)
                     {
-                        if (gameManager.otherBettingNumberList_Gosu[i] > 13)
+                        if (gameManager.otherBettingNumberList[i] - 1 == mainRightPointerManager.pointerList[j].index)
                         {
-                            if (gameManager.otherBettingNumberList_Gosu[i] - 1 == leftPointerManager.pointerList[j].index)
-                            {
-                                leftPointerManager.pointerList[j].Betting_Gosu_Other();
-                            }
-                        }
-                        else
-                        {
-                            if (gameManager.otherBettingNumberList_Gosu[i] == leftPointerManager.pointerList[j].index)
-                            {
-                                leftPointerManager.pointerList[j].Betting_Gosu_Other();
-                            }
+                            mainRightPointerManager.pointerList[j].Betting_Gosu_Other();
                         }
                     }
-                }
-                else
-                {
-                    for (int j = 0; j < rightPointerManager.pointerList.Count; j++)
+                    else
                     {
-                        if (gameManager.otherBettingNumberList_Gosu[i] > 13)
+                        if (gameManager.otherBettingNumberList[i] == mainRightPointerManager.pointerList[j].index)
                         {
-                            if (gameManager.otherBettingNumberList_Gosu[i] - 1 == rightPointerManager.pointerList[j].index)
-                            {
-                                rightPointerManager.pointerList[j].Betting_Gosu_Other();
-                            }
-                        }
-                        else
-                        {
-                            if (gameManager.otherBettingNumberList_Gosu[i] == rightPointerManager.pointerList[j].index)
-                            {
-                                rightPointerManager.pointerList[j].Betting_Gosu_Other();
-                            }
+                            mainRightPointerManager.pointerList[j].Betting_Gosu_Other();
                         }
                     }
                 }
@@ -538,7 +541,7 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(InitializeWindCharacter1(roulette1Obj));
+            StartCoroutine(InitializeWindCharacter1(roulette1Obj[0]));
         }
         else
         {
@@ -552,7 +555,7 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(InitializeWindCharacter2(roulette2Obj));
+            StartCoroutine(InitializeWindCharacter2(roulette2Obj[0]));
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -566,9 +569,10 @@ public class RouletteManager : MonoBehaviour
     {
         windCharacterManager.Initialize(target);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
 
-        roulette2Obj.gameObject.SetActive(false);
+        roulette2Obj[0].gameObject.SetActive(false);
+        roulette2Obj[1].gameObject.SetActive(false);
         rightFingerController.Disable();
         leftFingerController.Disable();
 
@@ -579,9 +583,10 @@ public class RouletteManager : MonoBehaviour
     {
         windCharacterManager.Initialize(target);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
 
-        roulette1Obj.gameObject.SetActive(false);
+        roulette1Obj[0].gameObject.SetActive(false);
+        roulette1Obj[1].gameObject.SetActive(false);
         rightFingerController.Disable();
         leftFingerController.Disable();
 
@@ -916,18 +921,32 @@ public class RouletteManager : MonoBehaviour
 
         if (rouletteIndex == 0)
         {
-            targetNumber = leftPointerManager.CheckNumber(pinball.transform);
+            targetNumber = mainLeftPointerManager.CheckNumber(pinball.transform);
 
-            leftQueenPoint.parent = roulette1Obj;
-            targetQueenNumber = leftPointerManager.CheckQueenNumber(leftQueenPoint);
+            if(GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                leftQueenPoint.parent = roulette1Obj[0];
+            }
+            else
+            {
+                leftQueenPoint.parent = roulette1Obj[1];
+            }
+            targetQueenNumber = mainLeftPointerManager.CheckQueenNumber(leftQueenPoint);
             leftQueenPoint.parent = leftClock[2].transform;
         }
         else
         {
-            targetNumber = rightPointerManager.CheckNumber(pinball.transform);
+            targetNumber = mainRightPointerManager.CheckNumber(pinball.transform);
 
-            rightQueenPoint.parent = roulette2Obj;
-            targetQueenNumber = rightPointerManager.CheckQueenNumber(rightQueenPoint);
+            if (GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                rightQueenPoint.parent = roulette2Obj[0];
+            }
+            else
+            {
+                rightQueenPoint.parent = roulette2Obj[1];
+            }
+            targetQueenNumber = mainRightPointerManager.CheckQueenNumber(rightQueenPoint);
             rightQueenPoint.parent = rightClock[2].transform;
         }
 
@@ -958,21 +977,7 @@ public class RouletteManager : MonoBehaviour
             yield return null;
         }
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            if (targetNumber % 2 == 0)
-            {
-                PV.RPC("ShowTargetNumber_NewBie", RpcTarget.All, 0);
-            }
-            else
-            {
-                PV.RPC("ShowTargetNumber_NewBie", RpcTarget.All, 1);
-            }
-        }
-        else
-        {
-            PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
-        }
+        PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
 
         yield return new WaitForSeconds(2.5f);
 
@@ -1064,8 +1069,11 @@ public class RouletteManager : MonoBehaviour
         gameManager.GameResult(target);
         windCharacterManager.Stop();
 
-        roulette1Obj.gameObject.SetActive(false);
-        roulette2Obj.gameObject.SetActive(false);
+        roulette1Obj[0].gameObject.SetActive(false);
+        roulette1Obj[1].gameObject.SetActive(false);
+
+        roulette2Obj[0].gameObject.SetActive(false);
+        roulette2Obj[1].gameObject.SetActive(false);
 
         CloseRouletteView();
     }
