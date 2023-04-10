@@ -27,53 +27,20 @@ public class Pointer : MonoBehaviour
         numberText.text = index.ToString();
     }
 
-    public void Initialize_NewBie(int number)
+    public void Betting_Initialize()
     {
-        index = number;
+        betting = 0;
 
-        focus.SetActive(false);
-
-        numberText.text = "";
-
-        if (number % 2 == 0)
-        {
-            numberText.text = "흰";
-        }
-        else
-        {
-            numberText.text = "검";
-        }
+        numberText.color = Color.black;
     }
 
-    public void Betting_Newbie(int number)
-    {
-        if (number == 0)
-        {
-            numberText.color = Color.black;
-
-            betting = 0;
-        }
-        else if (number == 1)
-        {
-            numberText.color = Color.green;
-        }
-        else if (number == 2)
-        {
-            numberText.color = new Color(0, 1, 1);
-        }
-        else
-        {
-            numberText.color = Color.red;
-        }
-    }
-
-    public void Betting_Gosu()
+    public void Betting()
     {
         betting = 1;
         numberText.color = new Color(0, 1, 1);
     }
 
-    public void Betting_Gosu_Other()
+    public void Betting_Other()
     {
         if(betting == 0)
         {

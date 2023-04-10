@@ -37,6 +37,7 @@ public class MatchingManager : MonoBehaviour
     public FadeInOut mainFadeInOut;
     public NetworkManager networkManager;
     public UIManager uIManager;
+    public AiManager aiManager;
 
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
@@ -60,6 +61,11 @@ public class MatchingManager : MonoBehaviour
         gameRankType = GameRankType.Bronze_4 + rank;
 
         rankText.text = "현재 랭크 : ";
+
+        if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
+        {
+            gameRankType = GameRankType.Legend;
+        }
 
         switch (gameRankType)
         {
@@ -123,16 +129,7 @@ public class MatchingManager : MonoBehaviour
             case GameRankType.Diamond_1:
                 rankText.text += "다이아 1";
                 break;
-            case GameRankType.Legend_4:
-                rankText.text += "전설";
-                break;
-            case GameRankType.Legend_3:
-                rankText.text += "전설";
-                break;
-            case GameRankType.Legend_2:
-                rankText.text += "전설";
-                break;
-            case GameRankType.Legend_1:
+            case GameRankType.Legend:
                 rankText.text += "전설";
                 break;
         }
@@ -142,13 +139,18 @@ public class MatchingManager : MonoBehaviour
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockValue;
 
-        newbieEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(rankInformation.stakes);
-        newbieMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(rankInformation.limitBlockValue);
+        newbieEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes / 2);
+        newbieMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock / 2);
 
-        gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(rankInformation.stakes);
-        gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(rankInformation.limitBlockValue);
+        gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes);
+        gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock);
 
         GameStateManager.instance.GameRankType = gameRankType;
+
+        //if(PhotonNetwork.InRoom)
+        //{
+        //    PhotonNetwork.LeaveRoom();
+        //}
     }
 
     public void GameStartButton_Newbie()
@@ -162,14 +164,14 @@ public class MatchingManager : MonoBehaviour
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
-        if(playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
         {
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
             return;
         }
 
-        if(number > limitBlock) //블럭 제한을 넘지 않는지?
+        if(number > (limitBlock / 2)) //블럭 제한을 넘지 않는지?
         {
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
@@ -191,8 +193,8 @@ public class MatchingManager : MonoBehaviour
         blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
-        int number2 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
-        int number3 = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
+        int number2 = upgradeDataBase.GetUpgradeValue(blockClass2.rankType).GetValueNumber(blockClass2.level);
+        int number3 = upgradeDataBase.GetUpgradeValue(blockClass3.rankType).GetValueNumber(blockClass3.level);
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
@@ -251,13 +253,13 @@ public class MatchingManager : MonoBehaviour
         AlMatching();
     }
 
-    public void PlayerMatching(string player1, string player2)
+    public void PlayerMatching(string player1, string player2, int otherFormation)
     {
         StopAllCoroutines();
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(player1, player2, stakes);
+        uIManager.OnMatchingSuccess(player1, player2, otherFormation);
 
         mainFadeInOut.FadeOutToIn();
 
@@ -270,7 +272,7 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingAi(stakes);
+        uIManager.OnMatchingAi(aiManager.RandomCharacter());
 
         mainFadeInOut.FadeOutToIn();
 

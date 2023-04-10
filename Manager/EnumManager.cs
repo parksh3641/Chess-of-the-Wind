@@ -209,8 +209,5 @@ public enum GameRankType
     Diamond_3,
     Diamond_2,
     Diamond_1,
-    Legend_4,
-    Legend_3,
-    Legend_2,
-    Legend_1,
+    Legend
 }

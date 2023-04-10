@@ -26,18 +26,6 @@ public class NickNameManager : MonoBehaviour
 
         nickNameView.SetActive(false);
         nickNameFirstView.SetActive(false);
-    }
-
-    public void Initialize()
-    {
-        if(GameStateManager.instance.NickName.Length > 10)
-        {
-            nickNameFirstView.SetActive(true);
-        }
-        else
-        {
-            formationManager.Initialize();
-        }
 
         string file = SystemPath.GetPath() + "BadWord.txt";
 
@@ -50,6 +38,18 @@ public class NickNameManager : MonoBehaviour
             word.Close();
 
             lines = Regex.Split(source, LINE_SPLIT_RE);
+        }
+    }
+
+    public void Initialize()
+    {
+        if (GameStateManager.instance.NickName.Length > 10)
+        {
+            OpenNickName();
+        }
+        else
+        {
+            formationManager.Initialize();
         }
     }
 
@@ -126,8 +126,8 @@ public class NickNameManager : MonoBehaviour
 
     public void CheckFreeNickName()
     {
-            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
-            Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
+            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣 ]", "", RegexOptions.Singleline);
+            //Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for (int i = 0; i < lines.Length; i++)
             {

@@ -26,13 +26,14 @@ public class Notion : MonoBehaviour
     void Awake()
     {
         trans = GetComponent<Transform>();
+
+        which = trans.localPosition;
     }
 
     void OnEnable()
     {
         tween.Kill();
         second_speed_down = second_speed;
-        which = trans.localPosition;
         scale = plus_scale;
         value = 0;
 

@@ -31,6 +31,16 @@ public class WindCharacterManager : MonoBehaviour
         }
     }
 
+    public void MyWhich(int number)
+    {
+        for (int i = 0; i < windCharacters.Length; i++)
+        {
+            windCharacters[i].GetComponent<MeshRenderer>().material.color = Color.white;
+        }
+
+        windCharacters[number].GetComponent<MeshRenderer>().material.color = Color.red;
+    }
+
     public void Stop()
     {
         for (int i = 0; i < windCharacters.Length; i++)

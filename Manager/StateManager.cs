@@ -13,6 +13,7 @@ public class StateManager : MonoBehaviour
     public UIManager uIManager;
     public NickNameManager nickNameManager;
     public MatchingManager matchingManager;
+    public StoryManager storyManager;
 
 
     void Awake()
@@ -33,8 +34,9 @@ public class StateManager : MonoBehaviour
             uIManager.Initialize();
             nickNameManager.Initialize();
             matchingManager.Initialize();
+            storyManager.Initialize();
 
-            if(GameStateManager.instance.Penalty > 0)
+            if (GameStateManager.instance.Penalty > 0)
             {
                 if(Application.platform == RuntimePlatform.WindowsEditor)
                 {

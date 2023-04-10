@@ -47,6 +47,7 @@ public class PlayfabManager : MonoBehaviour
 #endif
 
     public CollectionManager collectionManager;
+    public NickNameManager nickNameManager;
 
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
@@ -566,6 +567,7 @@ public class PlayfabManager : MonoBehaviour
             if (GameStateManager.instance.NickName == null)
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
+                nickNameManager.OpenNickName();
             }
             // GameStateManager.Instance.SavePlayerData();
         },
@@ -778,6 +780,16 @@ public class PlayfabManager : MonoBehaviour
                        //    break;
                        case "Formation":
                            playerDataBase.Formation = statistics.Value;
+
+                           if(playerDataBase.Formation == 2)
+                           {
+                               GameStateManager.instance.WindCharacterType = WindCharacterType.UnderWorld;
+                           }
+                           else
+                           {
+                               GameStateManager.instance.WindCharacterType = WindCharacterType.Winter;
+                           }
+
                            break;
                        case "SnowBox":
                            playerDataBase.SnowBox = statistics.Value;
@@ -1448,7 +1460,7 @@ public class PlayfabManager : MonoBehaviour
             {
                 OnCloudUpdateStats(result);
 
-                Invoke("ChangeUserInventory", 1.5f);
+                Invoke("ChangeUserInventory", 1.0f);
 
                 }, DisplayPlayfabError);
             }

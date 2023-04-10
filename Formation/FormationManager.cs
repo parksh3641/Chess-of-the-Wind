@@ -19,6 +19,8 @@ public class FormationManager : MonoBehaviour
     List<string> itemList = new List<string>();
 
     public CollectionManager collectionManager;
+    public StoryManager storyManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -73,6 +75,8 @@ public class FormationManager : MonoBehaviour
         {
             playerDataBase.Formation = 1;
 
+            GameStateManager.instance.WindCharacterType = WindCharacterType.Winter;
+
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
 
             itemList.Clear();
@@ -86,6 +90,8 @@ public class FormationManager : MonoBehaviour
         else
         {
             playerDataBase.Formation = 2;
+
+            GameStateManager.instance.WindCharacterType = WindCharacterType.UnderWorld;
 
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
 
@@ -104,6 +110,7 @@ public class FormationManager : MonoBehaviour
 
         yield return new WaitForSeconds(4);
 
+        storyManager.Initialize();
         collectionManager.FirstEquipCheck();
 
         formationView.SetActive(false);

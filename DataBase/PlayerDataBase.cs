@@ -458,7 +458,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        Debug.Log(blockClass.blockType + "_" + blockClass.rankType + " 블럭이 추가되었습니다");
+        //Debug.Log(blockClass.blockType + "_" + blockClass.rankType + " 블럭이 추가되었습니다");
 
         blockList.Add(blockClass);
     }

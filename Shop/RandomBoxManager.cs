@@ -230,7 +230,7 @@ public class RandomBoxManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         closePanel.SetActive(true);
     }

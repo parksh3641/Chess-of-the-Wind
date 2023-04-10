@@ -16,17 +16,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     RoomOptions roomOption;
 
+    public int otherFormation = 0;
+
     public bool isDelay = false;
 
     public GameManager gameManager;
     public StateManager stateManager;
-    public CharacterManager characterManager;
     public MatchingManager matchingManager;
 
-
+    PlayerDataBase playerDataBase;
     void Awake()
     {
-
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
     public void Initialize()
@@ -232,16 +233,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", 0 } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
-        }
 
-        characterManager.AddAllPlayer();
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Formation", playerDataBase.Formation } });
+        }
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            playerNickName1 = GameStateManager.instance.NickName;
-            playerNickName2 = PhotonNetwork.PlayerList[1].NickName;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Formation", playerDataBase.Formation } });
 
-            matchingManager.PlayerMatching(PhotonNetwork.PlayerList[0].NickName, PhotonNetwork.PlayerList[1].NickName);
+            StartCoroutine(DelayEnterGame());
         }
     }
 
@@ -306,21 +306,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         //PV.RPC("ChatRPC", RpcTarget.All, "<color=#00FF00>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
 
-        characterManager.AddPlayer(newPlayer.NickName);
-
         if(PhotonNetwork.IsMasterClient)
         {
-            playerNickName1 = GameStateManager.instance.NickName;
-            playerNickName2 = PhotonNetwork.PlayerList[1].NickName;
-
-            matchingManager.PlayerMatching(PhotonNetwork.PlayerList[0].NickName, PhotonNetwork.PlayerList[1].NickName);
+            StartCoroutine(DelayEnterGame());
         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //PV.RPC("ChatRPC", RpcTarget.All, "<color=#FF0000>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
-
-        characterManager.DeletePlayer(otherPlayer.NickName);
 
         if (GameStateManager.instance.Playing)
         {
@@ -328,9 +321,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    //[PunRPC]
-    //void ChatRPC(string msg)
-    //{
-    //    RecordManager.instance.UseNotion(msg);
-    //}
+    IEnumerator DelayEnterGame()
+    {
+        yield return new WaitForSeconds(1f);
+
+        playerNickName1 = GameStateManager.instance.NickName;
+        playerNickName2 = PhotonNetwork.PlayerList[1].NickName;
+
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            otherFormation = int.Parse(ht["Player2_Formation"].ToString());
+        }
+        else
+        {
+            otherFormation = int.Parse(ht["Player1_Formation"].ToString());
+        }
+
+        matchingManager.PlayerMatching(PhotonNetwork.PlayerList[1].NickName, PhotonNetwork.PlayerList[0].NickName, otherFormation);
+    }
 }

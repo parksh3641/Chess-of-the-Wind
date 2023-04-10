@@ -6,6 +6,8 @@ public class ShopManager : MonoBehaviour
 {
     public GameObject shopView;
 
+    public GameObject[] boxArray;
+
     public ShopContent shopContent;
     public Transform shopContentTransform;
 
@@ -42,6 +44,18 @@ public class ShopManager : MonoBehaviour
         if(!shopView.activeSelf)
         {
             shopView.SetActive(true);
+
+            boxArray[0].SetActive(false);
+            boxArray[1].SetActive(false);
+
+            if (playerDataBase.Formation == 2)
+            {
+                boxArray[1].SetActive(true);
+            }
+            else
+            {
+                boxArray[0].SetActive(true);
+            }
         }
     }
 
@@ -73,9 +87,18 @@ public class ShopManager : MonoBehaviour
     {
         playerDataBase.UnderworldBox = number;
 
-        playerDataBase.UnderworldBox += number;
+        playerDataBase.BuyUnderworldBox += number;
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuySnowBox);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
+
+        if (number == 1)
+        {
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1000);
+        }
+        else
+        {
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
+        }
     }
 
     public void BuyItem(ShopType type)

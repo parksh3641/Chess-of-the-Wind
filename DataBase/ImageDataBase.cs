@@ -9,7 +9,7 @@ public class ImageDataBase : ScriptableObject
 {
     public Sprite moneyIcon;
 
-    public Sprite[] iconArray;
+    public Sprite[] characterArray;
 
     public Sprite[] rankBackgroundArray;
 
@@ -20,9 +20,9 @@ public class ImageDataBase : ScriptableObject
         return moneyIcon;
     }
 
-    public Sprite[] GetIconArray()
+    public Sprite[] GetCharacterArray()
     {
-        return iconArray;
+        return characterArray;
     }
 
     public Sprite[] GetRankBackgroundArray()

@@ -164,7 +164,7 @@ public class EquipManager : MonoBehaviour
 
         PlayfabManager.instance.SetPlayerData(blockData);
 
-        Debug.Log("°©¿Ê ÀåÂø : " + block.blockType);
+        //Debug.Log("°©¿Ê ÀåÂø : " + block.blockType);
     }
 
     public void EquipWeapon(BlockClass block, bool first)
@@ -187,7 +187,7 @@ public class EquipManager : MonoBehaviour
 
         PlayfabManager.instance.SetPlayerData(blockData);
 
-        Debug.Log("°Ë ÀåÂø : " + block.blockType);
+        //Debug.Log("°Ë ÀåÂø : " + block.blockType);
     }
 
     public void EquipShield(BlockClass block, bool first)
@@ -210,7 +210,7 @@ public class EquipManager : MonoBehaviour
 
         PlayfabManager.instance.SetPlayerData(blockData);
 
-        Debug.Log("¹æÆÐ ÀåÂø : " + block.blockType);
+        //Debug.Log("¹æÆÐ ÀåÂø : " + block.blockType);
     }
 
     public void EquipNewBie(BlockClass block, bool first)
@@ -233,7 +233,7 @@ public class EquipManager : MonoBehaviour
 
         PlayfabManager.instance.SetPlayerData(blockData);
 
-        Debug.Log("´ººñ ÀåÂø : " + block.blockType);
+        //Debug.Log("´ººñ ÀåÂø : " + block.blockType);
     }
 
     public bool CheckEquipBlock(string id)

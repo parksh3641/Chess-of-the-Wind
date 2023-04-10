@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,13 +49,13 @@ public class SellManager : MonoBehaviour
 
         blockUIContent.Collection_Initialize(blockClass);
 
-        titleText.text = "ÆÇ¸Å ¾Ë¸²";
-        sellText.text = "ÆÇ¸Å °¡°İ";
+        titleText.text = "íŒë§¤ ì•Œë¦¼";
+        sellText.text = "íŒë§¤ ê°€ê²©";
 
         sellPriceText.text = price.ToString();
 
-        sellButtonText.text = "ÆÇ¸ÅÇÏ±â";
-        cancleButtonText.text = "±×¸¸µÎ±â";
+        sellButtonText.text = "íŒë§¤í•˜ê¸°";
+        cancleButtonText.text = "ê·¸ë§Œë‘ê¸°";
     }
 
     public void SellButton()

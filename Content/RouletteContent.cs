@@ -21,6 +21,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 {
     public RouletteType rouletteType = RouletteType.Default;
     public RouletteColorType rouletteColorType = RouletteColorType.White;
+    public bool initialize = false;
     public int[] index = new int[2];
 
     [Space]
@@ -32,7 +33,11 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     [Title("Active")]
     public BlockClass blockClass;
     public bool isActive = false;
-    bool initialize = false;
+
+    [Space]
+    [Title("Active_Ai")]
+    public BlockClass blockClass_Ai;
+    public bool isActive_Ai;
 
     [Space]
     [Title("Main")]
@@ -237,11 +242,19 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         }
     }
 
+    public void SetAciveTrue_Ai(BlockClass block)
+    {
+        blockClass_Ai = block;
+        isActive_Ai = true;
+    }
+
     public void SetActiveFalseAll()
     {
         blockClass = null;
+        blockClass_Ai = null;
 
         isActive = false;
+        isActive_Ai = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class SynthesisManager : MonoBehaviour
 {
+    public WindCharacterType windCharacterType = WindCharacterType.Winter;
+
     public GameObject synthesisView;
     public GameObject synthesisResultView;
     public GameObject synthesisResultButton;
@@ -57,7 +59,6 @@ public class SynthesisManager : MonoBehaviour
 
     List<string> synthesisResultList = new List<string>();
 
-    WindCharacterType windCharacterType = WindCharacterType.Winter;
     RankType rankType = RankType.N;
     BlockClass blockClass;
     BlockClass blockClassMat1;
@@ -257,8 +258,8 @@ public class SynthesisManager : MonoBehaviour
                     needText.text = "필수 재료 : 2x SR등급 " + titleText.text;
                     break;
                 case RankType.SSR:
-                    matObj2.SetActive(false);
-                    needText.text = "필수 재료 : 1x SSR등급 " + titleText.text;
+                    //matObj2.SetActive(false);
+                    needText.text = "필수 재료 : 2x SSR등급 " + titleText.text;
                     break;
                 case RankType.UR:
                     matObj2.SetActive(false);
@@ -336,13 +337,13 @@ public class SynthesisManager : MonoBehaviour
                 }
                 break;
             case RankType.SSR:
-                if (isMat1)
+                if (isMat1 && isMat2)
                 {
                     CheckSynthesis();
                 }
                 break;
             case RankType.UR:
-                if (isMat1)
+                if (isMat1 && isMat2)
                 {
                     CheckSynthesis();
                 }
@@ -356,23 +357,7 @@ public class SynthesisManager : MonoBehaviour
 
         level1 = blockClass.level;
         level2 = blockClassMat1.level;
-
-        switch (blockClass.rankType)
-        {
-            case RankType.N:
-                level3 = blockClassMat2.level;
-                break;
-            case RankType.R:
-                level3 = blockClassMat2.level;
-                break;
-            case RankType.SR:
-                level3 = blockClassMat2.level;
-                break;
-            case RankType.SSR:
-                break;
-            case RankType.UR:
-                break;
-        }
+        level3 = blockClassMat2.level;
 
         List<int> list = new List<int>();
         list.Add(level1);
@@ -537,11 +522,11 @@ public class SynthesisManager : MonoBehaviour
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
                 break;
             case WindCharacterType.UnderWorld:
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of The Underworld", synthesisResultList);
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
                 break;
         }
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
 
         BlockClass block2 = new BlockClass();
 

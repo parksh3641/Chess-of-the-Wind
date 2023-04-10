@@ -9,6 +9,10 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
+    public Image characterImg;
+
+    Sprite[] characterArray;
+
     public Text sortText;
 
     [Space]
@@ -34,12 +38,18 @@ public class CollectionManager : MonoBehaviour
     public EquipManager equipManager;
     public UpgradeManager upgradeManager;
     public PresentManager presentManager;
+
+
     PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
 
 
     void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        characterArray = imageDataBase.GetCharacterArray();
 
         collectionView.SetActive(false);
 
@@ -65,6 +75,16 @@ public class CollectionManager : MonoBehaviour
         if(!collectionView.activeSelf)
         {
             collectionView.SetActive(true);
+
+            if(playerDataBase.Formation == 2)
+            {
+                characterImg.sprite = characterArray[1];
+            }
+            else
+            {
+                characterImg.sprite = characterArray[0];
+            }
+
 
             if (!check) //딱 한번만 체크함
             {
@@ -254,7 +274,7 @@ public class CollectionManager : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; i++)
         {
-            if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
+            if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V4)
             {
                 equipManager.EquipShield(blockList[i], true);
                 break;

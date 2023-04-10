@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [Title("Login")]
     public GameObject loginUI;
     public GameObject[] loginButtonList;
+    public Text versionText;
 
     [Space]
     [Title("Main")]
@@ -40,10 +41,17 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("VS")]
     public GameObject vsView;
+    public Image player1Img;
+    public Image player2Img;
     public Text player1Text;
     public Text player2Text;
     public FadeInOut vsFadeInOut;
     public FadeInOut mainFadeInOut;
+
+    [Space]
+    [Title("Roulette")]
+    public Image mainPlayer1Img;
+    public Image mainPlayer2Img;
 
     [Space]
     [Title("Result")]
@@ -62,13 +70,20 @@ public class UIManager : MonoBehaviour
     public GameObject[] bottomUIIcon;
     public RectTransform[] bottmUIRect;
 
+
+    Sprite[] characterArray;
+
     [Space]
     [Title("DataBase")]
     PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        characterArray = imageDataBase.GetCharacterArray();
 
         goldText.text = "0";
         crystalText.text = "0";
@@ -90,6 +105,8 @@ public class UIManager : MonoBehaviour
 
         dontTouchObj.SetActive(false);
         waitingObj.SetActive(false);
+
+        versionText.text = "v" + Application.version;
     }
 
     private void Start()
@@ -110,6 +127,7 @@ public class UIManager : MonoBehaviour
     {
         goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Gold);
         crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
+
         nickNameText.text = "닉네임 : " + GameStateManager.instance.NickName;
 
         matchingManager.Initialize();
@@ -146,17 +164,41 @@ public class UIManager : MonoBehaviour
         mainView.SetActive(true);
     }
 
-    public void OnMatchingSuccess(string player1, string player2, int stakes)
+    public void OnMatchingSuccess(string player1, string player2, int otherFormation)
     {
-        StartCoroutine(MatchingCoroution(player1, player2, stakes, false));
+        StartCoroutine(MatchingCoroution(player1, player2, otherFormation, false));
     }
 
-    public void OnMatchingAi(int stakes)
+    public void OnMatchingAi(int otherFormation)
     {
-        StartCoroutine(MatchingCoroution(GameStateManager.instance.NickName, "인공지능", stakes, true));
+        StartCoroutine(MatchingCoroution("인공지능", GameStateManager.instance.NickName, otherFormation, true));
     }
-    IEnumerator MatchingCoroution(string player1, string player2, int stakes, bool aiMode)
+
+
+    IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, bool aiMode)
     {
+        if (playerDataBase.Formation == 2)
+        {
+            player2Img.sprite = characterArray[1];
+            mainPlayer2Img.sprite = characterArray[1];
+        }
+        else
+        {
+            player2Img.sprite = characterArray[0];
+            mainPlayer2Img.sprite = characterArray[0];
+        }
+
+        if (otherFormation == 2)
+        {
+            player1Img.sprite = characterArray[1];
+            mainPlayer1Img.sprite = characterArray[1];
+        }
+        else
+        {
+            player1Img.sprite = characterArray[0];
+            mainPlayer1Img.sprite = characterArray[0];
+        }
+
         GameStateManager.instance.Playing = true;
 
         yield return new WaitForSeconds(1f);
@@ -233,6 +275,8 @@ public class UIManager : MonoBehaviour
         waitingObj.SetActive(false);
 
         resultView.SetActive(false);
+
+        Renewal();
     }
 
     public void OpenRouletteView()

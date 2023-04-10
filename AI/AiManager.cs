@@ -21,6 +21,7 @@ public class AiManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
+    public int random = 0;
     public int limitBlock = 0; //입장 제한 블럭 가치
     public int limitBlockLevel_N = 0;
     public int limitBlockLevel_R = 0;
@@ -35,6 +36,7 @@ public class AiManager : MonoBehaviour
     [Space]
     [Title("bool")]
     public bool isPut = false;
+    public bool isMove = false;
 
     [Space]
     [Title("Array")]
@@ -69,9 +71,18 @@ public class AiManager : MonoBehaviour
             otherBlockContentList.Add(content);
         }
     }
+
+    public int RandomCharacter()
+    {
+        random = Random.Range(1, 3);
+
+        return random;
+    }
+
     public void RestartGame()
     {
         isPut = false;
+        isMove = false;
 
         for (int i = 0; i < otherBlockContentList.Count; i++)
         {
@@ -94,15 +105,13 @@ public class AiManager : MonoBehaviour
         limitBlockLevel_SR = upgradeDataBase.CheckUpgradeValue(RankType.SR, limitBlock);
         limitBlockLevel_SSR = upgradeDataBase.CheckUpgradeValue(RankType.SSR, limitBlock);
 
-        int random = Random.Range(0, 2);
-
         if (gameType == GameType.NewBie)
         {
             blockClassArray = new BlockClass[1];
             blockTypeArray = new BlockType[1];
             bettingValue = new int[1];
 
-            if (random == 0)
+            if (random == 1)
             {
                 windCharacterType = WindCharacterType.Winter;
 
@@ -125,7 +134,7 @@ public class AiManager : MonoBehaviour
             blockTypeArray = new BlockType[3];
             bettingValue = new int[3];
 
-            if (random == 0)
+            if (random == 1)
             {
                 windCharacterType = WindCharacterType.Winter;
 
@@ -186,7 +195,6 @@ public class AiManager : MonoBehaviour
             }
 
             value = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level - Random.Range(0, 2));
-            otherBlockContentList[i].SetOtherBlock(blockClass.blockType, aiName, value.ToString());
 
             blockClassArray[i] = blockClass;
             bettingValue[i] = value;
@@ -203,23 +211,25 @@ public class AiManager : MonoBehaviour
         {
             blockIndex = 0;
 
-            otherBlockContentList[0].gameObject.SetActive(true);
-
             blockPos = Random.Range(1, 10);
 
+            otherBlockContentList[0].gameObject.SetActive(true);
             otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+            otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
-            gameManager.SetBettingNumber_Ai(blockTypeArray[0], blockPos);
+            Debug.Log("Ai가 초보방 블럭을 " + (blockPos - 1) + "번에 놓았습니다");
 
-            Debug.Log("Ai가 초보방 블럭을 " + blockPos + "번에 놓았습니다");
+            gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
         }
         else
         {
             blockIndex = Random.Range(0, 3);
 
-            otherBlockContentList[blockIndex].gameObject.SetActive(true);
+            dontBettingZone1 = new int[] { 10, 15, 20, 25 };
+            dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
+            dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
 
-            if(blockIndex == 0)
+            if (blockIndex == 0)
             {
                 blockPos = GenerateRandomNumber(dontBettingZone1);
             }
@@ -232,14 +242,61 @@ public class AiManager : MonoBehaviour
                 blockPos = GenerateRandomNumber(dontBettingZone3);
             }
 
+            otherBlockContentList[blockIndex].gameObject.SetActive(true);
             otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
-
-            gameManager.SetBettingNumber_Ai(otherBlockContentList[blockIndex].blockType, blockPos - 1);
+            otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
             Debug.Log("Ai가 고수방 블럭을 " + (blockPos - 1) + "번에 놓았습니다");
+
+            gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
         }
+    }
 
+    public void MoveBlock()
+    {
+        if (isMove) return;
 
+        isMove = true;
+
+        if(gameType == GameType.NewBie)
+        {
+            blockPos = Random.Range(1, 10);
+
+            otherBlockContentList[0].gameObject.SetActive(true);
+            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+            otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
+
+            Debug.Log("Ai가 초보방 블럭을 " + (blockPos - 1) + "번으로 위치를 바꿨습니다");
+
+            gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
+        }
+        else
+        {
+            dontBettingZone1 = new int[] { 10, 15, 20, 25 };
+            dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
+            dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+
+            if (blockIndex == 0)
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone1);
+            }
+            else if (blockIndex == 1)
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone2);
+            }
+            else
+            {
+                blockPos = GenerateRandomNumber(dontBettingZone3);
+            }
+
+            otherBlockContentList[blockIndex].gameObject.SetActive(true);
+            otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+            otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
+
+            Debug.Log("Ai가 고수방 블럭을 " + (blockPos - 1) + "번으로 위치를 바꿨습니다");
+
+            gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
+        }
     }
 
     private int GenerateRandomNumber(int[] exclusionList)

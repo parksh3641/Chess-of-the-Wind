@@ -91,12 +91,4 @@ public class PointerManager : MonoBehaviour
             pointerList[i].Initialize(number + i + 1);
         }
     }
-
-    public void Initialize_NewBie()
-    {
-        for (int i = 0; i < pointerList.Count; i++)
-        {
-            pointerList[i].Initialize_NewBie(i);
-        }
-    }
 }

@@ -9,15 +9,12 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
     public BlockClass blockClass;
 
-    public int index = 0;
-    public int value = 0;
-
-    Image backgroundImg;
-
     [Title("Info")]
     public Text valueText;
 
     [Title("Block")]
+    Image backgroundImg;
+    public Image blockIcon;
     public GameObject blockMain;
 
     public BlockChildContent[] blockUIArray;
@@ -28,6 +25,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Transform previousParent;
     private CanvasGroup canvasGroup;
     public bool isDrag = false;
+
+    public int index = 0;
+    public int value = 0;
 
     GameManager gameManager;
 
@@ -91,8 +91,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //previousParent = transform.parent;
-
         transform.SetParent(blockRootParent);
         transform.SetAsLastSibling();
 
@@ -102,9 +100,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = true;
         gameManager.blockType = blockClass.blockType;
 
-        //backgroundImg.color = new Color(1, 1, 1, 1 / 255f);
         blockMain.SetActive(false);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
+        blockIcon = blockMainArray[(int)blockClass.blockType - 1].blockIcon;
+
+        blockIcon.color = new Color(1, 1, 1, 0.5f);
 
         isDrag = true;
 
@@ -125,7 +125,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
-            //backgroundImg.color = new Color(1, 1, 1, 1);
             blockMain.SetActive(true);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
@@ -140,6 +139,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = false;
         gameManager.blockType = BlockType.Default;
 
+        blockIcon.color = new Color(1, 1, 1, 1f);
+
         isDrag = false;
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(true);
@@ -152,8 +153,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.SetParent(previousParent);
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
-            //backgroundImg.color = new Color(1, 1, 1, 1);
             blockMain.SetActive(true);
+            blockIcon.color = new Color(1, 1, 1, 1f);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
             isDrag = false;
@@ -169,8 +170,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         transform.SetParent(previousParent);
         transform.position = previousParent.GetComponent<RectTransform>().position;
 
-        //backgroundImg.color = new Color(1, 1, 1, 1);
         blockMain.SetActive(true);
+        blockIcon.color = new Color(1, 1, 1, 1f);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
         canvasGroup.alpha = 1f;
