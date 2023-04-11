@@ -146,11 +146,6 @@ public class MatchingManager : MonoBehaviour
         gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock);
 
         GameStateManager.instance.GameRankType = gameRankType;
-
-        //if(PhotonNetwork.InRoom)
-        //{
-        //    PhotonNetwork.LeaveRoom();
-        //}
     }
 
     public void GameStartButton_Newbie()
@@ -235,6 +230,11 @@ public class MatchingManager : MonoBehaviour
             networkManager.LeaveRoom();
 
             matchingView.SetActive(false);
+
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
     }
 

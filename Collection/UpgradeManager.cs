@@ -102,7 +102,7 @@ public class UpgradeManager : MonoBehaviour
         destroyText.text = "파괴 확률 : " + upgradeInformation.destroy + "%";
 
         valuePlusText.text = "가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
-            " ▶ " + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1)));
+            " ▶ <color=#00FF00>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) +"</color>";
 
         gold = playerDataBase.Gold;
 

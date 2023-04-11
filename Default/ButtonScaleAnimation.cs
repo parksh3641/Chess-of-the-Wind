@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class ButtonScaleAnimation : MonoBehaviour
 {
-    private float minScale = 0.9f;
-    private float maxScale = 1.15f;
+    [Header("Regular")]
+    public bool regular = false;
+
+    [Header("First Delay")]
+    public bool first = false;
+    [Range(1, 10)]
+    public float firstDelay = 2f;
+
+    [Header("Scale Delay")]
+    [Range(1, 10)]
+    public float delay = 5f;
 
     private float speed = 0.015f;
-    public float delay = 5f;
+    private float minScale = 0.9f;
+    private float maxScale = 1.15f;
 
     float scale = 0;
 
@@ -31,6 +41,11 @@ public class ButtonScaleAnimation : MonoBehaviour
     {
         scale = 1;
 
+        if (first)
+        {
+            yield return new WaitForSeconds(firstDelay);
+        }
+
         while (transform.localScale.x > minScale)
         {
             scale -= speed;
@@ -40,7 +55,7 @@ public class ButtonScaleAnimation : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        while(transform.localScale.x < maxScale)
+        while (transform.localScale.x < maxScale)
         {
             scale += speed;
 
@@ -60,9 +75,15 @@ public class ButtonScaleAnimation : MonoBehaviour
 
         transform.localScale = Vector3.one;
 
-        yield return new WaitForSeconds(Random.Range(delay * 0.8f, delay * 1.2f));
+        if (regular)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+        else
+        {
+            yield return new WaitForSeconds(Random.Range(delay * 0.8f, delay * 1.2f));
+        }
 
         StartCoroutine(ButtonAnimation());
     }
-
 }

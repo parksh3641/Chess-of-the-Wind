@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
-    public GameObject camera;
-
     public Transform targetPosition;
 
     public float smoothTime = 0.3f;
@@ -32,11 +30,11 @@ public class MoveCamera : MonoBehaviour
 
     IEnumerator MoveCameraCoroution()
     {
-        while(isActive)
+        while (isActive)
         {
-            camera.transform.position = Vector3.SmoothDamp(camera.transform.position, targetPosition.position, ref velocity, smoothTime);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition.position, ref velocity, smoothTime);
 
-            if (Vector3.Distance(targetPosition.position, camera.transform.position) < 0.1f)
+            if (Vector3.Distance(targetPosition.position, transform.position) < 0.1f)
             {
                 isActive = false;
                 //isRotation = true;

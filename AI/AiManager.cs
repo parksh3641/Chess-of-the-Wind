@@ -211,6 +211,19 @@ public class AiManager : MonoBehaviour
         {
             blockIndex = 0;
 
+            if (random == 1)
+            {
+                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
+                dontBettingZone3 = new int[] { };
+            }
+            else
+            {
+                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
+                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+            }
+
             blockPos = Random.Range(1, 10);
 
             otherBlockContentList[0].gameObject.SetActive(true);
@@ -224,10 +237,6 @@ public class AiManager : MonoBehaviour
         else
         {
             blockIndex = Random.Range(0, 3);
-
-            dontBettingZone1 = new int[] { 10, 15, 20, 25 };
-            dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-            dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
 
             if (blockIndex == 0)
             {
@@ -272,9 +281,18 @@ public class AiManager : MonoBehaviour
         }
         else
         {
-            dontBettingZone1 = new int[] { 10, 15, 20, 25 };
-            dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-            dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+            if (random == 1)
+            {
+                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
+                dontBettingZone3 = new int[] { };
+            }
+            else
+            {
+                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
+                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
+                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+            }
 
             if (blockIndex == 0)
             {

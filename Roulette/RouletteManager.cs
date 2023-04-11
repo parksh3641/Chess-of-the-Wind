@@ -392,6 +392,9 @@ public class RouletteManager : MonoBehaviour
             mainRightPointerManager = rightPointerManager[1];
         }
 
+        leftFingerController.gameObject.SetActive(true);
+        rightFingerController.gameObject.SetActive(true);
+
         leftFingerController.Initialize();
         rightFingerController.Initialize();
 
@@ -588,12 +591,12 @@ public class RouletteManager : MonoBehaviour
     {
         windCharacterManager.Initialize(target);
 
-        yield return new WaitForSeconds(1.5f);
-
         roulette2Obj[0].gameObject.SetActive(false);
         roulette2Obj[1].gameObject.SetActive(false);
-        rightFingerController.Disable();
-        leftFingerController.Disable();
+        rightFingerController.gameObject.SetActive(false);
+        leftFingerController.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(1.5f);
 
         buttonClick = false;
     }
@@ -602,12 +605,12 @@ public class RouletteManager : MonoBehaviour
     {
         windCharacterManager.Initialize(target);
 
-        yield return new WaitForSeconds(1.5f);
-
         roulette1Obj[0].gameObject.SetActive(false);
         roulette1Obj[1].gameObject.SetActive(false);
-        rightFingerController.Disable();
-        leftFingerController.Disable();
+        rightFingerController.gameObject.SetActive(false);
+        leftFingerController.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(1.5f);
 
         buttonClick = false;
     }
@@ -736,7 +739,7 @@ public class RouletteManager : MonoBehaviour
 
             windCharacterManager.MyWhich(windIndex);
 
-            buttonText.text = "당신은 빨간색 캐릭터입니다.\n버튼을 꾹 눌러서 바람 게이지를 조절하세요!";
+            buttonText.text = "당신은 <color=#FF3200>빨간색 위치</color>입니다.\n버튼으로 파워를 조절해서 바람을 발사하세요!";
 
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
