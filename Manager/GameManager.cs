@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour
     public AiManager aiManager;
     public RandomBoxManager randomBoxManager;
     public EmoteManager emoteManager;
+    public MoneyAnimation moneyAnimation;
 
     UpgradeDataBase upgradeDataBase;
     PlayerDataBase playerDataBase;
@@ -625,6 +626,7 @@ public class GameManager : MonoBehaviour
         GameReset();
 
         ResetBettingMoney();
+
         SetStakes();
         SetTotalMoney();
 
@@ -739,6 +741,9 @@ public class GameManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("RestartGame", RpcTarget.All);
+
+            StartCoroutine(TimerCoroution());
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
         }
     }
 
@@ -790,6 +795,7 @@ public class GameManager : MonoBehaviour
             bettingList[i] = 0;
         }
 
+        ResetBettingMoney();
         ClearOtherPlayerBlock();
 
         if (aiMode)
@@ -807,12 +813,6 @@ public class GameManager : MonoBehaviour
 
         uIManager.SetWaitingView(false);
         uIManager.dontTouchObj.SetActive(false);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(TimerCoroution());
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Betting" } });
-        }
 
         NotionManager.instance.UseNotion(NotionType.GoBetting);
     }
@@ -1174,7 +1174,7 @@ public class GameManager : MonoBehaviour
             //randomBoxManager.GameReward();
         }
 
-        Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 돈을 획득");
+        Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 내가 돈을 획득");
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
@@ -1199,6 +1199,8 @@ public class GameManager : MonoBehaviour
                 tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
             }
 
+            Debug.LogError(MoneyUnitString.ToCurrencyString(tempAiMoney) + " 만큼 Ai가 돈을 획득");
+
             int[] compare = new int[2];
             compare[0] = bettingAiMoney;
             compare[1] = (int)plusAiMoney;
@@ -1206,13 +1208,7 @@ public class GameManager : MonoBehaviour
             CompareMoney(compare);
         }
 
-        if (aiMode)
-        {
-            Debug.LogError(MoneyUnitString.ToCurrencyString(tempAiMoney) + " 만큼 Ai가 돈을 획득");
-        }
-
         ResetRouletteBackgroundColor();
-        ResetBettingMoney();
 
         for (int i = 0; i < blockContentList.Count; i++)
         {
@@ -1226,7 +1222,10 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
-        StartCoroutine(WaitTimerCoroution());
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(WaitTimerCoroution());
+        }
     }
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
@@ -1357,7 +1356,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeBettingMoney()
     {
-        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>"; ;
+        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -2661,6 +2660,11 @@ public class GameManager : MonoBehaviour
 
     public void SetBettingNumber_Ai(BlockClass block, int number)
     {
+        for (int i = 0; i < rouletteContentList_Target.Count; i++)
+        {
+            rouletteContentList_Target[i].isActive_Ai = false;
+        }
+
         index0_Ai[0] = rouletteContentList_Target[number].index[0] + blockDataBase.GetIndex0(block.blockType, 0);
         index0_Ai[1] = rouletteContentList_Target[number].index[1] + blockDataBase.GetIndex0(block.blockType, 1);
 
@@ -3007,8 +3011,6 @@ public class GameManager : MonoBehaviour
     {
         int number = 0;
 
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-
         otherMoney -= other[0]; //상대방의 배팅한 금액만큼 일단 빼기
 
         if (tempMoney > 0 && other[1] > 0) //둘다 땃을 경우
@@ -3017,6 +3019,8 @@ public class GameManager : MonoBehaviour
             {
                 number = tempMoney - other[1];
 
+                moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
+
                 money += number;
                 otherMoney -= number;
             }
@@ -3024,38 +3028,46 @@ public class GameManager : MonoBehaviour
             {
                 number = other[1] - tempMoney;
 
+                moneyAnimation.MinusMoneyAnimation(money, otherMoney, number);
+
                 money -= number;
                 otherMoney += number;
             }
         }
-        else if (tempMoney > 0 && other[1] <= 0) //상대방은 잃었는데 나만 땃을 경우 
+        else if (tempMoney > 0 && other[1] < 0) //상대방은 잃고 난 땃을 경우 
         {
-            money += tempMoney;
-            otherMoney -= tempMoney + Mathf.Abs(other[1]);
+            moneyAnimation.AddMoneyAnimation(money, otherMoney + Mathf.Abs(other[1]), Mathf.Abs(tempMoney));
+
+            money += Mathf.Abs(tempMoney);
+            otherMoney -= Mathf.Abs(tempMoney) + Mathf.Abs(other[1]);
         }
-        else if (tempMoney <= 0 && other[1] > 0) //난 잃었는데 상대방만 땃을 경우
+        else if (tempMoney < 0 && other[1] > 0) //난 잃고 상대방만 땃을 경우
         {
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, other[1] + Mathf.Abs(tempMoney));
+
             money -= other[1] + Mathf.Abs(tempMoney);
             otherMoney += other[1];
         }
-        else if (tempMoney < 0 && other[1] < 0) //둘다 못 땃을 경우
-        {
-            money += Mathf.Abs(tempMoney);
-            otherMoney += Mathf.Abs(other[1]);
-        }
         else if (tempMoney > 0 && other[1] == 0) //상대방이 배팅 안 했을 경우
         {
-            money += tempMoney;
-            otherMoney -= tempMoney;
+            moneyAnimation.AddMoneyAnimation(money, otherMoney, Mathf.Abs(tempMoney));
+
+            money += Mathf.Abs(tempMoney);
+            otherMoney -= Mathf.Abs(tempMoney);
         }
-        else if (tempMoney == 0 && other[1] > 0) //내가 배팅 안 했을 경우 
+        else if (tempMoney == 0 && other[1] > 0) //내가 배팅 안 했을 경우
         {
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, other[1]);
+
             money -= other[1];
             otherMoney += other[1];
         }
+        else
+        {
+            moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        }
 
-        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-        otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
@@ -3073,11 +3085,28 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void SyncMoney(int[] compare)
     {
-        money = compare[0];
-        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        if(money > compare[0]) //돈을 잃은 경우
+        {
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, money - compare[0]);
 
-        otherMoney = compare[1];
-        otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            money = compare[0];
+            otherMoney = compare[1];
+        }
+        else if(money < compare[0]) //돈을 얻었을 경우
+        {
+            moneyAnimation.AddMoneyAnimation(money, otherMoney, compare[0] - money);
+
+            money = compare[0];
+            otherMoney = compare[1];
+        }
+        else //변동이 없을 경우
+        {
+            money = compare[0];
+            otherMoney = compare[1];
+
+            moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        }
     }
 
     public void SurrenderButton() //기권하기

@@ -322,11 +322,11 @@ public class UIManager : MonoBehaviour
 
         if(gold > 0)
         {
-            resultGoldText.text = "+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold));
+            resultGoldText.text = "+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + " 만큼 돈 증가!";
         }
         else
         {
-            resultGoldText.text = "-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold));
+            resultGoldText.text = "-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + " 만큼 돈 감소";
         }
 
         RecordManager.instance.OpenRecord();

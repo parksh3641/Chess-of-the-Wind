@@ -739,7 +739,7 @@ public class RouletteManager : MonoBehaviour
 
             windCharacterManager.MyWhich(windIndex);
 
-            buttonText.text = "당신은 <color=#FF3200>빨간색 위치</color>입니다.\n버튼으로 파워를 조절해서 바람을 발사하세요!";
+            buttonText.text = "당신 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불 수 있습니다.\n버튼을 꾹 눌러 <color=#0096FF>파워</color>를 조절하세요";
 
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
@@ -762,7 +762,9 @@ public class RouletteManager : MonoBehaviour
                 StartCoroutine(BlowWindCoroution_Ai());
             }
 
-            buttonText.text = "상대방 차례입니다.\n다음 차례 때 바람을 불 수 있습니다.";
+            windCharacterManager.MyWhich(1 - windIndex);
+
+            buttonText.text = "상대방 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불려고 합니다";
         }
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정
@@ -1316,6 +1318,8 @@ public class RouletteManager : MonoBehaviour
                     case 4:
                         if (bettingPosCheck1)
                         {
+                            yield return new WaitForSeconds(0.2f);
+
                             BlowWind_Ai(2, 10, 1);
 
                             Debug.Log("Ai가 2번 위치 - 2번째 자리에서 바람을 불었습니다");
@@ -1333,6 +1337,8 @@ public class RouletteManager : MonoBehaviour
                     case 5:
                         if (bettingPosCheck2)
                         {
+                            yield return new WaitForSeconds(0.2f);
+
                             BlowWind_Ai(2, 30, 1);
 
                             Debug.Log("Ai가 2번 위치 - 3번째 자리에서 바람을 불었습니다");
@@ -1356,6 +1362,8 @@ public class RouletteManager : MonoBehaviour
                     case 0:
                         if (bettingPosCheck3)
                         {
+                            yield return new WaitForSeconds(0.2f);
+
                             BlowWind_Ai(2, 30, 0);
 
                             Debug.Log("Ai가 1번 위치 - 1번째 자리에서 바람을 불었습니다");
@@ -1373,6 +1381,8 @@ public class RouletteManager : MonoBehaviour
                     case 1:
                         if (bettingPosCheck4)
                         {
+                            yield return new WaitForSeconds(0.2f);
+
                             BlowWind_Ai(2, 10, 0);
 
                             Debug.Log("Ai가 1번 위치 - 2번째 자리에서 바람을 불었습니다");

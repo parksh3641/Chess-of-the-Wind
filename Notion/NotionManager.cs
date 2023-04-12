@@ -91,10 +91,10 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "그 위치에는 놓을 수 없어요";
                         break;
                     case NotionType.Cancle:
-                        notion.txt.text = "블럭을 취소했어요";
+                        notion.txt.text = "배치한 블럭을 취소했어요";
                         break;
                     case NotionType.GoBetting:
-                        notion.txt.text = "블럭을 배치하세요";
+                        notion.txt.text = "시간 안에 블럭을 배치하세요";
                         break;
                     case NotionType.YourTurn:
                         notion.txt.text = "당신의 차례예요. 바람을 불어보세요!";
@@ -112,7 +112,7 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "강화 하락";
                         break;
                     case NotionType.UpgradeDestroy:
-                        notion.txt.text = "파괴되었습니다";
+                        notion.txt.text = "블럭이 파괴되었습니다";
                         break;
                     case NotionType.SellBlock:
                         notion.txt.text = "블럭을 판매했습니다";
@@ -133,7 +133,7 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "같은 종류의 블록을 중복 장착할 수 없습니다";
                         break;
                     case NotionType.LimitMaxBlock:
-                        notion.txt.text = "최대 블럭 값을 초과했습니다";
+                        notion.txt.text = "입장 가능한 최대 블럭 값을 초과했습니다";
                         break;
                     case NotionType.OverBettingBlock:
                         notion.txt.text = "1개 이상 배팅할 수 없습니다";

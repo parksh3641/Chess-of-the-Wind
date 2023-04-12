@@ -98,7 +98,15 @@ public class AiManager : MonoBehaviour
         gameRankType = GameStateManager.instance.GameRankType;
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
-        limitBlock = rankInformation.limitBlockValue;
+
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            limitBlock = rankInformation.limitBlockValue / 2;
+        }
+        else
+        {
+            limitBlock = rankInformation.limitBlockValue;
+        }
 
         limitBlockLevel_N = upgradeDataBase.CheckUpgradeValue(RankType.N, limitBlock);
         limitBlockLevel_R = upgradeDataBase.CheckUpgradeValue(RankType.R, limitBlock);

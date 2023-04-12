@@ -230,11 +230,6 @@ public class MatchingManager : MonoBehaviour
             networkManager.LeaveRoom();
 
             matchingView.SetActive(false);
-
-            if (PhotonNetwork.InRoom)
-            {
-                PhotonNetwork.LeaveRoom();
-            }
         }
     }
 
