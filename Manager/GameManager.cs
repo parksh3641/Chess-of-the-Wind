@@ -668,7 +668,7 @@ public class GameManager : MonoBehaviour
     {
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
-            GameEnd(2);
+            GameEnd(3);
             PV.RPC("GameEnd", RpcTarget.Others, 2);
         }
         else if(money <= 0) //내돈이 다 떨어졌을 때
@@ -702,14 +702,18 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("패배");
         }
+        else if (number == 2)
+        {
+            Debug.Log("상대방 항복으로 승리");
+        }
         else
         {
             Debug.Log("무승부");
         }
 
         GameStateManager.instance.Playing = false;
-
         soundManager.StopLoopSFX(GameSfxType.Roulette);
+
 
         uIManager.OpenResultView(number, money - stakes);
     }
@@ -3087,6 +3091,8 @@ public class GameManager : MonoBehaviour
     {
         if(money > compare[0]) //돈을 잃은 경우
         {
+            moneyAnimation.correction = compare[1];
+
             moneyAnimation.MinusMoneyAnimation(money, otherMoney, money - compare[0]);
 
             money = compare[0];
@@ -3094,6 +3100,8 @@ public class GameManager : MonoBehaviour
         }
         else if(money < compare[0]) //돈을 얻었을 경우
         {
+            moneyAnimation.correction = compare[1];
+
             moneyAnimation.AddMoneyAnimation(money, otherMoney, compare[0] - money);
 
             money = compare[0];
@@ -3144,7 +3152,7 @@ public class GameManager : MonoBehaviour
 
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
 
-        GameEnd(0);
+        GameEnd(2);
 
         Debug.Log("상대방이 기권하여 승리하였습니다");
     }
@@ -3157,7 +3165,7 @@ public class GameManager : MonoBehaviour
 
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
 
-        GameEnd(0);
+        GameEnd(2);
 
         Debug.Log("상대방이 방에서 튕겼습니다");
     }

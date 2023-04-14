@@ -56,7 +56,9 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("Result")]
     public GameObject resultView;
+    public Image characterImg;
     public Text resultTitleText;
+    public Text resultTalkText;
     public Text resultGoldText;
 
     [Space]
@@ -307,17 +309,66 @@ public class UIManager : MonoBehaviour
     {
         resultView.SetActive(true);
 
-        if(number == 0)
+        if (playerDataBase.Formation == 2)
+        {
+            characterImg.sprite = characterArray[1];
+        }
+        else
+        {
+            characterImg.sprite = characterArray[0];
+        }
+
+        if (number == 0)
         {
             resultTitleText.text = "승리";
+
+            if (playerDataBase.Formation == 2)
+            {
+                resultTalkText.text = "좋았어! 우리의 승리야.";
+            }
+            else
+            {
+                resultTalkText.text = "저희의 승리입니다.";
+            }
         }
         else if(number == 1)
         {
             resultTitleText.text = "패배";
+
+            if (playerDataBase.Formation == 2)
+            {
+                resultTalkText.text = "흥. 아쉬운걸?";
+            }
+            else
+            {
+                resultTalkText.text = "아쉽네요. 다음번에 더 잘해봐요.";
+            }
+        }
+        else if (number == 2)
+        {
+            resultTitleText.text = "상대방 항복으로 승리";
+
+            if (playerDataBase.Formation == 2)
+            {
+                resultTalkText.text = "승리는 언제나 달콤해.";
+            }
+            else
+            {
+                resultTalkText.text = "완벽한 승리입니다.";
+            }
         }
         else
         {
             resultTitleText.text = "무승부";
+
+            if (playerDataBase.Formation == 2)
+            {
+                resultTalkText.text = "무승부라고? 이럴수가..";
+            }
+            else
+            {
+                resultTalkText.text = "무승부라니 상대팀도 잘했군요.";
+            }
         }
 
         if(gold > 0)

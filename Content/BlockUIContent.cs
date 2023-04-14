@@ -13,6 +13,7 @@ public class BlockUIContent : MonoBehaviour
     public Text levelText;
     private int level = 0;
 
+    public GameObject alarm;
     public GameObject selectedObj;
     public GameObject lockedObj;
 
@@ -28,6 +29,7 @@ public class BlockUIContent : MonoBehaviour
 
         levelText.text = "";
 
+        alarm.SetActive(false);
         selectedObj.SetActive(false);
         lockedObj.SetActive(false);
     }
@@ -75,10 +77,10 @@ public class BlockUIContent : MonoBehaviour
                 backgroundImg.color = Color.green;
                 break;
             case RankType.SR:
-                backgroundImg.color = Color.blue;
+                backgroundImg.color = new Color(0, 150 / 255f, 1);
                 break;
             case RankType.SSR:
-                backgroundImg.color = new Color(1, 0, 1);
+                backgroundImg.color = new Color(1, 100 / 255f, 1);
                 break;
             case RankType.UR:
                 backgroundImg.color = Color.yellow;
@@ -96,16 +98,16 @@ public class BlockUIContent : MonoBehaviour
         switch (blockClass.rankType)
         {
             case RankType.N:
-                backgroundImg.color = Color.green;
+                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
                 break;
             case RankType.R:
                 backgroundImg.color = Color.blue;
                 break;
             case RankType.SR:
-                backgroundImg.color = new Color(1, 0, 1);
+                backgroundImg.color = new Color(0, 150 / 255f, 1);
                 break;
             case RankType.SSR:
-                backgroundImg.color = Color.yellow;
+                backgroundImg.color = new Color(1, 100 / 255f, 1);
                 break;
             case RankType.UR:
                 backgroundImg.color = Color.yellow;

@@ -28,6 +28,7 @@ public class CollectionManager : MonoBehaviour
     public Transform blockUITransform;
 
     public List<BlockClass> blockList = new List<BlockClass>();
+    public List<string> alarmList = new List<string>();
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
@@ -111,6 +112,11 @@ public class CollectionManager : MonoBehaviour
 
     public void CloseCollectionView()
     {
+        for (int i = 0; i < blockList.Count; i++) //알람 설정
+        {
+            blockUIContentList[i].alarm.SetActive(false);
+        }
+
         collectionView.SetActive(false);
 
         upgradeManager.CloseUpgradeView();
@@ -153,6 +159,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
+            alarmList.Add(blockList[i].instanceId);
         }
 
         for (int i = 0; i < blockList.Count; i++)
@@ -229,6 +236,27 @@ public class CollectionManager : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < blockList.Count; i++) //알람 설정
+        {
+            blockUIContentList[i].alarm.SetActive(true);
+
+            for (int j = 0; j < alarmList.Count; j++)
+            {
+                if(blockList[i].instanceId.Equals(alarmList[j]))
+                {
+                    blockUIContentList[i].alarm.SetActive(false);
+                }
+            }
+        }
+
+        alarmList.Clear();
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            alarmList.Add(blockList[i].instanceId);
+        }
+
 
         CheckEquipArmor();
         CheckEquipWeapon();

@@ -14,7 +14,7 @@ public static class MoneyUnitString
     /// 
     public static string ToCurrencyString(this double number)
     {
-        if (number >= 1000)
+        if (Mathf.Abs((float)number) >= 1000)
         {
             return (number / 1000f).ToString("F1") + "k";
         }

@@ -8,6 +8,9 @@ public class BlockChild : MonoBehaviour
 {
     public BlockType blockType = BlockType.Default;
 
+    private Color snowWorldColor = new Color(0 / 255f, 200 / 255f, 255 / 255f);
+    private Color underWorldColor = new Color(205 / 255f, 92 / 255f, 92 / 255f);
+
     private Image image;
 
     public GameObject bettingMark;
@@ -18,71 +21,68 @@ public class BlockChild : MonoBehaviour
 
         switch (blockType)
         {
-            case BlockType.Default:
-                image.color = Color.white;
-                break;
             case BlockType.RightQueen_2:
-                image.color = new Color(1, 200 / 255f, 0);
+                image.color = underWorldColor;
                 break;
             case BlockType.LeftQueen_2:
-                image.color = new Color(1, 200 / 255f, 0);
+                image.color = snowWorldColor;
                 break;
             case BlockType.RightQueen_3:
-                image.color = new Color(1, 200 / 255f, 0);
+                image.color = underWorldColor;
                 break;
             case BlockType.LeftQueen_3:
-                image.color = new Color(1, 200 / 255f, 0);
+                image.color = snowWorldColor;
                 break;
             case BlockType.RightNight:
-                image.color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = underWorldColor;
                 break;
             case BlockType.LeftNight:
-                image.color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = snowWorldColor;
                 break;
             case BlockType.RightDownNight:
-                image.color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = underWorldColor;
                 break;
             case BlockType.LeftDownNight:
-                image.color = new Color(200 / 255f, 100 / 255f, 0);
+                image.color = snowWorldColor;
                 break;
             case BlockType.Rook_V2:
-                image.color = new Color(0, 150 / 255f, 1);
+                image.color = snowWorldColor;
                 break;
             case BlockType.Rook_V2H2:
-                image.color = new Color(0, 150 / 255f, 1);
+                image.color = Color.white; //╬х╬╡юс
                 break;
             case BlockType.Pawn_Under:
-                image.color = new Color(0, 150 / 255f, 1);
+                image.color = underWorldColor;
                 break;
             case BlockType.Pawn_Snow:
-                image.color = new Color(0, 150 / 255f, 1);
+                image.color = snowWorldColor;
                 break;
             case BlockType.Spider:
-                image.color = Color.red;
+                image.color = Color.white;
                 break;
             case BlockType.Rook_V4:
-                image.color = new Color(240 / 255f, 240 / 255f, 1);
+                image.color = underWorldColor;
                 break;
             case BlockType.Tetris_I_Hor:
-                image.color = new Color(240 / 255f, 240 / 255f, 1);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_T:
-                image.color = new Color(160 / 255f, 0, 240 / 255f);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_L:
-                image.color = new Color(0, 0, 240 / 255f);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_J:
-                image.color = new Color(240 / 255f, 160 / 255f, 0);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_S:
-                image.color = new Color(0, 240 / 255f, 0);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_Z:
-                image.color = new Color(240 / 255f, 0, 0);
+                image.color = Color.white;
                 break;
             case BlockType.Tetris_Speical:
-                image.color = new Color(0, 240 / 255f, 240 / 255f);
+                image.color = Color.white;
                 break;
         }
 

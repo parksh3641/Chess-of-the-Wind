@@ -46,10 +46,10 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
                 backgroundImg.color = Color.green;
                 break;
             case RankType.SR:
-                backgroundImg.color = Color.blue;
+                backgroundImg.color = new Color(0, 150 / 255f, 1);
                 break;
             case RankType.SSR:
-                backgroundImg.color = new Color(1, 0, 1);
+                backgroundImg.color = new Color(1, 100 / 255f, 1);
                 break;
             case RankType.UR:
                 backgroundImg.color = Color.yellow;

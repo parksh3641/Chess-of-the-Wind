@@ -21,6 +21,8 @@ public class MoneyAnimation : MonoBehaviour
     [Title("Prefab")]
     public MoneyContent moneyPrefab;
 
+    public int correction = 0;
+
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
 
     private void Awake()
@@ -34,6 +36,8 @@ public class MoneyAnimation : MonoBehaviour
             monster.gameObject.SetActive(false);
             moneyPrefabList.Add(monster);
         }
+
+        correction = 0;
     }
 
     [Button]
@@ -108,6 +112,54 @@ public class MoneyAnimation : MonoBehaviour
 
             yield return null;
         }
+
+        if (correction == 0) yield break;
+
+        while (otherMoney != correction)
+        {
+            if(otherMoney > correction)
+            {
+                if(otherMoney - 1000 > correction)
+                {
+                    otherMoney -= 1000;
+                }
+                else
+                {
+                    if (otherMoney - 100 > correction)
+                    {
+                        otherMoney -= 100;
+                    }
+                    else
+                    {
+                        otherMoney -= 1;
+                    }
+                }
+            }
+            else
+            {
+                if (otherMoney + 1000 < correction)
+                {
+                    otherMoney += 1000;
+                }
+                else
+                {
+                    if (otherMoney + 100 < correction)
+                    {
+                        otherMoney += 100;
+                    }
+                    else
+                    {
+                        otherMoney += 1;
+                    }
+                }
+            }
+
+            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
+            yield return null;
+        }
+
+        correction = 0;
     }
 
     IEnumerator MinusMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
@@ -148,5 +200,53 @@ public class MoneyAnimation : MonoBehaviour
 
             yield return null;
         }
+
+        if (correction == 0) yield break;
+
+        while (otherMoney != correction)
+        {
+            if (otherMoney > correction)
+            {
+                if (otherMoney - 1000 > correction)
+                {
+                    otherMoney -= 1000;
+                }
+                else
+                {
+                    if (otherMoney - 100 > correction)
+                    {
+                        otherMoney -= 100;
+                    }
+                    else
+                    {
+                        otherMoney -= 1;
+                    }
+                }
+            }
+            else
+            {
+                if (otherMoney + 1000 < correction)
+                {
+                    otherMoney += 1000;
+                }
+                else
+                {
+                    if (otherMoney + 100 < correction)
+                    {
+                        otherMoney += 100;
+                    }
+                    else
+                    {
+                        otherMoney += 1;
+                    }
+                }
+            }
+
+            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
+            yield return null;
+        }
+
+        correction = 0;
     }
 }

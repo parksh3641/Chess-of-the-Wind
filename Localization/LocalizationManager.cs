@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -10,7 +11,6 @@ public class LocalizationManager : MonoBehaviour
     public static LocalizationManager instance;
 
     public Font normalFont;
-    public Font bengaliFont;
 
     public UnityEvent eChangeLanguage;
 
@@ -23,21 +23,47 @@ public class LocalizationManager : MonoBehaviour
     {
         instance = this;
 
+        if (localizationDataBase == null) localizationDataBase = Resources.Load("LocalizationDataBase") as LocalizationDataBase;
+
+        localizationDataBase.Initialize();
         localizationContentList.Clear();
+
+        if (!Directory.Exists(SystemPath.GetPath()))
+        {
+            Directory.CreateDirectory(SystemPath.GetPath());
+        }
+
+        StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
+        string value = reader.ReadToEnd();
+        reader.Close();
+        SetLocalization(value);
+    }
+
+    void SetLocalization(string tsv)
+    {
+        string[] row = tsv.Split('\n');
+        int rowSize = row.Length;
+        //int columnSize = row[0].Split('\t').Length;
+
+        for (int i = 1; i < rowSize; i++)
+        {
+            string[] column = row[i].Split('\t');
+            LocalizationData content = new LocalizationData();
+
+            content.key = column[0];
+            content.korean = column[1].Replace('$', '\n');
+            content.english = column[2].Replace('$', '\n');
+            content.japanese = column[3].Replace('$', '\n');
+
+            localizationDataBase.SetLocalization(content);
+        }
     }
 
     public void AddContent(LocalizationContent content)
     {
         localizationContentList.Add(content);
 
-        if (GameStateManager.instance.Language == LanguageType.Bengali)
-        {
-            content.GetComponent<Text>().font = bengaliFont;
-        }
-        else
-        {
-            content.GetComponent<Text>().font = normalFont;
-        }
+        content.GetComponent<Text>().font = normalFont;
     }
 
     public string GetString(string name)
@@ -58,39 +84,6 @@ public class LocalizationManager : MonoBehaviour
                         break;
                     case LanguageType.Japanese:
                         str = item.japanese;
-                        break;
-                    case LanguageType.Chinese:
-                        str = item.chinese;
-                        break;
-                    case LanguageType.Indian:
-                        str = item.indian;
-                        break;
-                    case LanguageType.Portuguese:
-                        str = item.portuguese;
-                        break;
-                    case LanguageType.Russian:
-                        str = item.russian;
-                        break;
-                    case LanguageType.German:
-                        str = item.german;
-                        break;
-                    case LanguageType.Spanish:
-                        str = item.spanish;
-                        break;
-                    case LanguageType.Arabic:
-                        str = item.arabic;
-                        break;
-                    case LanguageType.Bengali:
-                        str = item.bengali;
-                        break;
-                    case LanguageType.Indonesian:
-                        str = item.indonesian;
-                        break;
-                    case LanguageType.Italian:
-                        str = item.italian;
-                        break;
-                    case LanguageType.Dutch:
-                        str = item.dutch;
                         break;
                 }
             }
@@ -125,80 +118,6 @@ public class LocalizationManager : MonoBehaviour
         eChangeLanguage.Invoke();
     }
 
-    public void ChangeChinese()
-    {
-        ChangeLanguage(LanguageType.Chinese);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeIndian()
-    {
-        ChangeLanguage(LanguageType.Indian);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangePortuguese()
-    {
-        ChangeLanguage(LanguageType.Portuguese);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeRussian()
-    {
-        ChangeLanguage(LanguageType.Russian);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeGerman()
-    {
-        ChangeLanguage(LanguageType.German);
-
-        eChangeLanguage.Invoke();
-    }
-    public void ChangeSpanish()
-    {
-        ChangeLanguage(LanguageType.Spanish);
-
-        eChangeLanguage.Invoke();
-    }
-    public void ChangeArabic()
-    {
-        ChangeLanguage(LanguageType.Arabic);
-
-        eChangeLanguage.Invoke();
-    }
-    public void ChangeBengali()
-    {
-        ChangeLanguage(LanguageType.Bengali);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeIndonesian()
-    {
-        ChangeLanguage(LanguageType.Indonesian);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeItalian()
-    {
-        ChangeLanguage(LanguageType.Italian);
-
-        eChangeLanguage.Invoke();
-    }
-
-    public void ChangeDutch()
-    {
-        ChangeLanguage(LanguageType.Dutch);
-
-        eChangeLanguage.Invoke();
-    }
-
     public void ChangeLanguage(LanguageType type)
     {
         Debug.Log("Change Language : " + type);
@@ -219,57 +138,15 @@ public class LocalizationManager : MonoBehaviour
             case LanguageType.Japanese:
                 iso = "ja";
                 break;
-            case LanguageType.Chinese:
-                iso = "en";
-                break;
-            case LanguageType.Indian:
-                iso = "hi";
-                break;
-            case LanguageType.Portuguese:
-                iso = "pt";
-                break;
-            case LanguageType.Russian:
-                iso = "ru";
-                break;
-            case LanguageType.German:
-                iso = "de";
-                break;
-            case LanguageType.Spanish:
-                iso = "es";
-                break;
-            case LanguageType.Arabic:
-                iso = "ar";
-                break;
-            case LanguageType.Bengali:
-                iso = "bn";
-                break;
-            case LanguageType.Indonesian:
-                iso = "id";
-                break;
-            case LanguageType.Italian:
-                iso = "it";
-                break;
-            case LanguageType.Dutch:
-                iso = "nl";
-                break;
             default:
                 iso = "en";
                 break;
         }
 
-        //if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetProfileLanguage(iso);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetProfileLanguage(iso);
 
         for(int i = 0; i < localizationContentList.Count; i ++)
         {
-            if (type == LanguageType.Bengali)
-            {
-                localizationContentList[i].GetComponent<Text>().font = bengaliFont;
-            }
-            else
-            {
-                localizationContentList[i].GetComponent<Text>().font = normalFont;
-            }
-
             localizationContentList[i].ReLoad();
         }
     }

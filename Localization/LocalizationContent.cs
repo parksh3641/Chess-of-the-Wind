@@ -6,64 +6,24 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Text))]
 public class LocalizationContent : MonoBehaviour
 {
-    private Text text;
-    public string name = "";
+    private Text localizationText;
+    public string localizationName = "";
 
-    bool setValue = false;
-    int value = 0;
 
     private void Awake()
     {
-        text = GetComponent<Text>();
-    }
-
-    public void TextColor(Color color)
-    {
-        text.color = color;
+        localizationText = GetComponent<Text>();
     }
 
     private void Start()
     {
-        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
+        if (localizationName.Length > 0) localizationText.text = LocalizationManager.instance.GetString(localizationName);
 
-        if(LocalizationManager.instance != null) LocalizationManager.instance.AddContent(this);
+        if (LocalizationManager.instance != null) LocalizationManager.instance.AddContent(this);
     }
 
     public void ReLoad()
     {
-        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
-
-        if (setValue)
-        {
-            text.text += " : \n" + value;
-        }
-    }
-
-    public void SetNumber(int number)
-    {
-        if(!setValue)
-        {
-            setValue = true;
-
-            value = number;
-
-            Invoke("Delay", 0.5f);
-        }
-        else
-        {
-            ReLoad();
-        }
-    }
-
-    void Delay()
-    {
-        text.text += " : \n" + value;
-    }
-
-    public void OnReset()
-    {
-        setValue = false;
-
-        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
+        if (localizationName.Length > 0) localizationText.text = LocalizationManager.instance.GetString(localizationName);
     }
 }

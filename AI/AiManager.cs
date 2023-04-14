@@ -166,7 +166,7 @@ public class AiManager : MonoBehaviour
 
                 dontBettingZone1 = new int[] { 10, 15, 20, 25 };
                 dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
 
                 SetBlockClass();
             }
@@ -229,7 +229,7 @@ public class AiManager : MonoBehaviour
             {
                 dontBettingZone1 = new int[] { 10, 15, 20, 25 };
                 dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
             }
 
             blockPos = Random.Range(1, 10);
@@ -299,7 +299,7 @@ public class AiManager : MonoBehaviour
             {
                 dontBettingZone1 = new int[] { 10, 15, 20, 25 };
                 dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25 };
+                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
             }
 
             if (blockIndex == 0)

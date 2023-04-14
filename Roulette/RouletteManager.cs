@@ -284,7 +284,7 @@ public class RouletteManager : MonoBehaviour
 
             Debug.Log("보너스 룰렛 체크 : " + total + " / " + minus + " / " + check);
 
-            if (total * 0.7f <= minus || GameStateManager.instance.CheckBouns && !check) //공중 분해된 돈이 전체 판돈에 30% 이상일 경우 매판 1번 등장.
+            if (total * 0.6f <= minus || GameStateManager.instance.CheckBouns && !check) //공중 분해된 돈이 전체 판돈에 60% 이상일 경우 매판 1번 등장.
             {
                 bounsRewards[0] = (int)(minus * 0.1f);
                 bounsRewards[1] = (int)(minus * 0.2f);
@@ -353,6 +353,14 @@ public class RouletteManager : MonoBehaviour
                     rightClock[i].transform.parent = roulette2Obj[1].transform;
                 }
             }
+
+            leftClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
+            leftClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
+            leftClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
+
+            rightClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
+            rightClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
+            rightClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
         }
 
         for (int i = 0; i < roulette1Particle.Length; i++)
