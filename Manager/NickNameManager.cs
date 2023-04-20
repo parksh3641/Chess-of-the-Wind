@@ -72,7 +72,6 @@ public class NickNameManager : MonoBehaviour
         if (playerDataBase.Gold >= 100)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
-            Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for(int i = 0; i < lines.Length; i ++)
             {
@@ -97,7 +96,7 @@ public class NickNameManager : MonoBehaviour
                     oldNickName = "";
                 }
 
-                if (newNickName.Length > 1)
+                if (newNickName.Length > 2)
                 {
                     if (!(newNickName.Equals(oldNickName)))
                     {
@@ -127,7 +126,6 @@ public class NickNameManager : MonoBehaviour
     public void CheckFreeNickName()
     {
             string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣 ]", "", RegexOptions.Singleline);
-            //Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -152,7 +150,7 @@ public class NickNameManager : MonoBehaviour
                 oldNickName = "";
             }
 
-            if (newNickName.Length > 1)
+            if (newNickName.Length > 2)
             {
                 if (!(newNickName.Equals(oldNickName)))
                 {

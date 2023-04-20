@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using DG.Tweening;
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,6 +54,8 @@ public class MatchingManager : MonoBehaviour
         rankText.text = "";
 
         matchingView.SetActive(false);
+
+        DOTween.RewindAll();
     }
 
     public void Initialize()

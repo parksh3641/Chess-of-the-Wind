@@ -2977,10 +2977,24 @@ public class GameManager : MonoBehaviour
         switch (myNumber)
         {
             case 0:
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", GameStateManager.instance.Stakes } });
+                if(GameStateManager.instance.GameType == GameType.NewBie)
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", GameStateManager.instance.Stakes / 2 } });
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", GameStateManager.instance.Stakes } });
+                }
                 break;
             case 1:
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", GameStateManager.instance.Stakes } });
+                if (GameStateManager.instance.GameType == GameType.NewBie)
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", GameStateManager.instance.Stakes / 2 } });
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", GameStateManager.instance.Stakes } });
+                }
                 break;
         }
     }

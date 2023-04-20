@@ -128,9 +128,9 @@ public class Pinball3D : MonoBehaviour
                         rigid.AddForce(vector.forward * (windPower + force));
                         break;
                     case 5:
-                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[2].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.2f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.25f + force));
                         break;
                 }
             }
@@ -173,9 +173,9 @@ public class Pinball3D : MonoBehaviour
                         rigid.AddForce(vector.forward * (windPower + force));
                         break;
                     case 5:
-                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[2].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.2f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.25f + force));
                         break;
                 }
             }

@@ -526,7 +526,7 @@ public class SynthesisManager : MonoBehaviour
                 break;
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
 
         BlockClass block2 = new BlockClass();
 
