@@ -20,7 +20,7 @@ public class GameStateManager : MonoBehaviour
         public bool isLogin = false;
 
         [Space]
-        [Title("GuestLogin")]
+        [Title("Login")]
         public string playfabId = "";
         public string customId = "";
         public bool autoLogin = false;
@@ -43,6 +43,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Setting")]
+        public bool tutorial = false;
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
@@ -50,7 +51,7 @@ public class GameStateManager : MonoBehaviour
         public bool inAppReview = false;
 
         [Space]
-        [Title("GuestLogin")]
+        [Title("Betting")]
         public int bettingTime = 16;
         public int bettingWaitTime = 5;
         public bool autoTarget = false;
@@ -321,6 +322,20 @@ public class GameStateManager : MonoBehaviour
             SaveFile();
         }
     }
+
+    public bool Tutorial
+    {
+        get
+        {
+            return gameSettings.tutorial;
+        }
+        set
+        {
+            gameSettings.tutorial = value;
+            SaveFile();
+        }
+    }
+
 
     public bool Music
     {

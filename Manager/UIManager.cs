@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("VS")]
     public GameObject vsView;
+    public Text rankText;
     public Image player1Img;
     public Image player2Img;
     public Text player1Text;
@@ -67,6 +68,7 @@ public class UIManager : MonoBehaviour
     public CollectionManager collectionManager;
     public GameManager gameManager;
     public MatchingManager matchingManager;
+    public TutorialManager tutorialManager;
 
     public Image[] bottomUIImg;
     public GameObject[] bottomUIIcon;
@@ -162,8 +164,15 @@ public class UIManager : MonoBehaviour
 
     public void OnLoginSuccess()
     {
-        loginView.SetActive(false);
-        mainView.SetActive(true);
+        if(!GameStateManager.instance.Tutorial)
+        {
+            SceneManager.LoadScene("TutorialScene");
+        }
+        else
+        {
+            loginView.SetActive(false);
+            mainView.SetActive(true);
+        }
     }
 
     public void OnMatchingSuccess(string player1, string player2, int otherFormation)
@@ -179,26 +188,40 @@ public class UIManager : MonoBehaviour
 
     IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, bool aiMode)
     {
-        if (playerDataBase.Formation == 2)
-        {
-            player2Img.sprite = characterArray[1];
-            mainPlayer2Img.sprite = characterArray[1];
-        }
-        else
-        {
-            player2Img.sprite = characterArray[0];
-            mainPlayer2Img.sprite = characterArray[0];
-        }
+        rankText.text = matchingManager.rankText.text;
 
         if (otherFormation == 2)
         {
             player1Img.sprite = characterArray[1];
+            player1Img.transform.rotation = Quaternion.Euler(0, 180, 0);
+
             mainPlayer1Img.sprite = characterArray[1];
+            mainPlayer1Img.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         else
         {
             player1Img.sprite = characterArray[0];
+            player1Img.transform.rotation = Quaternion.identity;
+
             mainPlayer1Img.sprite = characterArray[0];
+            mainPlayer1Img.transform.rotation = Quaternion.identity;
+        }
+
+        if (playerDataBase.Formation == 2)
+        {
+            player2Img.sprite = characterArray[1];
+            player2Img.transform.rotation = Quaternion.identity;
+
+            mainPlayer2Img.sprite = characterArray[1];
+            mainPlayer2Img.transform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            player2Img.sprite = characterArray[0];
+            player2Img.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+            mainPlayer2Img.sprite = characterArray[0];
+            mainPlayer2Img.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
 
         GameStateManager.instance.Playing = true;

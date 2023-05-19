@@ -16,6 +16,7 @@ public class MoneyAnimation : MonoBehaviour
     [Space]
     [Title("Text")]
     public Text[] moneyText;
+    public Text[] changeMoneyText;
 
     [Space]
     [Title("Prefab")]
@@ -24,6 +25,8 @@ public class MoneyAnimation : MonoBehaviour
     public int correction = 0;
 
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
+
+    public GameManager gameManager;
 
     private void Awake()
     {
@@ -52,12 +55,23 @@ public class MoneyAnimation : MonoBehaviour
         MinusMoneyAnimation(50000, 50000, 25000);
     }
 
+    public void Initialize()
+    {
+        changeMoneyText[0].text = "";
+        changeMoneyText[1].text = "";
+    }
+
     public void AddMoneyAnimation(int money, int otherMoney, int value) //내가 상대방 돈 가져감
     {
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
             moneyPrefabList[i].gameObject.SetActive(false);
         }
+
+        changeMoneyText[0].text = "<color=#00FF00>+" + value + "</color>";
+        changeMoneyText[1].text = "<color=#FF0000>-" + value + "</color>";
+
+        RecordManager.instance.SetRecord(value.ToString());
 
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
@@ -68,6 +82,11 @@ public class MoneyAnimation : MonoBehaviour
         {
             moneyPrefabList[i].gameObject.SetActive(false);
         }
+
+        changeMoneyText[0].text = "<color=#00FF00>+" + value + "</color>";
+        changeMoneyText[1].text = "<color=#FF0000>-" + value + "</color>";
+
+        RecordManager.instance.SetRecord((-value).ToString());
 
         StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
@@ -159,7 +178,7 @@ public class MoneyAnimation : MonoBehaviour
             yield return null;
         }
 
-        correction = 0;
+        EndAnimation();
     }
 
     IEnumerator MinusMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
@@ -247,6 +266,16 @@ public class MoneyAnimation : MonoBehaviour
             yield return null;
         }
 
+        EndAnimation();
+    }
+
+    void EndAnimation()
+    {
+        changeMoneyText[0].text = "";
+        changeMoneyText[1].text = "";
+
         correction = 0;
+
+        gameManager.CheckWinnerPlayer();
     }
 }

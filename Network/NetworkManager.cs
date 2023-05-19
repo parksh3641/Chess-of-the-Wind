@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (pause)
         {
-            Disconnect();
+            //Disconnect();
         }
         else
         {
@@ -339,6 +339,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             otherFormation = int.Parse(ht["Player1_Formation"].ToString());
         }
 
-        matchingManager.PlayerMatching(PhotonNetwork.PlayerList[1].NickName, PhotonNetwork.PlayerList[0].NickName, otherFormation);
+        string nickName = "";
+
+        if(!PhotonNetwork.PlayerList[0].NickName.Equals(GameStateManager.instance.NickName))
+        {
+            nickName = PhotonNetwork.PlayerList[0].NickName;
+        }
+        else
+        {
+            nickName = PhotonNetwork.PlayerList[1].NickName;
+        }
+
+        matchingManager.PlayerMatching(nickName, GameStateManager.instance.NickName, otherFormation);
     }
 }

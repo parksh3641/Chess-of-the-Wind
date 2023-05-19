@@ -184,7 +184,8 @@ public enum NotionType
     SameEquipBlock,
     LimitMaxBlock,
     OverBettingBlock,
-    OnlyPawn
+    OnlyPawn,
+    Allin
 }
 
 public enum GameRankType

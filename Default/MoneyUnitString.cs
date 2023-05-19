@@ -14,14 +14,16 @@ public static class MoneyUnitString
     /// 
     public static string ToCurrencyString(this double number)
     {
-        if (Mathf.Abs((float)number) >= 1000)
-        {
-            return (number / 1000f).ToString("F1") + "k";
-        }
-        else
-        {
-            return number.ToString();
-        }
+        //if (Mathf.Abs((float)number) >= 1000)
+        //{
+        //    return (number / 1000f).ToString("F1") + "k";
+        //}
+        //else
+        //{
+        //    return number.ToString();
+        //}
+
+        return number.ToString();
     }
     //public static string ToCurrencyString(this double number)
     //{

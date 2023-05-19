@@ -90,7 +90,19 @@ public class RecordManager : MonoBehaviour
             content.transform.parent = endRecordContentTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.Initialize(i + 1 + "번째 턴 : " + recordList[i]);
+
+            if(int.Parse(recordList[i]) == 0)
+            {
+                content.Initialize(i + 1 + "번째 턴 : <color=FFFFFF>+" + recordList[i] + "</color>");
+            }
+            else if(int.Parse(recordList[i]) > 0)
+            {
+                content.Initialize(i + 1 + "번째 턴 : <color=00FF00>+" + recordList[i] + "</color>");
+            }
+            else if (int.Parse(recordList[i]) < 0)
+            {
+                content.Initialize(i + 1 + "번째 턴 : <color=FF0000>" + recordList[i] + "</color>");
+            }
             content.gameObject.SetActive(true);
             endRecordContentList.Add(content);
         }

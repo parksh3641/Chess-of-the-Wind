@@ -51,9 +51,9 @@ public class LocalizationManager : MonoBehaviour
             LocalizationData content = new LocalizationData();
 
             content.key = column[0];
-            content.korean = column[1].Replace('$', '\n');
-            content.english = column[2].Replace('$', '\n');
-            content.japanese = column[3].Replace('$', '\n');
+            content.korean = column[1].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
+            content.english = column[2].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
+            content.japanese = column[3].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
 
             localizationDataBase.SetLocalization(content);
         }
@@ -121,6 +121,7 @@ public class LocalizationManager : MonoBehaviour
     public void ChangeLanguage(LanguageType type)
     {
         Debug.Log("Change Language : " + type);
+
         GameStateManager.instance.Language = type;
 
         string iso = "";

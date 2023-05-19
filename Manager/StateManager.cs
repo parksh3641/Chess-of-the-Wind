@@ -32,7 +32,7 @@ public class StateManager : MonoBehaviour
             networkManager.Initialize();
             gameManager.Initialize();
             uIManager.Initialize();
-            nickNameManager.Initialize();
+            //nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
 

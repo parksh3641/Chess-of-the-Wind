@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     public bool blockDrag = false;
     public bool blockDrop = false;
     public bool blockOverlap = false;
+    public bool allIn = false;
 
     [Space]
     [Title("Parent")]
@@ -439,9 +440,9 @@ public class GameManager : MonoBehaviour
         timerText.text = timer.ToString();
         timerFillAmount.fillAmount = 1;
 
-        moneyText.text = moneyText.text = "GOLD  <size=25>0</size>";
+        moneyText.text = moneyText.text = "LE  <size=25>0</size>";
         bettingMoneyText.text = "0";
-        otherMoneyText.text = moneyText.text = "GOLD  <size=25>0</size>";
+        otherMoneyText.text = moneyText.text = "LE  <size=25>0</size>";
 
         RecordManager.instance.Initialize();
         recordText.text = "";
@@ -488,6 +489,7 @@ public class GameManager : MonoBehaviour
     public void GameStart_Initialize()
     {
         emoteManager.Initialize();
+        moneyAnimation.Initialize();
 
         rouletteContentTransform_NewBie.gameObject.SetActive(false);
         rouletteContentTransform.gameObject.SetActive(false);
@@ -617,8 +619,8 @@ public class GameManager : MonoBehaviour
         money = stakes;
         otherMoney = stakes;
 
-        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-        otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
     public void GameStart()
@@ -664,8 +666,10 @@ public class GameManager : MonoBehaviour
     //    }
     //}
 
-    void CheckWinnerPlayer() //게임 누가 승리했는지 체크
+    public void CheckWinnerPlayer() //게임 누가 승리했는지 체크
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
             GameEnd(3);
@@ -801,6 +805,8 @@ public class GameManager : MonoBehaviour
 
         ResetBettingMoney();
         ClearOtherPlayerBlock();
+
+        moneyAnimation.Initialize();
 
         if (aiMode)
         {
@@ -1146,7 +1152,7 @@ public class GameManager : MonoBehaviour
             localNotion = "변동이 없습니다";
 
             NotionManager.instance.UseNotion(localNotion, ColorType.Green);
-            RecordManager.instance.SetRecord("+0");
+            RecordManager.instance.SetRecord("0");
         }
         else
         {
@@ -1160,7 +1166,7 @@ public class GameManager : MonoBehaviour
                 localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
 
                 NotionManager.instance.UseNotion(localNotion, ColorType.Green);
-                RecordManager.instance.SetRecord(localNotion);
+                //RecordManager.instance.SetRecord(localNotion);
             }
             else
             {
@@ -1170,7 +1176,7 @@ public class GameManager : MonoBehaviour
                 localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
 
                 NotionManager.instance.UseNotion(localNotion, ColorType.Red);
-                RecordManager.instance.SetRecord(localNotion);
+                //RecordManager.instance.SetRecord(localNotion);
             }
 
             //PV.RPC("ChatRPC", RpcTarget.All, worldNotion);
@@ -1203,7 +1209,7 @@ public class GameManager : MonoBehaviour
                 tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
             }
 
-            Debug.LogError(MoneyUnitString.ToCurrencyString(tempAiMoney) + " 만큼 Ai가 돈을 획득");
+            //Debug.LogError(MoneyUnitString.ToCurrencyString(tempAiMoney) + " 만큼 Ai가 돈을 획득");
 
             int[] compare = new int[2];
             compare[0] = bettingAiMoney;
@@ -1234,7 +1240,16 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
     {
-        int value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level);
+        int value = 0;
+
+        if(!allIn)
+        {
+            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level);
+        }
+        else
+        {
+            value = bettingMoney;
+        }
 
         for(int i = 0; i < bettingValue.Length; i ++) //당첨된 블럭 빼주기
         {
@@ -1360,7 +1375,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeBettingMoney()
     {
-        moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
+        moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -2547,13 +2562,21 @@ public class GameManager : MonoBehaviour
 
         ResetRouletteBackgroundColor();
 
-        if (playerDataBase.Gold < bettingValue[blockContent.index])
+        if (money < bettingValue[blockContent.index])
         {
-            blockContent.ResetPos();
+            NotionManager.instance.UseNotion(NotionType.Allin);
 
-            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            Debug.Log("남은 골드를 모두 사용하여 배팅합니다.");
 
-            return;
+            allIn = true;
+        }
+        else
+        {
+            string notion = MoneyUnitString.ToCurrencyString(bettingValue[blockContent.index]) + " 값의 블록 배치";
+
+            NotionManager.instance.UseNotion(notion, ColorType.Green);
+
+            allIn = false;
         }
 
         if(bettingList.Contains(1) && bettingList[blockContent.index] == 0)
@@ -2567,12 +2590,25 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (bettingList[blockContent.index] == 0)
+        if(!allIn)
         {
-            bettingList[blockContent.index] = 1;
-            bettingMinusList[blockContent.index] = blockDataBase.GetBlockInfomation(blockContent.blockClass.blockType).GetSize();
-            bettingMoney += bettingValue[blockContent.index];
-            ChangeBettingMoney();
+            if (bettingList[blockContent.index] == 0)
+            {
+                bettingList[blockContent.index] = 1;
+                bettingMinusList[blockContent.index] = blockDataBase.GetBlockInfomation(blockContent.blockClass.blockType).GetSize();
+                bettingMoney += bettingValue[blockContent.index];
+                ChangeBettingMoney();
+            }
+        }
+        else
+        {
+            if (bettingList[blockContent.index] == 0)
+            {
+                bettingList[blockContent.index] = 1;
+                bettingMinusList[blockContent.index] = blockDataBase.GetBlockInfomation(blockContent.blockClass.blockType).GetSize();
+                bettingMoney += money;
+                ChangeBettingMoney();
+            }
         }
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
@@ -2633,10 +2669,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        string notion = MoneyUnitString.ToCurrencyString(bettingValue[blockContent.index]) + " 값의 블록 배치";
-
-        NotionManager.instance.UseNotion(notion, ColorType.Green);
-
         insertBlock = new string[5];
 
         insertBlock[0] = mainRouletteContent.rouletteType.ToString();
@@ -2652,7 +2684,15 @@ public class GameManager : MonoBehaviour
     public void ResetPosBlock(int number)
     {
         bettingList[number] = 0;
-        bettingMoney -= bettingValue[number];
+
+        if(!allIn)
+        {
+            bettingMoney -= bettingValue[number];
+        }
+        else
+        {
+            bettingMoney -= money;
+        }
 
         if (bettingMoney < 0)
         {
@@ -2664,6 +2704,14 @@ public class GameManager : MonoBehaviour
 
     public void SetBettingNumber_Ai(BlockClass block, int number)
     {
+        if(otherMoney < upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level))
+        {
+            GameEnd(0);
+
+            Debug.Log("Ai가 돈이 부족하여 항복하였습니다.");
+            return;
+        }
+
         for (int i = 0; i < rouletteContentList_Target.Count; i++)
         {
             rouletteContentList_Target[i].isActive_Ai = false;
@@ -3082,8 +3130,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
         }
 
 
@@ -3096,8 +3144,6 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("서버 돈 동기화 갱신완료");
         }
-
-        CheckWinnerPlayer();
     }
 
     [PunRPC]
@@ -3126,8 +3172,8 @@ public class GameManager : MonoBehaviour
             money = compare[0];
             otherMoney = compare[1];
 
-            moneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
         }
     }
 

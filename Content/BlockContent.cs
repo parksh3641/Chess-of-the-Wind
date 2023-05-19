@@ -15,6 +15,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [Title("Block")]
     Image backgroundImg;
     public Image blockIcon;
+    public Image blockUI;
     public GameObject blockMain;
 
     public BlockChildContent[] blockUIArray;
@@ -37,6 +38,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup = GetComponent<CanvasGroup>();
 
         blockMain.SetActive(true);
+        blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
     }
 
     public void Initialize(GameManager manager, Transform root, Transform grid)
@@ -100,6 +102,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager.blockDrag = true;
         gameManager.blockType = blockClass.blockType;
 
+        blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1 / 255f);
         blockMain.SetActive(false);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
         blockIcon = blockMainArray[(int)blockClass.blockType - 1].blockIcon;
@@ -126,6 +129,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
             blockMain.SetActive(true);
+            blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
             gameManager.CancleBetting(blockClass.blockType);
@@ -154,6 +158,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             transform.position = previousParent.GetComponent<RectTransform>().position;
 
             blockMain.SetActive(true);
+            blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
             blockIcon.color = new Color(1, 1, 1, 1f);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
@@ -171,6 +176,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         transform.position = previousParent.GetComponent<RectTransform>().position;
 
         blockMain.SetActive(true);
+        blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
         blockIcon.color = new Color(1, 1, 1, 1f);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 

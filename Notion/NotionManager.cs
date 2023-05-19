@@ -136,10 +136,13 @@ public class NotionManager : MonoBehaviour
                         notion.txt.text = "입장 가능한 최대 블럭 값을 초과했습니다";
                         break;
                     case NotionType.OverBettingBlock:
-                        notion.txt.text = "1개 이상 배팅할 수 없습니다";
+                        notion.txt.text = "1개 이상 블록을 배치할 수 없습니다";
                         break;
                     case NotionType.OnlyPawn:
-                        notion.txt.text = "초보방은 폰만 장착할 수 있습니다";
+                        notion.txt.text = "초보방은 1칸 짜리만 장착할 수 있습니다";
+                        break;
+                    case NotionType.Allin:
+                        notion.txt.text = "남은 골드를 전부 사용했습니다";
                         break;
                 }
                 SetColor(list.colorType);

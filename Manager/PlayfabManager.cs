@@ -70,8 +70,6 @@ public class PlayfabManager : MonoBehaviour
         isActive = false;
         isDelay = false;
 
-        infoText.text = "";
-
 #if UNITY_ANDROID
         GoogleActivate();
 #elif UNITY_IOS
