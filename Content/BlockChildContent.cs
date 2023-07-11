@@ -36,4 +36,17 @@ public class BlockChildContent : MonoBehaviour
             blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
         }
     }
+
+    public void SetEnemy()
+    {
+        if (blockChildArray.Length <= 0)
+        {
+            blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+        }
+
+        for (int i = 0; i < blockChildArray.Length; i++)
+        {
+            blockChildArray[i].SetEnemy();
+        }
+    }
 }

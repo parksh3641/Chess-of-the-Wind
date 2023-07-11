@@ -139,10 +139,10 @@ public class SynthesisManager : MonoBehaviour
         upgradeLevelText.text = "합성을 원하는 블록을 선택하세요!";
         valueText.text = "";
 
-        nextBlockUIContent.Reset_Initalize();
-        targetBlockUIContent.Reset_Initalize();
-        matBlockUIContent1.Reset_Initalize();
-        matBlockUIContent2.Reset_Initalize();
+        nextBlockUIContent.gameObject.SetActive(false);
+        targetBlockUIContent.gameObject.SetActive(false);
+        matBlockUIContent1.gameObject.SetActive(false);
+        matBlockUIContent2.gameObject.SetActive(false);
 
         blockList = new List<BlockClass>(blockList.Count);
 
@@ -180,6 +180,11 @@ public class SynthesisManager : MonoBehaviour
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
+
+            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR)
+            {
+                blockUIContentList[i].gameObject.SetActive(false);
+            }
         }
 
         for (int i = 0; i < blockList.Count; i++)
@@ -196,6 +201,8 @@ public class SynthesisManager : MonoBehaviour
         isStart = false;
         isMat1 = false;
         isMat2 = false;
+
+        Debug.Log("합성 초기화");
     }
 
     public void OpenSynthesisView(string id, Action action)
@@ -211,10 +218,10 @@ public class SynthesisManager : MonoBehaviour
 
             equipInfo = 0;
 
-            nextBlockUIContent.Reset_Initalize();
-            targetBlockUIContent.Reset_Initalize();
-            matBlockUIContent1.Reset_Initalize();
-            matBlockUIContent2.Reset_Initalize();
+            nextBlockUIContent.gameObject.SetActive(false);
+            targetBlockUIContent.gameObject.SetActive(false);
+            matBlockUIContent1.gameObject.SetActive(false);
+            matBlockUIContent2.gameObject.SetActive(false);
 
             blockClass = playerDataBase.GetBlockClass(id);
 
@@ -227,8 +234,11 @@ public class SynthesisManager : MonoBehaviour
             upgradeValue2 = upgradeDataBase.GetUpgradeValue(blockClass.rankType + 1);
             upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
+            nextBlockUIContent.gameObject.SetActive(true);
             nextBlockUIContent.Collection_Initialize(blockClass);
             nextBlockUIContent.NextLevel_Initialize();
+
+            targetBlockUIContent.gameObject.SetActive(true);
             targetBlockUIContent.Collection_Initialize(blockClass);
 
             plusObj.SetActive(true);
@@ -239,8 +249,8 @@ public class SynthesisManager : MonoBehaviour
             needObj.SetActive(true);
 
             titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
-            upgradeLevelText.text = "최대 강화 레벨 : " + upgradeValue.maxLevel + " ▶ " + (upgradeValue.maxLevel + 5);
-            valueText.text = "가치 " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ " + upgradeValue2.GetValueNumber(blockClass.level);
+            upgradeLevelText.text = "최대 강화 레벨 : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
+            valueText.text = "가치 " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ <color=#FF6123>" + upgradeValue2.GetValueNumber(blockClass.level) + "</color>";
 
             needGold = upgradeValue.GetSynthesisValue();
 
@@ -285,6 +295,7 @@ public class SynthesisManager : MonoBehaviour
 
                 playerDataBase.CheckEquipId(id);
 
+                matBlockUIContent1.gameObject.SetActive(true);
                 matBlockUIContent1.Collection_Initialize(blockClassMat1);
 
                 isMat1 = true;
@@ -301,6 +312,7 @@ public class SynthesisManager : MonoBehaviour
 
                 playerDataBase.CheckEquipId(id);
 
+                matBlockUIContent2.gameObject.SetActive(true);
                 matBlockUIContent2.Collection_Initialize(blockClassMat2);
 
                 isMat2 = true;
@@ -387,13 +399,14 @@ public class SynthesisManager : MonoBehaviour
             titleText.text = "";
             upgradeLevelText.text = "합성을 원하는 블록을 선택하세요!";
             valueText.text = "";
+            nextBlockUIContent.levelText.text = "";
 
             equipInfo = 0;
 
-            nextBlockUIContent.Reset_Initalize();
-            targetBlockUIContent.Reset_Initalize();
-            matBlockUIContent1.Reset_Initalize();
-            matBlockUIContent2.Reset_Initalize();
+            nextBlockUIContent.gameObject.SetActive(false);
+            targetBlockUIContent.gameObject.SetActive(false);
+            matBlockUIContent1.gameObject.SetActive(false);
+            matBlockUIContent2.gameObject.SetActive(false);
 
             plusObj.SetActive(false);
             matObj1.SetActive(false);
@@ -416,7 +429,7 @@ public class SynthesisManager : MonoBehaviour
         {
             if(blockClassMat1.instanceId.Equals(id))
             {
-                matBlockUIContent1.Reset_Initalize();
+                matBlockUIContent1.gameObject.SetActive(false);
 
                 isMat1 = false;
 
@@ -425,7 +438,7 @@ public class SynthesisManager : MonoBehaviour
 
             if(blockClassMat2.instanceId.Equals(id))
             {
-                matBlockUIContent2.Reset_Initalize();
+                matBlockUIContent2.gameObject.SetActive(false);
 
                 isMat2 = false;
 
@@ -436,8 +449,6 @@ public class SynthesisManager : MonoBehaviour
             {
                 blockUIContentList[i].Lock(false);
             }
-
-            nextBlockUIContent.levelText.text = "";
 
             synthesisButton.SetActive(false);
         }

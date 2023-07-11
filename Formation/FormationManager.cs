@@ -10,6 +10,9 @@ public class FormationManager : MonoBehaviour
     public GameObject warningView;
 
     public GameObject animationView;
+    public Image icon;
+
+    public Sprite[] iconArray;
 
     public Text warningText;
 
@@ -20,6 +23,7 @@ public class FormationManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public StoryManager storyManager;
+    public SoundManager soundManager;
 
     PlayerDataBase playerDataBase;
 
@@ -86,6 +90,10 @@ public class FormationManager : MonoBehaviour
             itemList.Add("Pawn_Snow_N");
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
+
+            soundManager.PlayBGM(GameBgmType.Main_Snow);
+
+            Debug.Log("눈의 여왕 진형 선택");
         }
         else
         {
@@ -103,10 +111,21 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
+            soundManager.PlayBGM(GameBgmType.Main_Under);
+
             Debug.Log("지하 세계 진형 선택");
         }
 
         animationView.SetActive(true);
+
+        if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+        {
+            icon.sprite = iconArray[0];
+        }
+        else
+        {
+            icon.sprite = iconArray[1];
+        }
 
         yield return new WaitForSeconds(4);
 

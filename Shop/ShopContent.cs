@@ -9,6 +9,8 @@ public class ShopContent : MonoBehaviour
 
     public Image backgroundImg;
 
+    public Sprite[] backgroundImgArray;
+
     public Image icon;
 
     public Text titleText;
@@ -46,7 +48,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.DailyReward:
                 break;
             case ShopType.UpgradeTicket_N:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
+                backgroundImg.sprite = backgroundImgArray[1];
 
                 titleText.text = "N 등급 강화권 x5";
 
@@ -54,7 +56,7 @@ public class ShopContent : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket_R:
-                backgroundImg.color = Color.green;
+                backgroundImg.sprite = backgroundImgArray[2];
 
                 titleText.text = "R 등급 강화권 x5";
 
@@ -62,7 +64,7 @@ public class ShopContent : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket_SR:
-                backgroundImg.color = Color.blue;
+                backgroundImg.sprite = backgroundImgArray[3];
 
                 titleText.text = "SR 등급 강화권 x5";
 
@@ -70,7 +72,7 @@ public class ShopContent : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket_SSR:
-                backgroundImg.color = new Color(1, 0, 1);
+                backgroundImg.sprite = backgroundImgArray[4];
 
                 titleText.text = "SSR 등급 강화권 x5";
 
@@ -78,7 +80,7 @@ public class ShopContent : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket_UR:
-                backgroundImg.color = Color.yellow;
+                backgroundImg.sprite = backgroundImgArray[5];
 
                 titleText.text = "UR 등급 강화권 x5";
 
@@ -86,7 +88,7 @@ public class ShopContent : MonoBehaviour
 
                 break;
             case ShopType.DefDestroyTicket:
-                backgroundImg.color = new Color(1, 0, 1);
+                backgroundImg.sprite = backgroundImgArray[0];
 
                 titleText.text = "파괴방지권 x5";
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class UpgradeManager : MonoBehaviour
 
     public Text titleText;
     public Text levelText;
+    public Image levelFillamount;
     public Text valueText;
 
     public Text successText;
@@ -25,6 +27,9 @@ public class UpgradeManager : MonoBehaviour
     public Text ticketText;
     public Text ticketNumberText;
 
+    public Image ticketImg;
+    public Sprite[] ticketImgArray;
+
     public Text equipText;
     public Text upgradeText;
     public Text sellText;
@@ -35,12 +40,28 @@ public class UpgradeManager : MonoBehaviour
 
     public Image defCheckMark;
 
+    public Image upgradeButton;
+    public Sprite[] upgradeButtonArray;
+
     int gold = 0;
     int upgradeTicket = 0;
     int level = 0;
 
     bool isWait = false;
     bool isDef = false;
+
+    [Title("Upgrade Screen")]
+    public GameObject upgradeScreen;
+
+    public GameObject upgradeScreenEffect;
+    public Text upgradeScreenTitle;
+    public Image upgradeScreenIcon;
+    public Text upgradeScreenLevelName;
+    public Text upgradeScreenLevel;
+    public Text upgradeScreenValueName;
+    public Text upgradeScreenValue;
+
+    Sprite[] blockArray;
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
 
@@ -55,14 +76,19 @@ public class UpgradeManager : MonoBehaviour
     UpgradeDataBase upgradeDataBase;
     BlockDataBase blockDataBase;
     PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
         if (blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        blockArray = imageDataBase.GetBlockArray();
 
         upgradeView.SetActive(false);
+        upgradeScreen.SetActive(false);
 
         defDestroyObj.SetActive(false);
     }
@@ -92,7 +118,8 @@ public class UpgradeManager : MonoBehaviour
 
         titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
 
-        levelText.text = "레벨 " + (blockClass.level + 1).ToString() + " / " + upgradeValue.maxLevel;
+        levelText.text = "Lv. " + (blockClass.level + 1).ToString() + "/" + upgradeValue.maxLevel;
+        levelFillamount.fillAmount = (blockClass.level + 1) * 1.0f / upgradeValue.maxLevel * 1.0f;
 
         valueText.text = "현재 가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level));
 
@@ -102,17 +129,19 @@ public class UpgradeManager : MonoBehaviour
         destroyText.text = "파괴 확률 : " + upgradeInformation.destroy + "%";
 
         valuePlusText.text = "가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
-            " ▶ <color=#00FF00>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) +"</color>";
+            " ▶ <color=#FFCA14>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) +"</color>";
 
         gold = playerDataBase.Gold;
 
         goldText.text = "필요 골드";
-        goldNumberText.text = MoneyUnitString.ToCurrencyString(gold) + " / " + MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
+        goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
 
         ticketText.text = "강화권";
-        ticketNumberText.text = upgradeTicket + " / 1";
+        ticketNumberText.text = upgradeTicket + "/1";
+
+        ticketImg.sprite = ticketImgArray[(int)blockClass.rankType];
 
         defDestroyObj.SetActive(false);
 
@@ -132,9 +161,13 @@ public class UpgradeManager : MonoBehaviour
         {
             if (gold >= upgradeInformation.needGold && upgradeTicket >= 1)
             {
-                Debug.Log("강화 준비 완료");
+                upgradeButton.sprite = upgradeButtonArray[1];
 
-                //강화 버튼 색깔을 바꿔야함. 안되면 회색으로
+                Debug.Log("강화 준비 완료");
+            }
+            else
+            {
+                upgradeButton.sprite = upgradeButtonArray[0];
             }
 
             if(upgradeInformation.destroy > 0f)
@@ -163,8 +196,6 @@ public class UpgradeManager : MonoBehaviour
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
-            Debug.Log("더 이상 강화가 불가능합니다");
-
             NotionManager.instance.UseNotion(NotionType.MaxBlockLevel);
             return;
         }
@@ -211,7 +242,9 @@ public class UpgradeManager : MonoBehaviour
         {
             if (isDef)
             {
-                NotionManager.instance.UseNotion(NotionType.DefDestroy);
+                //NotionManager.instance.UseNotion(NotionType.DefDestroy);
+
+                OpenUpgradeScreen(0); //실패했지만 파괴가 안됨
             }
             else
             {
@@ -219,11 +252,15 @@ public class UpgradeManager : MonoBehaviour
 
                 CloseUpgradeView();
 
-                NotionManager.instance.UseNotion(NotionType.UpgradeDestroy);
+                OpenUpgradeScreen(4);
+
+                //NotionManager.instance.UseNotion(NotionType.UpgradeDestroy);
             }
         }
         else if (random <= upgradeInformation.down)
         {
+            OpenUpgradeScreen(1);
+
             int level = blockClass.level - 1;
 
             customData.Clear();
@@ -235,16 +272,20 @@ public class UpgradeManager : MonoBehaviour
 
             PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, customData);
 
-            NotionManager.instance.UseNotion(NotionType.UpgradeDown);
+            //NotionManager.instance.UseNotion(NotionType.UpgradeDown);
         }
         else if (random <= upgradeInformation.keep)
         {
             //Nothing
 
-            NotionManager.instance.UseNotion(NotionType.UpgradeKeep);
+            //NotionManager.instance.UseNotion(NotionType.UpgradeKeep);
+
+            OpenUpgradeScreen(2);
         }
         else
         {
+            OpenUpgradeScreen(3);
+
             int level = blockClass.level + 1;
 
             customData.Clear();
@@ -257,7 +298,7 @@ public class UpgradeManager : MonoBehaviour
 
             PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, customData);
 
-            NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
+            //NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
         }
 
         if (isDef)
@@ -275,6 +316,65 @@ public class UpgradeManager : MonoBehaviour
 
         isWait = true;
         Invoke("Delay", 0.5f);
+    }
+
+    void OpenUpgradeScreen(int number)
+    {
+        upgradeScreen.SetActive(true);
+
+        upgradeScreenIcon.sprite = blockArray[(int)blockUIContent.blockClass.blockType - 1];
+        upgradeScreenIcon.color = new Color(1, 1, 1);
+
+        upgradeScreenEffect.SetActive(false);
+
+        upgradeScreenLevelName.text = "레벨";
+        upgradeScreenValueName.text = "가치";
+
+        switch (number)
+        {
+            case 0:
+                upgradeScreenTitle.text = "강화 하락";
+                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level - 1).ToString() + "</color>";
+                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
+                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
+
+                break;
+            case 1:
+                upgradeScreenTitle.text = "강화 실패";
+                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + blockClass.level.ToString() + "</color>";
+                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
+                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
+
+                break;
+            case 2:
+                upgradeScreenTitle.text = "강화 유지";
+                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level).ToString() + "</color>";
+                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
+                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
+                break;
+            case 3:
+                upgradeScreenEffect.SetActive(true);
+
+                upgradeScreenTitle.text = "강화 성공!";
+                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
+                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
+                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level + 1)) + "</color>";
+                break;
+            case 4:
+                upgradeScreenIcon.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+
+                upgradeScreenTitle.text = "강화 실패";
+                upgradeScreenValueName.text = "";
+                upgradeScreenLevel.text = "";
+                upgradeScreenValueName.text = "";
+                upgradeScreenValue.text = "블록이 파괴되었습니다";
+                break;
+        }
+    }
+
+    public void CloseUpgradeScreen()
+    {
+        upgradeScreen.SetActive(false);
     }
 
     void Delay()

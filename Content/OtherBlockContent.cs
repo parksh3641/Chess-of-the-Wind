@@ -32,7 +32,8 @@ public class OtherBlockContent : MonoBehaviour
         }
 
         blockArray[(int)blockType - 1].gameObject.SetActive(true);
-        blockArray[(int)blockType - 1].SetBlock(nickName, value);
+        blockArray[(int)blockType - 1].SetEnemy();
+        //blockArray[(int)blockType - 1].SetBlock(nickName, value);
 
         main.raycastTarget = false;
     }

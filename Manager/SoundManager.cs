@@ -4,7 +4,47 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public AudioSource audioSource;
+
+    public AudioClip[] bgmAudio; 
     public AudioSource[] sfxAudio;
+
+    PlayerDataBase playerDataBase;
+
+    private void Awake()
+    {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        audioSource.volume = 0;
+    }
+
+    public void Initialize()
+    {
+        audioSource.volume = 1;
+
+        if (playerDataBase.Formation >= 1)
+        {
+            PlayBGM(GameBgmType.Main_Snow);
+        }
+        else
+        {
+            PlayBGM(GameBgmType.Main_Under);
+        }
+    }
+
+
+    public void PlayBGM(GameBgmType type)
+    {
+        for (int i = 0; i < bgmAudio.Length; i++)
+        {
+            if (bgmAudio[i].name.Equals(type.ToString()))
+            {
+                audioSource.Stop();
+                audioSource.clip = bgmAudio[i];
+                audioSource.Play();
+            }
+        }
+    }
 
     public void PlaySFX(GameSfxType type)
     {

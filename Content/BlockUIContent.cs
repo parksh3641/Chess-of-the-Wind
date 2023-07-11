@@ -10,6 +10,13 @@ public class BlockUIContent : MonoBehaviour
     public string instanceId = "";
 
     public Image backgroundImg;
+
+    public Image rankImg;
+    public Text rankText;
+
+    Sprite[] rankBackgroundArray;
+    Sprite[] rankBannerArray;
+
     public Text levelText;
     private int level = 0;
 
@@ -17,7 +24,7 @@ public class BlockUIContent : MonoBehaviour
     public GameObject selectedObj;
     public GameObject lockedObj;
 
-    public BlockChildContent[] blockUIArray;
+    public GameObject[] blockUIArray;
 
     ImageDataBase imageDataBase;
     CollectionManager collectionManager;
@@ -26,6 +33,9 @@ public class BlockUIContent : MonoBehaviour
     void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+        rankBannerArray = imageDataBase.GetRankBannerArray();
 
         levelText.text = "";
 
@@ -36,17 +46,13 @@ public class BlockUIContent : MonoBehaviour
 
     public void Reset_Initalize()
     {
-        backgroundImg.color = Color.white;
-
         for (int i = 0; i < blockUIArray.Length; i++)
         {
-            blockUIArray[i].gameObject.SetActive(false);
+            blockUIArray[i].SetActive(false);
         }
 
         selectedObj.SetActive(false);
         lockedObj.SetActive(false);
-
-        levelText.text = "";
     }
 
     public void Initialize(BlockType type)
@@ -55,10 +61,10 @@ public class BlockUIContent : MonoBehaviour
 
         for (int i = 0; i < blockUIArray.Length; i++)
         {
-            blockUIArray[i].gameObject.SetActive(false);
+            blockUIArray[i].SetActive(false);
         }
 
-        blockUIArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
+        blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
     }
 
     public void Collection_Initialize(BlockClass block)
@@ -68,67 +74,28 @@ public class BlockUIContent : MonoBehaviour
 
         Initialize(blockClass.blockType);
 
-        switch (blockClass.rankType)
-        {
-            case RankType.N:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-            case RankType.R:
-                backgroundImg.color = Color.green;
-                break;
-            case RankType.SR:
-                backgroundImg.color = new Color(0, 150 / 255f, 1);
-                break;
-            case RankType.SSR:
-                backgroundImg.color = new Color(1, 100 / 255f, 1);
-                break;
-            case RankType.UR:
-                backgroundImg.color = Color.yellow;
-                break;
-            default:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-        }
+        backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+        rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+        rankText.text = blockClass.rankType.ToString();
 
         SetLevel(blockClass.level);
     }
 
     public void NextLevel_Initialize()
     {
-        switch (blockClass.rankType)
-        {
-            case RankType.N:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-            case RankType.R:
-                backgroundImg.color = Color.blue;
-                break;
-            case RankType.SR:
-                backgroundImg.color = new Color(0, 150 / 255f, 1);
-                break;
-            case RankType.SSR:
-                backgroundImg.color = new Color(1, 100 / 255f, 1);
-                break;
-            case RankType.UR:
-                backgroundImg.color = Color.yellow;
-                break;
-        }
+        backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType + 1];
+        rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
+        rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
+        rankText.text = (blockClass.rankType + 1).ToString();
 
-        levelText.text = "";
+        //levelText.text = "";
     }
 
     public void SetLevel(int number)
     {
         level = number;
 
-        if (level > 0)
-        {
-            levelText.text = (level + 1).ToString();
-        }
-        else
-        {
-            levelText.text = "";
-        }
+        levelText.text = "Lv." + (level + 1).ToString();
     }
 
     public void Upgrade_Initialize(CollectionManager manager)
@@ -145,7 +112,7 @@ public class BlockUIContent : MonoBehaviour
 
         if(synthesisManager != null)
         {
-            if(blockClass.rankType != RankType.UR)
+            if(blockClass.rankType != RankType.SSR && blockClass.rankType != RankType.UR)
                 synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
         }
     }

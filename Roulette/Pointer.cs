@@ -37,18 +37,18 @@ public class Pointer : MonoBehaviour
     public void Betting()
     {
         betting = 1;
-        numberText.color = new Color(0, 1, 1);
+        numberText.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
     }
 
     public void Betting_Other()
     {
         if(betting == 0)
         {
-            numberText.color = Color.red;
+            numberText.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
         }
         else
         {
-            numberText.color = Color.green;
+            numberText.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
         }
     }
 

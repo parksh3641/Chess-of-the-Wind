@@ -9,17 +9,24 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
     public BlockClass blockClass;
 
-    [Title("Info")]
-    public Text valueText;
-
     [Title("Block")]
     Image backgroundImg;
+
+    public Image rankImg;
+    public Text rankText;
+
+    Sprite[] rankBackgroundArray;
+    Sprite[] rankBannerArray;
+
     public Image blockIcon;
     public Image blockUI;
     public GameObject blockMain;
 
-    public BlockChildContent[] blockUIArray;
+    public GameObject[] blockUIArray;
     public BlockChildContent[] blockMainArray;
+
+    [Title("Info")]
+    public Text valueText;
 
     [Title("Drag")]
     private Transform blockRootParent;
@@ -32,8 +39,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     GameManager gameManager;
 
+    ImageDataBase imageDataBase;
+
     void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+        rankBannerArray = imageDataBase.GetRankBannerArray();
+
         backgroundImg = GetComponent<Image>();
         canvasGroup = GetComponent<CanvasGroup>();
 
@@ -66,29 +80,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         blockUIArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
 
-        switch (blockClass.rankType)
-        {
-            case RankType.N:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-            case RankType.R:
-                backgroundImg.color = Color.green;
-                break;
-            case RankType.SR:
-                backgroundImg.color = new Color(0, 150 / 255f, 1);
-                break;
-            case RankType.SSR:
-                backgroundImg.color = new Color(1, 100 / 255f, 1);
-                break;
-            case RankType.UR:
-                backgroundImg.color = Color.yellow;
-                break;
-            default:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-        }
+        backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+        rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+        rankText.text = blockClass.rankType.ToString();
 
-        valueText.text = MoneyUnitString.ToCurrencyString(this.value);
+        //valueText.text = MoneyUnitString.ToCurrencyString(this.value);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -150,6 +146,25 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockMainArray[(int)blockClass.blockType - 1].Betting(true);
         //blockMainArray[(int)blockClass.blockType - 1].SetBlock(GameStateManager.instance.NickName, value.ToString());
     }
+
+    public void CancleBetting()
+    {
+        if (transform.parent != previousParent)
+        {
+            transform.SetParent(previousParent);
+            transform.position = previousParent.GetComponent<RectTransform>().position;
+
+            blockMain.SetActive(true);
+            blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
+            blockIcon.color = new Color(1, 1, 1, 1f);
+            blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
+
+            isDrag = false;
+        }
+
+        blockMainArray[(int)blockClass.blockType - 1].Betting(false);
+    }
+
     public void ResetPos()
     {
         if (transform.parent != previousParent)

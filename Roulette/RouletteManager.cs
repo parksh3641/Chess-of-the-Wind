@@ -34,6 +34,11 @@ public class RouletteManager : MonoBehaviour
     public MeshRenderer[] roulette1WindPoint;
     public MeshRenderer[] roulette2WindPoint;
 
+    public GameObject windGauge;
+    public Image windButton;
+
+    public Sprite[] windButtonArray;
+
     [Space]
     [Title("Roulette_Particle")]
     public ParticleSystem[] roulette1Particle;
@@ -74,10 +79,13 @@ public class RouletteManager : MonoBehaviour
     private int upPower = 2;
     private int maxPower = 100;
 
+    bool windDelay = false;
     bool pinballPower = false;
     bool pinballPowerReturn = false;
 
     public GameObject targetView;
+    public GameObject targetNormal;
+    public GameObject targetQueen;
     public Text targetText;
     public Text buttonText;
 
@@ -233,10 +241,12 @@ public class RouletteManager : MonoBehaviour
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             roulettePlane[0].SetActive(true);
+            windGauge.SetActive(false);
         }
         else
         {
             roulettePlane[1].SetActive(true);
+            windGauge.SetActive(true);
         }
 
         queenNumber = 0;
@@ -277,32 +287,34 @@ public class RouletteManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Roulette", "Left" } });
             }
 
-            bool check = (bool)ht["Bouns"];
+            //bool check = (bool)ht["Bouns"];
 
-            int total = GameStateManager.instance.Stakes * 2;
-            int minus = int.Parse(ht["Player1_Minus"].ToString()) + int.Parse(ht["Player2_Minus"].ToString());
+            //int total = GameStateManager.instance.Stakes * 2;
+            //int minus = int.Parse(ht["Player1_Minus"].ToString()) + int.Parse(ht["Player2_Minus"].ToString());
 
-            Debug.Log("보너스 룰렛 체크 : " + total + " / " + minus + " / " + check);
+            //Debug.Log("보너스 룰렛 체크 : " + total + " / " + minus + " / " + check);
 
-            if (total * 0.6f <= minus || GameStateManager.instance.CheckBouns && !check) //공중 분해된 돈이 전체 판돈에 60% 이상일 경우 매판 1번 등장.
-            {
-                bounsRewards[0] = (int)(minus * 0.1f);
-                bounsRewards[1] = (int)(minus * 0.2f);
-                bounsRewards[2] = (int)(minus * 0.3f);
-                bounsRewards[3] = (int)(minus * 0.5f);
+            //if (total * 0.6f <= minus || GameStateManager.instance.CheckBouns && !check) //공중 분해된 돈이 전체 판돈에 60% 이상일 경우 매판 1번 등장.
+            //{
+            //    bounsRewards[0] = (int)(minus * 0.1f);
+            //    bounsRewards[1] = (int)(minus * 0.2f);
+            //    bounsRewards[2] = (int)(minus * 0.3f);
+            //    bounsRewards[3] = (int)(minus * 0.5f);
 
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Bouns" } });
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Bouns", true } });
+            //    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Bouns" } });
+            //    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Bouns", true } });
 
-                PV.RPC("PlayBouns", RpcTarget.All, bounsRewards);
+            //    PV.RPC("PlayBouns", RpcTarget.All, bounsRewards);
 
-                GameStateManager.instance.CheckBouns = false;
-            }
-            else
-            {
+            //    GameStateManager.instance.CheckBouns = false;
+            //}
+            //else
+            //{
 
-                PV.RPC("SelectRoulette", RpcTarget.All, rouletteIndex);
-            }
+            //    PV.RPC("SelectRoulette", RpcTarget.All, rouletteIndex);
+            //}
+
+            PV.RPC("SelectRoulette", RpcTarget.All, rouletteIndex);
         }
     }
 
@@ -640,6 +652,7 @@ public class RouletteManager : MonoBehaviour
 
                     PV.RPC("CheckPinball", RpcTarget.Others);
 
+                    buttonClick = true;
                     check = true;
                 }
 
@@ -707,6 +720,7 @@ public class RouletteManager : MonoBehaviour
         power = 0;
         powerFillAmount.fillAmount = 0;
 
+        windDelay = false;
         pinballPower = false;
         pinballPowerReturn = false;
 
@@ -741,13 +755,17 @@ public class RouletteManager : MonoBehaviour
 
         aiMode = false;
 
+        windButton.sprite = windButtonArray[0];
+
         if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {
             pinball.MyTurn(rouletteIndex);
 
             windCharacterManager.MyWhich(windIndex);
 
-            buttonText.text = "당신 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불 수 있습니다.\n버튼을 꾹 눌러 <color=#0096FF>파워</color>를 조절하세요";
+            windButton.sprite = windButtonArray[1];
+
+            //buttonText.text = "당신 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불 수 있습니다.\n버튼을 꾹 눌러 <color=#0096FF>파워</color>를 조절하세요";
 
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
@@ -858,40 +876,62 @@ public class RouletteManager : MonoBehaviour
 
         if (!pinball.PV.IsMine || buttonClick) return;
 
-        pinballPower = true;
-
-        StartCoroutine(PowerCoroution());
-
-        if(rouletteIndex == 0)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            if(windIndex == 0)
+            if (!windDelay)
             {
-                roulette1WindPoint[0].gameObject.SetActive(true);
+                float[] blow = new float[2];
+                blow[0] = 35;
+                blow[1] = windIndex;
 
-                StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
-            }
-            else
-            {
-                roulette1WindPoint[1].gameObject.SetActive(true);
+                PV.RPC("BlowingWind", RpcTarget.All, blow);
 
-                StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
+                windDelay = true;
+                Invoke("WindDelay", 0.5f);
             }
         }
         else
         {
-            if (windIndex == 0)
-            {
-                roulette2WindPoint[0].gameObject.SetActive(true);
+            pinballPower = true;
 
-                StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
+            StartCoroutine(PowerCoroution());
+
+            if (rouletteIndex == 0)
+            {
+                if (windIndex == 0)
+                {
+                    roulette1WindPoint[0].gameObject.SetActive(true);
+
+                    StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
+                }
+                else
+                {
+                    roulette1WindPoint[1].gameObject.SetActive(true);
+
+                    StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
+                }
             }
             else
             {
-                roulette2WindPoint[1].gameObject.SetActive(true);
+                if (windIndex == 0)
+                {
+                    roulette2WindPoint[0].gameObject.SetActive(true);
 
-                StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
+                    StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
+                }
+                else
+                {
+                    roulette2WindPoint[1].gameObject.SetActive(true);
+
+                    StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
+                }
             }
         }
+    }
+
+    void WindDelay()
+    {
+        windDelay = false;
     }
 
     IEnumerator FlickerCoroution(MeshRenderer mesh)
@@ -943,6 +983,11 @@ public class RouletteManager : MonoBehaviour
         if (aiMode) return;
 
         if (!pinball.PV.IsMine || buttonClick) return;
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            return;
+        }
 
         buttonClick = true;
         pinballPower = false;
@@ -1091,7 +1136,14 @@ public class RouletteManager : MonoBehaviour
             yield return null;
         }
 
-        PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+        if(targetNumber != targetQueenNumber)
+        {
+            PV.RPC("ShowTargetNumberNormal", RpcTarget.All, targetNumber);
+        }
+        else
+        {
+            PV.RPC("ShowTargetNumberQueen", RpcTarget.All, targetNumber);
+        }
 
         yield return new WaitForSeconds(2.5f);
 
@@ -1140,6 +1192,7 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void EndRoulette()
     {
+        buttonClick = true;
         playing = false;
 
         soundManager.StopLoopSFX(GameSfxType.Roulette);
@@ -1156,10 +1209,23 @@ public class RouletteManager : MonoBehaviour
     }
 
     [PunRPC]
-    void ShowTargetNumber(int number)
+    void ShowTargetNumberNormal(int number)
     {
         targetView.SetActive(true);
+        targetNormal.SetActive(true);
+        targetQueen.SetActive(false);
+
         targetText.text = number.ToString();
+    }
+
+    [PunRPC]
+    void ShowTargetNumberQueen(int number)
+    {
+        targetView.SetActive(true);
+        targetNormal.SetActive(false);
+        targetQueen.SetActive(true);
+
+        //targetText.text = number.ToString();
     }
 
     [PunRPC]
@@ -1298,7 +1364,7 @@ public class RouletteManager : MonoBehaviour
 
         buttonClick = false;
 
-        yield return new WaitForSeconds(Random.Range(5, 20));
+        yield return new WaitForSeconds(Random.Range(5, 10));
 
         while (!buttonClick)
         {
@@ -1437,7 +1503,10 @@ public class RouletteManager : MonoBehaviour
 
         PV.RPC("BlowingWind", RpcTarget.All, blow);
 
-        buttonClick = true;
+        if (GameStateManager.instance.GameType == GameType.Gosu)
+        {
+            buttonClick = true;
+        }
     }
 
     void SetBettingPos()

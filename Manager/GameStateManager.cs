@@ -37,13 +37,13 @@ public class GameStateManager : MonoBehaviour
         public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
         public bool playing = false;
-        public int matchingTime = 15;
+        public int matchingTime = 8;
         public int stakes = 0;
         public int penalty = 0;
 
         [Space]
         [Title("Setting")]
-        public bool tutorial = false;
+        public bool tutorial = true;
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
@@ -52,7 +52,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Betting")]
-        public int bettingTime = 16;
+        public int bettingTime = 11;
         public int bettingWaitTime = 5;
         public bool autoTarget = false;
         public int autoTargetNumber = 0;

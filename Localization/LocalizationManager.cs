@@ -25,18 +25,97 @@ public class LocalizationManager : MonoBehaviour
 
         if (localizationDataBase == null) localizationDataBase = Resources.Load("LocalizationDataBase") as LocalizationDataBase;
 
-        localizationDataBase.Initialize();
         localizationContentList.Clear();
 
-        if (!Directory.Exists(SystemPath.GetPath()))
-        {
-            Directory.CreateDirectory(SystemPath.GetPath());
-        }
+        localizationDataBase.Initialize();
 
-        StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
-        string value = reader.ReadToEnd();
-        reader.Close();
-        SetLocalization(value);
+        TextAsset textAsset = Resources.Load<TextAsset>("Localization");
+        SetLocalization(textAsset.ToString());
+    }
+
+    private void Start()
+    {
+        if (GameStateManager.instance.Language == LanguageType.Default)
+        {
+            if (Application.systemLanguage == SystemLanguage.Korean)
+            {
+                GameStateManager.instance.Language = LanguageType.Korean;
+
+                ChangeKorean();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Japanese)
+            {
+                GameStateManager.instance.Language = LanguageType.Japanese;
+
+                ChangeJapanese();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Chinese)
+            {
+                GameStateManager.instance.Language = LanguageType.Chinese;
+
+                ChangeChinese();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Portuguese)
+            {
+                GameStateManager.instance.Language = LanguageType.Portuguese;
+
+                ChangePortuguese();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Russian)
+            {
+                GameStateManager.instance.Language = LanguageType.Russian;
+
+                ChangeRussian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.German)
+            {
+                GameStateManager.instance.Language = LanguageType.German;
+
+                ChangeGerman();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Spanish)
+            {
+                GameStateManager.instance.Language = LanguageType.Spanish;
+
+                ChangeSpanish();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Arabic)
+            {
+                GameStateManager.instance.Language = LanguageType.Arabic;
+
+                ChangeArabic();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Indonesian)
+            {
+                GameStateManager.instance.Language = LanguageType.Indonesian;
+
+                ChangeIndonesian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Italian)
+            {
+                GameStateManager.instance.Language = LanguageType.Italian;
+
+                ChangeItalian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Dutch)
+            {
+                GameStateManager.instance.Language = LanguageType.Dutch;
+
+                ChangeDutch();
+            }
+            else if (Application.systemLanguage.ToString() == "Hindi")
+            {
+                GameStateManager.instance.Language = LanguageType.Indian;
+
+                ChangeIndian();
+            }
+            else
+            {
+                GameStateManager.instance.Language = LanguageType.English;
+
+                ChangeEnglish();
+            }
+        }
     }
 
     void SetLocalization(string tsv)
@@ -50,10 +129,22 @@ public class LocalizationManager : MonoBehaviour
             string[] column = row[i].Split('\t');
             LocalizationData content = new LocalizationData();
 
+            //content.korean = column[1].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
             content.key = column[0];
-            content.korean = column[1].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
-            content.english = column[2].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
-            content.japanese = column[3].Replace('$', '\n').Replace("^", "<color=#FF9600>").Replace("&", "<color=#C800FF>").Replace("*", "</color>");
+            content.korean = column[1].Replace('#', '\n');
+            content.english = column[2].Replace('#', '\n');
+            content.japanese = column[3].Replace('#', '\n');
+            content.chinese = column[4].Replace('#', '\n');
+            content.indian = column[5].Replace('#', '\n');
+            content.portuguese = column[6].Replace('#', '\n');
+            content.russian = column[7].Replace('#', '\n');
+            content.german = column[8].Replace('#', '\n');
+            content.spanish = column[9].Replace('#', '\n');
+            content.arabic = column[10].Replace('#', '\n');
+            content.bengali = column[11].Replace('#', '\n');
+            content.indonesian = column[12].Replace('#', '\n');
+            content.italian = column[13].Replace('#', '\n');
+            content.dutch = column[14].Replace('#', '\n');
 
             localizationDataBase.SetLocalization(content);
         }
@@ -85,6 +176,39 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.Japanese:
                         str = item.japanese;
                         break;
+                    case LanguageType.Chinese:
+                        str = item.chinese;
+                        break;
+                    case LanguageType.Indian:
+                        str = item.indian;
+                        break;
+                    case LanguageType.Portuguese:
+                        str = item.portuguese;
+                        break;
+                    case LanguageType.Russian:
+                        str = item.russian;
+                        break;
+                    case LanguageType.German:
+                        str = item.german;
+                        break;
+                    case LanguageType.Spanish:
+                        str = item.spanish;
+                        break;
+                    case LanguageType.Arabic:
+                        str = item.arabic;
+                        break;
+                    case LanguageType.Bengali:
+                        str = item.bengali;
+                        break;
+                    case LanguageType.Indonesian:
+                        str = item.indonesian;
+                        break;
+                    case LanguageType.Italian:
+                        str = item.italian;
+                        break;
+                    case LanguageType.Dutch:
+                        str = item.dutch;
+                        break;
                 }
             }
         }
@@ -95,6 +219,55 @@ public class LocalizationManager : MonoBehaviour
         }
 
         return str;
+    }
+
+    public void ChangeLanguage()
+    {
+        switch (GameStateManager.instance.Language)
+        {
+            case LanguageType.Korean:
+                ChangeEnglish();
+                break;
+            case LanguageType.English:
+                ChangeJapanese();
+                break;
+            case LanguageType.Japanese:
+                ChangeChinese();
+                break;
+            case LanguageType.Chinese:
+                ChangeIndian();
+                break;
+            case LanguageType.Indian:
+                ChangePortuguese();
+                break;
+            case LanguageType.Portuguese:
+                ChangeRussian();
+                break;
+            case LanguageType.Russian:
+                ChangeGerman();
+                break;
+            case LanguageType.German:
+                ChangeSpanish();
+                break;
+            case LanguageType.Spanish:
+                ChangeArabic();
+                break;
+            case LanguageType.Arabic:
+                ChangeBengali();
+                break;
+            case LanguageType.Bengali:
+                ChangeIndonesian();
+                break;
+            case LanguageType.Indonesian:
+                ChangeItalian();
+                break;
+            case LanguageType.Italian:
+                ChangeDutch();
+                break;
+            case LanguageType.Dutch:
+                ChangeKorean();
+                break;
+        }
     }
 
     public void ChangeKorean()
@@ -116,6 +289,58 @@ public class LocalizationManager : MonoBehaviour
         ChangeLanguage(LanguageType.Japanese);
 
         eChangeLanguage.Invoke();
+    }
+
+    public void ChangeChinese()
+    {
+        ChangeLanguage(LanguageType.Chinese);
+    }
+
+    public void ChangeIndian()
+    {
+        ChangeLanguage(LanguageType.Indian);
+    }
+
+    public void ChangePortuguese()
+    {
+        ChangeLanguage(LanguageType.Portuguese);
+    }
+
+    public void ChangeRussian()
+    {
+        ChangeLanguage(LanguageType.Russian);
+    }
+
+    public void ChangeGerman()
+    {
+        ChangeLanguage(LanguageType.German);
+    }
+    public void ChangeSpanish()
+    {
+        ChangeLanguage(LanguageType.Spanish);
+    }
+    public void ChangeArabic()
+    {
+        ChangeLanguage(LanguageType.Arabic);
+    }
+    public void ChangeBengali()
+    {
+        ChangeLanguage(LanguageType.Bengali);
+    }
+
+    public void ChangeIndonesian()
+    {
+        ChangeLanguage(LanguageType.Indonesian);
+    }
+
+    public void ChangeItalian()
+    {
+        ChangeLanguage(LanguageType.Italian);
+    }
+
+    public void ChangeDutch()
+    {
+        ChangeLanguage(LanguageType.Dutch);
     }
 
     public void ChangeLanguage(LanguageType type)

@@ -205,6 +205,8 @@ public class RandomBoxManager : MonoBehaviour
 
         boxPanel.SetActive(true);
 
+        boxOpenEffect.SetActive(true);
+
         boxAnim.StopAnim();
 
         isStart = false;

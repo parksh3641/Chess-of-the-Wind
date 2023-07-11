@@ -71,9 +71,8 @@ public class UIManager : MonoBehaviour
     public TutorialManager tutorialManager;
 
     public Image[] bottomUIImg;
-    public GameObject[] bottomUIIcon;
-    public RectTransform[] bottmUIRect;
 
+    public int index = 0;
 
     Sprite[] characterArray;
 
@@ -111,6 +110,8 @@ public class UIManager : MonoBehaviour
         waitingObj.SetActive(false);
 
         versionText.text = "v" + Application.version;
+
+        index = -1;
     }
 
     private void Start()
@@ -119,7 +120,7 @@ public class UIManager : MonoBehaviour
 
         SetLoginUI();
 
-        OpenMainCanvas(2);
+        OpenMainCanvas(1);
     }
 
     public void Initialize()
@@ -132,7 +133,7 @@ public class UIManager : MonoBehaviour
         goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Gold);
         crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
 
-        nickNameText.text = "닉네임 : " + GameStateManager.instance.NickName;
+        nickNameText.text = GameStateManager.instance.NickName;
 
         matchingManager.Initialize();
 
@@ -153,12 +154,13 @@ public class UIManager : MonoBehaviour
         {
             loginUI.SetActive(true);
 
-//#if UNITY_ANDROID
-//            loginButtonList[0].SetActive(true);
-//#elif UNITY_IOS
-//            loginButtonList[1].SetActive(true);
-//#endif
-            loginButtonList[2].SetActive(true);
+            loginButtonList[0].SetActive(true);
+
+            //#if UNITY_ANDROID
+            //            loginButtonList[1].SetActive(true);
+            //#elif UNITY_IOS
+            //            loginButtonList[2].SetActive(true);
+            //#endif
         }
     }
 
@@ -430,71 +432,47 @@ public class UIManager : MonoBehaviour
 
     public void GoToMain()
     {
-        SceneManager.LoadScene("LoginScene");
+        if(!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+        }
+        else
+        {
+            disconnectedView.SetActive(false);
+        }
+
+        //SceneManager.LoadScene("LoginScene");
     }
 
     public void OpenMainCanvas(int number)
     {
-        for (int i = 0; i < bottmUIRect.Length; i++)
+        if (index == number) return;
+
+        for (int i = 0; i < bottomUIImg.Length; i++)
         {
-            bottomUIImg[i].color = new Color(1, 1, 1, 1);
-            bottmUIRect[i].sizeDelta = new Vector2(175, 200);
+            bottomUIImg[i].enabled = false;
         }
 
-        bottmUIRect[number].sizeDelta = new Vector2(250, 200);
-        bottomUIImg[number].color = Color.yellow;
+        bottomUIImg[number].enabled = true;
+
+
+        shopManager.CloseShopView();
+        collectionManager.CloseCollectionView();
+
 
         switch (number)
         {
             case 0:
-                bottmUIRect[0].anchoredPosition = new Vector2(-350, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-137.5f, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
-
                 shopManager.OpenShopView();
-                collectionManager.CloseCollectionView();
                 break;
             case 1:
-                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-175f, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(37.5f, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
-
-                shopManager.CloseShopView();
-                collectionManager.OpenCollectionView();
                 break;
             case 2:
-                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(0, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(212.5f, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
-
-                shopManager.CloseShopView();
-                collectionManager.CloseCollectionView();
+                collectionManager.OpenCollectionView();
                 break;
             case 3:
-                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(175f, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(387.5f, 0);
-
-                shopManager.CloseShopView();
-                collectionManager.CloseCollectionView();
                 break;
             case 4:
-                bottmUIRect[0].anchoredPosition = new Vector2(-387.5f, 0);
-                bottmUIRect[1].anchoredPosition = new Vector2(-212.5f, 0);
-                bottmUIRect[2].anchoredPosition = new Vector2(-37.5f, 0);
-                bottmUIRect[3].anchoredPosition = new Vector2(137.5f, 0);
-                bottmUIRect[4].anchoredPosition = new Vector2(350, 0);
-
-                shopManager.CloseShopView();
-                collectionManager.CloseCollectionView();
                 break;
         }    
     }

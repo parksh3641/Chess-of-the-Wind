@@ -8,15 +8,22 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 {
     public BlockClass blockClass;
 
-    public BlockChildContent[] blockUIArray;
+    Image backgroundImg;
+
+    public Sprite[] backgroundImgArray;
+
+    public Image rankImg;
+    public Text rankText;
+
+    public Sprite[] rankImgArray;
+
+    public GameObject[] blockUIArray;
 
     public Transform blockRootParent;
     public Transform previousParent;
     private CanvasGroup canvasGroup;
 
     public Text levelText;
-
-    Image backgroundImg;
 
     void Awake()
     {
@@ -32,32 +39,14 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 
         for (int i = 0; i < blockUIArray.Length; i++)
         {
-            blockUIArray[i].gameObject.SetActive(false);
+            blockUIArray[i].SetActive(false);
         }
 
-        blockUIArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
+        blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
 
-        switch (blockClass.rankType)
-        {
-            case RankType.N:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-            case RankType.R:
-                backgroundImg.color = Color.green;
-                break;
-            case RankType.SR:
-                backgroundImg.color = new Color(0, 150 / 255f, 1);
-                break;
-            case RankType.SSR:
-                backgroundImg.color = new Color(1, 100 / 255f, 1);
-                break;
-            case RankType.UR:
-                backgroundImg.color = Color.yellow;
-                break;
-            default:
-                backgroundImg.color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-                break;
-        }
+        backgroundImg.sprite = backgroundImgArray[(int)blockClass.rankType];
+        rankImg.sprite = rankImgArray[(int)blockClass.rankType];
+        rankText.text = blockClass.rankType.ToString();
 
         if (blockClass.level > 0)
         {

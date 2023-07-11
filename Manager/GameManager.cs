@@ -440,9 +440,9 @@ public class GameManager : MonoBehaviour
         timerText.text = timer.ToString();
         timerFillAmount.fillAmount = 1;
 
-        moneyText.text = moneyText.text = "LE  <size=25>0</size>";
+        moneyText.text = moneyText.text = "LP  <size=25>0</size>";
         bettingMoneyText.text = "0";
-        otherMoneyText.text = moneyText.text = "LE  <size=25>0</size>";
+        otherMoneyText.text = moneyText.text = "LP  <size=25>0</size>";
 
         RecordManager.instance.Initialize();
         recordText.text = "";
@@ -469,6 +469,7 @@ public class GameManager : MonoBehaviour
 
         rouletteManager.CloseRouletteView();
         soundManager.StopAllSFX();
+        soundManager.Initialize();
 
         ResetRouletteBackgroundColor();
 
@@ -619,8 +620,8 @@ public class GameManager : MonoBehaviour
         money = stakes;
         otherMoney = stakes;
 
-        moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-        otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
     public void GameStart()
@@ -824,7 +825,7 @@ public class GameManager : MonoBehaviour
         uIManager.SetWaitingView(false);
         uIManager.dontTouchObj.SetActive(false);
 
-        NotionManager.instance.UseNotion(NotionType.GoBetting);
+        NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
     }
 
     IEnumerator TimerCoroution()
@@ -1375,7 +1376,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeBettingMoney()
     {
-        moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
+        moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -2564,7 +2565,7 @@ public class GameManager : MonoBehaviour
 
         if (money < bettingValue[blockContent.index])
         {
-            NotionManager.instance.UseNotion(NotionType.Allin);
+            NotionManager.instance.UseNotion(NotionType.BettingAllin);
 
             Debug.Log("남은 골드를 모두 사용하여 배팅합니다.");
 
@@ -2581,7 +2582,7 @@ public class GameManager : MonoBehaviour
 
         if(bettingList.Contains(1) && bettingList[blockContent.index] == 0)
         {
-            blockContent.ResetPos();
+            blockContent.CancleBetting();
 
             NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
 
@@ -3130,8 +3131,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
         }
 
 
@@ -3172,8 +3173,8 @@ public class GameManager : MonoBehaviour
             money = compare[0];
             otherMoney = compare[1];
 
-            moneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "LE  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
         }
     }
 

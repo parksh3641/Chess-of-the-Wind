@@ -79,72 +79,7 @@ public class NotionManager : MonoBehaviour
         {
             if (list.notionType.Equals(type))
             {
-                switch (type)
-                {
-                    case NotionType.Test:
-                        notion.txt.text = "테스트";
-                        break;
-                    case NotionType.NotEnoughMoney:
-                        notion.txt.text = "골드가 부족합니다";
-                        break;
-                    case NotionType.NotBettingLocation:
-                        notion.txt.text = "그 위치에는 놓을 수 없어요";
-                        break;
-                    case NotionType.Cancle:
-                        notion.txt.text = "배치한 블럭을 취소했어요";
-                        break;
-                    case NotionType.GoBetting:
-                        notion.txt.text = "시간 안에 블럭을 배치하세요";
-                        break;
-                    case NotionType.YourTurn:
-                        notion.txt.text = "당신의 차례예요. 바람을 불어보세요!";
-                        break;
-                    case NotionType.BuyTicket:
-                        notion.txt.text = "강화권을 구매했습니다";
-                        break;
-                    case NotionType.UpgradeSuccess:
-                        notion.txt.text = "강화 성공!";
-                        break;
-                    case NotionType.UpgradeKeep:
-                        notion.txt.text = "강화 유지";
-                        break;
-                    case NotionType.UpgradeDown:
-                        notion.txt.text = "강화 하락";
-                        break;
-                    case NotionType.UpgradeDestroy:
-                        notion.txt.text = "블럭이 파괴되었습니다";
-                        break;
-                    case NotionType.SellBlock:
-                        notion.txt.text = "블럭을 판매했습니다";
-                        break;
-                    case NotionType.MaxBlockLevel:
-                        notion.txt.text = "최대 강화레벨입니다";
-                        break;
-                    case NotionType.DontSellEquipBlock:
-                        notion.txt.text = "장착한 블럭은 판매할 수 없습니다";
-                        break;
-                    case NotionType.NotEnoughTicket:
-                        notion.txt.text = "강화권이 부족합니다";
-                        break;
-                    case NotionType.DefDestroy:
-                        notion.txt.text = "파괴 방지!";
-                        break;
-                    case NotionType.SameEquipBlock:
-                        notion.txt.text = "같은 종류의 블록을 중복 장착할 수 없습니다";
-                        break;
-                    case NotionType.LimitMaxBlock:
-                        notion.txt.text = "입장 가능한 최대 블럭 값을 초과했습니다";
-                        break;
-                    case NotionType.OverBettingBlock:
-                        notion.txt.text = "1개 이상 블록을 배치할 수 없습니다";
-                        break;
-                    case NotionType.OnlyPawn:
-                        notion.txt.text = "초보방은 1칸 짜리만 장착할 수 있습니다";
-                        break;
-                    case NotionType.Allin:
-                        notion.txt.text = "남은 골드를 전부 사용했습니다";
-                        break;
-                }
+                notion.txt.text = LocalizationManager.instance.GetString(list.notionType.ToString());
                 SetColor(list.colorType);
                 SetEffect(list.effectType);
             }

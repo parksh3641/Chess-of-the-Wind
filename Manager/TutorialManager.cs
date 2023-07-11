@@ -9,8 +9,6 @@ public class TutorialManager : MonoBehaviour
     public GameObject bettingView;
     public GameObject rouletteView;
 
-
-
     public Image character;
 
     public Text npcText;

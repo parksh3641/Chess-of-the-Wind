@@ -97,6 +97,15 @@ public enum BetOptionType
     Repeat
 }
 
+public enum GameBgmType
+{
+    Main_Snow,
+    Main_Under,
+    Story_Snow,
+    Stroy_Under,
+    Game_Newbie,
+    Game_Gosu
+}
 public enum GameSfxType
 {
     Click,
@@ -168,8 +177,8 @@ public enum NotionType
     Test,
     NotEnoughMoney,
     NotBettingLocation,
-    Cancle,
-    GoBetting,
+    BettingCancle,
+    BettingTimesUp,
     YourTurn,
     BuyTicket,
     UpgradeSuccess,
@@ -185,7 +194,8 @@ public enum NotionType
     LimitMaxBlock,
     OverBettingBlock,
     OnlyPawn,
-    Allin
+    BettingAllin,
+    CheckInternet
 }
 
 public enum GameRankType

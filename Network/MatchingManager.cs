@@ -13,11 +13,14 @@ public class MatchingManager : MonoBehaviour
     RankInformation rankInformation = new RankInformation();
 
     [Title("Limit")]
+    public Image rankImg;
     public Text rankText;
     public Text newbieEnterText;
     public Text newbieMaxBlockText;
     public Text gosuEnterText;
     public Text gosuMaxBlockText;
+
+    public Sprite[] rankImgArray;
 
 
     [Title("Matching")]
@@ -39,6 +42,7 @@ public class MatchingManager : MonoBehaviour
     public NetworkManager networkManager;
     public UIManager uIManager;
     public AiManager aiManager;
+    public SoundManager soundManager;
 
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
@@ -63,77 +67,77 @@ public class MatchingManager : MonoBehaviour
         int rank = rankDataBase.GetRank(playerDataBase.Gold);
         gameRankType = GameRankType.Bronze_4 + rank;
 
-        rankText.text = "현재 랭크 : ";
-
         if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
         {
             gameRankType = GameRankType.Legend;
         }
 
+        rankImg.sprite = rankImgArray[(int)gameRankType];
+
         switch (gameRankType)
         {
             case GameRankType.Bronze_4:
-                rankText.text += "브론즈 4";
+                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 4";
                 break;
             case GameRankType.Bronze_3:
-                rankText.text += "브론즈 3";
+                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 3";
                 break;
             case GameRankType.Bronze_2:
-                rankText.text += "브론즈 2";
+                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 2";
                 break;
             case GameRankType.Bronze_1:
-                rankText.text += "브론즈 1";
+                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 1";
                 break;
             case GameRankType.Sliver_4:
-                rankText.text += "실버 4";
+                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 4";
                 break;
             case GameRankType.Sliver_3:
-                rankText.text += "실버 3";
+                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 3";
                 break;
             case GameRankType.Sliver_2:
-                rankText.text += "실버 2";
+                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 2";
                 break;
             case GameRankType.Sliver_1:
-                rankText.text += "실버 1";
+                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 1";
                 break;
             case GameRankType.Gold_4:
-                rankText.text += "골드 4";
+                rankText.text = LocalizationManager.instance.GetString("Gold") + " 4";
                 break;
             case GameRankType.Gold_3:
-                rankText.text += "골드 3";
+                rankText.text = LocalizationManager.instance.GetString("Gold") + " 3";
                 break;
             case GameRankType.Gold_2:
-                rankText.text += "골드 2";
+                rankText.text = LocalizationManager.instance.GetString("Gold") + " 2";
                 break;
             case GameRankType.Gold_1:
-                rankText.text += "골드 1";
+                rankText.text = LocalizationManager.instance.GetString("Gold") + " 1";
                 break;
             case GameRankType.Platinum_4:
-                rankText.text += "플래티넘 4";
+                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 4";
                 break;
             case GameRankType.Platinum_3:
-                rankText.text += "플래티넘 3";
+                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 3";
                 break;
             case GameRankType.Platinum_2:
-                rankText.text += "플래티넘 2";
+                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 2";
                 break;
             case GameRankType.Platinum_1:
-                rankText.text += "플래티넘 1";
+                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 1";
                 break;
             case GameRankType.Diamond_4:
-                rankText.text += "다이아 4";
+                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 4";
                 break;
             case GameRankType.Diamond_3:
-                rankText.text += "다이아 3";
+                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 3";
                 break;
             case GameRankType.Diamond_2:
-                rankText.text += "다이아 2";
+                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 2";
                 break;
             case GameRankType.Diamond_1:
-                rankText.text += "다이아 1";
+                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 1";
                 break;
             case GameRankType.Legend:
-                rankText.text += "전설";
+                rankText.text = LocalizationManager.instance.GetString("Legend");
                 break;
         }
 
@@ -261,6 +265,8 @@ public class MatchingManager : MonoBehaviour
 
         mainFadeInOut.FadeOutToIn();
 
+        Invoke("ChangeBGM", 1.5f);
+
         Debug.Log("플레이어와 매칭되었습니다.");
     }
 
@@ -274,6 +280,21 @@ public class MatchingManager : MonoBehaviour
 
         mainFadeInOut.FadeOutToIn();
 
+        Invoke("ChangeBGM", 1.5f);
+
         Debug.Log("사람이 없는 관계로 인공지능과 매칭됩니다.");
+    }
+
+    public void ChangeBGM()
+    {
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            soundManager.PlayBGM(GameBgmType.Game_Newbie);
+        }
+        else
+        {
+            soundManager.PlayBGM(GameBgmType.Game_Gosu);
+        }
+
     }
 }

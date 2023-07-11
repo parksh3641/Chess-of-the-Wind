@@ -13,7 +13,11 @@ public class ImageDataBase : ScriptableObject
 
     public Sprite[] rankBackgroundArray;
 
+    public Sprite[] rankBannerArray;
+
     public Sprite[] shopContentArray;
+
+    public Sprite[] blockArray;
 
     public Sprite GetMoneyIcon()
     {
@@ -30,8 +34,18 @@ public class ImageDataBase : ScriptableObject
         return rankBackgroundArray;
     }
 
+    public Sprite[] GetRankBannerArray()
+    {
+        return rankBannerArray;
+    }
+
     public Sprite[] GetShopContentArray()
     {
         return shopContentArray;
+    }
+
+    public Sprite[] GetBlockArray()
+    {
+        return blockArray;
     }
 }

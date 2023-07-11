@@ -13,6 +13,7 @@ public class StateManager : MonoBehaviour
     public UIManager uIManager;
     public NickNameManager nickNameManager;
     public MatchingManager matchingManager;
+    public SoundManager soundManager;
     public StoryManager storyManager;
 
 
@@ -35,6 +36,7 @@ public class StateManager : MonoBehaviour
             //nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
+            soundManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {
