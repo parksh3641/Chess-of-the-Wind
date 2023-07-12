@@ -68,8 +68,8 @@ public class MoneyAnimation : MonoBehaviour
             moneyPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#00FF00>+" + value + "</color>";
-        changeMoneyText[1].text = "<color=#FF0000>-" + value + "</color>";
+        changeMoneyText[0].text = "<color=#27FFFC>+" + value + "</color>";
+        changeMoneyText[1].text = "<color=#FF712B>-" + value + "</color>";
 
         RecordManager.instance.SetRecord(value.ToString());
 
@@ -83,8 +83,8 @@ public class MoneyAnimation : MonoBehaviour
             moneyPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#00FF00>+" + value + "</color>";
-        changeMoneyText[1].text = "<color=#FF0000>-" + value + "</color>";
+        changeMoneyText[0].text = "<color=#FF712B>-" + value + "</color>";
+        changeMoneyText[1].text = "<color=#27FFFC>+" + value + "</color>";
 
         RecordManager.instance.SetRecord((-value).ToString());
 
@@ -126,8 +126,8 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[0].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return null;
         }
@@ -173,7 +173,7 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return null;
         }
@@ -214,8 +214,8 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[0].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return null;
         }
@@ -261,7 +261,7 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[1].text = "GOLD  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return null;
         }

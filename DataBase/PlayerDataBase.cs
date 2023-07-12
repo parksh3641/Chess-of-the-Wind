@@ -480,6 +480,22 @@ public class PlayerDataBase : ScriptableObject
         sellBlockList.Add(id);
     }
 
+    public bool CheckSellBlock(string id)
+    {
+        bool check = false;
+
+        for(int i = 0; i < sellBlockList.Count; i ++)
+        {
+            if(sellBlockList[i].Equals(id))
+            {
+                check = true;
+                break;
+            }
+        }
+
+        return check;
+    }
+
     public List<BlockClass> GetBlockClass()
     {
         return blockList;

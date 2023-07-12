@@ -101,7 +101,7 @@ public class RecordManager : MonoBehaviour
             }
             else if (int.Parse(recordList[i]) < 0)
             {
-                content.Initialize(i + 1 + "번째 턴 : <color=#FF712B>-" + recordList[i] + "</color>");
+                content.Initialize(i + 1 + "번째 턴 : <color=#FF712B>" + recordList[i] + "</color>");
             }
             content.gameObject.SetActive(true);
             endRecordContentList.Add(content);

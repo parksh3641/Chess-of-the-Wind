@@ -15,13 +15,11 @@ public class SoundManager : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        audioSource.volume = 0;
+        audioSource.Stop();
     }
 
     public void Initialize()
     {
-        audioSource.volume = 1;
-
         if (playerDataBase.Formation >= 1)
         {
             PlayBGM(GameBgmType.Main_Snow);
@@ -30,6 +28,8 @@ public class SoundManager : MonoBehaviour
         {
             PlayBGM(GameBgmType.Main_Under);
         }
+
+        audioSource.Play();
     }
 
 

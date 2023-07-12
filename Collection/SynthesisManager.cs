@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class SynthesisManager : MonoBehaviour
 {
+    public RankType synthesisRankType = RankType.N;
+
     public WindCharacterType windCharacterType = WindCharacterType.Winter;
 
     public GameObject synthesisView;
@@ -35,13 +37,34 @@ public class SynthesisManager : MonoBehaviour
     public GameObject needObj;
     public Text needText;
 
+    public GameObject sortButton;
     public GameObject synthesisButton;
+
+    public Text synthesisResultText;
+    public GameObject synthesisResultEffect;
+
+    [Title("All Synthesis")]
+    public GameObject synthesisAllButton;
+    public GameObject synthesisWarning;
+
+    public Text synthesisRank_N_Value;
+    public Text synthesisRank_R_Value;
+    public Text synthesisRank_SR_Value;
 
     [Title("Value")]
     private int needGold = 0;
     private int updateLevel = 0;
     private int equipInfo = 0;
     private int sortCount = 0;
+
+    private int rankNCount = 0;
+    private int rankNValue = 0;
+
+    private int rankRCount = 0;
+    private int rankRValue = 0;
+
+    private int rankSRCount = 0;
+    private int rankSRValue = 0;
 
     private bool isStart = false; //합성 시작 여부
     private bool isMat1 = false;
@@ -52,12 +75,25 @@ public class SynthesisManager : MonoBehaviour
     public Transform blockUITransform;
     public Transform synthesisTransform;
 
+    [Space]
     public List<BlockClass> blockList = new List<BlockClass>();
 
+    [Space]
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
     public List<BlockUIContent> synthesisResultContentList = new List<BlockUIContent>();
 
+    [Space]
+    public List<BlockUIContent> synthesisList_Rank_N = new List<BlockUIContent>();
+    public List<BlockUIContent> synthesisList_Rank_R = new List<BlockUIContent>();
+    public List<BlockUIContent> synthesisList_Rank_SR = new List<BlockUIContent>();
+
+    [Space]
+    public int[] synthesisList_Rank_N_Count;
+    public int[] synthesisList_Rank_R_Count;
+    public int[] synthesisList_Rank_SR_Count;
+
     List<string> synthesisResultList = new List<string>();
+    List<BlockType> synthesisListAllResult = new List<BlockType>();
 
     RankType rankType = RankType.N;
     BlockClass blockClass;
@@ -70,10 +106,14 @@ public class SynthesisManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
+    public SoundManager soundManager;
 
     UpgradeDataBase upgradeDataBase;
     BlockDataBase blockDataBase;
     PlayerDataBase playerDataBase;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.2f);
 
     private void Awake()
     {
@@ -82,15 +122,22 @@ public class SynthesisManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         synthesisView.SetActive(false);
+        synthesisResultView.SetActive(false);
+        synthesisResultEffect.SetActive(false);
+        synthesisResultText.gameObject.SetActive(false);
+        synthesisWarning.SetActive(false);
 
         plusObj.SetActive(false);
         matObj1.SetActive(false);
         matObj2.SetActive(false);
         goldObj.SetActive(false);
         needObj.SetActive(false);
-        synthesisButton.SetActive(false);
 
-        for (int i = 0; i < 100; i++)
+        sortButton.SetActive(true);
+        synthesisButton.SetActive(false);
+        synthesisAllButton.SetActive(true);
+
+        for (int i = 0; i < 300; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
             content.transform.parent = blockUITransform;
@@ -102,7 +149,7 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList.Add(content);
         }
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 100; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
             content.transform.parent = synthesisTransform;
@@ -121,6 +168,10 @@ public class SynthesisManager : MonoBehaviour
         if (!synthesisView.activeSelf)
         {
             synthesisView.SetActive(true);
+            synthesisResultView.SetActive(false);
+            synthesisResultEffect.SetActive(false);
+            synthesisResultText.gameObject.SetActive(false);
+            synthesisWarning.SetActive(false);
 
             Initialize();
         }
@@ -131,6 +182,8 @@ public class SynthesisManager : MonoBehaviour
         synthesisView.SetActive(false);
 
         synthesisResultView.SetActive(false);
+        synthesisResultEffect.SetActive(false);
+        synthesisResultText.gameObject.SetActive(false);
     }
 
     void Initialize()
@@ -144,7 +197,44 @@ public class SynthesisManager : MonoBehaviour
         matBlockUIContent1.gameObject.SetActive(false);
         matBlockUIContent2.gameObject.SetActive(false);
 
+        plusObj.SetActive(false);
+        matObj1.SetActive(false);
+        matObj2.SetActive(false);
+        goldObj.SetActive(false);
+        needObj.SetActive(false);
+
+        sortButton.SetActive(true);
+        synthesisButton.SetActive(false);
+        synthesisAllButton.SetActive(true);
+
+        blockList.Clear();
         blockList = new List<BlockClass>(blockList.Count);
+
+        if(blockUIContentList.Count < blockList.Count)
+        {
+            for (int i = 0; i < blockList.Count - blockUIContentList.Count; i++)
+            {
+                BlockUIContent content = Instantiate(blockUIContent);
+                content.transform.parent = blockUITransform;
+                content.transform.localPosition = Vector3.zero;
+                content.transform.localScale = Vector3.one;
+                content.gameObject.SetActive(false);
+                content.Synthesis_Initialize(this);
+
+                blockUIContentList.Add(content);
+            }
+
+            for (int i = 0; i < (blockList.Count - blockUIContentList.Count) / 3; i++)
+            {
+                BlockUIContent content = Instantiate(blockUIContent);
+                content.transform.parent = synthesisTransform;
+                content.transform.localPosition = Vector3.zero;
+                content.transform.localScale = Vector3.one;
+                content.gameObject.SetActive(false);
+
+                synthesisResultContentList.Add(content);
+            }
+        }
 
         for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
         {
@@ -181,7 +271,7 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
 
-            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR)
+            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR || playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
             {
                 blockUIContentList[i].gameObject.SetActive(false);
             }
@@ -225,7 +315,7 @@ public class SynthesisManager : MonoBehaviour
 
             blockClass = playerDataBase.GetBlockClass(id);
 
-            equipInfo = playerDataBase.CheckEquipId(id);
+            //equipInfo = playerDataBase.CheckEquipId(id);
 
             windCharacterType = blockDataBase.GetBlockInfomation(blockClass.blockType).windCharacterType;
             rankType = blockClass.rankType;
@@ -245,8 +335,10 @@ public class SynthesisManager : MonoBehaviour
             matObj1.SetActive(true);
             matObj2.SetActive(true);
             goldObj.SetActive(true);
-
             needObj.SetActive(true);
+
+            sortButton.SetActive(false);
+            synthesisAllButton.SetActive(false);
 
             titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
             upgradeLevelText.text = "최대 강화 레벨 : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
@@ -279,7 +371,8 @@ public class SynthesisManager : MonoBehaviour
             for (int i = 0; i < blockUIContentList.Count; i++)
             {
                 if (!blockUIContentList[i].blockClass.blockType.Equals(blockClass.blockType) ||
-                    !blockUIContentList[i].blockClass.rankType.Equals(blockClass.rankType))
+                    !blockUIContentList[i].blockClass.rankType.Equals(blockClass.rankType) || 
+                    playerDataBase.CheckEquipId(blockUIContentList[i].instanceId) != 0)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                 }
@@ -304,6 +397,8 @@ public class SynthesisManager : MonoBehaviour
 
                 CheckSynthesisMaterial();
 
+                synthesisAllButton.SetActive(false);
+
                 Debug.Log("1번째 재료 선택됨");
             }
             else if (!isMat2 && matObj2.activeSelf)
@@ -320,6 +415,8 @@ public class SynthesisManager : MonoBehaviour
                 action.Invoke();
 
                 CheckSynthesisMaterial();
+
+                synthesisAllButton.SetActive(false);
 
                 Debug.Log("2번째 재료 선택됨");
             }
@@ -414,11 +511,21 @@ public class SynthesisManager : MonoBehaviour
             goldObj.SetActive(false);
             needObj.SetActive(false);
 
+            sortButton.SetActive(true);
+            synthesisButton.SetActive(false);
+            synthesisAllButton.SetActive(true);
+
             for (int i = 0; i < blockList.Count; i++)
             {
                 blockUIContentList[i].gameObject.SetActive(true);
                 blockUIContentList[i].SynthesisUnSelected();
                 blockUIContentList[i].Lock(false);
+
+                if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR || 
+                    playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
             }
 
             isStart = false;
@@ -456,8 +563,6 @@ public class SynthesisManager : MonoBehaviour
 
     public void SynthesisButton()
     {
-        synthesisResultButton.SetActive(false);
-
         if (synthesisButton.activeSelf)
         {
             if (playerDataBase.Gold < needGold)
@@ -467,7 +572,6 @@ public class SynthesisManager : MonoBehaviour
             }
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, needGold);
-
 
             for (int i = 0; i < synthesisResultContentList.Count; i++)
             {
@@ -483,26 +587,37 @@ public class SynthesisManager : MonoBehaviour
     {
         synthesisResultView.SetActive(true);
 
-        upgradeManager.SellBlock(blockClass.instanceId);
-        yield return new WaitForSeconds(0.1f);
-
-        upgradeManager.SellBlock(blockClassMat1.instanceId);
-        yield return new WaitForSeconds(0.1f);
-
-        switch (rankType)
+        for (int i = 0; i < synthesisResultContentList.Count; i++)
         {
-            case RankType.N:
-                upgradeManager.SellBlock(blockClassMat2.instanceId);
-                break;
-            case RankType.R:
-                upgradeManager.SellBlock(blockClassMat2.instanceId);
-                break;
-            case RankType.SR:
-                upgradeManager.SellBlock(blockClassMat2.instanceId);
-                break;
+            synthesisResultContentList[i].gameObject.SetActive(false);
         }
 
-        yield return new WaitForSeconds(0.1f);
+        synthesisResultButton.SetActive(false);
+
+        synthesisResultText.gameObject.SetActive(true);
+        StartCoroutine(TextCoroution());
+
+        upgradeManager.SellBlock(blockClass.instanceId);
+        yield return waitForSeconds;
+
+        upgradeManager.SellBlock(blockClassMat1.instanceId);
+        yield return waitForSeconds;
+
+        upgradeManager.SellBlock(blockClassMat2.instanceId);
+        yield return waitForSeconds;
+
+        //switch (rankType)
+        //{
+        //    case RankType.N:
+        //        upgradeManager.SellBlock(blockClassMat2.instanceId);
+        //        break;
+        //    case RankType.R:
+        //        upgradeManager.SellBlock(blockClassMat2.instanceId);
+        //        break;
+        //    case RankType.SR:
+        //        upgradeManager.SellBlock(blockClassMat2.instanceId);
+        //        break;
+        //}
 
         if (updateLevel > 0)
         {
@@ -516,7 +631,7 @@ public class SynthesisManager : MonoBehaviour
 
             if(equipInfo > 0)
             {
-                Debug.Log(equipInfo + " 로 장착이 계승 될 예정입니다");
+                Debug.Log(equipInfo + " 위치로 장착이 계승 될 예정입니다");
             }
 
             playerDataBase.SetSuccessionLevel(block);
@@ -539,6 +654,9 @@ public class SynthesisManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.5f);
 
+        synthesisResultText.gameObject.SetActive(false);
+        synthesisResultEffect.SetActive(true);
+
         BlockClass block2 = new BlockClass();
 
         block2.blockType = blockClass.blockType;
@@ -551,17 +669,19 @@ public class SynthesisManager : MonoBehaviour
             synthesisResultContentList[i].Collection_Initialize(block2);
         }
 
+        collectionManager.UpdateCollection();
+        Initialize();
+
         synthesisResultButton.SetActive(true);
 
         Debug.Log("합성 성공!");
-
-        collectionManager.UpdateCollection();
-        Initialize();
     }
 
     public void ClosesSynthesisResultView()
     {
         synthesisResultView.SetActive(false);
+        synthesisResultEffect.SetActive(false);
+        synthesisResultText.gameObject.SetActive(false);
     }
 
     public void SortButton()
@@ -578,5 +698,379 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
+    }
+
+    IEnumerator TextCoroution()
+    {
+        if (synthesisResultText.gameObject.activeInHierarchy)
+        {
+            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중");
+            yield return waitForSeconds2;
+            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + ".";
+            yield return waitForSeconds2;
+            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + "..";
+            yield return waitForSeconds2;
+            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + "...";
+            yield return waitForSeconds2;
+            StartCoroutine(TextCoroution());
+        }
+        else
+        {
+            yield break;
+        }
+    }
+
+    public void OpenSynthesisWarning()
+    {
+        synthesisWarning.SetActive(true);
+
+        synthesisList_Rank_N.Clear();
+        synthesisList_Rank_R.Clear();
+        synthesisList_Rank_SR.Clear();
+
+        synthesisList_Rank_N_Count = new int[(System.Enum.GetValues(typeof(BlockType)).Length - 1)];
+        synthesisList_Rank_R_Count = new int[(System.Enum.GetValues(typeof(BlockType)).Length - 1)];
+        synthesisList_Rank_SR_Count = new int[(System.Enum.GetValues(typeof(BlockType)).Length - 1)];
+
+        rankNCount = 0;
+        rankNValue = 0;
+
+        rankRCount = 0;
+        rankRValue = 0;
+
+        rankSRCount = 0;
+        rankSRValue = 0;
+
+        synthesisRank_N_Value.text = "0";
+        synthesisRank_R_Value.text = "0";
+        synthesisRank_SR_Value.text = "0";
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].level == 0 && playerDataBase.CheckEquipId(blockList[i].instanceId) == 0 && 
+                !playerDataBase.CheckSellBlock(blockList[i].instanceId))
+            {
+                if (blockList[i].rankType == RankType.N)
+                {
+                    synthesisList_Rank_N.Add(blockUIContentList[i]);
+                }
+                else if (blockList[i].rankType == RankType.R)
+                {
+                    synthesisList_Rank_R.Add(blockUIContentList[i]);
+                }
+                else if (blockList[i].rankType == RankType.SR)
+                {
+                    synthesisList_Rank_SR.Add(blockUIContentList[i]);
+                }
+            }
+        }
+
+        Debug.Log("N등급 개수 : " + synthesisList_Rank_N.Count);
+        Debug.Log("R등급 개수 : " + synthesisList_Rank_R.Count);
+        Debug.Log("SR등급 개수 : " + synthesisList_Rank_SR.Count);
+
+        for (int i = 0; i < synthesisList_Rank_N.Count; i++)
+        {
+            for (int j = 0; j < System.Enum.GetValues(typeof(BlockType)).Length - 1; j++)
+            {
+                if (synthesisList_Rank_N[i].blockClass.blockType.Equals(BlockType.Default + 1 + j))
+                {
+                    synthesisList_Rank_N_Count[j] += 1;
+
+                    rankNCount = synthesisList_Rank_N_Count[j] / 3;
+                }
+            }
+        }
+
+        for (int i = 0; i < synthesisList_Rank_N_Count.Length; i++)
+        {
+            rankNCount += synthesisList_Rank_N_Count[i] / 3;
+        }
+
+        for (int i = 0; i < synthesisList_Rank_R.Count; i ++)
+        {
+            for(int j = 0; j < System.Enum.GetValues(typeof(BlockType)).Length - 1; j ++)
+            {
+                if(synthesisList_Rank_R[i].blockClass.blockType.Equals(BlockType.Default + 1 + j))
+                {
+                    synthesisList_Rank_R_Count[j] += 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < synthesisList_Rank_R_Count.Length; i++)
+        {
+            rankRCount += synthesisList_Rank_R_Count[i] / 3;
+        }
+
+        for (int i = 0; i < synthesisList_Rank_SR.Count; i++)
+        {
+            for (int j = 0; j < System.Enum.GetValues(typeof(BlockType)).Length - 1; j++)
+            {
+                if (synthesisList_Rank_SR[i].blockClass.blockType.Equals(BlockType.Default + 1 + j))
+                {
+                    synthesisList_Rank_SR_Count[j] += 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < synthesisList_Rank_SR_Count.Length; i++)
+        {
+            rankSRCount += synthesisList_Rank_SR_Count[i] / 3;
+        }
+
+        rankNValue = rankNCount * upgradeDataBase.GetSynthesisValue(RankType.N);
+        rankRValue = rankRCount * upgradeDataBase.GetSynthesisValue(RankType.R);
+        rankSRValue = rankSRCount * upgradeDataBase.GetSynthesisValue(RankType.SR);
+
+
+        synthesisRank_N_Value.text = rankNValue.ToString();
+        synthesisRank_R_Value.text = rankRValue.ToString();
+        synthesisRank_SR_Value.text = rankSRValue.ToString();
+
+        Debug.Log("일괄 합성 준비 완료");
+    }
+
+    public void CloseSynthesisWarning()
+    {
+        synthesisWarning.SetActive(false);
+    }
+
+    public void SynthesisAllButton_N()
+    {
+        if(rankNValue == 0)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
+            return;
+        }
+        else
+        {
+            if(playerDataBase.Gold < rankNValue)
+            {
+                NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+                return;
+            }
+            else
+            {
+                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankNValue);
+            }
+        }
+
+        Debug.Log("N등급 일괄 합성 시작");
+
+        synthesisRankType = RankType.N;
+
+        StartCoroutine(SynthesisAllCoroution());
+    }
+
+    public void SynthesisAllButton_R()
+    {
+        if (rankRValue == 0)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
+            return;
+        }
+        else
+        {
+            if (playerDataBase.Gold < rankRValue)
+            {
+                NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+                return;
+            }
+            else
+            {
+                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankRValue);
+            }
+        }
+
+        Debug.Log("R등급 일괄 합성 시작");
+
+        synthesisRankType = RankType.R;
+
+        StartCoroutine(SynthesisAllCoroution());
+    }
+
+    public void SynthesisAllButton_SR()
+    {
+        if (rankSRValue == 0)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
+            return;
+        }
+        else
+        {
+            if (playerDataBase.Gold < rankSRValue)
+            {
+                NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+                return;
+            }
+            else
+            {
+                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankSRValue);
+            }
+        }
+
+        Debug.Log("SR등급 일괄 합성 시작");
+
+        synthesisRankType = RankType.SR;
+
+        StartCoroutine(SynthesisAllCoroution());
+    }
+
+    IEnumerator SynthesisAllCoroution()
+    {
+        synthesisWarning.SetActive(false);
+
+        synthesisResultView.SetActive(true);
+
+        for (int i = 0; i < synthesisResultContentList.Count; i++)
+        {
+            synthesisResultContentList[i].gameObject.SetActive(false);
+        }
+
+        synthesisResultButton.SetActive(false);
+
+        synthesisResultText.gameObject.SetActive(true);
+        StartCoroutine(TextCoroution());
+
+        synthesisResultList.Clear();
+
+        switch (synthesisRankType)
+        {
+            case RankType.N:
+                for(int i = 0; i < synthesisList_Rank_N.Count; i ++)
+                {
+                    upgradeManager.SellBlock(synthesisList_Rank_N[i].blockClass.instanceId);
+                    yield return waitForSeconds;
+                }
+
+
+                for (int i = 0; i < synthesisList_Rank_N_Count.Length; i ++)
+                {
+                    for (int j = 0; j < synthesisList_Rank_N_Count[i] / 3; j++)
+                    {
+                        synthesisListAllResult.Add((BlockType.Default + 1 + i));
+
+                        synthesisResultList.Clear();
+                        synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        switch (GameStateManager.instance.WindCharacterType)
+                        {
+                            case WindCharacterType.Winter:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                                break;
+                            case WindCharacterType.UnderWorld:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                                break;
+                        }
+
+                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        yield return waitForSeconds;
+                    }
+                }
+
+                break;
+            case RankType.R:
+                for (int i = 0; i < synthesisList_Rank_R.Count; i++)
+                {
+                    upgradeManager.SellBlock(synthesisList_Rank_R[i].blockClass.instanceId);
+                    yield return waitForSeconds;
+                }
+
+                for (int i = 0; i < synthesisList_Rank_R_Count.Length; i++)
+                {
+                    for (int j = 0; j < synthesisList_Rank_R_Count[i] / 3; j++)
+                    {
+                        synthesisListAllResult.Add((BlockType.Default + 1 + i));
+
+                        synthesisResultList.Clear();
+                        synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        switch (GameStateManager.instance.WindCharacterType)
+                        {
+                            case WindCharacterType.Winter:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                                break;
+                            case WindCharacterType.UnderWorld:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                                break;
+                        }
+
+                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        yield return waitForSeconds;
+                    }
+                }
+
+                break;
+            case RankType.SR:
+                for (int i = 0; i < synthesisList_Rank_SR.Count; i++)
+                {
+                    upgradeManager.SellBlock(synthesisList_Rank_SR[i].blockClass.instanceId);
+                    yield return waitForSeconds;
+                }
+
+                for (int i = 0; i < synthesisList_Rank_SR_Count.Length; i++)
+                {
+                    for (int j = 0; j < synthesisList_Rank_SR_Count[i] / 3; j++)
+                    {
+                        synthesisListAllResult.Add((BlockType.Default + 1 + i));
+
+                        synthesisResultList.Clear();
+                        synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        switch (GameStateManager.instance.WindCharacterType)
+                        {
+                            case WindCharacterType.Winter:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                                break;
+                            case WindCharacterType.UnderWorld:
+                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                                break;
+                        }
+
+                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+
+                        yield return waitForSeconds;
+                    }
+                }
+
+                break;
+            case RankType.SSR:
+                break;
+            case RankType.UR:
+                break;
+        }
+
+        yield return new WaitForSeconds(2.5f);
+
+        synthesisResultText.gameObject.SetActive(false);
+        synthesisResultEffect.SetActive(true);
+
+        for (int i = 0; i < synthesisListAllResult.Count; i ++)
+        {
+            BlockClass block = new BlockClass();
+
+            block.blockType = synthesisListAllResult[i];
+            block.rankType = synthesisRankType + 1;
+            block.level = 0;
+
+            synthesisResultContentList[i].Collection_Initialize(block);
+        }
+
+        for (int i = 0; i < synthesisListAllResult.Count; i++)
+        {
+            synthesisResultContentList[i].gameObject.SetActive(true);
+            soundManager.PlaySFX(GameSfxType.Click);
+            yield return waitForSeconds2;
+        }
+
+        collectionManager.UpdateCollection();
+        Initialize();
+
+        synthesisResultButton.SetActive(true);
+
+        Debug.Log("일괄 합성 성공!");
     }
 }

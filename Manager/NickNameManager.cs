@@ -77,7 +77,7 @@ public class NickNameManager : MonoBehaviour
             {
                 if (inputField.text.Contains(lines[i]))
                 {
-                    //NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                     return;
                 }
             }
@@ -104,22 +104,22 @@ public class NickNameManager : MonoBehaviour
                     }
                     else
                     {
-                        //NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
+                        NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                     }
                 }
                 else
                 {
-                    //NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
                 }
             }
             else
             {
-                //NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
             }
         }
         else
         {
-            //NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
+            NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
         }
     }
 
@@ -131,7 +131,7 @@ public class NickNameManager : MonoBehaviour
             {
                 if (inputFieldFree.text.Contains(lines[i]))
                 {
-                    //NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                     return;
                 }
             }
@@ -158,17 +158,17 @@ public class NickNameManager : MonoBehaviour
                 }
                 else
                 {
-                    //NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                 }
             }
             else
             {
-                //NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
             }
         }
         else
         {
-            //NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+            NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
         }
     }
 
@@ -178,7 +178,7 @@ public class NickNameManager : MonoBehaviour
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100);
 
-        //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameView.SetActive(false);
     }
@@ -187,7 +187,7 @@ public class NickNameManager : MonoBehaviour
     {
         uIManager.Renewal();
 
-        //NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameFirstView.SetActive(false);
 
@@ -196,13 +196,13 @@ public class NickNameManager : MonoBehaviour
 
     public void Failure()
     {
-        //NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
     }
 
     public void CopyId()
     {
-        //GUIUtility.systemCopyBuffer = nickNameText.text;
+        GUIUtility.systemCopyBuffer = inputField.text;
 
-        //NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
+        NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
     }
 }

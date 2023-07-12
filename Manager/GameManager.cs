@@ -737,7 +737,12 @@ public class GameManager : MonoBehaviour
     {
         uIManager.dontTouchObj.SetActive(true);
 
-        while(timer > 0)
+        for (int i = 0; i < rouletteContentList_Target.Count; i++)
+        {
+            rouletteContentList_Target[i].SetActiveFalseAll();
+        }
+
+        while (timer > 0)
         {
             timer -= 1;
             PV.RPC("ChangeWaitTimer", RpcTarget.Others, timer);
@@ -794,10 +799,10 @@ public class GameManager : MonoBehaviour
             allContentList[i].SetActiveFalseAll();
         }
 
-        for (int i = 0; i < rouletteContentList_Target.Count; i++)
-        {
-            rouletteContentList_Target[i].SetActiveFalseAll();
-        }
+        //for (int i = 0; i < rouletteContentList_Target.Count; i++)
+        //{
+        //    rouletteContentList_Target[i].SetActiveFalseAll();
+        //}
 
         for (int i = 0; i < bettingList.Length; i++)
         {

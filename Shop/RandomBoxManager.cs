@@ -33,7 +33,7 @@ public class RandomBoxManager : MonoBehaviour
     [Title("Value")]
     public int boxCount = 0;
     public int boxCountSave = 0;
-    public int[] percentBlock;
+    public float[] percentBlock;
     public List<string> allowSnowBlockList = new List<string>();
     public List<string> allowUnderworldBlockList = new List<string>();
     public List<BlockClass> prizeBlockList = new List<BlockClass>(); //¥Á√∑µ» ∞Õ
@@ -42,7 +42,7 @@ public class RandomBoxManager : MonoBehaviour
     public bool isWait = false; //ªÛ¿⁄ ªÃ±‚ µÙ∑π¿Ã
     public bool isStart = false; //¡ÿ∫Òøœ∑·
 
-    private int random = 0;
+    private float random = 0;
     private string block = "";
 
     public SoundManager soundManager;
@@ -72,7 +72,7 @@ public class RandomBoxManager : MonoBehaviour
 
     void ResetView()
     {
-        percentBlock = new int[3];
+        percentBlock = new float[3];
 
         allowSnowBlockList.Clear();
         allowUnderworldBlockList.Clear();
@@ -142,9 +142,9 @@ public class RandomBoxManager : MonoBehaviour
     {
         string[] temp = check.Split(",");
 
-        percentBlock[0] = int.Parse(temp[0]);
-        percentBlock[1] = int.Parse(temp[1]);
-        percentBlock[2] = int.Parse(temp[2]);
+        percentBlock[0] = float.Parse(temp[0]);
+        percentBlock[1] = float.Parse(temp[1]);
+        percentBlock[2] = float.Parse(temp[2]);
 
         switch (windCharacterType)
         {
@@ -229,6 +229,8 @@ public class RandomBoxManager : MonoBehaviour
             boxCountSave -= 1;
             boxCountText.text = boxCountSave.ToString();
 
+            soundManager.PlaySFX(GameSfxType.Click);
+
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -248,7 +250,7 @@ public class RandomBoxManager : MonoBehaviour
                 yield return null;
             }
 
-            random = Random.Range(0, 100);
+            random = Random.Range(0, 100.0f);
             block = "";
 
             switch (windCharacterType)

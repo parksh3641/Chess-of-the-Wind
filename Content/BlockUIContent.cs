@@ -74,6 +74,11 @@ public class BlockUIContent : MonoBehaviour
 
         Initialize(blockClass.blockType);
 
+        if(rankBackgroundArray == null)
+        {
+            rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+        }
+
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();
@@ -84,7 +89,6 @@ public class BlockUIContent : MonoBehaviour
     public void NextLevel_Initialize()
     {
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType + 1];
-        rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
         rankText.text = (blockClass.rankType + 1).ToString();
 

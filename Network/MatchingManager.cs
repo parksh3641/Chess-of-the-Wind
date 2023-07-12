@@ -141,6 +141,8 @@ public class MatchingManager : MonoBehaviour
                 break;
         }
 
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Rank", (int)gameRankType);
+
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
         stakes = rankInformation.stakes;

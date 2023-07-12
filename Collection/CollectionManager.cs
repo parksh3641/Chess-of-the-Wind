@@ -315,7 +315,7 @@ public class CollectionManager : MonoBehaviour
         {
             if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
             {
-                equipManager.EquipNewBie(blockList[i], false);
+                equipManager.EquipNewBie(blockList[i], true);
                 break;
             }
         }

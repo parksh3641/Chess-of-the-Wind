@@ -101,4 +101,20 @@ public class UpgradeDataBase : ScriptableObject
 
         return level;
     }
+
+    public int GetSynthesisValue(RankType type)
+    {
+        int number = 0;
+
+        for(int i = 0; i < upgradeValueList.Count; i ++)
+        {
+            if(upgradeValueList[i].rankType.Equals(type))
+            {
+                number = upgradeValueList[i].GetSynthesisValue();
+                break;
+            }
+        }
+
+        return number;
+    }
 }

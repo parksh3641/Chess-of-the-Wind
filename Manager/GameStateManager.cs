@@ -37,7 +37,7 @@ public class GameStateManager : MonoBehaviour
         public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
         public bool playing = false;
-        public int matchingTime = 8;
+        public int matchingTime = 6;
         public int stakes = 0;
         public int penalty = 0;
 

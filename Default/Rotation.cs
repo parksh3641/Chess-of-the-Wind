@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Rotation : MonoBehaviour
 {
-    private float speed = 40f;
+    public float rotationSpeed = 30f; // Adjust the rotation speed as needed
+    private RectTransform rectTransform;
 
-    private void FixedUpdate()
+    private void Start()
     {
-        transform.Rotate(Vector3.forward * speed * Time.deltaTime);
+        rectTransform = GetComponent<RectTransform>();
+    }
+
+    private void Update()
+    {
+        // Rotate the UI element to the right on the Z-axis
+        rectTransform.Rotate(0f, 0f, -rotationSpeed * Time.deltaTime);
     }
 }

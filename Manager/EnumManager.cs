@@ -195,7 +195,15 @@ public enum NotionType
     OverBettingBlock,
     OnlyPawn,
     BettingAllin,
-    CheckInternet
+    CheckInternet,
+    NickNameNotion1,
+    NickNameNotion2,
+    NickNameNotion3,
+    NickNameNotion4,
+    NickNameNotion5,
+    NickNameNotion6,
+    CopyIdNotion,
+    NotSynthesisBlock
 }
 
 public enum GameRankType

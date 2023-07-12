@@ -147,15 +147,29 @@ public class UpgradeManager : MonoBehaviour
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
+            if(blockClass.rankType != RankType.SSR)
+            {
+                successText.text = "합성을 하면 더 강해질 수 있습니다";
+                keepText.text = "합성시 강화 최대 레벨이 증가합니다";
+                downText.text = "합성시 강화 레벨은 그대로 연계됩니다";
+                destroyText.text = "";
+
+                goldNumberText.text = "-";
+                ticketNumberText.text = "-";
+            }
+            else
+            {
+                successText.text = "";
+                keepText.text = "최대 레벨입니다";
+                downText.text = "";
+                destroyText.text = "";
+                valuePlusText.text = "";
+
+                goldNumberText.text = "-";
+                ticketNumberText.text = "-";
+            }
+
             Debug.Log("최대 레벨입니다");
-
-            successText.text = "";
-            keepText.text = "합성시 강화 최대 레벨이 증가합니다";
-            downText.text = "합성시 강화 레벨은 그대로 연계됩니다";
-            destroyText.text = "";
-
-            goldNumberText.text = "-";
-            ticketNumberText.text = "-";
         }
         else
         {
@@ -333,22 +347,20 @@ public class UpgradeManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                upgradeScreenTitle.text = "강화 하락";
-                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level - 1).ToString() + "</color>";
-                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
-                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
-
-                break;
-            case 1:
-                upgradeScreenTitle.text = "강화 실패";
-                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + blockClass.level.ToString() + "</color>";
+                upgradeScreenTitle.text = "강화 실패 (파괴 방지)";
+                upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
-
+                break;
+            case 1:
+                upgradeScreenTitle.text = "강화 하락";
+                upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level).ToString() + "</color>";
+                upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
+                    + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
                 break;
             case 2:
                 upgradeScreenTitle.text = "강화 유지";
-                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level).ToString() + "</color>";
+                upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
                 break;
@@ -356,18 +368,19 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenEffect.SetActive(true);
 
                 upgradeScreenTitle.text = "강화 성공!";
-                upgradeScreenLevel.text = blockClass.level.ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
+                upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 2).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level + 1)) + "</color>";
                 break;
             case 4:
                 upgradeScreenIcon.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
 
-                upgradeScreenTitle.text = "강화 실패";
+                upgradeScreenTitle.text = "강화 실패 (파괴)";
+                
+                upgradeScreenLevelName.text = "";
+                upgradeScreenLevel.text = "블록이 파괴되었습니다";
                 upgradeScreenValueName.text = "";
-                upgradeScreenLevel.text = "";
-                upgradeScreenValueName.text = "";
-                upgradeScreenValue.text = "블록이 파괴되었습니다";
+                upgradeScreenValue.text = "";
                 break;
         }
     }

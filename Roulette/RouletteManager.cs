@@ -1003,6 +1003,8 @@ public class RouletteManager : MonoBehaviour
 
         roulette2WindPoint[0].gameObject.SetActive(false);
         roulette2WindPoint[1].gameObject.SetActive(false);
+
+        windButton.sprite = windButtonArray[0];
     }
 
     [PunRPC]

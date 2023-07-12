@@ -91,8 +91,6 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
 
-            soundManager.PlayBGM(GameBgmType.Main_Snow);
-
             Debug.Log("눈의 여왕 진형 선택");
         }
         else
@@ -111,20 +109,24 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
-            soundManager.PlayBGM(GameBgmType.Main_Under);
-
             Debug.Log("지하 세계 진형 선택");
         }
+
+        warningView.SetActive(false);
 
         animationView.SetActive(true);
 
         if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
         {
             icon.sprite = iconArray[0];
+
+            soundManager.PlayBGM(GameBgmType.Main_Snow);
         }
         else
         {
             icon.sprite = iconArray[1];
+
+            soundManager.PlayBGM(GameBgmType.Main_Under);
         }
 
         yield return new WaitForSeconds(4);

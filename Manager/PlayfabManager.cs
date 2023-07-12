@@ -597,7 +597,9 @@ public class PlayfabManager : MonoBehaviour
 
     IEnumerator LoadDataCoroutine()
     {
-        infoText.text = "데이터를 읽고 있습니다.";
+        infoText.text = "로드 중...";
+
+        //infoText.text = "데이터를 읽고 있습니다.";
         Debug.Log("Load Data...");
 
         playerDataBase.Initialize();
@@ -619,7 +621,7 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
-        infoText.text = "서버에 접속중입니다.";
+        //infoText.text = "서버에 접속중입니다.";
         Debug.Log("Load Data Complete");
 
         isActive = true;
