@@ -80,6 +80,8 @@ public class EquipManager : MonoBehaviour
         upgradeManager.CloseUpgradeView();
 
         CloseEquipView();
+
+        SoundManager.instance.PlaySFX(GameSfxType.BlockEquip);
     }
 
     public void ChangeWeapon()
@@ -102,6 +104,8 @@ public class EquipManager : MonoBehaviour
         upgradeManager.CloseUpgradeView();
 
         CloseEquipView();
+
+        SoundManager.instance.PlaySFX(GameSfxType.BlockEquip);
     }
 
     public void ChangeShield()
@@ -124,6 +128,8 @@ public class EquipManager : MonoBehaviour
         upgradeManager.CloseUpgradeView();
 
         CloseEquipView();
+
+        SoundManager.instance.PlaySFX(GameSfxType.BlockEquip);
     }
 
     public void ChangeNewbie()
@@ -135,6 +141,8 @@ public class EquipManager : MonoBehaviour
             upgradeManager.CloseUpgradeView();
 
             CloseEquipView();
+
+            SoundManager.instance.PlaySFX(GameSfxType.BlockEquip);
         }
         else
         {

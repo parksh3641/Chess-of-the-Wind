@@ -12,7 +12,17 @@ public class MatchingManager : MonoBehaviour
     GameRankType gameRankType = GameRankType.Bronze_4;
     RankInformation rankInformation = new RankInformation();
 
-    [Title("Limit")]
+    [Title("Rank Up")]
+    public GameObject rankUpView;
+
+    public GameObject rankUpEffect;
+
+    public Text rankUpTitle;
+    public Image rankUpIcon;
+    public Text rankUpText;
+
+
+    [Title("Enter")]
     public Image rankImg;
     public Text rankText;
     public Text newbieEnterText;
@@ -20,17 +30,21 @@ public class MatchingManager : MonoBehaviour
     public Text gosuEnterText;
     public Text gosuMaxBlockText;
 
-    public Sprite[] rankImgArray;
+    Sprite[] rankIconArray;
+
+    string[] strArray = new string[2];
+    string[] strArray2 = new string[2];
 
 
     [Title("Matching")]
     public GameObject matchingView;
     public Text matchingText;
 
-
     private int stakes = 0;
     private int limitBlock = 0;
     private int matchingWaitTime = 0;
+
+    bool isWait = false;
 
     BlockClass blockClass;
     BlockClass blockClass2;
@@ -42,21 +56,25 @@ public class MatchingManager : MonoBehaviour
     public NetworkManager networkManager;
     public UIManager uIManager;
     public AiManager aiManager;
-    public SoundManager soundManager;
 
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
     UpgradeDataBase upgradeDataBase;
-
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        rankIconArray = imageDataBase.GetRankIconArray();
 
         rankText.text = "";
 
+        rankUpEffect.SetActive(false);
+        rankUpView.SetActive(false);
         matchingView.SetActive(false);
 
         DOTween.RewindAll();
@@ -64,84 +82,21 @@ public class MatchingManager : MonoBehaviour
 
     public void Initialize()
     {
-        int rank = rankDataBase.GetRank(playerDataBase.Gold);
+        int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
         gameRankType = GameRankType.Bronze_4 + rank;
 
         if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
         {
-            gameRankType = GameRankType.Legend;
+            gameRankType = GameRankType.Legend_1;
         }
 
-        rankImg.sprite = rankImgArray[(int)gameRankType];
+        rankImg.sprite = rankIconArray[rank];
 
-        switch (gameRankType)
-        {
-            case GameRankType.Bronze_4:
-                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 4";
-                break;
-            case GameRankType.Bronze_3:
-                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 3";
-                break;
-            case GameRankType.Bronze_2:
-                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 2";
-                break;
-            case GameRankType.Bronze_1:
-                rankText.text = LocalizationManager.instance.GetString("Bronze") + " 1";
-                break;
-            case GameRankType.Sliver_4:
-                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 4";
-                break;
-            case GameRankType.Sliver_3:
-                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 3";
-                break;
-            case GameRankType.Sliver_2:
-                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 2";
-                break;
-            case GameRankType.Sliver_1:
-                rankText.text = LocalizationManager.instance.GetString("Sliver") + " 1";
-                break;
-            case GameRankType.Gold_4:
-                rankText.text = LocalizationManager.instance.GetString("Gold") + " 4";
-                break;
-            case GameRankType.Gold_3:
-                rankText.text = LocalizationManager.instance.GetString("Gold") + " 3";
-                break;
-            case GameRankType.Gold_2:
-                rankText.text = LocalizationManager.instance.GetString("Gold") + " 2";
-                break;
-            case GameRankType.Gold_1:
-                rankText.text = LocalizationManager.instance.GetString("Gold") + " 1";
-                break;
-            case GameRankType.Platinum_4:
-                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 4";
-                break;
-            case GameRankType.Platinum_3:
-                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 3";
-                break;
-            case GameRankType.Platinum_2:
-                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 2";
-                break;
-            case GameRankType.Platinum_1:
-                rankText.text = LocalizationManager.instance.GetString("Platinum") + " 1";
-                break;
-            case GameRankType.Diamond_4:
-                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 4";
-                break;
-            case GameRankType.Diamond_3:
-                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 3";
-                break;
-            case GameRankType.Diamond_2:
-                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 2";
-                break;
-            case GameRankType.Diamond_1:
-                rankText.text = LocalizationManager.instance.GetString("Diamond") + " 1";
-                break;
-            case GameRankType.Legend:
-                rankText.text = LocalizationManager.instance.GetString("Legend");
-                break;
-        }
+        strArray = rankDataBase.rankInformationArray[rank].gameRankType.ToString().Split("_");
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Rank", (int)gameRankType);
+        rankText.text = LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1];
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Rank", (int)gameRankType);
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
@@ -154,7 +109,79 @@ public class MatchingManager : MonoBehaviour
         gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes);
         gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock);
 
+        if(GameStateManager.instance.GameRankType < gameRankType)
+        {
+            Debug.Log("랭크 상승!");
+
+            OpenRankUpView(true);
+
+            if((int)gameRankType > playerDataBase.HighRank)
+            {
+                playerDataBase.HighRank = (int)gameRankType;
+
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", (int)gameRankType);
+
+                Debug.Log("최고 랭크 달성!");
+            }
+        }
+        else if(GameStateManager.instance.GameRankType > gameRankType)
+        {
+            Debug.Log("랭크 하락");
+
+            OpenRankUpView(false);
+        }
+
         GameStateManager.instance.GameRankType = gameRankType;
+    }
+
+    void OpenRankUpView(bool check)
+    {
+        rankUpView.SetActive(true);
+
+        rankUpEffect.SetActive(check);
+
+        rankUpIcon.sprite = rankIconArray[(int)gameRankType];
+
+        strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
+        strArray2 = rankDataBase.rankInformationArray[(int)gameRankType].gameRankType.ToString().Split("_");
+
+        rankUpText.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " + 
+            LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] +"</color>";
+
+        if (check)
+        {
+            rankUpTitle.text = "랭크 상승!";
+
+            SoundManager.instance.PlaySFX(GameSfxType.RankUp);
+
+            Invoke("SoundDelay", 2f);
+
+        }
+        else
+        {
+            rankUpTitle.text = "랭크 하락";
+        }
+
+        isWait = true;
+        Invoke("Delay", 1.0f);
+    }
+
+    void SoundDelay()
+    {
+        SoundManager.instance.StopSFX(GameSfxType.RankUp);
+    }
+
+    public void CloseRankUpView()
+    {
+        if(!isWait)
+        {
+            rankUpView.SetActive(false);
+        }
+    }
+
+    void Delay()
+    {
+        isWait = false;
     }
 
     public void GameStartButton_Newbie()
@@ -170,6 +197,8 @@ public class MatchingManager : MonoBehaviour
 
         if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
             return;
@@ -177,6 +206,8 @@ public class MatchingManager : MonoBehaviour
 
         if(number > (limitBlock / 2)) //블럭 제한을 넘지 않는지?
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
             return;
@@ -291,11 +322,11 @@ public class MatchingManager : MonoBehaviour
     {
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            soundManager.PlayBGM(GameBgmType.Game_Newbie);
+            SoundManager.instance.PlayBGM(GameBgmType.Game_Newbie);
         }
         else
         {
-            soundManager.PlayBGM(GameBgmType.Game_Gosu);
+            SoundManager.instance.PlayBGM(GameBgmType.Game_Gosu);
         }
 
     }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager instance;
+
     public AudioSource audioSource;
 
     public AudioClip[] bgmAudio; 
@@ -13,23 +15,30 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        instance = this;
 
-        audioSource.Stop();
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
     public void Initialize()
     {
-        if (playerDataBase.Formation >= 1)
+        if (GameStateManager.instance.Music)
         {
-            PlayBGM(GameBgmType.Main_Snow);
+            audioSource.volume = 1;
         }
         else
         {
-            PlayBGM(GameBgmType.Main_Under);
+            audioSource.volume = 0;
         }
 
-        audioSource.Play();
+        if (playerDataBase.Formation == 2)
+        {
+            PlayBGM(GameBgmType.Main_Under);
+        }
+        else
+        {
+            PlayBGM(GameBgmType.Main_Snow);
+        }
     }
 
 
@@ -44,15 +53,32 @@ public class SoundManager : MonoBehaviour
                 audioSource.Play();
             }
         }
+
+        if(audioSource.clip == null)
+        {
+            PlayBGM(GameBgmType.Game_Gosu);
+        }
+    }
+
+    public void PlayBGM()
+    {
+        audioSource.volume = 1;
+    }
+
+    public void StopBGM()
+    {
+        audioSource.volume = 0;
     }
 
     public void PlaySFX(GameSfxType type)
     {
+        if (!GameStateManager.instance.Sfx) return;
+
         for (int i = 0; i < sfxAudio.Length; i++)
         {
             if (sfxAudio[i].name.Equals(type.ToString()))
             {
-                if (!sfxAudio[i].isPlaying) sfxAudio[i].Play();
+                sfxAudio[i].Play();
             }
         }
     }
@@ -63,7 +89,7 @@ public class SoundManager : MonoBehaviour
         {
             if (sfxAudio[i].name.Equals(type.ToString()))
             {
-                if (sfxAudio[i].isPlaying) sfxAudio[i].Stop();
+                sfxAudio[i].Stop();
             }
         }
     }
@@ -82,6 +108,8 @@ public class SoundManager : MonoBehaviour
 
     public void PlayLoopSFX(GameSfxType type)
     {
+        if (!GameStateManager.instance.Sfx) return;
+
         for (int i = 0; i < sfxAudio.Length; i++)
         {
             if (sfxAudio[i].name.Equals(type.ToString()))

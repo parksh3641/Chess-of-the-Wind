@@ -19,7 +19,10 @@ public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointer
     {
         transform.localScale = Vector3.one * 0.95f;
 
-        if(isSound) clickSoundEvent.Invoke();
+        if (isSound && GameStateManager.instance.Sfx)
+        {
+            clickSoundEvent.Invoke();
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)

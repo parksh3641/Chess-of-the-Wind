@@ -172,7 +172,6 @@ public class GameManager : MonoBehaviour
     [Title("Manager")]
     public NetworkManager networkManager;
     public UIManager uIManager;
-    public SoundManager soundManager;
     public RouletteManager rouletteManager;
     public AiManager aiManager;
     public RandomBoxManager randomBoxManager;
@@ -468,8 +467,8 @@ public class GameManager : MonoBehaviour
         GameReset();
 
         rouletteManager.CloseRouletteView();
-        soundManager.StopAllSFX();
-        soundManager.Initialize();
+        SoundManager.instance.StopAllSFX();
+        SoundManager.instance.Initialize();
 
         ResetRouletteBackgroundColor();
 
@@ -717,7 +716,7 @@ public class GameManager : MonoBehaviour
         }
 
         GameStateManager.instance.Playing = false;
-        soundManager.StopLoopSFX(GameSfxType.Roulette);
+        SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
 
         uIManager.OpenResultView(number, money - stakes);
@@ -1171,7 +1170,7 @@ public class GameManager : MonoBehaviour
                 //worldNotion = "<color=#00FF00>+" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
                 localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
 
-                NotionManager.instance.UseNotion(localNotion, ColorType.Green);
+                //NotionManager.instance.UseNotion(localNotion, ColorType.Green);
                 //RecordManager.instance.SetRecord(localNotion);
             }
             else
@@ -1181,7 +1180,7 @@ public class GameManager : MonoBehaviour
                 //worldNotion = "<color=#FF0000>" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
                 localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
 
-                NotionManager.instance.UseNotion(localNotion, ColorType.Red);
+                //NotionManager.instance.UseNotion(localNotion, ColorType.Red);
                 //RecordManager.instance.SetRecord(localNotion);
             }
 
@@ -2564,7 +2563,7 @@ public class GameManager : MonoBehaviour
 
     public void ExitBlock(BlockContent blockContent)
     {
-        soundManager.PlaySFX(GameSfxType.Click);
+        SoundManager.instance.PlaySFX(GameSfxType.Click);
 
         ResetRouletteBackgroundColor();
 

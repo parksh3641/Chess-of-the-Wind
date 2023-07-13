@@ -32,12 +32,12 @@ public class PlayfabManager : MonoBehaviour
     public Text infoText;
 
     public UIManager uiManager;
-    public SoundManager soundManager;
 
     [ShowInInspector]
     string customId = "";
 
     public bool isActive = false;
+    public bool isLogin = false;
     public bool isDelay = false;
 
 #if UNITY_IOS
@@ -68,6 +68,7 @@ public class PlayfabManager : MonoBehaviour
         instance = this;
 
         isActive = false;
+        isLogin = false;
         isDelay = false;
 
         infoText.text = "";
@@ -168,6 +169,8 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
+        isLogin = false;
+
         Debug.Log("Logout");
 
         PlayerPrefs.SetInt("Version", 0);
@@ -190,6 +193,16 @@ public class PlayfabManager : MonoBehaviour
     #region GuestLogin
     public void OnClickGuestLogin()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        if (isLogin) return;
+
+        isLogin = true;
+
         customId = GameStateManager.instance.CustomId;
 
         if (string.IsNullOrEmpty(customId))
@@ -217,6 +230,8 @@ public class PlayfabManager : MonoBehaviour
             OnLoginSuccess(result);
         }, error =>
         {
+            isLogin = false;
+
             Debug.LogError("Login Fail - Guest");
         });
     }
@@ -257,6 +272,18 @@ public class PlayfabManager : MonoBehaviour
     #region Google Login
     public void OnClickGoogleLogin()
     {
+        if(!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        if (isLogin) return;
+
+        isLogin = true;
+
+        Debug.Log("Google Login");
+
 #if UNITY_ANDROID
         LoginGoogleAuthenticate();
 #else
@@ -267,8 +294,6 @@ public class PlayfabManager : MonoBehaviour
     private void LoginGoogleAuthenticate()
     {
 #if UNITY_ANDROID
-
-        Debug.Log("???????????? ?????????????? ??????????????");
 
         //if (Social.localUser.authenticated)
         //{
@@ -291,16 +316,18 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
-
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
+
+                Debug.Log("Google Login Success");
 
                 OnLoginSuccess(result);
             },
             error =>
             {
-                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
+                isLogin = false;
+
+                Debug.Log("Google Login Fail");
 
                 DisplayPlayfabError(error);
             });
@@ -361,6 +388,16 @@ public class PlayfabManager : MonoBehaviour
 
     public void OnClickAppleLogin()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        if (isLogin) return;
+
+        isLogin = true;
+
 #if UNITY_IOS
         Debug.Log("Try Apple Login");
         StartCoroutine(AppleLoginCor());
@@ -384,6 +421,8 @@ public class PlayfabManager : MonoBehaviour
             }, error =>
             {
                 var authorizationErrorCode = error.GetAuthorizationErrorCode();
+
+                isLogin = false;
             });
     }
 
@@ -414,6 +453,8 @@ public class PlayfabManager : MonoBehaviour
                     _newAppleUser = true;
                     SignInWithApple();
                     var authorizationErrorCode = error.GetAuthorizationErrorCode();
+
+                    isLogin = false;
                 });
         }
         else
@@ -492,11 +533,11 @@ public class PlayfabManager : MonoBehaviour
 
         GameStateManager.instance.PlayfabId = result.PlayFabId;
 
-//#if UNITY_EDITOR
-//        StartCoroutine(LoadDataCoroutine());
-//#else
-//        GetTitleInternalData("CheckVersion", CheckVersion);
-//#endif
+#if UNITY_EDITOR
+        StartCoroutine(LoadDataCoroutine());
+#else
+        GetTitleInternalData("CheckVersion", CheckVersion);
+#endif
 
         StartCoroutine(LoadDataCoroutine());
 
@@ -528,7 +569,7 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
-            //uiManager.OnNeedUpdate();
+            uiManager.OnNeedUpdate();
         }
     }
 
@@ -822,6 +863,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "DefDestroyTicket":
                            playerDataBase.DefDestroyTicket = statistics.Value;
+                           break;
+                       case "HighRank":
+                           playerDataBase.HighRank = statistics.Value;
                            break;
                    }
                }
@@ -1510,7 +1554,7 @@ public class PlayfabManager : MonoBehaviour
 
         }, DisplayPlayfabError);
 
-        //NotionManager.instance.UseNotion(NotionType.RestorePurchasesNotion);
+        NotionManager.instance.UseNotion(NotionType.RestorePurchaseNotion);
 
         isDelay = true;
         Invoke("WaitDelay", 2f);

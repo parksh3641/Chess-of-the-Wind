@@ -118,7 +118,6 @@ public class RouletteManager : MonoBehaviour
     public GameManager gameManager;
     public UIManager uIManager;
     public CharacterManager characterManager;
-    public SoundManager soundManager;
     public WindCharacterManager windCharacterManager;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
@@ -670,22 +669,22 @@ public class RouletteManager : MonoBehaviour
         rouletteCamera.gameObject.SetActive(true);
         rouletteBallCamera.gameObject.SetActive(false);
 
-        if (rouletteIndex == 0)
-        {
-            for (int i = 0; i < roulette1Particle.Length; i++)
-            {
-                roulette1Particle[i].gameObject.SetActive(true);
-                roulette1Particle[i].Play();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < roulette2Particle.Length; i++)
-            {
-                roulette2Particle[i].gameObject.SetActive(true);
-                roulette2Particle[i].Play();
-            }
-        }
+        //if (rouletteIndex == 0) //폭죽
+        //{
+        //    for (int i = 0; i < roulette1Particle.Length; i++)
+        //    {
+        //        roulette1Particle[i].gameObject.SetActive(true);
+        //        roulette1Particle[i].Play();
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < roulette2Particle.Length; i++)
+        //    {
+        //        roulette2Particle[i].gameObject.SetActive(true);
+        //        roulette2Particle[i].Play();
+        //    }
+        //}
     }
 
     [PunRPC]
@@ -724,7 +723,7 @@ public class RouletteManager : MonoBehaviour
         pinballPower = false;
         pinballPowerReturn = false;
 
-        soundManager.PlayLoopSFX(GameSfxType.Roulette);
+        SoundManager.instance.PlayLoopSFX(GameSfxType.Roulette);
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
@@ -1153,7 +1152,10 @@ public class RouletteManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.5f);
 
-        Handheld.Vibrate();
+        if(GameStateManager.instance.Vibration)
+        {
+            Handheld.Vibrate();
+        }
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 
@@ -1197,7 +1199,7 @@ public class RouletteManager : MonoBehaviour
         buttonClick = true;
         playing = false;
 
-        soundManager.StopLoopSFX(GameSfxType.Roulette);
+        SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
         for (int i = 0; i < leftClock.Length; i++)
         {
@@ -1218,6 +1220,8 @@ public class RouletteManager : MonoBehaviour
         targetQueen.SetActive(false);
 
         targetText.text = number.ToString();
+
+        SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
     }
 
     [PunRPC]
@@ -1228,6 +1232,8 @@ public class RouletteManager : MonoBehaviour
         targetQueen.SetActive(true);
 
         //targetText.text = number.ToString();
+
+        SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
     }
 
     [PunRPC]

@@ -74,11 +74,6 @@ public class BlockUIContent : MonoBehaviour
 
         Initialize(blockClass.blockType);
 
-        if(rankBackgroundArray == null)
-        {
-            rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
-        }
-
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();

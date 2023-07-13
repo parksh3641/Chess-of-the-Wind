@@ -43,14 +43,14 @@ public class NickNameManager : MonoBehaviour
 
     public void Initialize()
     {
-        if (GameStateManager.instance.NickName.Length > 10)
+        if (GameStateManager.instance.NickName.Length > 15)
         {
             OpenNickName();
         }
-        else
-        {
-            formationManager.Initialize();
-        }
+        //else
+        //{
+        //    formationManager.Initialize();
+        //}
     }
 
     public void OpenNickName()
@@ -104,21 +104,29 @@ public class NickNameManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                     }
                 }
                 else
                 {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
                 }
             }
             else
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
             }
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
         }
     }
@@ -158,16 +166,22 @@ public class NickNameManager : MonoBehaviour
                 }
                 else
                 {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                 }
             }
             else
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
             }
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
         }
     }
@@ -196,13 +210,8 @@ public class NickNameManager : MonoBehaviour
 
     public void Failure()
     {
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
         NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
-    }
-
-    public void CopyId()
-    {
-        GUIUtility.systemCopyBuffer = inputField.text;
-
-        NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
     }
 }

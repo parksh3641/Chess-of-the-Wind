@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StateManager : MonoBehaviour
 {
@@ -13,15 +14,18 @@ public class StateManager : MonoBehaviour
     public UIManager uIManager;
     public NickNameManager nickNameManager;
     public MatchingManager matchingManager;
-    public SoundManager soundManager;
     public StoryManager storyManager;
+    public RankInfoManager rankInfoManager;
+
+    public GameObject penaltyView;
+    public Text penaltyValue;
 
 
     void Awake()
     {
         instance = this;
 
-        Application.targetFrameRate = 60;
+        penaltyView.SetActive(false);
     }
 
     public void Initialize()
@@ -33,10 +37,11 @@ public class StateManager : MonoBehaviour
             networkManager.Initialize();
             gameManager.Initialize();
             uIManager.Initialize();
-            //nickNameManager.Initialize();
+            nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
-            soundManager.Initialize();
+            SoundManager.instance.Initialize();
+            rankInfoManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {
@@ -46,6 +51,10 @@ public class StateManager : MonoBehaviour
                     return;
                 }
 
+                penaltyView.SetActive(true);
+
+                penaltyValue.text = "-" + GameStateManager.instance.Penalty.ToString();
+
                 PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Penalty);
 
                 GameStateManager.instance.Penalty = 0;
@@ -53,6 +62,11 @@ public class StateManager : MonoBehaviour
                 Debug.Log("패널티가 적용되었습니다");
             }
         }
+    }
+
+    public void ClosePenaltyView()
+    {
+        penaltyView.SetActive(false);
     }
 
     public void ServerConnectComplete()

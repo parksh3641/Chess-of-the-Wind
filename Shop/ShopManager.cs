@@ -81,6 +81,8 @@ public class ShopManager : MonoBehaviour
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
         }
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
     public void BuyUnderworldBox(int number)
@@ -99,6 +101,8 @@ public class ShopManager : MonoBehaviour
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
         }
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
     public void BuyItem(ShopType type)
@@ -174,6 +178,8 @@ public class ShopManager : MonoBehaviour
         }
 
         uIManager.Renewal();
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.BuyTicket);
 

@@ -97,6 +97,14 @@ public enum BetOptionType
     Repeat
 }
 
+public enum OptionType
+{
+    Music,
+    Sfx,
+    Vibration,
+    SleepMode
+}
+
 public enum GameBgmType
 {
     Main_Snow,
@@ -109,7 +117,35 @@ public enum GameBgmType
 public enum GameSfxType
 {
     Click,
-    Roulette
+    Roulette,
+    BlockEquip,
+    BlockUpgradeReady,
+    BlockUpgradeSuccess,
+    BlockUpgradeFail,
+    BlockSynthesisSuccess,
+    BuyShopItem,
+    BoxOpen,
+    GetBlock, //블록 획득음
+    PlusMoney1,
+    PlusMoney2,
+    MinusMoney,
+    ChangeMoney, //돈 액수 변동
+    UseEmotion,
+    SetBlock, //배치 완료
+    TimesUp,
+    GameWin,
+    ResultMoney, //게임 결과창에서 돈 올라가는 소리
+    GameLose,
+    BounsRoulette,
+    GetNumber,
+    GetQueen,
+    RankUp,
+    ChoiceWinter,
+    ChoiceUnder,
+    TalkWinter,
+    TalkUnder,
+    TalkEnemy,
+    Wrong
 }
 
 public enum LanguageType
@@ -203,7 +239,8 @@ public enum NotionType
     NickNameNotion5,
     NickNameNotion6,
     CopyIdNotion,
-    NotSynthesisBlock
+    NotSynthesisBlock,
+    RestorePurchaseNotion
 }
 
 public enum GameRankType
@@ -228,5 +265,5 @@ public enum GameRankType
     Diamond_3,
     Diamond_2,
     Diamond_1,
-    Legend
+    Legend_1
 }

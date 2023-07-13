@@ -68,7 +68,7 @@ public class CollectionManager : MonoBehaviour
 
         sortCount = 0;
 
-        sortText.text = "등급 순";
+        sortText.text = "종류 순";
     }
 
     public void OpenCollectionView()
@@ -528,25 +528,17 @@ public class CollectionManager : MonoBehaviour
 
         if (sortCount == 0)
         {
-            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).OrderByDescending(x => x.level).ToList();
 
-            sortText.text = "종류 순";
+            sortText.text = "레벨 순";
 
             sortCount = 1;
         }
         else if (sortCount == 1)
         {
-            blockList = blockList.OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "레벨 순";
-
-            sortCount = 2;
-        }
-        else
-        {
-            blockList = blockList.OrderByDescending(x => x.rankType).ToList();
-
-            sortText.text = "등급 순";
+            sortText.text = "종류 순";
 
             sortCount = 0;
         }

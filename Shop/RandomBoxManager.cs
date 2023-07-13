@@ -45,7 +45,6 @@ public class RandomBoxManager : MonoBehaviour
     private float random = 0;
     private string block = "";
 
-    public SoundManager soundManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -72,7 +71,7 @@ public class RandomBoxManager : MonoBehaviour
 
     void ResetView()
     {
-        percentBlock = new float[3];
+        percentBlock = new float[4];
 
         allowSnowBlockList.Clear();
         allowUnderworldBlockList.Clear();
@@ -145,6 +144,7 @@ public class RandomBoxManager : MonoBehaviour
         percentBlock[0] = float.Parse(temp[0]);
         percentBlock[1] = float.Parse(temp[1]);
         percentBlock[2] = float.Parse(temp[2]);
+        percentBlock[3] = float.Parse(temp[3]);
 
         switch (windCharacterType)
         {
@@ -211,6 +211,8 @@ public class RandomBoxManager : MonoBehaviour
 
         isStart = false;
 
+        SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
+
         StartCoroutine(OpenBoxCoroution());
     }
 
@@ -229,7 +231,7 @@ public class RandomBoxManager : MonoBehaviour
             boxCountSave -= 1;
             boxCountText.text = boxCountSave.ToString();
 
-            soundManager.PlaySFX(GameSfxType.Click);
+            SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
 
             yield return new WaitForSeconds(0.2f);
         }
@@ -271,23 +273,29 @@ public class RandomBoxManager : MonoBehaviour
 
             blockClass.blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block);
 
-            if (random <= percentBlock[2])
+            if (random <= percentBlock[3])
             {
                 blockClass.rankType = RankType.SSR;
                 block += "_SSR";
                 Debug.Log("SSR ´çÃ·");
             }
-            else if (random <= percentBlock[1])
+            else if (random <= percentBlock[2])
             {
                 blockClass.rankType = RankType.SR;
                 block += "_SR";
                 Debug.Log("SR ´çÃ·");
             }
-            else
+            else if (random <= percentBlock[1])
             {
                 blockClass.rankType = RankType.R;
                 block += "_R";
                 Debug.Log("R ´çÃ·");
+            }
+            else
+            {
+                blockClass.rankType = RankType.N;
+                block += "_N";
+                Debug.Log("N ´çÃ·");
             }
 
             prizeBlockList.Add(blockClass);

@@ -73,6 +73,17 @@ public class MoneyAnimation : MonoBehaviour
 
         RecordManager.instance.SetRecord(value.ToString());
 
+        if(Random.Range(0,2) == 0)
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
+        }
+
+        SoundManager.instance.PlayLoopSFX(GameSfxType.ChangeMoney);
+
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
@@ -87,6 +98,9 @@ public class MoneyAnimation : MonoBehaviour
         changeMoneyText[1].text = "<color=#27FFFC>+" + value + "</color>";
 
         RecordManager.instance.SetRecord((-value).ToString());
+
+        SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
+        SoundManager.instance.PlayLoopSFX(GameSfxType.ChangeMoney);
 
         StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
@@ -271,6 +285,8 @@ public class MoneyAnimation : MonoBehaviour
 
     void EndAnimation()
     {
+        SoundManager.instance.StopLoopSFX(GameSfxType.ChangeMoney);
+
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";
 

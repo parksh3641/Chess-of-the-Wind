@@ -23,7 +23,6 @@ public class FormationManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public StoryManager storyManager;
-    public SoundManager soundManager;
 
     PlayerDataBase playerDataBase;
 
@@ -91,6 +90,8 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
 
+            SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
+
             Debug.Log("눈의 여왕 진형 선택");
         }
         else
@@ -109,6 +110,8 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
+            SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
+
             Debug.Log("지하 세계 진형 선택");
         }
 
@@ -120,13 +123,13 @@ public class FormationManager : MonoBehaviour
         {
             icon.sprite = iconArray[0];
 
-            soundManager.PlayBGM(GameBgmType.Main_Snow);
+            SoundManager.instance.PlayBGM(GameBgmType.Main_Snow);
         }
         else
         {
             icon.sprite = iconArray[1];
 
-            soundManager.PlayBGM(GameBgmType.Main_Under);
+            SoundManager.instance.PlayBGM(GameBgmType.Main_Under);
         }
 
         yield return new WaitForSeconds(4);

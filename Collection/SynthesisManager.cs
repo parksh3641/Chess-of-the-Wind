@@ -106,7 +106,6 @@ public class SynthesisManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
-    public SoundManager soundManager;
 
     UpgradeDataBase upgradeDataBase;
     BlockDataBase blockDataBase;
@@ -160,7 +159,7 @@ public class SynthesisManager : MonoBehaviour
             synthesisResultContentList.Add(content);
         }
 
-        sortText.text = "레벨 순";
+        sortText.text = "종류 순";
     }
 
     public void OpenSynthesisView()
@@ -567,6 +566,8 @@ public class SynthesisManager : MonoBehaviour
         {
             if (playerDataBase.Gold < needGold)
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                 return;
             }
@@ -674,6 +675,8 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisResultButton.SetActive(true);
 
+        SoundManager.instance.PlaySFX(GameSfxType.BlockSynthesisSuccess);
+
         Debug.Log("합성 성공!");
     }
 
@@ -686,7 +689,29 @@ public class SynthesisManager : MonoBehaviour
 
     public void SortButton()
     {
-        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
+        blockList = new List<BlockClass>(blockList.Count);
+
+        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
+        {
+            blockList.Add(playerDataBase.GetBlockClass()[i]);
+        }
+
+        if (sortCount == 0)
+        {
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).OrderByDescending(x => x.level).ToList();
+
+            sortText.text = "레벨 순";
+
+            sortCount = 1;
+        }
+        else if (sortCount == 1)
+        {
+            blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
+
+            sortText.text = "종류 순";
+
+            sortCount = 0;
+        }
 
         for (int i = 0; i < blockUIContentList.Count; i++)
         {
@@ -697,6 +722,12 @@ public class SynthesisManager : MonoBehaviour
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
+
+            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR ||
+    playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
+            {
+                blockUIContentList[i].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -1062,7 +1093,7 @@ public class SynthesisManager : MonoBehaviour
         for (int i = 0; i < synthesisListAllResult.Count; i++)
         {
             synthesisResultContentList[i].gameObject.SetActive(true);
-            soundManager.PlaySFX(GameSfxType.Click);
+            SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
             yield return waitForSeconds2;
         }
 

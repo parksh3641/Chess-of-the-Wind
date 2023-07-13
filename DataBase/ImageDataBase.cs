@@ -19,6 +19,8 @@ public class ImageDataBase : ScriptableObject
 
     public Sprite[] blockArray;
 
+    public Sprite[] rankIconArray;
+
     public Sprite GetMoneyIcon()
     {
         return moneyIcon;
@@ -47,5 +49,10 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetBlockArray()
     {
         return blockArray;
+    }
+
+    public Sprite[] GetRankIconArray()
+    {
+        return rankIconArray;
     }
 }

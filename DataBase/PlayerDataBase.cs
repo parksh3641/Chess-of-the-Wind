@@ -91,6 +91,8 @@ public class PlayerDataBase : ScriptableObject
     [Title("User")]
     [SerializeField]
     private int formation = 0;
+    [SerializeField]
+    private int highRank = 0;
 
     [Title("Equip")]
     [SerializeField]
@@ -180,6 +182,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             formation = value;
+        }
+    }
+
+    public int HighRank
+    {
+        get
+        {
+            return highRank;
+        }
+        set
+        {
+            highRank = value;
         }
     }
 
@@ -305,7 +319,9 @@ public class PlayerDataBase : ScriptableObject
     public void Initialize()
     {
         gold = 0;
+        crystal = 0;
         formation = 0;
+        highRank = 0;
 
         armor = "";
         weapon = "";

@@ -200,14 +200,10 @@ public class UpgradeManager : MonoBehaviour
                 isDef = false;
             }
         }
-
-        isWait = false;
     }
 
     public void UpgradeButton()
     {
-        if (isWait) return;
-
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
             NotionManager.instance.UseNotion(NotionType.MaxBlockLevel);
@@ -351,18 +347,24 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
+
+                SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 1:
                 upgradeScreenTitle.text = "강화 하락";
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
+
+                SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 2:
                 upgradeScreenTitle.text = "강화 유지";
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
+
+                SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 3:
                 upgradeScreenEffect.SetActive(true);
@@ -371,6 +373,8 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 2).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level + 1)) + "</color>";
+
+                SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeSuccess);
                 break;
             case 4:
                 upgradeScreenIcon.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
@@ -387,7 +391,10 @@ public class UpgradeManager : MonoBehaviour
 
     public void CloseUpgradeScreen()
     {
-        upgradeScreen.SetActive(false);
+        if(!isWait)
+        {
+            upgradeScreen.SetActive(false);
+        }
     }
 
     void Delay()

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public GameObject updateView;
+
     [Space]
     [Title("Login")]
     public GameObject loginUI;
@@ -87,6 +89,8 @@ public class UIManager : MonoBehaviour
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         characterArray = imageDataBase.GetCharacterArray();
+
+        updateView.SetActive(false);
 
         goldText.text = "0";
         crystalText.text = "0";
@@ -355,6 +359,8 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = "저희의 승리입니다.";
             }
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else if(number == 1)
         {
@@ -368,6 +374,8 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = "아쉽네요. 다음번에 더 잘해봐요.";
             }
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
         else if (number == 2)
         {
@@ -381,6 +389,8 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = "완벽한 승리입니다.";
             }
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else
         {
@@ -394,6 +404,8 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = "무승부라니 상대팀도 잘했군요.";
             }
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
 
         if(gold > 0)
@@ -404,6 +416,8 @@ public class UIManager : MonoBehaviour
         {
             resultGoldText.text = "-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + " 만큼 돈 감소";
         }
+
+        SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
 
         RecordManager.instance.OpenRecord();
     }
@@ -439,6 +453,8 @@ public class UIManager : MonoBehaviour
         else
         {
             disconnectedView.SetActive(false);
+
+            gameManager.ExitRoom();
         }
 
         //SceneManager.LoadScene("LoginScene");
@@ -475,5 +491,21 @@ public class UIManager : MonoBehaviour
             case 4:
                 break;
         }    
+    }
+
+    public void OnNeedUpdate()
+    {
+        updateView.SetActive(true);
+    }
+
+    public void OnUpdate()
+    {
+#if UNITY_ANDROID
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+#elif UNITY_IOS
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+#else
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+#endif
     }
 }

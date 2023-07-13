@@ -72,6 +72,8 @@ public class EmoteManager : MonoBehaviour
 
             PV.RPC("UseEmote", RpcTarget.Others, number);
 
+            SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
+
             StartCoroutine(ResetEmoteCoroutine());
         }
         else
@@ -100,6 +102,8 @@ public class EmoteManager : MonoBehaviour
     {
         otherEmote.gameObject.SetActive(true);
         otherEmoteImg.sprite = emoteImgArray[number];
+
+        SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
 
         Invoke("CloseOtherEmote", 4.0f);
     }
