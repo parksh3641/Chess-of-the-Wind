@@ -41,6 +41,11 @@ public class RankInfoManager : MonoBehaviour
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
 
+            if(i % 2 == 0)
+            {
+                monster.SetBackground(false);
+            }
+
             strArray = rankDataBase.rankInformationArray[i].gameRankType.ToString().Split("_");
 
             monster.Initialize(rankIconArray[i], int.Parse(strArray[1]), LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1],

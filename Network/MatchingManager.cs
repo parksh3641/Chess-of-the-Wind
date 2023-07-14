@@ -39,11 +39,15 @@ public class MatchingManager : MonoBehaviour
     [Title("Matching")]
     public GameObject matchingView;
     public Text matchingText;
+    public Image matchingButton;
+
+    public Sprite[] matchingButtonArray;
 
     private int stakes = 0;
     private int limitBlock = 0;
     private int matchingWaitTime = 0;
 
+    bool isCancle = false;
     bool isWait = false;
 
     BlockClass blockClass;
@@ -113,7 +117,10 @@ public class MatchingManager : MonoBehaviour
         {
             Debug.Log("랭크 상승!");
 
-            OpenRankUpView(true);
+            if(uIManager.isFirst)
+            {
+                OpenRankUpView(true);
+            }
 
             if((int)gameRankType > playerDataBase.HighRank)
             {
@@ -128,7 +135,10 @@ public class MatchingManager : MonoBehaviour
         {
             Debug.Log("랭크 하락");
 
-            OpenRankUpView(false);
+            if (uIManager.isFirst)
+            {
+                OpenRankUpView(false);
+            }
         }
 
         GameStateManager.instance.GameRankType = gameRankType;
@@ -258,6 +268,10 @@ public class MatchingManager : MonoBehaviour
         {
             matchingView.SetActive(true);
 
+            matchingButton.sprite = matchingButtonArray[1];
+
+            isCancle = true;
+
             GameStateManager.instance.Stakes = stakes;
 
             matchingWaitTime = GameStateManager.instance.MatchingTime;
@@ -265,11 +279,14 @@ public class MatchingManager : MonoBehaviour
         }
         else
         {
-            StopAllCoroutines();
+            if (isCancle)
+            {
+                StopAllCoroutines();
 
-            networkManager.LeaveRoom();
+                networkManager.LeaveRoom();
 
-            matchingView.SetActive(false);
+                matchingView.SetActive(false);
+            }
         }
     }
 
@@ -279,6 +296,13 @@ public class MatchingManager : MonoBehaviour
         {
             matchingWaitTime -= 1;
             matchingText.text = "상대방을 찾고 있습니다...\n예상 대기 시간 : " + matchingWaitTime + "초";
+
+            if(matchingWaitTime <= 1)
+            {
+                matchingButton.sprite = matchingButtonArray[0];
+
+                isCancle = false;
+            }
 
             yield return waitForSeconds;
         }

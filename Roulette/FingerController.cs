@@ -85,6 +85,8 @@ public class FingerController : MonoBehaviour
             {
                 fingerPush = false;
 
+                yield return new WaitForSeconds(0.2f);
+
                 EndMoveFinger();
             }
             yield return null;

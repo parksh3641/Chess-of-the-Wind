@@ -240,7 +240,8 @@ public enum NotionType
     NickNameNotion6,
     CopyIdNotion,
     NotSynthesisBlock,
-    RestorePurchaseNotion
+    RestorePurchaseNotion,
+    EnemyTurn
 }
 
 public enum GameRankType

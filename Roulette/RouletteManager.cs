@@ -789,7 +789,9 @@ public class RouletteManager : MonoBehaviour
 
             windCharacterManager.MyWhich(1 - windIndex);
 
-            buttonText.text = "상대방 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불려고 합니다";
+            NotionManager.instance.UseNotion(NotionType.EnemyTurn);
+
+            //buttonText.text = "상대방 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불려고 합니다";
         }
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정
@@ -1175,22 +1177,22 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void PlayParticle()
     {
-        if (rouletteIndex == 0)
-        {
-            for (int i = 0; i < roulette1Particle.Length; i++)
-            {
-                roulette1Particle[i].gameObject.SetActive(true);
-                roulette1Particle[i].Play();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < roulette2Particle.Length; i++)
-            {
-                roulette2Particle[i].gameObject.SetActive(true);
-                roulette2Particle[i].Play();
-            }
-        }
+        //if (rouletteIndex == 0)
+        //{
+        //    for (int i = 0; i < roulette1Particle.Length; i++)
+        //    {
+        //        roulette1Particle[i].gameObject.SetActive(true);
+        //        roulette1Particle[i].Play();
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < roulette2Particle.Length; i++)
+        //    {
+        //        roulette2Particle[i].gameObject.SetActive(true);
+        //        roulette2Particle[i].Play();
+        //    }
+        //}
     }
 
     [PunRPC]

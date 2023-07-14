@@ -28,11 +28,11 @@ public class RankInfoContent : MonoBehaviour
         index.text = number.ToString();
         rankNameText.text = name;
         rankUpValue.text = value.ToString() + "~";
+    }
 
-        if(number % 2 == 0)
-        {
-            background.enabled = false;
-        }
+    public void SetBackground(bool check)
+    {
+        background.enabled = check;
     }
 
     public void CheckMy(bool check)

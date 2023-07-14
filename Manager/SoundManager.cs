@@ -44,17 +44,20 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBGM(GameBgmType type)
     {
+        bool check = false;
+
         for (int i = 0; i < bgmAudio.Length; i++)
         {
             if (bgmAudio[i].name.Equals(type.ToString()))
             {
+                check = true;
                 audioSource.Stop();
                 audioSource.clip = bgmAudio[i];
                 audioSource.Play();
             }
         }
 
-        if(audioSource.clip == null)
+        if(!check)
         {
             PlayBGM(GameBgmType.Game_Gosu);
         }
@@ -79,6 +82,7 @@ public class SoundManager : MonoBehaviour
             if (sfxAudio[i].name.Equals(type.ToString()))
             {
                 sfxAudio[i].Play();
+                sfxAudio[i].loop = false;
             }
         }
     }

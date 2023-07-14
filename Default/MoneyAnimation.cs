@@ -28,6 +28,8 @@ public class MoneyAnimation : MonoBehaviour
 
     public GameManager gameManager;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+
     private void Awake()
     {
         for (int i = 0; i < 10; i++)
@@ -82,7 +84,7 @@ public class MoneyAnimation : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
         }
 
-        SoundManager.instance.PlayLoopSFX(GameSfxType.ChangeMoney);
+        StartCoroutine(ChangeMoneyCoroution());
 
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
@@ -100,12 +102,18 @@ public class MoneyAnimation : MonoBehaviour
         RecordManager.instance.SetRecord((-value).ToString());
 
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
-        SoundManager.instance.PlayLoopSFX(GameSfxType.ChangeMoney);
+
+        StartCoroutine(ChangeMoneyCoroution());
 
         StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
+    IEnumerator ChangeMoneyCoroution()
+    {
+        SoundManager.instance.PlaySFX(GameSfxType.ChangeMoney);
 
+        yield return waitForSeconds;
+    }
 
     IEnumerator AddMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
     {
@@ -121,22 +129,38 @@ public class MoneyAnimation : MonoBehaviour
 
         while (money < max)
         {
-            if(money + 1000 < max)
+            if (money + 100000 < max)
             {
-                money += 1000;
-                otherMoney -= 1000;
+                money += 100000;
+                otherMoney -= 100000;
             }
             else
             {
-                if (money + 100 < max)
+                if (money + 10000 < max)
                 {
-                    money += 100;
-                    otherMoney -= 100;
+                    money += 10000;
+                    otherMoney -= 10000;
                 }
                 else
                 {
-                    money += 1;
-                    otherMoney -= 1;
+                    if (money + 1000 < max)
+                    {
+                        money += 1000;
+                        otherMoney -= 1000;
+                    }
+                    else
+                    {
+                        if (money + 100 < max)
+                        {
+                            money += 100;
+                            otherMoney -= 100;
+                        }
+                        else
+                        {
+                            money += 1;
+                            otherMoney -= 1;
+                        }
+                    }
                 }
             }
 
@@ -146,43 +170,75 @@ public class MoneyAnimation : MonoBehaviour
             yield return null;
         }
 
-        if (correction == 0) yield break;
+        if (correction == 0)
+        {
+            EndAnimation();
+            yield break;
+        }
 
         while (otherMoney != correction)
         {
             if(otherMoney > correction)
             {
-                if(otherMoney - 1000 > correction)
+                if (otherMoney - 100000 > correction)
                 {
-                    otherMoney -= 1000;
+                    otherMoney -= 100000;
                 }
                 else
                 {
-                    if (otherMoney - 100 > correction)
+                    if (otherMoney - 10000 > correction)
                     {
-                        otherMoney -= 100;
+                        otherMoney -= 10000;
                     }
                     else
                     {
-                        otherMoney -= 1;
+                        if (otherMoney - 1000 > correction)
+                        {
+                            otherMoney -= 1000;
+                        }
+                        else
+                        {
+                            if (otherMoney - 100 > correction)
+                            {
+                                otherMoney -= 100;
+                            }
+                            else
+                            {
+                                otherMoney -= 1;
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                if (otherMoney + 1000 < correction)
+                if (otherMoney + 100000 < correction)
                 {
-                    otherMoney += 1000;
+                    otherMoney += 100000;
                 }
                 else
                 {
-                    if (otherMoney + 100 < correction)
+                    if (otherMoney + 10000 < correction)
                     {
-                        otherMoney += 100;
+                        otherMoney += 10000;
                     }
                     else
                     {
-                        otherMoney += 1;
+                        if (otherMoney + 1000 < correction)
+                        {
+                            otherMoney += 1000;
+                        }
+                        else
+                        {
+                            if (otherMoney + 100 < correction)
+                            {
+                                otherMoney += 100;
+                            }
+                            else
+                            {
+                                otherMoney += 1;
+                            }
+                        }
                     }
                 }
             }
@@ -209,22 +265,38 @@ public class MoneyAnimation : MonoBehaviour
 
         while (money > max)
         {
-            if (money - 1000 > max)
+            if (money - 100000 > max)
             {
-                money -= 1000;
-                otherMoney += 1000;
+                money -= 100000;
+                otherMoney += 100000;
             }
             else
             {
-                if (money - 100 > max)
+                if (money - 10000 > max)
                 {
-                    money -= 100;
-                    otherMoney += 100;
+                    money -= 10000;
+                    otherMoney += 10000;
                 }
                 else
                 {
-                    money -= 1;
-                    otherMoney += 1;
+                    if (money - 1000 > max)
+                    {
+                        money -= 1000;
+                        otherMoney += 1000;
+                    }
+                    else
+                    {
+                        if (money - 100 > max)
+                        {
+                            money -= 100;
+                            otherMoney += 100;
+                        }
+                        else
+                        {
+                            money -= 1;
+                            otherMoney += 1;
+                        }
+                    }
                 }
             }
 
@@ -234,43 +306,75 @@ public class MoneyAnimation : MonoBehaviour
             yield return null;
         }
 
-        if (correction == 0) yield break;
+        if (correction == 0)
+        {
+            EndAnimation();
+            yield break;
+        }
 
         while (otherMoney != correction)
         {
             if (otherMoney > correction)
             {
-                if (otherMoney - 1000 > correction)
+                if (otherMoney - 100000 > correction)
                 {
-                    otherMoney -= 1000;
+                    otherMoney -= 100000;
                 }
                 else
                 {
-                    if (otherMoney - 100 > correction)
+                    if (otherMoney - 10000 > correction)
                     {
-                        otherMoney -= 100;
+                        otherMoney -= 10000;
                     }
                     else
                     {
-                        otherMoney -= 1;
+                        if (otherMoney - 1000 > correction)
+                        {
+                            otherMoney -= 1000;
+                        }
+                        else
+                        {
+                            if (otherMoney - 100 > correction)
+                            {
+                                otherMoney -= 100;
+                            }
+                            else
+                            {
+                                otherMoney -= 1;
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                if (otherMoney + 1000 < correction)
+                if (otherMoney + 100000 < correction)
                 {
-                    otherMoney += 1000;
+                    otherMoney += 100000;
                 }
                 else
                 {
-                    if (otherMoney + 100 < correction)
+                    if (otherMoney + 10000 < correction)
                     {
-                        otherMoney += 100;
+                        otherMoney += 10000;
                     }
                     else
                     {
-                        otherMoney += 1;
+                        if (otherMoney + 1000 < correction)
+                        {
+                            otherMoney += 1000;
+                        }
+                        else
+                        {
+                            if (otherMoney + 100 < correction)
+                            {
+                                otherMoney += 100;
+                            }
+                            else
+                            {
+                                otherMoney += 1;
+                            }
+                        }
                     }
                 }
             }
@@ -285,7 +389,7 @@ public class MoneyAnimation : MonoBehaviour
 
     void EndAnimation()
     {
-        SoundManager.instance.StopLoopSFX(GameSfxType.ChangeMoney);
+        StopAllCoroutines();
 
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";
@@ -293,5 +397,99 @@ public class MoneyAnimation : MonoBehaviour
         correction = 0;
 
         gameManager.CheckWinnerPlayer();
+    }
+
+    public void ResultAddMoney(int target, Text text)
+    {
+        StartCoroutine(ResultAddMoneyCoroution(target, text));
+    }
+
+    IEnumerator ResultAddMoneyCoroution(int target, Text text)
+    {
+        int max = 0;
+
+        while (max < target)
+        {
+            if (max + 10000 < target)
+            {
+                max += 10000;
+            }
+            else
+            {
+                if (max + 10000 < target)
+                {
+                    max += 10000;
+                }
+                else
+                {
+                    if (max + 1000 < target)
+                    {
+                        max += 1000;
+                    }
+                    else
+                    {
+                        if (max + 100 < target)
+                        {
+                            max += 100;
+                        }
+                        else
+                        {
+                            max += 1;
+                        }
+                    }
+                }
+            }
+
+            text.text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ∏∏≈≠ µ∑ ¡ı∞°!</color>";
+
+            yield return null;
+        }
+    }
+
+    public void ResultMinusMoney(int target, Text text)
+    {
+        StartCoroutine(ResultMinusMoneyCoroution(target, text));
+    }
+
+    IEnumerator ResultMinusMoneyCoroution(int target, Text text)
+    {
+        int max = 0;
+
+        while (max > target)
+        {
+            if (max - 100000 > target)
+            {
+                max -= 100000;
+            }
+            else
+            {
+                if (max - 10000 > target)
+                {
+                    max -= 10000;
+                }
+                else
+                {
+                    if (max - 1000 > target)
+                    {
+                        max -= 1000;
+                    }
+                    else
+                    {
+                        if (max - 100 > target)
+                        {
+                            max -= 100;
+                        }
+                        else
+                        {
+                            max -= 1;
+                        }
+                    }
+                }
+            }
+
+            text.text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ∏∏≈≠ µ∑ ∞®º“</color>";
+
+            yield return null;
+        }
     }
 }

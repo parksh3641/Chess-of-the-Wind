@@ -34,13 +34,14 @@ public class StateManager : MonoBehaviour
         {
             isInit = true;
 
+            SoundManager.instance.Initialize();
+
             networkManager.Initialize();
             gameManager.Initialize();
             uIManager.Initialize();
             nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
-            SoundManager.instance.Initialize();
             rankInfoManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)

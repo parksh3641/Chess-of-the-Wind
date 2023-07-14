@@ -18,6 +18,8 @@ public class RecordManager : MonoBehaviour
 
     private int recordIndex = 0;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+
     private void Awake()
     {
         instance = this;
@@ -66,6 +68,8 @@ public class RecordManager : MonoBehaviour
     public void SetRecord(string text)
     {
         recordList.Add(text);
+
+        Debug.Log("게임 결과 기록 완료");
     }
 
     public void SetGameRecord(string text)
@@ -84,6 +88,11 @@ public class RecordManager : MonoBehaviour
 
     public void OpenRecord()
     {
+        StartCoroutine(OpenCoroution());
+    }
+
+    IEnumerator OpenCoroution()
+    {
         for (int i = 0; i < recordList.Count; i++)
         {
             RecordContent content = Instantiate(recordContent);
@@ -91,11 +100,11 @@ public class RecordManager : MonoBehaviour
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
 
-            if(int.Parse(recordList[i]) == 0)
+            if (int.Parse(recordList[i]) == 0)
             {
                 content.Initialize(i + 1 + "번째 턴 : <color=#FFFFFF>+" + recordList[i] + "</color>");
             }
-            else if(int.Parse(recordList[i]) > 0)
+            else if (int.Parse(recordList[i]) > 0)
             {
                 content.Initialize(i + 1 + "번째 턴 : <color=#27FFFC>+" + recordList[i] + "</color>");
             }
@@ -105,6 +114,8 @@ public class RecordManager : MonoBehaviour
             }
             content.gameObject.SetActive(true);
             endRecordContentList.Add(content);
+
+            yield return waitForSeconds;
         }
     }
 }

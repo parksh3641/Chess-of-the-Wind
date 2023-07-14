@@ -70,11 +70,12 @@ public class UIManager : MonoBehaviour
     public CollectionManager collectionManager;
     public GameManager gameManager;
     public MatchingManager matchingManager;
-    public TutorialManager tutorialManager;
+    public MoneyAnimation moneyAnimation;
 
     public Image[] bottomUIImg;
 
     public int index = 0;
+    public bool isFirst = false;
 
     Sprite[] characterArray;
 
@@ -116,6 +117,8 @@ public class UIManager : MonoBehaviour
         versionText.text = "v" + Application.version;
 
         index = -1;
+
+        isFirst = false;
     }
 
     private void Start()
@@ -408,13 +411,20 @@ public class UIManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
 
-        if(gold > 0)
+
+        resultGoldText.text = "";
+
+        gold = 9999999;
+
+        if (gold > 0)
         {
-            resultGoldText.text = "+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + " 만큼 돈 증가!";
+            moneyAnimation.ResultAddMoney(gold, resultGoldText);
+            //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";
         }
         else
         {
-            resultGoldText.text = "-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + " 만큼 돈 감소";
+            moneyAnimation.ResultMinusMoney(gold, resultGoldText);
+            //resultGoldText.text = "-<color=#FF712B>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 감소";
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
@@ -482,6 +492,14 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
+                if(!isFirst)
+                {
+                    isFirst = true;
+                }
+                else
+                {
+                    matchingManager.Initialize();
+                }
                 break;
             case 2:
                 collectionManager.OpenCollectionView();

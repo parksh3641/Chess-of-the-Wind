@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     public Image timerFillAmount;
     private int timerAi = 0;
 
+    public ButtonScaleAnimation timerAnimation;
+    private bool isTimesUp = false;
+
     [Space]
     [Title("Text")]
     public Text roomText;
@@ -635,6 +638,10 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
+        isTimesUp = false;
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
+
         if (PhotonNetwork.IsMasterClient)
         {
             rouletteManager.CreateObj();
@@ -669,6 +676,8 @@ public class GameManager : MonoBehaviour
     public void CheckWinnerPlayer() //게임 누가 승리했는지 체크
     {
         if (!PhotonNetwork.IsMasterClient) return;
+
+        Debug.Log("누가 이겼는지 체크중입니다");
 
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
@@ -767,6 +776,19 @@ public class GameManager : MonoBehaviour
 
         timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
         timerText.text = timer.ToString();
+
+        if (timer <= 5)
+        {
+            if (!isTimesUp)
+            {
+                isTimesUp = true;
+
+                timerText.color = Color.red;
+                timerAnimation.PlayAnim();
+
+                SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+            }
+        }
     }
 
     [PunRPC]
@@ -849,6 +871,19 @@ public class GameManager : MonoBehaviour
 
             PV.RPC("ChangeTimer", RpcTarget.Others, timer);
 
+            if (timer <= 5)
+            {
+                if (!isTimesUp)
+                {
+                    isTimesUp = true;
+
+                    timerText.color = Color.red;
+                    timerAnimation.PlayAnim();
+
+                    SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                }
+            }
+
             timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
             timerText.text = timer.ToString();
 
@@ -870,6 +905,10 @@ public class GameManager : MonoBehaviour
 
             yield return waitForSeconds;
         }
+
+        isTimesUp = false;
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
 
 
         if (PhotonNetwork.IsMasterClient)
@@ -898,6 +937,10 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+
+        isTimesUp = false;
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
 
         ResetRouletteBackgroundColor();
 
@@ -1157,7 +1200,6 @@ public class GameManager : MonoBehaviour
             localNotion = "변동이 없습니다";
 
             NotionManager.instance.UseNotion(localNotion, ColorType.Green);
-            RecordManager.instance.SetRecord("0");
         }
         else
         {
@@ -1189,7 +1231,7 @@ public class GameManager : MonoBehaviour
             //randomBoxManager.GameReward();
         }
 
-        Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 내가 돈을 획득");
+        //Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 내가 돈을 획득");
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
@@ -3133,10 +3175,20 @@ public class GameManager : MonoBehaviour
             money -= other[1];
             otherMoney += other[1];
         }
-        else
+        //else if(tempMoney == 0 && other[1] < 0) //난 배팅 안 했는데 상대방은 배팅한 돈만큼 잃었을 때
+        //{
+
+        //}
+        //else if(tempMoney < 0 && other[1] == 0) //상대방은 배팅 안 했는데 난 배팅한 돈만큼 잃었을 때
+        //{
+
+        //}
+        else //둘다 잃었을 경우
         {
             moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
             otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
+            RecordManager.instance.SetRecord("0");
         }
 
 

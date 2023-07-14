@@ -45,6 +45,8 @@ public class RandomBoxManager : MonoBehaviour
     private float random = 0;
     private string block = "";
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.2f);
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -223,6 +225,8 @@ public class RandomBoxManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(false);
         }
 
+        yield return new WaitForSeconds(1f);
+
         for (int i = 0; i < prizeBlockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
@@ -233,7 +237,7 @@ public class RandomBoxManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
 
-            yield return new WaitForSeconds(0.2f);
+            yield return waitForSeconds;
         }
 
         yield return new WaitForSeconds(1.0f);
