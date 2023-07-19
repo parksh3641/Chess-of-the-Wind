@@ -49,6 +49,7 @@ public class UpgradeManager : MonoBehaviour
 
     bool isWait = false;
     bool isDef = false;
+    bool unEquip = false;
 
     [Title("Upgrade Screen")]
     public GameObject upgradeScreen;
@@ -116,42 +117,55 @@ public class UpgradeManager : MonoBehaviour
         upgradeValue = upgradeDataBase.GetUpgradeValue(blockClass.rankType);
         upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
-        titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
+        titleText.text = LocalizationManager.instance.GetString(blockClass.blockType.ToString());
 
         levelText.text = "Lv. " + (blockClass.level + 1).ToString() + "/" + upgradeValue.maxLevel;
         levelFillamount.fillAmount = (blockClass.level + 1) * 1.0f / upgradeValue.maxLevel * 1.0f;
 
-        valueText.text = "현재 가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level));
+        valueText.text = LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level));
 
-        successText.text = "성공 확률 : " + upgradeInformation.success + "%";
-        keepText.text = "실패(유지) 확률 : " + upgradeInformation.keep + "%";
-        downText.text = "실패(하락) 확률 : " + upgradeInformation.down + "%";
-        destroyText.text = "파괴 확률 : " + upgradeInformation.destroy + "%";
+        successText.text = LocalizationManager.instance.GetString("SuccessPercent") + " : " + upgradeInformation.success + "%";
+        keepText.text = LocalizationManager.instance.GetString("RetentionPercent") + " : " + upgradeInformation.keep + "%";
+        downText.text = LocalizationManager.instance.GetString("LowerPercent") + " : " + upgradeInformation.down + "%";
+        destroyText.text = LocalizationManager.instance.GetString("DestroyPercent") + " : " + upgradeInformation.destroy + "%";
 
-        valuePlusText.text = "가치 : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
+        valuePlusText.text = LocalizationManager.instance.GetString("Value") + " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
             " ▶ <color=#FFCA14>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) +"</color>";
 
         gold = playerDataBase.Gold;
 
-        goldText.text = "필요 골드";
+        goldText.text = LocalizationManager.instance.GetString("NeedGold");
         goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
 
-        ticketText.text = "강화권";
+        ticketText.text = LocalizationManager.instance.GetString("UpgradeTicket");
         ticketNumberText.text = upgradeTicket + "/1";
 
         ticketImg.sprite = ticketImgArray[(int)blockClass.rankType];
 
         defDestroyObj.SetActive(false);
 
+        if(playerDataBase.CheckEquip(blockClass.instanceId) > 0)
+        {
+            equipText.text = LocalizationManager.instance.GetString("UnEquip");
+
+            unEquip = true;
+        }
+        else
+        {
+            equipText.text = LocalizationManager.instance.GetString("Equip");
+
+            unEquip = false;
+        }
+
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
             if(blockClass.rankType != RankType.SSR)
             {
-                successText.text = "합성을 하면 더 강해질 수 있습니다";
-                keepText.text = "합성시 강화 최대 레벨이 증가합니다";
-                downText.text = "합성시 강화 레벨은 그대로 연계됩니다";
+                successText.text = LocalizationManager.instance.GetString("NextSynthesisInfo");
+                keepText.text = "";
+                downText.text = "";
                 destroyText.text = "";
 
                 goldNumberText.text = "-";
@@ -159,8 +173,8 @@ public class UpgradeManager : MonoBehaviour
             }
             else
             {
-                successText.text = "";
-                keepText.text = "최대 레벨입니다";
+                successText.text = LocalizationManager.instance.GetString("MaxLevel");
+                keepText.text = "";
                 downText.text = "";
                 destroyText.text = "";
                 valuePlusText.text = "";
@@ -187,7 +201,7 @@ public class UpgradeManager : MonoBehaviour
             if(upgradeInformation.destroy > 0f)
             {
                 defDestroyObj.SetActive(true);
-                defDestroyText.text = "파괴 방지권";
+                defDestroyText.text = LocalizationManager.instance.GetString("DefDestroyTicket");
                 defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
 
                 defCheckMark.enabled = false;
@@ -337,13 +351,13 @@ public class UpgradeManager : MonoBehaviour
 
         upgradeScreenEffect.SetActive(false);
 
-        upgradeScreenLevelName.text = "레벨";
-        upgradeScreenValueName.text = "가치";
+        upgradeScreenLevelName.text = LocalizationManager.instance.GetString("Level");
+        upgradeScreenValueName.text = LocalizationManager.instance.GetString("Value");
 
         switch (number)
         {
             case 0:
-                upgradeScreenTitle.text = "강화 실패 (파괴 방지)";
+                upgradeScreenTitle.text = LocalizationManager.instance.GetString("FailureDefUpgrade");
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
@@ -351,7 +365,7 @@ public class UpgradeManager : MonoBehaviour
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 1:
-                upgradeScreenTitle.text = "강화 하락";
+                upgradeScreenTitle.text = LocalizationManager.instance.GetString("FailureUpgrade");
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
@@ -359,7 +373,7 @@ public class UpgradeManager : MonoBehaviour
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 2:
-                upgradeScreenTitle.text = "강화 유지";
+                upgradeScreenTitle.text = LocalizationManager.instance.GetString("RetentionUpgrade");
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 1).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
@@ -369,7 +383,7 @@ public class UpgradeManager : MonoBehaviour
             case 3:
                 upgradeScreenEffect.SetActive(true);
 
-                upgradeScreenTitle.text = "강화 성공!";
+                upgradeScreenTitle.text = LocalizationManager.instance.GetString("SuccessUpgrade");
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 2).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level + 1)) + "</color>";
@@ -379,10 +393,10 @@ public class UpgradeManager : MonoBehaviour
             case 4:
                 upgradeScreenIcon.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
 
-                upgradeScreenTitle.text = "강화 실패 (파괴)";
-                
+                upgradeScreenTitle.text = LocalizationManager.instance.GetString("FailureDestroyUpgrade");
+
                 upgradeScreenLevelName.text = "";
-                upgradeScreenLevel.text = "블록이 파괴되었습니다";
+                upgradeScreenLevel.text = LocalizationManager.instance.GetString("DestroyBlockInfo");
                 upgradeScreenValueName.text = "";
                 upgradeScreenValue.text = "";
                 break;
@@ -424,7 +438,13 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellButton()
     {
-        if(!collectionManager.equipManager.CheckEquipBlock(blockClass.instanceId))
+        if(blockClass.rankType == RankType.R)
+        {
+            NotionManager.instance.UseNotion(NotionType.NotSellBlock);
+            return;
+        }
+
+        if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
         {
             sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
         }
@@ -478,6 +498,14 @@ public class UpgradeManager : MonoBehaviour
 
         CloseUpgradeView();
 
-        equipManager.OpenEquipView(blockClass);
+        if(unEquip)
+        {
+            equipManager.CheckUnEquip(blockClass.instanceId);
+            collectionManager.CheckUnEquip(blockClass.instanceId);
+        }
+        else
+        {
+            equipManager.OpenEquipView(blockClass);
+        }
     }
 }

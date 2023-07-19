@@ -17,7 +17,7 @@ public class CollectionManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
-    public int sortCount;
+    public int sortCount = 0;
 
     public bool change = false;
     
@@ -67,7 +67,6 @@ public class CollectionManager : MonoBehaviour
         }
 
         sortCount = 0;
-
         sortText.text = "종류 순";
     }
 
@@ -91,7 +90,15 @@ public class CollectionManager : MonoBehaviour
             {
                 check = true;
 
+                sortCount = 0;
+                sortText.text = LocalizationManager.instance.GetString("ByType");
+
                 Initialize();
+
+                CheckEquipArmor();
+                CheckEquipWeapon();
+                CheckEquipShield();
+                CheckEquipNewBie();
             }
             else
             {
@@ -172,11 +179,6 @@ public class CollectionManager : MonoBehaviour
                 }
             }
         }
-
-        CheckEquipArmor();
-        CheckEquipWeapon();
-        CheckEquipShield();
-        CheckEquipNewBie();
     }
 
     public void UpdateCollection() //변경점이 생겼을 경우 업데이트
@@ -258,10 +260,10 @@ public class CollectionManager : MonoBehaviour
         }
 
 
-        CheckEquipArmor();
-        CheckEquipWeapon();
-        CheckEquipShield();
-        CheckEquipNewBie();
+        //CheckEquipArmor();
+        //CheckEquipWeapon();
+        //CheckEquipShield();
+        //CheckEquipNewBie();
     }
 
     public void FirstEquipCheck()
@@ -323,151 +325,148 @@ public class CollectionManager : MonoBehaviour
 
     public void CheckEquipArmor()
     {
-        if (playerDataBase.Armor.Length <= 0) //장착한게 없을 경우 기본 세팅해주기
+        //if (playerDataBase.Armor.Length <= 0) //장착한게 없을 경우 기본 세팅해주기
+        //{
+        //    for (int i = 0; i < blockList.Count; i++)
+        //    {
+        //        if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
+        //        {
+        //            blockUIContentList[i].gameObject.SetActive(false);
+        //            equipManager.EquipArmor(blockList[i], false);
+        //            break;
+        //        }
+        //    }
+        //}
+        //else //불러오기
+        //{
+        //bool equip = false;
+
+        for (int i = 0; i < blockList.Count; i++)
         {
-            for (int i = 0; i < blockList.Count; i++)
+            if (blockList[i].instanceId.Equals(playerDataBase.Armor))
             {
-                if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipArmor(blockList[i], false);
-                    break;
-                }
+                blockUIContentList[i].gameObject.SetActive(false);
+                equipManager.EquipArmor(blockList[i], false);
+                //equip = true;
+                break;
             }
         }
-        else //불러오기
-        {
-            bool equip = false;
 
-            for (int i = 0; i < blockList.Count; i++)
-            {
-                if (blockList[i].instanceId.Equals(playerDataBase.Armor))
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipArmor(blockList[i], false);
-                    equip = true;
-                    break;
-                }
-            }
-
-            if (!equip)
-            {
-                playerDataBase.Armor = "";
-                CheckEquipArmor();
-            }
-        }
+            //if (!equip)
+            //{
+            //    playerDataBase.Armor = "";
+            //    CheckEquipArmor();
+            //}
     }
 
     public void CheckEquipWeapon()
     {
-        if (playerDataBase.Weapon.Length <= 0)
+        //if (playerDataBase.Weapon.Length <= 0)
+        //{
+        //    for (int i = 0; i < blockList.Count; i++)
+        //    {
+        //        if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
+        //        {
+        //            blockUIContentList[i].gameObject.SetActive(false);
+        //            equipManager.EquipWeapon(blockList[i], false);
+        //            break;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //bool equip = false;
+
+        for (int i = 0; i < blockList.Count; i++)
         {
-            for (int i = 0; i < blockList.Count; i++)
+            if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
             {
-                if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipWeapon(blockList[i], false);
-                    break;
-                }
+                blockUIContentList[i].gameObject.SetActive(false);
+                equipManager.EquipWeapon(blockList[i], false);
+                //equip = true;
+                break;
             }
         }
-        else
-        {
-            bool equip = false;
 
-            for (int i = 0; i < blockList.Count; i++)
-            {
-                if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipWeapon(blockList[i], false);
-                    equip = true;
-                    break;
-                }
-            }
-
-            if (!equip)
-            {
-                playerDataBase.Weapon = "";
-                CheckEquipWeapon();
-            }
-        }
+            //if (!equip)
+            //{
+            //    playerDataBase.Weapon = "";
+            //    CheckEquipWeapon();
+            //}
     }
 
     public void CheckEquipShield()
     {
-        if (playerDataBase.Shield.Length <= 0)
+        //if (playerDataBase.Shield.Length <= 0)
+        //{
+        //    for (int i = 0; i < blockList.Count; i++)
+        //    {
+        //        if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
+        //        {
+        //            blockUIContentList[i].gameObject.SetActive(false);
+        //            equipManager.EquipShield(blockList[i], false);
+        //            break;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //bool equip = false;
+
+        for (int i = 0; i < blockList.Count; i++)
         {
-            for (int i = 0; i < blockList.Count; i++)
+            if (blockList[i].instanceId.Equals(playerDataBase.Shield))
             {
-                if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V2H2)
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipShield(blockList[i], false);
-                    break;
-                }
+                blockUIContentList[i].gameObject.SetActive(false);
+                equipManager.EquipShield(blockList[i], false);
+                //equip = true;
+                break;
             }
         }
-        else
-        {
-            bool equip = false;
 
-            for (int i = 0; i < blockList.Count; i++)
-            {
-                if (blockList[i].instanceId.Equals(playerDataBase.Shield))
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipShield(blockList[i], false);
-                    equip = true;
-                    break;
-                }
-            }
-
-            if (!equip)
-            {
-                playerDataBase.Shield = "";
-                CheckEquipShield();
-            }
-        }
+            //if (!equip)
+            //{
+            //    playerDataBase.Shield = "";
+            //    CheckEquipShield();
+            //}
     }
 
     public void CheckEquipNewBie()
     {
-        if (playerDataBase.Newbie.Length <= 0)
+        //if (playerDataBase.Newbie.Length <= 0)
+        //{
+        //    for (int i = 0; i < blockList.Count; i++)
+        //    {
+        //        if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
+        //        {
+        //            blockUIContentList[i].gameObject.SetActive(false);
+        //            equipManager.EquipNewBie(blockList[i], false);
+        //            break;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //bool equip = false;
+
+        for (int i = 0; i < blockList.Count; i++)
         {
-            for (int i = 0; i < blockList.Count; i++)
+            if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
             {
-                if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipNewBie(blockList[i], false);
-                    break;
-                }
+                blockUIContentList[i].gameObject.SetActive(false);
+                equipManager.EquipNewBie(blockList[i], false);
+                //equip = true;
+
+                break;
+
             }
         }
-        else
-        {
-            bool equip = false;
 
-            for (int i = 0; i < blockList.Count; i++)
-            {
-                if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
-                {
-                    blockUIContentList[i].gameObject.SetActive(false);
-                    equipManager.EquipNewBie(blockList[i], false);
-                    equip = true;
-
-                    break;
-                }
-            }
-
-            if (!equip)
-            {
-                playerDataBase.Newbie = "";
-                CheckEquipNewBie();
-            }
-        }
+            //if (!equip)
+            //{
+            //    playerDataBase.Newbie = "";
+            //    CheckEquipNewBie();
+            //}
     }
 
 
@@ -530,7 +529,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).OrderByDescending(x => x.level).ToList();
 
-            sortText.text = "레벨 순";
+            sortText.text = LocalizationManager.instance.GetString("ByLevel");
 
             sortCount = 1;
         }
@@ -538,7 +537,7 @@ public class CollectionManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "종류 순";
+            sortText.text = LocalizationManager.instance.GetString("ByType");
 
             sortCount = 0;
         }

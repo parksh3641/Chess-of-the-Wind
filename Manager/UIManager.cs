@@ -76,6 +76,7 @@ public class UIManager : MonoBehaviour
 
     public int index = 0;
     public bool isFirst = false;
+    public bool isHome = false;
 
     Sprite[] characterArray;
 
@@ -414,8 +415,6 @@ public class UIManager : MonoBehaviour
 
         resultGoldText.text = "";
 
-        gold = 9999999;
-
         if (gold > 0)
         {
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
@@ -485,6 +484,7 @@ public class UIManager : MonoBehaviour
         shopManager.CloseShopView();
         collectionManager.CloseCollectionView();
 
+        isHome = false;
 
         switch (number)
         {
@@ -498,6 +498,8 @@ public class UIManager : MonoBehaviour
                 }
                 else
                 {
+                    isHome = true;
+
                     matchingManager.Initialize();
                 }
                 break;

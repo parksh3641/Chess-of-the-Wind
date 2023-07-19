@@ -10,8 +10,14 @@ public class NickNameManager : MonoBehaviour
     public GameObject nickNameView;
     public GameObject nickNameFirstView;
 
+    public GameObject exitButton;
+
+    public GameObject[] confirmButton;
+
     public InputField inputField;
     public InputField inputFieldFree;
+
+    public Text profileNickNameText;
 
     public string[] lines;
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
@@ -26,6 +32,11 @@ public class NickNameManager : MonoBehaviour
 
         nickNameView.SetActive(false);
         nickNameFirstView.SetActive(false);
+
+        exitButton.SetActive(false);
+
+        confirmButton[0].SetActive(false);
+        confirmButton[1].SetActive(false);
 
         string file = SystemPath.GetPath() + "BadWord.txt";
 
@@ -45,12 +56,24 @@ public class NickNameManager : MonoBehaviour
     {
         if (GameStateManager.instance.NickName.Length > 15)
         {
-            OpenNickName();
+            OpenFreeNickName();
         }
-        //else
-        //{
-        //    formationManager.Initialize();
-        //}
+        else
+        {
+            formationManager.Initialize();
+        }
+    }
+
+    public void OpenFreeNickName()
+    {
+        inputField.text = "";
+
+        nickNameView.SetActive(true);
+
+        exitButton.SetActive(false);
+
+        confirmButton[0].SetActive(true);
+        confirmButton[1].SetActive(false);
     }
 
     public void OpenNickName()
@@ -60,6 +83,11 @@ public class NickNameManager : MonoBehaviour
             inputField.text = "";
 
             nickNameView.SetActive(true);
+
+            exitButton.SetActive(true);
+
+            confirmButton[0].SetActive(false);
+            confirmButton[1].SetActive(true);
         }
         else
         {
@@ -69,7 +97,7 @@ public class NickNameManager : MonoBehaviour
 
     public void CheckNickName()
     {
-        if (playerDataBase.Gold >= 100)
+        if (playerDataBase.Gold >= 10000)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
 
@@ -190,7 +218,9 @@ public class NickNameManager : MonoBehaviour
     {
         uIManager.Renewal();
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 10000);
+
+        profileNickNameText.text = GameStateManager.instance.NickName;
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 

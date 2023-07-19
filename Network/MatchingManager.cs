@@ -108,16 +108,16 @@ public class MatchingManager : MonoBehaviour
         limitBlock = rankInformation.limitBlockValue;
 
         newbieEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes / 2);
-        newbieMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock / 2);
+        newbieMaxBlockText.text = "최대 블럭 레벨 : " + MoneyUnitString.ToCurrencyString(limitBlock / 2);
 
         gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes);
-        gosuMaxBlockText.text = "최대 블럭 값 : " + MoneyUnitString.ToCurrencyString(limitBlock);
+        gosuMaxBlockText.text = "최대 블럭 레벨 : " + MoneyUnitString.ToCurrencyString(limitBlock);
 
         if(GameStateManager.instance.GameRankType < gameRankType)
         {
             Debug.Log("랭크 상승!");
 
-            if(uIManager.isFirst)
+            if(uIManager.isFirst || uIManager.isHome)
             {
                 OpenRankUpView(true);
             }
@@ -205,6 +205,12 @@ public class MatchingManager : MonoBehaviour
 
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
+        if(!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
+        {
+            NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
+            return;
+        }
+
         if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
@@ -240,6 +246,12 @@ public class MatchingManager : MonoBehaviour
         int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
         int number2 = upgradeDataBase.GetUpgradeValue(blockClass2.rankType).GetValueNumber(blockClass2.level);
         int number3 = upgradeDataBase.GetUpgradeValue(blockClass3.rankType).GetValueNumber(blockClass3.level);
+
+        if (!playerDataBase.CheckEquipBlock_Gosu()) //블록은 전부 장착했는지
+        {
+            NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
+            return;
+        }
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {

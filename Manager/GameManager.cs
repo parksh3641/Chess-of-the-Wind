@@ -906,10 +906,7 @@ public class GameManager : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        isTimesUp = false;
-        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
-        timerAnimation.StopAnim();
-
+        yield return new WaitForSeconds(1.0f);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -927,6 +924,10 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void DelayRoulette()
     {
+        isTimesUp = false;
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
+
         uIManager.dontTouchObj.SetActive(true);
 
         for (int i = 0; i < blockContentList.Count; i++)
@@ -937,10 +938,6 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-
-        isTimesUp = false;
-        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
-        timerAnimation.StopAnim();
 
         ResetRouletteBackgroundColor();
 
@@ -1042,6 +1039,10 @@ public class GameManager : MonoBehaviour
     public void GameResult(string[] target) //게임이 한판 끝났을 경우
     {
         emoteManager.Initialize();
+
+        isTimesUp = false;
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
 
         uIManager.CloseRouletteView();
 

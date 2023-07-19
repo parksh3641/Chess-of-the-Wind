@@ -158,8 +158,12 @@ public class SynthesisManager : MonoBehaviour
 
             synthesisResultContentList.Add(content);
         }
+    }
 
-        sortText.text = "종류 순";
+    private void Start()
+    {
+        sortCount = 0;
+        sortText.text = LocalizationManager.instance.GetString("ByType");
     }
 
     public void OpenSynthesisView()
@@ -188,7 +192,7 @@ public class SynthesisManager : MonoBehaviour
     void Initialize()
     {
         titleText.text = "";
-        upgradeLevelText.text = "합성을 원하는 블록을 선택하세요!";
+        upgradeLevelText.text = LocalizationManager.instance.GetString("SynthesisInfo");
         valueText.text = "";
 
         nextBlockUIContent.gameObject.SetActive(false);
@@ -270,7 +274,7 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(blockList[i]);
 
-            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR || playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
+            if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR || playerDataBase.CheckEquip(blockList[i].instanceId) != 0)
             {
                 blockUIContentList[i].gameObject.SetActive(false);
             }
@@ -339,9 +343,9 @@ public class SynthesisManager : MonoBehaviour
             sortButton.SetActive(false);
             synthesisAllButton.SetActive(false);
 
-            titleText.text = blockDataBase.GetBlockName(blockClass.blockType);
-            upgradeLevelText.text = "최대 강화 레벨 : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
-            valueText.text = "가치 " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ <color=#FF6123>" + upgradeValue2.GetValueNumber(blockClass.level) + "</color>";
+            titleText.text = LocalizationManager.instance.GetString(blockClass.blockType.ToString());
+            upgradeLevelText.text = LocalizationManager.instance.GetString("MaxUpgradeLevel") + " : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
+            valueText.text = LocalizationManager.instance.GetString("Value") + " : " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ <color=#FF6123>" + upgradeValue2.GetValueNumber(blockClass.level) + "</color>";
 
             needGold = upgradeValue.GetSynthesisValue();
 
@@ -350,17 +354,17 @@ public class SynthesisManager : MonoBehaviour
             switch (blockClass.rankType)
             {
                 case RankType.N:
-                    needText.text = "필수 재료 : 2x N등급 " + titleText.text;
+                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeN") + " " + titleText.text;
                     break;
                 case RankType.R:
-                    needText.text = "필수 재료 : 2x R등급 " + titleText.text;
+                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeR") + " " + titleText.text;
                     break;
                 case RankType.SR:
-                    needText.text = "필수 재료 : 2x SR등급 " + titleText.text;
+                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeSR") + " " + titleText.text;
                     break;
                 case RankType.SSR:
                     //matObj2.SetActive(false);
-                    needText.text = "필수 재료 : 2x SSR등급 " + titleText.text;
+                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeSSR") + " " + titleText.text;
                     break;
                 case RankType.UR:
                     matObj2.SetActive(false);
@@ -371,7 +375,7 @@ public class SynthesisManager : MonoBehaviour
             {
                 if (!blockUIContentList[i].blockClass.blockType.Equals(blockClass.blockType) ||
                     !blockUIContentList[i].blockClass.rankType.Equals(blockClass.rankType) || 
-                    playerDataBase.CheckEquipId(blockUIContentList[i].instanceId) != 0)
+                    playerDataBase.CheckEquip(blockUIContentList[i].instanceId) != 0)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                 }
@@ -385,7 +389,7 @@ public class SynthesisManager : MonoBehaviour
             {
                 blockClassMat1 = playerDataBase.GetBlockClass(id);
 
-                playerDataBase.CheckEquipId(id);
+                playerDataBase.CheckEquip(id);
 
                 matBlockUIContent1.gameObject.SetActive(true);
                 matBlockUIContent1.Collection_Initialize(blockClassMat1);
@@ -404,7 +408,7 @@ public class SynthesisManager : MonoBehaviour
             {
                 blockClassMat2 = playerDataBase.GetBlockClass(id);
 
-                playerDataBase.CheckEquipId(id);
+                playerDataBase.CheckEquip(id);
 
                 matBlockUIContent2.gameObject.SetActive(true);
                 matBlockUIContent2.Collection_Initialize(blockClassMat2);
@@ -493,7 +497,7 @@ public class SynthesisManager : MonoBehaviour
         if (id.Equals(blockClass.instanceId)) //합성 취소
         {
             titleText.text = "";
-            upgradeLevelText.text = "합성을 원하는 블록을 선택하세요!";
+            upgradeLevelText.text = LocalizationManager.instance.GetString("SynthesisInfo");
             valueText.text = "";
             nextBlockUIContent.levelText.text = "";
 
@@ -521,7 +525,7 @@ public class SynthesisManager : MonoBehaviour
                 blockUIContentList[i].Lock(false);
 
                 if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR || 
-                    playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
+                    playerDataBase.CheckEquip(blockList[i].instanceId) != 0)
                 {
                     blockUIContentList[i].gameObject.SetActive(false);
                 }
@@ -700,7 +704,7 @@ public class SynthesisManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).OrderByDescending(x => x.level).ToList();
 
-            sortText.text = "레벨 순";
+            sortText.text = LocalizationManager.instance.GetString("ByLevel");
 
             sortCount = 1;
         }
@@ -708,7 +712,7 @@ public class SynthesisManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = "종류 순";
+            sortText.text = LocalizationManager.instance.GetString("ByType");
 
             sortCount = 0;
         }
@@ -724,7 +728,7 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList[i].Collection_Initialize(blockList[i]);
 
             if (blockList[i].rankType == RankType.SSR || blockList[i].rankType == RankType.UR ||
-    playerDataBase.CheckEquipId(blockList[i].instanceId) != 0)
+    playerDataBase.CheckEquip(blockList[i].instanceId) != 0)
             {
                 blockUIContentList[i].gameObject.SetActive(false);
             }
@@ -735,13 +739,13 @@ public class SynthesisManager : MonoBehaviour
     {
         if (synthesisResultText.gameObject.activeInHierarchy)
         {
-            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중");
+            synthesisResultText.text = LocalizationManager.instance.GetString("Synthesizing");
             yield return waitForSeconds2;
-            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + ".";
+            synthesisResultText.text = LocalizationManager.instance.GetString("Synthesizing") + ".";
             yield return waitForSeconds2;
-            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + "..";
+            synthesisResultText.text = LocalizationManager.instance.GetString("Synthesizing") + "..";
             yield return waitForSeconds2;
-            synthesisResultText.text = LocalizationManager.instance.GetString("합성 중") + "...";
+            synthesisResultText.text = LocalizationManager.instance.GetString("Synthesizing") + "...";
             yield return waitForSeconds2;
             StartCoroutine(TextCoroution());
         }
@@ -778,7 +782,7 @@ public class SynthesisManager : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; i++)
         {
-            if (blockList[i].level == 0 && playerDataBase.CheckEquipId(blockList[i].instanceId) == 0 && 
+            if (blockList[i].level == 0 && playerDataBase.CheckEquip(blockList[i].instanceId) == 0 && 
                 !playerDataBase.CheckSellBlock(blockList[i].instanceId))
             {
                 if (blockList[i].rankType == RankType.N)

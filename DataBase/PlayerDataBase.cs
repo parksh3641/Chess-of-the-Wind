@@ -533,60 +533,122 @@ public class PlayerDataBase : ScriptableObject
         return blockClass;
     }
 
-    public int CheckEquipId(string id)
+    public int CheckEquip(string id)
     {
         int number = 0;
 
-        if(armor.Equals(id))
+        if(armor != null)
         {
-            number = 1;
+            if (armor.Equals(id))
+            {
+                number = 1;
 
-            Debug.Log("장착 중인 아머가 선택되었습니다");
+                Debug.Log("장착 중인 아머가 선택되었습니다");
+            }
         }
 
-        if (weapon.Equals(id))
+        if (weapon != null)
         {
-            number = 2;
+            if (weapon.Equals(id))
+            {
+                number = 2;
 
-            Debug.Log("장착 중인 검이 선택되었습니다");
+                Debug.Log("장착 중인 검이 선택되었습니다");
+            }
         }
 
-        if (shield.Equals(id))
+        if (shield != null)
         {
-            number = 3;
+            if (shield.Equals(id))
+            {
+                number = 3;
 
-            Debug.Log("장착 중인 쉴드가 선택되었습니다");
+                Debug.Log("장착 중인 쉴드가 선택되었습니다");
+            }
         }
 
-        if (newbie.Equals(id))
+        if (newbie != null)
         {
-            number = 4;
+            if (newbie.Equals(id))
+            {
+                number = 4;
 
-            Debug.Log("장착 중인 뉴비가 선택되었습니다");
+                Debug.Log("장착 중인 뉴비가 선택되었습니다");
+            }
         }
 
         return number;
     }
 
-    public int CheckOverlapBlock(BlockClass block, int number)
+    public void CheckUnEquip(string id)
+    {
+        if(armor != null)
+        {
+            if (armor.Equals(id))
+            {
+                armor = "";
+
+                Debug.Log("장착 중인 아머가 해제되었습니다");
+            }
+        }
+
+        if (weapon != null)
+        {
+            if (weapon.Equals(id))
+            {
+                weapon = "";
+
+                Debug.Log("장착 중인 검이 해제되었습니다");
+            }
+        }
+
+        if (shield != null)
+        {
+            if (shield.Equals(id))
+            {
+                shield = "";
+
+                Debug.Log("장착 중인 쉴드가 해제되었습니다");
+            }
+        }
+
+        if (newbie != null)
+        {
+            if (newbie.Equals(id))
+            {
+                newbie = "";
+
+                Debug.Log("장착 중인 뉴비가 해제되었습니다");
+            }
+        }
+    }
+
+    public int CheckOverlapBlock(BlockClass block)
     {
         int index = 0;
 
-        if(GetBlockClass(armor).blockType.Equals(block.blockType))
+        if(armor != null)
         {
-            index = 1;
+            if (GetBlockClass(armor).blockType.Equals(block.blockType))
+            {
+                index = 1;
+            }
         }
-        else if (GetBlockClass(weapon).blockType.Equals(block.blockType))
+
+        if (weapon != null)
         {
-            index = 2;
+            if (GetBlockClass(weapon).blockType.Equals(block.blockType))
+            {
+                index = 2;
+            }
         }
-        else if (GetBlockClass(shield).blockType.Equals(block.blockType))
+
+        if (shield != null)
         {
-            index = 3;
-        }
-        else
-        {
-            index = 0;
+            if (GetBlockClass(shield).blockType.Equals(block.blockType))
+            {
+                index = 3;
+            }
         }
 
         return index;
@@ -638,4 +700,38 @@ public class PlayerDataBase : ScriptableObject
         }
     }
     #endregion
+
+    public bool CheckEquipBlock_Gosu()
+    {
+        bool check = true;
+
+        if (armor == null)
+        {
+            check = false;
+        }
+
+        if (weapon == null)
+        {
+            check = false;
+        }
+
+        if (shield == null)
+        {
+            check = false;
+        }
+
+        return check;
+    }
+
+    public bool CheckEquipBlock_Newbie()
+    {
+        bool check = true;
+
+        if(newbie == null)
+        {
+            check = false;
+        }
+
+        return check;
+    }
 }

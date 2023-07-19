@@ -79,16 +79,34 @@ public class Pinball3D : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 20, 0);
 
+        rigid.mass = 1;
+
         rigid.AddForce(vector.forward * 200);
 
         move = true;
+
+        StopAllCoroutines();
+        StartCoroutine(GravityCoroution());
+    }
+
+    IEnumerator GravityCoroution()
+    {
+        rigid.mass += 0.015f;
+
+        yield return new WaitForSeconds(0.1f);
+
+        StartCoroutine(GravityCoroution());
     }
 
     public void BlowingWind(float force, int number)
     {
-        //Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
+        StopAllCoroutines();
+
+        rigid.mass = 1;
 
         windPower = power;
+
+        //Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
 
         if (index == 0) //현재 룰렛 위치는? 왼쪽 오른쪽
         {
@@ -192,6 +210,8 @@ public class Pinball3D : MonoBehaviour
         time = 0;
 
         rouletteManager.EndPinball();
+
+        StopAllCoroutines();
     }
 
     public void OnTriggerEnter(Collider other)

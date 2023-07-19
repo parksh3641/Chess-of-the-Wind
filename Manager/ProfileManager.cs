@@ -56,7 +56,7 @@ public class ProfileManager : MonoBehaviour
 
     void Initialize()
     {
-        nickNameText.text = "´Ð³×ÀÓ : " + GameStateManager.instance.NickName;
+        nickNameText.text = LocalizationManager.instance.GetString("Nickname") + " : " + GameStateManager.instance.NickName;
 
         if (playerDataBase.Formation == 2)
         {

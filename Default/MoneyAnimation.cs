@@ -29,6 +29,7 @@ public class MoneyAnimation : MonoBehaviour
     public GameManager gameManager;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.03f);
 
     private void Awake()
     {
@@ -63,7 +64,7 @@ public class MoneyAnimation : MonoBehaviour
         changeMoneyText[1].text = "";
     }
 
-    public void AddMoneyAnimation(int money, int otherMoney, int value) //내가 상대방 돈 가져감
+    public void AddMoneyAnimation(int money, int otherMoney, int value) //???? ?????? ?? ??????
     {
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
@@ -89,7 +90,7 @@ public class MoneyAnimation : MonoBehaviour
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
-    public void MinusMoneyAnimation(int money, int otherMoney, int value) //상대방이 내 돈 가져감
+    public void MinusMoneyAnimation(int money, int otherMoney, int value) //???????? ?? ?? ??????
     {
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
@@ -167,7 +168,7 @@ public class MoneyAnimation : MonoBehaviour
             text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
             text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
 
         if (correction == 0)
@@ -245,7 +246,7 @@ public class MoneyAnimation : MonoBehaviour
 
             text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
 
         EndAnimation();
@@ -303,7 +304,7 @@ public class MoneyAnimation : MonoBehaviour
             text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
             text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
 
         if (correction == 0)
@@ -381,7 +382,7 @@ public class MoneyAnimation : MonoBehaviour
 
             text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
 
         EndAnimation();
@@ -440,9 +441,9 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " 만큼 돈 증가!</color>";
+            text.text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ?? ? ??!</color>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
     }
 
@@ -487,9 +488,9 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " 만큼 돈 감소</color>";
+            text.text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ?? ? ??</color>";
 
-            yield return null;
+            yield return waitForSeconds2;
         }
     }
 }

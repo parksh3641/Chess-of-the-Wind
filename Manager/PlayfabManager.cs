@@ -608,7 +608,7 @@ public class PlayfabManager : MonoBehaviour
             if (GameStateManager.instance.NickName == null)
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
-                nickNameManager.OpenNickName();
+                nickNameManager.OpenFreeNickName();
             }
             // GameStateManager.Instance.SavePlayerData();
         },

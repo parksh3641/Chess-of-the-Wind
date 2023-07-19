@@ -125,16 +125,16 @@ public enum GameSfxType
     BlockSynthesisSuccess,
     BuyShopItem,
     BoxOpen,
-    GetBlock, //블록 획득음
+    GetBlock, //???? ??????
     PlusMoney1,
     PlusMoney2,
     MinusMoney,
-    ChangeMoney, //돈 액수 변동
+    ChangeMoney, //?? ???? ????
     UseEmotion,
-    SetBlock, //배치 완료
+    SetBlock, //???? ????
     TimesUp,
     GameWin,
-    ResultMoney, //게임 결과창에서 돈 올라가는 소리
+    ResultMoney, //???? ?????????? ?? ???????? ????
     GameLose,
     BounsRoulette,
     GetNumber,
@@ -241,7 +241,9 @@ public enum NotionType
     CopyIdNotion,
     NotSynthesisBlock,
     RestorePurchaseNotion,
-    EnemyTurn
+    EnemyTurn,
+    NeedEquipBlock,
+    NotSellBlock
 }
 
 public enum GameRankType

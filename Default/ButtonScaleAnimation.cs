@@ -22,17 +22,24 @@ public class ButtonScaleAnimation : MonoBehaviour
 
     float scale = 0;
 
+    bool isStop = false;
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
 
     private void OnEnable()
     {
-        StopAllCoroutines();
-        StartCoroutine(ButtonAnimation());
+        if (!isStop)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ButtonAnimation());
+        }
     }
 
     public void StopAnim()
     {
         StopAllCoroutines();
+
+        isStop = true;
 
         transform.localScale = Vector3.one;
     }

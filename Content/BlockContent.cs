@@ -14,6 +14,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public Image rankImg;
     public Text rankText;
+    public Text levelText;
 
     Sprite[] rankBackgroundArray;
     Sprite[] rankBannerArray;
@@ -83,6 +84,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();
+        levelText.text = "Lv." + (blockClass.level + 1).ToString();
 
         //valueText.text = MoneyUnitString.ToCurrencyString(this.value);
     }

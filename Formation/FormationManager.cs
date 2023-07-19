@@ -135,7 +135,7 @@ public class FormationManager : MonoBehaviour
         yield return new WaitForSeconds(4);
 
         storyManager.Initialize();
-        collectionManager.FirstEquipCheck();
+        //collectionManager.FirstEquipCheck();
 
         formationView.SetActive(false);
     }

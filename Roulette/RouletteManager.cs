@@ -34,6 +34,8 @@ public class RouletteManager : MonoBehaviour
     public MeshRenderer[] roulette1WindPoint;
     public MeshRenderer[] roulette2WindPoint;
 
+    public GameObject[] vectorArray;
+
     public GameObject windGauge;
     public Image windButton;
 
@@ -236,6 +238,9 @@ public class RouletteManager : MonoBehaviour
 
         roulette2WindPoint[0].gameObject.SetActive(false);
         roulette2WindPoint[1].gameObject.SetActive(false);
+
+        vectorArray[0].SetActive(false);
+        vectorArray[1].SetActive(false);
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
@@ -756,6 +761,9 @@ public class RouletteManager : MonoBehaviour
 
         windButton.sprite = windButtonArray[0];
 
+        vectorArray[0].SetActive(false);
+        vectorArray[1].SetActive(false);
+
         if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {
             pinball.MyTurn(rouletteIndex);
@@ -763,6 +771,8 @@ public class RouletteManager : MonoBehaviour
             windCharacterManager.MyWhich(windIndex);
 
             windButton.sprite = windButtonArray[1];
+
+            vectorArray[windIndex].SetActive(true);
 
             //buttonText.text = "당신 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불 수 있습니다.\n버튼을 꾹 눌러 <color=#0096FF>파워</color>를 조절하세요";
 
