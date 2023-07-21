@@ -8,7 +8,7 @@ using UnityEngine;
 public class AiManager : MonoBehaviour
 {
     [Title("Player Information")]
-    public string aiName = "ÀÎ°øÁö´É";
+    public string aiName = "ì¸ê³µì§€ëŠ¥";
     public GameType gameType = GameType.NewBie;
     public WindCharacterType windCharacterType = WindCharacterType.Winter;
     public GameRankType gameRankType = GameRankType.Bronze_4;
@@ -22,7 +22,7 @@ public class AiManager : MonoBehaviour
     [Space]
     [Title("Value")]
     public int random = 0;
-    public int limitBlock = 0; //ÀÔÀå Á¦ÇÑ ºí·° °¡Ä¡
+    public int limitBlock = 0; //?? ?? ?? ??
     public int limitBlockLevel_N = 0;
     public int limitBlockLevel_R = 0;
     public int limitBlockLevel_SR = 0;
@@ -43,7 +43,7 @@ public class AiManager : MonoBehaviour
     public BlockClass[] blockClassArray;
     public BlockType[] blockTypeArray;
 
-    public int[] bettingValue = new int[3]; //°¢ ºí·°¿¡ ¹èÆÃ ±İ¾×
+    public int[] bettingValue = new int[3]; //? ??? ?? ??
 
     public int[] dontBettingZone1;
     public int[] dontBettingZone2;
@@ -101,11 +101,11 @@ public class AiManager : MonoBehaviour
 
         if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            limitBlock = rankInformation.limitBlockValue / 2;
+            limitBlock = rankInformation.limitBlockLevel / 2;
         }
         else
         {
-            limitBlock = rankInformation.limitBlockValue;
+            limitBlock = rankInformation.limitBlockLevel;
         }
 
         limitBlockLevel_N = upgradeDataBase.CheckUpgradeValue(RankType.N, limitBlock);
@@ -202,7 +202,7 @@ public class AiManager : MonoBehaviour
                 blockClass.level = limitBlockLevel_N;
             }
 
-            value = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level - Random.Range(0, 2));
+            value = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
 
             blockClassArray[i] = blockClass;
             bettingValue[i] = value;
@@ -238,7 +238,7 @@ public class AiManager : MonoBehaviour
             otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
             otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
-            Debug.Log("Ai°¡ ÃÊº¸¹æ ºí·°À» " + (blockPos - 1) + "¹ø¿¡ ³õ¾Ò½À´Ï´Ù");
+            Debug.Log("Aiê°€ ì´ˆë³´ë°© " + (blockPos - 1) + " ìœ„ì¹˜ì— ë°°íŒ…í–ˆìŠµë‹ˆë‹¤");
 
             gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
         }
@@ -263,7 +263,7 @@ public class AiManager : MonoBehaviour
             otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
             otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
-            Debug.Log("Ai°¡ °í¼ö¹æ ºí·°À» " + (blockPos - 1) + "¹ø¿¡ ³õ¾Ò½À´Ï´Ù");
+            Debug.Log("Aiê°€ ê³ ìˆ˜ë°© " + (blockPos - 1) + " ìœ„ì¹˜ì— ë°°íŒ…í–ˆìŠµë‹ˆë‹¤");
 
             gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
         }
@@ -283,7 +283,7 @@ public class AiManager : MonoBehaviour
             otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
             otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
-            Debug.Log("Ai°¡ ÃÊº¸¹æ ºí·°À» " + (blockPos - 1) + "¹øÀ¸·Î À§Ä¡¸¦ ¹Ù²å½À´Ï´Ù");
+            Debug.Log("Aiê°€ ì´ˆë³´ë°© " + (blockPos - 1) + " ìœ„ì¹˜ë¡œ ì´ë™í–ˆìŠµë‹ˆë‹¤");
 
             gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
         }
@@ -319,7 +319,7 @@ public class AiManager : MonoBehaviour
             otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
             otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
-            Debug.Log("Ai°¡ °í¼ö¹æ ºí·°À» " + (blockPos - 1) + "¹øÀ¸·Î À§Ä¡¸¦ ¹Ù²å½À´Ï´Ù");
+            Debug.Log("Aiê°€ ê³ ìˆ˜ë°© " + (blockPos - 1) + " ìœ„ì¹˜ë¡œ ì´ë™í–ˆìŠµë‹ˆë‹¤");
 
             gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
         }

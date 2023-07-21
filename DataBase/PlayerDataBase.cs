@@ -92,6 +92,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int formation = 0;
     [SerializeField]
+    private int star = 0;
+    [SerializeField]
+    private int nowRank = 0;
+    [SerializeField]
     private int highRank = 0;
 
     [Title("Equip")]
@@ -182,6 +186,30 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             formation = value;
+        }
+    }
+
+    public int Star
+    {
+        get
+        {
+            return star;
+        }
+        set
+        {
+            star = value;
+        }
+    }
+
+    public int NowRank
+    {
+        get
+        {
+            return nowRank;
+        }
+        set
+        {
+            nowRank = value;
         }
     }
 
@@ -320,7 +348,10 @@ public class PlayerDataBase : ScriptableObject
     {
         gold = 0;
         crystal = 0;
+
         formation = 0;
+        star = 0;
+        nowRank = 0;
         highRank = 0;
 
         armor = "";
@@ -709,15 +740,36 @@ public class PlayerDataBase : ScriptableObject
         {
             check = false;
         }
+        else
+        {
+            if(armor.Length == 0)
+            {
+                check = false;
+            }
+        }
 
         if (weapon == null)
         {
             check = false;
         }
+        else
+        {
+            if (weapon.Length == 0)
+            {
+                check = false;
+            }
+        }
 
         if (shield == null)
         {
             check = false;
+        }
+        else
+        {
+            if (shield.Length == 0)
+            {
+                check = false;
+            }
         }
 
         return check;
@@ -731,6 +783,14 @@ public class PlayerDataBase : ScriptableObject
         {
             check = false;
         }
+        else
+        {
+            if (newbie.Length == 0)
+            {
+                check = false;
+            }
+        }
+
 
         return check;
     }

@@ -10,6 +10,7 @@ public class FormationManager : MonoBehaviour
     public GameObject warningView;
 
     public GameObject animationView;
+    public Text animationText;
     public Image icon;
 
     public Sprite[] iconArray;
@@ -56,11 +57,11 @@ public class FormationManager : MonoBehaviour
 
         if (selectNumber == 0)
         {
-            warningText.text = "정말로 눈의 세계 진형을\n선택하실 건가요?";
+            warningText.text = LocalizationManager.instance.GetString("Formation_Winter");
         }
         else
         {
-            warningText.text = "정말로 지하 세계 진형을\n선택하실 건가요?";
+            warningText.text = LocalizationManager.instance.GetString("Formation_Under");
         }
     }
     public void SelectedFormation()
@@ -123,11 +124,15 @@ public class FormationManager : MonoBehaviour
         {
             icon.sprite = iconArray[0];
 
+            animationText.text = LocalizationManager.instance.GetString("Select_Winter");
+
             SoundManager.instance.PlayBGM(GameBgmType.Main_Snow);
         }
         else
         {
             icon.sprite = iconArray[1];
+
+            animationText.text = LocalizationManager.instance.GetString("Select_Under");
 
             SoundManager.instance.PlayBGM(GameBgmType.Main_Under);
         }

@@ -752,12 +752,12 @@ public class PlayfabManager : MonoBehaviour
                     {
                         if (list.ItemId.Contains((BlockType.Default + i).ToString()))
                         {
-                            //if (list.CustomData == null)
-                            //{
-                            //    SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
+                            if (list.CustomData == null)
+                            {
+                                SetInventoryCustomData(list.ItemInstanceId, defaultCustomData);
 
-                            //    Debug.Log(list.ItemInstanceId + " 블럭이 초기화 되었습니다");
-                            //}
+                                Debug.Log(list.ItemInstanceId + " 블럭이 초기화 되었습니다");
+                            }
 
                             playerDataBase.SetBlock(list);
                         }
@@ -863,6 +863,14 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "DefDestroyTicket":
                            playerDataBase.DefDestroyTicket = statistics.Value;
+                           break;
+                       case "Star":
+                           playerDataBase.Star = statistics.Value;
+                           break;
+                       case "NowRank":
+                           playerDataBase.NowRank = statistics.Value;
+
+                           GameStateManager.instance.GameRankType = GameRankType.Bronze_4 + playerDataBase.NowRank;
                            break;
                        case "HighRank":
                            playerDataBase.HighRank = statistics.Value;

@@ -25,12 +25,15 @@ public class MatchingManager : MonoBehaviour
     [Title("Enter")]
     public Image rankImg;
     public Text rankText;
+
     public Text newbieEnterText;
     public Text newbieMaxBlockText;
     public Text gosuEnterText;
     public Text gosuMaxBlockText;
 
     Sprite[] rankIconArray;
+
+    public Image[] starArray;
 
     string[] strArray = new string[2];
     string[] strArray2 = new string[2];
@@ -86,63 +89,133 @@ public class MatchingManager : MonoBehaviour
 
     public void Initialize()
     {
-        int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
-        gameRankType = GameRankType.Bronze_4 + rank;
+        //int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
+        //gameRankType = GameRankType.Bronze_4 + rank;
 
-        if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
+        //if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
+        //{
+        //    gameRankType = GameRankType.Legend_1;
+        //}
+
+        int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank);
+
+        for (int i = 0; i < starArray.Length; i ++)
         {
-            gameRankType = GameRankType.Legend_1;
+            starArray[i].gameObject.SetActive(false);
         }
 
-        rankImg.sprite = rankIconArray[rank];
+        for(int i =0; i < needStar; i ++)
+        {
+            starArray[i].gameObject.SetActive(true);
+            starArray[i].color = Color.black;
+        }
 
-        strArray = rankDataBase.rankInformationArray[rank].gameRankType.ToString().Split("_");
+        for(int i = 0; i < playerDataBase.Star; i ++)
+        {
+            starArray[i].color = Color.white;
+        }
+
+        rankImg.sprite = rankIconArray[playerDataBase.NowRank];
+
+        strArray = rankDataBase.rankInformationArray[playerDataBase.NowRank].gameRankType.ToString().Split("_");
 
         rankText.text = LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1];
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Rank", (int)gameRankType);
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
         stakes = rankInformation.stakes;
-        limitBlock = rankInformation.limitBlockValue;
+        limitBlock = rankInformation.limitBlockLevel;
 
-        newbieEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes / 2);
-        newbieMaxBlockText.text = "최대 블럭 레벨 : " + MoneyUnitString.ToCurrencyString(limitBlock / 2);
+        newbieEnterText.text = LocalizationManager.instance.GetString("AllowMoney") + " : " + MoneyUnitString.ToCurrencyString(stakes / 2);
+        newbieMaxBlockText.text = LocalizationManager.instance.GetString("AllowBlockLevel") + " : " + MoneyUnitString.ToCurrencyString(limitBlock);
 
-        gosuEnterText.text = "입장료 : " + MoneyUnitString.ToCurrencyString(stakes);
-        gosuMaxBlockText.text = "최대 블럭 레벨 : " + MoneyUnitString.ToCurrencyString(limitBlock);
-
-        if(GameStateManager.instance.GameRankType < gameRankType)
-        {
-            Debug.Log("랭크 상승!");
-
-            if(uIManager.isFirst || uIManager.isHome)
-            {
-                OpenRankUpView(true);
-            }
-
-            if((int)gameRankType > playerDataBase.HighRank)
-            {
-                playerDataBase.HighRank = (int)gameRankType;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", (int)gameRankType);
-
-                Debug.Log("최고 랭크 달성!");
-            }
-        }
-        else if(GameStateManager.instance.GameRankType > gameRankType)
-        {
-            Debug.Log("랭크 하락");
-
-            if (uIManager.isFirst)
-            {
-                OpenRankUpView(false);
-            }
-        }
-
-        GameStateManager.instance.GameRankType = gameRankType;
+        gosuEnterText.text = LocalizationManager.instance.GetString("AllowMoney") + " : " + MoneyUnitString.ToCurrencyString(stakes);
+        gosuMaxBlockText.text = LocalizationManager.instance.GetString("AllowBlockLevel") + " : " + MoneyUnitString.ToCurrencyString(limitBlock);
     }
+
+    [Button]
+    public void CheckRankUp()
+    {
+        if(GameStateManager.instance.Win)
+        {
+            GameStateManager.instance.Win = false;
+
+            int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank);
+
+            if(GameStateManager.instance.WinStreak >= 3)
+            {
+                playerDataBase.Star += 2;
+
+                Debug.Log("3연승 이상 승리 :  별 2개 획득");
+            }
+            else
+            {
+                playerDataBase.Star += 1;
+
+                Debug.Log("승리 : 별 1개 획득");
+            }
+
+            if(playerDataBase.NowRank != rankDataBase.rankInformationArray.Length - 1)
+            {
+                if (playerDataBase.Star >= needStar)
+                {
+                    playerDataBase.NowRank += 1;
+
+                    GameStateManager.instance.GameRankType += 1;
+
+                    playerDataBase.Star -= needStar;
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
+
+                    if(playerDataBase.NowRank > playerDataBase.HighRank)
+                    {
+                        playerDataBase.HighRank = playerDataBase.NowRank;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", playerDataBase.HighRank);
+
+                        Debug.Log("최고 랭크 갱신 !");
+                    }
+
+                    OpenRankUpView(true);
+
+                    Debug.Log("랭크 상승 !");
+                }
+            }
+            else
+            {
+                playerDataBase.Star = rankDataBase.GetNeedStar(rankDataBase.rankInformationArray.Length - 1);
+
+                Debug.Log("최고 랭크 달성 !");
+            }
+        }
+        else if(GameStateManager.instance.Lose)
+        {
+            GameStateManager.instance.Lose = false;
+            GameStateManager.instance.WinStreak = 0;
+
+            playerDataBase.Star -= 1;
+
+            Debug.Log("패배 : 별 1개 감소");
+
+            if (playerDataBase.Star <= -1 && playerDataBase.NowRank != 0)
+            {
+                playerDataBase.Star = rankDataBase.GetNeedStar(playerDataBase.NowRank - 1) - 1;
+
+                playerDataBase.NowRank -= 1;
+
+                GameStateManager.instance.GameRankType -= 1;
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
+
+                OpenRankUpView(false);
+
+                Debug.Log("랭크 하락");
+            }
+        }
+
+        Initialize();
+    }
+
 
     void OpenRankUpView(bool check)
     {
@@ -152,15 +225,15 @@ public class MatchingManager : MonoBehaviour
 
         rankUpIcon.sprite = rankIconArray[(int)gameRankType];
 
-        strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
-        strArray2 = rankDataBase.rankInformationArray[(int)gameRankType].gameRankType.ToString().Split("_");
-
-        rankUpText.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " + 
-            LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] +"</color>";
-
         if (check)
         {
-            rankUpTitle.text = "랭크 상승!";
+            rankUpTitle.text = LocalizationManager.instance.GetString("RankUp");
+
+            strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType - 1].gameRankType.ToString().Split("_");
+            strArray2 = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
+
+            rankUpText.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " +
+    LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] + "</color>";
 
             SoundManager.instance.PlaySFX(GameSfxType.RankUp);
 
@@ -169,7 +242,13 @@ public class MatchingManager : MonoBehaviour
         }
         else
         {
-            rankUpTitle.text = "랭크 하락";
+            rankUpTitle.text = LocalizationManager.instance.GetString("RankDown");
+
+            strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType + 1].gameRankType.ToString().Split("_");
+            strArray2 = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
+
+            rankUpText.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " +
+    LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] + "</color>";
         }
 
         isWait = true;
@@ -199,16 +278,26 @@ public class MatchingManager : MonoBehaviour
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
         stakes = rankInformation.stakes;
-        limitBlock = rankInformation.limitBlockValue;
-
-        blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
-
-        int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
+        limitBlock = rankInformation.limitBlockLevel;
 
         if(!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
         {
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
+
             return;
+        }
+        else
+        {
+            blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
+
+            if (blockClass.level > limitBlock) //블럭 제한을 넘지 않는지?
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+
+                return;
+            }
         }
 
         if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
@@ -220,16 +309,6 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        if(number > (limitBlock / 2)) //블럭 제한을 넘지 않는지?
-        {
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
-
-            return;
-        }
-
-
         OpenMacthingView();
 
         networkManager.JoinRandomRoom_Newbie();
@@ -239,30 +318,34 @@ public class MatchingManager : MonoBehaviour
 
     public void GameStartButton_Gosu()
     {
-        blockClass = playerDataBase.GetBlockClass(playerDataBase.Armor);
-        blockClass2 = playerDataBase.GetBlockClass(playerDataBase.Weapon);
-        blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
+        rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
-        int number = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);
-        int number2 = upgradeDataBase.GetUpgradeValue(blockClass2.rankType).GetValueNumber(blockClass2.level);
-        int number3 = upgradeDataBase.GetUpgradeValue(blockClass3.rankType).GetValueNumber(blockClass3.level);
+        stakes = rankInformation.stakes;
+        limitBlock = rankInformation.limitBlockLevel;
 
         if (!playerDataBase.CheckEquipBlock_Gosu()) //블록은 전부 장착했는지
         {
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
+
             return;
+        }
+        else
+        {
+            blockClass = playerDataBase.GetBlockClass(playerDataBase.Armor);
+            blockClass2 = playerDataBase.GetBlockClass(playerDataBase.Weapon);
+            blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
+
+            if (blockClass.level > limitBlock || blockClass2.level > limitBlock || blockClass3.level > limitBlock) //블럭 제한을 넘지 않는지?
+            {
+                NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+
+                return;
+            }
         }
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-
-            return;
-        }
-
-        if (number > limitBlock || number2 > limitBlock || number3 > limitBlock) //블럭 제한을 넘지 않는지?
-        {
-            NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
             return;
         }
@@ -307,7 +390,7 @@ public class MatchingManager : MonoBehaviour
         while(matchingWaitTime > 0)
         {
             matchingWaitTime -= 1;
-            matchingText.text = "상대방을 찾고 있습니다...\n예상 대기 시간 : " + matchingWaitTime + "초";
+            matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
 
             if(matchingWaitTime <= 1)
             {
@@ -365,5 +448,21 @@ public class MatchingManager : MonoBehaviour
             SoundManager.instance.PlayBGM(GameBgmType.Game_Gosu);
         }
 
+    }
+
+    public void StarUp()
+    {
+        GameStateManager.instance.Win = true;
+
+        GameStateManager.instance.WinStreak += 1;
+
+        CheckRankUp();
+    }
+
+    public void StarDown()
+    {
+        GameStateManager.instance.Lose = true;
+
+        CheckRankUp();
     }
 }

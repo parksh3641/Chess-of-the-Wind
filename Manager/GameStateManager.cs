@@ -42,6 +42,12 @@ public class GameStateManager : MonoBehaviour
         public int penalty = 0;
 
         [Space]
+        [Title("Rank")]
+        public int winStreak = 0; //연속 승리
+        public bool win = false;
+        public bool lose = false;
+
+        [Space]
         [Title("Setting")]
         public bool tutorial = true;
         public bool music = true;
@@ -322,6 +328,46 @@ public class GameStateManager : MonoBehaviour
             SaveFile();
         }
     }
+
+    public int WinStreak
+    {
+        get
+        {
+            return gameSettings.winStreak;
+        }
+        set
+        {
+            gameSettings.winStreak = value;
+            SaveFile();
+        }
+    }
+
+    public bool Win
+    {
+        get
+        {
+            return gameSettings.win;
+        }
+        set
+        {
+            gameSettings.win = value;
+            SaveFile();
+        }
+    }
+
+    public bool Lose
+    {
+        get
+        {
+            return gameSettings.lose;
+        }
+        set
+        {
+            gameSettings.lose = value;
+            SaveFile();
+        }
+    }
+
 
     public bool Tutorial
     {

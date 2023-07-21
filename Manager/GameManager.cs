@@ -1014,7 +1014,7 @@ public class GameManager : MonoBehaviour
         {
             SetMinusMoney(bettingMoney);
 
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, bettingMoney);
+            //PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, bettingMoney);
 
             Debug.LogError(bettingMoney + "만큼 배팅했습니다.");
         }
@@ -1208,7 +1208,7 @@ public class GameManager : MonoBehaviour
             {
                 tempMoney = (int)(plusMoney) - bettingMoney;
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, tempMoney);
+                //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, tempMoney);
 
                 //worldNotion = "<color=#00FF00>+" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
                 localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);

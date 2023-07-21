@@ -243,7 +243,8 @@ public enum NotionType
     RestorePurchaseNotion,
     EnemyTurn,
     NeedEquipBlock,
-    NotSellBlock
+    NotSellBlock,
+    BuyShopItem
 }
 
 public enum GameRankType

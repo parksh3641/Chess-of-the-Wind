@@ -67,10 +67,10 @@ public class ProfileManager : MonoBehaviour
             characterImg.sprite = characterArray[0];
         }
 
-        int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
+        //int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
 
-        nowRankImg.sprite = rankIconArray[rank];
-        strArray = rankDataBase.rankInformationArray[rank].gameRankType.ToString().Split("_");
+        nowRankImg.sprite = rankIconArray[playerDataBase.NowRank];
+        strArray = rankDataBase.rankInformationArray[playerDataBase.NowRank].gameRankType.ToString().Split("_");
         nowRankText.text = strArray[1];
 
         highRankImg.sprite = rankIconArray[playerDataBase.HighRank];

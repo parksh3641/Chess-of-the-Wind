@@ -15,7 +15,7 @@ public class NumberContent : MonoBehaviour
         }
         else if(number == 12)
         {
-            numberText.text = "퀸";
+            numberText.text = LocalizationManager.instance.GetString("Queen");
         }
         else if(number > 12)
         {
@@ -31,7 +31,7 @@ public class NumberContent : MonoBehaviour
         }
         else if (number == 4)
         {
-            numberText.text = "퀸";
+            numberText.text = LocalizationManager.instance.GetString("Queen");
         }
         else if (number > 4)
         {

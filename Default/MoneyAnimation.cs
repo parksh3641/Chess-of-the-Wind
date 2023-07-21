@@ -64,7 +64,7 @@ public class MoneyAnimation : MonoBehaviour
         changeMoneyText[1].text = "";
     }
 
-    public void AddMoneyAnimation(int money, int otherMoney, int value) //???? ?????? ?? ??????
+    public void AddMoneyAnimation(int money, int otherMoney, int value)
     {
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
@@ -90,7 +90,7 @@ public class MoneyAnimation : MonoBehaviour
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
-    public void MinusMoneyAnimation(int money, int otherMoney, int value) //???????? ?? ?? ??????
+    public void MinusMoneyAnimation(int money, int otherMoney, int value)
     {
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
@@ -441,7 +441,7 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ?? ? ??!</color>";
+            text.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
 
             yield return waitForSeconds2;
         }
@@ -488,7 +488,7 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + " ?? ? ??</color>";
+            text.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
 
             yield return waitForSeconds2;
         }

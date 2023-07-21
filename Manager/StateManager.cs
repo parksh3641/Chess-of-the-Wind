@@ -60,7 +60,7 @@ public class StateManager : MonoBehaviour
 
                 GameStateManager.instance.Penalty = 0;
         
-                Debug.Log("패널티가 적용되었습니다");
+                Debug.Log("Initialize Complete !!");
             }
         }
     }

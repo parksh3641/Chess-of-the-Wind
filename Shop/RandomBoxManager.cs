@@ -21,14 +21,16 @@ public class RandomBoxManager : MonoBehaviour
 
     [Title("Box")]
     public Image boxIcon;
+    public Image boxGradient;
     public Sprite[] boxInitIcon;
     public Sprite[] boxOpenIcon;
     public GameObject boxOpenEffect;
+    public GameObject gradient;
 
     public GameObject boxPanel;
     public GameObject closePanel;
     public ButtonScaleAnimation boxAnim;
-
+    public GameObject tapObj;
 
     [Title("Value")]
     public int boxCount = 0;
@@ -36,11 +38,11 @@ public class RandomBoxManager : MonoBehaviour
     public float[] percentBlock;
     public List<string> allowSnowBlockList = new List<string>();
     public List<string> allowUnderworldBlockList = new List<string>();
-    public List<BlockClass> prizeBlockList = new List<BlockClass>(); //¥Á√∑µ» ∞Õ
+    public List<BlockClass> prizeBlockList = new List<BlockClass>();
     public List<string> prizeBlockStringList = new List<string>();
 
-    public bool isWait = false; //ªÛ¿⁄ ªÃ±‚ µÙ∑π¿Ã
-    public bool isStart = false; //¡ÿ∫Òøœ∑·
+    public bool isWait = false;
+    public bool isStart = false;
 
     private float random = 0;
     private string block = "";
@@ -88,6 +90,10 @@ public class RandomBoxManager : MonoBehaviour
         closePanel.SetActive(false);
 
         boxOpenEffect.SetActive(false);
+
+        tapObj.SetActive(false);
+
+        gradient.SetActive(false);
     }
 
     private void OnApplicationQuit()
@@ -103,6 +109,7 @@ public class RandomBoxManager : MonoBehaviour
             ResetView();
 
             boxIcon.sprite = boxInitIcon[0];
+            boxGradient.sprite = boxInitIcon[0];
 
             boxCount = playerDataBase.SnowBox;
             boxCountText.text = boxCount.ToString();
@@ -122,6 +129,7 @@ public class RandomBoxManager : MonoBehaviour
             ResetView();
 
             boxIcon.sprite = boxInitIcon[1];
+            boxGradient.sprite = boxInitIcon[1];
 
             boxCount = playerDataBase.UnderworldBox;
             boxCountText.text = boxCount.ToString();
@@ -191,7 +199,7 @@ public class RandomBoxManager : MonoBehaviour
         StartCoroutine(RandomBoxCoroution());
     }
 
-    public void OpenBox() //ªÛ¿⁄∞° ¡ÿ∫Òµ«∏È ø≠±‚
+    public void OpenBox()
     {
         if (!isStart) return;
 
@@ -199,9 +207,11 @@ public class RandomBoxManager : MonoBehaviour
         {
             case WindCharacterType.Winter:
                 boxIcon.sprite = boxOpenIcon[0];
+                boxGradient.sprite = boxOpenIcon[1];
                 break;
             case WindCharacterType.UnderWorld:
                 boxIcon.sprite = boxOpenIcon[1];
+                boxGradient.sprite = boxOpenIcon[1];
                 break;
         }
 
@@ -242,6 +252,8 @@ public class RandomBoxManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
+        tapObj.SetActive(true);
+
         closePanel.SetActive(true);
     }
 
@@ -281,25 +293,29 @@ public class RandomBoxManager : MonoBehaviour
             {
                 blockClass.rankType = RankType.SSR;
                 block += "_SSR";
-                Debug.Log("SSR ¥Á√∑");
+                Debug.Log("SSR ÎãπÏ≤®");
+
+                gradient.SetActive(true);
             }
             else if (random <= percentBlock[2])
             {
                 blockClass.rankType = RankType.SR;
                 block += "_SR";
-                Debug.Log("SR ¥Á√∑");
+                Debug.Log("SR ÎãπÏ≤®");
+
+                gradient.SetActive(true);
             }
             else if (random <= percentBlock[1])
             {
                 blockClass.rankType = RankType.R;
                 block += "_R";
-                Debug.Log("R ¥Á√∑");
+                Debug.Log("R ÎãπÏ≤®");
             }
             else
             {
                 blockClass.rankType = RankType.N;
                 block += "_N";
-                Debug.Log("N ¥Á√∑");
+                Debug.Log("N ÎãπÏ≤®");
             }
 
             prizeBlockList.Add(blockClass);
@@ -312,8 +328,6 @@ public class RandomBoxManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("ªÛ¿⁄ ¡æ∑· »ƒ ¿Ø¿˙ ¿Œ∫•≈‰∏Æ ¿¸º€ Ω√¿€");
-
             while (isWait)
             {
                 yield return null;
@@ -339,8 +353,6 @@ public class RandomBoxManager : MonoBehaviour
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
                 break;
         }
-
-        Debug.Log("¿Ø¿˙ ¿Œ∫•≈‰∏Æ ¿¸º€ øœ∑·");
 
         yield return new WaitForSeconds(0.5f);
 
@@ -422,7 +434,5 @@ public class RandomBoxManager : MonoBehaviour
 
                 break;
         }
-
-        Debug.Log("∞‘¿” «√∑π¿Ã ∫∏ªÛ : " + prize);
     }
 }

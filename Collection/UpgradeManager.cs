@@ -438,7 +438,7 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellButton()
     {
-        if(blockClass.rankType == RankType.R)
+        if(blockClass.rankType == RankType.N)
         {
             NotionManager.instance.UseNotion(NotionType.NotSellBlock);
             return;

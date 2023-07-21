@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ShopContent : MonoBehaviour
 {
     public ShopType shopType = ShopType.UpgradeTicket_N;
+    public MoneyType moneyType = MoneyType.Gold;
 
     public Image backgroundImg;
 
@@ -14,9 +15,14 @@ public class ShopContent : MonoBehaviour
     public Image icon;
 
     public Text titleText;
-    public Text priceRMText;
-    public GameObject coin;
-    public Text priceCoinText;
+
+    public GameObject adButton;
+
+    public GameObject buyButton;
+    public Text priceText;
+
+    public GameObject goldObj;
+    public Text goldText;
 
     Sprite[] shopContentArray;
 
@@ -30,12 +36,30 @@ public class ShopContent : MonoBehaviour
         shopContentArray = imageDataBase.shopContentArray;
     }
 
-    public void Initialize(ShopType type, ShopManager manager)
+    public void Initialize(ShopType type, MoneyType money, ShopManager manager)
     {
         shopType = type;
         shopManager = manager;
 
-        coin.SetActive(false);
+        moneyType = money;
+
+        buyButton.SetActive(true);
+
+        if (moneyType == MoneyType.Gold)
+        {
+            adButton.SetActive(false);
+            goldObj.SetActive(true);
+
+            priceText.gameObject.SetActive(false);
+        }
+        else
+        {
+            adButton.SetActive(true);
+            goldObj.SetActive(false);
+
+            priceText.gameObject.SetActive(true);
+        }
+
 
         icon.sprite = shopContentArray[(int)type];
 
@@ -50,49 +74,91 @@ public class ShopContent : MonoBehaviour
             case ShopType.UpgradeTicket_N:
                 backgroundImg.sprite = backgroundImgArray[1];
 
-                titleText.text = "N 등급 강화권 x5";
-
-                priceRMText.text = "₩ 1500";
+                if(moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeN") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    goldText.text = "1000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeN") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
 
                 break;
             case ShopType.UpgradeTicket_R:
                 backgroundImg.sprite = backgroundImgArray[2];
 
-                titleText.text = "R 등급 강화권 x5";
-
-                priceRMText.text = "₩ 2500";
+                if (moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    goldText.text = "2000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
 
                 break;
             case ShopType.UpgradeTicket_SR:
                 backgroundImg.sprite = backgroundImgArray[3];
 
-                titleText.text = "SR 등급 강화권 x5";
-
-                priceRMText.text = "₩ 5000";
+                if (moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    goldText.text = "3000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
 
                 break;
             case ShopType.UpgradeTicket_SSR:
                 backgroundImg.sprite = backgroundImgArray[4];
 
-                titleText.text = "SSR 등급 강화권 x5";
-
-                priceRMText.text = "₩ 10000";
+                if (moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeSSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    goldText.text = "4000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeSSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
 
                 break;
             case ShopType.UpgradeTicket_UR:
                 backgroundImg.sprite = backgroundImgArray[5];
 
-                titleText.text = "UR 등급 강화권 x5";
-
-                priceRMText.text = "₩ 15000";
+                if (moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeUR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    goldText.text = "5000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("GradeUR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
 
                 break;
             case ShopType.DefDestroyTicket:
                 backgroundImg.sprite = backgroundImgArray[0];
 
-                titleText.text = "파괴방지권 x5";
-
-                priceRMText.text = "₩ 50000";
+                if (moneyType == MoneyType.Gold)
+                {
+                    titleText.text = LocalizationManager.instance.GetString("DefDestroyTicket") + " x1";
+                    goldText.text = "6000";
+                }
+                else
+                {
+                    titleText.text = LocalizationManager.instance.GetString("DefDestroyTicket") + " x5";
+                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                }
                 break;
             case ShopType.PresentA:
                 break;
@@ -109,6 +175,6 @@ public class ShopContent : MonoBehaviour
 
     public void BuyButton()
     {
-        shopManager.BuyItem(shopType);
+        shopManager.BuyItem(shopType,moneyType);
     }
 }

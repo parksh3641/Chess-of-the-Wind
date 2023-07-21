@@ -49,7 +49,7 @@ public class RankInfoManager : MonoBehaviour
             strArray = rankDataBase.rankInformationArray[i].gameRankType.ToString().Split("_");
 
             monster.Initialize(rankIconArray[i], int.Parse(strArray[1]), LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1],
-                rankDataBase.rankInformationArray[i].value);
+                rankDataBase.rankInformationArray[i].star);
             monster.gameObject.SetActive(true);
 
             rankInfoContentList.Add(monster);
@@ -72,14 +72,14 @@ public class RankInfoManager : MonoBehaviour
 
     public void CheckMy()
     {
-        int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
+        //int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
 
         for(int i = 0; i < rankInfoContentList.Count; i ++)
         {
             rankInfoContentList[i].CheckMy(false);
         }
 
-        rankInfoContentList[rank].CheckMy(true);
+        rankInfoContentList[playerDataBase.NowRank].CheckMy(true);
     }
 
 }

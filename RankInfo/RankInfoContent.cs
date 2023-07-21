@@ -27,7 +27,7 @@ public class RankInfoContent : MonoBehaviour
         icon.sprite = sp;
         index.text = number.ToString();
         rankNameText.text = name;
-        rankUpValue.text = value.ToString() + "~";
+        rankUpValue.text = value.ToString();
     }
 
     public void SetBackground(bool check)

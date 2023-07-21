@@ -7,9 +7,9 @@ using UnityEngine;
 public class RankInformation
 {
     public GameRankType gameRankType = GameRankType.Bronze_4;
-    public int value = 0;
+    public int star = 0;
     public int stakes = 0;
-    public int limitBlockValue = 0;
+    public int limitBlockLevel = 0;
 }
 
 [CreateAssetMenu(fileName = "RankDataBase", menuName = "ScriptableObjects/RankDataBase")]
@@ -33,17 +33,22 @@ public class RankDataBase : ScriptableObject
         return rank;
     }
 
-    public int GetRank(int money)
+    public int GetRank(int money) //더 이상 사용되지 않음 
     {
         int count = 0;
 
         for(int i = 0; i < rankInformationArray.Length; i ++)
         {
-            if(rankInformationArray[i].value <= money)
+            if(rankInformationArray[i].star <= money)
             {
                 count++;
             }
         }
         return count;
+    }
+
+    public int GetNeedStar(int level) //다음 랭크 등급 상승을 위한 별이 몇개 필요한가요?
+    {
+        return rankInformationArray[level].star;
     }
 }

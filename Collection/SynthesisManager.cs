@@ -14,6 +14,7 @@ public class SynthesisManager : MonoBehaviour
 
     public GameObject synthesisView;
     public GameObject synthesisResultView;
+    public GameObject syntheisResultView2;
     public GameObject synthesisResultButton;
 
     public BlockUIContent nextBlockUIContent;
@@ -112,7 +113,7 @@ public class SynthesisManager : MonoBehaviour
     PlayerDataBase playerDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.2f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.15f);
 
     private void Awake()
     {
@@ -122,6 +123,7 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisView.SetActive(false);
         synthesisResultView.SetActive(false);
+        syntheisResultView2.SetActive(false);
         synthesisResultEffect.SetActive(false);
         synthesisResultText.gameObject.SetActive(false);
         synthesisWarning.SetActive(false);
@@ -172,6 +174,7 @@ public class SynthesisManager : MonoBehaviour
         {
             synthesisView.SetActive(true);
             synthesisResultView.SetActive(false);
+            syntheisResultView2.SetActive(false);
             synthesisResultEffect.SetActive(false);
             synthesisResultText.gameObject.SetActive(false);
             synthesisWarning.SetActive(false);
@@ -185,6 +188,7 @@ public class SynthesisManager : MonoBehaviour
         synthesisView.SetActive(false);
 
         synthesisResultView.SetActive(false);
+        syntheisResultView2.SetActive(false);
         synthesisResultEffect.SetActive(false);
         synthesisResultText.gameObject.SetActive(false);
     }
@@ -687,6 +691,7 @@ public class SynthesisManager : MonoBehaviour
     public void ClosesSynthesisResultView()
     {
         synthesisResultView.SetActive(false);
+        syntheisResultView2.SetActive(false);
         synthesisResultEffect.SetActive(false);
         synthesisResultText.gameObject.SetActive(false);
     }
@@ -976,7 +981,7 @@ public class SynthesisManager : MonoBehaviour
                 for(int i = 0; i < synthesisList_Rank_N.Count; i ++)
                 {
                     upgradeManager.SellBlock(synthesisList_Rank_N[i].blockClass.instanceId);
-                    yield return waitForSeconds;
+                    yield return waitForSeconds2;
                 }
 
 
@@ -1001,7 +1006,7 @@ public class SynthesisManager : MonoBehaviour
 
                         Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        yield return waitForSeconds;
+                        yield return waitForSeconds2;
                     }
                 }
 
@@ -1010,7 +1015,7 @@ public class SynthesisManager : MonoBehaviour
                 for (int i = 0; i < synthesisList_Rank_R.Count; i++)
                 {
                     upgradeManager.SellBlock(synthesisList_Rank_R[i].blockClass.instanceId);
-                    yield return waitForSeconds;
+                    yield return waitForSeconds2;
                 }
 
                 for (int i = 0; i < synthesisList_Rank_R_Count.Length; i++)
@@ -1034,7 +1039,7 @@ public class SynthesisManager : MonoBehaviour
 
                         Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        yield return waitForSeconds;
+                        yield return waitForSeconds2;
                     }
                 }
 
@@ -1043,7 +1048,7 @@ public class SynthesisManager : MonoBehaviour
                 for (int i = 0; i < synthesisList_Rank_SR.Count; i++)
                 {
                     upgradeManager.SellBlock(synthesisList_Rank_SR[i].blockClass.instanceId);
-                    yield return waitForSeconds;
+                    yield return waitForSeconds2;
                 }
 
                 for (int i = 0; i < synthesisList_Rank_SR_Count.Length; i++)
@@ -1067,7 +1072,7 @@ public class SynthesisManager : MonoBehaviour
 
                         Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        yield return waitForSeconds;
+                        yield return waitForSeconds2;
                     }
                 }
 
@@ -1079,6 +1084,8 @@ public class SynthesisManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2.5f);
+
+        syntheisResultView2.SetActive(true);
 
         synthesisResultText.gameObject.SetActive(false);
         synthesisResultEffect.SetActive(true);

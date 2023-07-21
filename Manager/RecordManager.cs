@@ -102,15 +102,15 @@ public class RecordManager : MonoBehaviour
 
             if (int.Parse(recordList[i]) == 0)
             {
-                content.Initialize(i + 1 + "번째 턴 : <color=#FFFFFF>+" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FFFFFF>+" + recordList[i] + "</color>");
             }
             else if (int.Parse(recordList[i]) > 0)
             {
-                content.Initialize(i + 1 + "번째 턴 : <color=#27FFFC>+" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#27FFFC>+" + recordList[i] + "</color>");
             }
             else if (int.Parse(recordList[i]) < 0)
             {
-                content.Initialize(i + 1 + "번째 턴 : <color=#FF712B>" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FF712B>" + recordList[i] + "</color>");
             }
             content.gameObject.SetActive(true);
             endRecordContentList.Add(content);

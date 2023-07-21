@@ -75,9 +75,6 @@ public class UIManager : MonoBehaviour
     public Image[] bottomUIImg;
 
     public int index = 0;
-    public bool isFirst = false;
-    public bool isHome = false;
-
     Sprite[] characterArray;
 
     [Space]
@@ -118,8 +115,6 @@ public class UIManager : MonoBehaviour
         versionText.text = "v" + Application.version;
 
         index = -1;
-
-        isFirst = false;
     }
 
     private void Start()
@@ -142,8 +137,6 @@ public class UIManager : MonoBehaviour
         crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
 
         nickNameText.text = GameStateManager.instance.NickName;
-
-        matchingManager.Initialize();
 
         Debug.Log("Main UI Renewal");
     }
@@ -312,6 +305,8 @@ public class UIManager : MonoBehaviour
         resultView.SetActive(false);
 
         Renewal();
+
+        matchingManager.CheckRankUp();
     }
 
     public void OpenRouletteView()
@@ -353,60 +348,65 @@ public class UIManager : MonoBehaviour
 
         if (number == 0)
         {
-            resultTitleText.text = "승리";
+            resultTitleText.text = LocalizationManager.instance.GetString("Win");
 
             if (playerDataBase.Formation == 2)
             {
-                resultTalkText.text = "좋았어! 우리의 승리야.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Win_Under");
             }
             else
             {
-                resultTalkText.text = "저희의 승리입니다.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Win_Winter");
             }
+
+            GameStateManager.instance.Win = true;
+            GameStateManager.instance.WinStreak += 1;
 
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else if(number == 1)
         {
-            resultTitleText.text = "패배";
+            resultTitleText.text = LocalizationManager.instance.GetString("Lose");
 
             if (playerDataBase.Formation == 2)
             {
-                resultTalkText.text = "흥. 아쉬운걸?";
+                resultTalkText.text = LocalizationManager.instance.GetString("Lose_Under");
             }
             else
             {
-                resultTalkText.text = "아쉽네요. 다음번에 더 잘해봐요.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Lose_Winter");
             }
+
+            GameStateManager.instance.Lose = true;
 
             SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
         else if (number == 2)
         {
-            resultTitleText.text = "상대방 항복으로 승리";
+            resultTitleText.text = LocalizationManager.instance.GetString("Surrender_Enemy");
 
             if (playerDataBase.Formation == 2)
             {
-                resultTalkText.text = "승리는 언제나 달콤해.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Win2_Under");
             }
             else
             {
-                resultTalkText.text = "완벽한 승리입니다.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Win2_Winter");
             }
 
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else
         {
-            resultTitleText.text = "무승부";
+            resultTitleText.text = LocalizationManager.instance.GetString("Tie");
 
             if (playerDataBase.Formation == 2)
             {
-                resultTalkText.text = "무승부라고? 이럴수가..";
+                resultTalkText.text = LocalizationManager.instance.GetString("Tie_Under");
             }
             else
             {
-                resultTalkText.text = "무승부라니 상대팀도 잘했군요.";
+                resultTalkText.text = LocalizationManager.instance.GetString("Tie_Winter");
             }
 
             SoundManager.instance.PlaySFX(GameSfxType.GameLose);
@@ -419,11 +419,15 @@ public class UIManager : MonoBehaviour
         {
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
             //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";
+
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, gold);
         }
         else
         {
             moneyAnimation.ResultMinusMoney(gold, resultGoldText);
             //resultGoldText.text = "-<color=#FF712B>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 감소";
+
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
@@ -484,24 +488,12 @@ public class UIManager : MonoBehaviour
         shopManager.CloseShopView();
         collectionManager.CloseCollectionView();
 
-        isHome = false;
-
         switch (number)
         {
             case 0:
                 shopManager.OpenShopView();
                 break;
             case 1:
-                if(!isFirst)
-                {
-                    isFirst = true;
-                }
-                else
-                {
-                    isHome = true;
-
-                    matchingManager.Initialize();
-                }
                 break;
             case 2:
                 collectionManager.OpenCollectionView();

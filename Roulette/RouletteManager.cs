@@ -481,15 +481,15 @@ public class RouletteManager : MonoBehaviour
 
                     if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
                     {
-                        leftQueen.material.color = Color.green;
+                        leftQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
                     }
                     else if (gameManager.bettingNumberList.Contains(queenNumber))
                     {
-                        leftQueen.material.color = new Color(0, 1, 1);
+                        leftQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
                     }
                     else if (gameManager.otherBettingNumberList.Contains(queenNumber))
                     {
-                        leftQueen.material.color = Color.red;
+                        leftQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
                     }
                 }
             }
@@ -514,15 +514,15 @@ public class RouletteManager : MonoBehaviour
 
                     if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
                     {
-                        rightQueen.material.color = Color.green;
+                        rightQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
                     }
                     else if (gameManager.bettingNumberList.Contains(queenNumber))
                     {
-                        rightQueen.material.color = new Color(0, 1, 1);
+                        rightQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
                     }
                     else if (gameManager.otherBettingNumberList.Contains(queenNumber))
                     {
-                        rightQueen.material.color = Color.red;
+                        rightQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
                     }
                 }
             }
@@ -651,8 +651,8 @@ public class RouletteManager : MonoBehaviour
             {
                 if (pinball.rigid.velocity.magnitude < 0.1f)
                 {
-                    rouletteCamera.gameObject.SetActive(false);
-                    rouletteBallCamera.gameObject.SetActive(true);
+                    rouletteCamera.gameObject.SetActive(true);
+                    rouletteBallCamera.gameObject.SetActive(false);
 
                     PV.RPC("CheckPinball", RpcTarget.Others);
 
@@ -695,8 +695,8 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void CheckPinball()
     {
-        rouletteCamera.gameObject.SetActive(false);
-        rouletteBallCamera.gameObject.SetActive(true);
+        rouletteCamera.gameObject.SetActive(true);
+        rouletteBallCamera.gameObject.SetActive(false);
     }
 
     //void CheckGameMode()
