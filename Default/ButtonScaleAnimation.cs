@@ -9,6 +9,7 @@ public class ButtonScaleAnimation : MonoBehaviour
 
     [Header("First Delay")]
     public bool first = false;
+    private bool isStop = false;
     [Range(1, 10)]
     public float firstDelay = 2f;
 
@@ -21,8 +22,6 @@ public class ButtonScaleAnimation : MonoBehaviour
     private float maxScale = 1.15f;
 
     float scale = 0;
-
-    bool isStop = false;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
 
@@ -47,6 +46,7 @@ public class ButtonScaleAnimation : MonoBehaviour
     public void PlayAnim()
     {
         StopAllCoroutines();
+
         StartCoroutine(ButtonAnimation());
     }
 

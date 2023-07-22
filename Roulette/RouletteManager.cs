@@ -471,7 +471,7 @@ public class RouletteManager : MonoBehaviour
                             mainLeftPointerManager.pointerList[j].Betting();
                         }
                     }
-                    else
+                    else if (gameManager.bettingNumberList[i] < queenNumber)ㅁ
                     {
                         if (gameManager.bettingNumberList[i] == mainLeftPointerManager.pointerList[j].index)
                         {
@@ -504,7 +504,7 @@ public class RouletteManager : MonoBehaviour
                             mainRightPointerManager.pointerList[j].Betting();
                         }
                     }
-                    else
+                    else if(gameManager.bettingNumberList[i] < queenNumber)
                     {
                         if (gameManager.bettingNumberList[i] == mainRightPointerManager.pointerList[j].index)
                         {

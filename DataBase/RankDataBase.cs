@@ -44,11 +44,28 @@ public class RankDataBase : ScriptableObject
                 count++;
             }
         }
+
         return count;
     }
 
     public int GetNeedStar(int level) //다음 랭크 등급 상승을 위한 별이 몇개 필요한가요?
     {
         return rankInformationArray[level].star;
+    }
+
+    public int GetLimitLevel(GameRankType type) //제 랭크에서 최대로 허용되는 레벨이 몇인가요?
+    {
+        int level = 0;
+
+        for(int i = 0; i < rankInformationArray.Length; i ++)
+        {
+            if(rankInformationArray[i].gameRankType.Equals(type))
+            {
+                level = rankInformationArray[i].limitBlockLevel;
+                break;
+            }
+        }
+
+        return level;
     }
 }

@@ -10,17 +10,19 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public BlockClass blockClass;
 
     [Title("Block")]
-    Image backgroundImg;
+    public Image backgroundImg;
+    public Image blockUI;
 
     public Image rankImg;
     public Text rankText;
     public Text levelText;
 
+    public GameObject gradient;
+
     Sprite[] rankBackgroundArray;
     Sprite[] rankBannerArray;
 
     public Image blockIcon;
-    public Image blockUI;
     public GameObject blockMain;
 
     public GameObject[] blockUIArray;
@@ -49,8 +51,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
         rankBannerArray = imageDataBase.GetRankBannerArray();
 
-        backgroundImg = GetComponent<Image>();
         canvasGroup = GetComponent<CanvasGroup>();
+
+        gradient.SetActive(false);
 
         blockMain.SetActive(true);
         blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
@@ -77,6 +80,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         for (int i = 0; i < blockMainArray.Length; i++)
         {
             blockMainArray[i].gameObject.SetActive(false);
+        }
+
+        if (blockClass.rankType > RankType.SR)
+        {
+            gradient.SetActive(true);
+        }
+        else
+        {
+            gradient.SetActive(false);
         }
 
         blockUIArray[(int)blockClass.blockType - 1].gameObject.SetActive(true);
@@ -106,6 +118,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockIcon = blockMainArray[(int)blockClass.blockType - 1].blockIcon;
 
         blockIcon.color = new Color(1, 1, 1, 0.5f);
+
+        gradient.SetActive(false);
 
         isDrag = true;
 
@@ -164,6 +178,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             isDrag = false;
         }
 
+        if (blockClass.rankType > RankType.SR)
+        {
+            gradient.SetActive(true);
+        }
+        else
+        {
+            gradient.SetActive(false);
+        }
+
         blockMainArray[(int)blockClass.blockType - 1].Betting(false);
     }
 
@@ -182,6 +205,15 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             isDrag = false;
 
             gameManager.ResetPosBlock(index);
+        }
+
+        if (blockClass.rankType > RankType.SR)
+        {
+            gradient.SetActive(true);
+        }
+        else
+        {
+            gradient.SetActive(false);
         }
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(false);

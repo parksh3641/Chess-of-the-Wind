@@ -92,8 +92,6 @@ public class AiManager : MonoBehaviour
 
     public void Initialize()
     {
-        RestartGame();
-
         gameType = GameStateManager.instance.GameType;
         gameRankType = GameStateManager.instance.GameRankType;
 

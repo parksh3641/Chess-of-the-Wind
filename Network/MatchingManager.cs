@@ -121,7 +121,7 @@ public class MatchingManager : MonoBehaviour
 
         rankText.text = LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1];
 
-        rankInformation = rankDataBase.GetRankInformation(gameRankType);
+        rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockLevel;
@@ -286,19 +286,19 @@ public class MatchingManager : MonoBehaviour
 
             return;
         }
-        else
-        {
-            blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
+        //else
+        //{
+        //    blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
-            if (blockClass.level > limitBlock) //블럭 제한을 넘지 않는지?
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+        //    if (blockClass.level > limitBlock) //블럭 제한을 넘지 않는지?
+        //    {
+        //        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-                NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+        //        NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
         {
@@ -329,19 +329,19 @@ public class MatchingManager : MonoBehaviour
 
             return;
         }
-        else
-        {
-            blockClass = playerDataBase.GetBlockClass(playerDataBase.Armor);
-            blockClass2 = playerDataBase.GetBlockClass(playerDataBase.Weapon);
-            blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
+        //else
+        //{
+        //    blockClass = playerDataBase.GetBlockClass(playerDataBase.Armor);
+        //    blockClass2 = playerDataBase.GetBlockClass(playerDataBase.Weapon);
+        //    blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
 
-            if (blockClass.level > limitBlock || blockClass2.level > limitBlock || blockClass3.level > limitBlock) //블럭 제한을 넘지 않는지?
-            {
-                NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
+        //    if (blockClass.level > limitBlock || blockClass2.level > limitBlock || blockClass3.level > limitBlock) //블럭 제한을 넘지 않는지?
+        //    {
+        //        NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {

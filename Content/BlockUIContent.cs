@@ -14,9 +14,6 @@ public class BlockUIContent : MonoBehaviour
     public Image rankImg;
     public Text rankText;
 
-    Sprite[] rankBackgroundArray;
-    Sprite[] rankBannerArray;
-
     public Text levelText;
     private int level = 0;
 
@@ -27,6 +24,9 @@ public class BlockUIContent : MonoBehaviour
     public GameObject lockedObj;
 
     public GameObject[] blockUIArray;
+
+    Sprite[] rankBackgroundArray;
+    Sprite[] rankBannerArray;
 
     ImageDataBase imageDataBase;
     CollectionManager collectionManager;

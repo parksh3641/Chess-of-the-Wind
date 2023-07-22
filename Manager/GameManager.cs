@@ -184,6 +184,7 @@ public class GameManager : MonoBehaviour
     UpgradeDataBase upgradeDataBase;
     PlayerDataBase playerDataBase;
     BlockDataBase blockDataBase;
+    RankDataBase rankDataBase;
 
     public PhotonView PV;
 
@@ -195,6 +196,7 @@ public class GameManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         bettingValue = new int[4];
         bettingSizeList = new int[4];
@@ -508,13 +510,23 @@ public class GameManager : MonoBehaviour
 
         numberContentTransform_NewBie.gameObject.SetActive(false);
         numberContentTransform.gameObject.SetActive(false);
+
+        aiManager.RestartGame();
+
+        timer = bettingWaitTime;
+        timerFillAmount.fillAmount = 1;
+
+        isTimesUp = false;
+        timerText.text = bettingWaitTime.ToString();
+        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
+        timerAnimation.StopAnim();
     }
 
     public void GameStart_Newbie()
     {
-        roomText.text = "초보방";
+        //roomText.text = "초보방";
 
-        developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n9 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        //developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n9 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
 
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
@@ -530,8 +542,14 @@ public class GameManager : MonoBehaviour
 
         newbieBlockContent.gameObject.SetActive(true);
 
-
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
+
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+
+        if (blockClassNewbie.level > level)
+        {
+            blockClassNewbie.level = level;
+        }
 
         int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
 
@@ -568,7 +586,23 @@ public class GameManager : MonoBehaviour
         blockClassArmor = playerDataBase.GetBlockClass(playerDataBase.Armor);
         blockClassWeapon = playerDataBase.GetBlockClass(playerDataBase.Weapon);
         blockClassShield = playerDataBase.GetBlockClass(playerDataBase.Shield);
-        blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
+
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+
+        if(blockClassArmor.level > level)
+        {
+            blockClassArmor.level = level - 1;
+        }
+
+        if (blockClassWeapon.level > level)
+        {
+            blockClassWeapon.level = level - 1;
+        }
+
+        if (blockClassShield.level > level)
+        {
+            blockClassShield.level = level - 1;
+        }
 
         int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
         int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
@@ -634,13 +668,6 @@ public class GameManager : MonoBehaviour
 
         SetStakes();
         SetTotalMoney();
-
-        timer = bettingWaitTime;
-        timerFillAmount.fillAmount = 1;
-
-        isTimesUp = false;
-        timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
-        timerAnimation.StopAnim();
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -756,7 +783,7 @@ public class GameManager : MonoBehaviour
             PV.RPC("ChangeWaitTimer", RpcTarget.Others, timer);
 
             timerFillAmount.fillAmount = timer / ((bettingWaitTime - 1) * 1.0f);
-            timerText.text = timer + "초 뒤에 게임을 시작합니다";
+            timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
             yield return waitForSeconds;
         }
 
@@ -797,7 +824,7 @@ public class GameManager : MonoBehaviour
         timer = number;
 
         timerFillAmount.fillAmount = timer / ((bettingWaitTime - 1) * 1.0f);
-        timerText.text = timer + "초 뒤에 게임을 시작합니다";
+        timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
     }
 
     [PunRPC]
@@ -1198,9 +1225,9 @@ public class GameManager : MonoBehaviour
 
         if (bettingMoney == 0)
         {
-            localNotion = "변동이 없습니다";
+            //localNotion = "변동이 없습니다";
 
-            NotionManager.instance.UseNotion(localNotion, ColorType.Green);
+            //NotionManager.instance.UseNotion(localNotion, ColorType.Green);
         }
         else
         {
@@ -1211,7 +1238,7 @@ public class GameManager : MonoBehaviour
                 //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, tempMoney);
 
                 //worldNotion = "<color=#00FF00>+" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
-                localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
+                //localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
 
                 //NotionManager.instance.UseNotion(localNotion, ColorType.Green);
                 //RecordManager.instance.SetRecord(localNotion);
@@ -1221,7 +1248,7 @@ public class GameManager : MonoBehaviour
                 tempMoney = (int)(plusMoney) - bettingMoney;
 
                 //worldNotion = "<color=#FF0000>" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
-                localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
+                //localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
 
                 //NotionManager.instance.UseNotion(localNotion, ColorType.Red);
                 //RecordManager.instance.SetRecord(localNotion);
@@ -2620,7 +2647,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            string notion = MoneyUnitString.ToCurrencyString(bettingValue[blockContent.index]) + " 값의 블록 배치";
+            string notion = MoneyUnitString.ToCurrencyString(bettingValue[blockContent.index]) + " " + LocalizationManager.instance.GetString("PowerBetting");
 
             NotionManager.instance.UseNotion(notion, ColorType.Green);
 
@@ -3189,7 +3216,17 @@ public class GameManager : MonoBehaviour
             moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
             otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
-            RecordManager.instance.SetRecord("0");
+            if(bettingMoney > 0)
+            {
+                moneyAnimation.MinusMoneyAnimationMid();
+            }
+
+            if(other[0] > 0)
+            {
+                moneyAnimation.MinusMoneyAnimationMidEnemy();
+            }
+
+            RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
 
 

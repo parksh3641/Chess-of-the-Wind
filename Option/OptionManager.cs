@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class OptionManager : MonoBehaviour
 {
     public GameObject optionView;
+    public GameObject languageView;
 
     public OptionContent[] optionContents;
 
@@ -15,6 +16,7 @@ public class OptionManager : MonoBehaviour
     private void Awake()
     {
         optionView.SetActive(false);
+        languageView.SetActive(false);
     }
 
     private void Start()
@@ -52,6 +54,19 @@ public class OptionManager : MonoBehaviour
         else
         {
             optionView.SetActive(false);
+            languageView.SetActive(false);
+        }
+    }
+
+    public void OpenLanguageView()
+    {
+        if (!languageView.activeInHierarchy)
+        {
+            languageView.SetActive(true);
+        }
+        else
+        {
+            languageView.SetActive(false);
         }
     }
 
@@ -123,11 +138,6 @@ public class OptionManager : MonoBehaviour
         }
     }
 
-
-    public void OpenLanguage()
-    {
-
-    }
 
     public void RestorePurchase()
     {

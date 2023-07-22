@@ -12,6 +12,7 @@ public class MoneyAnimation : MonoBehaviour
 
     public Transform moneyStartTransform;
     public Transform otherMoneyStartTransform;
+    public Transform midTransform;
 
     [Space]
     [Title("Text")]
@@ -25,6 +26,7 @@ public class MoneyAnimation : MonoBehaviour
     public int correction = 0;
 
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
+    List<MoneyContent> moneyPrefabList2 = new List<MoneyContent>();
 
     public GameManager gameManager;
 
@@ -41,6 +43,16 @@ public class MoneyAnimation : MonoBehaviour
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
             moneyPrefabList.Add(monster);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            MoneyContent monster = Instantiate(moneyPrefab);
+            monster.transform.parent = moneyTransform;
+            monster.transform.localPosition = Vector3.zero;
+            monster.transform.localScale = new Vector3(1, 1, 1);
+            monster.gameObject.SetActive(false);
+            moneyPrefabList2.Add(monster);
         }
 
         correction = 0;
@@ -107,6 +119,24 @@ public class MoneyAnimation : MonoBehaviour
         StartCoroutine(ChangeMoneyCoroution());
 
         StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
+    }
+
+    public void MinusMoneyAnimationMid() //내 돈이 가운데로 이동되는 애니메이션
+    {
+        for (int i = 0; i < moneyPrefabList.Count; i++)
+        {
+            moneyPrefabList[i].gameObject.SetActive(true);
+            moneyPrefabList[i].GoToTarget(moneyStartTransform.localPosition, midTransform.localPosition);
+        }
+    }
+
+    public void MinusMoneyAnimationMidEnemy() //상대방 돈이 가운데로 이동되는 애니메이션
+    {
+        for (int i = 0; i < moneyPrefabList2.Count; i++)
+        {
+            moneyPrefabList2[i].gameObject.SetActive(true);
+            moneyPrefabList2[i].GoToTarget(otherMoneyStartTransform.localPosition, midTransform.localPosition);
+        }
     }
 
     IEnumerator ChangeMoneyCoroution()
@@ -399,6 +429,10 @@ public class MoneyAnimation : MonoBehaviour
 
         gameManager.CheckWinnerPlayer();
     }
+
+
+
+
 
     public void ResultAddMoney(int target, Text text)
     {
