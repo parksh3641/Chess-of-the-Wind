@@ -88,6 +88,7 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int crystal = 0;
 
+    [Space]
     [Title("User")]
     [SerializeField]
     private int formation = 0;
@@ -98,6 +99,7 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int highRank = 0;
 
+    [Space]
     [Title("Equip")]
     [SerializeField]
     private string armor = "";
@@ -108,48 +110,82 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private string newbie = "";
 
-    [Title("Item")]
+    [Space]
+    [Title("Box")]
     [SerializeField]
     private int snowBox = 0;
     [SerializeField]
     private int underworldBox = 0;
-    [SerializeField]
-    private int defDestroyTicket = 0;
 
-    [Title("BuyCount")]
+    [Space]
+    [Title("Box_Snow")]
+    [SerializeField]
+    private int snowBox_N = 0;
+    [SerializeField]
+    private int snowBox_R = 0;
+    [SerializeField]
+    private int snowBox_SR = 0;
+    [SerializeField]
+    private int snowBox_SSR = 0;
+    [SerializeField]
+    private int snowBox_UR = 0;
+
+    [Space]
+    [Title("Box_Under")]
+    [SerializeField]
+    private int underworldBox_N = 0;
+    [SerializeField]
+    private int underworldBox_R = 0;
+    [SerializeField]
+    private int underworldBox_SR = 0;
+    [SerializeField]
+    private int underworldBox_SSR = 0;
+    [SerializeField]
+    private int underworldBox_UR = 0;
+
+    [Space]
+    [Title("Box Buy Count")]
     [SerializeField]
     private int buySnowBox = 0;
     [SerializeField]
     private int buyUnderworldBox = 0;
 
+    [Space]
     [Title("Wind Character")]
     [SerializeField]
     private List<WindCharacterClass> windCharacterList = new List<WindCharacterClass>();
 
+    [Space]
     [Title("Block")]
     [SerializeField]
     private List<BlockClass> blockList = new List<BlockClass>();
     public List<BlockClass> successionLevel = new List<BlockClass>();
     public List<string> sellBlockList = new List<string>();
 
+    [Space]
     [Title("Upgrade")]
     [SerializeField]
     private WindCharacterUpgrade windCharacterUpgrade;
     [SerializeField]
     private BlockUpgrade blockUpgrade;
 
+    [Space]
     [Title("Present")]
     [SerializeField]
     private List<PresentClass> presentList = new List<PresentClass>();
 
-    [Title("UpgradeTicket")]
+    [Space]
+    [Title("Upgrade")]
     [SerializeField]
     private List<UpgradeTicketClass> upgradeTicketList = new List<UpgradeTicketClass>();
+    [SerializeField]
+    private int defDestroyTicket = 0;
 
     Dictionary<string, string> levelCustomData = new Dictionary<string, string>();
 
     public delegate void BoxEvent();
-    public static event BoxEvent eGetSnowBox, eGetUnderworldBox;
+    public static event BoxEvent eGetSnowBox, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR,
+        eGetUnderworldBox, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR;
 
     #region Data
 
@@ -290,6 +326,91 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int SnowBox_N
+    {
+        get
+        {
+            return snowBox_N;
+        }
+        set
+        {
+            snowBox_N = value;
+
+            if (snowBox_N > 0)
+            {
+                eGetSnowBox_N();
+            }
+        }
+    }
+
+    public int SnowBox_R
+    {
+        get
+        {
+            return snowBox_R;
+        }
+        set
+        {
+            snowBox_R = value;
+
+            if (snowBox_R > 0)
+            {
+                eGetSnowBox_R();
+            }
+        }
+    }
+
+    public int SnowBox_SR
+    {
+        get
+        {
+            return snowBox_SR;
+        }
+        set
+        {
+            snowBox_SR = value;
+
+            if (snowBox_SR > 0)
+            {
+                eGetSnowBox_SR();
+            }
+        }
+    }
+
+    public int SnowBox_SSR
+    {
+        get
+        {
+            return snowBox_SSR;
+        }
+        set
+        {
+            snowBox_SSR = value;
+
+            if (snowBox_SSR > 0)
+            {
+                eGetSnowBox_SSR();
+            }
+        }
+    }
+
+    public int SnowBox_UR
+    {
+        get
+        {
+            return snowBox_UR;
+        }
+        set
+        {
+            snowBox_UR = value;
+
+            if (snowBox_UR > 0)
+            {
+                eGetSnowBox_UR();
+            }
+        }
+    }
+
     public int UnderworldBox
     {
         get
@@ -303,6 +424,91 @@ public class PlayerDataBase : ScriptableObject
             if (underworldBox > 0)
             {
                 eGetUnderworldBox();
+            }
+        }
+    }
+
+    public int UnderworldBox_N
+    {
+        get
+        {
+            return underworldBox_N;
+        }
+        set
+        {
+            underworldBox_N = value;
+
+            if (underworldBox_N > 0)
+            {
+                eGetUnderworldBox_N();
+            }
+        }
+    }
+
+    public int UnderworldBox_R
+    {
+        get
+        {
+            return underworldBox_R;
+        }
+        set
+        {
+            underworldBox_R = value;
+
+            if (underworldBox_R > 0)
+            {
+                eGetUnderworldBox_R();
+            }
+        }
+    }
+
+    public int UnderworldBox_SR
+    {
+        get
+        {
+            return underworldBox_SR;
+        }
+        set
+        {
+            underworldBox_SR = value;
+
+            if (underworldBox_SR > 0)
+            {
+                eGetUnderworldBox_SR();
+            }
+        }
+    }
+
+    public int UnderworldBox_SSR
+    {
+        get
+        {
+            return underworldBox_SSR;
+        }
+        set
+        {
+            underworldBox_SSR = value;
+
+            if (underworldBox_SSR > 0)
+            {
+                eGetUnderworldBox_SSR();
+            }
+        }
+    }
+
+    public int UnderworldBox_UR
+    {
+        get
+        {
+            return underworldBox_UR;
+        }
+        set
+        {
+            underworldBox_UR = value;
+
+            if (underworldBox_UR > 0)
+            {
+                eGetUnderworldBox_UR();
             }
         }
     }
@@ -353,6 +559,7 @@ public class PlayerDataBase : ScriptableObject
         star = 0;
         nowRank = 0;
         highRank = 0;
+        defDestroyTicket = 0;
 
         armor = "";
         weapon = "";
@@ -360,8 +567,19 @@ public class PlayerDataBase : ScriptableObject
         newbie = "";
 
         snowBox = 0;
+        snowBox_N = 0;
+        snowBox_R = 0;
+        snowBox_SR = 0;
+        snowBox_SSR = 0;
+        snowBox_UR = 0;
+
         underworldBox = 0;
-        defDestroyTicket = 0;
+        underworldBox_N = 0;
+        underworldBox_R = 0;
+        underworldBox_SR = 0;
+        underworldBox_SSR = 0;
+        underworldBox_UR = 0;
+
 
         BuySnowBox = 0;
         BuyUnderworldBox = 0;

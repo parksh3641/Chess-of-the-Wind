@@ -7,7 +7,7 @@ public class OptionContent : MonoBehaviour
 {
     public OptionType optionType = OptionType.Music;
 
-    public Text titleText;
+    public LocalizationContent titleText;
 
     public GameObject[] checkMarks;
 
@@ -15,7 +15,8 @@ public class OptionContent : MonoBehaviour
 
     public void Initialize()
     {
-        titleText.text = LocalizationManager.instance.GetString(optionType.ToString());
+        titleText.localizationName = optionType.ToString();
+        titleText.ReLoad();
 
         switch (optionType)
         {

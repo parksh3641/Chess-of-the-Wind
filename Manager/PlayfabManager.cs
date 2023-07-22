@@ -533,13 +533,11 @@ public class PlayfabManager : MonoBehaviour
 
         GameStateManager.instance.PlayfabId = result.PlayFabId;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
         StartCoroutine(LoadDataCoroutine());
 #else
         GetTitleInternalData("CheckVersion", CheckVersion);
 #endif
-
-        StartCoroutine(LoadDataCoroutine());
 
     }
 
@@ -638,7 +636,7 @@ public class PlayfabManager : MonoBehaviour
 
     IEnumerator LoadDataCoroutine()
     {
-        infoText.text = "로드 중...";
+        infoText.text = LocalizationManager.instance.GetString("Loading");
 
         //infoText.text = "데이터를 읽고 있습니다.";
         Debug.Log("Load Data...");
@@ -656,16 +654,17 @@ public class PlayfabManager : MonoBehaviour
 
         yield return GetUserInventory();
 
-        yield return GetStatistics();
+        yield return new WaitForSeconds(1.0f);
 
         yield return GetPlayerData();
 
-        yield return new WaitForSeconds(1.0f);
-
-        //infoText.text = "서버에 접속중입니다.";
-        Debug.Log("Load Data Complete");
+        yield return GetStatistics();
 
         isActive = true;
+
+        Debug.Log("Load Data Complete");
+
+        yield return new WaitForSeconds(0.5f);
 
         StateManager.instance.Initialize();
     }
@@ -837,8 +836,38 @@ public class PlayfabManager : MonoBehaviour
                        case "SnowBox":
                            playerDataBase.SnowBox = statistics.Value;
                            break;
+                       case "SnowBox_N":
+                           playerDataBase.SnowBox_N = statistics.Value;
+                           break;
+                       case "SnowBox_R":
+                           playerDataBase.SnowBox_R = statistics.Value;
+                           break;
+                       case "SnowBox_SR":
+                           playerDataBase.SnowBox_SR = statistics.Value;
+                           break;
+                       case "SnowBox_SSR":
+                           playerDataBase.SnowBox_SSR = statistics.Value;
+                           break;
+                       case "SnowBox_UR":
+                           playerDataBase.SnowBox_UR = statistics.Value;
+                           break;
                        case "UnderworldBox":
                            playerDataBase.UnderworldBox = statistics.Value;
+                           break;
+                       case "UnderworldBox_N":
+                           playerDataBase.UnderworldBox_N = statistics.Value;
+                           break;
+                       case "UnderworldBox_R":
+                           playerDataBase.UnderworldBox_R = statistics.Value;
+                           break;
+                       case "UnderworldBox_SR":
+                           playerDataBase.UnderworldBox_SR = statistics.Value;
+                           break;
+                       case "UnderworldBox_SSR":
+                           playerDataBase.UnderworldBox_SSR = statistics.Value;
+                           break;
+                       case "UnderworldBox_UR":
+                           playerDataBase.UnderworldBox_UR = statistics.Value;
                            break;
                        case "BuySnowBox":
                            playerDataBase.BuySnowBox = statistics.Value;

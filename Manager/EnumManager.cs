@@ -17,6 +17,21 @@ public enum WindCharacterType
     UnderWorld
 }
 
+public enum BoxType
+{
+    Random,
+    N,
+    R,
+    SR,
+    SSR,
+    UR,
+    Choice_N,
+    Choice_R,
+    Choice_SR,
+    Choice_SSR,
+    Choice_UR
+}
+
 public enum PresentType
 {
     A,

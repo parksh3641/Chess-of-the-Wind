@@ -98,6 +98,12 @@ public class ShopManager : MonoBehaviour
     {
         playerDataBase.SnowBox = number;
 
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", number);
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+
+        //기록
         playerDataBase.BuySnowBox += number;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
@@ -110,6 +116,45 @@ public class ShopManager : MonoBehaviour
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
         }
+    }
+
+    public void GetSnowBox(BoxType type, int number)
+    {
+        switch (type)
+        {
+            case BoxType.Random:
+                break;
+            case BoxType.N:
+                playerDataBase.SnowBox_N = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", number);
+                break;
+            case BoxType.R:
+                playerDataBase.SnowBox_R = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", number);
+                break;
+            case BoxType.SR:
+                playerDataBase.SnowBox_SR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SR", number);
+                break;
+            case BoxType.SSR:
+                playerDataBase.SnowBox_SSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SSR", number);
+                break;
+            case BoxType.UR:
+                playerDataBase.SnowBox_UR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", number);
+                break;
+            case BoxType.Choice_N:
+                break;
+            case BoxType.Choice_R:
+                break;
+            case BoxType.Choice_SR:
+                break;
+            case BoxType.Choice_SSR:
+                break;
+            case BoxType.Choice_UR:
+                break;
+        }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
@@ -118,6 +163,12 @@ public class ShopManager : MonoBehaviour
     {
         playerDataBase.UnderworldBox = number;
 
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", number);
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+
+        //기록
         playerDataBase.BuyUnderworldBox += number;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
@@ -129,6 +180,45 @@ public class ShopManager : MonoBehaviour
         else
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
+        }
+    }
+
+    public void GetUnderworld(BoxType type, int number)
+    {
+        switch (type)
+        {
+            case BoxType.Random:
+                break;
+            case BoxType.N:
+                playerDataBase.UnderworldBox_N = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", number);
+                break;
+            case BoxType.R:
+                playerDataBase.UnderworldBox_R = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", number);
+                break;
+            case BoxType.SR:
+                playerDataBase.UnderworldBox_SR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SR", number);
+                break;
+            case BoxType.SSR:
+                playerDataBase.UnderworldBox_SSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SSR", number);
+                break;
+            case BoxType.UR:
+                playerDataBase.UnderworldBox_UR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", number);
+                break;
+            case BoxType.Choice_N:
+                break;
+            case BoxType.Choice_R:
+                break;
+            case BoxType.Choice_SR:
+                break;
+            case BoxType.Choice_SSR:
+                break;
+            case BoxType.Choice_UR:
+                break;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
@@ -313,13 +403,73 @@ public class ShopManager : MonoBehaviour
 
     #endregion
 
+    #region Developer
+
+    [Button]
     public void PlusMoney()
     {
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 100000);
     }
 
-    public void MinusMoney()
+    [Button]
+    public void OpenSnowBox_N()
     {
-        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 100000);
+        GetSnowBox(BoxType.N, 10);
     }
+
+    [Button]
+    public void OpenSnowBox_R()
+    {
+        GetSnowBox(BoxType.R, 10);
+    }
+
+    [Button]
+    public void OpenSnowBox_SR()
+    {
+        GetSnowBox(BoxType.SR, 10);
+    }
+
+    [Button]
+    public void OpenSnowBox_SSR()
+    {
+        GetSnowBox(BoxType.SSR, 10);
+    }
+
+    [Button]
+    public void OpenSnowBox_UR()
+    {
+        GetSnowBox(BoxType.UR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_N()
+    {
+        GetUnderworld(BoxType.N, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_R()
+    {
+        GetUnderworld(BoxType.R, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_SR()
+    {
+        GetUnderworld(BoxType.SR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_SSR()
+    {
+        GetUnderworld(BoxType.SSR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_UR()
+    {
+        GetUnderworld(BoxType.UR, 10);
+    }
+
+    #endregion
 }

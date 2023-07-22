@@ -9,33 +9,32 @@ public class UpgradeManager : MonoBehaviour
 
     public BlockUIContent blockUIContent;
 
-    public Text titleText;
+    public LocalizationContent titleText;
+    public LocalizationContent storyText;
     public Text levelText;
     public Image levelFillamount;
-    public Text valueText;
+    public LocalizationContent valueText;
 
-    public Text successText;
-    public Text keepText;
-    public Text downText;
-    public Text destroyText;
+    public LocalizationContent successText;
+    public LocalizationContent keepText;
+    public LocalizationContent downText;
+    public LocalizationContent destroyText;
 
-    public Text valuePlusText;
+    public LocalizationContent valuePlusText;
 
-    public Text goldText;
+    public LocalizationContent goldText;
     public Text goldNumberText;
 
-    public Text ticketText;
+    public LocalizationContent ticketText;
     public Text ticketNumberText;
 
     public Image ticketImg;
     public Sprite[] ticketImgArray;
 
-    public Text equipText;
-    public Text upgradeText;
-    public Text sellText;
+    public LocalizationContent equipText;
 
     public GameObject defDestroyObj;
-    public Text defDestroyText;
+    public LocalizationContent defDestroyText;
     public Text defDestroyNumberText;
 
     public Image defCheckMark;
@@ -117,29 +116,52 @@ public class UpgradeManager : MonoBehaviour
         upgradeValue = upgradeDataBase.GetUpgradeValue(blockClass.rankType);
         upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
-        titleText.text = LocalizationManager.instance.GetString(blockClass.blockType.ToString());
+        titleText.localizationName = blockClass.blockType.ToString();
+        titleText.ReLoad();
+
+        storyText.localizationName = blockClass.blockType + "_Story";
+        storyText.ReLoad();
 
         levelText.text = "Lv. " + (blockClass.level + 1).ToString() + "/" + upgradeValue.maxLevel;
         levelFillamount.fillAmount = (blockClass.level + 1) * 1.0f / upgradeValue.maxLevel * 1.0f;
 
-        valueText.text = LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level));
+        valueText.localizationName = "CurrentValue";
+        valueText.plusText = " : <color=#FFCA14>" + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
+        valueText.ReLoad();
 
-        successText.text = LocalizationManager.instance.GetString("SuccessPercent") + " : " + upgradeInformation.success + "%";
-        keepText.text = LocalizationManager.instance.GetString("RetentionPercent") + " : " + upgradeInformation.keep + "%";
-        downText.text = LocalizationManager.instance.GetString("LowerPercent") + " : " + upgradeInformation.down + "%";
-        destroyText.text = LocalizationManager.instance.GetString("DestroyPercent") + " : " + upgradeInformation.destroy + "%";
+        successText.localizationName = "SuccessPercent";
+        successText.plusText = " : " + upgradeInformation.success + "%";
 
-        valuePlusText.text = LocalizationManager.instance.GetString("Value") + " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
-            " ▶ <color=#FFCA14>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) +"</color>";
+
+        keepText.localizationName = "RetentionPercent";
+        keepText.plusText = " : " + upgradeInformation.keep + "%";
+
+
+        downText.localizationName = "LowerPercent";
+        downText.plusText = " : " + upgradeInformation.down + "%";
+
+
+        destroyText.localizationName = "DestroyPercent";
+        destroyText.plusText = " : " + upgradeInformation.destroy + "%";
+
+
+
+        valuePlusText.localizationName = "Value";
+        valuePlusText.plusText = " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
+            "   ▶   <color=#FFCA14>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) + "</color>";
 
         gold = playerDataBase.Gold;
 
-        goldText.text = LocalizationManager.instance.GetString("NeedGold");
+        goldText.localizationName = "NeedGold";
+        goldText.ReLoad();
+
         goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
 
-        ticketText.text = LocalizationManager.instance.GetString("UpgradeTicket");
+        ticketText.localizationName = "UpgradeTicket";
+        ticketText.ReLoad();
+
         ticketNumberText.text = upgradeTicket + "/1";
 
         ticketImg.sprite = ticketImgArray[(int)blockClass.rankType];
@@ -148,13 +170,15 @@ public class UpgradeManager : MonoBehaviour
 
         if(playerDataBase.CheckEquip(blockClass.instanceId) > 0)
         {
-            equipText.text = LocalizationManager.instance.GetString("UnEquip");
+            equipText.localizationName = "UnEquip";
+            equipText.ReLoad();           
 
             unEquip = true;
         }
         else
         {
-            equipText.text = LocalizationManager.instance.GetString("Equip");
+            equipText.localizationName = "Equip";
+            equipText.ReLoad();
 
             unEquip = false;
         }
@@ -163,25 +187,30 @@ public class UpgradeManager : MonoBehaviour
         {
             if(blockClass.rankType != RankType.SSR)
             {
-                successText.text = LocalizationManager.instance.GetString("NextSynthesisInfo");
-                keepText.text = "";
-                downText.text = "";
-                destroyText.text = "";
+                successText.localizationName = "NextSynthesisInfo";
+                keepText.localizationName = "";
+                downText.localizationName = "";
+                destroyText.localizationName = "";
 
                 goldNumberText.text = "-";
                 ticketNumberText.text = "-";
             }
             else
             {
-                successText.text = LocalizationManager.instance.GetString("MaxLevel");
-                keepText.text = "";
-                downText.text = "";
-                destroyText.text = "";
-                valuePlusText.text = "";
+                successText.localizationName = "MaxLevel";
+                keepText.localizationName = "";
+                downText.localizationName = "";
+                destroyText.localizationName = "";
+                valuePlusText.localizationName = "";
 
                 goldNumberText.text = "-";
                 ticketNumberText.text = "-";
             }
+
+            successText.ReLoad();
+            keepText.ReLoad();
+            downText.ReLoad();
+            destroyText.ReLoad();
 
             Debug.Log("최대 레벨입니다");
         }
@@ -201,7 +230,8 @@ public class UpgradeManager : MonoBehaviour
             if(upgradeInformation.destroy > 0f)
             {
                 defDestroyObj.SetActive(true);
-                defDestroyText.text = LocalizationManager.instance.GetString("DefDestroyTicket");
+                defDestroyText.localizationName = "DefDestroyTicket";
+                defDestroyText.ReLoad();
                 defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
 
                 defCheckMark.enabled = false;

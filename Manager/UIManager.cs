@@ -185,13 +185,13 @@ public class UIManager : MonoBehaviour
 
     public void OnMatchingAi(int otherFormation)
     {
-        StartCoroutine(MatchingCoroution("인공지능", GameStateManager.instance.NickName, otherFormation, true));
+        StartCoroutine(MatchingCoroution(LocalizationManager.instance.GetString("Ai"), GameStateManager.instance.NickName, otherFormation, true));
     }
 
 
     IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, bool aiMode)
     {
-        rankText.text = matchingManager.rankText.text;
+        //rankText.text = matchingManager.rankText.text;
 
         if (otherFormation == 2)
         {

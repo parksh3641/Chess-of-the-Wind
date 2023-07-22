@@ -22,11 +22,11 @@ public class SynthesisManager : MonoBehaviour
     public BlockUIContent matBlockUIContent1;
     public BlockUIContent matBlockUIContent2;
 
-    public Text titleText;
-    public Text upgradeLevelText;
-    public Text valueText;
+    public LocalizationContent titleText;
+    public LocalizationContent upgradeLevelText;
+    public LocalizationContent valueText;
 
-    public Text sortText;
+    public LocalizationContent sortText;
 
     public GameObject plusObj;
     public GameObject matObj1;
@@ -36,7 +36,7 @@ public class SynthesisManager : MonoBehaviour
     public Text goldText;
 
     public GameObject needObj;
-    public Text needText;
+    public LocalizationContent needText;
 
     public GameObject sortButton;
     public GameObject synthesisButton;
@@ -113,7 +113,7 @@ public class SynthesisManager : MonoBehaviour
     PlayerDataBase playerDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.15f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.125f);
 
     private void Awake()
     {
@@ -165,7 +165,7 @@ public class SynthesisManager : MonoBehaviour
     private void Start()
     {
         sortCount = 0;
-        sortText.text = LocalizationManager.instance.GetString("ByType");
+        sortText.localizationName = "ByType";
     }
 
     public void OpenSynthesisView()
@@ -195,9 +195,14 @@ public class SynthesisManager : MonoBehaviour
 
     void Initialize()
     {
-        titleText.text = "";
-        upgradeLevelText.text = LocalizationManager.instance.GetString("SynthesisInfo");
-        valueText.text = "";
+        titleText.localizationName = "";
+        upgradeLevelText.localizationName = "SynthesisInfo";
+        upgradeLevelText.plusText = "";
+        valueText.localizationName = "";
+
+        titleText.ReLoad();
+        upgradeLevelText.ReLoad();
+        valueText.ReLoad();
 
         nextBlockUIContent.gameObject.SetActive(false);
         targetBlockUIContent.gameObject.SetActive(false);
@@ -248,7 +253,7 @@ public class SynthesisManager : MonoBehaviour
             blockList.Add(playerDataBase.GetBlockClass()[i]);
         }
 
-        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.level).OrderByDescending(x => x.rankType).ToList();
+        blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
         if (blockUIContentList.Count < blockList.Count)
         {
@@ -347,33 +352,25 @@ public class SynthesisManager : MonoBehaviour
             sortButton.SetActive(false);
             synthesisAllButton.SetActive(false);
 
-            titleText.text = LocalizationManager.instance.GetString(blockClass.blockType.ToString());
-            upgradeLevelText.text = LocalizationManager.instance.GetString("MaxUpgradeLevel") + " : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
-            valueText.text = LocalizationManager.instance.GetString("Value") + " : " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ <color=#FF6123>" + upgradeValue2.GetValueNumber(blockClass.level) + "</color>";
+            titleText.localizationName = blockClass.blockType.ToString();
+            titleText.ReLoad();
+
+            upgradeLevelText.localizationName = "MaxUpgradeLevel";
+            upgradeLevelText.plusText = " : " + upgradeValue.maxLevel + " ▶ <color=#FF6123>" + (upgradeValue.maxLevel + 5) + "</color>";
+            upgradeLevelText.ReLoad();
+
+            valueText.localizationName = "Value";
+            valueText.plusText = " : " + upgradeValue.GetValueNumber(blockClass.level) + " ▶ <color=#FF6123>" + upgradeValue2.GetValueNumber(blockClass.level) + "</color>";
+            valueText.ReLoad();
 
             needGold = upgradeValue.GetSynthesisValue();
 
             goldText.text = needGold.ToString();
 
-            switch (blockClass.rankType)
-            {
-                case RankType.N:
-                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeN") + " " + titleText.text;
-                    break;
-                case RankType.R:
-                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeR") + " " + titleText.text;
-                    break;
-                case RankType.SR:
-                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeSR") + " " + titleText.text;
-                    break;
-                case RankType.SSR:
-                    //matObj2.SetActive(false);
-                    needText.text = LocalizationManager.instance.GetString("Required") + " : 2x " + LocalizationManager.instance.GetString("GradeSSR") + " " + titleText.text;
-                    break;
-                case RankType.UR:
-                    matObj2.SetActive(false);
-                    break;
-            }
+            needText.localizationName = LocalizationManager.instance.GetString("Required");
+            needText.localizationName2 = LocalizationManager.instance.GetString("Grade" + blockClass.rankType.ToString());
+            needText.plusText = " " + titleText.GetText() + " x2";
+            needText.ReLoad();
 
             for (int i = 0; i < blockUIContentList.Count; i++)
             {
@@ -500,9 +497,15 @@ public class SynthesisManager : MonoBehaviour
     {
         if (id.Equals(blockClass.instanceId)) //합성 취소
         {
-            titleText.text = "";
-            upgradeLevelText.text = LocalizationManager.instance.GetString("SynthesisInfo");
-            valueText.text = "";
+            titleText.localizationName = "";
+            upgradeLevelText.localizationName = "SynthesisInfo";
+            upgradeLevelText.plusText = "";
+            valueText.localizationName = "";
+
+            titleText.ReLoad();
+            upgradeLevelText.ReLoad();
+            valueText.ReLoad();
+
             nextBlockUIContent.levelText.text = "";
 
             equipInfo = 0;
@@ -663,6 +666,8 @@ public class SynthesisManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.5f);
 
+        syntheisResultView2.SetActive(true);
+
         synthesisResultText.gameObject.SetActive(false);
         synthesisResultEffect.SetActive(true);
 
@@ -709,7 +714,8 @@ public class SynthesisManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).OrderByDescending(x => x.level).ToList();
 
-            sortText.text = LocalizationManager.instance.GetString("ByLevel");
+            sortText.localizationName = "ByLevel";
+            sortText.ReLoad();
 
             sortCount = 1;
         }
@@ -717,7 +723,8 @@ public class SynthesisManager : MonoBehaviour
         {
             blockList = blockList.OrderByDescending(x => x.blockType).OrderByDescending(x => x.rankType).ToList();
 
-            sortText.text = LocalizationManager.instance.GetString("ByType");
+            sortText.localizationName = "ByType";
+            sortText.ReLoad();
 
             sortCount = 0;
         }

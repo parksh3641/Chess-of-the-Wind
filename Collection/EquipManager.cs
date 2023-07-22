@@ -228,6 +228,8 @@ public class EquipManager : MonoBehaviour
             collectionManager.CheckEquip(playerDataBase.Armor);
         }
 
+        collectionManager.Checking();
+
         blockData.Clear();
         blockData.Add("Armor", block.instanceId);
 
@@ -250,6 +252,8 @@ public class EquipManager : MonoBehaviour
             weaponBlockUI.Collection_Initialize(block);
             collectionManager.CheckEquip(playerDataBase.Weapon);
         }
+
+        collectionManager.Checking();
 
         blockData.Clear();
         blockData.Add("Weapon", block.instanceId);
@@ -274,6 +278,8 @@ public class EquipManager : MonoBehaviour
             collectionManager.CheckEquip(playerDataBase.Shield);
         }
 
+        collectionManager.Checking();
+
         blockData.Clear();
         blockData.Add("Shield", block.instanceId);
 
@@ -296,6 +302,8 @@ public class EquipManager : MonoBehaviour
             newbieBlockUI.Collection_Initialize(block);
             collectionManager.CheckEquip(playerDataBase.Newbie);
         }
+
+        collectionManager.Checking();
 
         blockData.Clear();
         blockData.Add("NewBie", block.instanceId);

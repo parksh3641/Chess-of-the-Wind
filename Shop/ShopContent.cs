@@ -14,12 +14,12 @@ public class ShopContent : MonoBehaviour
 
     public Image icon;
 
-    public Text titleText;
+    public LocalizationContent titleText;
 
     public GameObject adButton;
 
     public GameObject buyButton;
-    public Text priceText;
+    public LocalizationContent priceText;
 
     public GameObject goldObj;
     public Text goldText;
@@ -58,6 +58,9 @@ public class ShopContent : MonoBehaviour
             goldObj.SetActive(false);
 
             priceText.gameObject.SetActive(true);
+
+            priceText.localizationName = shopType + "_Price";
+            //priceText.ReLoad();
         }
 
 
@@ -76,13 +79,16 @@ public class ShopContent : MonoBehaviour
 
                 if(moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeN") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    titleText.localizationName = "GradeN";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "1000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeN") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "GradeN";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x5";
                 }
 
                 break;
@@ -91,13 +97,16 @@ public class ShopContent : MonoBehaviour
 
                 if (moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    titleText.localizationName = "GradeR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "2000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "GradeR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x5";
                 }
 
                 break;
@@ -106,13 +115,16 @@ public class ShopContent : MonoBehaviour
 
                 if (moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    titleText.localizationName = "GradeSR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "3000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "GradeSR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x5";
                 }
 
                 break;
@@ -121,13 +133,16 @@ public class ShopContent : MonoBehaviour
 
                 if (moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeSSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    titleText.localizationName = "GradeSSR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "4000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeSSR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "GradeSSR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x5";
                 }
 
                 break;
@@ -136,13 +151,16 @@ public class ShopContent : MonoBehaviour
 
                 if (moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeUR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x1";
+                    titleText.localizationName = "GradeUR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "5000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("GradeUR") + " " + LocalizationManager.instance.GetString("UpgradeTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "GradeUR";
+                    titleText.localizationName2 = "UpgradeTicket";
+                    titleText.plusText = " x5";
                 }
 
                 break;
@@ -151,13 +169,14 @@ public class ShopContent : MonoBehaviour
 
                 if (moneyType == MoneyType.Gold)
                 {
-                    titleText.text = LocalizationManager.instance.GetString("DefDestroyTicket") + " x1";
+                    titleText.localizationName = "DefDestroyTicket";
+                    titleText.plusText = " x1";
                     goldText.text = "6000";
                 }
                 else
                 {
-                    titleText.text = LocalizationManager.instance.GetString("DefDestroyTicket") + " x5";
-                    priceText.text = LocalizationManager.instance.GetString(shopType + "_Price");
+                    titleText.localizationName = "DefDestroyTicket";
+                    titleText.plusText = " x5";
                 }
                 break;
             case ShopType.PresentA:

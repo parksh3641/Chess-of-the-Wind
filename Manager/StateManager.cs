@@ -46,7 +46,7 @@ public class StateManager : MonoBehaviour
 
             if (GameStateManager.instance.Penalty > 0)
             {
-                if(Application.platform == RuntimePlatform.WindowsEditor)
+                if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
                 {
                     GameStateManager.instance.Penalty = 0;
                     return;
@@ -59,9 +59,10 @@ public class StateManager : MonoBehaviour
                 PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Penalty);
 
                 GameStateManager.instance.Penalty = 0;
-        
-                Debug.Log("Initialize Complete !!");
+       
             }
+
+            Debug.Log("StateManager Initialize Complete !!");
         }
     }
 

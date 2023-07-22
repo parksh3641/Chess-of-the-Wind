@@ -1097,7 +1097,7 @@ public class GameManager : MonoBehaviour
             }
             targetQueenObj.transform.position = trans.position;
 
-            targetText.text = "퀸";
+            targetText.text = LocalizationManager.instance.GetString("Queen");
         }
         else
         {
@@ -1160,11 +1160,13 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                CheckQueenNumber();
-
                 if (aiMode)
                 {
                     CheckQueenNumber_Ai();
+                }
+                else
+                {
+                    CheckQueenNumber();
                 }
             }
 
@@ -1204,16 +1206,18 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (targetNumber > 12)
-                {
-                    targetNumber += 1;
-                }
-
-                CheckTargetNumber(targetNumber);
-
                 if(aiMode)
                 {
                     CheckTargetNumber_Ai(targetNumber);
+                }
+                else
+                {
+                    if (targetNumber > 12)
+                    {
+                        targetNumber += 1;
+                    }
+
+                    CheckTargetNumber(targetNumber);
                 }
             }
         }
@@ -1225,41 +1229,19 @@ public class GameManager : MonoBehaviour
 
         if (bettingMoney == 0)
         {
-            //localNotion = "변동이 없습니다";
-
-            //NotionManager.instance.UseNotion(localNotion, ColorType.Green);
+            Debug.Log("배팅을 안 했습니다");
         }
         else
         {
             if ((int)(plusMoney) - bettingMoney > 0) //배팅한 것보다 딴 돈이 많을 경우
             {
                 tempMoney = (int)(plusMoney) - bettingMoney;
-
-                //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, tempMoney);
-
-                //worldNotion = "<color=#00FF00>+" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
-                //localNotion = "+" + MoneyUnitString.ToCurrencyString(tempMoney);
-
-                //NotionManager.instance.UseNotion(localNotion, ColorType.Green);
-                //RecordManager.instance.SetRecord(localNotion);
             }
             else
             {
                 tempMoney = (int)(plusMoney) - bettingMoney;
-
-                //worldNotion = "<color=#FF0000>" + MoneyUnitString.ToCurrencyString(tempMoney) + "   " + GameStateManager.instance.NickName + "</color>";
-                //localNotion = MoneyUnitString.ToCurrencyString(tempMoney);
-
-                //NotionManager.instance.UseNotion(localNotion, ColorType.Red);
-                //RecordManager.instance.SetRecord(localNotion);
             }
-
-            //PV.RPC("ChatRPC", RpcTarget.All, worldNotion);
-
-            //randomBoxManager.GameReward();
         }
-
-        //Debug.LogError(MoneyUnitString.ToCurrencyString(tempMoney) + " 만큼 내가 돈을 획득");
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
@@ -1283,8 +1265,6 @@ public class GameManager : MonoBehaviour
             {
                 tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
             }
-
-            //Debug.LogError(MoneyUnitString.ToCurrencyString(tempAiMoney) + " 만큼 Ai가 돈을 획득");
 
             int[] compare = new int[2];
             compare[0] = bettingAiMoney;
@@ -3151,6 +3131,9 @@ public class GameManager : MonoBehaviour
     public void CompareMoney(int[] other)
     {
         int number = 0;
+
+        Debug.LogError("내가 배팅 한 돈 : " + bettingMoney + " / 내가 딴 돈 : " + plusMoney);
+        Debug.LogError("상대방이 배팅 돈 : " + other[0] + " / 상대방이 딴 돈 : " + other[1]);
 
         otherMoney -= other[0]; //상대방의 배팅한 금액만큼 일단 빼기
 

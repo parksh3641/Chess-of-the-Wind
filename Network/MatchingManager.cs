@@ -24,12 +24,13 @@ public class MatchingManager : MonoBehaviour
 
     [Title("Enter")]
     public Image rankImg;
-    public Text rankText;
+    public LocalizationContent rankText;
 
-    public Text newbieEnterText;
-    public Text newbieMaxBlockText;
-    public Text gosuEnterText;
-    public Text gosuMaxBlockText;
+    public LocalizationContent newbieEnterText;
+    public LocalizationContent newbieMaxBlockText;
+
+    public LocalizationContent gosuEnterText;
+    public LocalizationContent gosuMaxBlockText;
 
     Sprite[] rankIconArray;
 
@@ -78,8 +79,6 @@ public class MatchingManager : MonoBehaviour
 
         rankIconArray = imageDataBase.GetRankIconArray();
 
-        rankText.text = "";
-
         rankUpEffect.SetActive(false);
         rankUpView.SetActive(false);
         matchingView.SetActive(false);
@@ -119,18 +118,32 @@ public class MatchingManager : MonoBehaviour
 
         strArray = rankDataBase.rankInformationArray[playerDataBase.NowRank].gameRankType.ToString().Split("_");
 
-        rankText.text = LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1];
+        rankText.localizationName = strArray[0];
+        rankText.plusText = " " + strArray[1];
+        rankText.ReLoad();
 
         rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockLevel;
 
-        newbieEnterText.text = LocalizationManager.instance.GetString("AllowMoney") + " : " + MoneyUnitString.ToCurrencyString(stakes / 2);
-        newbieMaxBlockText.text = LocalizationManager.instance.GetString("AllowBlockLevel") + " : " + MoneyUnitString.ToCurrencyString(limitBlock);
+        newbieEnterText.localizationName = "AllowMoney";
+        newbieEnterText.plusText = " : " + MoneyUnitString.ToCurrencyString(stakes / 2);
 
-        gosuEnterText.text = LocalizationManager.instance.GetString("AllowMoney") + " : " + MoneyUnitString.ToCurrencyString(stakes);
-        gosuMaxBlockText.text = LocalizationManager.instance.GetString("AllowBlockLevel") + " : " + MoneyUnitString.ToCurrencyString(limitBlock);
+        newbieMaxBlockText.localizationName = "AllowBlockLevel";
+        newbieMaxBlockText.plusText = " : " + MoneyUnitString.ToCurrencyString(limitBlock);
+
+        gosuEnterText.localizationName = "AllowMoney";
+        gosuEnterText.plusText = " : " + MoneyUnitString.ToCurrencyString(stakes);
+
+        gosuMaxBlockText.localizationName = "AllowBlockLevel";
+        gosuMaxBlockText.plusText = " : " + MoneyUnitString.ToCurrencyString(limitBlock);
+
+        newbieEnterText.ReLoad();
+        newbieMaxBlockText.ReLoad();
+        gosuEnterText.ReLoad();
+        gosuMaxBlockText.ReLoad();
+
     }
 
     [Button]
@@ -275,6 +288,12 @@ public class MatchingManager : MonoBehaviour
 
     public void GameStartButton_Newbie()
     {
+        if(!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
         stakes = rankInformation.stakes;
@@ -318,6 +337,12 @@ public class MatchingManager : MonoBehaviour
 
     public void GameStartButton_Gosu()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
         stakes = rankInformation.stakes;

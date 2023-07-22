@@ -11,7 +11,7 @@ public class RankInfoContent : MonoBehaviour
 
     public Text index;
 
-    public Text rankNameText;
+    public LocalizationContent rankNameText;
 
     public Text rankUpValue;
 
@@ -22,11 +22,13 @@ public class RankInfoContent : MonoBehaviour
         background = GetComponent<Image>();
     }
 
-    public void Initialize(Sprite sp, int number, string name, int value)
+    public void Initialize(Sprite sp, int number, string name, string name2, int value)
     {
         icon.sprite = sp;
         index.text = number.ToString();
-        rankNameText.text = name;
+        rankNameText.localizationName = name;
+        rankNameText.plusText = name2;
+        rankNameText.ReLoad();
         rankUpValue.text = value.ToString();
     }
 

@@ -345,6 +345,11 @@ public class LocalizationManager : MonoBehaviour
 
     public void ChangeLanguage(LanguageType type)
     {
+        if(GameStateManager.instance.Language == type)
+        {
+            return;
+        }
+
         Debug.Log("Change Language : " + type);
 
         GameStateManager.instance.Language = type;

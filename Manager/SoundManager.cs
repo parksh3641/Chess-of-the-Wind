@@ -73,6 +73,11 @@ public class SoundManager : MonoBehaviour
         audioSource.volume = 0;
     }
 
+    public void PlayBGMLow()
+    {
+        audioSource.volume = 0f;
+    }
+
     public void PlaySFX(GameSfxType type)
     {
         if (!GameStateManager.instance.Sfx) return;

@@ -471,7 +471,7 @@ public class RouletteManager : MonoBehaviour
                             mainLeftPointerManager.pointerList[j].Betting();
                         }
                     }
-                    else if (gameManager.bettingNumberList[i] < queenNumber)ㅁ
+                    else if (gameManager.bettingNumberList[i] < queenNumber)
                     {
                         if (gameManager.bettingNumberList[i] == mainLeftPointerManager.pointerList[j].index)
                         {
@@ -728,6 +728,7 @@ public class RouletteManager : MonoBehaviour
         pinballPower = false;
         pinballPowerReturn = false;
 
+        SoundManager.instance.PlayBGMLow();
         SoundManager.instance.PlayLoopSFX(GameSfxType.Roulette);
 
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
@@ -892,7 +893,7 @@ public class RouletteManager : MonoBehaviour
             if (!windDelay)
             {
                 float[] blow = new float[2];
-                blow[0] = 35;
+                blow[0] = 15;
                 blow[1] = windIndex;
 
                 PV.RPC("BlowingWind", RpcTarget.All, blow);
@@ -1211,6 +1212,7 @@ public class RouletteManager : MonoBehaviour
         buttonClick = true;
         playing = false;
 
+        SoundManager.instance.PlayBGM();
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
         for (int i = 0; i < leftClock.Length; i++)

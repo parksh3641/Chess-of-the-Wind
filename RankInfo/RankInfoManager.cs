@@ -48,7 +48,7 @@ public class RankInfoManager : MonoBehaviour
 
             strArray = rankDataBase.rankInformationArray[i].gameRankType.ToString().Split("_");
 
-            monster.Initialize(rankIconArray[i], int.Parse(strArray[1]), LocalizationManager.instance.GetString(strArray[0]) + " " + strArray[1],
+            monster.Initialize(rankIconArray[i], int.Parse(strArray[1]), strArray[0], strArray[1],
                 rankDataBase.rankInformationArray[i].star);
             monster.gameObject.SetActive(true);
 
