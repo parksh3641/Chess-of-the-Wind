@@ -41,6 +41,11 @@ public class RouletteManager : MonoBehaviour
 
     public Sprite[] windButtonArray;
 
+    public Image player1Img;
+    public Image player2Img;
+
+    Sprite[] blockArray;
+
     [Space]
     [Title("Roulette_Particle")]
     public ParticleSystem[] roulette1Particle;
@@ -85,11 +90,15 @@ public class RouletteManager : MonoBehaviour
     bool pinballPower = false;
     bool pinballPowerReturn = false;
 
+    [Title("Target")]
     public GameObject targetView;
     public GameObject targetNormal;
     public GameObject targetQueen;
     public Text targetText;
     public Text buttonText;
+
+    public GameObject normalEffect;
+    public GameObject queenEffect;
 
     [Space]
     [Title("Value")]
@@ -122,6 +131,8 @@ public class RouletteManager : MonoBehaviour
     public CharacterManager characterManager;
     public WindCharacterManager windCharacterManager;
 
+    ImageDataBase imageDataBase;
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
 
@@ -129,6 +140,10 @@ public class RouletteManager : MonoBehaviour
 
     private void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        blockArray = imageDataBase.GetBlockArray();
+
         buttonClick = false;
         bouns = false;
 
@@ -218,6 +233,26 @@ public class RouletteManager : MonoBehaviour
     {
         uIManager.OpenRouletteView();
         uIManager.CloseSurrenderView();
+
+        if (gameManager.blockType != BlockType.Default)
+        {
+            player2Img.enabled = true;
+            player2Img.sprite = blockArray[(int)gameManager.blockType - 1];
+        }
+        else
+        {
+            player2Img.enabled = false;
+        }
+
+        if (gameManager.otherBlockType != BlockType.Default)
+        {
+            player1Img.enabled = true;
+            player1Img.sprite = blockArray[(int)gameManager.otherBlockType - 1];
+        }
+        else
+        {
+            player1Img.enabled = false;
+        }
 
         characterManager.ResetFocus();
 
@@ -1235,7 +1270,20 @@ public class RouletteManager : MonoBehaviour
 
         targetText.text = number.ToString();
 
-        SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
+        if(gameManager.bettingNumberList.Contains(number))
+        {
+            normalEffect.SetActive(true);
+
+            SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
+
+            Debug.Log("숫자에 당첨되었습니다");
+        }
+        else
+        {
+            normalEffect.SetActive(false);
+
+            Debug.Log("숫자에 당첨되지 않았습니다");
+        }
     }
 
     [PunRPC]
@@ -1247,7 +1295,20 @@ public class RouletteManager : MonoBehaviour
 
         //targetText.text = number.ToString();
 
-        SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
+        if (gameManager.bettingNumberList.Contains(13))
+        {
+            queenEffect.SetActive(true);
+
+            SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
+
+            Debug.Log("퀸에 당첨되었습니다");
+        }
+        else
+        {
+            queenEffect.SetActive(false);
+
+            Debug.Log("퀸에 당첨되지 않았습니다");
+        }
     }
 
     [PunRPC]

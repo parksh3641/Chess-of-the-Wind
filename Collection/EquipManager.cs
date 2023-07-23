@@ -311,20 +311,6 @@ public class EquipManager : MonoBehaviour
         PlayfabManager.instance.SetPlayerData(blockData);
     }
 
-    public bool CheckEquip(string id)
-    {
-        bool check = false;
-
-        if (armorBlockUI.instanceId.Equals(id) ||
-            weaponBlockUI.instanceId.Equals(id) ||
-            shieldBlockUI.instanceId.Equals(id) ||
-            newbieBlockUI.instanceId.Equals(id))
-        {
-            check = true;
-        }
-        return check;
-    }
-
     public void CheckUnEquip(string id)
     {
         if(armorBlockUI.instanceId.Equals(id))

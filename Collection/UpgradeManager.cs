@@ -468,20 +468,37 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellButton()
     {
+        if (blockClass.instanceId == null)
+        {
+            Debug.Log("잘못된 블럭 입니다");
+            return;
+        }
+
         if(blockClass.rankType == RankType.N)
         {
             NotionManager.instance.UseNotion(NotionType.NotSellBlock);
             return;
         }
 
-        if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
+        switch(playerDataBase.CheckEquip(blockClass.instanceId))
         {
-            sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+            case 0:
+                break;
+            default:
+                equipManager.CheckUnEquip(blockClass.instanceId);
+                break;
         }
-        else
-        {
-            NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
-        }
+
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+
+        //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
+        //{
+        //    sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+        //}
+        //else
+        //{
+        //    NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
+        //}
     }
 
     void CheckDefDestroyTicket()

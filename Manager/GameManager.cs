@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviour
     public RouletteContent mainRouletteContent;
     Transform targetBlockContent;
 
+    public BlockType dragBlockType = BlockType.Default;
+
     public BlockType blockType = BlockType.Default;
+    public BlockType otherBlockType = BlockType.Default;
     BlockMotherInformation blockMotherInformation;
 
     [Space]

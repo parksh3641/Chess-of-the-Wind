@@ -110,6 +110,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.blocksRaycasts = false;
 
         gameManager.blockDrag = true;
+        gameManager.dragBlockType = blockClass.blockType;
         gameManager.blockType = blockClass.blockType;
 
         blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1 / 255f);
@@ -153,7 +154,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.blocksRaycasts = true;
 
         gameManager.blockDrag = false;
-        gameManager.blockType = BlockType.Default;
+        gameManager.dragBlockType = BlockType.Default;
 
         blockIcon.color = new Color(1, 1, 1, 1f);
 
@@ -177,6 +178,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             isDrag = false;
         }
+
+        gameManager.blockType = BlockType.Default;
 
         if (blockClass.rankType > RankType.SR)
         {
@@ -207,6 +210,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             gameManager.ResetPosBlock(index);
         }
 
+        gameManager.blockType = BlockType.Default;
+
         if (blockClass.rankType > RankType.SR)
         {
             gradient.SetActive(true);
@@ -233,6 +238,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.blocksRaycasts = true;
 
         gameManager.blockDrag = false;
+
+        gameManager.blockType = BlockType.Default;
 
         isDrag = false;
 

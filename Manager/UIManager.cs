@@ -138,9 +138,8 @@ public class UIManager : MonoBehaviour
 
         nickNameText.text = GameStateManager.instance.NickName;
 
-        Debug.Log("Main UI Renewal");
+        Debug.Log("메인화면 갱신");
     }
-
 
     public void SetLoginUI()
     {

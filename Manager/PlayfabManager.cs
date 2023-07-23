@@ -85,12 +85,12 @@ public class PlayfabManager : MonoBehaviour
 
     private void Start()
     {
-        if(GameStateManager.instance.IsLogin)
-        {
-            StateManager.instance.Initialize();
+        //if(GameStateManager.instance.IsLogin)
+        //{
+        //    StateManager.instance.ServerInitialize();
 
-            return;
-        }
+        //    return;
+        //}
 
         if (GameStateManager.instance.AutoLogin)
         {
@@ -666,7 +666,7 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        StateManager.instance.Initialize();
+        StateManager.instance.ServerInitialize();
     }
 
     public bool GetUserInventory()
