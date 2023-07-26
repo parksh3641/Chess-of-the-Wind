@@ -365,7 +365,7 @@ public class SynthesisManager : MonoBehaviour
 
             needGold = upgradeValue.GetSynthesisValue();
 
-            goldText.text = needGold.ToString();
+            goldText.text = MoneyUnitString.ToCurrencyString(needGold);
 
             needText.localizationName = LocalizationManager.instance.GetString("Required");
             needText.localizationName2 = LocalizationManager.instance.GetString("Grade" + blockClass.rankType.ToString());

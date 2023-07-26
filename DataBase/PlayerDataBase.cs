@@ -950,47 +950,35 @@ public class PlayerDataBase : ScriptableObject
     }
     #endregion
 
-    public bool CheckEquipBlock_Gosu()
+    public int CheckEquipBlock_Gosu()
     {
-        bool check = true;
+        int index = 0;
 
-        if (armor == null)
+        if (armor != null)
         {
-            check = false;
-        }
-        else
-        {
-            if(armor.Length == 0)
+            if(armor.Length > 0)
             {
-                check = false;
+                index++;
             }
         }
 
-        if (weapon == null)
+        if (weapon != null)
         {
-            check = false;
-        }
-        else
-        {
-            if (weapon.Length == 0)
+            if (weapon.Length > 0)
             {
-                check = false;
+                index++;
             }
         }
 
-        if (shield == null)
+        if (shield != null)
         {
-            check = false;
-        }
-        else
-        {
-            if (shield.Length == 0)
+            if (shield.Length > 0)
             {
-                check = false;
+                index++;
             }
         }
 
-        return check;
+        return index;
     }
 
     public bool CheckEquipBlock_Newbie()

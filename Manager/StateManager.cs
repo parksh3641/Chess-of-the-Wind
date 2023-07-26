@@ -28,6 +28,18 @@ public class StateManager : MonoBehaviour
         penaltyView.SetActive(false);
     }
 
+    public void ServerInitialize()
+    {
+        networkManager.Initialize();
+    }
+
+    public void ServerConnectComplete()
+    {
+        uIManager.OnLoginSuccess();
+
+        Initialize();
+    }
+
     public void Initialize()
     {
         if (!isInit)
@@ -36,10 +48,10 @@ public class StateManager : MonoBehaviour
 
             SoundManager.instance.Initialize();
 
-            networkManager.Initialize();
-            gameManager.Initialize();
             uIManager.Initialize();
-            nickNameManager.Initialize();
+            //networkManager.Initialize();
+            gameManager.Initialize();
+            //nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
             rankInfoManager.Initialize();
@@ -62,17 +74,12 @@ public class StateManager : MonoBehaviour
        
             }
 
-            Debug.Log("StateManager Initialize Complete !!");
+            Debug.Log("모든 초기화가 완료되었습니다");
         }
     }
 
     public void ClosePenaltyView()
     {
         penaltyView.SetActive(false);
-    }
-
-    public void ServerConnectComplete()
-    {
-        uIManager.OnLoginSuccess();
     }
 }

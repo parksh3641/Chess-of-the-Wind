@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +12,8 @@ public class MoneyAnimation : MonoBehaviour
 
     public Transform moneyStartTransform;
     public Transform otherMoneyStartTransform;
-    public Transform midTransform;
+    public Transform moneyMidTransform;
+    public Transform otherMoneyMidTransform;
 
     [Space]
     [Title("Text")]
@@ -126,7 +127,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < moneyPrefabList.Count; i++)
         {
             moneyPrefabList[i].gameObject.SetActive(true);
-            moneyPrefabList[i].GoToTarget(moneyStartTransform.localPosition, midTransform.localPosition);
+            moneyPrefabList[i].GoToTarget(moneyStartTransform.localPosition, moneyMidTransform.localPosition);
         }
     }
 
@@ -135,7 +136,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < moneyPrefabList2.Count; i++)
         {
             moneyPrefabList2[i].gameObject.SetActive(true);
-            moneyPrefabList2[i].GoToTarget(otherMoneyStartTransform.localPosition, midTransform.localPosition);
+            moneyPrefabList2[i].GoToTarget(otherMoneyStartTransform.localPosition, otherMoneyMidTransform.localPosition);
         }
     }
 
@@ -427,19 +428,19 @@ public class MoneyAnimation : MonoBehaviour
 
         correction = 0;
 
-        gameManager.CheckWinnerPlayer();
+        if(gameManager != null) gameManager.CheckWinnerPlayer();
     }
 
 
 
 
 
-    public void ResultAddMoney(int target, Text text)
+    public void ResultAddMoney(int target, Text txt)
     {
-        StartCoroutine(ResultAddMoneyCoroution(target, text));
+        StartCoroutine(ResultAddMoneyCoroution(target, txt));
     }
 
-    IEnumerator ResultAddMoneyCoroution(int target, Text text)
+    IEnumerator ResultAddMoneyCoroution(int target, Text txt)
     {
         int max = 0;
 
@@ -475,18 +476,20 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+            txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
 
             yield return waitForSeconds2;
         }
+
+        txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
     }
 
-    public void ResultMinusMoney(int target, Text text)
+    public void ResultMinusMoney(int target, Text txt)
     {
-        StartCoroutine(ResultMinusMoneyCoroution(target, text));
+        StartCoroutine(ResultMinusMoneyCoroution(target, txt));
     }
 
-    IEnumerator ResultMinusMoneyCoroution(int target, Text text)
+    IEnumerator ResultMinusMoneyCoroution(int target, Text txt)
     {
         int max = 0;
 
@@ -522,9 +525,11 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+            txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
 
             yield return waitForSeconds2;
         }
+
+        txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(target) + "</color>";
     }
 }

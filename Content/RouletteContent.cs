@@ -21,6 +21,7 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 {
     public RouletteType rouletteType = RouletteType.Default;
     public RouletteColorType rouletteColorType = RouletteColorType.White;
+    public bool tutorial = false;
     public bool initialize = false;
     public int[] index = new int[2];
 
@@ -46,7 +47,9 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     public GameObject queen;
 
     private Transform blockParent;
+
     GameManager gameManager;
+    TutorialManager tutorialManager;
 
     public List<NumberClass> splitBet_HorizontalNumberList = new List<NumberClass>();
     public List<NumberClass> splitBet_VerticalNumberList = new List<NumberClass>();
@@ -122,6 +125,37 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         blockParent = parent;
         rouletteType = type;
         index = setIndex;
+
+        number = num + 1;
+
+        if (number % 2 == 0)
+        {
+            rouletteColorType = RouletteColorType.White;
+        }
+        else
+        {
+            rouletteColorType = RouletteColorType.Black;
+        }
+
+        if (number == 5)
+        {
+            queen.SetActive(true);
+            rouletteColorType = RouletteColorType.White;
+        }
+
+        SetBackgroundColor(rouletteColorType);
+
+        initialize = true;
+    }
+
+    public void Initialize_Tutorial(TutorialManager manager, Transform parent, RouletteType type, int[] setIndex, int num)
+    {
+        tutorialManager = manager;
+        blockParent = parent;
+        rouletteType = type;
+        index = setIndex;
+
+        tutorial = true;
 
         number = num + 1;
 
@@ -259,9 +293,12 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (gameManager.blockDrag)
+        if(!tutorial)
         {
-            gameManager.EnterBlock(this, eventData.pointerDrag.transform.GetComponent<BlockContent>());
+            if (gameManager.blockDrag)
+            {
+                gameManager.EnterBlock(this, eventData.pointerDrag.transform.GetComponent<BlockContent>());
+            }
         }
     }
 
@@ -274,12 +311,22 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
     {
         if (eventData.pointerDrag.transform.tag != "Block") return;
 
-        if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
+        if(!tutorial)
         {
-            eventData.pointerDrag.transform.SetParent(blockParent);
-            eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+            if (eventData.pointerDrag != null && !gameManager.blockOverlap && gameManager.blockDrop)
+            {
+                eventData.pointerDrag.transform.SetParent(blockParent);
+                eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
 
-            gameManager.ExitBlock(eventData.pointerDrag.GetComponent<BlockContent>());
+                gameManager.ExitBlock(eventData.pointerDrag.GetComponent<BlockContent>());
+            }
+        }
+        else
+        {
+            if(number == 7)
+            {
+                tutorialManager.SetBlockPos();
+            }
         }
     }
 }

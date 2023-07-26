@@ -18,11 +18,8 @@ public class WindCharacter : MonoBehaviour
 
         transform.position = endPos.position;
 
-        transform.position = startPos.position;
-
-        move = true;
-
-        StartCoroutine(MoveCoroution());
+        //move = true;
+        //StartCoroutine(MoveCoroution());
     }
 
     IEnumerator MoveCoroution()

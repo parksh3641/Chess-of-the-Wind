@@ -99,7 +99,9 @@ public class UpgradeManager : MonoBehaviour
         {
             upgradeView.SetActive(true);
 
-            Initialize(id);
+            blockClass = playerDataBase.GetBlockClass(id);
+
+            Initialize();
         }
     }
 
@@ -108,10 +110,8 @@ public class UpgradeManager : MonoBehaviour
         upgradeView.SetActive(false);
     }
 
-    void Initialize(string id)
+    void Initialize()
     {
-        blockClass = playerDataBase.GetBlockClass(id);
-
         blockUIContent.Collection_Initialize(blockClass);
         upgradeValue = upgradeDataBase.GetUpgradeValue(blockClass.rankType);
         upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
@@ -131,24 +131,25 @@ public class UpgradeManager : MonoBehaviour
 
         successText.localizationName = "SuccessPercent";
         successText.plusText = " : " + upgradeInformation.success + "%";
-
+        successText.ReLoad();
 
         keepText.localizationName = "RetentionPercent";
         keepText.plusText = " : " + upgradeInformation.keep + "%";
-
+        keepText.ReLoad();
 
         downText.localizationName = "LowerPercent";
         downText.plusText = " : " + upgradeInformation.down + "%";
-
+        downText.ReLoad();
 
         destroyText.localizationName = "DestroyPercent";
         destroyText.plusText = " : " + upgradeInformation.destroy + "%";
-
-
+        destroyText.ReLoad();
 
         valuePlusText.localizationName = "Value";
         valuePlusText.plusText = " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
             "   ▶   <color=#FFCA14>" + MoneyUnitString.ToCurrencyString((upgradeValue.GetValueNumber(blockClass.level + 1))) + "</color>";
+
+        valuePlusText.ReLoad();
 
         gold = playerDataBase.Gold;
 
@@ -188,6 +189,7 @@ public class UpgradeManager : MonoBehaviour
             if(blockClass.rankType != RankType.SSR)
             {
                 successText.localizationName = "NextSynthesisInfo";
+                successText.plusText = "";
                 keepText.localizationName = "";
                 downText.localizationName = "";
                 destroyText.localizationName = "";
@@ -198,6 +200,7 @@ public class UpgradeManager : MonoBehaviour
             else
             {
                 successText.localizationName = "MaxLevel";
+                successText.plusText = "";
                 keepText.localizationName = "";
                 downText.localizationName = "";
                 destroyText.localizationName = "";
@@ -211,6 +214,7 @@ public class UpgradeManager : MonoBehaviour
             keepText.ReLoad();
             downText.ReLoad();
             destroyText.ReLoad();
+            valuePlusText.ReLoad();
 
             Debug.Log("최대 레벨입니다");
         }
@@ -366,7 +370,7 @@ public class UpgradeManager : MonoBehaviour
             CheckDefDestroyTicket();
         }
 
-        Initialize(blockClass.instanceId);
+        Initialize();
 
         isWait = true;
         Invoke("Delay", 0.5f);
@@ -468,20 +472,37 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellButton()
     {
+        if (blockClass.instanceId == null)
+        {
+            Debug.Log("잘못된 블럭 입니다");
+            return;
+        }
+
         if(blockClass.rankType == RankType.N)
         {
             NotionManager.instance.UseNotion(NotionType.NotSellBlock);
             return;
         }
 
-        if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
+        switch(playerDataBase.CheckEquip(blockClass.instanceId))
         {
-            sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+            case 0:
+                break;
+            default:
+                equipManager.CheckUnEquip(blockClass.instanceId);
+                break;
         }
-        else
-        {
-            NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
-        }
+
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+
+        //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
+        //{
+        //    sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+        //}
+        //else
+        //{
+        //    NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
+        //}
     }
 
     void CheckDefDestroyTicket()
@@ -510,6 +531,8 @@ public class UpgradeManager : MonoBehaviour
             defCheckMark.enabled = false;
 
             isDef = false;
+
+            NotionManager.instance.UseNotion(NotionType.NotEnoughDefTicket);
         }
 
         Debug.Log("파괴 방지권 : " + isDef);

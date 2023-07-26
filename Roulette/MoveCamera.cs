@@ -13,6 +13,8 @@ public class MoveCamera : MonoBehaviour
     public bool isActive = false;
     //public bool isRotation = false;
 
+    public RouletteManager rouletteManager;
+
     public void Initialize(Transform target)
     {
         transform.position = target.position;
@@ -38,6 +40,8 @@ public class MoveCamera : MonoBehaviour
             {
                 isActive = false;
                 //isRotation = true;
+
+                rouletteManager.PlayRouletteDelay();
             }
             yield return null;
         }

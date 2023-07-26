@@ -120,6 +120,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GameStateManager.instance.Playing = false;
+        GameStateManager.instance.Win = false;
+        GameStateManager.instance.Lose = false;
 
         SetLoginUI();
 
@@ -138,9 +140,8 @@ public class UIManager : MonoBehaviour
 
         nickNameText.text = GameStateManager.instance.NickName;
 
-        Debug.Log("Main UI Renewal");
+        Debug.Log("메인화면 갱신");
     }
-
 
     public void SetLoginUI()
     {
@@ -167,15 +168,8 @@ public class UIManager : MonoBehaviour
 
     public void OnLoginSuccess()
     {
-        if(!GameStateManager.instance.Tutorial)
-        {
-            SceneManager.LoadScene("TutorialScene");
-        }
-        else
-        {
-            loginView.SetActive(false);
-            mainView.SetActive(true);
-        }
+        loginView.SetActive(false);
+        mainView.SetActive(true);
     }
 
     public void OnMatchingSuccess(string player1, string player2, int otherFormation)
@@ -394,6 +388,9 @@ public class UIManager : MonoBehaviour
                 resultTalkText.text = LocalizationManager.instance.GetString("Win2_Winter");
             }
 
+            GameStateManager.instance.Win = true;
+            GameStateManager.instance.WinStreak += 1;
+
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else
@@ -412,11 +409,14 @@ public class UIManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
 
+        RecordManager.instance.OpenRecord();
 
         resultGoldText.text = "";
 
-        if (gold > 0)
+        if (gold >= 0)
         {
+            Debug.Log("돈 증가 애니메이션 발동");
+
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
             //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";
 
@@ -424,15 +424,15 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            moneyAnimation.ResultMinusMoney(gold, resultGoldText);
+            Debug.Log("돈 감소 애니메이션 발동");
+
+            moneyAnimation.ResultMinusMoney(GameStateManager.instance.Stakes, resultGoldText);
             //resultGoldText.text = "-<color=#FF712B>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 감소";
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
-
-        RecordManager.instance.OpenRecord();
     }
 
     public void OpenSurrenderView()
@@ -519,5 +519,10 @@ public class UIManager : MonoBehaviour
 #else
         Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
 #endif
+    }
+
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("TutorialScene");
     }
 }

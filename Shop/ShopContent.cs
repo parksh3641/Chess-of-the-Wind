@@ -82,7 +82,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeN";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "1000";
+                    goldText.text = "1,000";
                 }
                 else
                 {
@@ -100,7 +100,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "2000";
+                    goldText.text = "2,000";
                 }
                 else
                 {
@@ -118,7 +118,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeSR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "3000";
+                    goldText.text = "3,000";
                 }
                 else
                 {
@@ -136,7 +136,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeSSR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "4000";
+                    goldText.text = "4,000";
                 }
                 else
                 {
@@ -154,7 +154,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeUR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "5000";
+                    goldText.text = "5,000";
                 }
                 else
                 {
@@ -171,7 +171,7 @@ public class ShopContent : MonoBehaviour
                 {
                     titleText.localizationName = "DefDestroyTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "6000";
+                    goldText.text = "6,000";
                 }
                 else
                 {

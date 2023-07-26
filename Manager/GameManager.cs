@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
     public RouletteContent mainRouletteContent;
     Transform targetBlockContent;
 
+    public BlockType dragBlockType = BlockType.Default;
     public BlockType blockType = BlockType.Default;
+    public BlockType otherBlockType = BlockType.Default;
     BlockMotherInformation blockMotherInformation;
 
     [Space]
@@ -453,6 +455,8 @@ public class GameManager : MonoBehaviour
 
         inputTargetNumber.text = "";
 
+        otherBlockType = BlockType.Default;
+
         ClearOtherPlayerBlock();
     }
 
@@ -517,7 +521,7 @@ public class GameManager : MonoBehaviour
         timerFillAmount.fillAmount = 1;
 
         isTimesUp = false;
-        timerText.text = bettingWaitTime.ToString();
+        timerText.text = "";
         timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
         timerAnimation.StopAnim();
     }
@@ -548,7 +552,7 @@ public class GameManager : MonoBehaviour
 
         if (blockClassNewbie.level > level)
         {
-            blockClassNewbie.level = level;
+            blockClassNewbie.level = level - 1;
         }
 
         int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
@@ -578,47 +582,93 @@ public class GameManager : MonoBehaviour
 
         rouletteContentList_Target = rouletteContentList_Gosu;
 
-        for (int i = 0; i < 3; i ++)
-        {
-            blockContentList[i].gameObject.SetActive(true);
-        }
-
-        blockClassArmor = playerDataBase.GetBlockClass(playerDataBase.Armor);
-        blockClassWeapon = playerDataBase.GetBlockClass(playerDataBase.Weapon);
-        blockClassShield = playerDataBase.GetBlockClass(playerDataBase.Shield);
+        //for (int i = 0; i < 3; i ++)
+        //{
+        //    blockContentList[i].gameObject.SetActive(true);
+        //}
 
         int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
 
-        if(blockClassArmor.level > level)
+        if (playerDataBase.Armor != null)
         {
-            blockClassArmor.level = level - 1;
+            if(playerDataBase.Armor.Length > 0)
+            {
+                blockClassArmor = playerDataBase.GetBlockClass(playerDataBase.Armor);
+
+                blockContentList[0].gameObject.SetActive(true);
+
+                if (blockClassArmor.level > level)
+                {
+                    blockClassArmor.level = level - 1;
+                }
+
+                int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
+
+                blockContentList[0].InGame_Initialize(blockClassArmor, 0, value);
+                bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
+                bettingSizeList[0] = blockDataBase.GetBlockInfomation(blockClassArmor.blockType).GetSize();
+
+                Debug.Log("아머를 장착했습니다");
+            }
+            else
+            {
+                Debug.Log("아머가 장착되지 않았습니다");
+            }
         }
 
-        if (blockClassWeapon.level > level)
+        if(playerDataBase.Weapon != null)
         {
-            blockClassWeapon.level = level - 1;
+            if (playerDataBase.Weapon.Length > 0)
+            {
+                blockClassWeapon = playerDataBase.GetBlockClass(playerDataBase.Weapon);
+
+                blockContentList[1].gameObject.SetActive(true);
+
+                if (blockClassWeapon.level > level)
+                {
+                    blockClassWeapon.level = level - 1;
+                }
+
+                int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
+
+                blockContentList[1].InGame_Initialize(blockClassWeapon, 1, value2);
+                bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
+                bettingSizeList[1] = blockDataBase.GetBlockInfomation(blockClassWeapon.blockType).GetSize();
+
+                Debug.Log("검을 장착했습니다");
+            }
+            else
+            {
+                Debug.Log("검이 장착되지 않았습니다");
+            }
         }
 
-        if (blockClassShield.level > level)
+        if (playerDataBase.Shield != null)
         {
-            blockClassShield.level = level - 1;
+            if (playerDataBase.Shield.Length > 0)
+            {
+                blockClassShield = playerDataBase.GetBlockClass(playerDataBase.Shield);
+
+                blockContentList[2].gameObject.SetActive(true);
+
+                if (blockClassShield.level > level)
+                {
+                    blockClassShield.level = level - 1;
+                }
+
+                int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
+
+                blockContentList[2].InGame_Initialize(blockClassShield, 2, value3);
+                bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
+                bettingSizeList[2] = blockDataBase.GetBlockInfomation(blockClassShield.blockType).GetSize();
+
+                Debug.Log("쉴드를 장착했습니다");
+            }
+            else
+            {
+                Debug.Log("쉴드가 장착되지 않았습니다");
+            }
         }
-
-        int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
-        int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
-        int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
-
-        blockContentList[0].InGame_Initialize(blockClassArmor, 0, value);
-        blockContentList[1].InGame_Initialize(blockClassWeapon, 1, value2);
-        blockContentList[2].InGame_Initialize(blockClassShield, 2, value3);
-
-        bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(blockClassArmor.level);
-        bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(blockClassWeapon.level);
-        bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(blockClassShield.level);
-
-        bettingSizeList[0] = blockDataBase.GetBlockInfomation(blockClassArmor.blockType).GetSize();
-        bettingSizeList[1] = blockDataBase.GetBlockInfomation(blockClassWeapon.blockType).GetSize();
-        bettingSizeList[2] = blockDataBase.GetBlockInfomation(blockClassShield.blockType).GetSize();
 
         GameStart();
     }
@@ -644,14 +694,7 @@ public class GameManager : MonoBehaviour
 
     void SetStakes() //판돈 설정
     {
-        if(GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            stakes = GameStateManager.instance.Stakes / 2;
-        }
-        else
-        {
-            stakes = GameStateManager.instance.Stakes;
-        }
+        stakes = GameStateManager.instance.Stakes;
 
         money = stakes;
         otherMoney = stakes;
@@ -732,8 +775,6 @@ public class GameManager : MonoBehaviour
     {
         uIManager.dontTouchObj.SetActive(false);
 
-        networkManager.LeaveRoom();
-
         if (number == 0)
         {
             Debug.Log("승리");
@@ -754,8 +795,12 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.Playing = false;
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
+        StopAllCoroutines();
+        timerAnimation.StopAnim();
 
         uIManager.OpenResultView(number, money - stakes);
+
+        networkManager.LeaveRoom();
     }
 
     private void ClearOtherPlayerBlock()
@@ -838,7 +883,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < blockContentList.Count; i++)
             {
-                blockContentList[i].ResetPos();
+                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
             }
         }
 
@@ -907,8 +952,23 @@ public class GameManager : MonoBehaviour
                     timerText.color = Color.red;
                     timerAnimation.PlayAnim();
 
-                    SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                    if(blockType == BlockType.Default)
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                    }
                 }
+                else
+                {
+                    if(blockType == BlockType.Default)
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                    }
+                    else
+                    {
+                        SoundManager.instance.StopSFX(GameSfxType.TimesUp);
+                    }
+                }
+                
             }
 
             timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
@@ -961,7 +1021,7 @@ public class GameManager : MonoBehaviour
         {
             if (blockContentList[i].isDrag)
             {
-                blockContentList[i].TimeOver();
+                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].TimeOver();
                 break;
             }
         }
@@ -1160,13 +1220,11 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                CheckQueenNumber();
+
                 if (aiMode)
                 {
                     CheckQueenNumber_Ai();
-                }
-                else
-                {
-                    CheckQueenNumber();
                 }
             }
 
@@ -1206,18 +1264,16 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if(aiMode)
+                if (targetNumber > 12)
+                {
+                    targetNumber += 1;
+                }
+
+                CheckTargetNumber(targetNumber);
+
+                if (aiMode)
                 {
                     CheckTargetNumber_Ai(targetNumber);
-                }
-                else
-                {
-                    if (targetNumber > 12)
-                    {
-                        targetNumber += 1;
-                    }
-
-                    CheckTargetNumber(targetNumber);
                 }
             }
         }
@@ -1279,7 +1335,7 @@ public class GameManager : MonoBehaviour
         {
             if (blockContentList[i].isDrag)
             {
-                blockContentList[i].TimeOver();
+                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].TimeOver();
                 break;
             }
         }
@@ -2738,6 +2794,8 @@ public class GameManager : MonoBehaviour
 
     public void ResetPosBlock(int number)
     {
+        blockType = BlockType.Default;
+
         bettingList[number] = 0;
 
         if(!allIn)
@@ -2960,7 +3018,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < blockContentList.Count; i++)
             {
-                blockContentList[i].ResetPos();
+                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
             }
         }
 
@@ -2993,6 +3051,8 @@ public class GameManager : MonoBehaviour
     {
         RouletteType rouletteType = (RouletteType)System.Enum.Parse(typeof(RouletteType), block[0]);
         BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[1]);
+
+        otherBlockType = blockType;
 
         for (int i = 0; i < otherBlockContentList.Count; i++)
         {
@@ -3212,7 +3272,6 @@ public class GameManager : MonoBehaviour
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
 
-
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
             compareMoney[0] = otherMoney;
@@ -3252,6 +3311,18 @@ public class GameManager : MonoBehaviour
 
             moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
             otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
+            if(bettingMoney > 0)
+            {
+                moneyAnimation.MinusMoneyAnimationMid();
+            }
+
+            if(otherMoney > compare[1])
+            {
+                moneyAnimation.MinusMoneyAnimationMidEnemy();
+            }
+
+            RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
     }
 
@@ -3261,9 +3332,9 @@ public class GameManager : MonoBehaviour
 
         uIManager.CloseSurrenderView();
 
-        money -= (int)(money * 0.1f);
+        money = 0;
 
-        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, (int)(money * 0.1f)); //내 보유 금액의 10% 잃기
+        //PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, (int)(money * 1f)); //내 보유 금액의 100% 잃기
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -3288,7 +3359,7 @@ public class GameManager : MonoBehaviour
 
         money += (int)(otherMoney * 0.1f);
 
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
+        //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
 
         GameEnd(2);
 
@@ -3301,7 +3372,7 @@ public class GameManager : MonoBehaviour
 
         money += (int)(otherMoney * 0.1f);
 
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
+        //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
 
         GameEnd(2);
 

@@ -71,7 +71,7 @@ public class PlayfabManager : MonoBehaviour
         isLogin = false;
         isDelay = false;
 
-        infoText.text = "";
+        if(infoText != null) infoText.text = "";
 
 #if UNITY_ANDROID
         GoogleActivate();
@@ -85,12 +85,12 @@ public class PlayfabManager : MonoBehaviour
 
     private void Start()
     {
-        if(GameStateManager.instance.IsLogin)
-        {
-            StateManager.instance.Initialize();
+        //if(GameStateManager.instance.IsLogin)
+        //{
+        //    StateManager.instance.ServerInitialize();
 
-            return;
-        }
+        //    return;
+        //}
 
         if (GameStateManager.instance.AutoLogin)
         {
@@ -606,7 +606,7 @@ public class PlayfabManager : MonoBehaviour
             if (GameStateManager.instance.NickName == null)
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
-                nickNameManager.OpenFreeNickName();
+                //nickNameManager.OpenFreeNickName();
             }
             // GameStateManager.Instance.SavePlayerData();
         },
@@ -636,6 +636,14 @@ public class PlayfabManager : MonoBehaviour
 
     IEnumerator LoadDataCoroutine()
     {
+        if (infoText == null)
+        {
+            isActive = true;
+
+            Debug.Log("튜토리얼 씬에서 로그인 완료");
+            yield break;
+        }
+
         infoText.text = LocalizationManager.instance.GetString("Loading");
 
         //infoText.text = "데이터를 읽고 있습니다.";
@@ -666,7 +674,14 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        StateManager.instance.Initialize();
+        if(!GameStateManager.instance.Tutorial && playerDataBase.Formation == 0)
+        {
+            SceneManager.LoadScene("TutorialScene");
+        }
+        else
+        {
+            StateManager.instance.ServerInitialize();
+        }
     }
 
     public bool GetUserInventory()
@@ -1543,7 +1558,7 @@ public class PlayfabManager : MonoBehaviour
             {
                 OnCloudUpdateStats(result);
 
-                Invoke("ChangeUserInventory", 1.0f);
+                //Invoke("ChangeUserInventory", 1.0f);
 
                 }, DisplayPlayfabError);
             }

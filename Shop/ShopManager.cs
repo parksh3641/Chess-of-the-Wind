@@ -47,6 +47,8 @@ public class ShopManager : MonoBehaviour
             monster.Initialize(ShopType.UpgradeTicket_N + i, MoneyType.Gold, this);
             monster.gameObject.SetActive(true);
 
+            if (i == 4) monster.gameObject.SetActive(false);
+
             shopContentGoldList.Add(monster);
         }
 
@@ -60,7 +62,7 @@ public class ShopManager : MonoBehaviour
             monster.Initialize(ShopType.UpgradeTicket_N + i, MoneyType.Crystal, this);
             monster.gameObject.SetActive(true);
 
-            //if (i == 4) monster.gameObject.SetActive(false);
+            if (i == 4) monster.gameObject.SetActive(false);
 
             shopContentList.Add(monster);
         }
@@ -258,6 +260,8 @@ public class ShopManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
 
+                NotionManager.instance.UseNotion(NotionType.GetGradeNTicket);
+
                 break;
             case ShopType.UpgradeTicket_R:
                 if (moneyType == MoneyType.Gold)
@@ -280,6 +284,8 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.SetUpgradeTicket(RankType.R, 5);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.R));
+
+                NotionManager.instance.UseNotion(NotionType.GetGradeRTicket);
 
                 break;
             case ShopType.UpgradeTicket_SR:
@@ -304,6 +310,8 @@ public class ShopManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SR));
 
+                NotionManager.instance.UseNotion(NotionType.GetGradeSRTicket);
+
                 break;
             case ShopType.UpgradeTicket_SSR:
                 if (moneyType == MoneyType.Gold)
@@ -326,6 +334,8 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.SetUpgradeTicket(RankType.SSR, 5);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SSR));
+
+                NotionManager.instance.UseNotion(NotionType.GetGradeSSRTicket);
 
                 break;
             case ShopType.UpgradeTicket_UR:
@@ -350,6 +360,8 @@ public class ShopManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.UR));
 
+                NotionManager.instance.UseNotion(NotionType.GetGradeURTicket);
+
                 break;
             case ShopType.DefDestroyTicket:
                 if (moneyType == MoneyType.Gold)
@@ -373,6 +385,8 @@ public class ShopManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DefDestroyTicket", playerDataBase.DefDestroyTicket);
 
+                NotionManager.instance.UseNotion(NotionType.GetGradeDefTicket);
+
                 break;
             case ShopType.PresentA:
                 break;
@@ -390,7 +404,7 @@ public class ShopManager : MonoBehaviour
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
-        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+        //NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
         isDelay = true;
         Invoke("Delay", 0.5f);

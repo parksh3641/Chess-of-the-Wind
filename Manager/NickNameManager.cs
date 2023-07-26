@@ -58,10 +58,10 @@ public class NickNameManager : MonoBehaviour
         {
             OpenFreeNickName();
         }
-        else
-        {
-            formationManager.Initialize();
-        }
+        //else
+        //{
+        //    formationManager.Initialize();
+        //}
     }
 
     public void OpenFreeNickName()
@@ -161,16 +161,16 @@ public class NickNameManager : MonoBehaviour
 
     public void CheckFreeNickName()
     {
-            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣 ]", "", RegexOptions.Singleline);
+        string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣 ]", "", RegexOptions.Singleline);
 
-            for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (inputFieldFree.text.Contains(lines[i]))
             {
-                if (inputFieldFree.text.Contains(lines[i]))
-                {
-                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    return;
-                }
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                return;
             }
+        }
 
         if (inputFieldFree.text.Equals(Check) == true)
         {
@@ -216,7 +216,7 @@ public class NickNameManager : MonoBehaviour
 
     public void Success()
     {
-        uIManager.Renewal();
+        if (uIManager != null) uIManager.Renewal();
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 10000);
 
@@ -229,13 +229,13 @@ public class NickNameManager : MonoBehaviour
 
     public void FreeSuccess()
     {
-        uIManager.Renewal();
+        if(uIManager != null) uIManager.Renewal();
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameFirstView.SetActive(false);
 
-        formationManager.Initialize();
+        //if(formationManager != null) formationManager.Initialize();
     }
 
     public void Failure()

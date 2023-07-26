@@ -186,6 +186,8 @@ public class EquipManager : MonoBehaviour
                 CheckUnEquip(armorBlockUI.blockClass.instanceId);
 
                 collectionManager.CheckUnEquip(armorBlockUI.blockClass.instanceId);
+
+                NotionManager.instance.UseNotion(NotionType.EquipSameBlock);
             }
         }
 
@@ -196,6 +198,8 @@ public class EquipManager : MonoBehaviour
                 CheckUnEquip(weaponBlockUI.blockClass.instanceId);
 
                 collectionManager.CheckUnEquip(weaponBlockUI.blockClass.instanceId);
+
+                NotionManager.instance.UseNotion(NotionType.EquipSameBlock);
             }
         }
 
@@ -206,6 +210,8 @@ public class EquipManager : MonoBehaviour
                 CheckUnEquip(shieldBlockUI.blockClass.instanceId);
 
                 collectionManager.CheckUnEquip(shieldBlockUI.blockClass.instanceId);
+
+                NotionManager.instance.UseNotion(NotionType.EquipSameBlock);
             }
         }
     }
@@ -309,20 +315,6 @@ public class EquipManager : MonoBehaviour
         blockData.Add("NewBie", block.instanceId);
 
         PlayfabManager.instance.SetPlayerData(blockData);
-    }
-
-    public bool CheckEquip(string id)
-    {
-        bool check = false;
-
-        if (armorBlockUI.instanceId.Equals(id) ||
-            weaponBlockUI.instanceId.Equals(id) ||
-            shieldBlockUI.instanceId.Equals(id) ||
-            newbieBlockUI.instanceId.Equals(id))
-        {
-            check = true;
-        }
-        return check;
     }
 
     public void CheckUnEquip(string id)

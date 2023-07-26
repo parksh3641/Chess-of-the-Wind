@@ -15,6 +15,14 @@ public class PointerManager : MonoBehaviour
         }
     }
 
+    public void Initialize(int number)
+    {
+        for (int i = 0; i < pointerList.Count; i++)
+        {
+            pointerList[i].Initialize(number + i + 1);
+        }
+    }
+
     public int CheckNumber(Transform target)
     {
         int number = 0;
@@ -82,13 +90,5 @@ public class PointerManager : MonoBehaviour
         }
 
         return number;
-    }
-
-    public void Initialize(int number)
-    {
-        for (int i = 0; i < pointerList.Count; i++)
-        {
-            pointerList[i].Initialize(number + i + 1);
-        }
     }
 }

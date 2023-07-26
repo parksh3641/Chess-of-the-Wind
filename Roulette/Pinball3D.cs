@@ -18,8 +18,11 @@ public class Pinball3D : MonoBehaviour
 
     public bool move = false;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
+
     public RouletteManager rouletteManager;
     public PhotonView PV;
+    public TutorialManager tutorialManager;
 
     private void Awake()
     {
@@ -56,7 +59,7 @@ public class Pinball3D : MonoBehaviour
 
     public void MyTurn(int number)
     {
-        PV.RequestOwnership();
+        if(PV != null) PV.RequestOwnership();
 
         rigid.useGravity = true;
         rigid.isKinematic = false;
@@ -91,7 +94,7 @@ public class Pinball3D : MonoBehaviour
 
     IEnumerator GravityCoroution()
     {
-        rigid.mass += 0.015f;
+        rigid.mass += 0.02f;
 
         yield return new WaitForSeconds(0.1f);
 
@@ -106,9 +109,7 @@ public class Pinball3D : MonoBehaviour
 
         windPower = power;
 
-        //Debug.Log(number + "에서 발사 / 공위치 : " + ballPos);
-
-        if (index == 0) //현재 룰렛 위치는? 왼쪽 오른쪽
+        if (index == 0)
         {
             if(number == 0)
             {
@@ -203,13 +204,12 @@ public class Pinball3D : MonoBehaviour
     void EndPinball()
     {
         move = false;
-
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
         time = 0;
 
-        rouletteManager.EndPinball();
+        if(rouletteManager != null) rouletteManager.EndPinball();
 
         StopAllCoroutines();
     }
@@ -240,5 +240,43 @@ public class Pinball3D : MonoBehaviour
         {
             ballPos = 5;
         }
+    }
+
+    public void BlowTargetBlow(Transform target)
+    {
+        move = false;
+
+        rigid.useGravity = false;
+        rigid.isKinematic = true;
+
+        StartCoroutine(MoveTarget(target));
+    }
+
+    Vector3 speed = Vector3.zero;
+
+    IEnumerator MoveTarget(Transform target)
+    {
+        transform.position = Vector3.SmoothDamp(transform.position, target.position, ref speed, 0.1f);
+
+        yield return waitForSeconds;
+
+        if (Vector3.Distance(target.position, transform.position) < 0.1f)
+        {
+            tutorialManager.EndBallAi();
+
+            EndPinball();
+
+            yield break;
+        }
+
+        StartCoroutine(MoveTarget(target));
+    }
+
+    public void Stop()
+    {
+        move = false;
+
+        rigid.useGravity = false;
+        rigid.isKinematic = true;
     }
 }

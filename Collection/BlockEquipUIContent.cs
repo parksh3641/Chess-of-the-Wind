@@ -50,11 +50,11 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 
         if (blockClass.level > 0)
         {
-            levelText.text = (blockClass.level + 1).ToString();
+            levelText.text = "Lv." + (blockClass.level + 1).ToString();
         }
         else
         {
-            levelText.text = "";
+            levelText.text = "Lv.1";
         }
     }
 

@@ -109,8 +109,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = false;
 
-        gameManager.blockDrag = true;
-        gameManager.blockType = blockClass.blockType;
+        if(gameManager != null)
+        {
+            gameManager.blockDrag = true;
+            gameManager.dragBlockType = blockClass.blockType;
+        }
 
         blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1 / 255f);
         blockMain.SetActive(false);
@@ -144,16 +147,25 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
-            gameManager.CancleBetting(blockClass.blockType);
-
-            gameManager.ResetPosBlock(index);
+            if (gameManager != null)
+            {
+                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.ResetPosBlock(index);
+            }
+        }
+        else
+        {
+            gameManager.blockType = blockClass.blockType;
         }
 
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        gameManager.blockDrag = false;
-        gameManager.blockType = BlockType.Default;
+        if (gameManager != null)
+        {
+            gameManager.blockDrag = false;
+            gameManager.dragBlockType = BlockType.Default;
+        }
 
         blockIcon.color = new Color(1, 1, 1, 1f);
 

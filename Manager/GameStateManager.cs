@@ -59,7 +59,7 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Betting")]
         public int bettingTime = 11;
-        public int bettingWaitTime = 3;
+        public int bettingWaitTime = 5;
         public bool autoTarget = false;
         public int autoTargetNumber = 0;
         public bool blockOverlap = false;
@@ -469,6 +469,7 @@ public class GameStateManager : MonoBehaviour
             else
             {
                 gameSettings = new GameSettings();
+                gameSettings.penalty = 0;
             }
         }
         catch (Exception e)

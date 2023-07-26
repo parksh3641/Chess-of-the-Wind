@@ -9,7 +9,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MatchingManager : MonoBehaviour
 {
-    GameRankType gameRankType = GameRankType.Bronze_4;
     RankInformation rankInformation = new RankInformation();
 
     [Title("Rank Up")]
@@ -96,22 +95,32 @@ public class MatchingManager : MonoBehaviour
         //    gameRankType = GameRankType.Legend_1;
         //}
 
-        int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank);
+        int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
 
         for (int i = 0; i < starArray.Length; i ++)
         {
             starArray[i].gameObject.SetActive(false);
         }
 
-        for(int i =0; i < needStar; i ++)
+        for(int i =0; i < needStar - 1; i ++)
         {
             starArray[i].gameObject.SetActive(true);
             starArray[i].color = Color.black;
         }
 
-        for(int i = 0; i < playerDataBase.Star; i ++)
+        if(playerDataBase.Star > starArray.Length)
         {
-            starArray[i].color = Color.white;
+            for (int i = 0; i < starArray.Length; i++)
+            {
+                starArray[i].color = Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < playerDataBase.Star; i++)
+            {
+                starArray[i].color = Color.white;
+            }
         }
 
         rankImg.sprite = rankIconArray[playerDataBase.NowRank];
@@ -128,7 +137,7 @@ public class MatchingManager : MonoBehaviour
         limitBlock = rankInformation.limitBlockLevel;
 
         newbieEnterText.localizationName = "AllowMoney";
-        newbieEnterText.plusText = " : " + MoneyUnitString.ToCurrencyString(stakes / 2);
+        newbieEnterText.plusText = " : " + MoneyUnitString.ToCurrencyString(stakes);
 
         newbieMaxBlockText.localizationName = "AllowBlockLevel";
         newbieMaxBlockText.plusText = " : " + MoneyUnitString.ToCurrencyString(limitBlock);
@@ -153,7 +162,7 @@ public class MatchingManager : MonoBehaviour
         {
             GameStateManager.instance.Win = false;
 
-            int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank);
+            int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
 
             if(GameStateManager.instance.WinStreak >= 3)
             {
@@ -196,7 +205,7 @@ public class MatchingManager : MonoBehaviour
             }
             else
             {
-                playerDataBase.Star = rankDataBase.GetNeedStar(rankDataBase.rankInformationArray.Length - 1);
+                //playerDataBase.Star = rankDataBase.GetNeedStar(rankDataBase.rankInformationArray.Length - 1);
 
                 Debug.Log("최고 랭크 달성 !");
             }
@@ -212,7 +221,7 @@ public class MatchingManager : MonoBehaviour
 
             if (playerDataBase.Star <= -1 && playerDataBase.NowRank != 0)
             {
-                playerDataBase.Star = rankDataBase.GetNeedStar(playerDataBase.NowRank - 1) - 1;
+                playerDataBase.Star = rankDataBase.GetNeedStar(playerDataBase.NowRank - 1);
 
                 playerDataBase.NowRank -= 1;
 
@@ -224,7 +233,15 @@ public class MatchingManager : MonoBehaviour
 
                 Debug.Log("랭크 하락");
             }
+            else
+            {
+                playerDataBase.Star = 0;
+
+                Debug.Log("최하 랭크 입니다");
+            }
         }
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Star", playerDataBase.Star);
 
         Initialize();
     }
@@ -236,7 +253,7 @@ public class MatchingManager : MonoBehaviour
 
         rankUpEffect.SetActive(check);
 
-        rankUpIcon.sprite = rankIconArray[(int)gameRankType];
+        rankUpIcon.sprite = rankIconArray[(int)GameStateManager.instance.GameRankType];
 
         if (check)
         {
@@ -294,10 +311,12 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        rankInformation = rankDataBase.GetRankInformation(gameRankType);
+        rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockLevel;
+
+        GameStateManager.instance.Stakes = stakes;
 
         if(!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
         {
@@ -319,7 +338,7 @@ public class MatchingManager : MonoBehaviour
         //    }
         //}
 
-        if(playerDataBase.Gold < (stakes / 2)) //입장료를 가지고 있는지?
+        if(playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -343,12 +362,14 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        rankInformation = rankDataBase.GetRankInformation(gameRankType);
+        rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
         limitBlock = rankInformation.limitBlockLevel;
 
-        if (!playerDataBase.CheckEquipBlock_Gosu()) //블록은 전부 장착했는지
+        GameStateManager.instance.Stakes = stakes;
+
+        if (playerDataBase.CheckEquipBlock_Gosu() == 0) //1개라도 착용했을 경우
         {
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
 
@@ -391,8 +412,6 @@ public class MatchingManager : MonoBehaviour
             matchingButton.sprite = matchingButtonArray[1];
 
             isCancle = true;
-
-            GameStateManager.instance.Stakes = stakes;
 
             matchingWaitTime = GameStateManager.instance.MatchingTime;
             StartCoroutine(WaitingPlayer());

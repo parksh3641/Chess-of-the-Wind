@@ -22,7 +22,7 @@ public class AiManager : MonoBehaviour
     [Space]
     [Title("Value")]
     public int random = 0;
-    public int limitBlock = 0; //?? ?? ?? ??
+    public int limitBlock = 0;
     public int limitBlockLevel_N = 0;
     public int limitBlockLevel_R = 0;
     public int limitBlockLevel_SR = 0;
@@ -43,7 +43,7 @@ public class AiManager : MonoBehaviour
     public BlockClass[] blockClassArray;
     public BlockType[] blockTypeArray;
 
-    public int[] bettingValue = new int[3]; //? ??? ?? ??
+    public int[] bettingValue = new int[3];
 
     public int[] dontBettingZone1;
     public int[] dontBettingZone2;
@@ -238,6 +238,8 @@ public class AiManager : MonoBehaviour
 
             Debug.Log("Ai가 초보방 " + (blockPos - 1) + " 위치에 배팅했습니다");
 
+            gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
+
             gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
         }
         else
@@ -262,6 +264,8 @@ public class AiManager : MonoBehaviour
             otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
 
             Debug.Log("Ai가 고수방 " + (blockPos - 1) + " 위치에 배팅했습니다");
+
+            gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
 
             gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
         }

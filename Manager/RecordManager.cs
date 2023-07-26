@@ -17,6 +17,7 @@ public class RecordManager : MonoBehaviour
     List<string> recordList = new List<string>();
 
     private int recordIndex = 0;
+    private bool recording = false;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
 
@@ -53,6 +54,8 @@ public class RecordManager : MonoBehaviour
         endRecordContentList.Clear();
 
         recordList.Clear();
+
+        recording = false;
     }
 
     public void GameRecordInitialize()
@@ -88,7 +91,19 @@ public class RecordManager : MonoBehaviour
 
     public void OpenRecord()
     {
-        StartCoroutine(OpenCoroution());
+        if(!recording)
+        {
+            recording = true;
+
+            Debug.Log("게임 결과 기록을 가져옵니다");
+
+            StopAllCoroutines();
+            StartCoroutine(OpenCoroution());
+        }
+        else
+        {
+            Debug.Log("이미 게임 결과 기록을 가져왔습니다");
+        }
     }
 
     IEnumerator OpenCoroution()

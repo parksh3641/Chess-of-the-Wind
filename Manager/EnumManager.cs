@@ -259,7 +259,15 @@ public enum NotionType
     EnemyTurn,
     NeedEquipBlock,
     NotSellBlock,
-    BuyShopItem
+    BuyShopItem,
+    NotEnoughDefTicket,
+    GetGradeNTicket,
+    GetGradeRTicket,
+    GetGradeSRTicket,
+    GetGradeSSRTicket,
+    GetGradeURTicket,
+    GetGradeDefTicket,
+    EquipSameBlock,
 }
 
 public enum GameRankType

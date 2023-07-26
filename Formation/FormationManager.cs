@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FormationManager : MonoBehaviour
@@ -22,9 +23,6 @@ public class FormationManager : MonoBehaviour
 
     List<string> itemList = new List<string>();
 
-    public CollectionManager collectionManager;
-    public StoryManager storyManager;
-
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -38,10 +36,7 @@ public class FormationManager : MonoBehaviour
 
     public void Initialize()
     {
-        if(playerDataBase.Formation == 0)
-        {
-            formationView.SetActive(true);
-        }
+        formationView.SetActive(true);
     }
 
     public void SelectFormationButton(int number) //진형 선택
@@ -91,7 +86,7 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
 
-            SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
+            //SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
 
             Debug.Log("눈의 여왕 진형 선택");
         }
@@ -111,7 +106,7 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
-            SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
+            //SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
 
             Debug.Log("지하 세계 진형 선택");
         }
@@ -139,10 +134,8 @@ public class FormationManager : MonoBehaviour
 
         yield return new WaitForSeconds(4);
 
-        storyManager.Initialize();
-        //collectionManager.FirstEquipCheck();
-
-        formationView.SetActive(false);
+        GameStateManager.instance.Tutorial = true;
+        SceneManager.LoadScene("MainScene");
     }
 
     public void CancleFormationButton()
