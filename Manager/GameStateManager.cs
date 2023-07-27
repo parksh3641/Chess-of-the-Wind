@@ -469,6 +469,7 @@ public class GameStateManager : MonoBehaviour
             else
             {
                 gameSettings = new GameSettings();
+                gameSettings.tutorial = false;
                 gameSettings.penalty = 0;
             }
         }

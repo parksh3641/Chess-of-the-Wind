@@ -523,6 +523,7 @@ public class UIManager : MonoBehaviour
 
     public void GoToTutorial()
     {
-        SceneManager.LoadScene("TutorialScene");
+        PlayerPrefs.SetString("LoadScene", "TutorialScene");
+        SceneManager.LoadScene("LoadScene");
     }
 }

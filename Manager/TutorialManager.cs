@@ -102,6 +102,8 @@ public class TutorialManager : MonoBehaviour
 
     bool myTurn = false;
 
+    public GameObject homeButton;
+
 
     public NickNameManager nickNameManager;
     public FormationManager formationManager;
@@ -184,10 +186,14 @@ public class TutorialManager : MonoBehaviour
         targetBlock.SetActive(false);
 
         windButtonTarget.SetActive(false);
+
+        homeButton.SetActive(false);
     }
 
     void Start()
     {
+        if (playerDataBase.Formation > 0) homeButton.SetActive(true);
+
         talkIndex = 0;
 
         Initialize(talkIndex);
@@ -305,8 +311,8 @@ public class TutorialManager : MonoBehaviour
                 }
                 else
                 {
-                    GameStateManager.instance.Tutorial = true;
-                    SceneManager.LoadScene("MainScene");
+                    PlayerPrefs.SetString("LoadScene", "MainScene");
+                    SceneManager.LoadScene("LoadScene");
                 }
                 break;
         }
@@ -637,11 +643,17 @@ public class TutorialManager : MonoBehaviour
 
         mainCanvas.enabled = true;
 
-        SetCharacter(0, 1);
+        SetCharacter(0, 0);
 
         talkIndex++;
         Initialize(talkIndex);
 
         talkBarTransform.transform.localPosition = new Vector3(0, -540);
+    }
+
+    public void GoToHome()
+    {
+        PlayerPrefs.SetString("LoadScene", "MainScene");
+        SceneManager.LoadScene("LoadScene");
     }
 }

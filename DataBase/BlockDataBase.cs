@@ -70,9 +70,9 @@ public class BlockDataBase : ScriptableObject
     {
         BlockInformation block = new BlockInformation();
 
-        for(int i = 0; i < blockInformation.Length; i ++)
+        for (int i = 0; i < blockInformation.Length; i++)
         {
-            if(blockInformation[i].blockType.Equals(type))
+            if (blockInformation[i].blockType.Equals(type))
             {
                 block = blockInformation[i];
             }
@@ -137,6 +137,21 @@ public class BlockDataBase : ScriptableObject
     public int GetIndex8(BlockType type, int number)
     {
         return index = blockInformation[(int)type - 1].index8[number];
+    }
+
+    public int GetSize(BlockType type)
+    {
+        int number = 0;
+
+        for (int i = 0; i < blockInformation.Length; i++)
+        {
+            if (blockInformation[i].blockType.Equals(type))
+            {
+                number = blockInformation[i].GetSize();
+            }
+        }
+
+        return number;
     }
 }
 

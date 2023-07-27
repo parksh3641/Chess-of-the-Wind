@@ -86,7 +86,7 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
 
-            //SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
+            SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
 
             Debug.Log("눈의 여왕 진형 선택");
         }
@@ -106,7 +106,7 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
-            //SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
+            SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
 
             Debug.Log("지하 세계 진형 선택");
         }
@@ -121,7 +121,7 @@ public class FormationManager : MonoBehaviour
 
             animationText.text = LocalizationManager.instance.GetString("Select_Winter");
 
-            SoundManager.instance.PlayBGM(GameBgmType.Main_Snow);
+            //SoundManager.instance.PlayBGM(GameBgmType.Main_Snow);
         }
         else
         {
@@ -129,13 +129,15 @@ public class FormationManager : MonoBehaviour
 
             animationText.text = LocalizationManager.instance.GetString("Select_Under");
 
-            SoundManager.instance.PlayBGM(GameBgmType.Main_Under);
+            //SoundManager.instance.PlayBGM(GameBgmType.Main_Under);
         }
 
         yield return new WaitForSeconds(4);
 
         GameStateManager.instance.Tutorial = true;
-        SceneManager.LoadScene("MainScene");
+
+        PlayerPrefs.SetString("LoadScene", "MainScene");
+        SceneManager.LoadScene("LoadScene");
     }
 
     public void CancleFormationButton()

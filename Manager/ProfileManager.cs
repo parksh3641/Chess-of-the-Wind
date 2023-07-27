@@ -17,6 +17,12 @@ public class ProfileManager : MonoBehaviour
     public Image highRankImg;
     public Text highRankText;
 
+    public Text newbieWinTitleText;
+    public Text newbieWinText;
+
+    public Text gosuWinTitleText;
+    public Text gosuWinText;
+
     Sprite[] characterArray;
     Sprite[] rankIconArray;
 
@@ -76,6 +82,13 @@ public class ProfileManager : MonoBehaviour
         highRankImg.sprite = rankIconArray[playerDataBase.HighRank];
         strArray2 = rankDataBase.rankInformationArray[playerDataBase.HighRank].gameRankType.ToString().Split("_");
         highRankText.text = strArray2[1];
+
+        newbieWinTitleText.text = LocalizationManager.instance.GetString("Newbie") + " " + LocalizationManager.instance.GetString("Win");
+        newbieWinText.text = playerDataBase.NewbieWin.ToString();
+
+        gosuWinTitleText.text = LocalizationManager.instance.GetString("Gosu") + " " + LocalizationManager.instance.GetString("Win");
+        gosuWinText.text = playerDataBase.GosuWin.ToString();
+
 
     }
 

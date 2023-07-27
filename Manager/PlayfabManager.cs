@@ -676,7 +676,8 @@ public class PlayfabManager : MonoBehaviour
 
         if(!GameStateManager.instance.Tutorial && playerDataBase.Formation == 0)
         {
-            SceneManager.LoadScene("TutorialScene");
+            PlayerPrefs.SetString("LoadScene", "TutorialScene");
+            SceneManager.LoadScene("LoadScene");
         }
         else
         {
@@ -847,6 +848,18 @@ public class PlayfabManager : MonoBehaviour
                                GameStateManager.instance.WindCharacterType = WindCharacterType.Winter;
                            }
 
+                           break;
+                       case "NewbieWin":
+                           playerDataBase.NewbieWin = statistics.Value;
+                           break;
+                       case "NewbieLose":
+                           playerDataBase.NewbieLose = statistics.Value;
+                           break;
+                       case "GosuWin":
+                           playerDataBase.GosuWin = statistics.Value;
+                           break;
+                       case "GosuLose":
+                           playerDataBase.GosuLose = statistics.Value;
                            break;
                        case "SnowBox":
                            playerDataBase.SnowBox = statistics.Value;
@@ -1558,9 +1571,12 @@ public class PlayfabManager : MonoBehaviour
             {
                 OnCloudUpdateStats(result);
 
-                //Invoke("ChangeUserInventory", 1.0f);
+                if(uiManager != null)
+                {
+                    Invoke("ChangeUserInventory", 1.0f);
+                }
 
-                }, DisplayPlayfabError);
+            }, DisplayPlayfabError);
             }
             else
             {

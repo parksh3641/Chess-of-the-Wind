@@ -177,6 +177,17 @@ public class MatchingManager : MonoBehaviour
                 Debug.Log("승리 : 별 1개 획득");
             }
 
+            if(GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                playerDataBase.NewbieWin += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewbieWin", playerDataBase.NewbieWin);
+            }
+            else
+            {
+                playerDataBase.GosuWin += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("GosuWin", playerDataBase.GosuWin);
+            }
+
             if(playerDataBase.NowRank != rankDataBase.rankInformationArray.Length - 1)
             {
                 if (playerDataBase.Star >= needStar)
@@ -198,6 +209,8 @@ public class MatchingManager : MonoBehaviour
                         Debug.Log("최고 랭크 갱신 !");
                     }
 
+                    playerDataBase.Star += 1;
+
                     OpenRankUpView(true);
 
                     Debug.Log("랭크 상승 !");
@@ -217,27 +230,41 @@ public class MatchingManager : MonoBehaviour
 
             playerDataBase.Star -= 1;
 
-            Debug.Log("패배 : 별 1개 감소");
-
-            if (playerDataBase.Star <= -1 && playerDataBase.NowRank != 0)
+            if (GameStateManager.instance.GameType == GameType.NewBie)
             {
-                playerDataBase.Star = rankDataBase.GetNeedStar(playerDataBase.NowRank - 1);
-
-                playerDataBase.NowRank -= 1;
-
-                GameStateManager.instance.GameRankType -= 1;
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
-
-                OpenRankUpView(false);
-
-                Debug.Log("랭크 하락");
+                playerDataBase.NewbieLose += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewbieLose", playerDataBase.NewbieLose);
             }
             else
             {
-                playerDataBase.Star = 0;
+                playerDataBase.GosuLose += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("GosuLose", playerDataBase.GosuLose);
+            }
 
-                Debug.Log("최하 랭크 입니다");
+            Debug.Log("패배 : 별 1개 감소");
+
+            if (playerDataBase.Star <= -1)
+            {
+                if(playerDataBase.NowRank != 0)
+                {
+                    playerDataBase.Star = rankDataBase.GetNeedStar(playerDataBase.NowRank - 1) - 1;
+
+                    playerDataBase.NowRank -= 1;
+
+                    GameStateManager.instance.GameRankType -= 1;
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
+
+                    OpenRankUpView(false);
+
+                    Debug.Log("랭크 하락");
+                }
+                else if(playerDataBase.NowRank == 0)
+                {
+                    playerDataBase.Star = 0;
+
+                    Debug.Log("최하 랭크 입니다");
+                }
             }
         }
 
@@ -320,6 +347,8 @@ public class MatchingManager : MonoBehaviour
 
         if(!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
 
             return;
@@ -371,6 +400,8 @@ public class MatchingManager : MonoBehaviour
 
         if (playerDataBase.CheckEquipBlock_Gosu() == 0) //1개라도 착용했을 경우
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
 
             return;
@@ -391,6 +422,8 @@ public class MatchingManager : MonoBehaviour
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
             return;

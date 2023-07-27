@@ -247,6 +247,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }
@@ -272,6 +274,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }
@@ -297,6 +301,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }
@@ -322,6 +328,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }
@@ -347,6 +355,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }
@@ -372,6 +382,8 @@ public class ShopManager : MonoBehaviour
                     }
                     else
                     {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                         NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                         return;
                     }

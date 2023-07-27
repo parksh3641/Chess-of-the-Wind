@@ -823,8 +823,6 @@ public class SynthesisManager : MonoBehaviour
                 if (synthesisList_Rank_N[i].blockClass.blockType.Equals(BlockType.Default + 1 + j))
                 {
                     synthesisList_Rank_N_Count[j] += 1;
-
-                    rankNCount = synthesisList_Rank_N_Count[j] / 3;
                 }
             }
         }
@@ -887,6 +885,8 @@ public class SynthesisManager : MonoBehaviour
     {
         if(rankNValue == 0)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
             return;
         }
@@ -894,6 +894,8 @@ public class SynthesisManager : MonoBehaviour
         {
             if(playerDataBase.Gold < rankNValue)
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                 return;
             }
@@ -914,6 +916,8 @@ public class SynthesisManager : MonoBehaviour
     {
         if (rankRValue == 0)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
             return;
         }
@@ -921,6 +925,8 @@ public class SynthesisManager : MonoBehaviour
         {
             if (playerDataBase.Gold < rankRValue)
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                 return;
             }
@@ -941,6 +947,8 @@ public class SynthesisManager : MonoBehaviour
     {
         if (rankSRValue == 0)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotSynthesisBlock);
             return;
         }
@@ -948,6 +956,8 @@ public class SynthesisManager : MonoBehaviour
         {
             if (playerDataBase.Gold < rankSRValue)
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
                 NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
                 return;
             }
@@ -981,6 +991,8 @@ public class SynthesisManager : MonoBehaviour
         StartCoroutine(TextCoroution());
 
         synthesisResultList.Clear();
+
+        synthesisListAllResult.Clear();
 
         switch (synthesisRankType)
         {

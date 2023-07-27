@@ -100,6 +100,17 @@ public class PlayerDataBase : ScriptableObject
     private int highRank = 0;
 
     [Space]
+    [Title("Info")]
+    [SerializeField]
+    private int newbieWin = 0;
+    [SerializeField]
+    private int newbieLose = 0;
+    [SerializeField]
+    private int gosuWin = 0;
+    [SerializeField]
+    private int gosuLose = 0;
+
+    [Space]
     [Title("Equip")]
     [SerializeField]
     private string armor = "";
@@ -258,6 +269,54 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             highRank = value;
+        }
+    }
+
+    public int NewbieWin
+    {
+        get
+        {
+            return newbieWin;
+        }
+        set
+        {
+            newbieWin = value;
+        }
+    }
+
+    public int NewbieLose
+    {
+        get
+        {
+            return newbieLose;
+        }
+        set
+        {
+            newbieLose = value;
+        }
+    }
+
+    public int GosuWin
+    {
+        get
+        {
+            return gosuWin;
+        }
+        set
+        {
+            gosuWin = value;
+        }
+    }
+
+    public int GosuLose
+    {
+        get
+        {
+            return gosuLose;
+        }
+        set
+        {
+            gosuLose = value;
         }
     }
 
@@ -560,6 +619,11 @@ public class PlayerDataBase : ScriptableObject
         nowRank = 0;
         highRank = 0;
         defDestroyTicket = 0;
+
+        newbieWin = 0;
+        newbieLose = 0;
+        gosuWin = 0;
+        gosuLose = 0;
 
         armor = "";
         weapon = "";

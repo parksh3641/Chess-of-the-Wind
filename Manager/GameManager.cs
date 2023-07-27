@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public int[] bettingValue = new int[4]; //각 블럭에 배팅 금액
     public int[] bettingSizeList = new int[4]; //각 블럭에 사이즈
     public int[] bettingList = new int[4];//블럭이 배팅했는지 여부
+    public int[] bettingPlusList = new int[4]; //당첨 안된 블럭 빼기
     public int[] bettingMinusList = new int[4]; //당첨 안된 블럭 빼기
 
     public List<int> bettingNumberList = new List<int>();
@@ -203,6 +204,7 @@ public class GameManager : MonoBehaviour
         bettingValue = new int[4];
         bettingSizeList = new int[4];
         bettingList = new int[4];
+        bettingPlusList = new int[4];
         bettingMinusList = new int[4];
 
         gridConstraintCount = gridLayoutGroup.constraintCount;
@@ -334,30 +336,30 @@ public class GameManager : MonoBehaviour
         index = 0;
         count = 0;
 
-        for (int i = 0; i < 16; i++)
-        {
-            int[] setIndex = new int[2];
+        //for (int i = 0; i < 16; i++)
+        //{
+        //    int[] setIndex = new int[2];
 
-            if (index >= gridConstraintCount - 1)
-            {
-                index = 0;
-                count++;
-            }
+        //    if (index >= gridConstraintCount - 1)
+        //    {
+        //        index = 0;
+        //        count++;
+        //    }
 
-            setIndex[0] = index;
-            setIndex[1] = count;
+        //    setIndex[0] = index;
+        //    setIndex[1] = count;
 
-            RouletteContent content = Instantiate(rouletteContent);
-            content.transform.parent = rouletteContentTransformSquareBet;
-            content.transform.localPosition = Vector3.zero;
-            content.transform.localScale = Vector3.one;
-            content.Initialize(this, blockParent.transform, RouletteType.SquareBet, setIndex, i);
-            rouletteSquareContentList.Add(content);
+        //    RouletteContent content = Instantiate(rouletteContent);
+        //    content.transform.parent = rouletteContentTransformSquareBet;
+        //    content.transform.localPosition = Vector3.zero;
+        //    content.transform.localScale = Vector3.one;
+        //    content.Initialize(this, blockParent.transform, RouletteType.SquareBet, setIndex, i);
+        //    rouletteSquareContentList.Add(content);
 
-            index++;
+        //    index++;
 
-            allContentList.Add(content);
-        }
+        //    allContentList.Add(content);
+        //}
 
         //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
         //{
@@ -1278,9 +1280,28 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Debug.LogError(plusMoney);
+
         for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
         {
-            plusMoney -= (bettingList[i] / (bettingSizeList[i] + 1)) * bettingMinusList[i];
+            if(bettingList[i] > 0)
+            {
+                plusMoney = plusMoney + ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]) - ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
+
+                Debug.LogError(((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]));
+                Debug.LogError((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
+                break;
+            }
+        }
+
+        for(int i = 0; i < bettingMinusList.Length; i ++)
+        {
+            bettingMinusList[i] = 0;
+        }
+
+        for(int i = 0; i < bettingPlusList.Length; i ++)
+        {
+            bettingPlusList[i] = 0;
         }
 
         if (bettingMoney == 0)
@@ -1289,14 +1310,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if ((int)(plusMoney) - bettingMoney > 0) //배팅한 것보다 딴 돈이 많을 경우
-            {
-                tempMoney = (int)(plusMoney) - bettingMoney;
-            }
-            else
-            {
-                tempMoney = (int)(plusMoney) - bettingMoney;
-            }
+            //if ((int)(plusMoney) - bettingMoney > 0) //배팅한 것보다 딴 돈이 많을 경우
+            //{
+            //    tempMoney = (int)(plusMoney) - bettingMoney;
+            //}
+            //else
+            //{
+            //    tempMoney = (int)(plusMoney) - bettingMoney;
+            //}
+
+            tempMoney = (int)plusMoney;
         }
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
@@ -1351,22 +1374,26 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
     {
-        int value = 0;
+        float value = 0;
 
         if(!allIn)
         {
-            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level);
+            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
         }
         else
         {
-            value = bettingMoney;
+            value = bettingMoney * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
         }
 
         for(int i = 0; i < bettingValue.Length; i ++) //당첨된 블럭 빼주기
         {
-            if(value.Equals(bettingValue))
+            if (bettingList[i] > 0)
             {
-                bettingMinusList[i] -= 1;
+                if (value.ToString() == (bettingValue[i] * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f).ToString())
+                {
+                    bettingMinusList[i] -= 1;
+                    bettingPlusList[i] += 1;
+                }
             }
         }
 
@@ -1377,44 +1404,44 @@ public class GameManager : MonoBehaviour
             case RouletteType.StraightBet:
                 if(queen)
                 {
-                    plusMoney += blockMotherInformation.queenStraightBet * value + value;
+                    plusMoney += blockMotherInformation.queenStraightBet * value;
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.straightBet * value + value;
+                    plusMoney += blockMotherInformation.straightBet * value;
                 }
 
                 break;
             case RouletteType.SplitBet_Horizontal:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensplitBet * value + value;
+                    plusMoney += blockMotherInformation.queensplitBet * (value / 2);
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.splitBet * value + value;
+                    plusMoney += blockMotherInformation.splitBet * (value / 2);
                 }
 
                 break;
             case RouletteType.SplitBet_Vertical:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensplitBet * value + value;
+                    plusMoney += blockMotherInformation.queensplitBet * (value / 2);
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.splitBet * value + value;
+                    plusMoney += blockMotherInformation.splitBet * (value / 2);
                 }
 
                 break;
             case RouletteType.SquareBet:
                 if (queen)
                 {
-                    plusMoney += blockMotherInformation.queensquareBet * value + value;
+                    plusMoney += blockMotherInformation.queensquareBet * (value / 4);
                 }
                 else
                 {
-                    plusMoney += blockMotherInformation.squareBet * value + value;
+                    plusMoney += blockMotherInformation.squareBet * (value / 4);
                 }
 
                 break;
@@ -1440,44 +1467,44 @@ public class GameManager : MonoBehaviour
             case RouletteType.StraightBet:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queenStraightBet * value + value;
+                    plusAiMoney += blockMotherInformation.queenStraightBet * value;
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.straightBet * value + value;
+                    plusAiMoney += blockMotherInformation.straightBet * value;
                 }
 
                 break;
             case RouletteType.SplitBet_Horizontal:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensplitBet * value + value;
+                    plusAiMoney += blockMotherInformation.queensplitBet * (value / 2);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.splitBet * value + value;
+                    plusAiMoney += blockMotherInformation.splitBet * (value / 2);
                 }
 
                 break;
             case RouletteType.SplitBet_Vertical:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensplitBet * value + value;
+                    plusAiMoney += blockMotherInformation.queensplitBet * (value / 2);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.splitBet * value + value;
+                    plusAiMoney += blockMotherInformation.splitBet * (value / 2);
                 }
 
                 break;
             case RouletteType.SquareBet:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensquareBet * value + value;
+                    plusAiMoney += blockMotherInformation.queensquareBet * (value / 4);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.squareBet * value + value;
+                    plusAiMoney += blockMotherInformation.squareBet * (value / 4);
                 }
 
                 break;

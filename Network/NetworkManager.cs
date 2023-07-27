@@ -54,7 +54,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         //PhotonNetwork.AutomaticallySyncScene = true;
 
-        PhotonNetwork.ConnectUsingSettings();
+        if(!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            stateManager.ServerConnectComplete();
+        }
     }
 
     public override void OnConnectedToMaster()

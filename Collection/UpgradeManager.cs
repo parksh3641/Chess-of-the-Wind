@@ -254,18 +254,24 @@ public class UpgradeManager : MonoBehaviour
     {
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.MaxBlockLevel);
             return;
         }
 
         if (gold < upgradeInformation.needGold)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
             return;
         }
 
         if (upgradeTicket < 1)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotEnoughTicket);
             return;
         }
