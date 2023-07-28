@@ -188,7 +188,8 @@ public class UpgradeManager : MonoBehaviour
         {
             if(blockClass.rankType != RankType.SSR)
             {
-                successText.localizationName = "NextSynthesisInfo";
+                //successText.localizationName = "NextSynthesisInfo";
+                successText.localizationName = "";
                 successText.plusText = "";
                 keepText.localizationName = "";
                 downText.localizationName = "";
@@ -199,7 +200,8 @@ public class UpgradeManager : MonoBehaviour
             }
             else
             {
-                successText.localizationName = "MaxLevel";
+                //successText.localizationName = "MaxLevel";
+                successText.localizationName = "";
                 successText.plusText = "";
                 keepText.localizationName = "";
                 downText.localizationName = "";

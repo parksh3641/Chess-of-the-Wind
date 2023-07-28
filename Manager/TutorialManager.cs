@@ -282,6 +282,8 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 21:
                 SetCharacter(1, 1);
+
+                SoundManager.instance.PlayBGM(GameBgmType.Stroy_Under);
                 break;
             case 22:
                 InitCharacter();

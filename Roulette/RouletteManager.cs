@@ -1283,7 +1283,15 @@ public class RouletteManager : MonoBehaviour
 
         targetText.text = number.ToString();
 
-        if(gameManager.bettingNumberList.Contains(number))
+        if(GameStateManager.instance.GameType == GameType.Gosu)
+        {
+            if (number > 12)
+            {
+                number += 1;
+            }
+        }
+
+        if (gameManager.bettingNumberList.Contains(number))
         {
             normalEffect.SetActive(true);
 
@@ -1308,7 +1316,7 @@ public class RouletteManager : MonoBehaviour
 
         //targetText.text = number.ToString();
 
-        if (gameManager.bettingNumberList.Contains(13))
+        if (gameManager.bettingNumberList.Contains(queenNumber))
         {
             queenEffect.SetActive(true);
 

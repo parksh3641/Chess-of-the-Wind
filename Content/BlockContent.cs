@@ -101,6 +101,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         //valueText.text = MoneyUnitString.ToCurrencyString(this.value);
     }
 
+    public void InGame_SetLevel(int number)
+    {
+        levelText.text = "Lv." + (number + 1).ToString();
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         transform.SetParent(blockRootParent);

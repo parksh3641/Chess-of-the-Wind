@@ -21,7 +21,7 @@ public class FormationContent : MonoBehaviour
             blockContents[2].Initialize(BlockType.Rook_V2);
             blockContents[3].Initialize(BlockType.Pawn_Snow);
 
-            titleText.text = "눈의 세계";
+            //titleText.text = "눈의 세계";
         }
         else
         {
@@ -30,9 +30,9 @@ public class FormationContent : MonoBehaviour
             blockContents[2].Initialize(BlockType.Rook_V4);
             blockContents[3].Initialize(BlockType.Pawn_Under);
 
-            titleText.text = "지하 세계";
+            //titleText.text = "지하 세계";
         }
 
-        selectText.text = "선택하기";
+        //selectText.text = "선택하기";
     }
 }

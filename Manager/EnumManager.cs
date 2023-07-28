@@ -103,6 +103,12 @@ public enum BlockType
     Tetris_S,
     Tetris_Z,
     Tetris_Speical,
+    RightNight_Mirror,
+    LeftNight_Mirror,
+    Rook_V4_2,
+    Rook_V2_2,
+    Pawn_Under_2,
+    Pawn_Snow_2,
 }
 
 public enum BetOptionType

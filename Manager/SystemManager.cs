@@ -59,6 +59,7 @@ public class SystemManager : MonoBehaviour
             }
         }
 
-        SceneManager.LoadScene("MainScene");
+        PlayerPrefs.SetString("LoadScene", "MainScene");
+        SceneManager.LoadScene("LoadScene");
     }
 }

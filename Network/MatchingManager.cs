@@ -481,6 +481,8 @@ public class MatchingManager : MonoBehaviour
 
         PhotonNetwork.CurrentRoom.IsOpen = false;
 
+        yield return waitForSeconds;
+
         AlMatching();
     }
 

@@ -336,4 +336,20 @@ public class AiManager : MonoBehaviour
         }
         return randomValue;
     }
+
+    public int GetValue(BlockType type)
+    {
+        int number = 0;
+
+        for(int i = 0; i< otherBlockContentList.Count; i ++)
+        {
+            if(otherBlockContentList[i].Equals(type))
+            {
+                number = int.Parse(otherBlockContentList[i].value);
+                break;
+            }
+        }
+
+        return number;
+    }
 }

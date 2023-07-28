@@ -38,4 +38,14 @@ public class NumberContent : MonoBehaviour
             numberText.text = number.ToString();
         }
     }
+
+    public void Initialize()
+    {
+        numberText.color = Color.white;
+    }
+
+    public void Overlap()
+    {
+        numberText.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+    }
 }

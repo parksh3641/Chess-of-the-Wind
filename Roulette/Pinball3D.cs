@@ -39,6 +39,11 @@ public class Pinball3D : MonoBehaviour
 
         if (transform.position.y < -2)
         {
+            Debug.Log("공이 밖으로 나감");
+
+            rigid.useGravity = false;
+            rigid.isKinematic = true;
+
             StartRotate(index);
         }
 
@@ -61,14 +66,14 @@ public class Pinball3D : MonoBehaviour
     {
         if(PV != null) PV.RequestOwnership();
 
-        rigid.useGravity = true;
-        rigid.isKinematic = false;
-
         StartRotate(number);
     }
 
     public void StartRotate(int number)
     {
+        rigid.useGravity = true;
+        rigid.isKinematic = false;
+
         index = number;
 
         if (number == 0)
