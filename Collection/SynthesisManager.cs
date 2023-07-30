@@ -97,9 +97,9 @@ public class SynthesisManager : MonoBehaviour
     List<BlockType> synthesisListAllResult = new List<BlockType>();
 
     RankType rankType = RankType.N;
-    BlockClass blockClass;
-    BlockClass blockClassMat1;
-    BlockClass blockClassMat2;
+    BlockClass blockClass = new BlockClass();
+    BlockClass blockClassMat1 = new BlockClass();
+    BlockClass blockClassMat2 = new BlockClass();
 
     UpgradeValue upgradeValue;
     UpgradeValue upgradeValue2;
@@ -367,9 +367,9 @@ public class SynthesisManager : MonoBehaviour
 
             goldText.text = MoneyUnitString.ToCurrencyString(needGold);
 
-            needText.localizationName = LocalizationManager.instance.GetString("Required");
-            needText.localizationName2 = LocalizationManager.instance.GetString("Grade" + blockClass.rankType.ToString());
-            needText.plusText = " " + titleText.GetText() + " x2";
+            needText.localizationName = "Required";
+            needText.localizationName2 = "Grade" + blockClass.rankType.ToString();
+            needText.plusText = "  x2";
             needText.ReLoad();
 
             for (int i = 0; i < blockUIContentList.Count; i++)
@@ -553,7 +553,7 @@ public class SynthesisManager : MonoBehaviour
                 Debug.Log("1번째 재료 취소");
             }
 
-            if(blockClassMat2.instanceId.Equals(id))
+            if (blockClassMat2.instanceId.Equals(id))
             {
                 matBlockUIContent2.gameObject.SetActive(false);
 

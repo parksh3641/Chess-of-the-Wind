@@ -131,7 +131,7 @@ public enum GameBgmType
     Main_Snow,
     Main_Under,
     Story_Snow,
-    Stroy_Under,
+    Story_Under,
     Game_Newbie,
     Game_Gosu
 }
@@ -247,7 +247,7 @@ public enum NotionType
     DontSellEquipBlock,
     NotEnoughTicket,
     DefDestroy,
-    SameEquipBlock,
+    LockedMode,
     LimitMaxBlock,
     OverBettingBlock,
     OnlyPawn,
@@ -274,6 +274,7 @@ public enum NotionType
     GetGradeURTicket,
     GetGradeDefTicket,
     EquipSameBlock,
+    LimitRank
 }
 
 public enum GameRankType

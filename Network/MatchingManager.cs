@@ -5,10 +5,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MatchingManager : MonoBehaviour
 {
+    [Title("Newbie Limit Rank")]
+    public GameRankType newbieLimitRank = GameRankType.Sliver_1;
+
+    [Space]
+    [Title("Gosu Limit Rank")]
+    public GameRankType gosuLimitRank = GameRankType.Bronze_2;
+
+
     RankInformation rankInformation = new RankInformation();
 
     [Title("Rank Up")]
@@ -37,6 +44,12 @@ public class MatchingManager : MonoBehaviour
 
     string[] strArray = new string[2];
     string[] strArray2 = new string[2];
+
+    public Image newbieLimitRankImg;
+    public LocalizationContent newbieLimitRankText;
+
+    public Image gosuLimitRankImg;
+    public LocalizationContent gosuLimitRankText;
 
 
     [Title("Matching")]
@@ -153,6 +166,20 @@ public class MatchingManager : MonoBehaviour
         gosuEnterText.ReLoad();
         gosuMaxBlockText.ReLoad();
 
+        strArray = rankDataBase.rankInformationArray[(int)newbieLimitRank].gameRankType.ToString().Split("_");
+
+        newbieLimitRankImg.sprite = rankIconArray[(int)newbieLimitRank];
+        newbieLimitRankText.localizationName = strArray[0];
+        newbieLimitRankText.plusText = " " + strArray[1] + " ▼";
+        newbieLimitRankText.ReLoad();
+
+
+        strArray = rankDataBase.rankInformationArray[(int)gosuLimitRank].gameRankType.ToString().Split("_");
+
+        gosuLimitRankImg.sprite = rankIconArray[(int)gosuLimitRank];
+        gosuLimitRankText.localizationName = strArray[0];
+        gosuLimitRankText.plusText = " " + strArray[1] + " ▲";
+        gosuLimitRankText.ReLoad();
     }
 
     [Button]
@@ -338,6 +365,23 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
+        if(playerDataBase.NowRank > (int)newbieLimitRank)
+        {
+            NotionManager.instance.UseNotion(NotionType.LimitRank);
+            return;
+        }
+
+        PlayfabManager.instance.GetTitleInternalData("Newbie", GameStart_Newbie);
+    }
+
+    public void GameStart_Newbie(bool check)
+    {
+        if(!check)
+        {
+            NotionManager.instance.UseNotion(NotionType.LockedMode);
+            return;
+        }
+
         rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
@@ -345,7 +389,7 @@ public class MatchingManager : MonoBehaviour
 
         GameStateManager.instance.Stakes = stakes;
 
-        if(!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
+        if (!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -367,7 +411,7 @@ public class MatchingManager : MonoBehaviour
         //    }
         //}
 
-        if(playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -388,6 +432,23 @@ public class MatchingManager : MonoBehaviour
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        if (playerDataBase.NowRank < (int)gosuLimitRank)
+        {
+            NotionManager.instance.UseNotion(NotionType.LimitRank);
+            return;
+        }
+
+        PlayfabManager.instance.GetTitleInternalData("Rank", GameStart_Gosu);
+    }
+
+    public void GameStart_Gosu(bool check)
+    {
+        if (!check)
+        {
+            NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
 

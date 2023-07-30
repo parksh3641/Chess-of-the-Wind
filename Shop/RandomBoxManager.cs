@@ -48,6 +48,8 @@ public class RandomBoxManager : MonoBehaviour
     private float random = 0;
     private string block = "";
 
+    private bool confirmationSR = false;
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.2f);
 
     PlayerDataBase playerDataBase;
@@ -152,7 +154,16 @@ public class RandomBoxManager : MonoBehaviour
 
         boxCount = playerDataBase.SnowBox;
 
-        if(boxCount > 0)
+        if (boxCount >= 10)
+        {
+            confirmationSR = true;
+        }
+        else
+        {
+            confirmationSR = false;
+        }
+
+        if (boxCount > 0)
         {
             OpenSnowBox_Initialize();
         }
@@ -223,6 +234,15 @@ public class RandomBoxManager : MonoBehaviour
         boxType = BoxType.Random;
 
         boxCount = playerDataBase.UnderworldBox;
+
+        if (boxCount >= 10)
+        {
+            confirmationSR = true;
+        }
+        else
+        {
+            confirmationSR = false;
+        }
 
         if (boxCount > 0)
         {
@@ -459,77 +479,84 @@ public class RandomBoxManager : MonoBehaviour
             }
 
             BlockClass blockClass = new BlockClass();
-
             blockClass.blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block);
 
-            switch (boxType)
+            if (boxCount == 0 && confirmationSR)
             {
-                case BoxType.Random:
-                    if (random <= percentBlock[3])
-                    {
-                        blockClass.rankType = RankType.SSR;
-                        block += "_SSR";
+                confirmationSR = false;
 
+                blockClass.rankType = RankType.SR;
+                block += "_SR";
 
-                        gradient.SetActive(true);
-                    }
-                    else if (random <= percentBlock[2])
-                    {
-                        blockClass.rankType = RankType.SR;
-                        block += "_SR";
+                Debug.Log("SR 확정");
+            }
+            else
+            {
+                switch (boxType)
+                {
+                    case BoxType.Random:
+                        if (random <= percentBlock[3])
+                        {
+                            blockClass.rankType = RankType.SSR;
+                            block += "_SSR";
 
+                            gradient.SetActive(true);
+                        }
+                        else if (random <= percentBlock[2])
+                        {
+                            blockClass.rankType = RankType.SR;
+                            block += "_SR";
+                        }
+                        else if (random <= percentBlock[1])
+                        {
+                            blockClass.rankType = RankType.R;
+                            block += "_R";
 
-                        gradient.SetActive(true);
-                    }
-                    else if (random <= percentBlock[1])
-                    {
-                        blockClass.rankType = RankType.R;
-                        block += "_R";
+                        }
+                        else
+                        {
+                            blockClass.rankType = RankType.N;
+                            block += "_N";
 
-                    }
-                    else
-                    {
+                        }
+                        break;
+                    case BoxType.N:
                         blockClass.rankType = RankType.N;
                         block += "_N";
 
-                    }
-                    break;
-                case BoxType.N:
-                    blockClass.rankType = RankType.N;
-                    block += "_N";
+                        break;
+                    case BoxType.R:
+                        blockClass.rankType = RankType.R;
+                        block += "_R";
 
-                    break;
-                case BoxType.R:
-                    blockClass.rankType = RankType.R;
-                    block += "_R";
+                        break;
+                    case BoxType.SR:
+                        blockClass.rankType = RankType.SR;
+                        block += "_SR";
+                        break;
+                    case BoxType.SSR:
+                        blockClass.rankType = RankType.SSR;
+                        block += "_SSR";
 
-                    break;
-                case BoxType.SR:
-                    blockClass.rankType = RankType.SR;
-                    block += "_SR";
-                    break;
-                case BoxType.SSR:
-                    blockClass.rankType = RankType.SSR;
-                    block += "_SSR";
+                        gradient.SetActive(true);
+                        break;
+                    case BoxType.UR:
+                        blockClass.rankType = RankType.UR;
+                        block += "_UR";
 
-                    gradient.SetActive(true);
-                    break;
-                case BoxType.UR:
-                    blockClass.rankType = RankType.UR;
-                    block += "_UR";
-
-                    gradient.SetActive(true);
-                    break;
-                case BoxType.Choice_N:
-                    break;
-                case BoxType.Choice_R:
-                    break;
-                case BoxType.Choice_SR:
-                    break;
-                case BoxType.Choice_SSR:
-                    break;
-                case BoxType.Choice_UR:
-                    break;
+                        gradient.SetActive(true);
+                        break;
+                    case BoxType.Choice_N:
+                        break;
+                    case BoxType.Choice_R:
+                        break;
+                    case BoxType.Choice_SR:
+                        break;
+                    case BoxType.Choice_SSR:
+                        break;
+                    case BoxType.Choice_UR:
+                        break;
+                }
             }
 
             prizeBlockList.Add(blockClass);

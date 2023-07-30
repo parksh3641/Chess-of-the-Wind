@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     public GameObject[] loginButtonList;
     public Text versionText;
 
+    public GameObject testMode;
+
     [Space]
     [Title("Main")]
     public Text goldText;
@@ -115,14 +117,12 @@ public class UIManager : MonoBehaviour
         versionText.text = "v" + Application.version;
 
         index = -1;
+
+        testMode.SetActive(false);
     }
 
     private void Start()
     {
-        GameStateManager.instance.Playing = false;
-        GameStateManager.instance.Win = false;
-        GameStateManager.instance.Lose = false;
-
         SetLoginUI();
 
         OpenMainCanvas(1);
@@ -131,6 +131,17 @@ public class UIManager : MonoBehaviour
     public void Initialize()
     {
         Renewal();
+
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
+        testMode.SetActive(true);
+#else
+        PlayfabManager.instance.GetTitleInternalData("TestMode", TestMode);
+#endif
+    }
+
+    public void TestMode(bool check)
+    {
+        testMode.SetActive(check);
     }
 
     public void Renewal()
@@ -158,11 +169,11 @@ public class UIManager : MonoBehaviour
 
             loginButtonList[0].SetActive(true);
 
-            //#if UNITY_ANDROID
-            //            loginButtonList[1].SetActive(true);
-            //#elif UNITY_IOS
-            //            loginButtonList[2].SetActive(true);
-            //#endif
+#if UNITY_ANDROID
+            loginButtonList[1].SetActive(true);
+#elif UNITY_IOS
+            loginButtonList[2].SetActive(true);
+#endif
         }
     }
 
@@ -387,6 +398,8 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = LocalizationManager.instance.GetString("Win2_Winter");
             }
+
+            gold += (int)(GameStateManager.instance.Stakes * 0.1f);
 
             GameStateManager.instance.Win = true;
             GameStateManager.instance.WinStreak += 1;

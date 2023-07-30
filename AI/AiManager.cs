@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,19 +97,24 @@ public class AiManager : MonoBehaviour
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            limitBlock = rankInformation.limitBlockLevel / 2;
-        }
-        else
-        {
-            limitBlock = rankInformation.limitBlockLevel;
-        }
+        //if(GameStateManager.instance.GameType == GameType.NewBie)
+        //{
+        //    limitBlock = rankInformation.limitBlockLevel / 2;
+        //}
+        //else
+        //{
+        //    limitBlock = rankInformation.limitBlockLevel;
+        //}
 
-        limitBlockLevel_N = upgradeDataBase.CheckUpgradeValue(RankType.N, limitBlock);
-        limitBlockLevel_R = upgradeDataBase.CheckUpgradeValue(RankType.R, limitBlock);
-        limitBlockLevel_SR = upgradeDataBase.CheckUpgradeValue(RankType.SR, limitBlock);
-        limitBlockLevel_SSR = upgradeDataBase.CheckUpgradeValue(RankType.SSR, limitBlock);
+        //limitBlockLevel_N = upgradeDataBase.CheckUpgradeValue(RankType.N, limitBlock);
+        //limitBlockLevel_R = upgradeDataBase.CheckUpgradeValue(RankType.R, limitBlock);
+        //limitBlockLevel_SR = upgradeDataBase.CheckUpgradeValue(RankType.SR, limitBlock);
+        //limitBlockLevel_SSR = upgradeDataBase.CheckUpgradeValue(RankType.SSR, limitBlock);
+
+        limitBlockLevel_N = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitBlockLevel_R = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitBlockLevel_SR = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitBlockLevel_SSR = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
         if (gameType == GameType.NewBie)
         {

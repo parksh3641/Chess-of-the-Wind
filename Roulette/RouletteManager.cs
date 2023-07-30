@@ -1283,12 +1283,9 @@ public class RouletteManager : MonoBehaviour
 
         targetText.text = number.ToString();
 
-        if(GameStateManager.instance.GameType == GameType.Gosu)
+        if (number >= queenNumber)
         {
-            if (number > 12)
-            {
-                number += 1;
-            }
+            number += 1;
         }
 
         if (gameManager.bettingNumberList.Contains(number))
@@ -1302,6 +1299,8 @@ public class RouletteManager : MonoBehaviour
         else
         {
             normalEffect.SetActive(false);
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             Debug.Log("숫자에 당첨되지 않았습니다");
         }
@@ -1327,6 +1326,8 @@ public class RouletteManager : MonoBehaviour
         else
         {
             queenEffect.SetActive(false);
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             Debug.Log("퀸에 당첨되지 않았습니다");
         }

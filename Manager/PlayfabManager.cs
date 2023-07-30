@@ -169,11 +169,22 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
+        GameStateManager.instance.Playing = false;
+        GameStateManager.instance.MatchingTime = 6;
+        GameStateManager.instance.Penalty = 0;
+        GameStateManager.instance.WinStreak = 0;
+        GameStateManager.instance.Win = false;
+        GameStateManager.instance.Lose = false;
+        GameStateManager.instance.Tutorial = false;
+        GameStateManager.instance.GameRankType = GameRankType.Bronze_4;
+        GameStateManager.instance.BettingTime = 11;
+        GameStateManager.instance.BettingWaitTime = 5;
+
+        isActive = false;
         isLogin = false;
+        isDelay = false;
 
         Debug.Log("Logout");
-
-        PlayerPrefs.SetInt("Version", 0);
 
         SceneManager.LoadScene("LoginScene");
     }
@@ -264,7 +275,6 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.LogError("Guest Logout");
 
-        LogOut();
         PlayFabClientAPI.ForgetAllCredentials();
     }
 
@@ -543,9 +553,11 @@ public class PlayfabManager : MonoBehaviour
 
     public void CheckVersion(bool check)
     {
+        Debug.Log("Checking Version...");
+
         if (check)
         {
-#if UNITY_EDITOR || UNITY_ANDROID
+#if UNITY_ANDROID
             GetTitleInternalData("AOSVersion", CheckUpdate);
 #elif UNITY_IOS
             GetTitleInternalData("IOSVersion", CheckUpdate);
@@ -559,8 +571,6 @@ public class PlayfabManager : MonoBehaviour
 
     public void CheckUpdate(bool check)
     {
-        Debug.Log("Checking Version...");
-
         if (check)
         {
             StartCoroutine(LoadDataCoroutine());
@@ -1239,7 +1249,18 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if (name.Equals("AOSVersion") || name.Equals("IOSVersion"))
+                if(name.Equals("CheckVersion"))
+                {
+                    if (result.Data[name].Equals("ON"))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
+                }
+                else if (name.Equals("AOSVersion") || name.Equals("IOSVersion"))
                 {
                     if (result.Data[name].Equals(Application.version))
                     {
@@ -1250,7 +1271,18 @@ public class PlayfabManager : MonoBehaviour
                         action?.Invoke(false);
                     }
                 }
-                else
+                else if (name.Equals("Newbie") || name.Equals("Normal") || name.Equals("Rank"))
+                {
+                    if (result.Data[name].Equals("ON"))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
+                }
+                else if (name.Equals("TestMode"))
                 {
                     if (result.Data[name].Equals("ON"))
                     {

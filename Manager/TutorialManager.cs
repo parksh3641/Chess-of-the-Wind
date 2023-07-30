@@ -283,7 +283,7 @@ public class TutorialManager : MonoBehaviour
             case 21:
                 SetCharacter(1, 1);
 
-                SoundManager.instance.PlayBGM(GameBgmType.Stroy_Under);
+                SoundManager.instance.PlayBGM(GameBgmType.Story_Under);
                 break;
             case 22:
                 InitCharacter();
@@ -438,7 +438,7 @@ public class TutorialManager : MonoBehaviour
 
         SoundManager.instance.PlayBGM(GameBgmType.Game_Newbie);
 
-        timer = 5;
+        timer = 11;
         timerText.text = "";
         timerFillAmount.fillAmount = 1;
         StartCoroutine(TimerCoroution());
@@ -450,10 +450,10 @@ public class TutorialManager : MonoBehaviour
         {
             timer -= 1;
 
-            timerFillAmount.fillAmount = timer / 4.0f;
+            timerFillAmount.fillAmount = timer / 10.0f;
             timerText.text = timer.ToString();
 
-            if(timer < 3)
+            if(timer < 5)
             {
                 otherBlockContent.gameObject.SetActive(true);
                 otherBlockContent.transform.position = rouletteContentList[0].transform.position;
@@ -520,6 +520,8 @@ public class TutorialManager : MonoBehaviour
         targetView.SetActive(true);
 
         targetText.text = "1";
+
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
         yield return new WaitForSeconds(3f);
 
@@ -640,6 +642,15 @@ public class TutorialManager : MonoBehaviour
 
         SoundManager.instance.StopAllSFX();
         SoundManager.instance.PlayBGM();
+
+        if (Random.Range(0, 2) == 0)
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
+        }
 
         yield return new WaitForSeconds(4f);
 

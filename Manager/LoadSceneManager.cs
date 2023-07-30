@@ -14,6 +14,9 @@ public class LoadSceneManager : MonoBehaviour
 
     private void Start()
     {
+        progressBar.fillAmount = 0;
+        progressText.text = "";
+
         nextScene = PlayerPrefs.GetString("LoadScene");
 
         StartCoroutine(LoadScene());

@@ -7,6 +7,7 @@ public class OptionManager : MonoBehaviour
 {
     public GameObject optionView;
     public GameObject languageView;
+    public GameObject deleteAccountView;
 
     public OptionContent[] optionContents;
 
@@ -17,6 +18,7 @@ public class OptionManager : MonoBehaviour
     {
         optionView.SetActive(false);
         languageView.SetActive(false);
+        deleteAccountView.SetActive(false);
     }
 
     private void Start()
@@ -144,9 +146,21 @@ public class OptionManager : MonoBehaviour
         if(PlayfabManager.instance.isActive) PlayfabManager.instance.RestorePurchases();
     }
 
+    public void OpenDeleteAccountView()
+    {
+        if (!deleteAccountView.activeInHierarchy)
+        {
+            deleteAccountView.SetActive(true);
+        }
+        else
+        {
+            deleteAccountView.SetActive(false);
+        }
+    }
+
     public void DeleteAccount()
     {
-
+        PlayfabManager.instance.LogOut();
     }
 
     public void BugReport()

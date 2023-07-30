@@ -987,6 +987,11 @@ public class GameManager : MonoBehaviour
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             newbieBlockContent.ResetPos();
+
+            for (int i = 0; i < blockLevelContentList_NewBie.Count; i++)
+            {
+                blockLevelContentList_NewBie[i].Initialize();
+            }
         }
         else
         {
@@ -994,22 +999,17 @@ public class GameManager : MonoBehaviour
             {
                 if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
             }
+
+            for (int i = 0; i < allBlockLevelContentList.Count; i++)
+            {
+                allBlockLevelContentList[i].Initialize();
+            }
         }
 
         for (int i = 0; i < allContentList.Count; i++)
         {
             allContentList[i].SetActiveFalseAll();
         }
-
-        for (int i = 0; i < allBlockLevelContentList.Count; i ++)
-        {
-            allBlockLevelContentList[i].Initialize();
-        }
-
-        //for (int i = 0; i < rouletteContentList_Target.Count; i++)
-        //{
-        //    rouletteContentList_Target[i].SetActiveFalseAll();
-        //}
 
         for (int i = 0; i < bettingList.Length; i++)
         {
@@ -1209,7 +1209,7 @@ public class GameManager : MonoBehaviour
     {
         uIManager.dontTouchObj.SetActive(false);
 
-        money -= bettingMoney;
+        //money -= bettingMoney;
 
         if(bettingMoney > 0)
         {
@@ -1643,7 +1643,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeBettingMoney()
     {
-        moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
+        //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -2443,25 +2443,25 @@ public class GameManager : MonoBehaviour
             ChangeGetMoney(rouletteContentList_Split_Vertical[10].blockClass, RouletteType.SplitBet_Vertical, true);
         }
 
-        if (rouletteContentList_Square[5].isActive)
-        {
-            ChangeGetMoney(rouletteContentList_Square[5].blockClass, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[5].isActive)
+        //{
+        //    ChangeGetMoney(rouletteContentList_Square[5].blockClass, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[6].isActive)
-        {
-            ChangeGetMoney(rouletteContentList_Square[6].blockClass, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[6].isActive)
+        //{
+        //    ChangeGetMoney(rouletteContentList_Square[6].blockClass, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[9].isActive)
-        {
-            ChangeGetMoney(rouletteContentList_Square[9].blockClass, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[9].isActive)
+        //{
+        //    ChangeGetMoney(rouletteContentList_Square[9].blockClass, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[10].isActive)
-        {
-            ChangeGetMoney(rouletteContentList_Square[10].blockClass, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[10].isActive)
+        //{
+        //    ChangeGetMoney(rouletteContentList_Square[10].blockClass, RouletteType.SquareBet, true);
+        //}
     }
 
     private void CheckQueenNumber_Ai()
@@ -2491,25 +2491,25 @@ public class GameManager : MonoBehaviour
             ChangeGetMoney_Ai(rouletteContentList_Split_Vertical[10].blockClass_Ai, RouletteType.SplitBet_Vertical, true);
         }
 
-        if (rouletteContentList_Square[5].isActive_Ai)
-        {
-            ChangeGetMoney_Ai(rouletteContentList_Square[5].blockClass_Ai, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[5].isActive_Ai)
+        //{
+        //    ChangeGetMoney_Ai(rouletteContentList_Square[5].blockClass_Ai, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[6].isActive_Ai)
-        {
-            ChangeGetMoney_Ai(rouletteContentList_Square[6].blockClass_Ai, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[6].isActive_Ai)
+        //{
+        //    ChangeGetMoney_Ai(rouletteContentList_Square[6].blockClass_Ai, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[9].isActive_Ai)
-        {
-            ChangeGetMoney_Ai(rouletteContentList_Square[9].blockClass_Ai, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[9].isActive_Ai)
+        //{
+        //    ChangeGetMoney_Ai(rouletteContentList_Square[9].blockClass_Ai, RouletteType.SquareBet, true);
+        //}
 
-        if (rouletteContentList_Square[10].isActive_Ai)
-        {
-            ChangeGetMoney_Ai(rouletteContentList_Square[10].blockClass_Ai, RouletteType.SquareBet, true);
-        }
+        //if (rouletteContentList_Square[10].isActive_Ai)
+        //{
+        //    ChangeGetMoney_Ai(rouletteContentList_Square[10].blockClass_Ai, RouletteType.SquareBet, true);
+        //}
     }
 
     //void Update()
@@ -3478,6 +3478,7 @@ public class GameManager : MonoBehaviour
         Debug.LogError("상대방이 배팅 돈 : " + other[0] + " / 상대방이 딴 돈 : " + other[1]);
 
         otherMoney -= other[0]; //상대방의 배팅한 금액만큼 일단 빼기
+        money -= bettingMoney; //내 배팅한 금액만큼 일단 빼기
 
         if (tempMoney > 0 && other[1] > 0) //둘다 땃을 경우
         {
@@ -3538,17 +3539,17 @@ public class GameManager : MonoBehaviour
         //}
         else //둘다 잃었을 경우
         {
-            moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            //otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             if(bettingMoney > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMid();
+                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney, moneyText);
             }
 
             if(other[0] > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMidEnemy();
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + other[0], other[0], otherMoneyText);
             }
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
@@ -3556,10 +3557,11 @@ public class GameManager : MonoBehaviour
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
-            compareMoney[0] = otherMoney;
-            compareMoney[1] = money;
+            int[] compare = new int[2];
+            compare[0] = otherMoney;
+            compare[1] = money;
 
-            PV.RPC("SyncMoney", RpcTarget.Others, compareMoney);
+            PV.RPC("SyncMoney", RpcTarget.Others, compare);
 
             Debug.Log("서버 돈 동기화 갱신완료");
         }
@@ -3568,7 +3570,10 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void SyncMoney(int[] compare)
     {
-        if(money > compare[0]) //돈을 잃은 경우
+        Debug.LogError("내 돈 : " + money + " / 갱신할 돈 : " + compare[0]);
+        Debug.LogError("상대방 돈 : " + otherMoney + " / 갱신할 돈 : " + compare[1]);
+
+        if (money > otherMoney) //돈을 잃은 경우
         {
             moneyAnimation.correction = compare[1];
 
@@ -3577,7 +3582,7 @@ public class GameManager : MonoBehaviour
             money = compare[0];
             otherMoney = compare[1];
         }
-        else if(money < compare[0]) //돈을 얻었을 경우
+        else if(money < otherMoney) //돈을 얻었을 경우
         {
             moneyAnimation.correction = compare[1];
 
@@ -3591,17 +3596,17 @@ public class GameManager : MonoBehaviour
             money = compare[0];
             otherMoney = compare[1];
 
-            moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            //otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             if(bettingMoney > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMid();
+                moneyAnimation.MinusMoneyAnimationMid(money + compare[0], compare[0], moneyText);
             }
 
-            if(otherMoney > compare[1])
+            if(compare[1] > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMidEnemy();
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[1], compare[1], otherMoneyText);
             }
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());

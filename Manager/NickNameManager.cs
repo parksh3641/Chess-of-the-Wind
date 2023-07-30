@@ -224,6 +224,8 @@ public class NickNameManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
+        SoundManager.instance.PlaySFX(GameSfxType.Click);
+
         nickNameView.SetActive(false);
     }
 
@@ -233,9 +235,9 @@ public class NickNameManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
-        nickNameFirstView.SetActive(false);
+        SoundManager.instance.PlaySFX(GameSfxType.Click);
 
-        //if(formationManager != null) formationManager.Initialize();
+        nickNameFirstView.SetActive(false);
     }
 
     public void Failure()

@@ -43,7 +43,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Rank")]
-        public int winStreak = 0; //연속 승리
+        public int winStreak = 0;
         public bool win = false;
         public bool lose = false;
 
@@ -469,8 +469,16 @@ public class GameStateManager : MonoBehaviour
             else
             {
                 gameSettings = new GameSettings();
-                gameSettings.tutorial = false;
+                gameSettings.playing = false;
+                gameSettings.matchingTime = 6;
                 gameSettings.penalty = 0;
+                gameSettings.winStreak = 0;
+                gameSettings.win = false;
+                gameSettings.lose = false;
+                gameSettings.tutorial = false;
+                gameSettings.gameRankType = GameRankType.Bronze_4;
+                gameSettings.bettingTime = 11;
+                gameSettings.bettingWaitTime = 5;
             }
         }
         catch (Exception e)

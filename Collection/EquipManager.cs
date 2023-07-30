@@ -160,7 +160,8 @@ public class EquipManager : MonoBehaviour
 
     public void ChangeNewbie()
     {
-        if(blockClass.blockType == BlockType.Pawn_Under || blockClass.blockType == BlockType.Pawn_Snow)
+        if(blockClass.blockType == BlockType.Pawn_Under || blockClass.blockType == BlockType.Pawn_Snow || blockClass.blockType == BlockType.Pawn_Under_2
+            || blockClass.blockType == BlockType.Pawn_Snow_2)
         {
             EquipNewBie(blockClass, false);
 
@@ -172,6 +173,8 @@ public class EquipManager : MonoBehaviour
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.OnlyPawn);
             return;
         }

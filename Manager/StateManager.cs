@@ -28,6 +28,13 @@ public class StateManager : MonoBehaviour
         penaltyView.SetActive(false);
     }
 
+    private void Start()
+    {
+        GameStateManager.instance.Playing = false;
+        GameStateManager.instance.Win = false;
+        GameStateManager.instance.Lose = false;
+    }
+
     public void ServerInitialize()
     {
         networkManager.Initialize();
@@ -74,7 +81,7 @@ public class StateManager : MonoBehaviour
        
             }
 
-            Debug.Log("모든 초기화가 완료되었습니다");
+            Debug.Log("Initialize Complete!");
         }
     }
 
