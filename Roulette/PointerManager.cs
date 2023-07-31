@@ -91,4 +91,14 @@ public class PointerManager : MonoBehaviour
 
         return number;
     }
+
+    public void ShowTarget(int number, int queenNumber)
+    {
+        if (number >= queenNumber)
+        {
+            number -= 1;
+        }
+
+        pointerList[number].FocusOn();
+    }
 }

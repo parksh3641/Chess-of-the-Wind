@@ -39,6 +39,7 @@ public class PlayfabManager : MonoBehaviour
     public bool isActive = false;
     public bool isLogin = false;
     public bool isDelay = false;
+    public bool isNone = false;
 
 #if UNITY_IOS
     private string AppleUserIdKey = "";
@@ -91,6 +92,13 @@ public class PlayfabManager : MonoBehaviour
 
         //    return;
         //}
+
+        if(isNone)
+        {
+            isActive = true;
+            isLogin = true;
+            return;
+        }
 
         if (GameStateManager.instance.AutoLogin)
         {

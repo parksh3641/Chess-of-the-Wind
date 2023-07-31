@@ -24,8 +24,6 @@ public class MoneyAnimation : MonoBehaviour
     [Title("Prefab")]
     public MoneyContent moneyPrefab;
 
-    public int correction = 0;
-
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
     List<MoneyContent> moneyPrefabList2 = new List<MoneyContent>();
 
@@ -55,8 +53,6 @@ public class MoneyAnimation : MonoBehaviour
             monster.gameObject.SetActive(false);
             moneyPrefabList2.Add(monster);
         }
-
-        correction = 0;
     }
 
     [Button]
@@ -84,10 +80,8 @@ public class MoneyAnimation : MonoBehaviour
             moneyPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#27FFFC>+" + value + "</color>";
-        changeMoneyText[1].text = "<color=#FF712B>-" + value + "</color>";
-
-        RecordManager.instance.SetRecord(value.ToString());
+        changeMoneyText[0].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
+        changeMoneyText[1].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
 
         if(Random.Range(0,2) == 0)
         {
@@ -110,10 +104,8 @@ public class MoneyAnimation : MonoBehaviour
             moneyPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#FF712B>-" + value + "</color>";
-        changeMoneyText[1].text = "<color=#27FFFC>+" + value + "</color>";
-
-        RecordManager.instance.SetRecord((-value).ToString());
+        changeMoneyText[0].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
+        changeMoneyText[1].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
 
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
@@ -208,84 +200,6 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
-        if (correction == 0)
-        {
-            EndAnimation();
-            yield break;
-        }
-
-        while (otherMoney != correction)
-        {
-            if(otherMoney > correction)
-            {
-                if (otherMoney - 100000 > correction)
-                {
-                    otherMoney -= 100000;
-                }
-                else
-                {
-                    if (otherMoney - 10000 > correction)
-                    {
-                        otherMoney -= 10000;
-                    }
-                    else
-                    {
-                        if (otherMoney - 1000 > correction)
-                        {
-                            otherMoney -= 1000;
-                        }
-                        else
-                        {
-                            if (otherMoney - 100 > correction)
-                            {
-                                otherMoney -= 100;
-                            }
-                            else
-                            {
-                                otherMoney -= 1;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (otherMoney + 100000 < correction)
-                {
-                    otherMoney += 100000;
-                }
-                else
-                {
-                    if (otherMoney + 10000 < correction)
-                    {
-                        otherMoney += 10000;
-                    }
-                    else
-                    {
-                        if (otherMoney + 1000 < correction)
-                        {
-                            otherMoney += 1000;
-                        }
-                        else
-                        {
-                            if (otherMoney + 100 < correction)
-                            {
-                                otherMoney += 100;
-                            }
-                            else
-                            {
-                                otherMoney += 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
-
-            yield return waitForSeconds2;
-        }
-
         EndAnimation();
     }
 
@@ -363,84 +277,6 @@ public class MoneyAnimation : MonoBehaviour
             }
 
             text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
-
-            yield return waitForSeconds2;
-        }
-
-        if (correction == 0)
-        {
-            EndAnimation();
-            yield break;
-        }
-
-        while (otherMoney != correction)
-        {
-            if (otherMoney > correction)
-            {
-                if (otherMoney - 100000 > correction)
-                {
-                    otherMoney -= 100000;
-                }
-                else
-                {
-                    if (otherMoney - 10000 > correction)
-                    {
-                        otherMoney -= 10000;
-                    }
-                    else
-                    {
-                        if (otherMoney - 1000 > correction)
-                        {
-                            otherMoney -= 1000;
-                        }
-                        else
-                        {
-                            if (otherMoney - 100 > correction)
-                            {
-                                otherMoney -= 100;
-                            }
-                            else
-                            {
-                                otherMoney -= 1;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (otherMoney + 100000 < correction)
-                {
-                    otherMoney += 100000;
-                }
-                else
-                {
-                    if (otherMoney + 10000 < correction)
-                    {
-                        otherMoney += 10000;
-                    }
-                    else
-                    {
-                        if (otherMoney + 1000 < correction)
-                        {
-                            otherMoney += 1000;
-                        }
-                        else
-                        {
-                            if (otherMoney + 100 < correction)
-                            {
-                                otherMoney += 100;
-                            }
-                            else
-                            {
-                                otherMoney += 1;
-                            }
-                        }
-                    }
-                }
-            }
-
             text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return waitForSeconds2;
@@ -611,8 +447,6 @@ public class MoneyAnimation : MonoBehaviour
 
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";
-
-        correction = 0;
 
         if(gameManager != null) gameManager.CheckWinnerPlayer();
     }

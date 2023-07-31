@@ -47,11 +47,6 @@ public class RouletteManager : MonoBehaviour
     Sprite[] blockArray;
 
     [Space]
-    [Title("Roulette_Particle")]
-    public ParticleSystem[] roulette1Particle;
-    public ParticleSystem[] roulette2Particle;
-
-    [Space]
     [Title("Finger")]
     public FingerController leftFingerController;
     public FingerController rightFingerController;
@@ -412,16 +407,6 @@ public class RouletteManager : MonoBehaviour
             rightClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
             rightClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
             rightClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
-        }
-
-        for (int i = 0; i < roulette1Particle.Length; i++)
-        {
-            roulette1Particle[i].gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < roulette2Particle.Length; i++)
-        {
-            roulette2Particle[i].gameObject.SetActive(false);
         }
 
         pinball.transform.localPosition = new Vector3(5000, 5000);
@@ -1280,6 +1265,19 @@ public class RouletteManager : MonoBehaviour
         targetView.SetActive(true);
         targetNormal.SetActive(true);
         targetQueen.SetActive(false);
+
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            if (rouletteIndex == 0)
+            {
+                mainLeftPointerManager.ShowTarget(number, queenNumber);
+            }
+            else
+            {
+                mainRightPointerManager.ShowTarget(number, queenNumber);
+            }
+        }
 
         targetText.text = number.ToString();
 

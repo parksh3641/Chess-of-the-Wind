@@ -526,6 +526,21 @@ public class GameManager : MonoBehaviour
         otherBlockType = BlockType.Default;
 
         ClearOtherPlayerBlock();
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < blockLevelContentList_Target.Count; i++)
+            {
+                blockLevelContentList_Target[i].Initialize();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allBlockLevelContentList.Count; i++)
+            {
+                allBlockLevelContentList[i].Initialize();
+            }
+        }
     }
 
     public void Penalty()
@@ -860,23 +875,39 @@ public class GameManager : MonoBehaviour
 
         if(money <= 0 && otherMoney <= 0) //둘다 0원일때
         {
+            GameStateManager.instance.Playing = false;
+            PV.RPC("SetGameEnd", RpcTarget.Others);
+
             GameEnd(3);
-            PV.RPC("GameEnd", RpcTarget.Others, 2);
+            PV.RPC("GameEnd", RpcTarget.Others, 3);
         }
         else if(money <= 0) //내돈이 다 떨어졌을 때
         {
+            GameStateManager.instance.Playing = false;
+            PV.RPC("SetGameEnd", RpcTarget.Others);
+
             GameEnd(1);
-            PV.RPC("GameEnd", RpcTarget.Others, 1);
+            PV.RPC("GameEnd", RpcTarget.Others, 0);
         }
         else if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
         {
+            GameStateManager.instance.Playing = false;
+            PV.RPC("SetGameEnd", RpcTarget.Others);
+
             GameEnd(0);
-            PV.RPC("GameEnd", RpcTarget.Others, 0);
+            PV.RPC("GameEnd", RpcTarget.Others, 1);
         }
         else
         {
             Debug.Log("승패가 나지 않았습니다.");
         }
+    }
+
+    [PunRPC]
+
+    void SetGameEnd()
+    {
+        GameStateManager.instance.Playing = false;
     }
 
     [PunRPC]
@@ -901,7 +932,6 @@ public class GameManager : MonoBehaviour
             Debug.Log("무승부");
         }
 
-        GameStateManager.instance.Playing = false;
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
         StopAllCoroutines();
@@ -1452,13 +1482,12 @@ public class GameManager : MonoBehaviour
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
-            if (!PhotonNetwork.IsMasterClient) //플레이어2가 자신이 얻은 돈을 알려줍니다.
-            {
-                int[] compare = new int[2];
-                compare[0] = bettingMoney;
-                compare[1] = (int)(plusMoney);
-                PV.RPC("CompareMoney", RpcTarget.MasterClient, compare);
-            }
+            int[] compare = new int[2];
+            compare[0] = bettingMoney;
+            compare[1] = (int)(plusMoney);
+            PV.RPC("CompareMoney", RpcTarget.Others, compare);
+
+            Debug.Log("상대방한테 값을 전달했습니다");
         }
         else
         {
@@ -3248,9 +3277,19 @@ public class GameManager : MonoBehaviour
         content.SetOtherBlock(blockType, block[3], block[4]);
         otherBlockContentList.Add(content);
 
-        for(int i = 0; i < allBlockLevelContentList.Count; i ++)
+        if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            allBlockLevelContentList[i].Initialize_Other();
+            for (int i = 0; i < blockLevelContentList_Target.Count; i++)
+            {
+                blockLevelContentList_Target[i].Initialize_Other();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allBlockLevelContentList.Count; i++)
+            {
+                allBlockLevelContentList[i].Initialize_Other();
+            }
         }
 
         RouletteContent rouletteContent = new RouletteContent();
@@ -3470,143 +3509,44 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
-    public void CompareMoney(int[] other)
+    public void CompareMoney(int[] compare)
     {
-        int number = 0;
+        Debug.LogError("내가 배팅 한 돈 : " + bettingMoney + " / 내가 딴 돈 : " + (int)plusMoney);
+        Debug.LogError("상대방이 배팅 돈 : " + compare[0] + " / 상대방이 딴 돈 : " + compare[1]);
 
-        Debug.LogError("내가 배팅 한 돈 : " + bettingMoney + " / 내가 딴 돈 : " + plusMoney);
-        Debug.LogError("상대방이 배팅 돈 : " + other[0] + " / 상대방이 딴 돈 : " + other[1]);
-
-        otherMoney -= other[0]; //상대방의 배팅한 금액만큼 일단 빼기
         money -= bettingMoney; //내 배팅한 금액만큼 일단 빼기
+        otherMoney -= compare[0]; //상대방 배팅한 금액만큼 일단 빼기
 
-        if (tempMoney > 0 && other[1] > 0) //둘다 땃을 경우
+        int number = (int)plusMoney - compare[1];
+
+        if (number > 0)
         {
-            if (tempMoney > other[1]) //내가 더 많이 땃을 경우
-            {
-                number = tempMoney - other[1];
+            moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
 
-                moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
+            money += number;
+            otherMoney -= number;
 
-                money += number;
-                otherMoney -= number;
-            }
-            else //상대방이 더 많이 땃을 경우
-            {
-                number = other[1] - tempMoney;
-
-                moneyAnimation.MinusMoneyAnimation(money, otherMoney, number);
-
-                money -= number;
-                otherMoney += number;
-            }
+            RecordManager.instance.SetRecord(number.ToString());
         }
-        else if (tempMoney > 0 && other[1] < 0) //상대방은 잃고 난 땃을 경우 
+        else if(number < 0)
         {
-            moneyAnimation.AddMoneyAnimation(money, otherMoney + Mathf.Abs(other[1]), Mathf.Abs(tempMoney));
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, number);
 
-            money += Mathf.Abs(tempMoney);
-            otherMoney -= Mathf.Abs(tempMoney) + Mathf.Abs(other[1]);
+            money -= Mathf.Abs(number);
+            otherMoney += Mathf.Abs(number);
+
+            RecordManager.instance.SetRecord(number.ToString());
         }
-        else if (tempMoney < 0 && other[1] > 0) //난 잃고 상대방만 땃을 경우
+        else
         {
-            moneyAnimation.MinusMoneyAnimation(money, otherMoney, other[1] + Mathf.Abs(tempMoney));
-
-            money -= other[1] + Mathf.Abs(tempMoney);
-            otherMoney += other[1];
-        }
-        else if (tempMoney > 0 && other[1] == 0) //상대방이 배팅 안 했을 경우
-        {
-            moneyAnimation.AddMoneyAnimation(money, otherMoney, Mathf.Abs(tempMoney));
-
-            money += Mathf.Abs(tempMoney);
-            otherMoney -= Mathf.Abs(tempMoney);
-        }
-        else if (tempMoney == 0 && other[1] > 0) //내가 배팅 안 했을 경우
-        {
-            moneyAnimation.MinusMoneyAnimation(money, otherMoney, other[1]);
-
-            money -= other[1];
-            otherMoney += other[1];
-        }
-        //else if(tempMoney == 0 && other[1] < 0) //난 배팅 안 했는데 상대방은 배팅한 돈만큼 잃었을 때
-        //{
-
-        //}
-        //else if(tempMoney < 0 && other[1] == 0) //상대방은 배팅 안 했는데 난 배팅한 돈만큼 잃었을 때
-        //{
-
-        //}
-        else //둘다 잃었을 경우
-        {
-            //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            //otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
-
-            if(bettingMoney > 0)
+            if (bettingMoney > 0)
             {
                 moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney, moneyText);
             }
 
-            if(other[0] > 0)
+            if (compare[0] > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + other[0], other[0], otherMoneyText);
-            }
-
-            RecordManager.instance.SetRecord((-bettingMoney).ToString());
-        }
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-        {
-            int[] compare = new int[2];
-            compare[0] = otherMoney;
-            compare[1] = money;
-
-            PV.RPC("SyncMoney", RpcTarget.Others, compare);
-
-            Debug.Log("서버 돈 동기화 갱신완료");
-        }
-    }
-
-    [PunRPC]
-    void SyncMoney(int[] compare)
-    {
-        Debug.LogError("내 돈 : " + money + " / 갱신할 돈 : " + compare[0]);
-        Debug.LogError("상대방 돈 : " + otherMoney + " / 갱신할 돈 : " + compare[1]);
-
-        if (money > otherMoney) //돈을 잃은 경우
-        {
-            moneyAnimation.correction = compare[1];
-
-            moneyAnimation.MinusMoneyAnimation(money, otherMoney, money - compare[0]);
-
-            money = compare[0];
-            otherMoney = compare[1];
-        }
-        else if(money < otherMoney) //돈을 얻었을 경우
-        {
-            moneyAnimation.correction = compare[1];
-
-            moneyAnimation.AddMoneyAnimation(money, otherMoney, compare[0] - money);
-
-            money = compare[0];
-            otherMoney = compare[1];
-        }
-        else //변동이 없을 경우
-        {
-            money = compare[0];
-            otherMoney = compare[1];
-
-            //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            //otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
-
-            if(bettingMoney > 0)
-            {
-                moneyAnimation.MinusMoneyAnimationMid(money + compare[0], compare[0], moneyText);
-            }
-
-            if(compare[1] > 0)
-            {
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[1], compare[1], otherMoneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0], otherMoneyText);
             }
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
