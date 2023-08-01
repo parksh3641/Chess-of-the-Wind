@@ -14,7 +14,7 @@ public class ShopManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
-    private int[] goldValue = new int[] { 1000, 2000, 3000, 4000, 5000, 6000 };
+    private int[] goldValue = new int[] { 50, 500, 15000, 500000, 5000, 300000 };
 
 
     public ShopContent shopContent;
@@ -76,17 +76,17 @@ public class ShopManager : MonoBehaviour
         {
             shopView.SetActive(true);
 
-            boxArray[0].SetActive(false);
-            boxArray[1].SetActive(false);
+            boxArray[0].SetActive(true);
+            boxArray[1].SetActive(true);
 
-            if (playerDataBase.Formation == 2)
-            {
-                boxArray[1].SetActive(true);
-            }
-            else
-            {
-                boxArray[0].SetActive(true);
-            }
+            //if (playerDataBase.Formation == 2)
+            //{
+            //    boxArray[1].SetActive(true);
+            //}
+            //else
+            //{
+            //    boxArray[0].SetActive(true);
+            //}
         }
     }
 

@@ -27,6 +27,10 @@ public class MatchingManager : MonoBehaviour
     public Image rankUpIcon;
     public Text rankUpText;
 
+    public GameObject[] starBackground;
+    public ImageAnimation[] star;
+
+    public GameObject tapToContinue;
 
     [Title("Enter")]
     public Image rankImg;
@@ -59,6 +63,7 @@ public class MatchingManager : MonoBehaviour
 
     public Sprite[] matchingButtonArray;
 
+    private int starSave = 0;
     private int stakes = 0;
     private int limitBlock = 0;
     private int matchingWaitTime = 0;
@@ -100,14 +105,6 @@ public class MatchingManager : MonoBehaviour
 
     public void Initialize()
     {
-        //int rank = rankDataBase.GetRank(playerDataBase.Gold) - 1;
-        //gameRankType = GameRankType.Bronze_4 + rank;
-
-        //if (rank >= System.Enum.GetValues(typeof(GameRankType)).Length)
-        //{
-        //    gameRankType = GameRankType.Legend_1;
-        //}
-
         int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
 
         for (int i = 0; i < starArray.Length; i ++)
@@ -185,26 +182,47 @@ public class MatchingManager : MonoBehaviour
     [Button]
     public void CheckRankUp()
     {
-        if(GameStateManager.instance.Win)
+        rankUpView.SetActive(true);
+
+        rankUpEffect.SetActive(false);
+
+        tapToContinue.SetActive(false);
+
+        rankUpText.text = "";
+
+        rankUpIcon.sprite = rankIconArray[(int)GameStateManager.instance.GameRankType];
+
+        isWait = true;
+
+        if (GameStateManager.instance.Win)
         {
+            rankUpTitle.text = LocalizationManager.instance.GetString("Win");
+
             GameStateManager.instance.Win = false;
 
             int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
 
-            if(GameStateManager.instance.WinStreak >= 3)
-            {
-                playerDataBase.Star += 2;
+            starSave = playerDataBase.Star;
 
-                Debug.Log("3연승 이상 승리 :  별 2개 획득");
-            }
-            else
-            {
-                playerDataBase.Star += 1;
+            //if (GameStateManager.instance.WinStreak >= 3)
+            //{
+            //    playerDataBase.Star += 2;
 
-                Debug.Log("승리 : 별 1개 획득");
-            }
+            //    Debug.Log("3연승 이상 승리 :  별 2개 획득");
+            //}
+            //else
+            //{
+            //    playerDataBase.Star += 1;
 
-            if(GameStateManager.instance.GameType == GameType.NewBie)
+            //    Debug.Log("승리 : 별 1개 획득");
+            //}
+
+            playerDataBase.Star += 1;
+
+            Debug.Log("승리 : 별 1개 획득");
+
+
+            if (GameStateManager.instance.GameType == GameType.NewBie)
             {
                 playerDataBase.NewbieWin += 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewbieWin", playerDataBase.NewbieWin);
@@ -238,22 +256,34 @@ public class MatchingManager : MonoBehaviour
 
                     playerDataBase.Star += 1;
 
+                    StarAnimation(true);
+
                     OpenRankUpView(true);
 
                     Debug.Log("랭크 상승 !");
                 }
+                else
+                {
+                    StarAnimation(true);
+
+                    Debug.Log("별 개수 상승");
+
+                    Invoke("Delay", 1.5f);
+                }
             }
             else
             {
-                //playerDataBase.Star = rankDataBase.GetNeedStar(rankDataBase.rankInformationArray.Length - 1);
-
                 Debug.Log("최고 랭크 달성 !");
             }
         }
         else if(GameStateManager.instance.Lose)
         {
+            rankUpTitle.text = LocalizationManager.instance.GetString("Lose");
+
             GameStateManager.instance.Lose = false;
             GameStateManager.instance.WinStreak = 0;
+
+            starSave = playerDataBase.Star;
 
             playerDataBase.Star -= 1;
 
@@ -282,6 +312,8 @@ public class MatchingManager : MonoBehaviour
 
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
 
+                    StarAnimation(false);
+
                     OpenRankUpView(false);
 
                     Debug.Log("랭크 하락");
@@ -293,6 +325,14 @@ public class MatchingManager : MonoBehaviour
                     Debug.Log("최하 랭크 입니다");
                 }
             }
+            else
+            {
+                StarAnimation(false);
+
+                Debug.Log("별 개수 하락");
+
+                Invoke("Delay", 1.5f);
+            }
         }
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("Star", playerDataBase.Star);
@@ -300,6 +340,43 @@ public class MatchingManager : MonoBehaviour
         Initialize();
     }
 
+    void StarAnimation(bool check)
+    {
+        int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
+
+        for (int i = 0; i < starBackground.Length; i++)
+        {
+            starBackground[i].gameObject.SetActive(false);
+            star[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < needStar - 1; i++)
+        {
+            starBackground[i].gameObject.SetActive(true);
+            star[i].gameObject.SetActive(true);
+            star[i].StateOff();
+        }
+
+        for (int i = 0; i < playerDataBase.Star; i++)
+        {
+            star[i].StateOn();
+        }
+
+        if(check)
+        {
+            for (int i = 0; i < playerDataBase.Star - starSave; i++)
+            {
+                star[starSave + i].StarUp();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < starSave - playerDataBase.Star; i++)
+            {
+                star[playerDataBase.Star - i].StarDown();
+            }
+        }
+    }
 
     void OpenRankUpView(bool check)
     {
@@ -333,10 +410,11 @@ public class MatchingManager : MonoBehaviour
 
             rankUpText.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " +
     LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] + "</color>";
+
+            SoundManager.instance.PlaySFX(GameSfxType.RankDown);
         }
 
-        isWait = true;
-        Invoke("Delay", 1.0f);
+        Invoke("Delay", 1.5f);
     }
 
     void SoundDelay()
@@ -355,6 +433,8 @@ public class MatchingManager : MonoBehaviour
     void Delay()
     {
         isWait = false;
+
+        tapToContinue.SetActive(true);
     }
 
     public void GameStartButton_Newbie()

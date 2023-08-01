@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
 {
     public GameObject updateView;
 
+    public GameObject privacypolicyView;
+
     [Space]
     [Title("Login")]
     public GameObject loginUI;
@@ -119,13 +121,36 @@ public class UIManager : MonoBehaviour
         index = -1;
 
         testMode.SetActive(false);
+
+        privacypolicyView.SetActive(false);
     }
 
     private void Start()
     {
+        if(!GameStateManager.instance.PrivacyPolicy)
+        {
+            privacypolicyView.SetActive(true);
+        }
+
         SetLoginUI();
 
         OpenMainCanvas(1);
+    }
+
+    public void PrivacyAgree()
+    {
+        GameStateManager.instance.PrivacyPolicy = true;
+        privacypolicyView.SetActive(false);
+    }
+
+    public void PrivacyDecline()
+    {
+        Application.Quit();
+    }
+
+    public void PrivacyReadMore()
+    {
+        Application.OpenURL("https://sites.google.com/view/bluebook-co-ltd/home?authuser=3");
     }
 
     public void Initialize()

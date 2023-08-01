@@ -235,7 +235,7 @@ public class NickNameManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
-        SoundManager.instance.PlaySFX(GameSfxType.Click);
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
 
         nickNameFirstView.SetActive(false);
     }

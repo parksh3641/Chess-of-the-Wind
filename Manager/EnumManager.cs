@@ -146,16 +146,16 @@ public enum GameSfxType
     BlockSynthesisSuccess,
     BuyShopItem,
     BoxOpen,
-    GetBlock, //???? ??????
+    GetBlock,
     PlusMoney1,
     PlusMoney2,
     MinusMoney,
-    ChangeMoney, //?? ???? ????
+    ChangeMoney,
     UseEmotion,
-    SetBlock, //???? ????
+    SetBlock,
     TimesUp,
     GameWin,
-    ResultMoney, //???? ?????????? ?? ???????? ????
+    ResultMoney,
     GameLose,
     BounsRoulette,
     GetNumber,
@@ -166,7 +166,11 @@ public enum GameSfxType
     TalkWinter,
     TalkUnder,
     TalkEnemy,
-    Wrong
+    Wrong,
+    RankDown,
+    Success,
+    BlockSell,
+    BlowWind
 }
 
 public enum LanguageType

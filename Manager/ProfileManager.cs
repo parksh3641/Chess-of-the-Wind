@@ -97,5 +97,7 @@ public class ProfileManager : MonoBehaviour
         GUIUtility.systemCopyBuffer = nickNameText.text;
 
         NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
+
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
     }
 }

@@ -61,6 +61,8 @@ public class UpgradeManager : MonoBehaviour
     public Text upgradeScreenValueName;
     public Text upgradeScreenValue;
 
+    public GameObject tapToContinue;
+
     Sprite[] blockArray;
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
@@ -381,12 +383,14 @@ public class UpgradeManager : MonoBehaviour
         Initialize();
 
         isWait = true;
-        Invoke("Delay", 0.5f);
+        Invoke("Delay", 1.0f);
     }
 
     void OpenUpgradeScreen(int number)
     {
         upgradeScreen.SetActive(true);
+
+        tapToContinue.SetActive(false);
 
         upgradeScreenIcon.sprite = blockArray[(int)blockUIContent.blockClass.blockType - 1];
         upgradeScreenIcon.color = new Color(1, 1, 1);
@@ -456,6 +460,8 @@ public class UpgradeManager : MonoBehaviour
     void Delay()
     {
         isWait = false;
+
+        tapToContinue.SetActive(true);
     }
 
     public void SellBlock(string id)

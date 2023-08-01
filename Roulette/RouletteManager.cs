@@ -34,6 +34,9 @@ public class RouletteManager : MonoBehaviour
     public MeshRenderer[] roulette1WindPoint;
     public MeshRenderer[] roulette2WindPoint;
 
+    public ParticleSystem roulette1Particle;
+    public ParticleSystem roulette2Particle;
+
     public GameObject[] vectorArray;
 
     public GameObject windGauge;
@@ -408,6 +411,9 @@ public class RouletteManager : MonoBehaviour
             rightClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
             rightClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
         }
+
+        roulette1Particle.gameObject.SetActive(false);
+        roulette2Particle.gameObject.SetActive(false);
 
         pinball.transform.localPosition = new Vector3(5000, 5000);
 
@@ -1067,6 +1073,9 @@ public class RouletteManager : MonoBehaviour
     void BlowingParticle(int number)
     {
         windCharacterManager.WindBlowing(number);
+
+        SoundManager.instance.StopSFX(GameSfxType.BlowWind);
+        SoundManager.instance.PlaySFX(GameSfxType.BlowWind);
     }
 
     IEnumerator PowerCoroution()
@@ -1292,6 +1301,17 @@ public class RouletteManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
 
+            if (rouletteIndex == 0)
+            {
+                roulette1Particle.gameObject.SetActive(true);
+                roulette1Particle.Play();
+            }
+            else
+            {
+                roulette2Particle.gameObject.SetActive(true);
+                roulette2Particle.Play();
+            }
+
             Debug.Log("숫자에 당첨되었습니다");
         }
         else
@@ -1318,6 +1338,17 @@ public class RouletteManager : MonoBehaviour
             queenEffect.SetActive(true);
 
             SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
+
+            if (rouletteIndex == 0)
+            {
+                roulette1Particle.gameObject.SetActive(true);
+                roulette1Particle.Play();
+            }
+            else
+            {
+                roulette2Particle.gameObject.SetActive(true);
+                roulette2Particle.Play();
+            }
 
             Debug.Log("퀸에 당첨되었습니다");
         }

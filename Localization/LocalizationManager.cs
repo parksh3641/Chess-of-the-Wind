@@ -380,6 +380,8 @@ public class LocalizationManager : MonoBehaviour
         {
             localizationContentList[i].ReLoad();
         }
+
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
     }
 
     public void CloseLanguage()

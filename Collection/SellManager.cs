@@ -49,13 +49,13 @@ public class SellManager : MonoBehaviour
 
         blockUIContent.Collection_Initialize(blockClass);
 
-        titleText.text = "판매 알림";
-        sellText.text = "판매 가격";
+        //titleText.text = "판매 알림";
+        //sellText.text = "판매 가격";
 
         sellPriceText.text = price.ToString();
 
-        sellButtonText.text = "판매하기";
-        cancleButtonText.text = "그만두기";
+        //sellButtonText.text = "판매하기";
+        //cancleButtonText.text = "그만두기";
     }
 
     public void SellButton()
@@ -67,6 +67,8 @@ public class SellManager : MonoBehaviour
         CloseSellView();
 
         NotionManager.instance.UseNotion(NotionType.SellBlock);
+
+        SoundManager.instance.PlaySFX(GameSfxType.SetBlock);
     }
     public void CloseSellView()
     {

@@ -19,6 +19,9 @@ public class GameStateManager : MonoBehaviour
         [Title("Developer")]
         public bool isLogin = false;
 
+        [Title("Agree")]
+        public bool privacypolicy = false;
+
         [Space]
         [Title("Login")]
         public string playfabId = "";
@@ -79,6 +82,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.isLogin = value;
+            SaveFile();
+        }
+    }
+
+    public bool PrivacyPolicy
+    {
+        get
+        {
+            return gameSettings.privacypolicy;
+        }
+        set
+        {
+            gameSettings.privacypolicy = value;
             SaveFile();
         }
     }

@@ -11,6 +11,10 @@ public class RandomBoxManager : MonoBehaviour
 
     public GameObject boxView;
 
+    public GameObject boxOpenView;
+
+    public FadeInOut fadeInOut;
+
     public Text boxCountText;
 
     [Title("Content")]
@@ -33,9 +37,16 @@ public class RandomBoxManager : MonoBehaviour
     public ButtonScaleAnimation boxAnim;
     public GameObject tapObj;
 
+    [Title("Detail")]
+    public BlockUIContent blockUIContent_Detail;
+    public Text blockTitleText;
+    public Text nextText;
+    public GameObject blockUIEffect;
+
     [Title("Value")]
     public int boxCount = 0;
     public int boxCountSave = 0;
+    public int boxIndex = 0;
     public float[] percentBlock;
     public List<string> allowSnowBlockList = new List<string>();
     public List<string> allowUnderworldBlockList = new List<string>();
@@ -44,13 +55,14 @@ public class RandomBoxManager : MonoBehaviour
 
     public bool isWait = false;
     public bool isStart = false;
+    public bool isDelay = false;
 
     private float random = 0;
     private string block = "";
 
     private bool confirmationSR = false;
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.2f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
 
     PlayerDataBase playerDataBase;
 
@@ -94,6 +106,11 @@ public class RandomBoxManager : MonoBehaviour
         tapObj.SetActive(false);
 
         gradient.SetActive(false);
+
+        boxOpenView.SetActive(false);
+        blockUIEffect.SetActive(false);
+
+        boxIndex = 0;
     }
 
     private void OnEnable()
@@ -405,45 +422,103 @@ public class RandomBoxManager : MonoBehaviour
     {
         if (!isStart) return;
 
+        isStart = false;
+
         boxIcon.sprite = boxOpenIcon[(int)boxType];
         boxGradient.sprite = boxOpenIcon[(int)boxType];
-
-        boxPanel.SetActive(true);
 
         boxOpenEffect.SetActive(true);
 
         boxAnim.StopAnim();
 
-        isStart = false;
-
         SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
 
-        StartCoroutine(OpenBoxCoroution());
+        //StartCoroutine(OpenBoxCoroution());
+
+        StartCoroutine(NextButtonCoroution());
+    }
+
+    IEnumerator NextButtonCoroution()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        fadeInOut.gameObject.SetActive(true);
+        fadeInOut.FadeOutToIn();
+
+        yield return new WaitForSeconds(1.5f);
+
+        NextButton();
+    }
+
+    public void NextButton()
+    {
+        if (isDelay) return;
+
+        if (boxIndex < boxCountSave)
+        {
+            boxOpenView.SetActive(true);
+
+            blockUIEffect.SetActive(false);
+
+            if (prizeBlockList[boxIndex].rankType >= RankType.SSR)
+            {
+                fadeInOut.gameObject.SetActive(true);
+                fadeInOut.FadeOut();
+
+                blockUIEffect.SetActive(true);
+
+                SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
+            }
+            else
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
+            }
+
+            blockUIContent_Detail.Collection_Initialize(prizeBlockList[boxIndex]);
+
+            blockTitleText.text = LocalizationManager.instance.GetString(prizeBlockList[boxIndex].blockType.ToString());
+            nextText.text = (boxIndex + 1) + "/" + boxCountSave;
+
+            boxIndex++;
+        }
+        else
+        {
+            boxOpenView.SetActive(false);
+
+            StartCoroutine(OpenBoxCoroution());
+        }
+
+        isDelay = true;
+        Invoke("Delay2", 0.3f);
     }
 
     IEnumerator OpenBoxCoroution()
     {
+        boxCountText.text = "0";
+
+        boxPanel.SetActive(true);
+
         for (int i = 0; i < blockUIContentList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(false);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < prizeBlockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Collection_Initialize(prizeBlockList[i]);
 
-            boxCountSave -= 1;
-            boxCountText.text = boxCountSave.ToString();
+            //boxCountSave -= 1;
+            //boxCountText.text = boxCountSave.ToString();
 
             SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
 
             yield return waitForSeconds;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         tapObj.SetActive(true);
 
@@ -687,6 +762,11 @@ public class RandomBoxManager : MonoBehaviour
     void Delay()
     {
         isWait = false;
+    }
+
+    void Delay2()
+    {
+        isDelay = false;
     }
 
     public void GameReward()

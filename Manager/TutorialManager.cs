@@ -187,12 +187,12 @@ public class TutorialManager : MonoBehaviour
 
         windButtonTarget.SetActive(false);
 
-        homeButton.SetActive(false);
+        homeButton.SetActive(true);
     }
 
     void Start()
     {
-        if (playerDataBase.Formation > 0) homeButton.SetActive(true);
+        //if (playerDataBase.Formation > 0) homeButton.SetActive(true);
 
         talkIndex = 0;
 
@@ -495,6 +495,8 @@ public class TutorialManager : MonoBehaviour
             {
                 windParticleArray[0].Play();
 
+                SoundManager.instance.PlaySFX(GameSfxType.BlowWind);
+
                 pinball.BlowTargetBlow(blowTargetAi);
 
                 break;
@@ -614,6 +616,8 @@ public class TutorialManager : MonoBehaviour
 
         windParticleArray[1].Play();
 
+        SoundManager.instance.PlaySFX(GameSfxType.BlowWind);
+
         pinball.BlowTargetBlow(blowTarget);
 
         StartCoroutine(BlowWindCoroution());
@@ -666,7 +670,14 @@ public class TutorialManager : MonoBehaviour
 
     public void GoToHome()
     {
-        PlayerPrefs.SetString("LoadScene", "MainScene");
-        SceneManager.LoadScene("LoadScene");
+        if (playerDataBase.Formation == 0)
+        {
+            formationManager.Initialize();
+        }
+        else
+        {
+            PlayerPrefs.SetString("LoadScene", "MainScene");
+            SceneManager.LoadScene("LoadScene");
+        }
     }
 }

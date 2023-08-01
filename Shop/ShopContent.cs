@@ -82,7 +82,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeN";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "1,000";
+                    goldText.text = MoneyUnitString.ToCurrencyString(50);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "2,000";
+                    goldText.text = MoneyUnitString.ToCurrencyString(500);
                 }
                 else
                 {
@@ -118,7 +118,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeSR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "3,000";
+                    goldText.text = MoneyUnitString.ToCurrencyString(150000);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ public class ShopContent : MonoBehaviour
                     titleText.localizationName = "GradeSSR";
                     titleText.localizationName2 = "UpgradeTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "4,000";
+                    goldText.text = MoneyUnitString.ToCurrencyString(500000);
                 }
                 else
                 {
@@ -171,7 +171,7 @@ public class ShopContent : MonoBehaviour
                 {
                     titleText.localizationName = "DefDestroyTicket";
                     titleText.plusText = " x1";
-                    goldText.text = "6,000";
+                    goldText.text = MoneyUnitString.ToCurrencyString(300000);
                 }
                 else
                 {
