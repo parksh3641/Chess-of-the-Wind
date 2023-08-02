@@ -33,6 +33,7 @@ public class UpgradeManager : MonoBehaviour
 
     public LocalizationContent equipText;
 
+    public GameObject ticketObj;
     public GameObject defDestroyObj;
     public LocalizationContent defDestroyText;
     public Text defDestroyNumberText;
@@ -45,6 +46,7 @@ public class UpgradeManager : MonoBehaviour
     int gold = 0;
     int upgradeTicket = 0;
     int level = 0;
+    int needTicket = 0;
 
     bool isWait = false;
     bool isDef = false;
@@ -92,6 +94,7 @@ public class UpgradeManager : MonoBehaviour
         upgradeView.SetActive(false);
         upgradeScreen.SetActive(false);
 
+        ticketObj.SetActive(false);
         defDestroyObj.SetActive(false);
     }
 
@@ -160,14 +163,25 @@ public class UpgradeManager : MonoBehaviour
 
         goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
 
-        upgradeTicket = playerDataBase.GetUpgradeTicket(upgradeValue.rankType);
+        upgradeTicket = playerDataBase.GetUpgradeTicket(RankType.N);
 
-        ticketText.localizationName = "UpgradeTicket";
-        ticketText.ReLoad();
+        needTicket = upgradeDataBase.GetNeedTicket(blockClass.level + 1);
 
-        ticketNumberText.text = upgradeTicket + "/1";
+        if (blockClass.level >= 6)
+        {
+            ticketObj.SetActive(true);
 
-        ticketImg.sprite = ticketImgArray[(int)blockClass.rankType];
+            ticketText.localizationName = "UpgradeTicket";
+            ticketText.ReLoad();
+
+            ticketNumberText.text = upgradeTicket + "/" + needTicket;
+
+            ticketImg.sprite = ticketImgArray[(int)RankType.SR];
+        }
+        else
+        {
+            ticketObj.SetActive(false);
+        }
 
         defDestroyObj.SetActive(false);
 
@@ -193,7 +207,8 @@ public class UpgradeManager : MonoBehaviour
                 //successText.localizationName = "NextSynthesisInfo";
                 successText.localizationName = "";
                 successText.plusText = "";
-                keepText.localizationName = "";
+                keepText.localizationName = "NextSynthesisInfo";
+                keepText.plusText = "";
                 downText.localizationName = "";
                 destroyText.localizationName = "";
 
@@ -205,7 +220,8 @@ public class UpgradeManager : MonoBehaviour
                 //successText.localizationName = "MaxLevel";
                 successText.localizationName = "";
                 successText.plusText = "";
-                keepText.localizationName = "";
+                keepText.localizationName = "MaxLevel";
+                keepText.plusText = "";
                 downText.localizationName = "";
                 destroyText.localizationName = "";
                 valuePlusText.localizationName = "";
@@ -224,33 +240,49 @@ public class UpgradeManager : MonoBehaviour
         }
         else
         {
-            if (gold >= upgradeInformation.needGold && upgradeTicket >= 1)
+            if (blockClass.level >= 6)
             {
-                upgradeButton.sprite = upgradeButtonArray[1];
+                if(upgradeTicket >= needTicket && gold >= upgradeInformation.needGold)
+                {
+                    upgradeButton.sprite = upgradeButtonArray[1];
 
-                Debug.Log("강화 준비 완료");
+                    Debug.Log("강화 준비 완료");
+                }
+                else
+                {
+                    upgradeButton.sprite = upgradeButtonArray[0];
+                }
             }
             else
             {
-                upgradeButton.sprite = upgradeButtonArray[0];
+                if(gold >= upgradeInformation.needGold)
+                {
+                    upgradeButton.sprite = upgradeButtonArray[1];
+
+                    Debug.Log("강화 준비 완료");
+                }
+                else
+                {
+                    upgradeButton.sprite = upgradeButtonArray[0];
+                }
             }
 
-            if(upgradeInformation.destroy > 0f)
-            {
-                defDestroyObj.SetActive(true);
-                defDestroyText.localizationName = "DefDestroyTicket";
-                defDestroyText.ReLoad();
-                defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
+            //if(upgradeInformation.destroy > 0f)
+            //{
+            //    defDestroyObj.SetActive(true);
+            //    defDestroyText.localizationName = "DefDestroyTicket";
+            //    defDestroyText.ReLoad();
+            //    defDestroyNumberText.text = playerDataBase.DefDestroyTicket + " /1";
 
-                defCheckMark.enabled = false;
-                isDef = false;
-            }
-            else
-            {
-                defCheckMark.enabled = false;
+            //    defCheckMark.enabled = false;
+            //    isDef = false;
+            //}
+            //else
+            //{
+            //    defCheckMark.enabled = false;
 
-                isDef = false;
-            }
+            //    isDef = false;
+            //}
         }
     }
 
@@ -272,7 +304,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        if (upgradeTicket < 1)
+        if (blockClass.level >= 6 && upgradeTicket < needTicket)
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -283,26 +315,28 @@ public class UpgradeManager : MonoBehaviour
 
         PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, upgradeInformation.needGold);
 
-        playerDataBase.UseUpgradeTicket(upgradeValue.rankType);
+        playerDataBase.UseUpgradeTicket(RankType.N, needTicket);
 
-        switch (upgradeValue.rankType)
-        {
-            case RankType.N:
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
-                break;
-            case RankType.R:
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_R", upgradeTicket - 1);
-                break;
-            case RankType.SR:
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SR", upgradeTicket - 1);
-                break;
-            case RankType.SSR:
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SSR", upgradeTicket - 1);
-                break;
-            case RankType.UR:
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_UR", upgradeTicket - 1);
-                break;
-        }
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
+
+        //switch (upgradeValue.rankType)
+        //{
+        //    case RankType.N:
+        //        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
+        //        break;
+        //    case RankType.R:
+        //        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_R", upgradeTicket - 1);
+        //        break;
+        //    case RankType.SR:
+        //        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SR", upgradeTicket - 1);
+        //        break;
+        //    case RankType.SSR:
+        //        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_SSR", upgradeTicket - 1);
+        //        break;
+        //    case RankType.UR:
+        //        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_UR", upgradeTicket - 1);
+        //        break;
+        //}
 
         float random = Random.Range(0, 100.0f);
 

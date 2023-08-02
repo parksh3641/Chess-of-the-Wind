@@ -67,17 +67,19 @@ public class ShopManager : MonoBehaviour
             shopContentList.Add(monster);
         }
 
-        shopRectTransform.sizeDelta = new Vector2(0, -999);
+        //shopRectTransform.sizeDelta = new Vector2(0, -999);
     }
 
     public void OpenShopView()
     {
-        if(!shopView.activeSelf)
+        if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
 
             boxArray[0].SetActive(true);
             boxArray[1].SetActive(true);
+
+            Invoke("GridTransform", 0.1f);
 
             //if (playerDataBase.Formation == 2)
             //{
@@ -88,6 +90,12 @@ public class ShopManager : MonoBehaviour
             //    boxArray[0].SetActive(true);
             //}
         }
+    }
+
+    [Button]
+    public void GridTransform()
+    {
+        shopRectTransform.sizeDelta = Vector3.zero;
     }
 
     public void CloseShopView()

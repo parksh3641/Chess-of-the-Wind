@@ -803,7 +803,14 @@ public class RouletteManager : MonoBehaviour
 
             //vectorArray[windIndex].SetActive(true);
 
-            //buttonText.text = "당신 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불 수 있습니다.\n버튼을 꾹 눌러 <color=#0096FF>파워</color>를 조절하세요";
+            if(GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                buttonText.text = LocalizationManager.instance.GetString("Newbie_MyTurn");
+            }
+            else
+            {
+                buttonText.text = LocalizationManager.instance.GetString("Gosu_MyTurn");
+            }
 
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
@@ -830,7 +837,7 @@ public class RouletteManager : MonoBehaviour
 
             NotionManager.instance.UseNotion(NotionType.EnemyTurn);
 
-            //buttonText.text = "상대방 차례입니다.\n<color=#FF3200>빨간색 위치</color>에서 바람을 불려고 합니다";
+            buttonText.text = LocalizationManager.instance.GetString("EnemyTurn");
         }
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정

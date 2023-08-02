@@ -28,7 +28,7 @@ public class BlockLevelContent : MonoBehaviour
 
     public void SetMyBlock(int number)
     {
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
         if (number > level)
         {
@@ -45,7 +45,7 @@ public class BlockLevelContent : MonoBehaviour
 
     public void SetOtherBlock(int number)
     {
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
         if (number > level)
         {

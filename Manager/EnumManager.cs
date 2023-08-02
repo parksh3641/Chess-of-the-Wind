@@ -170,7 +170,10 @@ public enum GameSfxType
     RankDown,
     Success,
     BlockSell,
-    BlowWind
+    BlowWind,
+    BoxOpen2,
+    GetStar,
+    LoseStar
 }
 
 public enum LanguageType
@@ -278,7 +281,9 @@ public enum NotionType
     GetGradeURTicket,
     GetGradeDefTicket,
     EquipSameBlock,
-    LimitRank
+    LimitRank,
+    InGameBurning,
+    InGameBurning2
 }
 
 public enum GameRankType

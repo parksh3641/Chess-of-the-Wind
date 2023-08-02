@@ -77,7 +77,7 @@ public class ImageAnimation : MonoBehaviour
             }
             else
             {
-                SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
+                SoundManager.instance.PlaySFX(GameSfxType.GetStar);
 
                 transform.localScale = Vector3.one;
                 yield break;
@@ -98,6 +98,8 @@ public class ImageAnimation : MonoBehaviour
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.LoseStar);
+
             transform.localScale = Vector3.zero;
             yield break;
         }

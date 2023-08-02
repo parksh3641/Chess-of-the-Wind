@@ -100,6 +100,8 @@ public class TutorialManager : MonoBehaviour
 
     public GameObject windButtonTarget;
 
+    public ParticleSystem rouletteParticle;
+
     bool myTurn = false;
 
     public GameObject homeButton;
@@ -188,6 +190,8 @@ public class TutorialManager : MonoBehaviour
         windButtonTarget.SetActive(false);
 
         homeButton.SetActive(true);
+
+        rouletteParticle.gameObject.SetActive(false);
     }
 
     void Start()
@@ -632,6 +636,9 @@ public class TutorialManager : MonoBehaviour
         targetView.SetActive(true);
         targetEffect.SetActive(true);
         targetText.text = "6";
+
+        rouletteParticle.gameObject.SetActive(true);
+        rouletteParticle.Play();
 
         SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
 

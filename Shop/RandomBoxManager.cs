@@ -26,7 +26,6 @@ public class RandomBoxManager : MonoBehaviour
 
     [Title("Box")]
     public Image boxIcon;
-    public Image boxGradient;
     public Sprite[] boxInitIcon;
     public Sprite[] boxOpenIcon;
     public GameObject boxOpenEffect;
@@ -332,7 +331,6 @@ public class RandomBoxManager : MonoBehaviour
         ResetView();
 
         boxIcon.sprite = boxInitIcon[(int)boxType];
-        boxGradient.sprite = boxInitIcon[(int)boxType];
 
         boxCountText.text = boxCount.ToString();
         boxCountSave = boxCount;
@@ -347,7 +345,6 @@ public class RandomBoxManager : MonoBehaviour
         ResetView();
 
         boxIcon.sprite = boxInitIcon[(int)boxType];
-        boxGradient.sprite = boxInitIcon[(int)boxType];
 
         boxCountText.text = boxCount.ToString();
         boxCountSave = boxCount;
@@ -425,13 +422,15 @@ public class RandomBoxManager : MonoBehaviour
         isStart = false;
 
         boxIcon.sprite = boxOpenIcon[(int)boxType];
-        boxGradient.sprite = boxOpenIcon[(int)boxType];
+
+        gradient.SetActive(false);
 
         boxOpenEffect.SetActive(true);
 
         boxAnim.StopAnim();
 
         SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
+        SoundManager.instance.PlaySFX(GameSfxType.BoxOpen2);
 
         //StartCoroutine(OpenBoxCoroution());
 

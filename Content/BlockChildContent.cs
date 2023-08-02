@@ -12,8 +12,6 @@ public class BlockChildContent : MonoBehaviour
     public string nickName = "";
     public string value = "";
 
-    public Text blockInformation;
-
     public void Betting(bool check)
     {
         if (blockChildArray.Length <= 0)
@@ -27,10 +25,8 @@ public class BlockChildContent : MonoBehaviour
         }
     }
 
-    public void SetBlock(string name,string value)
+    public void SetBlock()
     {
-        blockInformation.text = name + " / " + MoneyUnitString.ToCurrencyString(int.Parse(value));
-
         if (blockChildArray.Length <= 0)
         {
             blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();

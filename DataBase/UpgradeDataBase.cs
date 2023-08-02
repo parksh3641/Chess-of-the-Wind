@@ -40,6 +40,7 @@ public class UpgradeInformation
     public float destroy = 0;
     [Title("Cost")]
     public int needGold = 0;
+    public int needTicket = 0;
     public int value = 0;
 }
 
@@ -80,7 +81,7 @@ public class UpgradeDataBase : ScriptableObject
         return upgradeInformation;
     }
 
-    public int CheckUpgradeValue(RankType type, int value) //이 값에 안 넘는 강화 단계 알려주세요
+    public int CheckUpgradeValue(RankType type, int value)
     {
         int level = 0;
 
@@ -116,5 +117,20 @@ public class UpgradeDataBase : ScriptableObject
         }
 
         return number;
+    }
+
+    public int GetNeedTicket(int level)
+    {
+        int need = 0;
+        for (int i = 0; i < upgradeInformationList.Count; i++)
+        {
+            if (upgradeInformationList[i].level.Equals(level))
+            {
+                need = upgradeInformationList[i].needTicket;
+                break;
+            }
+        }
+
+        return need;
     }
 }

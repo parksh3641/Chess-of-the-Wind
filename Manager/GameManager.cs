@@ -69,17 +69,21 @@ public class GameManager : MonoBehaviour
     private int bettingTime = 0;
     private int bettingWaitTime = 0;
 
+    public int turn = 0;
+    public bool inGameBurning = false;
+    public bool inGameBurning2 = false;
+
+    public GameObject burningObj;
+
     public int money = 0; //보유 코인
     public int otherMoney = 0; //상대방 보유 코인
     private int stakes = 0; //판돈
 
     private int bettingMoney = 0; //배치한 블럭 크기
     private float plusMoney = 0; //획득한 돈
-    private int tempMoney = 0;
 
     private int bettingAiMoney = 0;
     private float plusAiMoney = 0; //Ai가 획득한 돈
-    private int tempAiMoney = 0;
     private bool aiMoveBlock = false; //확률적으로 Ai가 2초 남기고 위치를 바꿉니다
 
     private int[] compareMoney = new int[2];
@@ -90,8 +94,6 @@ public class GameManager : MonoBehaviour
     private int targetQueenNumber = 0;
 
     private int gridConstraintCount = 0;
-
-    string worldNotion, localNotion = "";
 
     string[] insertBlock = new string[5];
     string[] deleteBlock = new string[2];
@@ -505,6 +507,13 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
 
+        turn = 0;
+
+        burningObj.SetActive(false);
+
+        inGameBurning = false;
+        inGameBurning2 = false;
+
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
 
@@ -652,11 +661,11 @@ public class GameManager : MonoBehaviour
 
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
         if (blockClassNewbie.level > level)
         {
-            blockClassNewbie.level = level - 1;
+            blockClassNewbie.level = level;
         }
 
         int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
@@ -701,7 +710,7 @@ public class GameManager : MonoBehaviour
         //    blockContentList[i].gameObject.SetActive(true);
         //}
 
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType);
+        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
         int myLevel = 0;
 
         if (playerDataBase.Armor != null)
@@ -716,7 +725,7 @@ public class GameManager : MonoBehaviour
 
                 if (myLevel > level)
                 {
-                    myLevel = level - 1;
+                    myLevel = level;
                 }
 
                 int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
@@ -746,7 +755,7 @@ public class GameManager : MonoBehaviour
 
                 if (myLevel > level)
                 {
-                    myLevel = level - 1;
+                    myLevel = level;
                 }
 
                 int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
@@ -776,7 +785,7 @@ public class GameManager : MonoBehaviour
 
                 if (myLevel > level)
                 {
-                    myLevel = level - 1;
+                    myLevel = level;
                 }
 
                 int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);
@@ -1067,7 +1076,42 @@ public class GameManager : MonoBehaviour
         uIManager.SetWaitingView(false);
         uIManager.dontTouchObj.SetActive(false);
 
-        NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
+        turn += 1;
+
+        turn = 8;
+
+        if(turn >= 8)
+        {
+            if(!inGameBurning)
+            {
+                inGameBurning = true;
+
+                money = money / 2;
+                otherMoney = otherMoney / 2;
+
+                burningObj.SetActive(true);
+
+                NotionManager.instance.UseNotion(NotionType.InGameBurning);
+            }
+        }
+        else if(turn >= 14)
+        {
+            if(!inGameBurning2)
+            {
+                inGameBurning2 = true;
+
+                money = money / 2;
+                otherMoney = otherMoney / 2;
+
+                NotionManager.instance.UseNotion(NotionType.InGameBurning2);
+            }
+        }
+        else
+        {
+            NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
+        }
+
+        Debug.Log("현재 턴 : " + turn + 1);
     }
 
     IEnumerator TimerCoroution()
@@ -1340,10 +1384,7 @@ public class GameManager : MonoBehaviour
         recordText.text += targetNumber + ", ";
 
         plusMoney = 0; //획득한 돈
-        tempMoney = 0;
-
         plusAiMoney = 0;
-        tempAiMoney = 0;
 
         if (targetQueenNumber == 1)
         {
@@ -1424,15 +1465,20 @@ public class GameManager : MonoBehaviour
 
         Debug.LogError(plusMoney);
 
-        for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
+        if (plusMoney > 0)
         {
-            if(bettingList[i] > 0)
+            if(inGameBurning)
             {
-                plusMoney = plusMoney + ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]) - ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
+                plusMoney *= 2;
+            }
 
-                Debug.LogError(((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]));
-                Debug.LogError((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
-                break;
+            for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
+            {
+                if (bettingList[i] > 0)
+                {
+                    plusMoney = plusMoney + ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]) - ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
+                    break;
+                }
             }
         }
 
@@ -1448,61 +1494,42 @@ public class GameManager : MonoBehaviour
 
         if(aiMode)
         {
-            switch (blockDataBase.GetSize(otherBlockType))
+            if (plusAiMoney > 0)
             {
-                case 1:
-                    plusAiMoney = plusAiMoney + (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f);
-                    break;
-                case 2:
+                if(inGameBurning)
+                {
+                    plusAiMoney *= 2;
+                }
 
-                    break;
-                case 3:
-                    plusAiMoney = plusAiMoney - (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f) * 2;
-                    break;
+                switch (blockDataBase.GetSize(otherBlockType))
+                {
+                    case 1:
+                        plusAiMoney = plusAiMoney + (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f);
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        plusAiMoney = plusAiMoney - (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f) * 2;
+                        break;
+                }
             }
-        }
-
-        if (bettingMoney == 0)
-        {
-            Debug.Log("배팅을 안 했습니다");
-        }
-        else
-        {
-            //if ((int)(plusMoney) - bettingMoney > 0) //배팅한 것보다 딴 돈이 많을 경우
-            //{
-            //    tempMoney = (int)(plusMoney) - bettingMoney;
-            //}
-            //else
-            //{
-            //    tempMoney = (int)(plusMoney) - bettingMoney;
-            //}
-
-            tempMoney = (int)plusMoney;
         }
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
+            Debug.Log("상대방한테 값을 전달했습니다");
+
             int[] compare = new int[2];
             compare[0] = bettingMoney;
             compare[1] = (int)(plusMoney);
             PV.RPC("CompareMoney", RpcTarget.Others, compare);
-
-            Debug.Log("상대방한테 값을 전달했습니다");
         }
         else
         {
+            Debug.Log("Ai 결과값 비교중입니다");
+
             bettingAiMoney = aiManager.bettingValue[aiManager.blockIndex];
-
-            //if ((int)(plusAiMoney) - bettingAiMoney > 0) //인공지능 결과 기록하기
-            //{
-            //    tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
-            //}
-            //else
-            //{
-            //    tempAiMoney = (int)(plusAiMoney) - bettingAiMoney;
-            //}
-
-            tempAiMoney = (int)plusAiMoney;
 
             int[] compare = new int[2];
             compare[0] = bettingAiMoney;
@@ -1528,6 +1555,56 @@ public class GameManager : MonoBehaviour
         if(PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(WaitTimerCoroution());
+        }
+    }
+
+    [PunRPC]
+    public void CompareMoney(int[] compare)
+    {
+        Debug.LogError("내가 배팅 한 돈 : " + bettingMoney + " / 내가 딴 돈 : " + (int)plusMoney);
+        Debug.LogError("상대방이 배팅 돈 : " + compare[0] + " / 상대방이 딴 돈 : " + compare[1]);
+
+        if(inGameBurning)
+        {
+            compare[1] *= 2;
+        }
+
+        money -= bettingMoney; //내 배팅한 금액만큼 일단 빼기
+        otherMoney -= compare[0]; //상대방 배팅한 금액만큼 일단 빼기
+
+        int number = (int)plusMoney - compare[1];
+
+        if (number > 0)
+        {
+            moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
+
+            money += number;
+            otherMoney -= number;
+
+            RecordManager.instance.SetRecord(number.ToString());
+        }
+        else if (number < 0)
+        {
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, Mathf.Abs(number));
+
+            money -= Mathf.Abs(number);
+            otherMoney += Mathf.Abs(number);
+
+            RecordManager.instance.SetRecord(number.ToString());
+        }
+        else
+        {
+            if (bettingMoney > 0)
+            {
+                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney, moneyText);
+            }
+
+            if (compare[0] > 0)
+            {
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0], otherMoneyText);
+            }
+
+            RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
     }
 
@@ -3505,51 +3582,6 @@ public class GameManager : MonoBehaviour
             case 1:
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", int.Parse(ht["Player2_Minus"].ToString()) + number } });
                 break;
-        }
-    }
-
-    [PunRPC]
-    public void CompareMoney(int[] compare)
-    {
-        Debug.LogError("내가 배팅 한 돈 : " + bettingMoney + " / 내가 딴 돈 : " + (int)plusMoney);
-        Debug.LogError("상대방이 배팅 돈 : " + compare[0] + " / 상대방이 딴 돈 : " + compare[1]);
-
-        money -= bettingMoney; //내 배팅한 금액만큼 일단 빼기
-        otherMoney -= compare[0]; //상대방 배팅한 금액만큼 일단 빼기
-
-        int number = (int)plusMoney - compare[1];
-
-        if (number > 0)
-        {
-            moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
-
-            money += number;
-            otherMoney -= number;
-
-            RecordManager.instance.SetRecord(number.ToString());
-        }
-        else if(number < 0)
-        {
-            moneyAnimation.MinusMoneyAnimation(money, otherMoney, number);
-
-            money -= Mathf.Abs(number);
-            otherMoney += Mathf.Abs(number);
-
-            RecordManager.instance.SetRecord(number.ToString());
-        }
-        else
-        {
-            if (bettingMoney > 0)
-            {
-                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney, moneyText);
-            }
-
-            if (compare[0] > 0)
-            {
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0], otherMoneyText);
-            }
-
-            RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
     }
 

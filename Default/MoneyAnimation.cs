@@ -364,6 +364,8 @@ public class MoneyAnimation : MonoBehaviour
 
             yield return waitForSeconds2;
         }
+
+        EndAnimation();
     }
 
 
@@ -436,6 +438,8 @@ public class MoneyAnimation : MonoBehaviour
 
             yield return waitForSeconds2;
         }
+
+        EndAnimation();
     }
 
 

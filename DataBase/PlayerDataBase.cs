@@ -1001,13 +1001,13 @@ public class PlayerDataBase : ScriptableObject
         return ticket;
     }
 
-    public void UseUpgradeTicket(RankType type)
+    public void UseUpgradeTicket(RankType type, int number)
     {
         for (int i = 0; i < upgradeTicketList.Count; i++)
         {
             if (upgradeTicketList[i].rankType.Equals(type))
             {
-                upgradeTicketList[i].holdNumber -= 1;
+                upgradeTicketList[i].holdNumber -= number;
                 break;
             }
         }
