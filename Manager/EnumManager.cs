@@ -25,11 +25,9 @@ public enum BoxType
     SR,
     SSR,
     UR,
-    Choice_N,
-    Choice_R,
-    Choice_SR,
-    Choice_SSR,
-    Choice_UR
+    NR,
+    RSR,
+    SRSSR
 }
 
 public enum PresentType
@@ -220,20 +218,10 @@ public enum ItemType
 
 public enum ShopType
 {
-    RemoveAds,
-    WatchAd,
     DailyReward,
-    UpgradeTicket_N,
-    UpgradeTicket_R,
-    UpgradeTicket_SR,
-    UpgradeTicket_SSR,
-    UpgradeTicket_UR,
-    DefDestroyTicket,
-    PresentA,
-    PresentB,
-    PresentC,
-    PresentD,
-    PresentE,
+    DailyReward_WatchAd,
+    UpgradeTicket,
+
 }
 
 public enum NotionType
@@ -273,17 +261,14 @@ public enum NotionType
     NeedEquipBlock,
     NotSellBlock,
     BuyShopItem,
-    NotEnoughDefTicket,
-    GetGradeNTicket,
-    GetGradeRTicket,
-    GetGradeSRTicket,
-    GetGradeSSRTicket,
-    GetGradeURTicket,
-    GetGradeDefTicket,
+    NotBuyDailyLimit,
+    GetUpgradeTicket,
     EquipSameBlock,
     LimitRank,
     InGameBurning,
-    InGameBurning2
+    InGameBurning2,
+    GetFreeReward,
+    GetWatchAdReward
 }
 
 public enum GameRankType

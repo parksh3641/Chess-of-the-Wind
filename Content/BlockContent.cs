@@ -176,7 +176,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         isDrag = false;
 
-        blockMainArray[(int)blockClass.blockType - 1].Betting(true);
+        blockMainArray[(int)blockClass.blockType - 1].Betting(true, this);
         //blockMainArray[(int)blockClass.blockType - 1].SetBlock(GameStateManager.instance.NickName, value.ToString());
     }
 
@@ -204,7 +204,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             gradient.SetActive(false);
         }
 
-        blockMainArray[(int)blockClass.blockType - 1].Betting(false);
+        blockMainArray[(int)blockClass.blockType - 1].Betting(false, this);
     }
 
     public void ResetPos()
@@ -233,7 +233,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             gradient.SetActive(false);
         }
 
-        blockMainArray[(int)blockClass.blockType - 1].Betting(false);
+        blockMainArray[(int)blockClass.blockType - 1].Betting(false, this);
     }
 
     public void TimeOver()

@@ -678,13 +678,15 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        yield return GetUserInventory();
+        yield return GetStatistics();
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         yield return GetPlayerData();
 
-        yield return GetStatistics();
+        yield return GetUserInventory();
+
+        yield return new WaitForSeconds(0.5f);
 
         isActive = true;
 
@@ -897,6 +899,15 @@ public class PlayfabManager : MonoBehaviour
                        case "SnowBox_UR":
                            playerDataBase.SnowBox_UR = statistics.Value;
                            break;
+                       case "SnowBox_NR":
+                           playerDataBase.SnowBox_NR = statistics.Value;
+                           break;
+                       case "SnowBox_RSR":
+                           playerDataBase.SnowBox_RSR = statistics.Value;
+                           break;
+                       case "SnowBox_SRSSR":
+                           playerDataBase.SnowBox_SRSSR = statistics.Value;
+                           break;
                        case "UnderworldBox":
                            playerDataBase.UnderworldBox = statistics.Value;
                            break;
@@ -915,11 +926,26 @@ public class PlayfabManager : MonoBehaviour
                        case "UnderworldBox_UR":
                            playerDataBase.UnderworldBox_UR = statistics.Value;
                            break;
+                       case "UnderworldBox_NR":
+                           playerDataBase.UnderworldBox_NR = statistics.Value;
+                           break;
+                       case "UnderworldBox_RSR":
+                           playerDataBase.UnderworldBox_RSR = statistics.Value;
+                           break;
+                       case "UnderworldBox_SRSSR":
+                           playerDataBase.UnderworldBox_SRSSR = statistics.Value;
+                           break;
                        case "BuySnowBox":
                            playerDataBase.BuySnowBox = statistics.Value;
                            break;
                        case "BuyUnderworldBox":
                            playerDataBase.BuyUnderworldBox = statistics.Value;
+                           break;
+                       case "BuySnowBoxSSRCount":
+                           playerDataBase.BuySnowBoxSSRCount = statistics.Value;
+                           break;
+                       case "BuyUnderworldBoxSSRCount":
+                           playerDataBase.BuyUnderworldBoxSSRCount = statistics.Value;
                            break;
                        case "UpgradeTicket_N":
                            playerDataBase.SetUpgradeTicket(RankType.N, statistics.Value);

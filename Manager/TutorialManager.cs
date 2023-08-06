@@ -110,8 +110,6 @@ public class TutorialManager : MonoBehaviour
     public NickNameManager nickNameManager;
     public FormationManager formationManager;
 
-    public WindCharacterManager windCharacterManager;
-
     Sprite[] characterArray;
 
     WaitForSeconds talkDelay = new WaitForSeconds(0.04f);

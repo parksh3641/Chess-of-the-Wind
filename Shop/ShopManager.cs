@@ -11,11 +11,7 @@ public class ShopManager : MonoBehaviour
     public RectTransform shopRectTransform;
 
     public GameObject[] boxArray;
-
-    [Space]
-    [Title("Value")]
-    private int[] goldValue = new int[] { 50, 500, 15000, 500000, 5000, 300000 };
-
+    public LocalizationContent[] boxSSRTextArray;
 
     public ShopContent shopContent;
 
@@ -37,35 +33,20 @@ public class ShopManager : MonoBehaviour
 
         shopView.SetActive(false);
 
-        for (int i = 0; i < 6; i++)
-        {
-            ShopContent monster = Instantiate(shopContent);
-            monster.transform.parent = shopContentGoldTransform;
-            monster.transform.position = Vector3.zero;
-            monster.transform.rotation = Quaternion.identity;
-            monster.transform.localScale = Vector3.one;
-            monster.Initialize(ShopType.UpgradeTicket_N + i, MoneyType.Gold, this);
-            monster.gameObject.SetActive(true);
+        //for (int i = 0; i < 6; i++)
+        //{
+        //    ShopContent monster = Instantiate(shopContent);
+        //    monster.transform.parent = shopContentGoldTransform;
+        //    monster.transform.position = Vector3.zero;
+        //    monster.transform.rotation = Quaternion.identity;
+        //    monster.transform.localScale = Vector3.one;
+        //    monster.Initialize(ShopType.UpgradeTicket_N + i, MoneyType.Gold, this);
+        //    monster.gameObject.SetActive(true);
 
-            if (i == 4) monster.gameObject.SetActive(false);
+        //    if (i == 4) monster.gameObject.SetActive(false);
 
-            shopContentGoldList.Add(monster);
-        }
-
-        for (int i = 0; i < 6; i++)
-        {
-            ShopContent monster = Instantiate(shopContent);
-            monster.transform.parent = shopContentTransform;
-            monster.transform.position = Vector3.zero;
-            monster.transform.rotation = Quaternion.identity;
-            monster.transform.localScale = Vector3.one;
-            monster.Initialize(ShopType.UpgradeTicket_N + i, MoneyType.Crystal, this);
-            monster.gameObject.SetActive(true);
-
-            if (i == 4) monster.gameObject.SetActive(false);
-
-            shopContentList.Add(monster);
-        }
+        //    shopContentGoldList.Add(monster);
+        //}
 
         //shopRectTransform.sizeDelta = new Vector2(0, -999);
     }
@@ -76,19 +57,50 @@ public class ShopManager : MonoBehaviour
         {
             shopView.SetActive(true);
 
-            boxArray[0].SetActive(true);
-            boxArray[1].SetActive(true);
+            boxArray[0].SetActive(false);
+            boxArray[1].SetActive(false);
 
             Invoke("GridTransform", 0.1f);
 
-            //if (playerDataBase.Formation == 2)
-            //{
-            //    boxArray[1].SetActive(true);
-            //}
-            //else
-            //{
-            //    boxArray[0].SetActive(true);
-            //}
+            if (playerDataBase.Formation == 2)
+            {
+                boxArray[1].SetActive(true);
+
+                boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
+                boxSSRTextArray[1].localizationName = "BoxSSRInfo";
+                boxSSRTextArray[1].ReLoad();
+            }
+            else
+            {
+                boxArray[0].SetActive(true);
+
+                boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
+                boxSSRTextArray[0].localizationName = "BoxSSRInfo";
+                boxSSRTextArray[0].ReLoad();
+            }
+        }
+    }
+
+    public void Change()
+    {
+        if (shopView.activeSelf)
+        {
+            if (playerDataBase.Formation == 2)
+            {
+                boxArray[1].SetActive(true);
+
+                boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
+                boxSSRTextArray[1].localizationName = "BoxSSRInfo";
+                boxSSRTextArray[1].ReLoad();
+            }
+            else
+            {
+                boxArray[0].SetActive(true);
+
+                boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
+                boxSSRTextArray[0].localizationName = "BoxSSRInfo";
+                boxSSRTextArray[0].ReLoad();
+            }
         }
     }
 
@@ -117,15 +129,6 @@ public class ShopManager : MonoBehaviour
         playerDataBase.BuySnowBox += number;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
-
-        if (number == 1)
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1000);
-        }
-        else
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
-        }
     }
 
     public void GetSnowBox(BoxType type, int number)
@@ -154,15 +157,17 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.SnowBox_UR = number;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", number);
                 break;
-            case BoxType.Choice_N:
+            case BoxType.NR:
+                playerDataBase.SnowBox_NR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", number);
                 break;
-            case BoxType.Choice_R:
+            case BoxType.RSR:
+                playerDataBase.SnowBox_RSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", number);
                 break;
-            case BoxType.Choice_SR:
-                break;
-            case BoxType.Choice_SSR:
-                break;
-            case BoxType.Choice_UR:
+            case BoxType.SRSSR:
+                playerDataBase.SnowBox_SRSSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SRSSR", number);
                 break;
         }
 
@@ -182,15 +187,6 @@ public class ShopManager : MonoBehaviour
         playerDataBase.BuyUnderworldBox += number;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
-
-        if (number == 1)
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1000);
-        }
-        else
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 9500);
-        }
     }
 
     public void GetUnderworld(BoxType type, int number)
@@ -219,204 +215,112 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.UnderworldBox_UR = number;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", number);
                 break;
-            case BoxType.Choice_N:
+            case BoxType.NR:
+                playerDataBase.UnderworldBox_NR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", number);
                 break;
-            case BoxType.Choice_R:
+            case BoxType.RSR:
+                playerDataBase.UnderworldBox_RSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", number);
                 break;
-            case BoxType.Choice_SR:
-                break;
-            case BoxType.Choice_SSR:
-                break;
-            case BoxType.Choice_UR:
+            case BoxType.SRSSR:
+                playerDataBase.UnderworldBox_SRSSR = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SRSSR", number);
                 break;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
-    public void BuyItem(ShopType type, MoneyType moneyType)
+    public void Buy_NR(int number)
+    {
+        int price = 15000 * number;
+
+        if (number >= 10) price -= 15000;
+
+        if (playerDataBase.Gold >= price)
+        {
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+
+            switch (GameStateManager.instance.WindCharacterType)
+            {
+                case WindCharacterType.Winter:
+                    GetSnowBox(BoxType.NR, number);
+                    break;
+                case WindCharacterType.UnderWorld:
+                    GetUnderworld(BoxType.NR, number);
+                    break;
+            }
+
+            SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+        }
+    }
+
+    public void Buy_RSR(int number)
+    {
+        int price = 100000 * number;
+
+        if (number >= 10) price -= 100000;
+
+        if (playerDataBase.Gold >= price)
+        {
+            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+
+            switch (GameStateManager.instance.WindCharacterType)
+            {
+                case WindCharacterType.Winter:
+                    GetSnowBox(BoxType.RSR, number);
+                    break;
+                case WindCharacterType.UnderWorld:
+                    GetUnderworld(BoxType.RSR, number);
+                    break;
+            }
+
+            SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+        }
+    }
+
+    public void BuyItem(ShopType type, int price, int number)
     {
         if (isDelay) return;
 
         switch (type)
         {
-            case ShopType.RemoveAds:
-                break;
-            case ShopType.WatchAd:
-                break;
             case ShopType.DailyReward:
                 break;
-            case ShopType.UpgradeTicket_N:
-                if(moneyType == MoneyType.Gold)
+            case ShopType.DailyReward_WatchAd:
+                break;
+            case ShopType.UpgradeTicket:
+                if (playerDataBase.Gold >= price)
                 {
-                    if(playerDataBase.Gold >= goldValue[0])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[0]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
+                    PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
                 }
                 else
                 {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 1500);
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                    NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+                    return;
                 }
 
-                playerDataBase.SetUpgradeTicket(RankType.N, 5);
+                playerDataBase.SetUpgradeTicket(RankType.N, number);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
 
-                NotionManager.instance.UseNotion(NotionType.GetGradeNTicket);
+                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
 
-                break;
-            case ShopType.UpgradeTicket_R:
-                if (moneyType == MoneyType.Gold)
-                {
-                    if (playerDataBase.Gold >= goldValue[1])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[1]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
-                }
-                else
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 2500);
-                }
-
-                playerDataBase.SetUpgradeTicket(RankType.R, 5);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.R));
-
-                NotionManager.instance.UseNotion(NotionType.GetGradeRTicket);
-
-                break;
-            case ShopType.UpgradeTicket_SR:
-                if (moneyType == MoneyType.Gold)
-                {
-                    if (playerDataBase.Gold >= goldValue[2])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[2]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
-                }
-                else
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 5000);
-                }
-
-                playerDataBase.SetUpgradeTicket(RankType.SR, 5);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SR));
-
-                NotionManager.instance.UseNotion(NotionType.GetGradeSRTicket);
-
-                break;
-            case ShopType.UpgradeTicket_SSR:
-                if (moneyType == MoneyType.Gold)
-                {
-                    if (playerDataBase.Gold >= goldValue[3])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[3]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
-                }
-                else
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 10000);
-                }
-
-                playerDataBase.SetUpgradeTicket(RankType.SSR, 5);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.SSR));
-
-                NotionManager.instance.UseNotion(NotionType.GetGradeSSRTicket);
-
-                break;
-            case ShopType.UpgradeTicket_UR:
-                if (moneyType == MoneyType.Gold)
-                {
-                    if (playerDataBase.Gold >= goldValue[4])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[4]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
-                }
-                else
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 15000);
-                }
-
-                playerDataBase.SetUpgradeTicket(RankType.UR, 5);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.UR));
-
-                NotionManager.instance.UseNotion(NotionType.GetGradeURTicket);
-
-                break;
-            case ShopType.DefDestroyTicket:
-                if (moneyType == MoneyType.Gold)
-                {
-                    if (playerDataBase.Gold >= goldValue[5])
-                    {
-                        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, goldValue[5]);
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                        NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
-                        return;
-                    }
-                }
-                else
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 50000);
-                }
-
-                playerDataBase.DefDestroyTicket += 5;
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DefDestroyTicket", playerDataBase.DefDestroyTicket);
-
-                NotionManager.instance.UseNotion(NotionType.GetGradeDefTicket);
-
-                break;
-            case ShopType.PresentA:
-                break;
-            case ShopType.PresentB:
-                break;
-            case ShopType.PresentC:
-                break;
-            case ShopType.PresentD:
-                break;
-            case ShopType.PresentE:
                 break;
         }
 
@@ -476,6 +380,25 @@ public class ShopManager : MonoBehaviour
     }
 
     [Button]
+    public void OpenSnowBox_NR()
+    {
+        GetSnowBox(BoxType.NR, 10);
+    }
+
+    [Button]
+    public void OpenSnowBox_RSR()
+    {
+        GetSnowBox(BoxType.RSR, 10);
+    }
+
+
+    [Button]
+    public void OpenSnowBox_SRSSR()
+    {
+        GetSnowBox(BoxType.SRSSR, 10);
+    }
+
+    [Button]
     public void OpenUnderworld_N()
     {
         GetUnderworld(BoxType.N, 10);
@@ -503,6 +426,24 @@ public class ShopManager : MonoBehaviour
     public void OpenUnderworld_UR()
     {
         GetUnderworld(BoxType.UR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_NR()
+    {
+        GetUnderworld(BoxType.NR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_RSR()
+    {
+        GetUnderworld(BoxType.RSR, 10);
+    }
+
+    [Button]
+    public void OpenUnderworld_SRSSR()
+    {
+        GetUnderworld(BoxType.SRSSR, 10);
     }
 
     #endregion

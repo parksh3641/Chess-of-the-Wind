@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LocalizationContent : MonoBehaviour
 {
     private Text localizationText;
+    public string forwardText;
     public string localizationName = "";
     public string localizationName2 = "";
     public string plusText;
@@ -26,7 +27,7 @@ public class LocalizationContent : MonoBehaviour
     {
         if (localizationName.Length > 0)
         {
-            localizationText.text = LocalizationManager.instance.GetString(localizationName) + " " +
+            localizationText.text = forwardText + " " + LocalizationManager.instance.GetString(localizationName) + " " +
                 LocalizationManager.instance.GetString(localizationName2) + plusText;
         }
         else
@@ -41,7 +42,7 @@ public class LocalizationContent : MonoBehaviour
     {
         if (localizationName.Length > 0)
         {
-            localizationText.text = LocalizationManager.instance.GetString(localizationName) + " " +
+            localizationText.text = forwardText + " " + LocalizationManager.instance.GetString(localizationName) + " " +
                 LocalizationManager.instance.GetString(localizationName2) + plusText;
         }
         else

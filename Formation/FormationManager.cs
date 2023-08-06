@@ -132,9 +132,9 @@ public class FormationManager : MonoBehaviour
             //SoundManager.instance.PlayBGM(GameBgmType.Main_Under);
         }
 
-        yield return new WaitForSeconds(4);
-
         GameStateManager.instance.Tutorial = true;
+
+        yield return new WaitForSeconds(4);
 
         PlayerPrefs.SetString("LoadScene", "MainScene");
         SceneManager.LoadScene("LoadScene");

@@ -51,18 +51,6 @@ public class WindCharacterUpgrade
 }
 
 [System.Serializable]
-public class BlockUpgrade
-{
-    public int max = 99;
-
-    public int gold = 0;
-    public int addGold = 0;
-
-    public int ticket = 0; //필요한 강화권 개수
-    public int addTicket = 0;
-}
-
-[System.Serializable]
 public class PresentClass
 {
     public PresentType presentType = PresentType.A;
@@ -122,14 +110,9 @@ public class PlayerDataBase : ScriptableObject
     private string newbie = "";
 
     [Space]
-    [Title("Box")]
+    [Title("Box_Snow")]
     [SerializeField]
     private int snowBox = 0;
-    [SerializeField]
-    private int underworldBox = 0;
-
-    [Space]
-    [Title("Box_Snow")]
     [SerializeField]
     private int snowBox_N = 0;
     [SerializeField]
@@ -140,9 +123,17 @@ public class PlayerDataBase : ScriptableObject
     private int snowBox_SSR = 0;
     [SerializeField]
     private int snowBox_UR = 0;
+    [SerializeField]
+    private int snowBox_NR = 0;
+    [SerializeField]
+    private int snowBox_RSR = 0;
+    [SerializeField]
+    private int snowBox_SRSSR = 0;
 
     [Space]
     [Title("Box_Under")]
+    [SerializeField]
+    private int underworldBox = 0;
     [SerializeField]
     private int underworldBox_N = 0;
     [SerializeField]
@@ -153,6 +144,12 @@ public class PlayerDataBase : ScriptableObject
     private int underworldBox_SSR = 0;
     [SerializeField]
     private int underworldBox_UR = 0;
+    [SerializeField]
+    private int underworldBox_NR = 0;
+    [SerializeField]
+    private int underworldBox_RSR = 0;
+    [SerializeField]
+    private int underworldBox_SRSSR = 0;
 
     [Space]
     [Title("Box Buy Count")]
@@ -160,6 +157,10 @@ public class PlayerDataBase : ScriptableObject
     private int buySnowBox = 0;
     [SerializeField]
     private int buyUnderworldBox = 0;
+    [SerializeField]
+    private int buySnowBoxSSRCount = 0;
+    [SerializeField]
+    private int buyUnderworldSSRCount = 0;
 
     [Space]
     [Title("Wind Character")]
@@ -177,8 +178,6 @@ public class PlayerDataBase : ScriptableObject
     [Title("Upgrade")]
     [SerializeField]
     private WindCharacterUpgrade windCharacterUpgrade;
-    [SerializeField]
-    private BlockUpgrade blockUpgrade;
 
     [Space]
     [Title("Present")]
@@ -195,8 +194,9 @@ public class PlayerDataBase : ScriptableObject
     Dictionary<string, string> levelCustomData = new Dictionary<string, string>();
 
     public delegate void BoxEvent();
-    public static event BoxEvent eGetSnowBox, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR,
-        eGetUnderworldBox, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR;
+    public static event BoxEvent eGetSnowBox, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR, eGetSnowBox_NR, eGetSnowBox_RSR, eGetSnowBox_SRSSR,
+        eGetUnderworldBox, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR, eGetUnderworldBox_NR,
+        eGetUnderworldBox_RSR, eGetUnderworldBox_SRSSR;
 
     #region Data
 
@@ -470,6 +470,57 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int SnowBox_NR
+    {
+        get
+        {
+            return snowBox_NR;
+        }
+        set
+        {
+            snowBox_NR = value;
+
+            if (snowBox_NR > 0)
+            {
+                eGetSnowBox_NR();
+            }
+        }
+    }
+
+    public int SnowBox_RSR
+    {
+        get
+        {
+            return snowBox_RSR;
+        }
+        set
+        {
+            snowBox_RSR = value;
+
+            if (snowBox_RSR > 0)
+            {
+                eGetSnowBox_RSR();
+            }
+        }
+    }
+
+    public int SnowBox_SRSSR
+    {
+        get
+        {
+            return snowBox_SRSSR;
+        }
+        set
+        {
+            snowBox_SRSSR = value;
+
+            if (snowBox_SRSSR > 0)
+            {
+                eGetSnowBox_SRSSR();
+            }
+        }
+    }
+
     public int UnderworldBox
     {
         get
@@ -572,6 +623,57 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int UnderworldBox_NR
+    {
+        get
+        {
+            return underworldBox_NR;
+        }
+        set
+        {
+            underworldBox_NR = value;
+
+            if (underworldBox_NR > 0)
+            {
+                eGetUnderworldBox_NR();
+            }
+        }
+    }
+
+    public int UnderworldBox_RSR
+    {
+        get
+        {
+            return underworldBox_RSR;
+        }
+        set
+        {
+            underworldBox_RSR = value;
+
+            if (underworldBox_RSR > 0)
+            {
+                eGetUnderworldBox_RSR();
+            }
+        }
+    }
+
+    public int UnderworldBox_SRSSR
+    {
+        get
+        {
+            return underworldBox_SRSSR;
+        }
+        set
+        {
+            underworldBox_SRSSR = value;
+
+            if (underworldBox_SRSSR > 0)
+            {
+                eGetUnderworldBox_SRSSR();
+            }
+        }
+    }
+
     public int BuySnowBox
     {
         get
@@ -592,6 +694,30 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             buyUnderworldBox = value;
+        }
+    }
+
+    public int BuySnowBoxSSRCount
+    {
+        get
+        {
+            return buySnowBoxSSRCount;
+        }
+        set
+        {
+            buySnowBoxSSRCount = value;
+        }
+    }
+
+    public int BuyUnderworldBoxSSRCount
+    {
+        get
+        {
+            return buyUnderworldSSRCount;
+        }
+        set
+        {
+            buyUnderworldSSRCount = value;
         }
     }
 
@@ -636,6 +762,9 @@ public class PlayerDataBase : ScriptableObject
         snowBox_SR = 0;
         snowBox_SSR = 0;
         snowBox_UR = 0;
+        snowBox_NR = 0;
+        snowBox_RSR = 0;
+        snowBox_SRSSR = 0;
 
         underworldBox = 0;
         underworldBox_N = 0;
@@ -643,10 +772,14 @@ public class PlayerDataBase : ScriptableObject
         underworldBox_SR = 0;
         underworldBox_SSR = 0;
         underworldBox_UR = 0;
-
+        underworldBox_NR = 0;
+        underworldBox_RSR = 0;
+        underworldBox_SRSSR = 0;
 
         BuySnowBox = 0;
         BuyUnderworldBox = 0;
+        BuySnowBoxSSRCount = 0;
+        BuyUnderworldBoxSSRCount = 0;
 
         windCharacterList.Clear();
 

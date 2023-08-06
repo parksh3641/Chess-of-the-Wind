@@ -390,7 +390,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Win = true;
-            GameStateManager.instance.WinStreak += 1;
 
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
@@ -427,7 +426,6 @@ public class UIManager : MonoBehaviour
             gold += (int)(GameStateManager.instance.Stakes * 0.1f);
 
             GameStateManager.instance.Win = true;
-            GameStateManager.instance.WinStreak += 1;
 
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
@@ -454,6 +452,13 @@ public class UIManager : MonoBehaviour
         if (gold >= 0)
         {
             Debug.Log("돈 증가 애니메이션 발동");
+
+            if(gold < GameStateManager.instance.Stakes)
+            {
+                gold = GameStateManager.instance.Stakes + (int)(GameStateManager.instance.Stakes * 0.1f);
+
+                Debug.Log("리타이어 승리");
+            }
 
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
             //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";

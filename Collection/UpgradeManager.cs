@@ -158,7 +158,7 @@ public class UpgradeManager : MonoBehaviour
 
         gold = playerDataBase.Gold;
 
-        goldText.localizationName = "NeedGold";
+        goldText.localizationName = "NeedGold_Upgrade";
         goldText.ReLoad();
 
         goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
@@ -417,7 +417,7 @@ public class UpgradeManager : MonoBehaviour
         Initialize();
 
         isWait = true;
-        Invoke("Delay", 1.0f);
+        Invoke("Delay", 0.5f);
     }
 
     void OpenUpgradeScreen(int number)
@@ -580,7 +580,7 @@ public class UpgradeManager : MonoBehaviour
 
             isDef = false;
 
-            NotionManager.instance.UseNotion(NotionType.NotEnoughDefTicket);
+            NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
         }
 
         Debug.Log("파괴 방지권 : " + isDef);

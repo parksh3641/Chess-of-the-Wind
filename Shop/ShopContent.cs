@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class ShopContent : MonoBehaviour
 {
-    public ShopType shopType = ShopType.UpgradeTicket_N;
-    public MoneyType moneyType = MoneyType.Gold;
+    public ShopType shopType = ShopType.UpgradeTicket;
+    public int price = 0;
+    public int number = 0;
 
     public Image backgroundImg;
 
@@ -16,18 +17,16 @@ public class ShopContent : MonoBehaviour
 
     public LocalizationContent titleText;
 
-    public GameObject adButton;
-
     public GameObject buyButton;
-    public LocalizationContent priceText;
+    public Text priceText;
 
-    public GameObject goldObj;
     public Text goldText;
+    public GameObject freeButton;
 
     Sprite[] shopContentArray;
 
     ImageDataBase imageDataBase;
-    ShopManager shopManager;
+    public ShopManager shopManager;
 
     private void Awake()
     {
@@ -36,164 +35,53 @@ public class ShopContent : MonoBehaviour
         shopContentArray = imageDataBase.shopContentArray;
     }
 
-    public void Initialize(ShopType type, MoneyType money, ShopManager manager)
+    private void Start()
+    {
+        Initialize(shopType);
+    }
+
+    public void Initialize(ShopType type)
     {
         shopType = type;
-        shopManager = manager;
 
-        moneyType = money;
+        buyButton.SetActive(false);
 
-        buyButton.SetActive(true);
-
-        if (moneyType == MoneyType.Gold)
-        {
-            adButton.SetActive(false);
-            goldObj.SetActive(true);
-
-            priceText.gameObject.SetActive(false);
-        }
-        else
-        {
-            adButton.SetActive(true);
-            goldObj.SetActive(false);
-
-            priceText.gameObject.SetActive(true);
-
-            priceText.localizationName = shopType + "_Price";
-            //priceText.ReLoad();
-        }
-
-
-        icon.sprite = shopContentArray[(int)type];
+        goldText.text = "";
+        freeButton.gameObject.SetActive(false);
 
         switch (type)
         {
-            case ShopType.RemoveAds:
-                break;
-            case ShopType.WatchAd:
-                break;
             case ShopType.DailyReward:
+                goldText.text = "x40";
+                freeButton.gameObject.SetActive(true);
                 break;
-            case ShopType.UpgradeTicket_N:
-                backgroundImg.sprite = backgroundImgArray[1];
-
-                if(moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "GradeN";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = MoneyUnitString.ToCurrencyString(50);
-                }
-                else
-                {
-                    titleText.localizationName = "GradeN";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x5";
-                }
-
+            case ShopType.DailyReward_WatchAd:
                 break;
-            case ShopType.UpgradeTicket_R:
-                backgroundImg.sprite = backgroundImgArray[2];
+            case ShopType.UpgradeTicket:
+                buyButton.SetActive(true);
 
-                if (moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "GradeR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = MoneyUnitString.ToCurrencyString(500);
-                }
-                else
-                {
-                    titleText.localizationName = "GradeR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x5";
-                }
+                number = Random.Range(1, 11);
 
-                break;
-            case ShopType.UpgradeTicket_SR:
-                backgroundImg.sprite = backgroundImgArray[3];
+                price = price * number;
 
-                if (moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "GradeSR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = MoneyUnitString.ToCurrencyString(150000);
-                }
-                else
-                {
-                    titleText.localizationName = "GradeSR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x5";
-                }
+                priceText.text = price.ToString();
 
-                break;
-            case ShopType.UpgradeTicket_SSR:
-                backgroundImg.sprite = backgroundImgArray[4];
-
-                if (moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "GradeSSR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = MoneyUnitString.ToCurrencyString(500000);
-                }
-                else
-                {
-                    titleText.localizationName = "GradeSSR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x5";
-                }
-
-                break;
-            case ShopType.UpgradeTicket_UR:
-                backgroundImg.sprite = backgroundImgArray[5];
-
-                if (moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "GradeUR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = "5,000";
-                }
-                else
-                {
-                    titleText.localizationName = "GradeUR";
-                    titleText.localizationName2 = "UpgradeTicket";
-                    titleText.plusText = " x5";
-                }
-
-                break;
-            case ShopType.DefDestroyTicket:
-                backgroundImg.sprite = backgroundImgArray[0];
-
-                if (moneyType == MoneyType.Gold)
-                {
-                    titleText.localizationName = "DefDestroyTicket";
-                    titleText.plusText = " x1";
-                    goldText.text = MoneyUnitString.ToCurrencyString(300000);
-                }
-                else
-                {
-                    titleText.localizationName = "DefDestroyTicket";
-                    titleText.plusText = " x5";
-                }
-                break;
-            case ShopType.PresentA:
-                break;
-            case ShopType.PresentB:
-                break;
-            case ShopType.PresentC:
-                break;
-            case ShopType.PresentD:
-                break;
-            case ShopType.PresentE:
                 break;
         }
+
+        titleText.localizationName = type.ToString();
+
+        if (number > 0)
+        {
+            titleText.plusText = " x" + number;
+        }
+        titleText.ReLoad();
+
+        icon.sprite = shopContentArray[(int)type];
     }
 
     public void BuyButton()
     {
-        shopManager.BuyItem(shopType,moneyType);
+        shopManager.BuyItem(shopType, price, number);
     }
 }

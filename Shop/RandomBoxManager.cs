@@ -52,17 +52,23 @@ public class RandomBoxManager : MonoBehaviour
     public List<BlockClass> prizeBlockList = new List<BlockClass>();
     public List<string> prizeBlockStringList = new List<string>();
 
-    public bool isWait = false;
-    public bool isStart = false;
-    public bool isDelay = false;
+    private bool isWait = false;
+    private bool isStart = false;
+    private bool isDelay = false;
+
+    private bool nR = false;
+    private bool rSR = false;
+    private bool sRSSR = false;
 
     private float random = 0;
     private string block = "";
 
     private bool confirmationSR = false;
+    private bool confirmationSSR = false;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
 
+    public ShopManager shopManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -95,6 +101,11 @@ public class RandomBoxManager : MonoBehaviour
 
         isWait = false;
         isStart = false;
+        isDelay = false;
+
+        nR = false;
+        rSR = false;
+        sRSSR = false;
 
         boxView.SetActive(false);
         boxPanel.SetActive(false);
@@ -120,6 +131,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_SR += OpenSnowBox_SR;
         PlayerDataBase.eGetSnowBox_SSR += OpenSnowBox_SSR;
         PlayerDataBase.eGetSnowBox_UR += OpenSnowBox_UR;
+        PlayerDataBase.eGetSnowBox_NR += OpenSnowBox_NR;
+        PlayerDataBase.eGetSnowBox_RSR += OpenSnowBox_RSR;
+        PlayerDataBase.eGetSnowBox_SRSSR += OpenSnowBox_SRSSR;
 
 
         PlayerDataBase.eGetUnderworldBox += OpenUnderworldBox;
@@ -128,6 +142,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetUnderworldBox_SR += OpenUnderworldBox_SR;
         PlayerDataBase.eGetUnderworldBox_SSR += OpenUnderworldBox_SSR;
         PlayerDataBase.eGetUnderworldBox_UR += OpenUnderworldBox_UR;
+        PlayerDataBase.eGetUnderworldBox_NR += OpenUnderworldBox_NR;
+        PlayerDataBase.eGetUnderworldBox_RSR += OpenUnderworldBox_RSR;
+        PlayerDataBase.eGetUnderworldBox_SRSSR += OpenUnderworldBox_SRSSR;
     }
 
     private void OnDisable()
@@ -138,6 +155,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_SR -= OpenSnowBox_SR;
         PlayerDataBase.eGetSnowBox_SSR -= OpenSnowBox_SSR;
         PlayerDataBase.eGetSnowBox_UR -= OpenSnowBox_UR;
+        PlayerDataBase.eGetSnowBox_NR -= OpenSnowBox_NR;
+        PlayerDataBase.eGetSnowBox_RSR -= OpenSnowBox_RSR;
+        PlayerDataBase.eGetSnowBox_SRSSR -= OpenSnowBox_SRSSR;
 
         PlayerDataBase.eGetUnderworldBox -= OpenUnderworldBox;
         PlayerDataBase.eGetUnderworldBox_N -= OpenUnderworldBox_N;
@@ -145,6 +165,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetUnderworldBox_SR -= OpenUnderworldBox_SR;
         PlayerDataBase.eGetUnderworldBox_SSR -= OpenUnderworldBox_SSR;
         PlayerDataBase.eGetUnderworldBox_UR -= OpenUnderworldBox_UR;
+        PlayerDataBase.eGetUnderworldBox_NR -= OpenUnderworldBox_NR;
+        PlayerDataBase.eGetUnderworldBox_RSR -= OpenUnderworldBox_RSR;
+        PlayerDataBase.eGetUnderworldBox_SRSSR -= OpenUnderworldBox_SRSSR;
     }
 
     private void OnApplicationQuit()
@@ -155,6 +178,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_SR -= OpenSnowBox_SR;
         PlayerDataBase.eGetSnowBox_SSR -= OpenSnowBox_SSR;
         PlayerDataBase.eGetSnowBox_UR -= OpenSnowBox_UR;
+        PlayerDataBase.eGetSnowBox_NR -= OpenSnowBox_NR;
+        PlayerDataBase.eGetSnowBox_RSR -= OpenSnowBox_RSR;
+        PlayerDataBase.eGetSnowBox_SRSSR -= OpenSnowBox_SRSSR;
 
         PlayerDataBase.eGetUnderworldBox -= OpenUnderworldBox;
         PlayerDataBase.eGetUnderworldBox_N -= OpenUnderworldBox_N;
@@ -162,6 +188,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetUnderworldBox_SR -= OpenUnderworldBox_SR;
         PlayerDataBase.eGetUnderworldBox_SSR -= OpenUnderworldBox_SSR;
         PlayerDataBase.eGetUnderworldBox_UR -= OpenUnderworldBox_UR;
+        PlayerDataBase.eGetUnderworldBox_NR -= OpenUnderworldBox_NR;
+        PlayerDataBase.eGetUnderworldBox_RSR -= OpenUnderworldBox_RSR;
+        PlayerDataBase.eGetUnderworldBox_SRSSR -= OpenUnderworldBox_SRSSR;
     }
 
     public void OpenSnowBox()
@@ -169,6 +198,21 @@ public class RandomBoxManager : MonoBehaviour
         boxType = BoxType.Random;
 
         boxCount = playerDataBase.SnowBox;
+
+        playerDataBase.BuySnowBoxSSRCount += boxCount;
+
+        if(playerDataBase.BuySnowBoxSSRCount >= 50)
+        {
+            playerDataBase.BuySnowBoxSSRCount -= 50;
+
+            confirmationSSR = true;
+        }
+        else
+        {
+            confirmationSSR = false;
+        }
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBoxSSRCount", playerDataBase.BuySnowBoxSSRCount);
 
         if (boxCount >= 10)
         {
@@ -245,11 +289,62 @@ public class RandomBoxManager : MonoBehaviour
         }
     }
 
+    public void OpenSnowBox_NR()
+    {
+        boxType = BoxType.NR;
+
+        boxCount = playerDataBase.SnowBox_NR;
+
+        if (boxCount > 0)
+        {
+            OpenSnowBox_Initialize();
+        }
+    }
+
+    public void OpenSnowBox_RSR()
+    {
+        boxType = BoxType.RSR;
+
+        boxCount = playerDataBase.SnowBox_RSR;
+
+        if (boxCount > 0)
+        {
+            OpenSnowBox_Initialize();
+        }
+    }
+
+    public void OpenSnowBox_SRSSR()
+    {
+        boxType = BoxType.SRSSR;
+
+        boxCount = playerDataBase.SnowBox_SRSSR;
+
+        if (boxCount > 0)
+        {
+            OpenSnowBox_Initialize();
+        }
+    }
+
     public void OpenUnderworldBox()
     {
         boxType = BoxType.Random;
 
         boxCount = playerDataBase.UnderworldBox;
+
+        playerDataBase.BuyUnderworldBoxSSRCount += boxCount;
+
+        if (playerDataBase.BuyUnderworldBoxSSRCount >= 50)
+        {
+            playerDataBase.BuyUnderworldBoxSSRCount -= 50;
+
+            confirmationSSR = true;
+        }
+        else
+        {
+            confirmationSSR = false;
+        }
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBoxSSRCount", playerDataBase.BuyUnderworldBoxSSRCount);
 
         if (boxCount >= 10)
         {
@@ -326,6 +421,42 @@ public class RandomBoxManager : MonoBehaviour
         }
     }
 
+    public void OpenUnderworldBox_NR()
+    {
+        boxType = BoxType.NR;
+
+        boxCount = playerDataBase.UnderworldBox_NR;
+
+        if (boxCount > 0)
+        {
+            OpenUnderworldBox_Initialize();
+        }
+    }
+
+    public void OpenUnderworldBox_RSR()
+    {
+        boxType = BoxType.RSR;
+
+        boxCount = playerDataBase.UnderworldBox_RSR;
+
+        if (boxCount > 0)
+        {
+            OpenUnderworldBox_Initialize();
+        }
+    }
+
+    public void OpenUnderworldBox_SRSSR()
+    {
+        boxType = BoxType.SRSSR;
+
+        boxCount = playerDataBase.UnderworldBox_SRSSR;
+
+        if (boxCount > 0)
+        {
+            OpenUnderworldBox_Initialize();
+        }
+    }
+
     public void OpenSnowBox_Initialize()
     {
         ResetView();
@@ -337,7 +468,36 @@ public class RandomBoxManager : MonoBehaviour
 
         windCharacterType = WindCharacterType.Winter;
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+        switch (boxType)
+        {
+            case BoxType.Random:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.N:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.R:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.SR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.SSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.UR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.NR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
+                break;
+            case BoxType.RSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
+                break;
+            case BoxType.SRSSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
+                break;
+        }
     }
 
     public void OpenUnderworldBox_Initialize()
@@ -351,7 +511,36 @@ public class RandomBoxManager : MonoBehaviour
 
         windCharacterType = WindCharacterType.UnderWorld;
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+        switch (boxType)
+        {
+            case BoxType.Random:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.N:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.R:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.SR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.SSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.UR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                break;
+            case BoxType.NR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
+                break;
+            case BoxType.RSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
+                break;
+            case BoxType.SRSSR:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
+                break;
+        }
     }
 
     public void CloseBoxView()
@@ -555,81 +744,121 @@ public class RandomBoxManager : MonoBehaviour
             BlockClass blockClass = new BlockClass();
             blockClass.blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block);
 
-            if (boxCount == 0 && confirmationSR)
+            if (confirmationSSR)
             {
-                confirmationSR = false;
+                confirmationSSR = false;
 
-                blockClass.rankType = RankType.SR;
-                block += "_SR";
+                blockClass.rankType = RankType.SSR;
+                block += "_SSR";
 
-                Debug.Log("SR 확정");
+                gradient.SetActive(true);
+
+                Debug.Log("SSR 확정");
             }
             else
             {
-                switch (boxType)
+                if (confirmationSR)
                 {
-                    case BoxType.Random:
-                        if (random <= percentBlock[3])
-                        {
+                    confirmationSR = false;
+
+                    blockClass.rankType = RankType.SR;
+                    block += "_SR";
+
+                    Debug.Log("SR 확정");
+                }
+                else
+                {
+                    switch (boxType)
+                    {
+                        case BoxType.Random:
+                            if (random <= percentBlock[3])
+                            {
+                                blockClass.rankType = RankType.SSR;
+                                block += "_SSR";
+
+                                gradient.SetActive(true);
+                            }
+                            else if (random <= percentBlock[2])
+                            {
+                                blockClass.rankType = RankType.SR;
+                                block += "_SR";
+                            }
+                            else if (random <= percentBlock[1])
+                            {
+                                blockClass.rankType = RankType.R;
+                                block += "_R";
+                            }
+                            else
+                            {
+                                blockClass.rankType = RankType.N;
+                                block += "_N";
+                            }
+                            break;
+                        case BoxType.N:
+                            blockClass.rankType = RankType.N;
+                            block += "_N";
+
+                            break;
+                        case BoxType.R:
+                            blockClass.rankType = RankType.R;
+                            block += "_R";
+
+                            break;
+                        case BoxType.SR:
+                            blockClass.rankType = RankType.SR;
+                            block += "_SR";
+                            break;
+                        case BoxType.SSR:
                             blockClass.rankType = RankType.SSR;
                             block += "_SSR";
 
                             gradient.SetActive(true);
-                        }
-                        else if (random <= percentBlock[2])
-                        {
-                            blockClass.rankType = RankType.SR;
-                            block += "_SR";
-                        }
-                        else if (random <= percentBlock[1])
-                        {
-                            blockClass.rankType = RankType.R;
-                            block += "_R";
+                            break;
+                        case BoxType.UR:
+                            blockClass.rankType = RankType.UR;
+                            block += "_UR";
 
-                        }
-                        else
-                        {
-                            blockClass.rankType = RankType.N;
-                            block += "_N";
+                            gradient.SetActive(true);
+                            break;
+                        case BoxType.NR:
+                            if (random <= percentBlock[0])
+                            {
+                                blockClass.rankType = RankType.N;
+                                block += "_N";
+                            }
+                            else
+                            {
+                                blockClass.rankType = RankType.R;
+                                block += "_R";
+                            }
+                            break;
+                        case BoxType.RSR:
+                            if (random <= percentBlock[0])
+                            {
+                                blockClass.rankType = RankType.R;
+                                block += "_R";
+                            }
+                            else
+                            {
+                                blockClass.rankType = RankType.SR;
+                                block += "_SR";
+                            }
+                            break;
+                        case BoxType.SRSSR:
+                            if (random <= percentBlock[0])
+                            {
+                                blockClass.rankType = RankType.SR;
+                                block += "_SR";
+                            }
+                            else
+                            {
+                                blockClass.rankType = RankType.SSR;
+                                block += "_SSR";
 
-                        }
-                        break;
-                    case BoxType.N:
-                        blockClass.rankType = RankType.N;
-                        block += "_N";
-
-                        break;
-                    case BoxType.R:
-                        blockClass.rankType = RankType.R;
-                        block += "_R";
-
-                        break;
-                    case BoxType.SR:
-                        blockClass.rankType = RankType.SR;
-                        block += "_SR";
-                        break;
-                    case BoxType.SSR:
-                        blockClass.rankType = RankType.SSR;
-                        block += "_SSR";
-
-                        gradient.SetActive(true);
-                        break;
-                    case BoxType.UR:
-                        blockClass.rankType = RankType.UR;
-                        block += "_UR";
-
-                        gradient.SetActive(true);
-                        break;
-                    case BoxType.Choice_N:
-                        break;
-                    case BoxType.Choice_R:
-                        break;
-                    case BoxType.Choice_SR:
-                        break;
-                    case BoxType.Choice_SSR:
-                        break;
-                    case BoxType.Choice_UR:
-                        break;
+                                gradient.SetActive(true);
+                            }
+                            break;
+                    }
                 }
             }
 
@@ -701,16 +930,6 @@ public class RandomBoxManager : MonoBehaviour
                         playerDataBase.SnowBox_UR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", 0);
                         break;
-                    case BoxType.Choice_N:
-                        break;
-                    case BoxType.Choice_R:
-                        break;
-                    case BoxType.Choice_SR:
-                        break;
-                    case BoxType.Choice_SSR:
-                        break;
-                    case BoxType.Choice_UR:
-                        break;
                 }
 
                 break;
@@ -742,20 +961,12 @@ public class RandomBoxManager : MonoBehaviour
                         playerDataBase.UnderworldBox_UR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", 0);
                         break;
-                    case BoxType.Choice_N:
-                        break;
-                    case BoxType.Choice_R:
-                        break;
-                    case BoxType.Choice_SR:
-                        break;
-                    case BoxType.Choice_SSR:
-                        break;
-                    case BoxType.Choice_UR:
-                        break;
                 }
 
                 break;
         }
+
+        shopManager.Change();
     }
 
     void Delay()

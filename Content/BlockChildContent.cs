@@ -12,17 +12,26 @@ public class BlockChildContent : MonoBehaviour
     public string nickName = "";
     public string value = "";
 
-    public void Betting(bool check)
+    public BlockContent blockContent;
+
+    public void Betting(bool check, BlockContent block)
     {
+        blockContent = block;
+
         if (blockChildArray.Length <= 0)
         {
             blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+
+            for (int i = 0; i < blockChildArray.Length; i++)
+            {
+                blockChildArray[i].Initialize(blockContent);
+            }
         }
 
-        for (int i = 0; i < blockChildArray.Length; i ++)
-        {
-            blockChildArray[i].SetBettingMark(check);
-        }
+        //for (int i = 0; i < blockChildArray.Length; i ++)
+        //{
+        //    blockChildArray[i].SetBettingMark(check);
+        //}
     }
 
     public void SetBlock()
@@ -30,6 +39,11 @@ public class BlockChildContent : MonoBehaviour
         if (blockChildArray.Length <= 0)
         {
             blockChildArray = gameObject.GetComponentsInChildren<BlockChild>();
+
+            for (int i = 0; i < blockChildArray.Length; i++)
+            {
+                blockChildArray[i].Initialize(blockContent);
+            }
         }
     }
 

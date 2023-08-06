@@ -20,6 +20,8 @@ public class MoneyAnimation : MonoBehaviour
     public Text[] moneyText;
     public Text[] changeMoneyText;
 
+    bool isStart = false;
+
     [Space]
     [Title("Prefab")]
     public MoneyContent moneyPrefab;
@@ -71,6 +73,10 @@ public class MoneyAnimation : MonoBehaviour
     {
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";
+
+        isStart = false;
+
+        StopAllCoroutines();
     }
 
     public void AddMoneyAnimation(int money, int otherMoney, int value)
@@ -92,8 +98,6 @@ public class MoneyAnimation : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
         }
 
-        StartCoroutine(ChangeMoneyCoroution());
-
         StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
@@ -109,16 +113,24 @@ public class MoneyAnimation : MonoBehaviour
 
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
-        StartCoroutine(ChangeMoneyCoroution());
-
         StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
     }
 
     IEnumerator ChangeMoneyCoroution()
     {
-        SoundManager.instance.PlaySFX(GameSfxType.ChangeMoney);
+        if(isStart)
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.ChangeMoney);
 
-        yield return waitForSeconds;
+            yield return waitForSeconds;
+
+            StartCoroutine(ChangeMoneyCoroution());
+
+        }
+        else
+        {
+            yield break;
+        }
     }
 
     IEnumerator AddMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
@@ -130,6 +142,9 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2.0f);
+
+        isStart = true;
+        StartCoroutine(ChangeMoneyCoroution());
 
         int max = money + value;
 
@@ -213,6 +228,9 @@ public class MoneyAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
+        isStart = true;
+        StartCoroutine(ChangeMoneyCoroution());
+
         int max = money - value;
 
         while (money > max)
@@ -287,11 +305,15 @@ public class MoneyAnimation : MonoBehaviour
 
     public void MinusMoneyAnimationMid(int money, int bettingMoney, Text txt) //내 돈이 가운데로 이동되는 애니메이션
     {
+        SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
+
         StartCoroutine(MinusMoneyMidCoroution(money, bettingMoney, txt));
     }
 
     public void MinusMoneyAnimationMidEnemy(int money, int bettingMoney, Text txt) //상대방 돈이 가운데로 이동되는 애니메이션
     {
+        SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
+
         StartCoroutine(MinusMoneyMidEnemyCoroution(money, bettingMoney, txt));
     }
 
@@ -304,6 +326,9 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2.0f);
+
+        isStart = true;
+        StartCoroutine(ChangeMoneyCoroution());
 
         int max = money - bettingMoney;
 
@@ -379,6 +404,9 @@ public class MoneyAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
+        isStart = true;
+        StartCoroutine(ChangeMoneyCoroution());
+
         int max = money - bettingMoney;
 
         while (money > max)
@@ -448,6 +476,8 @@ public class MoneyAnimation : MonoBehaviour
     void EndAnimation()
     {
         StopAllCoroutines();
+
+        isStart = false;
 
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";

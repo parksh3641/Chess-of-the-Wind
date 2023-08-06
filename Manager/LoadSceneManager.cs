@@ -6,14 +6,21 @@ using UnityEngine.UI;
 
 public class LoadSceneManager : MonoBehaviour
 {
+    public Image background;
     public Image progressBar;
     public Text progressText;
+
+    public Sprite[] backgroundArray;
 
     private string nextScene = "MainScene";
 
 
     private void Start()
     {
+        int random = Random.Range(0, backgroundArray.Length - 1);
+
+        background.sprite = backgroundArray[random];
+
         progressBar.fillAmount = 0;
         progressText.text = "";
 

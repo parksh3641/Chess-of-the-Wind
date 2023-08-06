@@ -677,15 +677,18 @@ public class RouletteManager : MonoBehaviour
 
             while (playing && !check)
             {
-                if (pinball.rigid.velocity.magnitude < 0.1f)
+                if (pinball != null)
                 {
-                    rouletteCamera.gameObject.SetActive(true);
-                    rouletteBallCamera.gameObject.SetActive(false);
+                    if (pinball.rigid.velocity.magnitude < 0.1f)
+                    {
+                        rouletteCamera.gameObject.SetActive(true);
+                        rouletteBallCamera.gameObject.SetActive(false);
 
-                    PV.RPC("CheckPinball", RpcTarget.Others);
+                        PV.RPC("CheckPinball", RpcTarget.Others);
 
-                    buttonClick = true;
-                    check = true;
+                        buttonClick = true;
+                        check = true;
+                    }
                 }
 
                 yield return waitForSeconds2;

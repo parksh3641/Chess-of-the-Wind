@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BlockChild : MonoBehaviour
+public class BlockChild : MonoBehaviour, IBeginDragHandler
 {
     RectTransform rectTransform;
 
@@ -17,6 +17,9 @@ public class BlockChild : MonoBehaviour
 
     public GameObject bettingMark;
 
+    public BlockContent blockContent;
+
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -28,6 +31,11 @@ public class BlockChild : MonoBehaviour
         bettingMark.SetActive(false);
     }
 
+    public void Initialize(BlockContent block)
+    {
+        blockContent = block;
+    }
+
     public void SetBettingMark(bool check)
     {
         bettingMark.SetActive(check);
@@ -36,5 +44,12 @@ public class BlockChild : MonoBehaviour
     public void SetEnemy()
     {
         image.color = underWorldColor;
+        image.raycastTarget = false;
+    }
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        blockContent.OnBeginDrag(eventData);
     }
 }

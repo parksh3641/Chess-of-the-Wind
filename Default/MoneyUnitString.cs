@@ -14,7 +14,14 @@ public static class MoneyUnitString
     /// 
     public static string ToCurrencyString(int number)
     {
-        return string.Format("{0:#,###}", number);
+        if (number != 0)
+        {
+            return string.Format("{0:#,###}", number);
+        }
+        else
+        {
+            return "0";
+        }
 
         //if (Mathf.Abs((float)number) >= 1000)
         //{

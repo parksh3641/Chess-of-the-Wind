@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
+    private int limitLevel = 0;
     private int bettingTime = 0;
     private int bettingWaitTime = 0;
 
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
     public bool inGameBurning2 = false;
 
     public GameObject burningObj;
+    public Text turnText;
 
     public int money = 0; //보유 코인
     public int otherMoney = 0; //상대방 보유 코인
@@ -508,6 +510,7 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
 
         turn = 0;
+        turnText.text = LocalizationManager.instance.GetString("Turn") + " : " + turn;
 
         burningObj.SetActive(false);
 
@@ -710,7 +713,7 @@ public class GameManager : MonoBehaviour
         //    blockContentList[i].gameObject.SetActive(true);
         //}
 
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
         int myLevel = 0;
 
         if (playerDataBase.Armor != null)
@@ -723,9 +726,9 @@ public class GameManager : MonoBehaviour
 
                 blockContentList[0].gameObject.SetActive(true);
 
-                if (myLevel > level)
+                if (myLevel > limitLevel)
                 {
-                    myLevel = level;
+                    myLevel = limitLevel;
                 }
 
                 int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
@@ -753,9 +756,9 @@ public class GameManager : MonoBehaviour
 
                 blockContentList[1].gameObject.SetActive(true);
 
-                if (myLevel > level)
+                if (myLevel > limitLevel)
                 {
-                    myLevel = level;
+                    myLevel = limitLevel;
                 }
 
                 int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
@@ -783,9 +786,9 @@ public class GameManager : MonoBehaviour
 
                 blockContentList[2].gameObject.SetActive(true);
 
-                if (myLevel > level)
+                if (myLevel > limitLevel)
                 {
-                    myLevel = level;
+                    myLevel = limitLevel;
                 }
 
                 int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);
@@ -878,7 +881,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckWinnerPlayer() //게임 누가 승리했는지 체크
     {
-        if (!PhotonNetwork.IsMasterClient) return;
+        //if (!PhotonNetwork.IsMasterClient) return;
 
         Debug.Log("누가 이겼는지 체크중입니다");
 
@@ -888,7 +891,7 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(3);
-            PV.RPC("GameEnd", RpcTarget.Others, 3);
+            //PV.RPC("GameEnd", RpcTarget.Others, 3);
         }
         else if(money <= 0) //내돈이 다 떨어졌을 때
         {
@@ -896,7 +899,7 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(1);
-            PV.RPC("GameEnd", RpcTarget.Others, 0);
+            //PV.RPC("GameEnd", RpcTarget.Others, 0);
         }
         else if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
         {
@@ -904,7 +907,7 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(0);
-            PV.RPC("GameEnd", RpcTarget.Others, 1);
+            //PV.RPC("GameEnd", RpcTarget.Others, 1);
         }
         else
         {
@@ -941,6 +944,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("무승부");
         }
 
+        SoundManager.instance.StopAllSFX();
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
         StopAllCoroutines();
@@ -1078,8 +1082,6 @@ public class GameManager : MonoBehaviour
 
         turn += 1;
 
-        turn = 8;
-
         if(turn >= 8)
         {
             if(!inGameBurning)
@@ -1089,9 +1091,16 @@ public class GameManager : MonoBehaviour
                 money = money / 2;
                 otherMoney = otherMoney / 2;
 
+                moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+                otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
                 burningObj.SetActive(true);
 
                 NotionManager.instance.UseNotion(NotionType.InGameBurning);
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
             }
         }
         else if(turn >= 14)
@@ -1103,7 +1112,14 @@ public class GameManager : MonoBehaviour
                 money = money / 2;
                 otherMoney = otherMoney / 2;
 
+                moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+                otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+
                 NotionManager.instance.UseNotion(NotionType.InGameBurning2);
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
             }
         }
         else
@@ -1111,7 +1127,9 @@ public class GameManager : MonoBehaviour
             NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
         }
 
-        Debug.Log("현재 턴 : " + turn + 1);
+        turnText.text = LocalizationManager.instance.GetString("Turn") + " : " + turn;
+
+        Debug.Log("현재 턴 : " + turn);
     }
 
     IEnumerator TimerCoroution()
@@ -1181,14 +1199,14 @@ public class GameManager : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("DelayRoulette", RpcTarget.All);
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -1463,8 +1481,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Debug.LogError(plusMoney);
-
         if (plusMoney > 0)
         {
             if(inGameBurning)
@@ -1482,7 +1498,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < bettingMinusList.Length; i ++)
+        Debug.LogError(plusMoney);
+
+        for (int i = 0; i < bettingMinusList.Length; i ++)
         {
             bettingMinusList[i] = 0;
         }
@@ -1496,11 +1514,6 @@ public class GameManager : MonoBehaviour
         {
             if (plusAiMoney > 0)
             {
-                if(inGameBurning)
-                {
-                    plusAiMoney *= 2;
-                }
-
                 switch (blockDataBase.GetSize(otherBlockType))
                 {
                     case 1:
@@ -1611,10 +1624,18 @@ public class GameManager : MonoBehaviour
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
     {
         float value = 0;
+        int level = 0;
 
-        if(!allIn)
+        level = block.level;
+
+        if (level > limitLevel)
         {
-            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
+            level = limitLevel;
+        }
+
+        if (!allIn)
+        {
+            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(level) * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
         }
         else
         {
@@ -1686,15 +1707,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney_Ai(BlockClass block, RouletteType type, bool queen)
     {
-        float value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f;
-
-        //for (int i = 0; i < bettingValue.Length; i++) //당첨된 블럭 빼주기
-        //{
-        //    if (value.Equals(bettingValue))
-        //    {
-        //        bettingMinusList[i] -= 1;
-        //    }
-        //}
+        float value = 0;
+        value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f;
 
         switch (type)
         {
@@ -2956,7 +2970,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            string notion = MoneyUnitString.ToCurrencyString(bettingValue[blockContent.index]) + " " + LocalizationManager.instance.GetString("PowerBetting");
+            string notion = LocalizationManager.instance.GetString("PowerBetting");
 
             NotionManager.instance.UseNotion(notion, ColorType.Green);
 
@@ -3095,8 +3109,10 @@ public class GameManager : MonoBehaviour
 
     public void SetBettingNumber_Ai(BlockClass block, int number)
     {
-        if(otherMoney < upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level))
+        if (otherMoney - upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) <= 0)
         {
+            GameStateManager.instance.Playing = false;
+
             GameEnd(0);
 
             Debug.Log("Ai가 돈이 부족하여 항복하였습니다.");
@@ -3597,6 +3613,9 @@ public class GameManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
+            GameStateManager.instance.Playing = false;
+            PV.RPC("SetGameEnd", RpcTarget.Others);
+
             GameEnd(1);
             PV.RPC("Surrender", RpcTarget.Others);
 
@@ -3604,6 +3623,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            GameStateManager.instance.Playing = false;
+            PV.RPC("SetGameEnd", RpcTarget.Others);
+
             GameEnd(1);
             PV.RPC("Surrender", RpcTarget.MasterClient);
 
@@ -3620,6 +3642,9 @@ public class GameManager : MonoBehaviour
 
         //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
 
+        GameStateManager.instance.Playing = false;
+        PV.RPC("SetGameEnd", RpcTarget.Others);
+
         GameEnd(2);
 
         Debug.Log("상대방이 기권하여 승리하였습니다");
@@ -3632,6 +3657,9 @@ public class GameManager : MonoBehaviour
         money += (int)(otherMoney * 0.1f);
 
         //PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, (int)(otherMoney * 0.1f)); //상대방 보유 금액의 10% 가져옴
+
+        GameStateManager.instance.Playing = false;
+        PV.RPC("SetGameEnd", RpcTarget.Others);
 
         GameEnd(2);
 

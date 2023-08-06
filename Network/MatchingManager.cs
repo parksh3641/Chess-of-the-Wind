@@ -10,13 +10,17 @@ public class MatchingManager : MonoBehaviour
 {
     [Title("Newbie Limit Rank")]
     public GameRankType newbieLimitRank = GameRankType.Sliver_1;
-
-    [Space]
     [Title("Gosu Limit Rank")]
     public GameRankType gosuLimitRank = GameRankType.Bronze_2;
 
-
     RankInformation rankInformation = new RankInformation();
+
+    public GameObject dontTouchObj;
+
+    public Image rankButtonImg;
+    public ButtonScaleAnimation rankButtonAnimation;
+
+    public Sprite[] rankImgArray;
 
     [Title("Rank Up")]
     public GameObject rankUpView;
@@ -99,6 +103,7 @@ public class MatchingManager : MonoBehaviour
         rankUpEffect.SetActive(false);
         rankUpView.SetActive(false);
         matchingView.SetActive(false);
+        dontTouchObj.SetActive(false);
 
         DOTween.RewindAll();
     }
@@ -177,6 +182,17 @@ public class MatchingManager : MonoBehaviour
         gosuLimitRankText.localizationName = strArray[0];
         gosuLimitRankText.plusText = " " + strArray[1] + " ▲";
         gosuLimitRankText.ReLoad();
+
+        if (playerDataBase.NowRank < (int)gosuLimitRank)
+        {
+            rankButtonImg.sprite = rankImgArray[0];
+            rankButtonAnimation.StopAnim();
+        }
+        else
+        {
+            rankButtonImg.sprite = rankImgArray[1];
+            rankButtonAnimation.PlayAnim();
+        }
     }
 
     [Button]
@@ -204,6 +220,7 @@ public class MatchingManager : MonoBehaviour
 
             starSave = playerDataBase.Star;
 
+            //GameStateManager.instance.WinStreak += 1;
             //if (GameStateManager.instance.WinStreak >= 3)
             //{
             //    playerDataBase.Star += 2;
@@ -268,11 +285,13 @@ public class MatchingManager : MonoBehaviour
 
                     Debug.Log("별 개수 상승");
 
-                    Invoke("Delay", 1.5f);
+                    Invoke("Delay", 0.5f);
                 }
             }
             else
             {
+                rankUpView.SetActive(false);
+
                 Debug.Log("최고 랭크 달성 !");
             }
         }
@@ -320,6 +339,8 @@ public class MatchingManager : MonoBehaviour
                 }
                 else if(playerDataBase.NowRank == 0)
                 {
+                    rankUpView.SetActive(false);
+
                     playerDataBase.Star = 0;
 
                     Debug.Log("최하 랭크 입니다");
@@ -331,7 +352,7 @@ public class MatchingManager : MonoBehaviour
 
                 Debug.Log("별 개수 하락");
 
-                Invoke("Delay", 1.5f);
+                Invoke("Delay", 0.5f);
             }
         }
 
@@ -427,6 +448,8 @@ public class MatchingManager : MonoBehaviour
         if(!isWait)
         {
             rankUpView.SetActive(false);
+
+            dontTouchObj.SetActive(false);
         }
     }
 
@@ -517,6 +540,8 @@ public class MatchingManager : MonoBehaviour
 
         if (playerDataBase.NowRank < (int)gosuLimitRank)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.LimitRank);
             return;
         }
@@ -629,6 +654,8 @@ public class MatchingManager : MonoBehaviour
 
     public void PlayerMatching(string player1, string player2, int otherFormation)
     {
+        dontTouchObj.SetActive(true);
+
         StopAllCoroutines();
 
         matchingView.SetActive(false);
@@ -644,6 +671,8 @@ public class MatchingManager : MonoBehaviour
 
     public void AlMatching()
     {
+        dontTouchObj.SetActive(true);
+
         StopAllCoroutines();
 
         matchingView.SetActive(false);
@@ -668,21 +697,18 @@ public class MatchingManager : MonoBehaviour
             SoundManager.instance.PlayBGM(GameBgmType.Game_Gosu);
         }
 
+        dontTouchObj.SetActive(false);
     }
 
     public void StarUp()
     {
         GameStateManager.instance.Win = true;
-
-        GameStateManager.instance.WinStreak += 1;
-
         CheckRankUp();
     }
 
     public void StarDown()
     {
         GameStateManager.instance.Lose = true;
-
         CheckRankUp();
     }
 }
