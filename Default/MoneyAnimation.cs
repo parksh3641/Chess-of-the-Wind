@@ -129,6 +129,8 @@ public class MoneyAnimation : MonoBehaviour
         }
         else
         {
+            SoundManager.instance.StopSFX(GameSfxType.ChangeMoney);
+
             yield break;
         }
     }

@@ -9,20 +9,24 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public int index = 0;
+
     public PhotonView PV;
 
-    string playerNickName1 = "";
-    string playerNickName2 = "";
+    public string playerNickName1 = ""; //방장
+    public string playerNickName2 = "";
 
-    RoomOptions roomOption;
+    private RoomOptions roomOption;
 
     public int otherFormation = 0;
+    private string saveName = "";
 
     public bool isDelay = false;
 
     public GameManager gameManager;
     public StateManager stateManager;
     public MatchingManager matchingManager;
+    public UIManager uIManager;
 
     PlayerDataBase playerDataBase;
     void Awake()
@@ -30,9 +34,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
-    public void Initialize()
+    public void Initialize(int number)
     {
+        index = number;
+
         Connect();
+    }
+
+    void OnApplicationQuit()
+    {
+        if (GameStateManager.instance.Playing)
+        {
+            GameStateManager.instance.Penalty = 1;
+        }
     }
 
 
@@ -52,16 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("서버에 접속중입니다.");
 
-        //PhotonNetwork.AutomaticallySyncScene = true;
-
-        if(!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-        else
-        {
-            stateManager.ServerConnectComplete();
-        }
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     public override void OnConnectedToMaster()
@@ -79,14 +84,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("서버와 연결이 끊겼습니다.");
 
-        if(GameStateManager.instance.Playing)
+        if (cause != DisconnectCause.DisconnectByClientLogic)
         {
-            gameManager.Penalty();
-
-            gameManager.ExitRoom();
+            matchingManager.CheckServer_Fail();
         }
 
-        Connect();
+        if(GameStateManager.instance.Playing)
+        {
+            uIManager.OpenDisconnectedView();
+        }
     }
 
 
@@ -103,7 +109,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("로비에 연결되었습니다.");
 
-        stateManager.ServerConnectComplete();
+        switch(index)
+        {
+            case 0:
+                matchingManager.CheckServer_NewBie();
+                break;
+            case 1:
+                matchingManager.CheckServer_Gosu();
+                break;
+            case 2:
+                Debug.Log("진행 중인 게임에 재입장을 시도합니다.");
+
+                PhotonNetwork.JoinRoom(saveName);
+                break;
+        }
     }
 
 
@@ -203,9 +222,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isDelay = false;
 
-        Debug.Log("방을 떠났습니다.");
+        Debug.Log("서버를 떠났습니다.");
 
-        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
     }
 
     public override void OnCreatedRoom()
@@ -235,11 +254,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             int number3 = Random.Range(0, 24);
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "RightNumber", number3 } });
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", 0 } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Total", GameStateManager.instance.Stakes } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Total", GameStateManager.instance.Stakes } });
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", 0 } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Minus", 0 } });
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Formation", playerDataBase.Formation } });
         }
@@ -249,6 +268,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Formation", playerDataBase.Formation } });
 
             StartCoroutine(DelayEnterGame());
+        }
+
+        if(GameStateManager.instance.Playing)
+        {
+            Debug.Log("방에 재입장하였습니다");
+
+            GameStateManager.instance.ReEnter = true;
+        }
+        else
+        {
+            GameStateManager.instance.ReEnter = false;
         }
     }
 
@@ -264,6 +294,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         isDelay = false;
 
         Debug.Log("방 참가 실패했습니다.");
+
+        if(GameStateManager.instance.Playing)
+        {
+            Debug.Log("재입장 하려고 했으나 이미 상대방이 나가버렸습니다.");
+
+            gameManager.Lose();
+        }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -271,6 +308,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         isDelay = false;
 
         Debug.Log("랜덤방이 없어서 방을 만듭니다.");
+
+        GameStateManager.instance.Playing = false;
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
@@ -311,26 +350,34 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        //PV.RPC("ChatRPC", RpcTarget.All, "<color=#00FF00>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
+        Debug.Log(newPlayer.NickName + "님이 입장하셨습니다");
 
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(DelayEnterGame());
+            if(!GameStateManager.instance.Playing)
+            {
+                StartCoroutine(DelayEnterGame());
+            }
         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        //PV.RPC("ChatRPC", RpcTarget.All, "<color=#FF0000>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
+        Debug.Log(otherPlayer.NickName + "님이 퇴장하셨습니다.");
 
         if (GameStateManager.instance.Playing)
         {
-            gameManager.Winner();
+            Debug.Log("123");
+
+            gameManager.CheckGameState();
+
+            PhotonNetwork.CurrentRoom.IsOpen = true;
         }
     }
+       
 
     IEnumerator DelayEnterGame()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         playerNickName1 = GameStateManager.instance.NickName;
         playerNickName2 = PhotonNetwork.PlayerList[1].NickName;
@@ -348,7 +395,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         string nickName = "";
 
-        if(!PhotonNetwork.PlayerList[0].NickName.Equals(GameStateManager.instance.NickName))
+        saveName = PhotonNetwork.PlayerList[0].NickName;
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Room", PhotonNetwork.PlayerList[0].NickName } });
+
+        if (!PhotonNetwork.PlayerList[0].NickName.Equals(GameStateManager.instance.NickName))
         {
             nickName = PhotonNetwork.PlayerList[0].NickName;
         }

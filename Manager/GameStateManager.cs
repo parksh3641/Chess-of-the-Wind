@@ -40,6 +40,7 @@ public class GameStateManager : MonoBehaviour
         public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
         public bool playing = false;
+        public bool reEnter = false;
         public int matchingTime = 6;
         public int stakes = 0;
         public int penalty = 0;
@@ -302,6 +303,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.playing = value;
+            SaveFile();
+        }
+    }
+
+    public bool ReEnter
+    {
+        get
+        {
+            return gameSettings.reEnter;
+        }
+        set
+        {
+            gameSettings.reEnter = value;
             SaveFile();
         }
     }

@@ -62,7 +62,7 @@ public class ImageAnimation : MonoBehaviour
         {
             if (size < 1.2f)
             {
-                size += 0.03f;
+                size += 0.04f;
             }
             else
             {
@@ -73,7 +73,7 @@ public class ImageAnimation : MonoBehaviour
         {
             if(size > 1f)
             {
-                size -= 0.03f;
+                size -= 0.04f;
             }
             else
             {
@@ -94,7 +94,7 @@ public class ImageAnimation : MonoBehaviour
     {
         if(size > 0)
         {
-            size -= 0.03f;
+            size -= 0.04f;
         }
         else
         {

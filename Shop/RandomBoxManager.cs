@@ -930,6 +930,18 @@ public class RandomBoxManager : MonoBehaviour
                         playerDataBase.SnowBox_UR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", 0);
                         break;
+                    case BoxType.NR:
+                        playerDataBase.SnowBox_NR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", 0);
+                        break;
+                    case BoxType.RSR:
+                        playerDataBase.SnowBox_RSR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", 0);
+                        break;
+                    case BoxType.SRSSR:
+                        playerDataBase.SnowBox_SRSSR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SRSSR", 0);
+                        break;
                 }
 
                 break;
@@ -960,6 +972,18 @@ public class RandomBoxManager : MonoBehaviour
                     case BoxType.UR:
                         playerDataBase.UnderworldBox_UR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", 0);
+                        break;
+                    case BoxType.NR:
+                        playerDataBase.UnderworldBox_NR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", 0);
+                        break;
+                    case BoxType.RSR:
+                        playerDataBase.UnderworldBox_RSR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", 0);
+                        break;
+                    case BoxType.SRSSR:
+                        playerDataBase.UnderworldBox_SRSSR = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SRSSR", 0);
                         break;
                 }
 

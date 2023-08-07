@@ -701,7 +701,7 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
-            StateManager.instance.ServerInitialize();
+            StateManager.instance.Initialize();
         }
     }
 
@@ -1011,7 +1011,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)
@@ -1104,7 +1105,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)
@@ -1159,7 +1161,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)
@@ -1209,7 +1212,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)
@@ -1251,7 +1255,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)
@@ -1646,7 +1651,8 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                uiManager.OpenDisconnectedView();
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
             }
         }
         catch (Exception e)

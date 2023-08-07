@@ -100,6 +100,7 @@ public class RouletteManager : MonoBehaviour
 
     [Space]
     [Title("Value")]
+    private int nextBall = 0;
     private int rouletteIndex = 0;
     private int windIndex = 0;
 
@@ -128,6 +129,7 @@ public class RouletteManager : MonoBehaviour
     public UIManager uIManager;
     public CharacterManager characterManager;
     public WindCharacterManager windCharacterManager;
+    public NetworkManager networkManager;
 
     ImageDataBase imageDataBase;
 
@@ -364,7 +366,7 @@ public class RouletteManager : MonoBehaviour
 
         roulette3D.SetActive(true);
 
-        if (!PhotonNetwork.IsMasterClient && pinball == null)
+        if (pinball == null)
         {
             pinball = GameObject.FindWithTag("Pinball").GetComponent<Pinball3D>();
             pinball.transform.parent = roulette3D.transform;
@@ -819,7 +821,7 @@ public class RouletteManager : MonoBehaviour
         }
         else
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            if (gameManager.aiMode)
             {
                 if (windIndex == 0)
                 {
@@ -845,25 +847,40 @@ public class RouletteManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정
         {
-            if (PhotonNetwork.PlayerList.Length >= 2) //혼자가 아닐경우
+            if (!gameManager.aiMode)
             {
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    if (PhotonNetwork.PlayerList[i].NickName.Equals(ht["Pinball"]))
-                    {
-                        if (i < PhotonNetwork.PlayerList.Length - 1) //돌린 사람 다음 사람이 핀볼을 돌리세요!
-                        {
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[i + 1].NickName } });
-                            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[i + 1].NickName);
-                        }
-                        else
-                        {
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[0].NickName } });
-                            Debug.Log("다시 처음부터 돌아갑니다.");
-                        }
+                //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                //{
+                //    if (PhotonNetwork.PlayerList[i].NickName.Equals(ht["Pinball"]))
+                //    {
+                //        if (i < PhotonNetwork.PlayerList.Length - 1) //돌린 사람 다음 사람이 핀볼을 돌리세요!
+                //        {
+                //            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[i + 1].NickName } });
+                //            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[i + 1].NickName);
+                //        }
+                //        else
+                //        {
+                //            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[0].NickName } });
+                //            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[0].NickName);
+                //        }
 
-                        break;
-                    }
+                //        break;
+                //    }
+                //}
+
+                if(nextBall == 0)
+                {
+                    nextBall = 1;
+
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName2 } });
+                    Debug.Log("다음 사람 : " + networkManager.playerNickName2);
+                }
+                else
+                {
+                    nextBall = 0;
+
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName1 } });
+                    Debug.Log("다음 사람 : " + networkManager.playerNickName1);
                 }
             }
             else
@@ -891,7 +908,7 @@ public class RouletteManager : MonoBehaviour
     {
         if (pinball.PV.IsMine)
         {
-            if (!aiMode)
+            if (!gameManager.aiMode)
             {
                 vectorArray[windIndex].SetActive(true);
             }
@@ -1476,28 +1493,24 @@ public class RouletteManager : MonoBehaviour
 
     #region Spectator
 
-    //public void SpectatorRoulette()
-    //{
-    //    Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+    public void CheckRouletteState()
+    {
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-    //    if (ht["Status"].ToString().Equals("Roulette"))
-    //    {
-    //        if (ht["Roulette"].ToString().Equals("Left"))
-    //        {
-    //            rouletteIndex = 0;
-    //        }
-    //        else
-    //        {
-    //            rouletteIndex = 1;
-    //        }
+        if (ht["Status"].ToString().Equals("Roulette"))
+        {
+            if (ht["Roulette"].ToString().Equals("Left"))
+            {
+                rouletteIndex = 0;
+            }
+            else
+            {
+                rouletteIndex = 1;
+            }
 
-    //        SelectRoulette(rouletteIndex);
-    //    }
-    //    else
-    //    {
-    //        PlayBouns();
-    //    }
-    //}
+            SelectRoulette(rouletteIndex);
+        }
+    }
 
     #endregion
 

@@ -30,21 +30,9 @@ public class StateManager : MonoBehaviour
 
     private void Start()
     {
-        GameStateManager.instance.Playing = false;
-        GameStateManager.instance.Win = false;
-        GameStateManager.instance.Lose = false;
-    }
-
-    public void ServerInitialize()
-    {
-        networkManager.Initialize();
-    }
-
-    public void ServerConnectComplete()
-    {
-        uIManager.OnLoginSuccess();
-
-        Initialize();
+        //GameStateManager.instance.Playing = false;
+        //GameStateManager.instance.Win = false;
+        //GameStateManager.instance.Lose = false;
     }
 
     public void Initialize()
@@ -56,29 +44,31 @@ public class StateManager : MonoBehaviour
             SoundManager.instance.Initialize();
 
             uIManager.Initialize();
-            //networkManager.Initialize();
             gameManager.Initialize();
-            //nickNameManager.Initialize();
             matchingManager.Initialize();
             storyManager.Initialize();
             rankInfoManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {
-                if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
-                {
-                    GameStateManager.instance.Penalty = 0;
-                    return;
-                }
+                //if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+                //{
+                //    GameStateManager.instance.Penalty = 0;
+                //    return;
+                //}
 
                 penaltyView.SetActive(true);
 
-                penaltyValue.text = "-" + GameStateManager.instance.Penalty.ToString();
+                penaltyValue.text = "-" + GameStateManager.instance.Stakes.ToString();
 
-                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Penalty);
+                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
+
+                GameStateManager.instance.Win = false;
+                GameStateManager.instance.Lose = true;
 
                 GameStateManager.instance.Penalty = 0;
-       
+
+                matchingManager.CheckRankUp();
             }
 
             Debug.Log("Initialize Complete!");

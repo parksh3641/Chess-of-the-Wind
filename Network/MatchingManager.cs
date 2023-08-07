@@ -74,6 +74,7 @@ public class MatchingManager : MonoBehaviour
 
     bool isCancle = false;
     bool isWait = false;
+    bool isServer = false;
 
     BlockClass blockClass;
     BlockClass blockClass2;
@@ -460,16 +461,49 @@ public class MatchingManager : MonoBehaviour
         tapToContinue.SetActive(true);
     }
 
+    public void CheckServer_Fail()
+    {
+        isServer = false;
+
+        NotionManager.instance.UseNotion(NotionType.CheckInternet);
+    }
+
     public void GameStartButton_Newbie()
     {
-        if(!NetworkConnect.instance.CheckConnectInternet())
+        if(isServer)
         {
+            return;
+        }
+
+        isServer = true;
+
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
 
-        if(playerDataBase.NowRank > (int)newbieLimitRank)
+        if(!PhotonNetwork.IsConnected)
         {
+            networkManager.Initialize(0);
+            return;
+        }
+
+        CheckServer_NewBie();
+    }
+
+    public void CheckServer_NewBie()
+    {
+        if (playerDataBase.NowRank > (int)newbieLimitRank)
+        {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.LimitRank);
             return;
         }
@@ -481,6 +515,10 @@ public class MatchingManager : MonoBehaviour
     {
         if(!check)
         {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
@@ -488,34 +526,24 @@ public class MatchingManager : MonoBehaviour
         rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
-        limitBlock = rankInformation.limitBlockLevel;
 
         GameStateManager.instance.Stakes = stakes;
 
-        if (!playerDataBase.CheckEquipBlock_Newbie()) //블록은 전부 장착했는지
+        if (!playerDataBase.CheckEquipBlock_Newbie()) //블록은 장착했는지
         {
+            isServer = false;
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
 
             return;
         }
-        //else
-        //{
-        //    blockClass = playerDataBase.GetBlockClass(playerDataBase.Newbie);
-
-        //    if (blockClass.level > limitBlock) //블럭 제한을 넘지 않는지?
-        //    {
-        //        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-        //        NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
-
-        //        return;
-        //    }
-        //}
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
+            isServer = false;
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
@@ -532,14 +560,38 @@ public class MatchingManager : MonoBehaviour
 
     public void GameStartButton_Gosu()
     {
+        if (isServer)
+        {
+            return;
+        }
+
+        isServer = true;
+
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
 
+        if (!PhotonNetwork.IsConnected)
+        {
+            networkManager.Initialize(1);
+            return;
+        }
+
+        CheckServer_Gosu();
+    }
+
+    public void CheckServer_Gosu()
+    {
         if (playerDataBase.NowRank < (int)gosuLimitRank)
         {
+            isServer = false;
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.LimitRank);
@@ -553,6 +605,10 @@ public class MatchingManager : MonoBehaviour
     {
         if (!check)
         {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
@@ -566,28 +622,19 @@ public class MatchingManager : MonoBehaviour
 
         if (playerDataBase.CheckEquipBlock_Gosu() == 0) //1개라도 착용했을 경우
         {
+            isServer = false;
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.NeedEquipBlock);
 
             return;
         }
-        //else
-        //{
-        //    blockClass = playerDataBase.GetBlockClass(playerDataBase.Armor);
-        //    blockClass2 = playerDataBase.GetBlockClass(playerDataBase.Weapon);
-        //    blockClass3 = playerDataBase.GetBlockClass(playerDataBase.Shield);
-
-        //    if (blockClass.level > limitBlock || blockClass2.level > limitBlock || blockClass3.level > limitBlock) //블럭 제한을 넘지 않는지?
-        //    {
-        //        NotionManager.instance.UseNotion(NotionType.LimitMaxBlock);
-
-        //        return;
-        //    }
-        //}
 
         if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
         {
+            isServer = false;
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
@@ -619,6 +666,8 @@ public class MatchingManager : MonoBehaviour
         {
             if (isCancle)
             {
+                isServer = false;
+
                 StopAllCoroutines();
 
                 networkManager.LeaveRoom();
@@ -654,6 +703,8 @@ public class MatchingManager : MonoBehaviour
 
     public void PlayerMatching(string player1, string player2, int otherFormation)
     {
+        isServer = false;
+
         dontTouchObj.SetActive(true);
 
         StopAllCoroutines();
@@ -671,6 +722,8 @@ public class MatchingManager : MonoBehaviour
 
     public void AlMatching()
     {
+        isServer = false;
+
         dontTouchObj.SetActive(true);
 
         StopAllCoroutines();

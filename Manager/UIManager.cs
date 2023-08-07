@@ -81,6 +81,8 @@ public class UIManager : MonoBehaviour
     public int index = 0;
     Sprite[] characterArray;
 
+    private List<string> nicknames = new List<string>();
+
     [Space]
     [Title("DataBase")]
     PlayerDataBase playerDataBase;
@@ -123,6 +125,25 @@ public class UIManager : MonoBehaviour
         testMode.SetActive(false);
 
         privacypolicyView.SetActive(false);
+
+        TextAsset nicknameTextAsset = Resources.Load<TextAsset>("Nicknames");
+
+        if (nicknameTextAsset != null)
+        {
+            string[] lines = nicknameTextAsset.text.Split('\n');
+            foreach (string line in lines)
+            {
+                string trimmedLine = line.Trim();
+                if (!string.IsNullOrEmpty(trimmedLine))
+                {
+                    nicknames.Add(trimmedLine);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Nicknames.txt not found in Resources folder.");
+        }
     }
 
     private void Start()
@@ -155,6 +176,9 @@ public class UIManager : MonoBehaviour
 
     public void Initialize()
     {
+        loginView.SetActive(false);
+        mainView.SetActive(true);
+
         Renewal();
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
@@ -202,12 +226,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnLoginSuccess()
-    {
-        loginView.SetActive(false);
-        mainView.SetActive(true);
-    }
-
     public void OnMatchingSuccess(string player1, string player2, int otherFormation)
     {
         StartCoroutine(MatchingCoroution(player1, player2, otherFormation, false));
@@ -215,7 +233,10 @@ public class UIManager : MonoBehaviour
 
     public void OnMatchingAi(int otherFormation)
     {
-        StartCoroutine(MatchingCoroution(LocalizationManager.instance.GetString("Ai"), GameStateManager.instance.NickName, otherFormation, true));
+        int randomIndex = Random.Range(0, nicknames.Count);
+        string randomNickname = nicknames[randomIndex] + "_" + Random.Range(1000,10000).ToString();
+
+        StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, true));
     }
 
 
