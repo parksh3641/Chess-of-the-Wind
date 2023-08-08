@@ -19,7 +19,7 @@ public class LoadSceneManager : MonoBehaviour
     {
         int random = Random.Range(0, backgroundArray.Length - 1);
 
-        background.sprite = backgroundArray[random];
+        //background.sprite = backgroundArray[random];
 
         progressBar.fillAmount = 0;
         progressText.text = "";

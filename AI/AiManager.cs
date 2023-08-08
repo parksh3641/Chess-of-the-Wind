@@ -184,25 +184,29 @@ public class AiManager : MonoBehaviour
 
             blockClass.blockType = blockTypeArray[i];
 
-            if(upgradeDataBase.GetUpgradeValue(RankType.SSR).GetValueNumber(limitBlockLevel_SSR) <= limitBlock)
+            blockClass.level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+
+            blockClass.level -= Random.Range(0, 2);
+
+            if (blockClass.level < 5)
             {
-                blockClass.rankType = RankType.SSR;
-                blockClass.level = limitBlockLevel_SSR;
+                blockClass.rankType = RankType.N;
             }
-            else if (upgradeDataBase.GetUpgradeValue(RankType.SR).GetValueNumber(limitBlockLevel_SR) <= limitBlock)
-            {
-                blockClass.rankType = RankType.SR;
-                blockClass.level = limitBlockLevel_SR;
-            }
-            else if (upgradeDataBase.GetUpgradeValue(RankType.R).GetValueNumber(limitBlockLevel_R) <= limitBlock)
+            else if(blockClass.level < 10)
             {
                 blockClass.rankType = RankType.R;
-                blockClass.level = limitBlockLevel_R;
+            }
+            else if(blockClass.level < 15)
+            {
+                blockClass.rankType = RankType.SR;
+            }
+            else if(blockClass.level < 20)
+            {
+                blockClass.rankType = RankType.SSR;
             }
             else
             {
-                blockClass.rankType = RankType.N;
-                blockClass.level = limitBlockLevel_N;
+                blockClass.rankType = RankType.UR;
             }
 
             value = upgradeDataBase.GetUpgradeValue(blockClass.rankType).GetValueNumber(blockClass.level);

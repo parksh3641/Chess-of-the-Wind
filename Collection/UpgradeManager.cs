@@ -479,6 +479,8 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenLevel.text = LocalizationManager.instance.GetString("DestroyBlockInfo");
                 upgradeScreenValueName.text = "";
                 upgradeScreenValue.text = "";
+
+                SellBlock(blockClass.instanceId);
                 break;
         }
     }
@@ -526,7 +528,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        if(blockClass.rankType == RankType.N)
+        if(blockClass.rankType < RankType.SR)
         {
             NotionManager.instance.UseNotion(NotionType.NotSellBlock);
             return;
@@ -541,7 +543,7 @@ public class UpgradeManager : MonoBehaviour
                 break;
         }
 
-        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 10);
 
         //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
         //{

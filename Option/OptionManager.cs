@@ -11,6 +11,8 @@ public class OptionManager : MonoBehaviour
 
     public OptionContent[] optionContents;
 
+    public GameObject[] bottomContents;
+
     public Text versionText;
 
 
@@ -52,6 +54,31 @@ public class OptionManager : MonoBehaviour
             optionView.SetActive(true);
 
             Initialize();
+
+            for (int i = 0; i < bottomContents.Length; i++)
+            {
+                bottomContents[i].SetActive(true);
+            }
+        }
+        else
+        {
+            optionView.SetActive(false);
+            languageView.SetActive(false);
+        }
+    }
+
+    public void OpenOptionView_InGame()
+    {
+        if (!optionView.activeInHierarchy)
+        {
+            optionView.SetActive(true);
+
+            Initialize();
+
+            for(int i = 0; i < bottomContents.Length; i ++)
+            {
+                bottomContents[i].SetActive(false);
+            }
         }
         else
         {

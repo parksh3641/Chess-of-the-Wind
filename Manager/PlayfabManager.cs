@@ -713,9 +713,9 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"];
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if (gold > 100000000)
+            if (gold > 999999999)
             {
-                gold = 100000000;
+                gold = 999999999;
             }
 
             playerDataBase.Gold = gold;
@@ -1147,11 +1147,25 @@ public class PlayfabManager : MonoBehaviour
                 switch (type)
                 {
                     case MoneyType.Gold:
-                        playerDataBase.Gold += number;
+                        if(playerDataBase.Gold + number > 999999999)
+                        {
+                            playerDataBase.Gold = 999999999;
+                        }
+                        else
+                        {
+                            playerDataBase.Gold += number;
+                        }
                         //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
                         break;
                     case MoneyType.Crystal:
-                        playerDataBase.Crystal += number;
+                        if (playerDataBase.Crystal + number > 999999999)
+                        {
+                            playerDataBase.Crystal = 999999999;
+                        }
+                        else
+                        {
+                            playerDataBase.Crystal += number;
+                        }
                         break;
                 }
 

@@ -199,6 +199,15 @@ public class MatchingManager : MonoBehaviour
     [Button]
     public void CheckRankUp()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+
+            return;
+        }
+
         rankUpView.SetActive(true);
 
         rankUpEffect.SetActive(false);
@@ -291,13 +300,36 @@ public class MatchingManager : MonoBehaviour
             }
             else
             {
-                rankUpView.SetActive(false);
+                if(playerDataBase.Star < 11)
+                {
+                    StarAnimation(true);
 
-                Debug.Log("최고 랭크 달성 !");
+                    Debug.Log("별 개수 상승");
+
+                    Invoke("Delay", 0.5f);
+                }
+                else
+                {
+                    rankUpView.SetActive(false);
+
+                    Debug.Log("최고 랭크 달성 !");
+                }
             }
         }
         else if(GameStateManager.instance.Lose)
         {
+            if(playerDataBase.NowRank < 4)
+            {
+                rankUpView.SetActive(false);
+
+                GameStateManager.instance.Lose = false;
+                GameStateManager.instance.WinStreak = 0;
+
+                Debug.Log("브론즈 단계에서는 랭크가 하락하지 않습니다");
+
+                return;
+            }
+
             rankUpTitle.text = LocalizationManager.instance.GetString("Lose");
 
             GameStateManager.instance.Lose = false;
@@ -693,8 +725,6 @@ public class MatchingManager : MonoBehaviour
 
             yield return waitForSeconds;
         }
-
-        PhotonNetwork.CurrentRoom.IsOpen = false;
 
         yield return waitForSeconds;
 

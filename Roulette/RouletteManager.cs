@@ -37,7 +37,7 @@ public class RouletteManager : MonoBehaviour
     public ParticleSystem roulette1Particle;
     public ParticleSystem roulette2Particle;
 
-    public GameObject[] vectorArray;
+    public Image[] vectorArray;
 
     public GameObject windGauge;
     public Image windButton;
@@ -115,10 +115,10 @@ public class RouletteManager : MonoBehaviour
 
     [Space]
     [Title("bool")]
-    bool buttonClick = false;
-    bool bouns = false;
-    bool aiMode = false;
-    bool playing = false;
+    private bool buttonClick = false;
+    private bool bouns = false;
+    private bool aiMode = false;
+    private bool playing = false;
 
     [Space]
     public int[] bettingPos0, bettingPos1, bettingPos2, bettingPos3, bettingPos4, bettingPos5;
@@ -274,9 +274,6 @@ public class RouletteManager : MonoBehaviour
         roulette2WindPoint[0].gameObject.SetActive(false);
         roulette2WindPoint[1].gameObject.SetActive(false);
 
-        vectorArray[0].SetActive(false);
-        vectorArray[1].SetActive(false);
-
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             roulettePlane[0].SetActive(true);
@@ -366,12 +363,14 @@ public class RouletteManager : MonoBehaviour
 
         roulette3D.SetActive(true);
 
+        vectorArray[0].gameObject.SetActive(false);
+        vectorArray[1].gameObject.SetActive(false);
+
         if (pinball == null)
         {
             pinball = GameObject.FindWithTag("Pinball").GetComponent<Pinball3D>();
             pinball.transform.parent = roulette3D.transform;
             pinball.rouletteManager = this;
-
             rouletteBallCamera.SetBall(pinball.gameObject);
 
             leftClock[0] = GameObject.FindWithTag("ClockSecObj_Left").GetComponent<Rotation_Clock>();
@@ -795,8 +794,8 @@ public class RouletteManager : MonoBehaviour
 
         windButton.sprite = windButtonArray[0];
 
-        vectorArray[0].SetActive(false);
-        vectorArray[1].SetActive(false);
+        vectorArray[0].gameObject.SetActive(false);
+        vectorArray[1].gameObject.SetActive(false);
 
         if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {
@@ -806,7 +805,8 @@ public class RouletteManager : MonoBehaviour
 
             windButton.sprite = windButtonArray[1];
 
-            //vectorArray[windIndex].SetActive(true);
+            vectorArray[windIndex].gameObject.SetActive(true);
+            vectorArray[windIndex].enabled = false;
 
             if(GameStateManager.instance.GameType == GameType.NewBie)
             {
@@ -821,17 +821,19 @@ public class RouletteManager : MonoBehaviour
         }
         else
         {
+            if (windIndex == 0)
+            {
+                vectorArray[1].gameObject.SetActive(true);
+                vectorArray[1].enabled = false;
+            }
+            else
+            {
+                vectorArray[0].gameObject.SetActive(true);
+                vectorArray[0].enabled = false;
+            }
+
             if (gameManager.aiMode)
             {
-                if (windIndex == 0)
-                {
-                    Debug.Log("Ai가 2번째 자리에서 바람을 불려고 합니다.");
-                }
-                else
-                {
-                    Debug.Log("Ai가 1번째 자리에서 바람을 불려고 합니다.");
-                }
-
                 pinball.MyTurn(rouletteIndex);
 
                 aiMode = true;
@@ -906,12 +908,14 @@ public class RouletteManager : MonoBehaviour
 
     public void PlayRouletteDelay()
     {
-        if (pinball.PV.IsMine)
+        if(vectorArray[0].gameObject.activeInHierarchy)
         {
-            if (!gameManager.aiMode)
-            {
-                vectorArray[windIndex].SetActive(true);
-            }
+            vectorArray[0].enabled = true;
+        }
+
+        if (vectorArray[1].gameObject.activeInHierarchy)
+        {
+            vectorArray[1].enabled = true;
         }
     }
 
@@ -959,7 +963,7 @@ public class RouletteManager : MonoBehaviour
             if (!windDelay)
             {
                 float[] blow = new float[2];
-                blow[0] = 15;
+                blow[0] = 20;
                 blow[1] = windIndex;
 
                 PV.RPC("BlowingWind", RpcTarget.All, blow);

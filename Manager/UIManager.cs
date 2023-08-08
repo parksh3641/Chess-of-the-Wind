@@ -234,7 +234,7 @@ public class UIManager : MonoBehaviour
     public void OnMatchingAi(int otherFormation)
     {
         int randomIndex = Random.Range(0, nicknames.Count);
-        string randomNickname = nicknames[randomIndex] + "_" + Random.Range(1000,10000).ToString();
+        string randomNickname = nicknames[randomIndex];
 
         StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, true));
     }
@@ -473,13 +473,6 @@ public class UIManager : MonoBehaviour
         if (gold >= 0)
         {
             Debug.Log("돈 증가 애니메이션 발동");
-
-            if(gold < GameStateManager.instance.Stakes)
-            {
-                gold = GameStateManager.instance.Stakes + (int)(GameStateManager.instance.Stakes * 0.1f);
-
-                Debug.Log("리타이어 승리");
-            }
 
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
             //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";

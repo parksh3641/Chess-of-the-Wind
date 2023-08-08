@@ -44,6 +44,8 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBGM(GameBgmType type)
     {
+        if (!GameStateManager.instance.Music) return;
+
         bool check = false;
 
         for (int i = 0; i < bgmAudio.Length; i++)

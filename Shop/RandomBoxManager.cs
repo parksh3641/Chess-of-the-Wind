@@ -201,9 +201,9 @@ public class RandomBoxManager : MonoBehaviour
 
         playerDataBase.BuySnowBoxSSRCount += boxCount;
 
-        if(playerDataBase.BuySnowBoxSSRCount >= 50)
+        if(playerDataBase.BuySnowBoxSSRCount >= 100)
         {
-            playerDataBase.BuySnowBoxSSRCount -= 50;
+            playerDataBase.BuySnowBoxSSRCount -= 100;
 
             confirmationSSR = true;
         }
@@ -333,9 +333,9 @@ public class RandomBoxManager : MonoBehaviour
 
         playerDataBase.BuyUnderworldBoxSSRCount += boxCount;
 
-        if (playerDataBase.BuyUnderworldBoxSSRCount >= 50)
+        if (playerDataBase.BuyUnderworldBoxSSRCount >= 100)
         {
-            playerDataBase.BuyUnderworldBoxSSRCount -= 50;
+            playerDataBase.BuyUnderworldBoxSSRCount -= 100;
 
             confirmationSSR = true;
         }

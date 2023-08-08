@@ -41,6 +41,7 @@ public class GameStateManager : MonoBehaviour
         public GameRankType gameRankType = GameRankType.Bronze_4;
         public bool playing = false;
         public bool reEnter = false;
+        public string room = "";
         public int matchingTime = 6;
         public int stakes = 0;
         public int penalty = 0;
@@ -316,6 +317,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.reEnter = value;
+            SaveFile();
+        }
+    }
+
+    public string Room
+    {
+        get
+        {
+            return gameSettings.room;
+        }
+        set
+        {
+            gameSettings.room = value;
             SaveFile();
         }
     }
