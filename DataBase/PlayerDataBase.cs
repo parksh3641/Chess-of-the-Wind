@@ -86,6 +86,19 @@ public class PlayerDataBase : ScriptableObject
     private int nowRank = 0;
     [SerializeField]
     private int highRank = 0;
+    [SerializeField]
+    private int accessDate = 0;
+
+    [Space]
+    [Title("Reset")]
+    public int season = 0;
+    public string attendanceDay = "";
+    public int attendanceCount = 0;
+    public bool attendanceCheck = false;
+    public string nextMonday = "";
+
+    public int welcomeCount = 0;
+    public bool welcomeCheck = false;
 
     [Space]
     [Title("Info")]
@@ -269,6 +282,102 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             highRank = value;
+        }
+    }
+
+    public int AccessDate
+    {
+        get
+        {
+            return accessDate;
+        }
+        set
+        {
+            accessDate = value;
+        }
+    }
+
+    public int Season
+    {
+        get
+        {
+            return season;
+        }
+        set
+        {
+            season = value;
+        }
+    }
+
+    public string AttendanceDay
+    {
+        get
+        {
+            return attendanceDay;
+        }
+        set
+        {
+            attendanceDay = value;
+        }
+    }
+
+    public int AttendanceCount
+    {
+        get
+        {
+            return attendanceCount;
+        }
+        set
+        {
+            attendanceCount = value;
+        }
+    }
+
+    public bool AttendanceCheck
+    {
+        get
+        {
+            return attendanceCheck;
+        }
+        set
+        {
+            attendanceCheck = value;
+        }
+    }
+
+    public string NextMonday
+    {
+        get
+        {
+            return nextMonday;
+        }
+        set
+        {
+            nextMonday = value;
+        }
+    }
+
+    public int WelcomeCount
+    {
+        get
+        {
+            return welcomeCount;
+        }
+        set
+        {
+            welcomeCount = value;
+        }
+    }
+
+    public bool WelcomeCheck
+    {
+        get
+        {
+            return welcomeCheck;
+        }
+        set
+        {
+            welcomeCheck = value;
         }
     }
 
@@ -744,7 +853,16 @@ public class PlayerDataBase : ScriptableObject
         star = 0;
         nowRank = 0;
         highRank = 0;
-        defDestroyTicket = 0;
+        accessDate = 0;
+
+        season = 0;
+        attendanceDay = "";
+        attendanceCount = 0;
+        attendanceCheck = false;
+        nextMonday = "";
+
+        welcomeCount = 0;
+        welcomeCheck = false;
 
         newbieWin = 0;
         newbieLose = 0;
@@ -780,6 +898,8 @@ public class PlayerDataBase : ScriptableObject
         BuyUnderworldBox = 0;
         BuySnowBoxSSRCount = 0;
         BuyUnderworldBoxSSRCount = 0;
+
+        defDestroyTicket = 0;
 
         windCharacterList.Clear();
 

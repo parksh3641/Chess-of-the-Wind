@@ -15,6 +15,9 @@ public class MoneyAnimation : MonoBehaviour
     public Transform moneyMidTransform;
     public Transform otherMoneyMidTransform;
 
+    public Transform resultMoneyStartTransform;
+    public Transform resultMoneyEndTransform;
+
     [Space]
     [Title("Text")]
     public Text[] moneyText;
@@ -24,10 +27,13 @@ public class MoneyAnimation : MonoBehaviour
 
     [Space]
     [Title("Prefab")]
+    public MoneyContent heartPrefab;
     public MoneyContent moneyPrefab;
 
+    List<MoneyContent> heartPrefabList = new List<MoneyContent>();
+    List<MoneyContent> heartPrefabList_Enemy = new List<MoneyContent>();
+
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
-    List<MoneyContent> moneyPrefabList2 = new List<MoneyContent>();
 
     public GameManager gameManager;
 
@@ -38,12 +44,22 @@ public class MoneyAnimation : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            MoneyContent monster = Instantiate(moneyPrefab);
+            MoneyContent monster = Instantiate(heartPrefab);
             monster.transform.parent = moneyTransform;
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
-            moneyPrefabList.Add(monster);
+            heartPrefabList.Add(monster);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            MoneyContent monster = Instantiate(heartPrefab);
+            monster.transform.parent = moneyTransform;
+            monster.transform.localPosition = Vector3.zero;
+            monster.transform.localScale = new Vector3(1, 1, 1);
+            monster.gameObject.SetActive(false);
+            heartPrefabList_Enemy.Add(monster);
         }
 
         for (int i = 0; i < 10; i++)
@@ -53,7 +69,7 @@ public class MoneyAnimation : MonoBehaviour
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
-            moneyPrefabList2.Add(monster);
+            moneyPrefabList.Add(monster);
         }
     }
 
@@ -81,9 +97,9 @@ public class MoneyAnimation : MonoBehaviour
 
     public void AddMoneyAnimation(int money, int otherMoney, int value)
     {
-        for (int i = 0; i < moneyPrefabList.Count; i++)
+        for (int i = 0; i < heartPrefabList.Count; i++)
         {
-            moneyPrefabList[i].gameObject.SetActive(false);
+            heartPrefabList[i].gameObject.SetActive(false);
         }
 
         changeMoneyText[0].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
@@ -98,14 +114,14 @@ public class MoneyAnimation : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
         }
 
-        StartCoroutine(AddMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
+        StartCoroutine(AddMoneyCoroution(money, otherMoney, value, heartPrefabList, moneyText));
     }
 
     public void MinusMoneyAnimation(int money, int otherMoney, int value)
     {
-        for (int i = 0; i < moneyPrefabList.Count; i++)
+        for (int i = 0; i < heartPrefabList.Count; i++)
         {
-            moneyPrefabList[i].gameObject.SetActive(false);
+            heartPrefabList[i].gameObject.SetActive(false);
         }
 
         changeMoneyText[0].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
@@ -113,7 +129,7 @@ public class MoneyAnimation : MonoBehaviour
 
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
-        StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, moneyPrefabList, moneyText));
+        StartCoroutine(MinusMoneyCoroution(money, otherMoney, value, heartPrefabList, moneyText));
     }
 
     IEnumerator ChangeMoneyCoroution()
@@ -321,10 +337,10 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator MinusMoneyMidCoroution(int money, int bettingMoney, Text txt)
     {
-        for (int i = 0; i < moneyPrefabList.Count; i++)
+        for (int i = 0; i < heartPrefabList.Count; i++)
         {
-            moneyPrefabList[i].gameObject.SetActive(true);
-            moneyPrefabList[i].GoToTarget(moneyStartTransform.localPosition, moneyMidTransform.localPosition);
+            heartPrefabList[i].gameObject.SetActive(true);
+            heartPrefabList[i].GoToTarget(moneyStartTransform.localPosition, moneyMidTransform.localPosition);
         }
 
         yield return new WaitForSeconds(2.0f);
@@ -398,10 +414,10 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator MinusMoneyMidEnemyCoroution(int money, int bettingMoney, Text txt)
     {
-        for (int i = 0; i < moneyPrefabList2.Count; i++)
+        for (int i = 0; i < heartPrefabList_Enemy.Count; i++)
         {
-            moneyPrefabList2[i].gameObject.SetActive(true);
-            moneyPrefabList2[i].GoToTarget(otherMoneyStartTransform.localPosition, otherMoneyMidTransform.localPosition);
+            heartPrefabList_Enemy[i].gameObject.SetActive(true);
+            heartPrefabList_Enemy[i].GoToTarget(otherMoneyStartTransform.localPosition, otherMoneyMidTransform.localPosition);
         }
 
         yield return new WaitForSeconds(2.0f);

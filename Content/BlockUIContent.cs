@@ -32,6 +32,8 @@ public class BlockUIContent : MonoBehaviour
     CollectionManager collectionManager;
     SynthesisManager synthesisManager;
 
+    public int Value { get; internal set; }
+
     void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;

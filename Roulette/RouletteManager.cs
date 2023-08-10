@@ -844,7 +844,7 @@ public class RouletteManager : MonoBehaviour
 
             NotionManager.instance.UseNotion(NotionType.EnemyTurn);
 
-            buttonText.text = LocalizationManager.instance.GetString("EnemyTurn");
+            buttonText.text = LocalizationManager.instance.GetString("EnemyTurn_Info");
         }
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정
@@ -963,7 +963,7 @@ public class RouletteManager : MonoBehaviour
             if (!windDelay)
             {
                 float[] blow = new float[2];
-                blow[0] = 20;
+                blow[0] = 30;
                 blow[1] = windIndex;
 
                 PV.RPC("BlowingWind", RpcTarget.All, blow);

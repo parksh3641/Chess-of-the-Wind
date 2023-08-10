@@ -39,12 +39,11 @@ public class GameStateManager : MonoBehaviour
         public WindCharacterType windCharacterType = WindCharacterType.Winter;
         public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
-        public bool playing = false;
-        public bool reEnter = false;
         public string room = "";
-        public int matchingTime = 6;
         public int stakes = 0;
         public int penalty = 0;
+        public bool playing = false;
+        public bool reEnter = false;
 
         [Space]
         [Title("Rank")]
@@ -54,7 +53,6 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Setting")]
-        public bool tutorial = true;
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
@@ -63,6 +61,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Betting")]
+        public int matchingTime = 6;
         public int bettingTime = 11;
         public int bettingWaitTime = 5;
         public bool autoTarget = false;
@@ -72,6 +71,24 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Bouns")]
         public bool checkBouns = false;
+
+        [Space]
+        [Title("Tutorial")]
+        public bool tutorial = true;
+
+        [Space]
+        [Title("Daily")]
+        public bool dailyWin = false;
+        public bool dailyReward = false;
+        public bool dailyAdsReward = false;
+        public bool dailyAdsReward2 = false;
+        public bool dailyNormalBox = false;
+        public bool dailyEpicBox = false;
+        public int dailyNormalBox_1 = 3;
+        public int dailyNormalBox_10 = 1;
+        public int dailyEpicBox_1 = 3;
+        public int dailyEpicBox_10 = 1;
+
     }
     #region Data
 
@@ -492,6 +509,136 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public bool DailyWin
+    {
+        get
+        {
+            return gameSettings.dailyWin;
+        }
+        set
+        {
+            gameSettings.dailyWin = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyReward
+    {
+        get
+        {
+            return gameSettings.dailyReward;
+        }
+        set
+        {
+            gameSettings.dailyReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyAdsReward
+    {
+        get
+        {
+            return gameSettings.dailyAdsReward;
+        }
+        set
+        {
+            gameSettings.dailyAdsReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyAdsReward2
+    {
+        get
+        {
+            return gameSettings.dailyAdsReward2;
+        }
+        set
+        {
+            gameSettings.dailyAdsReward2 = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyNormalBox
+    {
+        get
+        {
+            return gameSettings.dailyNormalBox;
+        }
+        set
+        {
+            gameSettings.dailyNormalBox = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyEpicBox
+    {
+        get
+        {
+            return gameSettings.dailyEpicBox;
+        }
+        set
+        {
+            gameSettings.dailyEpicBox = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyNormalBox_1
+    {
+        get
+        {
+            return gameSettings.dailyNormalBox_1;
+        }
+        set
+        {
+            gameSettings.dailyNormalBox_1 = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyNormalBox_10
+    {
+        get
+        {
+            return gameSettings.dailyNormalBox_10;
+        }
+        set
+        {
+            gameSettings.dailyNormalBox_10 = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyEpicBox_1
+    {
+        get
+        {
+            return gameSettings.dailyEpicBox_1;
+        }
+        set
+        {
+            gameSettings.dailyEpicBox_1 = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyEpicBox_10
+    {
+        get
+        {
+            return gameSettings.dailyEpicBox_10;
+        }
+        set
+        {
+            gameSettings.dailyEpicBox_10 = value;
+            SaveFile();
+        }
+    }
+
     #endregion
 
     private void Awake()
@@ -523,6 +670,11 @@ public class GameStateManager : MonoBehaviour
                 gameSettings.gameRankType = GameRankType.Bronze_4;
                 gameSettings.bettingTime = 11;
                 gameSettings.bettingWaitTime = 5;
+                gameSettings.privacypolicy = false;
+                gameSettings.dailyNormalBox_1 = 3;
+                gameSettings.dailyNormalBox_10 = 1;
+                gameSettings.dailyEpicBox_1 = 3;
+                gameSettings.dailyEpicBox_10 = 1;
             }
         }
         catch (Exception e)

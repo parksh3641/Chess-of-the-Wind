@@ -171,7 +171,8 @@ public enum GameSfxType
     BlowWind,
     BoxOpen2,
     GetStar,
-    LoseStar
+    LoseStar,
+    Bomb
 }
 
 public enum LanguageType
@@ -268,7 +269,8 @@ public enum NotionType
     InGameBurning,
     InGameBurning2,
     GetFreeReward,
-    GetWatchAdReward
+    GetWatchAdReward,
+    GetReward
 }
 
 public enum GameRankType
@@ -294,4 +296,20 @@ public enum GameRankType
     Diamond_2,
     Diamond_1,
     Legend_1
+}
+
+public enum RewardType
+{
+    Gold,
+    UpgradeTicket,
+    Box,
+    Box_N,
+    Box_R,
+    Box_SR,
+    Box_SSR,
+    Box_UR,
+    Box_NR,
+    Box_RSR,
+    Box_SRSSR,
+
 }

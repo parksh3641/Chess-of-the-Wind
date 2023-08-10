@@ -99,6 +99,13 @@ public class PointerManager : MonoBehaviour
             number -= 1;
         }
 
-        pointerList[number].FocusOn();
+        for (int i = 0; i < pointerList.Count; i++)
+        {
+            if (pointerList[i].index == number)
+            {
+                pointerList[i].FocusOn();
+                break;
+            }
+        }
     }
 }

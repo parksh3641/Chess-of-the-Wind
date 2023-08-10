@@ -10,8 +10,14 @@ public class ShopManager : MonoBehaviour
 
     public RectTransform shopRectTransform;
 
+    public ContentSizeFitter contentSizeFitter;
+
     public GameObject[] boxArray;
     public LocalizationContent[] boxSSRTextArray;
+
+    public Text[] dailyCountText;
+
+    public Text dailyShopCountText;
 
     public ShopContent shopContent;
 
@@ -21,11 +27,18 @@ public class ShopManager : MonoBehaviour
     List<ShopContent> shopContentGoldList = new List<ShopContent>();
     List<ShopContent> shopContentList = new List<ShopContent>();
 
+    string localization_Reset = "";
+    string localization_Days = "";
+    string localization_Hours = "";
+    string localization_Minutes = "";
+
     bool isDelay = false;
 
     public UIManager uIManager;
 
     PlayerDataBase playerDataBase;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     private void Awake()
     {
@@ -51,6 +64,11 @@ public class ShopManager : MonoBehaviour
         //shopRectTransform.sizeDelta = new Vector2(0, -999);
     }
 
+    private void Start()
+    {
+        StartCoroutine(DailyShopTimer());
+    }
+
     public void OpenShopView()
     {
         if (!shopView.activeSelf)
@@ -60,7 +78,12 @@ public class ShopManager : MonoBehaviour
             boxArray[0].SetActive(false);
             boxArray[1].SetActive(false);
 
-            Invoke("GridTransform", 0.1f);
+            localization_Reset = LocalizationManager.instance.GetString("Reset");
+            localization_Days = LocalizationManager.instance.GetString("Days");
+            localization_Hours = LocalizationManager.instance.GetString("Hours");
+            localization_Minutes = LocalizationManager.instance.GetString("Minutes");
+
+            shopRectTransform.offsetMax = Vector3.zero;
 
             if (playerDataBase.Formation == 2)
             {
@@ -78,6 +101,8 @@ public class ShopManager : MonoBehaviour
                 boxSSRTextArray[0].localizationName = "BoxSSRInfo";
                 boxSSRTextArray[0].ReLoad();
             }
+
+            Initialize_Count();
         }
     }
 
@@ -104,10 +129,12 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    [Button]
-    public void GridTransform()
+    void Initialize_Count()
     {
-        shopRectTransform.sizeDelta = Vector3.zero;
+        dailyCountText[0].text = GameStateManager.instance.DailyNormalBox_1 + "/3";
+        dailyCountText[1].text = GameStateManager.instance.DailyNormalBox_10 + "/1";
+        dailyCountText[2].text = GameStateManager.instance.DailyEpicBox_1 + "/3";
+        dailyCountText[3].text = GameStateManager.instance.DailyEpicBox_10 + "/1";
     }
 
     public void CloseShopView()
@@ -236,7 +263,28 @@ public class ShopManager : MonoBehaviour
     {
         int price = 15000 * number;
 
-        if (number >= 10) price -= 15000;
+        if (number >= 10)
+        {
+            if(GameStateManager.instance.DailyNormalBox_10 <= 0)
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                
+                NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
+                return;
+            }
+
+            price -= 15000;
+        }
+        else
+        {
+            if (GameStateManager.instance.DailyNormalBox_1 <= 0)
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
+                return;
+            }
+        }
 
         if (playerDataBase.Gold >= price)
         {
@@ -252,6 +300,17 @@ public class ShopManager : MonoBehaviour
                     break;
             }
 
+            if(number >= 10)
+            {
+                GameStateManager.instance.DailyNormalBox_10 -= 1;
+            }
+            else
+            {
+                GameStateManager.instance.DailyNormalBox_1 -= 1;
+            }
+
+            Initialize_Count();
+
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         }
         else
@@ -266,7 +325,28 @@ public class ShopManager : MonoBehaviour
     {
         int price = 100000 * number;
 
-        if (number >= 10) price -= 100000;
+        if (number >= 10)
+        {
+            if (GameStateManager.instance.DailyEpicBox_10 <= 0)
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
+                return;
+            }
+
+            price -= 100000;
+        }
+        else
+        {
+            if (GameStateManager.instance.DailyEpicBox_1 <= 0)
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
+                return;
+            }
+        }
 
         if (playerDataBase.Gold >= price)
         {
@@ -281,6 +361,17 @@ public class ShopManager : MonoBehaviour
                     GetUnderworld(BoxType.RSR, number);
                     break;
             }
+
+            if (number >= 10)
+            {
+                GameStateManager.instance.DailyEpicBox_10 -= 1;
+            }
+            else
+            {
+                GameStateManager.instance.DailyEpicBox_1 -= 1;
+            }
+
+            Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         }
@@ -337,6 +428,21 @@ public class ShopManager : MonoBehaviour
     void Delay()
     {
         isDelay = false;
+    }
+
+    IEnumerator DailyShopTimer()
+    {
+        if (dailyShopCountText.gameObject.activeInHierarchy)
+        {
+            System.DateTime f = System.DateTime.Now;
+            System.DateTime g = System.DateTime.Today.AddDays(1);
+            System.TimeSpan h = g - f;
+
+            dailyShopCountText.text = localization_Reset + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
+        }
+
+        yield return waitForSeconds;
+        StartCoroutine(DailyShopTimer());
     }
 
     #endregion

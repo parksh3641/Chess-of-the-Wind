@@ -253,6 +253,10 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         isDrag = false;
 
-        gameManager.ResetPosBlock(index);
+        if (gameManager != null)
+        {
+            gameManager.CancleBetting(blockClass.blockType);
+            gameManager.ResetPosBlock(index);
+        }
     }
 }

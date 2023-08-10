@@ -41,6 +41,8 @@ public class PlayfabManager : MonoBehaviour
     public bool isDelay = false;
     public bool isNone = false;
 
+    private float isWait = 0;
+
 #if UNITY_IOS
     private string AppleUserIdKey = "";
     private IAppleAuthManager _appleAuthManager;
@@ -187,6 +189,7 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.GameRankType = GameRankType.Bronze_4;
         GameStateManager.instance.BettingTime = 11;
         GameStateManager.instance.BettingWaitTime = 5;
+        GameStateManager.instance.PrivacyPolicy = false;
 
         isActive = false;
         isLogin = false;
@@ -678,21 +681,21 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        yield return GetUserInventory();
+
+        yield return new WaitForSeconds(0.5f + (isWait * 0.05f));
+
+        yield return GetPlayerData();
+
+        isActive = true;
+
         yield return GetStatistics();
 
         yield return new WaitForSeconds(0.5f);
 
-        yield return GetPlayerData();
-
-        yield return GetUserInventory();
-
-        yield return new WaitForSeconds(0.5f);
-
-        isActive = true;
+        uiManager.Renewal();
 
         Debug.Log("Load Data Complete");
-
-        yield return new WaitForSeconds(0.5f);
 
         if(!GameStateManager.instance.Tutorial && playerDataBase.Formation == 0)
         {
@@ -723,6 +726,8 @@ public class PlayfabManager : MonoBehaviour
 
             playerDataBase.Initialize_BlockList();
 
+            isWait = Inventory.Count;
+
             if (Inventory != null)
             {
                 inventoryList.Clear();
@@ -751,10 +756,6 @@ public class PlayfabManager : MonoBehaviour
 
                     //shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
-            }
-            else
-            {
-                return;
             }
 
         }, DisplayPlayfabError);
@@ -869,6 +870,42 @@ public class PlayfabManager : MonoBehaviour
                            }
 
                            break;
+                       case "AccessDate":
+                           playerDataBase.AccessDate = statistics.Value;
+                           break;
+                       case "AttendanceDay":
+                           playerDataBase.AttendanceDay = statistics.Value.ToString();
+                           break;
+                       case "NextMonday":
+                           playerDataBase.NextMonday = statistics.Value.ToString();
+                           break;
+                       case "AttendanceCount":
+                           playerDataBase.AttendanceCount = statistics.Value;
+                           break;
+                       case "AttendanceCheck":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.AttendanceCheck = false;
+                           }
+                           else
+                           {
+                               playerDataBase.AttendanceCheck = true;
+                           }
+                           break;
+                       case "WelcomeCount":
+                           playerDataBase.WelcomeCount = statistics.Value;
+                           break;
+                       case "WelcomeCheck":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.WelcomeCheck = false;
+                           }
+                           else
+                           {
+                               playerDataBase.WelcomeCheck = true;
+                           }
+                           break;
+
                        case "NewbieWin":
                            playerDataBase.NewbieWin = statistics.Value;
                            break;

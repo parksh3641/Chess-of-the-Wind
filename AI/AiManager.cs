@@ -23,10 +23,6 @@ public class AiManager : MonoBehaviour
     [Title("Value")]
     public int random = 0;
     public int limitBlock = 0;
-    public int limitBlockLevel_N = 0;
-    public int limitBlockLevel_R = 0;
-    public int limitBlockLevel_SR = 0;
-    public int limitBlockLevel_SSR = 0;
     private int value = 0;
 
     public int blockIndex = 0;
@@ -48,6 +44,9 @@ public class AiManager : MonoBehaviour
     public int[] dontBettingZone1;
     public int[] dontBettingZone2;
     public int[] dontBettingZone3;
+    public int[] dontBettingZone1_Twice; //이중 배팅
+    public int[] dontBettingZone2_Twice;
+    public int[] dontBettingZone3_Twice;
 
 
     RankInformation rankInformation = new RankInformation();
@@ -110,11 +109,6 @@ public class AiManager : MonoBehaviour
         //limitBlockLevel_R = upgradeDataBase.CheckUpgradeValue(RankType.R, limitBlock);
         //limitBlockLevel_SR = upgradeDataBase.CheckUpgradeValue(RankType.SR, limitBlock);
         //limitBlockLevel_SSR = upgradeDataBase.CheckUpgradeValue(RankType.SSR, limitBlock);
-
-        limitBlockLevel_N = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
-        limitBlockLevel_R = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
-        limitBlockLevel_SR = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
-        limitBlockLevel_SSR = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
         if (gameType == GameType.NewBie)
         {
@@ -185,8 +179,6 @@ public class AiManager : MonoBehaviour
             blockClass.blockType = blockTypeArray[i];
 
             blockClass.level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
-
-            blockClass.level -= Random.Range(0, 2);
 
             if (blockClass.level < 5)
             {

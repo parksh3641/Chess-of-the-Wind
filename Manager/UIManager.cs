@@ -444,8 +444,6 @@ public class UIManager : MonoBehaviour
                 resultTalkText.text = LocalizationManager.instance.GetString("Win2_Winter");
             }
 
-            gold += (int)(GameStateManager.instance.Stakes * 0.1f);
-
             GameStateManager.instance.Win = true;
 
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);

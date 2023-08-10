@@ -8,7 +8,7 @@ public class Pinball3D : MonoBehaviour
     public Transform vector;
     public Rigidbody rigid;
 
-    private float power = 130f;
+    private float power = 150f;
     private float windPower = 0;
     public int index = 0;
     public int ballPos = 0;

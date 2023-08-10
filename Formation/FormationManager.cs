@@ -23,6 +23,8 @@ public class FormationManager : MonoBehaviour
 
     List<string> itemList = new List<string>();
 
+    public TutorialManager tutorialManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -136,8 +138,12 @@ public class FormationManager : MonoBehaviour
 
         yield return new WaitForSeconds(4);
 
-        PlayerPrefs.SetString("LoadScene", "MainScene");
-        SceneManager.LoadScene("LoadScene");
+        formationView.SetActive(false);
+
+        tutorialManager.ChoiceFormation();
+
+        //PlayerPrefs.SetString("LoadScene", "MainScene");
+        //SceneManager.LoadScene("LoadScene");
     }
 
     public void CancleFormationButton()

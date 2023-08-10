@@ -113,7 +113,7 @@ public class SynthesisManager : MonoBehaviour
     PlayerDataBase playerDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.125f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.2f);
 
     private void Awake()
     {
@@ -997,10 +997,31 @@ public class SynthesisManager : MonoBehaviour
         switch (synthesisRankType)
         {
             case RankType.N:
-                for(int i = 0; i < synthesisList_Rank_N.Count; i ++)
+                for (int i = 0; i < synthesisList_Rank_N_Count.Length; i ++)
                 {
-                    upgradeManager.SellBlock(synthesisList_Rank_N[i].blockClass.instanceId);
-                    yield return waitForSeconds2;
+                    int number = synthesisList_Rank_N_Count[i] - (synthesisList_Rank_N_Count[i] % 3);
+
+                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+
+                    if (number == 0) continue;
+
+                    for(int j = 0; j < synthesisList_Rank_N.Count; j ++)
+                    {
+                        if(number > 0)
+                        {
+                            if (synthesisList_Rank_N[j].blockClass.blockType.Equals(BlockType.Default + 1 + i))
+                            {
+                                upgradeManager.SellBlock(synthesisList_Rank_N[j].blockClass.instanceId);
+                                number--;
+
+                                yield return waitForSeconds2;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
 
 
@@ -1031,10 +1052,31 @@ public class SynthesisManager : MonoBehaviour
 
                 break;
             case RankType.R:
-                for (int i = 0; i < synthesisList_Rank_R.Count; i++)
+                for (int i = 0; i < synthesisList_Rank_R_Count.Length; i++)
                 {
-                    upgradeManager.SellBlock(synthesisList_Rank_R[i].blockClass.instanceId);
-                    yield return waitForSeconds2;
+                    int number = synthesisList_Rank_R_Count[i] - (synthesisList_Rank_R_Count[i] % 3);
+
+                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+
+                    if (number == 0) continue;
+
+                    for (int j = 0; j < synthesisList_Rank_R.Count; j++)
+                    {
+                        if (number > 0)
+                        {
+                            if (synthesisList_Rank_R[j].blockClass.blockType.Equals(BlockType.Default + 1 + i))
+                            {
+                                upgradeManager.SellBlock(synthesisList_Rank_R[j].blockClass.instanceId);
+                                number--;
+
+                                yield return waitForSeconds2;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 for (int i = 0; i < synthesisList_Rank_R_Count.Length; i++)
@@ -1064,10 +1106,31 @@ public class SynthesisManager : MonoBehaviour
 
                 break;
             case RankType.SR:
-                for (int i = 0; i < synthesisList_Rank_SR.Count; i++)
+                for (int i = 0; i < synthesisList_Rank_SR_Count.Length; i++)
                 {
-                    upgradeManager.SellBlock(synthesisList_Rank_SR[i].blockClass.instanceId);
-                    yield return waitForSeconds2;
+                    int number = synthesisList_Rank_SR_Count[i] - (synthesisList_Rank_SR_Count[i] % 3);
+
+                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+
+                    if (number == 0) continue;
+
+                    for (int j = 0; j < synthesisList_Rank_SR.Count; j++)
+                    {
+                        if (number > 0)
+                        {
+                            if (synthesisList_Rank_SR[j].blockClass.blockType.Equals(BlockType.Default + 1 + i))
+                            {
+                                upgradeManager.SellBlock(synthesisList_Rank_SR[j].blockClass.instanceId);
+                                number--;
+
+                                yield return waitForSeconds2;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 for (int i = 0; i < synthesisList_Rank_SR_Count.Length; i++)

@@ -509,27 +509,6 @@ public class MatchingManager : MonoBehaviour
 
         isServer = true;
 
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            isServer = false;
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            return;
-        }
-
-        if(!PhotonNetwork.IsConnected)
-        {
-            networkManager.Initialize(0);
-            return;
-        }
-
-        CheckServer_NewBie();
-    }
-
-    public void CheckServer_NewBie()
-    {
         if (playerDataBase.NowRank > (int)newbieLimitRank)
         {
             isServer = false;
@@ -540,18 +519,13 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        PlayfabManager.instance.GetTitleInternalData("Newbie", GameStart_Newbie);
-    }
-
-    public void GameStart_Newbie(bool check)
-    {
-        if(!check)
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
             isServer = false;
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.LockedMode);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
 
@@ -583,6 +557,32 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
+        if (!PhotonNetwork.IsConnected)
+        {
+            networkManager.Initialize(0);
+            return;
+        }
+
+        CheckServer_NewBie();
+    }
+
+    public void CheckServer_NewBie()
+    {
+        PlayfabManager.instance.GetTitleInternalData("Newbie", GameStart_Newbie);
+    }
+
+    public void GameStart_Newbie(bool check)
+    {
+        if(!check)
+        {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.LockedMode);
+            return;
+        }
+
         OpenMacthingView();
 
         networkManager.JoinRandomRoom_Newbie();
@@ -599,27 +599,6 @@ public class MatchingManager : MonoBehaviour
 
         isServer = true;
 
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            isServer = false;
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            return;
-        }
-
-        if (!PhotonNetwork.IsConnected)
-        {
-            networkManager.Initialize(1);
-            return;
-        }
-
-        CheckServer_Gosu();
-    }
-
-    public void CheckServer_Gosu()
-    {
         if (playerDataBase.NowRank < (int)gosuLimitRank)
         {
             isServer = false;
@@ -630,18 +609,13 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        PlayfabManager.instance.GetTitleInternalData("Rank", GameStart_Gosu);
-    }
-
-    public void GameStart_Gosu(bool check)
-    {
-        if (!check)
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
             isServer = false;
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.LockedMode);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
 
@@ -671,6 +645,32 @@ public class MatchingManager : MonoBehaviour
 
             NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
 
+            return;
+        }
+
+        if (!PhotonNetwork.IsConnected)
+        {
+            networkManager.Initialize(1);
+            return;
+        }
+
+        CheckServer_Gosu();
+    }
+
+    public void CheckServer_Gosu()
+    {
+        PlayfabManager.instance.GetTitleInternalData("Rank", GameStart_Gosu);
+    }
+
+    public void GameStart_Gosu(bool check)
+    {
+        if (!check)
+        {
+            isServer = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
 

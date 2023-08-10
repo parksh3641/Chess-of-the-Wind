@@ -562,13 +562,14 @@ public class GameManager : MonoBehaviour
             if (blockContentList[i].isDrag)
             {
                 blockContentList[i].TimeOver();
-                break;
             }
         }
 
         BetOptionCancleButton();
 
         uIManager.GameEnd();
+
+        networkManager.LeaveRoom();
     }
 
     public void GameStart_Initialize()
@@ -612,6 +613,8 @@ public class GameManager : MonoBehaviour
         {
             allBlockLevelContentList[i].Initialize();
         }
+
+        BetOptionCancleButton();
     }
 
     public void GameStart_Newbie()
@@ -645,18 +648,22 @@ public class GameManager : MonoBehaviour
 
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
-        int level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        int myLevel = 0;
 
-        if (blockClassNewbie.level > level)
+        myLevel = blockClassNewbie.level;
+
+        if (myLevel > limitLevel)
         {
-            blockClassNewbie.level = level;
+            myLevel = limitLevel;
         }
 
-        int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
+        int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myLevel);
 
         newbieBlockContent.InGame_Initialize(blockClassNewbie, 3, value);
+        newbieBlockContent.InGame_SetLevel(myLevel);
+        bettingValue[3] = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myLevel);
 
-        bettingValue[3] = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(blockClassNewbie.level);
         bettingSizeList[3] = blockDataBase.GetBlockInfomation(blockClassNewbie.blockType).GetSize();
 
         GameStart();
@@ -840,7 +847,7 @@ public class GameManager : MonoBehaviour
 
         if(GameStateManager.instance.ReEnter)
         {
-            Invoke("CheckPlayerState", 0.5f);
+            Invoke("CheckPlayerState", 1.0f);
 
             GameStateManager.instance.ReEnter = false;
         }
@@ -933,7 +940,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(TimerCoroution());
                 break;
             case "Roulette":
-                rouletteManager.CreateObj();
+                GameEnd(0);
                 break;
         }
 
@@ -972,10 +979,14 @@ public class GameManager : MonoBehaviour
         }
         else if(number == 1)
         {
+            money -= stakes;
+
             Debug.Log("패배");
         }
         else if (number == 2)
         {
+            money += (int)(GameStateManager.instance.Stakes * 0.1f);
+
             Debug.Log("상대방 항복으로 승리");
         }
         else
@@ -989,9 +1000,7 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
         timerAnimation.StopAnim();
 
-        uIManager.OpenResultView(number, money - stakes);
-
-        networkManager.LeaveRoom();
+        uIManager.OpenResultView(number, money);
     }
 
     private void ClearOtherPlayerBlock()
@@ -1137,7 +1146,7 @@ public class GameManager : MonoBehaviour
     {
         turn = number;
 
-        if (turn >= 8)
+        if (turn >= 7)
         {
             if (!inGameBurning)
             {
@@ -1287,7 +1296,11 @@ public class GameManager : MonoBehaviour
         {
             if (blockContentList[i].isDrag)
             {
-                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].TimeOver();
+                if (blockContentList[i].gameObject.activeInHierarchy)
+                {
+                    blockContentList[i].TimeOver();
+
+                }
                 break;
             }
         }
@@ -1553,15 +1566,14 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < bettingMinusList.Length; i++) //마지막에 당첨 안 된거 만큼 빼기
             {
-                if (bettingList[i] > 0)
+                if (bettingMinusList[i] > 0)
                 {
-                    plusMoney = plusMoney + ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]) - ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
+                    plusMoney = plusMoney + ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingPlusList[i]) -
+                        ((bettingValue[i] * 1.0f / bettingSizeList[i] * 1.0f) * bettingMinusList[i]);
                     break;
                 }
             }
         }
-
-        Debug.LogError(plusMoney);
 
         for (int i = 0; i < bettingMinusList.Length; i ++)
         {
@@ -1573,7 +1585,7 @@ public class GameManager : MonoBehaviour
             bettingPlusList[i] = 0;
         }
 
-        if(aiMode)
+        if (aiMode)
         {
             if (plusAiMoney > 0)
             {
@@ -1583,14 +1595,16 @@ public class GameManager : MonoBehaviour
                         plusAiMoney = plusAiMoney + (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f);
                         break;
                     case 2:
-
                         break;
                     case 3:
-                        plusAiMoney = plusAiMoney - (aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f) * 2;
+                        plusAiMoney = plusAiMoney - aiManager.GetValue(otherBlockType) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f * 2;
                         break;
                 }
             }
         }
+
+        Debug.LogError("My : " + plusMoney);
+        Debug.LogError("Ai : " + plusAiMoney);
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
@@ -3377,13 +3391,19 @@ public class GameManager : MonoBehaviour
     {
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            newbieBlockContent.ResetPos();
+            if (newbieBlockContent.gameObject.activeInHierarchy)
+            {
+                newbieBlockContent.ResetPos();
+            }
         }
         else
         {
             for (int i = 0; i < blockContentList.Count; i++)
             {
-                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
+                if (blockContentList[i].gameObject.activeInHierarchy)
+                {
+                    blockContentList[i].ResetPos();
+                }
             }
         }
 
@@ -3694,12 +3714,10 @@ public class GameManager : MonoBehaviour
 
         money = 0;
 
-        //PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, (int)(money * 1f)); //내 보유 금액의 100% 잃기
-
         GameStateManager.instance.Playing = false;
-        PV.RPC("SetGameEnd", RpcTarget.Others);
 
         GameEnd(1);
+
         PV.RPC("Surrender", RpcTarget.Others);
 
         Debug.Log("기권");
@@ -3710,11 +3728,7 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        money += (int)(otherMoney * 0.1f);
-
         GameStateManager.instance.Playing = false;
-        PV.RPC("SetGameEnd", RpcTarget.Others);
-
         GameEnd(2);
 
         Debug.Log("상대방이 기권하여 승리하였습니다");
@@ -3724,11 +3738,7 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        money += (int)(otherMoney * 0.1f);
-
         GameStateManager.instance.Playing = false;
-        PV.RPC("SetGameEnd", RpcTarget.Others);
-
         GameEnd(2);
 
         Debug.Log("상대방이 방에서 튕겼습니다");
@@ -3737,8 +3747,6 @@ public class GameManager : MonoBehaviour
     public void Draw()
     {
         GameStateManager.instance.Playing = false;
-        PV.RPC("SetGameEnd", RpcTarget.Others);
-
         GameEnd(3);
 
         Debug.Log("튕겨서 재접속 했으나 방이 사라져서 무승부 처리되었습니다");

@@ -502,6 +502,8 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellBlock(string id)
     {
+        Debug.LogError("삭제 : " + id);
+
         PlayfabManager.instance.RevokeConsumeItem(id);
         playerDataBase.SellBlock(id);
     }
@@ -543,7 +545,7 @@ public class UpgradeManager : MonoBehaviour
                 break;
         }
 
-        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 10);
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 100);
 
         //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
         //{

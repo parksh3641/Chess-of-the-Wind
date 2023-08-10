@@ -577,8 +577,6 @@ public class RandomBoxManager : MonoBehaviour
             allowSnowBlockList.Add(temp[i]);
         }
 
-        isStart = true;
-
         boxView.SetActive(true);
 
         boxAnim.PlayAnim();
@@ -594,8 +592,6 @@ public class RandomBoxManager : MonoBehaviour
         {
             allowUnderworldBlockList.Add(temp[i]);
         }
-
-        isStart = true;
 
         boxView.SetActive(true);
 
@@ -724,7 +720,7 @@ public class RandomBoxManager : MonoBehaviour
                 yield return null;
             }
 
-            random = Random.Range(0, 100.0f);
+            random = Random.Range(0f, 100.0f);
             block = "";
 
             switch (windCharacterType)
@@ -876,6 +872,8 @@ public class RandomBoxManager : MonoBehaviour
             {
                 yield return null;
             }
+
+            isStart = true;
 
             StartCoroutine(SetUserPriceBlockCoroution());
         }
