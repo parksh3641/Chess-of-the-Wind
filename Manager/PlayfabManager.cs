@@ -51,6 +51,7 @@ public class PlayfabManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public NickNameManager nickNameManager;
+    public MoneyAnimation moneyAnimation;
 
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
@@ -683,7 +684,7 @@ public class PlayfabManager : MonoBehaviour
 
         yield return GetUserInventory();
 
-        yield return new WaitForSeconds(0.5f + (isWait * 0.05f));
+        yield return new WaitForSeconds(0.5f + (isWait * 0.2f));
 
         yield return GetPlayerData();
 
@@ -1156,16 +1157,7 @@ public class PlayfabManager : MonoBehaviour
     public void UpdateAddCurrency(MoneyType type, int number)
     {
         string currentType = "";
-
-        switch (type)
-        {
-            case MoneyType.Gold:
-                currentType = "GO";
-                break;
-            case MoneyType.Crystal:
-                currentType = "ST";
-                break;
-        }
+        int value = 0;
 
         try
         {
@@ -1173,40 +1165,55 @@ public class PlayfabManager : MonoBehaviour
             {
                 if (!isActive) return;
 
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "AddMoney",
-                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
-                    GeneratePlayStreamEvent = true,
-                }, OnCloudUpdateStats, DisplayPlayfabError);
-
-
                 switch (type)
                 {
                     case MoneyType.Gold:
-                        if(playerDataBase.Gold + number > 999999999)
+                        currentType = "GO";
+                        if (playerDataBase.Gold + number > 999999999)
                         {
-                            playerDataBase.Gold = 999999999;
+                            value = playerDataBase.Gold + number - 999999999;
                         }
                         else
                         {
-                            playerDataBase.Gold += number;
+                            value = number;
                         }
-                        //uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
+
                         break;
                     case MoneyType.Crystal:
+                        currentType = "ST";
                         if (playerDataBase.Crystal + number > 999999999)
                         {
-                            playerDataBase.Crystal = 999999999;
+                            value = playerDataBase.Crystal + number - 999999999;
                         }
                         else
                         {
-                            playerDataBase.Crystal += number;
+                            value = number;
                         }
                         break;
                 }
 
-                //soundManager.PlaySFX(GameSfxType.GetMoney);
+
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "AddMoney",
+                    FunctionParameter = new { currencyType = currentType, currencyAmount = value },
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudUpdateStats, DisplayPlayfabError);
+
+                moneyAnimation.PlusMoney(value);
+
+                SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
+
+                switch (type)
+                {
+                    case MoneyType.Gold:
+                        playerDataBase.Gold += value;
+
+                        break;
+                    case MoneyType.Crystal:
+                        playerDataBase.Crystal += value;
+                        break;
+                }
 
                 uiManager.Renewal();
             }

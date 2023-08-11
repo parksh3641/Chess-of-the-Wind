@@ -10,11 +10,14 @@ public class EventManager : MonoBehaviour
 {
     public GameObject eventView;
 
+
+    public GameObject welcomeEnterView;
     public GameObject welcomeView;
-
     public RectTransform welcomGrid;
-
+    public GameObject welcomeAlarm;
+    public GameObject welcomeAlarm2;
     public WelcomeContent[] welcomeContentArray;
+
 
     PlayerDataBase playerDataBase;
 
@@ -25,7 +28,27 @@ public class EventManager : MonoBehaviour
         eventView.SetActive(false);
         welcomeView.SetActive(false);
 
+        welcomeAlarm.SetActive(false);
+        welcomeAlarm2.SetActive(false);
+
         welcomGrid.anchoredPosition = new Vector2(0, -999);
+    }
+
+    public void Initialize()
+    {
+        if (playerDataBase.WelcomeCount >= 7)
+        {
+            welcomeEnterView.SetActive(false);
+        }
+        else
+        {
+            welcomeEnterView.SetActive(true);
+
+            if (!playerDataBase.WelcomeCheck)
+            {
+                OnSetWelcomeAlarm();
+            }
+        }
     }
 
 
@@ -72,13 +95,13 @@ public class EventManager : MonoBehaviour
 
     public void CheckWelcome()
     {
-        welcomeContentArray[0].Initialize();
-        welcomeContentArray[1].Initialize();
-        welcomeContentArray[2].Initialize();
-        welcomeContentArray[3].Initialize();
-        welcomeContentArray[4].Initialize();
-        welcomeContentArray[5].Initialize();
-        welcomeContentArray[6].Initialize();
+        welcomeContentArray[0].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[1].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[2].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[3].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[4].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[5].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
+        welcomeContentArray[6].Initialize(playerDataBase.WelcomeCount, playerDataBase.WelcomeCheck, this);
     }
 
     public void WelcomeReceiveButton(int number, Action action)
@@ -160,9 +183,25 @@ public class EventManager : MonoBehaviour
 
         action.Invoke();
 
+        CheckWelcome();
+
+        OnCheckWelcomeAlarm();
+
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
+    }
+
+    public void OnSetWelcomeAlarm()
+    {
+        welcomeAlarm.SetActive(true);
+        welcomeAlarm2.SetActive(true);
+    }
+
+    public void OnCheckWelcomeAlarm()
+    {
+        welcomeAlarm.SetActive(false);
+        welcomeAlarm2.SetActive(false);
     }
 
     #endregion

@@ -37,6 +37,7 @@ public class AttendanceManager : MonoBehaviour
         attendanceView.SetActive(false);
         lockObj.SetActive(true);
         clearObj.SetActive(false);
+        alarm.SetActive(false);
     }
 
     private void Start()
@@ -87,8 +88,8 @@ public class AttendanceManager : MonoBehaviour
         attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, 3000);
         attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_N, 1);
 
-        receiveContentArray[0].Initialize(RewardType.Gold, 3000);
-        receiveContentArray[1].Initialize(RewardType.Box, 3);
+        receiveContentArray[0].Initialize(RewardType.Gold, 6000);
+        receiveContentArray[1].Initialize(RewardType.Box_RSR, 3);
         receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 1);
     }
 
@@ -188,12 +189,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 3);
+                        playerDataBase.SnowBox_RSR = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 3);
+                        playerDataBase.UnderworldBox_RSR = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", 3);
                         break;
                 }
 
@@ -217,6 +218,8 @@ public class AttendanceManager : MonoBehaviour
         CheckAttendance();
 
         OnCheckAlarm();
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
     }

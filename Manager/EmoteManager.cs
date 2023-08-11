@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,9 @@ public class EmoteManager : MonoBehaviour
 {
     PhotonView PV;
 
+    [Title("Betting")]
     public GameObject emoteChoiceView;
+    public GameObject closeEmoteView;
 
     public GameObject myEmote;
     public Image myEmoteImg;
@@ -16,11 +19,28 @@ public class EmoteManager : MonoBehaviour
     public GameObject otherEmote;
     public Image otherEmoteImg;
 
-    public Sprite[] emoteImgArray;
-
     public Image emoteFillAmount;
 
+    [Space]
+    [Title("Roulette")]
+    public GameObject emoteChoiceView2;
+    public GameObject closeEmoteView2;
+
+    public GameObject myEmote2;
+    public Image myEmoteImg2;
+
+    public GameObject otherEmote2;
+    public Image otherEmoteImg2;
+
+    public Image emoteFillAmount2;
+
+
+
+    public Sprite[] emoteImgArray;
+
+
     private float emoteCoolTime = 5.0f;
+    private float emoteCoolTime2 = 10.0f;
     bool isUseEmote = true;
 
 
@@ -41,6 +61,13 @@ public class EmoteManager : MonoBehaviour
         otherEmote.SetActive(false);
 
         emoteFillAmount.fillAmount = 0;
+
+        emoteChoiceView2.SetActive(false);
+        myEmote2.SetActive(false);
+        otherEmote2.SetActive(false);
+
+        emoteFillAmount2.fillAmount = 0;
+
         isUseEmote = true;
     }
 
@@ -49,12 +76,16 @@ public class EmoteManager : MonoBehaviour
         if (isUseEmote)
         {
             emoteChoiceView.SetActive(true);
+
+            closeEmoteView.SetActive(true);
         }
     }
 
     public void CloseEmoteView()
     {
         emoteChoiceView.SetActive(false);
+
+        closeEmoteView.SetActive(false);
     }
 
     public void UseEmoteButton(int number)
@@ -76,13 +107,9 @@ public class EmoteManager : MonoBehaviour
 
             StartCoroutine(ResetEmoteCoroutine());
         }
-        else
-        {
-            Debug.Log("이모티콘 재사용 대기중입니다");
-        }
     }
 
-    IEnumerator ResetEmoteCoroutine() //스킬 쿨타임
+    IEnumerator ResetEmoteCoroutine()
     {
         while (emoteFillAmount.fillAmount < 1)
         {
@@ -116,5 +143,83 @@ public class EmoteManager : MonoBehaviour
     void CloseOtherEmote()
     {
         otherEmote.SetActive(false);
+    }
+
+
+
+
+
+    public void OpenEmoteView2()
+    {
+        if (isUseEmote)
+        {
+            emoteChoiceView2.SetActive(true);
+
+            closeEmoteView2.SetActive(true);
+        }
+    }
+
+    public void CloseEmoteView2()
+    {
+        emoteChoiceView2.SetActive(false);
+
+        closeEmoteView2.SetActive(false);
+    }
+
+    public void UseEmoteButton2(int number)
+    {
+        if (isUseEmote)
+        {
+            isUseEmote = false;
+
+            CloseEmoteView2();
+
+            myEmote2.gameObject.SetActive(true);
+            myEmoteImg2.sprite = emoteImgArray[number];
+
+            Invoke("CloseMyEmote2", 4.0f);
+
+            PV.RPC("UseEmote2", RpcTarget.Others, number);
+
+            SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
+
+            StartCoroutine(ResetEmoteCoroutine2());
+        }
+    }
+
+    IEnumerator ResetEmoteCoroutine2()
+    {
+        while (emoteFillAmount2.fillAmount < 1)
+        {
+            emoteFillAmount2.fillAmount += 1 * Time.smoothDeltaTime / emoteCoolTime2;
+
+            yield return null;
+        }
+
+        emoteFillAmount2.fillAmount = 0;
+
+        isUseEmote = true;
+    }
+
+
+    [PunRPC]
+    private void UseEmote2(int number)
+    {
+        otherEmote2.gameObject.SetActive(true);
+        otherEmoteImg2.sprite = emoteImgArray[number];
+
+        SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
+
+        Invoke("CloseOtherEmote2", 4.0f);
+    }
+
+    void CloseMyEmote2()
+    {
+        myEmote2.SetActive(false);
+    }
+
+    void CloseOtherEmote2()
+    {
+        otherEmote2.SetActive(false);
     }
 }

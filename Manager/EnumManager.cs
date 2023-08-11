@@ -172,7 +172,8 @@ public enum GameSfxType
     BoxOpen2,
     GetStar,
     LoseStar,
-    Bomb
+    Bomb,
+    TalkMy
 }
 
 public enum LanguageType
@@ -270,7 +271,8 @@ public enum NotionType
     InGameBurning2,
     GetFreeReward,
     GetWatchAdReward,
-    GetReward
+    GetReward,
+    NotRewardDailyLimit
 }
 
 public enum GameRankType

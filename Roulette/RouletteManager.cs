@@ -130,6 +130,7 @@ public class RouletteManager : MonoBehaviour
     public CharacterManager characterManager;
     public WindCharacterManager windCharacterManager;
     public NetworkManager networkManager;
+    public EmoteManager emoteManager;
 
     ImageDataBase imageDataBase;
 
@@ -233,6 +234,7 @@ public class RouletteManager : MonoBehaviour
     {
         uIManager.OpenRouletteView();
         uIManager.CloseSurrenderView();
+        emoteManager.Initialize();
 
         if (gameManager.blockType != BlockType.Default)
         {
@@ -1321,7 +1323,7 @@ public class RouletteManager : MonoBehaviour
 
         targetText.text = number.ToString();
 
-        if (number >= queenNumber)
+        if (number > queenNumber)
         {
             number += 1;
         }

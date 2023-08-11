@@ -13,6 +13,9 @@ public class ResetManager : MonoBehaviour
     DateTime serverTime;
     DateTime nextMondey;
 
+    public AttendanceManager attendanceManager;
+    public EventManager eventManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -22,6 +25,11 @@ public class ResetManager : MonoBehaviour
 
     public void Initialize()
     {
+        if (!playerDataBase.AttendanceCheck)
+        {
+            attendanceManager.OnSetAlarm();
+        }
+
         OnCheckAttendanceDay();
     }
 
@@ -67,12 +75,16 @@ public class ResetManager : MonoBehaviour
                 {
                     Debug.Log("다음 출석 체크 보상 오픈");
                 }
+
+                attendanceManager.OnSetAlarm();
             }
 
             if(playerDataBase.WelcomeCheck)
             {
                 playerDataBase.WelcomeCheck = false;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+
+                eventManager.OnSetWelcomeAlarm();
             }
         }
         else
@@ -112,12 +124,16 @@ public class ResetManager : MonoBehaviour
                     {
                         Debug.Log("다음 출석 체크 보상 오픈");
                     }
+
+                    attendanceManager.OnSetAlarm();
                 }
 
                 if (playerDataBase.WelcomeCheck)
                 {
                     playerDataBase.WelcomeCheck = false;
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+
+                    eventManager.OnSetWelcomeAlarm();
                 }
             }
             else

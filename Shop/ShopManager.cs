@@ -15,11 +15,13 @@ public class ShopManager : MonoBehaviour
     public GameObject[] boxArray;
     public LocalizationContent[] boxSSRTextArray;
 
+    public ShopContent shopContent;
+
     public Text[] dailyCountText;
 
     public Text dailyShopCountText;
 
-    public ShopContent shopContent;
+    public ShopContent dailyContent;
 
     public Transform shopContentGoldTransform;
     public Transform shopContentTransform;
@@ -66,7 +68,7 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(DailyShopTimer());
+        //StartCoroutine(DailyShopTimer());
     }
 
     public void OpenShopView()
@@ -390,6 +392,25 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
+                if(!GameStateManager.instance.DailyReward)
+                {
+                    GameStateManager.instance.DailyReward = true;
+
+                    dailyContent.Locked();
+
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+
+                    NotionManager.instance.UseNotion(NotionType.GetReward);
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                    NotionManager.instance.UseNotion(NotionType.NotRewardDailyLimit);
+
+                    return;
+                }
+
                 break;
             case ShopType.DailyReward_WatchAd:
                 break;
@@ -418,8 +439,6 @@ public class ShopManager : MonoBehaviour
         uIManager.Renewal();
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
-        //NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
         isDelay = true;
         Invoke("Delay", 0.5f);

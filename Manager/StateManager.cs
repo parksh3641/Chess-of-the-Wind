@@ -17,6 +17,7 @@ public class StateManager : MonoBehaviour
     public StoryManager storyManager;
     public RankInfoManager rankInfoManager;
     public ResetManager resetManager;
+    public EventManager eventManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -50,6 +51,7 @@ public class StateManager : MonoBehaviour
             storyManager.Initialize();
             rankInfoManager.Initialize();
             resetManager.Initialize();
+            eventManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {

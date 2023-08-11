@@ -67,6 +67,8 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBGM()
     {
+        if (!GameStateManager.instance.Music) return;
+
         audioSource.volume = 1;
     }
 

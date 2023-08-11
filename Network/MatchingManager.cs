@@ -295,7 +295,7 @@ public class MatchingManager : MonoBehaviour
 
                     Debug.Log("별 개수 상승");
 
-                    Invoke("Delay", 0.5f);
+                    Invoke("Delay", 0.8f);
                 }
             }
             else
@@ -306,7 +306,7 @@ public class MatchingManager : MonoBehaviour
 
                     Debug.Log("별 개수 상승");
 
-                    Invoke("Delay", 0.5f);
+                    Invoke("Delay", 0.8f);
                 }
                 else
                 {
@@ -385,7 +385,7 @@ public class MatchingManager : MonoBehaviour
 
                 Debug.Log("별 개수 하락");
 
-                Invoke("Delay", 0.5f);
+                Invoke("Delay", 0.8f);
             }
         }
 

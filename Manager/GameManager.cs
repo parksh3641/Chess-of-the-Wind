@@ -1152,11 +1152,11 @@ public class GameManager : MonoBehaviour
             {
                 inGameBurning = true;
 
+                moneyAnimation.MinusMoneyAnimationMid(money, money / 2, moneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney, otherMoney / 2, otherMoneyText);
+
                 money = money / 2;
                 otherMoney = otherMoney / 2;
-
-                moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-                otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
                 burningObj.SetActive(true);
 
@@ -1173,11 +1173,11 @@ public class GameManager : MonoBehaviour
             {
                 inGameBurning2 = true;
 
+                moneyAnimation.MinusMoneyAnimationMid(money, money / 2, moneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney, otherMoney / 2, otherMoneyText);
+
                 money = money / 2;
                 otherMoney = otherMoney / 2;
-
-                moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-                otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
                 NotionManager.instance.UseNotion(NotionType.InGameBurning2);
             }
@@ -3192,7 +3192,7 @@ public class GameManager : MonoBehaviour
         {
             GameStateManager.instance.Playing = false;
 
-            GameEnd(0);
+            GameEnd(2);
 
             Debug.Log("Ai가 돈이 부족하여 항복하였습니다.");
             return;
@@ -3734,6 +3734,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("상대방이 기권하여 승리하였습니다");
     }
 
+    [Button]
     public void Winner()
     {
         StopAllCoroutines();

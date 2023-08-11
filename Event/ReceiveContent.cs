@@ -48,7 +48,7 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[2];
                 break;
             case RewardType.Box_SSR:
-                mainBackground.sprite = rankBackgroundArray[3];
+                mainBackground.sprite = rankBackgroundArray[4];
                 break;
             case RewardType.Box_UR:
                 mainBackground.sprite = rankBackgroundArray[4];

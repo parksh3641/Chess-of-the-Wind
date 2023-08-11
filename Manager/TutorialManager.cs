@@ -21,6 +21,8 @@ public class TutorialManager : MonoBehaviour
     public GameObject bettingView;
     public GameObject rouletteView;
 
+    public GameObject talkBar;
+
     public Image leftCharacter;
     public Image rightCharacter;
 
@@ -109,6 +111,8 @@ public class TutorialManager : MonoBehaviour
 
     bool myTurn = false;
 
+    bool isTalkSound = false;
+
     public GameObject homeButton;
 
 
@@ -120,6 +124,7 @@ public class TutorialManager : MonoBehaviour
     WaitForSeconds talkDelay = new WaitForSeconds(0.04f);
 
     public FadeInOut fadeInOut;
+    public FadeInOut fadeInOut2;
 
     ImageDataBase imageDataBase;
     PlayerDataBase playerDataBase;
@@ -209,6 +214,9 @@ public class TutorialManager : MonoBehaviour
 
         talkIndex = 0;
 
+        fadeInOut.canvasGroup.alpha = 1;
+        fadeInOut2.canvasGroup.alpha = 0;
+
         Initialize(talkIndex);
     }
 
@@ -217,6 +225,7 @@ public class TutorialManager : MonoBehaviour
         nextText.enabled = false;
 
         talkSkip = false;
+        isTalkSound = false;
 
         Debug.Log(number);
 
@@ -253,7 +262,13 @@ public class TutorialManager : MonoBehaviour
                 SetCharacter(0, 0);
                 break;
             case 23:
-                GameStart();
+                fadeInOut.StoryFadeOut();
+
+                talkBar.SetActive(false);
+
+                Invoke("GameStart", 1.0f);
+
+                //GameStart();
                 break;
             case 24:
                 mainCanvas.enabled = false;
@@ -284,6 +299,10 @@ public class TutorialManager : MonoBehaviour
 
                 lpPointObj.SetActive(false);
 
+                SetCharacter(1, 0);
+                break;
+            case 28:
+                SetCharacter(1, 0);
                 break;
             case 29:
                 UserNickName();
@@ -309,12 +328,24 @@ public class TutorialManager : MonoBehaviour
                 targetBlock.SetActive(true);
                 targetBlock.transform.position = rouletteContentList[6].transform.position;
                 break;
+            case 32:
+                SetCharacter(1, 0);
+                break;
+            case 33:
+                SetCharacter(1, 0);
+                break;
+            case 34:
+                SetCharacter(1, 0);
+                break;
             case 35:
                 mainCanvas.enabled = false;
 
                 pinball.MyTurn(0);
 
                 StartCoroutine(MyTurnCoroution());
+                break;
+            case 36:
+                SetCharacter(1, 0);
                 break;
             case 37:
                 UserNickName();
@@ -328,7 +359,6 @@ public class TutorialManager : MonoBehaviour
                 windCharacterType = WindCharacterType.UnderWorld;
 
                 SoundManager.instance.PlayBGM(GameBgmType.Story_Under);
-                SoundManager.instance.PlaySFX(GameSfxType.Bomb);
                 break;
             case 40:
                 rightCharacter.enabled = false;
@@ -336,11 +366,11 @@ public class TutorialManager : MonoBehaviour
 
                 break;
             case 41:
-                gameCanvas.enabled = false;
-                mainCanvas.enabled = true;
-                mainCanvasBackground.gameObject.SetActive(true);
+                fadeInOut.StoryFadeOut();
 
-                mainCanvasBackground.sprite = mainCanvasBackgroundArray[1];
+                talkBar.SetActive(false);
+
+                Invoke("GoToUnder", 1.0f);
                 break;
             case 42:
                 SetCharacter(1, 1);
@@ -349,6 +379,12 @@ public class TutorialManager : MonoBehaviour
                 InitCharacter();
                 break;
             case 45:
+                SetCharacter(1, 1);
+                break;
+            case 46:
+                SetCharacter(1, 1);
+                break;
+            case 47:
                 SetCharacter(1, 1);
                 break;
             case 48:
@@ -376,27 +412,37 @@ public class TutorialManager : MonoBehaviour
                 formationManager.Initialize();
                 break;
             case 60:
-                PlayerPrefs.SetString("LoadScene", "MainScene");
-                SceneManager.LoadScene("LoadScene");
+                fadeInOut.StoryFadeOut();
+
+                talkBar.SetActive(false);
+
+                Invoke("GoToHome", 1.0f);
                 break;
         }
 
-        if (talkIndex > 60) return;
+        if (talkIndex > 59) return;
 
         str = LocalizationManager.instance.GetString("Tutorial_" + (number + 1).ToString()).Replace("%%",
             GameStateManager.instance.NickName);
 
         StartCoroutine(Talking(str));
 
-        if(number != 3 && number != 23 && number != 24 && number != 25 && number != 26 && number != 31 && number != 35 && number != 55)
+        if(number != 3 && number != 23 && number != 24 && number != 25 && number != 26 && number != 31 && number != 35 && number != 41 && number != 55)
         {
-            if (windCharacterType == WindCharacterType.Winter)
+            if(!isTalkSound)
             {
-                SoundManager.instance.PlaySFX(GameSfxType.TalkWinter);
+                SoundManager.instance.PlaySFX(GameSfxType.TalkMy);
             }
             else
             {
-                SoundManager.instance.PlaySFX(GameSfxType.TalkUnder);
+                if (windCharacterType == WindCharacterType.Winter)
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.TalkWinter);
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.TalkUnder);
+                }
             }
         }
     }
@@ -461,7 +507,9 @@ public class TutorialManager : MonoBehaviour
 
     public void SetCharacter(int vector, int number)
     {
-        if(vector == 0)
+        isTalkSound = true;
+
+        if (vector == 0)
         {
             leftCharacter.enabled = true;
             leftCharacter.color = Color.white;
@@ -502,8 +550,12 @@ public class TutorialManager : MonoBehaviour
 
     public void GameStart()
     {
+        fadeInOut2.FadeIn();
+
         mainCanvas.enabled = false;
         gameCanvas.enabled = true;
+
+        talkBar.SetActive(true);
 
         BlockClass blockClass = new BlockClass();
 
@@ -542,7 +594,8 @@ public class TutorialManager : MonoBehaviour
                 otherBlockContent.transform.position = rouletteContentList[0].transform.position;
                 otherBlockContent.SetOtherBlock(BlockType.Pawn_Under, "", "0");
 
-                mainCanvas.enabled = true;
+                ContinueTalk();
+
                 mainCanvasBackground.gameObject.SetActive(false);
 
                 SetCharacter(1, 0);
@@ -592,7 +645,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     pinball.rigid.isKinematic = true;
 
-                    mainCanvas.enabled = true;
+                    ContinueTalk();
 
                     break;
                 }
@@ -624,12 +677,12 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        mainCanvas.enabled = true;
-
-        vectorObj_Enemy.SetActive(false);
-
         SoundManager.instance.StopAllSFX();
         SoundManager.instance.PlayBGM();
+
+        ContinueTalk();
+
+        vectorObj_Enemy.SetActive(false);
     }
 
     public void SetBlockPos()
@@ -654,6 +707,8 @@ public class TutorialManager : MonoBehaviour
         SoundManager.instance.PlayBGMLow();
         SoundManager.instance.PlayLoopSFX(GameSfxType.Roulette);
 
+        SoundManager.instance.PlaySFX(GameSfxType.TalkWinter);
+
         playerImg.enabled = true;
 
         bettingView.SetActive(false);
@@ -673,7 +728,7 @@ public class TutorialManager : MonoBehaviour
         pointerManager.pointerList[5].Betting();
         pointerManager.pointerList[6].Betting_Other();
 
-        mainCanvas.enabled = true;
+        ContinueTalk();
 
         SetCharacter(1, 0);
 
@@ -690,7 +745,7 @@ public class TutorialManager : MonoBehaviour
             {
                 pinball.Stop();
 
-                mainCanvas.enabled = true;
+                ContinueTalk();
 
                 talkBarTransform.transform.localPosition = new Vector3(0, -200);
 
@@ -765,12 +820,12 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
 
-        mainCanvas.enabled = true;
-
-        SetCharacter(1, 0);
-
         talkIndex++;
         Initialize(talkIndex);
+
+        ContinueTalk();
+
+        SetCharacter(1, 0);
 
         talkBarTransform.transform.localPosition = new Vector3(0, -540);
     }
@@ -781,11 +836,28 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        mainCanvas.enabled = true;
+        ContinueTalk();
 
         talkBarTransform.transform.localPosition = new Vector3(0, -200);
 
         lpPointObj.SetActive(true);
+    }
+
+    void GoToUnder()
+    {
+        fadeInOut2.FadeIn();
+
+        talkBar.SetActive(true);
+
+        gameCanvas.enabled = false;
+
+        ContinueTalk();
+
+        mainCanvasBackground.gameObject.SetActive(true);
+
+        SoundManager.instance.PlaySFX(GameSfxType.Bomb);
+
+        mainCanvasBackground.sprite = mainCanvasBackgroundArray[1];
     }
 
     public void ChoiceFormation()
@@ -802,6 +874,24 @@ public class TutorialManager : MonoBehaviour
             mainCanvasBackground.sprite = mainCanvasBackgroundArray[3];
         }
 
+        str = LocalizationManager.instance.GetString("Tutorial_" + (talkIndex + 1).ToString()).Replace("%%",
+    GameStateManager.instance.NickName);
+
+        StartCoroutine(Talking(str));
+
+        SoundManager.instance.PlaySFX(GameSfxType.TalkMy);
+    }
+
+    public void ContinueTalk()
+    {
+        mainCanvas.enabled = true;
+
+        str = LocalizationManager.instance.GetString("Tutorial_" + (talkIndex + 1).ToString()).Replace("%%",
+            GameStateManager.instance.NickName);
+
+        StartCoroutine(Talking(str));
+
+        SoundManager.instance.PlaySFX(GameSfxType.TalkWinter);
     }
 
     public void GoToHome()

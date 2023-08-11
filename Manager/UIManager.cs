@@ -67,6 +67,8 @@ public class UIManager : MonoBehaviour
     public Text resultTitleText;
     public Text resultTalkText;
     public Text resultGoldText;
+    public Text dailyWinText;
+    public GameObject resultButton;
 
     [Space]
     [Title("MainCanvas")]
@@ -343,6 +345,8 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        SoundManager.instance.PlayBGM();
+
         mainCanvas.enabled = true;
         gameCanvas.enabled = false;
 
@@ -387,6 +391,10 @@ public class UIManager : MonoBehaviour
     public void OpenResultView(int number, int gold)
     {
         resultView.SetActive(true);
+
+        resultButton.SetActive(false);
+
+        SoundManager.instance.StopBGM();
 
         if (playerDataBase.Formation == 2)
         {
@@ -467,13 +475,24 @@ public class UIManager : MonoBehaviour
         RecordManager.instance.OpenRecord();
 
         resultGoldText.text = "";
+        dailyWinText.text = "";
 
         if (gold >= 0)
         {
             Debug.Log("돈 증가 애니메이션 발동");
 
+            if(!GameStateManager.instance.DailyWin)
+            {
+                GameStateManager.instance.DailyWin = true;
+
+                dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : +" + (gold * 0.5f);
+
+                gold = gold + (int)(gold * 0.5f);
+
+                Debug.Log("오늘 첫 승 1.5배 보너스");
+            }
+
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
-            //resultGoldText.text = "+<color=#27FFFC>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 증가!";
 
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, gold);
         }
@@ -481,13 +500,20 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("돈 감소 애니메이션 발동");
 
-            moneyAnimation.ResultMinusMoney(GameStateManager.instance.Stakes, resultGoldText);
-            //resultGoldText.text = "-<color=#FF712B>" + MoneyUnitString.ToCurrencyString(Mathf.Abs(gold)) + "</color> 만큼 돈 감소";
+            moneyAnimation.ResultMinusMoney(-GameStateManager.instance.Stakes, resultGoldText);
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
+    }
+
+    public void EndResultGoldAnimation()
+    {
+        if(resultView.activeInHierarchy)
+        {
+            resultButton.SetActive(true);
+        }
     }
 
     public void OpenSurrenderView()

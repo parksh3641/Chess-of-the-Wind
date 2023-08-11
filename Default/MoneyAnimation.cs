@@ -8,6 +8,7 @@ public class MoneyAnimation : MonoBehaviour
 {
     [Space]
     [Title("Target Pos")]
+    public Transform heartTransform;
     public Transform moneyTransform;
 
     public Transform moneyStartTransform;
@@ -15,15 +16,22 @@ public class MoneyAnimation : MonoBehaviour
     public Transform moneyMidTransform;
     public Transform otherMoneyMidTransform;
 
-    public Transform resultMoneyStartTransform;
-    public Transform resultMoneyEndTransform;
-
     [Space]
     [Title("Text")]
     public Text[] moneyText;
     public Text[] changeMoneyText;
 
     bool isStart = false;
+
+    [Space]
+    [Title("Plus")]
+    public GameObject plusMoneyView;
+    public Text myMoneyText;
+
+    public Transform plusMoneyStartTransform;
+    public Transform plusMoneyEndTransform;
+
+    private int gold = 0;
 
     [Space]
     [Title("Prefab")]
@@ -36,16 +44,21 @@ public class MoneyAnimation : MonoBehaviour
     List<MoneyContent> moneyPrefabList = new List<MoneyContent>();
 
     public GameManager gameManager;
+    public UIManager uIManager;
+
+    PlayerDataBase playerDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.03f);
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
         for (int i = 0; i < 10; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
-            monster.transform.parent = moneyTransform;
+            monster.transform.parent = heartTransform;
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -55,7 +68,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
-            monster.transform.parent = moneyTransform;
+            monster.transform.parent = heartTransform;
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -71,6 +84,8 @@ public class MoneyAnimation : MonoBehaviour
             monster.gameObject.SetActive(false);
             moneyPrefabList.Add(monster);
         }
+
+        plusMoneyView.gameObject.SetActive(false);
     }
 
     [Button]
@@ -105,7 +120,7 @@ public class MoneyAnimation : MonoBehaviour
         changeMoneyText[0].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
         changeMoneyText[1].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
 
-        if(Random.Range(0,2) == 0)
+        if (Random.Range(0, 2) == 0)
         {
             SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
         }
@@ -134,7 +149,7 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator ChangeMoneyCoroution()
     {
-        if(isStart)
+        if (isStart)
         {
             SoundManager.instance.PlaySFX(GameSfxType.ChangeMoney);
 
@@ -408,6 +423,8 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
+        txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+
         EndAnimation();
     }
 
@@ -485,6 +502,8 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
+        txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+
         EndAnimation();
     }
 
@@ -500,7 +519,7 @@ public class MoneyAnimation : MonoBehaviour
         changeMoneyText[0].text = "";
         changeMoneyText[1].text = "";
 
-        if(gameManager != null) gameManager.CheckWinnerPlayer();
+        if (gameManager != null) gameManager.CheckWinnerPlayer();
     }
 
 
@@ -572,6 +591,10 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+
+        yield return new WaitForSeconds(0.5f);
+
+        PlusMoney(Mathf.Abs(max));
     }
 
     public void ResultMinusMoney(int target, Text txt)
@@ -636,11 +659,112 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+            txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(max) + "</color>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(target) + "</color>";
+        txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(max) + "</color>";
+
+        uIManager.EndResultGoldAnimation();
+    }
+
+    [Button]
+    void PlusMoney()
+    {
+        PlusMoney(1000);
+    }
+
+    public void PlusMoney(int target)
+    {
+        if (plusMoneyView.activeInHierarchy) return;
+
+        plusMoneyView.SetActive(true);
+
+        gold = playerDataBase.Gold;
+        myMoneyText.text = MoneyUnitString.ToCurrencyString(gold);
+
+        StartCoroutine(PlusMoneyCoroution(target));
+    }
+
+    IEnumerator PlusMoneyCoroution(int target)
+    {
+        for (int i = 0; i < heartPrefabList_Enemy.Count; i++)
+        {
+            moneyPrefabList[i].gameObject.SetActive(true);
+            moneyPrefabList[i].GoToTarget(plusMoneyStartTransform.localPosition, plusMoneyEndTransform.localPosition);
+        }
+
+        yield return new WaitForSeconds(2.0f);
+
+        int max = 0;
+
+        while (max < target)
+        {
+            if (max + 1000000 < target)
+            {
+                max += 1000000;
+            }
+            else
+            {
+                if (max + 100000 < target)
+                {
+                    max += 100000;
+                }
+                else
+                {
+                    if (max + 10000 < target)
+                    {
+                        max += 10000;
+                    }
+                    else
+                    {
+                        if (max + 10000 < target)
+                        {
+                            max += 10000;
+                        }
+                        else
+                        {
+                            if (max + 1000 < target)
+                            {
+                                max += 1000;
+                            }
+                            else
+                            {
+                                if (max + 100 < target)
+                                {
+                                    max += 100;
+                                }
+                                else
+                                {
+                                    if (max + 10 < target)
+                                    {
+                                        max += 10;
+                                    }
+                                    else
+                                    {
+                                        max += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
+
+            yield return waitForSeconds2;
+        }
+
+        myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
+
+        yield return new WaitForSeconds(0.5f);
+
+        plusMoneyView.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        uIManager.EndResultGoldAnimation();
     }
 }

@@ -22,14 +22,21 @@ public class FadeInOut : MonoBehaviour
     }
 
     [Button]
+    public void FadeOut()
+    {
+        StartCoroutine(Fade());
+    }
+
+    [Button]
     public void FadeOutToIn()
     {
         StartCoroutine(Fade(false));
     }
 
-    public void FadeOut()
+    [Button]
+    public void StoryFadeOut()
     {
-        StartCoroutine(Fade());
+        StartCoroutine(FadeOutCoroution());
     }
 
     private IEnumerator Fade(bool isFadeIn)
@@ -50,6 +57,15 @@ public class FadeInOut : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(Fade(true));
         }
+    }
+
+    private IEnumerator FadeOutCoroution()
+    {
+        canvasGroup.alpha = 0;
+        canvasGroup.gameObject.SetActive(true);
+        Tween tween = canvasGroup.DOFade(1f, 1f);
+        yield return tween.WaitForCompletion();
+        canvasGroup.alpha = 0;
     }
 
     private IEnumerator Fade()

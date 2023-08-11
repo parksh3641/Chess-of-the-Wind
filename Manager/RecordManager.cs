@@ -117,15 +117,15 @@ public class RecordManager : MonoBehaviour
 
             if (int.Parse(recordList[i]) == 0)
             {
-                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FFFFFF>+" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FFFFFF>+" + MoneyUnitString.ToCurrencyString(int.Parse(recordList[i])) + "</color>");
             }
             else if (int.Parse(recordList[i]) > 0)
             {
-                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#27FFFC>+" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(int.Parse(recordList[i])) + "</color>");
             }
             else if (int.Parse(recordList[i]) < 0)
             {
-                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FF712B>" + recordList[i] + "</color>");
+                content.Initialize(LocalizationManager.instance.GetString("Turn") + " " + (i + 1) + " : <color=#FF712B>" + MoneyUnitString.ToCurrencyString(int.Parse(recordList[i])) + "</color>");
             }
             content.gameObject.SetActive(true);
             endRecordContentList.Add(content);

@@ -1317,4 +1317,20 @@ public class PlayerDataBase : ScriptableObject
 
         return check;
     }
+
+    public bool CheckBlockLevel(int level)
+    {
+        bool check = false;
+
+        for(int i = 0; i < blockList.Count; i ++)
+        {
+            if(blockList[i].level > level)
+            {
+                check = true;
+                break;
+            }
+        }
+
+        return check;
+    }
 }

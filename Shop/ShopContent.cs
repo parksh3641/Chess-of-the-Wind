@@ -23,14 +23,19 @@ public class ShopContent : MonoBehaviour
     public Text goldText;
     public GameObject freeButton;
 
+    public GameObject lockObj;
+
     Sprite[] shopContentArray;
 
     ImageDataBase imageDataBase;
+    RankDataBase rankDataBase;
+
     public ShopManager shopManager;
 
     private void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         shopContentArray = imageDataBase.shopContentArray;
     }
@@ -52,19 +57,38 @@ public class ShopContent : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
-                goldText.text = "x40";
+
+                if (GameStateManager.instance.DailyReward)
+                {
+                    lockObj.SetActive(true);
+                }
+                else
+                {
+                    lockObj.SetActive(false);
+                }
+
+                if(GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
+                {
+                    price = rankDataBase.GetRankInformation(GameRankType.Sliver_4).stakes;
+                }
+                else
+                {
+                    price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
+                }
+
+                goldText.text = "x" + MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);
                 break;
             case ShopType.DailyReward_WatchAd:
                 break;
             case ShopType.UpgradeTicket:
-                buyButton.SetActive(true);
+                lockObj.SetActive(false);
 
-                number = Random.Range(1, 11);
+                buyButton.SetActive(true);
 
                 price = price * number;
 
-                priceText.text = price.ToString();
+                priceText.text = MoneyUnitString.ToCurrencyString(price);
 
                 break;
         }
@@ -78,6 +102,11 @@ public class ShopContent : MonoBehaviour
         titleText.ReLoad();
 
         icon.sprite = shopContentArray[(int)type];
+    }
+
+    public void Locked()
+    {
+        lockObj.SetActive(true);
     }
 
     public void BuyButton()
