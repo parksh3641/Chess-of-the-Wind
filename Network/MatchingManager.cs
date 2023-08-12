@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MatchingManager : MonoBehaviour
 {
     [Title("Newbie Limit Rank")]
-    public GameRankType newbieLimitRank = GameRankType.Sliver_1;
+    public GameRankType newbieLimitRank = GameRankType.Sliver_3;
     [Title("Gosu Limit Rank")]
     public GameRankType gosuLimitRank = GameRankType.Bronze_2;
 
@@ -18,13 +18,13 @@ public class MatchingManager : MonoBehaviour
     public GameObject dontTouchObj;
 
     public Image rankButtonImg;
+    public GameObject rankLocked;
     public ButtonScaleAnimation rankButtonAnimation;
 
     public Sprite[] rankImgArray;
 
     [Title("Rank Up")]
     public GameObject rankUpView;
-
     public GameObject rankUpEffect;
 
     public Text rankUpTitle;
@@ -186,13 +186,15 @@ public class MatchingManager : MonoBehaviour
 
         if (playerDataBase.NowRank < (int)gosuLimitRank)
         {
-            rankButtonImg.sprite = rankImgArray[0];
             rankButtonAnimation.StopAnim();
+
+            rankLocked.gameObject.SetActive(true);
         }
         else
         {
-            rankButtonImg.sprite = rankImgArray[1];
             rankButtonAnimation.PlayAnim();
+
+            rankLocked.gameObject.SetActive(false);
         }
     }
 

@@ -23,6 +23,9 @@ public class ProfileManager : MonoBehaviour
     public Text gosuWinTitleText;
     public Text gosuWinText;
 
+    public Text accessDateTitleText;
+    public Text accessDateText;
+
     Sprite[] characterArray;
     Sprite[] rankIconArray;
 
@@ -89,6 +92,8 @@ public class ProfileManager : MonoBehaviour
         gosuWinTitleText.text = LocalizationManager.instance.GetString("Gosu") + " " + LocalizationManager.instance.GetString("Win");
         gosuWinText.text = playerDataBase.GosuWin.ToString();
 
+        accessDateTitleText.text = LocalizationManager.instance.GetString("AccessDate");
+        accessDateText.text = playerDataBase.AccessDate.ToString();
 
     }
 

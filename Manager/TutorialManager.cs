@@ -359,10 +359,14 @@ public class TutorialManager : MonoBehaviour
                 windCharacterType = WindCharacterType.UnderWorld;
 
                 SoundManager.instance.PlayBGM(GameBgmType.Story_Under);
+                SoundManager.instance.PlaySFX(GameSfxType.Bomb);
+
                 break;
             case 40:
                 rightCharacter.enabled = false;
                 npcText.text = "";
+
+                isTalkSound = true;
 
                 break;
             case 41:
@@ -409,7 +413,15 @@ public class TutorialManager : MonoBehaviour
                 UserNickName();
                 break;
             case 55:
-                formationManager.Initialize();
+                if (playerDataBase.Formation == 0)
+                {
+                    formationManager.Initialize();
+                }
+                else
+                {
+                    PlayerPrefs.SetString("LoadScene", "MainScene");
+                    SceneManager.LoadScene("LoadScene");
+                }
                 break;
             case 60:
                 fadeInOut.StoryFadeOut();
@@ -491,8 +503,8 @@ public class TutorialManager : MonoBehaviour
 
     void InitCharacter()
     {
-        leftCharacter.color = new Color(80 / 255f, 80 / 255f, 80 / 255f);
-        rightCharacter.color = new Color(80 / 255f, 80 / 255f, 80 / 255f);
+        //leftCharacter.color = new Color(80 / 255f, 80 / 255f, 80 / 255f);
+        //rightCharacter.color = new Color(80 / 255f, 80 / 255f, 80 / 255f);
         npcText.text = "";
     }
 
@@ -854,8 +866,6 @@ public class TutorialManager : MonoBehaviour
         ContinueTalk();
 
         mainCanvasBackground.gameObject.SetActive(true);
-
-        SoundManager.instance.PlaySFX(GameSfxType.Bomb);
 
         mainCanvasBackground.sprite = mainCanvasBackgroundArray[1];
     }

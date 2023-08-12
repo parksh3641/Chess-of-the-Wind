@@ -76,7 +76,7 @@ public class ShopContent : MonoBehaviour
                     price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
                 }
 
-                goldText.text = "x" + MoneyUnitString.ToCurrencyString(price);
+                goldText.text = MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);
                 break;
             case ShopType.DailyReward_WatchAd:

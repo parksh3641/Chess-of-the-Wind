@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
     [Space]
     [Title("VS")]
     public GameObject vsView;
+    public Text tipText;
     public Text rankText;
     public Image player1Img;
     public Image player2Img;
@@ -173,7 +174,7 @@ public class UIManager : MonoBehaviour
 
     public void PrivacyReadMore()
     {
-        Application.OpenURL("https://sites.google.com/view/bluebook-co-ltd/home?authuser=3");
+        Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy/home");
     }
 
     public void Initialize()
@@ -245,6 +246,8 @@ public class UIManager : MonoBehaviour
     IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, bool aiMode)
     {
         //rankText.text = matchingManager.rankText.text;
+
+        tipText.text = LocalizationManager.instance.GetString("Tutorial_" + (Random.Range(13,24).ToString()));
 
         if (otherFormation == 2)
         {

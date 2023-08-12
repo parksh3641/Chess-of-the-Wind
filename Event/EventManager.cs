@@ -108,6 +108,14 @@ public class EventManager : MonoBehaviour
     {
         if (playerDataBase.WelcomeCheck) return;
 
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         switch (number)
         {
             case 0:

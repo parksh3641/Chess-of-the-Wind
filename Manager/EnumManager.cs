@@ -272,7 +272,9 @@ public enum NotionType
     GetFreeReward,
     GetWatchAdReward,
     GetReward,
-    NotRewardDailyLimit
+    NotRewardDailyLimit,
+    LowRank,
+    LowPiece
 }
 
 public enum GameRankType
@@ -298,6 +300,17 @@ public enum GameRankType
     Diamond_2,
     Diamond_1,
     Legend_1
+}
+
+public enum PackageType
+{
+    Default,
+    Newbie,
+    Sliver,
+    Gold,
+    Platinum,
+    Diamond,
+    Legend
 }
 
 public enum RewardType

@@ -242,8 +242,8 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            text[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return waitForSeconds2;
         }
@@ -327,8 +327,8 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            text[0].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-            text[1].text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+            text[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            text[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
             yield return waitForSeconds2;
         }
@@ -418,12 +418,12 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
         EndAnimation();
     }
@@ -497,12 +497,12 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
         EndAnimation();
     }

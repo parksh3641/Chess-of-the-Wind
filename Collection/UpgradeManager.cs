@@ -63,9 +63,13 @@ public class UpgradeManager : MonoBehaviour
     public Text upgradeScreenValueName;
     public Text upgradeScreenValue;
 
+    public GameObject pieceObj;
+    public Image pieceImg;
+
     public GameObject tapToContinue;
 
     Sprite[] blockArray;
+    Sprite[] rankBackgroundArray;
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
 
@@ -90,6 +94,7 @@ public class UpgradeManager : MonoBehaviour
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         blockArray = imageDataBase.GetBlockArray();
+        rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
 
         upgradeView.SetActive(false);
         upgradeScreen.SetActive(false);
@@ -106,7 +111,10 @@ public class UpgradeManager : MonoBehaviour
 
             blockClass = playerDataBase.GetBlockClass(id);
 
-            Initialize();
+            if(blockClass.blockType != BlockType.Default)
+            {
+                Initialize();
+            }
         }
     }
 
@@ -288,6 +296,14 @@ public class UpgradeManager : MonoBehaviour
 
     public void UpgradeButton()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
@@ -426,6 +442,8 @@ public class UpgradeManager : MonoBehaviour
 
         tapToContinue.SetActive(false);
 
+        pieceObj.SetActive(false);
+
         upgradeScreenIcon.sprite = blockArray[(int)blockUIContent.blockClass.blockType - 1];
         upgradeScreenIcon.color = new Color(1, 1, 1);
 
@@ -480,7 +498,42 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenValueName.text = "";
                 upgradeScreenValue.text = "";
 
-                SellBlock(blockClass.instanceId);
+                pieceObj.SetActive(true);
+                pieceImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+
+                switch (blockClass.rankType)
+                {
+                    case RankType.N:
+                        playerDataBase.BoxPiece_N += 1;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_N", playerDataBase.BoxPiece_N);
+                        break;
+                    case RankType.R:
+                        playerDataBase.BoxPiece_R += 1;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_R", playerDataBase.BoxPiece_R);
+                        break;
+                    case RankType.SR:
+                        playerDataBase.BoxPiece_SR += 1;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SR", playerDataBase.BoxPiece_SR);
+                        break;
+                    case RankType.SSR:
+                        playerDataBase.BoxPiece_SSR += 1;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SSR", playerDataBase.BoxPiece_SSR);
+                        break;
+                    case RankType.UR:
+                        playerDataBase.BoxPiece_UR += 1;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_UR", playerDataBase.BoxPiece_UR);
+                        break;
+                }
+
+                equipManager.CheckUnEquip(blockClass.instanceId);
+                collectionManager.CheckUnEquip(blockClass.instanceId);
+
+                SellBlockOne(blockClass.instanceId);
                 break;
         }
     }

@@ -973,6 +973,21 @@ public class PlayfabManager : MonoBehaviour
                        case "UnderworldBox_SRSSR":
                            playerDataBase.UnderworldBox_SRSSR = statistics.Value;
                            break;
+                       case "BoxPiece_N":
+                           playerDataBase.BoxPiece_N = statistics.Value;
+                           break;
+                       case "BoxPiece_R":
+                           playerDataBase.BoxPiece_R = statistics.Value;
+                           break;
+                       case "BoxPiece_SR":
+                           playerDataBase.BoxPiece_SR = statistics.Value;
+                           break;
+                       case "BoxPiece_SSR":
+                           playerDataBase.BoxPiece_SSR = statistics.Value;
+                           break;
+                       case "BoxPiece_UR":
+                           playerDataBase.BoxPiece_UR = statistics.Value;
+                           break;
                        case "BuySnowBox":
                            playerDataBase.BuySnowBox = statistics.Value;
                            break;

@@ -134,6 +134,14 @@ public class AttendanceManager : MonoBehaviour
     {
         if (playerDataBase.AttendanceCheck) return;
 
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         switch (number)
         {
             case 0:

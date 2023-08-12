@@ -60,15 +60,23 @@ public class SellManager : MonoBehaviour
 
     public void SellButton()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         upgradeManager.SellBlockOne(blockClass.instanceId);
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
 
         upgradeManager.CloseUpgradeView();
         CloseSellView();
 
-        NotionManager.instance.UseNotion(NotionType.SellBlock);
-
         SoundManager.instance.PlaySFX(GameSfxType.SetBlock);
+
+        NotionManager.instance.UseNotion(NotionType.SellBlock);
     }
     public void CloseSellView()
     {

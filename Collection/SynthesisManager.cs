@@ -575,6 +575,14 @@ public class SynthesisManager : MonoBehaviour
     {
         if (synthesisButton.activeSelf)
         {
+            if (!NetworkConnect.instance.CheckConnectInternet())
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.CheckInternet);
+                return;
+            }
+
             if (playerDataBase.Gold < needGold)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);

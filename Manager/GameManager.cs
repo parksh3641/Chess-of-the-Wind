@@ -43,6 +43,11 @@ public class GameManager : MonoBehaviour
     public Text recordText;
 
     [Space]
+    [Title("Tip")]
+    public GameObject tipObj;
+    public Text tipText;
+
+    [Space]
     [Title("MainText")]
     public Text moneyText;
     public Text bettingMoneyText;
@@ -512,13 +517,15 @@ public class GameManager : MonoBehaviour
 
         targetText.text = "-";
 
+        tipObj.SetActive(false);
+
         timer = bettingWaitTime;
         timerText.text = timer.ToString();
         timerFillAmount.fillAmount = 1;
 
-        moneyText.text = moneyText.text = "LP  <size=25>0</size>";
+        moneyText.text = moneyText.text = "Raf  <size=25>0</size>";
         bettingMoneyText.text = "0";
-        otherMoneyText.text = moneyText.text = "LP  <size=25>0</size>";
+        otherMoneyText.text = moneyText.text = "Raf  <size=25>0</size>";
 
         RecordManager.instance.Initialize();
         recordText.text = "";
@@ -823,8 +830,8 @@ public class GameManager : MonoBehaviour
         money = stakes;
         otherMoney = stakes;
 
-        moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-        otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        moneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
     public void GameStart()
@@ -1049,16 +1056,34 @@ public class GameManager : MonoBehaviour
         timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
         timerText.text = timer.ToString();
 
-        if (timer <= 5)
+        if(timer <= 0)
         {
-            if (!isTimesUp)
+            SoundManager.instance.StopSFX(GameSfxType.TimesUp);
+        }
+        else
+        {
+            if (timer <= 5)
             {
-                isTimesUp = true;
+                if (!isTimesUp)
+                {
+                    isTimesUp = true;
 
-                timerText.color = Color.red;
-                timerAnimation.PlayAnim();
+                    timerText.color = Color.red;
+                    timerAnimation.PlayAnim();
 
-                SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                    SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                }
+                else
+                {
+                    if (blockType == BlockType.Default)
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.TimesUp);
+                    }
+                    else
+                    {
+                        SoundManager.instance.StopSFX(GameSfxType.TimesUp);
+                    }
+                }
             }
         }
     }
@@ -1139,6 +1164,8 @@ public class GameManager : MonoBehaviour
                 Winner();
             }
         }
+
+        CheckTip();
     }
 
     [PunRPC]
@@ -1199,6 +1226,36 @@ public class GameManager : MonoBehaviour
         {
             UpdateMoney();
         }
+    }
+
+    void CheckTip()
+    {
+        switch (GameStateManager.instance.GameType)
+        {
+            case GameType.NewBie:
+
+                tipObj.SetActive(true);
+                tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(0, 6).ToString()));
+
+                Invoke("CloseTip", 9f);
+
+                break;
+            case GameType.Gosu:
+                if(GameStateManager.instance.GameRankType < GameRankType.Sliver_1)
+                {
+                    tipObj.SetActive(true);
+                    tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(6, 13).ToString()));
+
+                    Invoke("CloseTip", 9f);
+                }
+
+                break;
+        }
+    }
+
+    void CloseTip()
+    {
+        tipObj.SetActive(false);
     }
 
     IEnumerator TimerCoroution()
@@ -1267,6 +1324,8 @@ public class GameManager : MonoBehaviour
 
             yield return waitForSeconds;
         }
+
+        SoundManager.instance.StopSFX(GameSfxType.TimesUp);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -1842,7 +1901,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeBettingMoney()
     {
-        //moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
+        //moneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money - bettingMoney) + "</size>";
         bettingMoneyText.text = MoneyUnitString.ToCurrencyString(bettingMoney);
     }
 
@@ -3675,8 +3734,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        moneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
-        otherMoneyText.text = "LP  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
+        moneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        otherMoneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
 
         Debug.Log("저장된 돈을 불러옵니다");
     }

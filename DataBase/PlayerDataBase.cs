@@ -62,7 +62,6 @@ public class PresentClass
 public class UpgradeTicketClass
 {
     public RankType rankType = RankType.N;
-
     public int holdNumber = 0;
 }
 
@@ -95,10 +94,11 @@ public class PlayerDataBase : ScriptableObject
     public string attendanceDay = "";
     public int attendanceCount = 0;
     public bool attendanceCheck = false;
-    public string nextMonday = "";
-
+    [Space]
     public int welcomeCount = 0;
     public bool welcomeCheck = false;
+    [Space]
+    public string nextMonday = "";
 
     [Space]
     [Title("Info")]
@@ -165,6 +165,19 @@ public class PlayerDataBase : ScriptableObject
     private int underworldBox_SRSSR = 0;
 
     [Space]
+    [Title("Box_Piece")]
+    [SerializeField]
+    private int boxPiece_N = 0;
+    [SerializeField]
+    private int boxPiece_R = 0;
+    [SerializeField]
+    private int boxPiece_SR = 0;
+    [SerializeField]
+    private int boxPiece_SSR = 0;
+    [SerializeField]
+    private int boxPiece_UR = 0;
+
+    [Space]
     [Title("Box Buy Count")]
     [SerializeField]
     private int buySnowBox = 0;
@@ -201,6 +214,9 @@ public class PlayerDataBase : ScriptableObject
     [Title("Upgrade")]
     [SerializeField]
     private List<UpgradeTicketClass> upgradeTicketList = new List<UpgradeTicketClass>();
+
+    [Space]
+    [Title("Delete")]
     [SerializeField]
     private int defDestroyTicket = 0;
 
@@ -783,6 +799,67 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+
+    public int BoxPiece_N
+    {
+        get
+        {
+            return boxPiece_N;
+        }
+        set
+        {
+            boxPiece_N = value;
+        }
+    }
+
+    public int BoxPiece_R
+    {
+        get
+        {
+            return boxPiece_R;
+        }
+        set
+        {
+            boxPiece_R = value;
+        }
+    }
+
+    public int BoxPiece_SR
+    {
+        get
+        {
+            return boxPiece_SR;
+        }
+        set
+        {
+            boxPiece_SR = value;
+        }
+    }
+
+    public int BoxPiece_SSR
+    {
+        get
+        {
+            return boxPiece_SSR;
+        }
+        set
+        {
+            boxPiece_SSR = value;
+        }
+    }
+
+    public int BoxPiece_UR
+    {
+        get
+        {
+            return boxPiece_UR;
+        }
+        set
+        {
+            boxPiece_UR = value;
+        }
+    }
+
     public int BuySnowBox
     {
         get
@@ -893,6 +970,12 @@ public class PlayerDataBase : ScriptableObject
         underworldBox_NR = 0;
         underworldBox_RSR = 0;
         underworldBox_SRSSR = 0;
+
+        boxPiece_N = 0;
+        boxPiece_R = 0;
+        boxPiece_SR = 0;
+        boxPiece_SSR = 0;
+        boxPiece_UR = 0;
 
         BuySnowBox = 0;
         BuyUnderworldBox = 0;

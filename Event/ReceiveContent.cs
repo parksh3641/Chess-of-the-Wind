@@ -48,7 +48,7 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[2];
                 break;
             case RewardType.Box_SSR:
-                mainBackground.sprite = rankBackgroundArray[4];
+                mainBackground.sprite = rankBackgroundArray[3];
                 break;
             case RewardType.Box_UR:
                 mainBackground.sprite = rankBackgroundArray[4];
@@ -64,6 +64,6 @@ public class ReceiveContent : MonoBehaviour
                 break;
         }
 
-        countText.text = "x" + count.ToString();
+        countText.text = MoneyUnitString.ToCurrencyString(count);
     }
 }
