@@ -41,8 +41,6 @@ public class PlayfabManager : MonoBehaviour
     public bool isDelay = false;
     public bool isNone = false;
 
-    private float isWait = 0;
-
 #if UNITY_IOS
     private string AppleUserIdKey = "";
     private IAppleAuthManager _appleAuthManager;
@@ -184,6 +182,7 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.MatchingTime = 6;
         GameStateManager.instance.Penalty = 0;
         GameStateManager.instance.WinStreak = 0;
+        GameStateManager.instance.LoseStreak = 0;
         GameStateManager.instance.Win = false;
         GameStateManager.instance.Lose = false;
         GameStateManager.instance.Tutorial = false;
@@ -682,17 +681,19 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        yield return GetUserInventory();
-
-        yield return new WaitForSeconds(0.5f + (isWait * 0.2f));
-
         yield return GetPlayerData();
+
+        yield return new WaitForSeconds(0.5f);
 
         isActive = true;
 
         yield return GetStatistics();
 
         yield return new WaitForSeconds(0.5f);
+
+        yield return GetUserInventory();
+
+        yield return new WaitForSeconds(1.0f);
 
         uiManager.Renewal();
 
@@ -726,8 +727,6 @@ public class PlayfabManager : MonoBehaviour
             playerDataBase.Crystal = crystal;
 
             playerDataBase.Initialize_BlockList();
-
-            isWait = Inventory.Count;
 
             if (Inventory != null)
             {
@@ -874,6 +873,9 @@ public class PlayfabManager : MonoBehaviour
                        case "AccessDate":
                            playerDataBase.AccessDate = statistics.Value;
                            break;
+                       case "ChallengeCount":
+                           playerDataBase.ChallengeCount = statistics.Value;
+                           break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
                            break;
@@ -1000,20 +1002,41 @@ public class PlayfabManager : MonoBehaviour
                        case "BuyUnderworldBoxSSRCount":
                            playerDataBase.BuyUnderworldBoxSSRCount = statistics.Value;
                            break;
-                       case "UpgradeTicket_N":
+                       case "UpgradeTicket":
                            playerDataBase.SetUpgradeTicket(RankType.N, statistics.Value);
                            break;
-                       case "UpgradeTicket_R":
-                           playerDataBase.SetUpgradeTicket(RankType.R, statistics.Value);
+                       //case "UpgradeTicket_R":
+                       //    playerDataBase.SetUpgradeTicket(RankType.R, statistics.Value);
+                       //    break;
+                       //case "UpgradeTicket_SR":
+                       //    playerDataBase.SetUpgradeTicket(RankType.SR, statistics.Value);
+                       //    break;
+                       //case "UpgradeTicket_SSR":
+                       //    playerDataBase.SetUpgradeTicket(RankType.SSR, statistics.Value);
+                       //    break;
+                       //case "UpgradeTicket_UR":
+                       //    playerDataBase.SetUpgradeTicket(RankType.UR, statistics.Value);
+                       //    break;
+                       case "ShopNewbie":
+                           playerDataBase.ShopNewbie = statistics.Value;
                            break;
-                       case "UpgradeTicket_SR":
-                           playerDataBase.SetUpgradeTicket(RankType.SR, statistics.Value);
+                       case "ShopSliver":
+                           playerDataBase.ShopSliver = statistics.Value;
                            break;
-                       case "UpgradeTicket_SSR":
-                           playerDataBase.SetUpgradeTicket(RankType.SSR, statistics.Value);
+                       case "ShopGold":
+                           playerDataBase.ShopGold = statistics.Value;
                            break;
-                       case "UpgradeTicket_UR":
-                           playerDataBase.SetUpgradeTicket(RankType.UR, statistics.Value);
+                       case "ShopPlatinum":
+                           playerDataBase.ShopPlatinum = statistics.Value;
+                           break;
+                       case "ShopDiamond":
+                           playerDataBase.ShopDiamond = statistics.Value;
+                           break;
+                       case "ShopLegend":
+                           playerDataBase.ShopLegend = statistics.Value;
+                           break;
+                       case "ShopSupply":
+                           playerDataBase.ShopSupply = statistics.Value;
                            break;
                        case "DefDestroyTicket":
                            playerDataBase.DefDestroyTicket = statistics.Value;
@@ -1023,11 +1046,13 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "NowRank":
                            playerDataBase.NowRank = statistics.Value;
-
                            GameStateManager.instance.GameRankType = GameRankType.Bronze_4 + playerDataBase.NowRank;
                            break;
                        case "HighRank":
                            playerDataBase.HighRank = statistics.Value;
+                           break;
+                       case "NewsAlarm":
+                           playerDataBase.NewsAlarm = statistics.Value;
                            break;
                    }
                }

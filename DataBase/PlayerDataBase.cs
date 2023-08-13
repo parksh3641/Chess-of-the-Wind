@@ -87,6 +87,8 @@ public class PlayerDataBase : ScriptableObject
     private int highRank = 0;
     [SerializeField]
     private int accessDate = 0;
+    [SerializeField]
+    private int challengeCount = 0;
 
     [Space]
     [Title("Reset")]
@@ -189,6 +191,24 @@ public class PlayerDataBase : ScriptableObject
     private int buyUnderworldSSRCount = 0;
 
     [Space]
+    [Title("Package")]
+    [SerializeField]
+    private int shopNewbie = 0;
+    [SerializeField]
+    private int shopSliver = 0;
+    [SerializeField]
+    private int shopGold = 0;
+    [SerializeField]
+    private int shopPlatinum = 0;
+    [SerializeField]
+    private int shopDiamond = 0;
+    [SerializeField]
+    private int shopLegend = 0;
+    [SerializeField]
+    private int shopSupply = 0;
+
+
+    [Space]
     [Title("Wind Character")]
     [SerializeField]
     private List<WindCharacterClass> windCharacterList = new List<WindCharacterClass>();
@@ -216,7 +236,9 @@ public class PlayerDataBase : ScriptableObject
     private List<UpgradeTicketClass> upgradeTicketList = new List<UpgradeTicketClass>();
 
     [Space]
-    [Title("Delete")]
+    [Title("ETC")]
+    [SerializeField]
+    private int newsAlarm = 0;
     [SerializeField]
     private int defDestroyTicket = 0;
 
@@ -310,6 +332,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             accessDate = value;
+        }
+    }
+
+    public int ChallengeCount
+    {
+        get
+        {
+            return challengeCount;
+        }
+        set
+        {
+            challengeCount = value;
         }
     }
 
@@ -907,6 +941,102 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int ShopNewbie
+    {
+        get
+        {
+            return shopNewbie;
+        }
+        set
+        {
+            shopNewbie = value;
+        }
+    }
+
+    public int ShopSliver
+    {
+        get
+        {
+            return shopSliver;
+        }
+        set
+        {
+            shopNewbie = value;
+        }
+    }
+
+    public int ShopGold
+    {
+        get
+        {
+            return shopGold;
+        }
+        set
+        {
+            shopGold = value;
+        }
+    }
+
+    public int ShopPlatinum
+    {
+        get
+        {
+            return shopPlatinum;
+        }
+        set
+        {
+            shopPlatinum = value;
+        }
+    }
+
+    public int ShopDiamond
+    {
+        get
+        {
+            return shopDiamond;
+        }
+        set
+        {
+            shopDiamond = value;
+        }
+    }
+
+    public int ShopLegend
+    {
+        get
+        {
+            return shopLegend;
+        }
+        set
+        {
+            shopLegend = value;
+        }
+    }
+
+    public int ShopSupply
+    {
+        get
+        {
+            return shopSupply;
+        }
+        set
+        {
+            shopSupply = value;
+        }
+    }
+
+    public int NewsAlarm
+    {
+        get
+        {
+            return newsAlarm;
+        }
+        set
+        {
+            newsAlarm = value;
+        }
+    }
+
     public int DefDestroyTicket
     {
         get
@@ -931,6 +1061,7 @@ public class PlayerDataBase : ScriptableObject
         nowRank = 0;
         highRank = 0;
         accessDate = 0;
+        ChallengeCount = 0;
 
         season = 0;
         attendanceDay = "";
@@ -982,6 +1113,15 @@ public class PlayerDataBase : ScriptableObject
         BuySnowBoxSSRCount = 0;
         BuyUnderworldBoxSSRCount = 0;
 
+        shopNewbie = 0;
+        shopSliver = 0;
+        shopGold = 0;
+        shopPlatinum = 0;
+        shopDiamond = 0;
+        shopLegend = 0;
+        shopSupply = 0;
+
+        newsAlarm = 0;
         defDestroyTicket = 0;
 
         windCharacterList.Clear();

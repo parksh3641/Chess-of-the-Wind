@@ -1195,7 +1195,7 @@ public class SynthesisManager : MonoBehaviour
         {
             synthesisResultContentList[i].gameObject.SetActive(true);
             SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
-            yield return waitForSeconds2;
+            yield return waitForSeconds;
         }
 
         collectionManager.UpdateCollection();

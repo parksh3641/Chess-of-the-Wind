@@ -48,6 +48,7 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Rank")]
         public int winStreak = 0;
+        public int loseStreak = 0;
         public bool win = false;
         public bool lose = false;
 
@@ -403,6 +404,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public int LoseStreak
+    {
+        get
+        {
+            return gameSettings.loseStreak;
+        }
+        set
+        {
+            gameSettings.loseStreak = value;
+            SaveFile();
+        }
+    }
+
     public bool Win
     {
         get
@@ -664,6 +678,7 @@ public class GameStateManager : MonoBehaviour
                 gameSettings.matchingTime = 6;
                 gameSettings.penalty = 0;
                 gameSettings.winStreak = 0;
+                gameSettings.loseStreak = 0;
                 gameSettings.win = false;
                 gameSettings.lose = false;
                 gameSettings.tutorial = false;

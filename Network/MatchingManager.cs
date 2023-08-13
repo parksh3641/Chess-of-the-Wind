@@ -17,6 +17,10 @@ public class MatchingManager : MonoBehaviour
 
     public GameObject dontTouchObj;
 
+    [Title("Package")]
+    public GameObject packageObj;
+    public PackageContent packageContent;
+
     public Image rankButtonImg;
     public GameObject rankLocked;
     public ButtonScaleAnimation rankButtonAnimation;
@@ -86,6 +90,7 @@ public class MatchingManager : MonoBehaviour
     public NetworkManager networkManager;
     public UIManager uIManager;
     public AiManager aiManager;
+    public PackageManager packageManager;
 
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
@@ -105,6 +110,7 @@ public class MatchingManager : MonoBehaviour
         rankUpView.SetActive(false);
         matchingView.SetActive(false);
         dontTouchObj.SetActive(false);
+        packageObj.SetActive(false);
 
         DOTween.RewindAll();
     }
@@ -227,6 +233,7 @@ public class MatchingManager : MonoBehaviour
             rankUpTitle.text = LocalizationManager.instance.GetString("Win");
 
             GameStateManager.instance.Win = false;
+            GameStateManager.instance.LoseStreak = 0;
 
             int needStar = rankDataBase.GetNeedStar(playerDataBase.NowRank) + 1;
 
@@ -326,6 +333,13 @@ public class MatchingManager : MonoBehaviour
 
                 GameStateManager.instance.Lose = false;
                 GameStateManager.instance.WinStreak = 0;
+                GameStateManager.instance.LoseStreak += 1;
+
+                if (GameStateManager.instance.LoseStreak >= 2)
+                {
+                    GameStateManager.instance.LoseStreak = 0;
+                    OpenSupplyPackage();
+                }
 
                 Debug.Log("브론즈 단계에서는 랭크가 하락하지 않습니다");
 
@@ -336,6 +350,13 @@ public class MatchingManager : MonoBehaviour
 
             GameStateManager.instance.Lose = false;
             GameStateManager.instance.WinStreak = 0;
+            GameStateManager.instance.LoseStreak += 1;
+
+            if(GameStateManager.instance.LoseStreak >= 2)
+            {
+                GameStateManager.instance.LoseStreak = 0;
+                OpenSupplyPackage();
+            }
 
             starSave = playerDataBase.Star;
 
@@ -573,7 +594,7 @@ public class MatchingManager : MonoBehaviour
         PlayfabManager.instance.GetTitleInternalData("Newbie", GameStart_Newbie);
     }
 
-    public void GameStart_Newbie(bool check)
+    void GameStart_Newbie(bool check)
     {
         if(!check)
         {
@@ -664,7 +685,7 @@ public class MatchingManager : MonoBehaviour
         PlayfabManager.instance.GetTitleInternalData("Rank", GameStart_Gosu);
     }
 
-    public void GameStart_Gosu(bool check)
+    void GameStart_Gosu(bool check)
     {
         if (!check)
         {
@@ -795,5 +816,19 @@ public class MatchingManager : MonoBehaviour
     {
         GameStateManager.instance.Lose = true;
         CheckRankUp();
+    }
+
+    public void OpenSupplyPackage()
+    {
+        if(playerDataBase.ShopSupply == 0 && GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
+        {
+            packageObj.SetActive(true);
+            packageContent.Initialize(packageManager);
+        }
+    }
+
+    public void CloseSupplyPackage()
+    {
+        packageObj.SetActive(false);
     }
 }

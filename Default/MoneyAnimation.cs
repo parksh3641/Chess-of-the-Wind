@@ -32,6 +32,7 @@ public class MoneyAnimation : MonoBehaviour
     public Transform plusMoneyEndTransform;
 
     private int gold = 0;
+    private int max = 0;
 
     [Space]
     [Title("Prefab")]
@@ -179,7 +180,7 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        int max = money + value;
+        max = money + value;
 
         while (money < max)
         {
@@ -264,7 +265,7 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        int max = money - value;
+        max = money - value;
 
         while (money > max)
         {
@@ -363,7 +364,7 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        int max = money - bettingMoney;
+        max = money - bettingMoney;
 
         while (money > max)
         {
@@ -442,7 +443,7 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        int max = money - bettingMoney;
+        max = money - bettingMoney;
 
         while (money > max)
         {
@@ -530,7 +531,7 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator ResultAddMoneyCoroution(int target, Text txt)
     {
-        int max = 0;
+        max = 0;
 
         while (max < target)
         {
@@ -604,7 +605,7 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator ResultMinusMoneyCoroution(int target, Text txt)
     {
-        int max = 0;
+        max = 0;
 
         while (max > target)
         {
@@ -672,12 +673,15 @@ public class MoneyAnimation : MonoBehaviour
     [Button]
     void PlusMoney()
     {
-        PlusMoney(1000);
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
     }
 
     public void PlusMoney(int target)
     {
-        if (plusMoneyView.activeInHierarchy) return;
+        if (plusMoneyView.activeInHierarchy)
+        {
+            StopAllCoroutines();
+        }
 
         plusMoneyView.SetActive(true);
 
@@ -697,7 +701,7 @@ public class MoneyAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        int max = 0;
+        max = 0;
 
         while (max < target)
         {

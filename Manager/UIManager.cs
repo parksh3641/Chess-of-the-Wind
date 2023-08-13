@@ -177,6 +177,11 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy/home");
     }
 
+    public void TermsReadMore()
+    {
+        Application.OpenURL("https://sites.google.com/view/bluebook-terms/home");
+    }
+
     public void Initialize()
     {
         loginView.SetActive(false);
@@ -247,7 +252,7 @@ public class UIManager : MonoBehaviour
     {
         //rankText.text = matchingManager.rankText.text;
 
-        tipText.text = LocalizationManager.instance.GetString("Tutorial_" + (Random.Range(13,24).ToString()));
+        tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(13,24).ToString()));
 
         if (otherFormation == 2)
         {

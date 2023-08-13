@@ -274,7 +274,8 @@ public enum NotionType
     GetReward,
     NotRewardDailyLimit,
     LowRank,
-    LowPiece
+    LowPiece,
+    CanclePurchase
 }
 
 public enum GameRankType
@@ -310,7 +311,8 @@ public enum PackageType
     Gold,
     Platinum,
     Diamond,
-    Legend
+    Legend,
+    Supply
 }
 
 public enum RewardType
@@ -326,5 +328,14 @@ public enum RewardType
     Box_NR,
     Box_RSR,
     Box_SRSSR,
+}
 
+public enum AdRewadType
+{
+    Box_NR,
+    Box_RSR,
+    AdShop1,
+    AdShop2,
+    AdShop3,
+    GoldShop
 }

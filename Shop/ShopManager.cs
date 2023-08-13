@@ -37,6 +37,7 @@ public class ShopManager : MonoBehaviour
     bool isDelay = false;
 
     public UIManager uIManager;
+    public PackageManager packageManager;
 
     PlayerDataBase playerDataBase;
 
@@ -76,6 +77,8 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
+
+            packageManager.OpenShop();
 
             boxArray[0].SetActive(false);
             boxArray[1].SetActive(false);
@@ -145,17 +148,36 @@ public class ShopManager : MonoBehaviour
     }
 
     #region RandomBox
-    public void BuySnowBox(int number)
+    public void BuySnowBox1()
     {
-        playerDataBase.SnowBox = number;
+        playerDataBase.SnowBox = 1;
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", number);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
+        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
 
         //기록
-        playerDataBase.BuySnowBox += number;
+        playerDataBase.BuySnowBox += 1;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
+    }
+
+    public void BuySnowBox2()
+    {
+        playerDataBase.SnowBox = 10;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+
+        //기록
+        playerDataBase.BuySnowBox += 10;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
     }
@@ -203,17 +225,36 @@ public class ShopManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
-    public void BuyUnderworldBox(int number)
+    public void BuyUnderworldBox1()
     {
-        playerDataBase.UnderworldBox = number;
+        playerDataBase.UnderworldBox = 1;
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", number);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
+        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
 
         //기록
-        playerDataBase.BuyUnderworldBox += number;
+        playerDataBase.BuyUnderworldBox += 1;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
+    }
+
+    public void BuyUnderworldBox2()
+    {
+        playerDataBase.UnderworldBox = 10;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+
+        //기록
+        playerDataBase.BuyUnderworldBox += 10;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
     }
@@ -314,6 +355,8 @@ public class ShopManager : MonoBehaviour
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+            NotionManager.instance.UseNotion(NotionType.BuyShopItem);
         }
         else
         {
@@ -376,6 +419,8 @@ public class ShopManager : MonoBehaviour
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+            NotionManager.instance.UseNotion(NotionType.BuyShopItem);
         }
         else
         {
@@ -399,8 +444,6 @@ public class ShopManager : MonoBehaviour
                     dailyContent.Locked();
 
                     PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
-
-                    NotionManager.instance.UseNotion(NotionType.GetReward);
                 }
                 else
                 {
@@ -429,7 +472,9 @@ public class ShopManager : MonoBehaviour
 
                 playerDataBase.SetUpgradeTicket(RankType.N, number);
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert(type.ToString(), playerDataBase.GetUpgradeTicket(RankType.N));
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+                SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
 
@@ -449,6 +494,37 @@ public class ShopManager : MonoBehaviour
         isDelay = false;
     }
 
+    public void BuyPurchase(int number)
+    {
+        switch(number)
+        {
+            case 0:
+                playerDataBase.SetUpgradeTicket(RankType.N, 10);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+                break;
+            case 1:
+                playerDataBase.SetUpgradeTicket(RankType.N, 100);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+
+                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+                break;
+            case 2:
+                playerDataBase.SetUpgradeTicket(RankType.N, 1000);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+                break;
+        }
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+    }
+
     IEnumerator DailyShopTimer()
     {
         if (dailyShopCountText.gameObject.activeInHierarchy)
@@ -462,6 +538,13 @@ public class ShopManager : MonoBehaviour
 
         yield return waitForSeconds;
         StartCoroutine(DailyShopTimer());
+    }
+
+    public void Failed()
+    {
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+        NotionManager.instance.UseNotion(NotionType.CanclePurchase);
     }
 
     #endregion

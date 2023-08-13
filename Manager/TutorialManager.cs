@@ -215,7 +215,7 @@ public class TutorialManager : MonoBehaviour
         talkIndex = 0;
 
         fadeInOut.canvasGroup.alpha = 1;
-        fadeInOut2.canvasGroup.alpha = 0;
+        fadeInOut2.canvasGroup.alpha = 1;
 
         Initialize(talkIndex);
     }
@@ -562,10 +562,10 @@ public class TutorialManager : MonoBehaviour
 
     public void GameStart()
     {
-        fadeInOut2.FadeIn();
-
         mainCanvas.enabled = false;
         gameCanvas.enabled = true;
+
+        fadeInOut2.FadeIn();
 
         talkBar.SetActive(true);
 
@@ -857,9 +857,9 @@ public class TutorialManager : MonoBehaviour
 
     void GoToUnder()
     {
-        fadeInOut2.FadeIn();
-
         talkBar.SetActive(true);
+
+        fadeInOut2.FadeIn();
 
         gameCanvas.enabled = false;
 

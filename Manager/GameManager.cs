@@ -3108,10 +3108,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            string notion = LocalizationManager.instance.GetString("PowerBetting");
-
-            NotionManager.instance.UseNotion(notion, ColorType.Green);
-
             allIn = false;
         }
 
@@ -3146,6 +3142,11 @@ public class GameManager : MonoBehaviour
                 ChangeBettingMoney();
             }
         }
+
+        string notion = LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(bettingMoney) + " " +
+    LocalizationManager.instance.GetString("PowerBetting");
+
+        NotionManager.instance.UseNotion(notion, ColorType.Green);
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
         {

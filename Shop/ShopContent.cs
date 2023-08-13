@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShopContent : MonoBehaviour
 {
+    public MoneyType moneyType = MoneyType.Gold;
     public ShopType shopType = ShopType.UpgradeTicket;
     public int price = 0;
     public int number = 0;
@@ -22,6 +23,9 @@ public class ShopContent : MonoBehaviour
 
     public Text goldText;
     public GameObject freeButton;
+
+    public GameObject[] rmButton;
+    public LocalizationContent[] rmButtonText;
 
     public GameObject lockObj;
 
@@ -51,8 +55,15 @@ public class ShopContent : MonoBehaviour
 
         buyButton.SetActive(false);
 
+        lockObj.SetActive(false);
+
         goldText.text = "";
         freeButton.gameObject.SetActive(false);
+
+        for(int i = 0; i < rmButton.Length; i ++)
+        {
+            rmButton[i].SetActive(false);
+        }
 
         switch (type)
         {
@@ -61,10 +72,6 @@ public class ShopContent : MonoBehaviour
                 if (GameStateManager.instance.DailyReward)
                 {
                     lockObj.SetActive(true);
-                }
-                else
-                {
-                    lockObj.SetActive(false);
                 }
 
                 if(GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
@@ -78,17 +85,42 @@ public class ShopContent : MonoBehaviour
 
                 goldText.text = MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);
+
                 break;
             case ShopType.DailyReward_WatchAd:
                 break;
             case ShopType.UpgradeTicket:
-                lockObj.SetActive(false);
+                if(moneyType == MoneyType.Gold)
+                {
+                    lockObj.SetActive(false);
 
-                buyButton.SetActive(true);
+                    buyButton.SetActive(true);
 
-                price = price * number;
+                    price = price * number;
 
-                priceText.text = MoneyUnitString.ToCurrencyString(price);
+                    priceText.text = MoneyUnitString.ToCurrencyString(price);
+                }
+                else
+                {
+                    if(number == 10)
+                    {
+                        rmButton[0].SetActive(true);
+                        rmButtonText[0].localizationName = "UpgradeTicket_10";
+                        rmButtonText[0].ReLoad();
+                    }
+                    else if (number == 100)
+                    {
+                        rmButton[1].SetActive(true);
+                        rmButtonText[1].localizationName = "UpgradeTicket_100";
+                        rmButtonText[1].ReLoad();
+                    }
+                    else if (number == 1000)
+                    {
+                        rmButton[2].SetActive(true);
+                        rmButtonText[2].localizationName = "UpgradeTicket_1000";
+                        rmButtonText[2].ReLoad();
+                    }
+                }
 
                 break;
         }
@@ -112,5 +144,28 @@ public class ShopContent : MonoBehaviour
     public void BuyButton()
     {
         shopManager.BuyItem(shopType, price, number);
+    }
+
+    public void BuyUpgradeTicket1()
+    {
+        shopManager.BuyPurchase(0);
+    }
+
+    public void BuyUpgradeTicket2()
+    {
+        shopManager.BuyPurchase(1);
+    }
+
+    public void BuyUpgradeTicket3()
+    {
+        shopManager.BuyPurchase(2);
+    }
+
+
+    public void Failed()
+    {
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+        NotionManager.instance.UseNotion(NotionType.CanclePurchase);
     }
 }

@@ -32,6 +32,8 @@ public class StoryManager : MonoBehaviour
         characterArray = imageDataBase.GetCharacterArray();
 
         characterImg.enabled = false;
+
+        talkSkip = true;
     }
 
     public void Initialize()

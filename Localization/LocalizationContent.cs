@@ -25,23 +25,7 @@ public class LocalizationContent : MonoBehaviour
 
     private void Start()
     {
-        if (localizationName.Length > 0)
-        {
-            if (forwardText.Length > 0)
-            {
-                localizationText.text = forwardText + " " + LocalizationManager.instance.GetString(localizationName) + " " +
-    LocalizationManager.instance.GetString(localizationName2) + plusText;
-            }
-            else
-            {
-                localizationText.text = LocalizationManager.instance.GetString(localizationName) + " " +
-    LocalizationManager.instance.GetString(localizationName2) + plusText;
-            }
-        }
-        else
-        {
-            localizationText.text = "";
-        }
+        ReLoad();
 
         if (LocalizationManager.instance != null) LocalizationManager.instance.AddContent(this);
     }
@@ -50,15 +34,23 @@ public class LocalizationContent : MonoBehaviour
     {
         if (localizationName.Length > 0)
         {
-            if(forwardText.Length > 0)
+            localizationText.text = "";
+
+            if (forwardText.Length > 0)
             {
-                localizationText.text = forwardText + " " + LocalizationManager.instance.GetString(localizationName) + " " +
-    LocalizationManager.instance.GetString(localizationName2) + plusText;
+                localizationText.text = forwardText + " ";
             }
-            else
+
+            localizationText.text += LocalizationManager.instance.GetString(localizationName);
+
+            if (localizationName2.Length > 0)
             {
-                localizationText.text = LocalizationManager.instance.GetString(localizationName) + " " +
-    LocalizationManager.instance.GetString(localizationName2) + plusText;
+                localizationText.text += " " + LocalizationManager.instance.GetString(localizationName2);
+            }
+
+            if(plusText.Length > 0)
+            {
+                localizationText.text += plusText;
             }
 
         }

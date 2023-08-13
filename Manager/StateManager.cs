@@ -18,6 +18,8 @@ public class StateManager : MonoBehaviour
     public RankInfoManager rankInfoManager;
     public ResetManager resetManager;
     public EventManager eventManager;
+    public MailBoxManager mailBoxManager;
+    public LockManager lockManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -52,6 +54,8 @@ public class StateManager : MonoBehaviour
             rankInfoManager.Initialize();
             resetManager.Initialize();
             eventManager.Initialize();
+            mailBoxManager.Initialize();
+            lockManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {
