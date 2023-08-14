@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ShopManager : MonoBehaviour
 {
@@ -18,13 +20,30 @@ public class ShopManager : MonoBehaviour
     public ShopContent shopContent;
 
     public Text[] dailyCountText;
-
     public Text dailyShopCountText;
-
     public ShopContent dailyContent;
 
     public Transform shopContentGoldTransform;
     public Transform shopContentTransform;
+
+    [Space]
+    [Title("Ad")]
+    public GameObject[] boxShopLockArray;
+    public ReceiveContent[] adShopReceiveContents;
+    public GameObject[] adShopLockArray;
+    public GameObject[] adShopClearArray;
+    public GameObject goldShopLockArray;
+
+    public Text watchAdCountText_BoxNR;
+    public Text watchAdCountText_BoxRSR;
+
+    private int adCoolTime_BoxNR = 0;
+    private int adCoolTime_BoxRSR = 0;
+
+    TimeSpan timeSpan;
+    private int hours;
+    private int minutes;
+    private int seconds;
 
     List<ShopContent> shopContentGoldList = new List<ShopContent>();
     List<ShopContent> shopContentList = new List<ShopContent>();
@@ -35,6 +54,9 @@ public class ShopManager : MonoBehaviour
     string localization_Minutes = "";
 
     bool isDelay = false;
+    bool first = false;
+
+    int random = 0;
 
     public UIManager uIManager;
     public PackageManager packageManager;
@@ -77,6 +99,17 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
+
+            if(!first)
+            {
+                adShopReceiveContents[0].Initialize(RewardType.Gold, 3000);
+                adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
+                adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
+
+                first = true;
+            }
+
+            Initialize_Ad();
 
             packageManager.OpenShop();
 
@@ -520,6 +553,20 @@ public class ShopManager : MonoBehaviour
 
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
+            case 3:
+                random = Random.Range(30000, 200001);
+
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+
+                NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+                break;
+            case 4:
+                random = Random.Range(300000, 20000001);
+
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+
+                NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+                break;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
@@ -546,6 +593,308 @@ public class ShopManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.CanclePurchase);
     }
+
+
+    public void Initialize_Ad() //광고 봤는지 안 봤는지 체크
+    {
+        boxShopLockArray[0].SetActive(true);
+        boxShopLockArray[1].SetActive(true);
+
+        adShopClearArray[0].SetActive(true);
+        adShopClearArray[1].SetActive(true);
+        adShopClearArray[2].SetActive(true);
+
+        goldShopLockArray.SetActive(true);
+
+        if (GameStateManager.instance.DailyNormalBox)
+        {
+            LoadAd_BoxNR();
+        }
+        else
+        {
+            SetWatchAd_BoxNR(false);
+        }
+
+        if (GameStateManager.instance.DailyEpicBox)
+        {
+            LoadAd_BoxRSR();
+        }
+        else
+        {
+            SetWatchAd_BoxRSR(false);
+        }
+
+        if (!GameStateManager.instance.DailyAdsReward)
+        {
+            adShopClearArray[0].SetActive(false);
+        }
+
+        if (!GameStateManager.instance.DailyAdsReward2)
+        {
+            adShopClearArray[1].SetActive(false);
+
+            if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
+            {
+                adShopLockArray[0].SetActive(false);
+            }
+            else
+            {
+                adShopLockArray[0].SetActive(true);
+            }
+        }
+
+        if (!GameStateManager.instance.DailyAdsReward3)
+        {
+            adShopClearArray[2].SetActive(false);
+
+            if (GameStateManager.instance.GameRankType > GameRankType.Platinum_1)
+            {
+                adShopLockArray[1].SetActive(false);
+            }
+            else
+            {
+                adShopLockArray[1].SetActive(true);
+            }
+        }
+
+        if (!GameStateManager.instance.DailyGoldReward)
+        {
+            goldShopLockArray.SetActive(false);
+        }
+    }
+
+    public void GetAdReward(int number)
+    {
+        switch(number)
+        {
+            case 0:
+                if (GameStateManager.instance.DailyNormalBox) return;
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+                        playerDataBase.SnowBox_NR = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", 1);
+                        break;
+                    case WindCharacterType.UnderWorld:
+                        playerDataBase.UnderworldBox_NR = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", 1);
+                        break;
+                }
+
+                SetWatchAd_BoxNR(true);
+                break;
+            case 1:
+                if (GameStateManager.instance.DailyEpicBox) return;
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+                        playerDataBase.SnowBox_RSR = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", 1);
+                        break;
+                    case WindCharacterType.UnderWorld:
+                        playerDataBase.UnderworldBox_RSR = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", 1);
+                        break;
+                }
+
+                SetWatchAd_BoxRSR(true);
+                break;
+            case 2:
+                if (GameStateManager.instance.DailyAdsReward) return;
+
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 3000);
+
+                GameStateManager.instance.DailyAdsReward = true;
+
+                Initialize_Ad();
+                break;
+            case 3:
+                if (GameStateManager.instance.DailyAdsReward2) return;
+
+                playerDataBase.SetUpgradeTicket(RankType.N, 1);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+                GameStateManager.instance.DailyAdsReward2 = true;
+
+                Initialize_Ad();
+                break;
+            case 4:
+                if (GameStateManager.instance.DailyAdsReward3) return;
+
+                playerDataBase.SetUpgradeTicket(RankType.N, 10);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+                GameStateManager.instance.DailyAdsReward3 = true;
+
+                Initialize_Ad();
+                break;
+            case 5:
+                if (GameStateManager.instance.DailyGoldReward) return;
+
+                random = Random.Range(1000, 10001);
+
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+
+                GameStateManager.instance.DailyGoldReward = true;
+
+                Initialize_Ad();
+                break;
+        }
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+
+        NotionManager.instance.UseNotion(NotionType.GetWatchAdReward);
+    }
+
+    #endregion
+
+    #region AdCoolTime
+
+    public void LoadAd_BoxNR()
+    {
+        DateTime time = DateTime.Parse(PlayerPrefs.GetString("AdCoolTime_BoxNR"));
+        DateTime now = DateTime.Now;
+
+        TimeSpan span = time - now;
+
+        if (span.TotalSeconds > 0)
+        {
+            if (adCoolTime_BoxNR > 0) return;
+
+            adCoolTime_BoxNR = (int)span.TotalSeconds;
+
+            boxShopLockArray[0].SetActive(true);
+
+            StartCoroutine(WatchAdCorution_BoxNR());
+        }
+        else
+        {
+            SetWatchAd_BoxNR(false);
+        }
+    }
+
+    public void SetWatchAd_BoxNR(bool check)
+    {
+        if (check)
+        {
+            Debug.Log("Watch Ad BoxNR Play");
+
+            boxShopLockArray[0].SetActive(true);
+            GameStateManager.instance.DailyNormalBox = true;
+
+            PlayerPrefs.SetString("AdCoolTime_BoxNR", DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"));
+
+            adCoolTime_BoxNR = 86400;
+
+            StartCoroutine(WatchAdCorution_BoxNR());
+        }
+        else
+        {
+            Debug.Log("Watch Ad BoxNR Stop");
+
+            boxShopLockArray[0].SetActive(false);
+            GameStateManager.instance.DailyNormalBox = false;
+
+            adCoolTime_BoxNR = 0;
+        }
+    }
+
+    IEnumerator WatchAdCorution_BoxNR()
+    {
+        if (adCoolTime_BoxNR > 0)
+        {
+            adCoolTime_BoxNR -= 1;
+        }
+        else
+        {
+            SetWatchAd_BoxNR(false);
+            yield break;
+        }
+
+        timeSpan = TimeSpan.FromSeconds(adCoolTime_BoxNR);
+        watchAdCountText_BoxNR.text = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
+        yield return waitForSeconds;
+        StartCoroutine(WatchAdCorution_BoxNR());
+    }
+
+    public void LoadAd_BoxRSR()
+    {
+        DateTime time = DateTime.Parse(PlayerPrefs.GetString("AdCoolTime_BoxRSR"));
+        DateTime now = DateTime.Now;
+
+        TimeSpan span = time - now;
+
+        if (span.TotalSeconds > 0)
+        {
+            if (adCoolTime_BoxRSR > 0) return;
+
+            adCoolTime_BoxRSR = (int)span.TotalSeconds;
+
+            boxShopLockArray[1].SetActive(true);
+
+            StartCoroutine(WatchAdCorution_BoxRSR());
+        }
+        else
+        {
+            SetWatchAd_BoxRSR(false);
+        }
+    }
+
+    public void SetWatchAd_BoxRSR(bool check)
+    {
+        if (check)
+        {
+            Debug.Log("Watch Ad BoxRSR Play");
+
+            boxShopLockArray[1].SetActive(true);
+            GameStateManager.instance.DailyEpicBox = true;
+
+            PlayerPrefs.SetString("AdCoolTime_BoxRSR", DateTime.Now.AddDays(3).ToString("yyyy-MM-dd HH:mm:ss"));
+
+            adCoolTime_BoxRSR = 86400 * 3;
+
+            StartCoroutine(WatchAdCorution_BoxRSR());
+        }
+        else
+        {
+            Debug.Log("Watch Ad BoxRSR Stop");
+
+            boxShopLockArray[1].SetActive(false);
+            GameStateManager.instance.DailyEpicBox = false;
+
+            adCoolTime_BoxRSR = 0;
+        }
+    }
+
+    IEnumerator WatchAdCorution_BoxRSR()
+    {
+        if (adCoolTime_BoxRSR > 0)
+        {
+            adCoolTime_BoxRSR -= 1;
+        }
+        else
+        {
+            SetWatchAd_BoxRSR(false);
+            yield break;
+        }
+
+        hours = adCoolTime_BoxRSR / 3600;
+        minutes = (adCoolTime_BoxRSR % 3600) / 60;
+        seconds = adCoolTime_BoxRSR % 60;
+
+        watchAdCountText_BoxRSR.text = string.Format("{0:D2}:{1:D2}:{2:D2}", hours, minutes, seconds);
+
+        yield return waitForSeconds;
+        StartCoroutine(WatchAdCorution_BoxRSR());
+    }
+
+
+
 
     #endregion
 

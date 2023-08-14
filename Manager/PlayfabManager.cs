@@ -1211,7 +1211,7 @@ public class PlayfabManager : MonoBehaviour
                         currentType = "GO";
                         if (playerDataBase.Gold + number > 999999999)
                         {
-                            value = playerDataBase.Gold + number - 999999999;
+                            value = 999999999 - playerDataBase.Gold;
                         }
                         else
                         {
@@ -1223,7 +1223,7 @@ public class PlayfabManager : MonoBehaviour
                         currentType = "ST";
                         if (playerDataBase.Crystal + number > 999999999)
                         {
-                            value = playerDataBase.Crystal + number - 999999999;
+                            value = 999999999 - playerDataBase.Crystal;
                         }
                         else
                         {

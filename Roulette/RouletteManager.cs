@@ -853,39 +853,39 @@ public class RouletteManager : MonoBehaviour
         {
             if (!gameManager.aiMode)
             {
-                //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                {
+                    if (PhotonNetwork.PlayerList[i].NickName.Equals(ht["Pinball"]))
+                    {
+                        if (i < PhotonNetwork.PlayerList.Length - 1) //돌린 사람 다음 사람이 핀볼을 돌리세요!
+                        {
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[i + 1].NickName } });
+                            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[i + 1].NickName);
+                        }
+                        else
+                        {
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[0].NickName } });
+                            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[0].NickName);
+                        }
+
+                        break;
+                    }
+                }
+
+                //if(nextBall == 0)
                 //{
-                //    if (PhotonNetwork.PlayerList[i].NickName.Equals(ht["Pinball"]))
-                //    {
-                //        if (i < PhotonNetwork.PlayerList.Length - 1) //돌린 사람 다음 사람이 핀볼을 돌리세요!
-                //        {
-                //            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[i + 1].NickName } });
-                //            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[i + 1].NickName);
-                //        }
-                //        else
-                //        {
-                //            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", PhotonNetwork.PlayerList[0].NickName } });
-                //            Debug.Log("다음 사람 : " + PhotonNetwork.PlayerList[0].NickName);
-                //        }
+                //    nextBall = 1;
 
-                //        break;
-                //    }
+                //    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName2 } });
+                //    Debug.Log("다음 사람 : " + networkManager.playerNickName2);
                 //}
+                //else
+                //{
+                //    nextBall = 0;
 
-                if(nextBall == 0)
-                {
-                    nextBall = 1;
-
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName2 } });
-                    Debug.Log("다음 사람 : " + networkManager.playerNickName2);
-                }
-                else
-                {
-                    nextBall = 0;
-
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName1 } });
-                    Debug.Log("다음 사람 : " + networkManager.playerNickName1);
-                }
+                //    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", networkManager.playerNickName1 } });
+                //    Debug.Log("다음 사람 : " + networkManager.playerNickName1);
+                //}
             }
             else
             {

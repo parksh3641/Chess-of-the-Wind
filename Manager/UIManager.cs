@@ -489,15 +489,18 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("돈 증가 애니메이션 발동");
 
-            if(!GameStateManager.instance.DailyWin)
+            if (GameStateManager.instance.Win)
             {
-                GameStateManager.instance.DailyWin = true;
+                if (!GameStateManager.instance.DailyWin)
+                {
+                    GameStateManager.instance.DailyWin = true;
 
-                dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : +" + (gold * 0.5f);
+                    dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : +" + MoneyUnitString.ToCurrencyString((int)(gold * 0.5f));
 
-                gold = gold + (int)(gold * 0.5f);
+                    gold = gold + (int)(gold * 0.5f);
 
-                Debug.Log("오늘 첫 승 1.5배 보너스");
+                    Debug.Log("오늘 첫 승 1.5배 보너스");
+                }
             }
 
             moneyAnimation.ResultAddMoney(gold, resultGoldText);

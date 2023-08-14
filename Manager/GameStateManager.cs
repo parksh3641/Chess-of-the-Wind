@@ -81,14 +81,16 @@ public class GameStateManager : MonoBehaviour
         [Title("Daily")]
         public bool dailyWin = false;
         public bool dailyReward = false;
-        public bool dailyAdsReward = false;
-        public bool dailyAdsReward2 = false;
         public bool dailyNormalBox = false;
         public bool dailyEpicBox = false;
         public int dailyNormalBox_1 = 3;
         public int dailyNormalBox_10 = 1;
         public int dailyEpicBox_1 = 3;
         public int dailyEpicBox_10 = 1;
+        public bool dailyAdsReward = false;
+        public bool dailyAdsReward2 = false;
+        public bool dailyAdsReward3 = false;
+        public bool dailyGoldReward = false;
 
     }
     #region Data
@@ -571,6 +573,32 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.dailyAdsReward2 = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyAdsReward3
+    {
+        get
+        {
+            return gameSettings.dailyAdsReward3;
+        }
+        set
+        {
+            gameSettings.dailyAdsReward3 = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyGoldReward
+    {
+        get
+        {
+            return gameSettings.dailyGoldReward;
+        }
+        set
+        {
+            gameSettings.dailyGoldReward = value;
             SaveFile();
         }
     }

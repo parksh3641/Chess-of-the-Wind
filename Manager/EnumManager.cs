@@ -275,7 +275,9 @@ public enum NotionType
     NotRewardDailyLimit,
     LowRank,
     LowPiece,
-    CanclePurchase
+    CanclePurchase,
+    CancleWatchAd,
+    HighLevelLimit
 }
 
 public enum GameRankType
@@ -328,14 +330,4 @@ public enum RewardType
     Box_NR,
     Box_RSR,
     Box_SRSSR,
-}
-
-public enum AdRewadType
-{
-    Box_NR,
-    Box_RSR,
-    AdShop1,
-    AdShop2,
-    AdShop3,
-    GoldShop
 }

@@ -27,6 +27,7 @@ public class MoneyAnimation : MonoBehaviour
     [Title("Plus")]
     public GameObject plusMoneyView;
     public Text myMoneyText;
+    public Text myPlusMoneyText;
 
     public Transform plusMoneyStartTransform;
     public Transform plusMoneyEndTransform;
@@ -118,8 +119,8 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
-        changeMoneyText[1].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
+        changeMoneyText[0].text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(value)) + "</color>";
+        changeMoneyText[1].text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(value)) + "</color>";
 
         if (Random.Range(0, 2) == 0)
         {
@@ -140,8 +141,8 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList[i].gameObject.SetActive(false);
         }
 
-        changeMoneyText[0].text = "<color=#FF712B>-" + Mathf.Abs(value) + "</color>";
-        changeMoneyText[1].text = "<color=#27FFFC>+" + Mathf.Abs(value) + "</color>";
+        changeMoneyText[0].text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(Mathf.Abs(value)) + "</color>";
+        changeMoneyText[1].text = "<color=#27FFFC>+" + MoneyUnitString.ToCurrencyString(Mathf.Abs(value)) + "</color>";
 
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
@@ -687,6 +688,7 @@ public class MoneyAnimation : MonoBehaviour
 
         gold = playerDataBase.Gold;
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold);
+        myPlusMoneyText.text = "+" + MoneyUnitString.ToCurrencyString(target);
 
         StartCoroutine(PlusMoneyCoroution(target));
     }
@@ -763,7 +765,7 @@ public class MoneyAnimation : MonoBehaviour
 
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         plusMoneyView.SetActive(false);
 

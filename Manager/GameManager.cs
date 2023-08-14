@@ -724,6 +724,8 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+
+                    NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
 
                 int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
@@ -754,6 +756,8 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+
+                    NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
 
                 int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
@@ -784,6 +788,8 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+
+                    NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
 
                 int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);
@@ -841,8 +847,6 @@ public class GameManager : MonoBehaviour
         ResetBettingMoney();
 
         SetStakes();
-
-        UpdateMoney();
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -992,7 +996,7 @@ public class GameManager : MonoBehaviour
         }
         else if (number == 2)
         {
-            money += (int)(GameStateManager.instance.Stakes * 0.1f);
+            money = GameStateManager.instance.Stakes + (int)(GameStateManager.instance.Stakes * 0.1f);
 
             Debug.Log("상대방 항복으로 승리");
         }
@@ -1008,6 +1012,11 @@ public class GameManager : MonoBehaviour
         timerAnimation.StopAnim();
 
         uIManager.OpenResultView(number, money);
+
+        if(PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
     }
 
     private void ClearOtherPlayerBlock()
@@ -1173,17 +1182,17 @@ public class GameManager : MonoBehaviour
     {
         turn = number;
 
-        if (turn >= 7)
+        if (turn >= 2)
         {
             if (!inGameBurning)
             {
                 inGameBurning = true;
 
-                moneyAnimation.MinusMoneyAnimationMid(money, money / 2, moneyText);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney, otherMoney / 2, otherMoneyText);
-
                 money = money / 2;
                 otherMoney = otherMoney / 2;
+
+                moneyAnimation.MinusMoneyAnimationMid(money + money / 2, money / 2, moneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + otherMoney / 2, otherMoney / 2, otherMoneyText);
 
                 burningObj.SetActive(true);
 
@@ -1194,17 +1203,17 @@ public class GameManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
             }
         }
-        else if (turn >= 14)
+        else if (turn >= 11)
         {
             if (!inGameBurning2)
             {
                 inGameBurning2 = true;
 
-                moneyAnimation.MinusMoneyAnimationMid(money, money / 2, moneyText);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney, otherMoney / 2, otherMoneyText);
-
                 money = money / 2;
                 otherMoney = otherMoney / 2;
+
+                moneyAnimation.MinusMoneyAnimationMid(money + money / 2, money / 2, moneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + otherMoney / 2, otherMoney / 2, otherMoneyText);
 
                 NotionManager.instance.UseNotion(NotionType.InGameBurning2);
             }
@@ -1222,10 +1231,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("현재 턴 : " + turn);
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            UpdateMoney();
-        }
+        UpdateMoney();
     }
 
     void CheckTip()
@@ -1701,10 +1707,10 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            UpdateMoney();
+        UpdateMoney();
 
+        if (PhotonNetwork.IsMasterClient)
+        {
             StartCoroutine(WaitTimerCoroution());
         }
     }
@@ -1757,6 +1763,8 @@ public class GameManager : MonoBehaviour
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
         }
+
+        UpdateMoney();
     }
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)

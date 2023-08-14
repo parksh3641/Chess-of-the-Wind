@@ -50,14 +50,16 @@ public class ResetManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
             GameStateManager.instance.DailyWin = false;
-            GameStateManager.instance.DailyAdsReward = false;
-            GameStateManager.instance.DailyAdsReward2 = false;
             GameStateManager.instance.DailyNormalBox = false;
             GameStateManager.instance.DailyEpicBox = false;
             GameStateManager.instance.DailyNormalBox_1 = 3;
             GameStateManager.instance.DailyNormalBox_10 = 1;
             GameStateManager.instance.DailyEpicBox_1 = 3;
             GameStateManager.instance.DailyEpicBox_10 = 1;
+            GameStateManager.instance.DailyAdsReward = false;
+            GameStateManager.instance.DailyAdsReward2 = false;
+            GameStateManager.instance.DailyAdsReward3 = false;
+            GameStateManager.instance.DailyGoldReward = false;
 
             if (playerDataBase.AttendanceCheck)
             {
@@ -99,14 +101,16 @@ public class ResetManager : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
                 GameStateManager.instance.DailyWin = false;
-                GameStateManager.instance.DailyAdsReward = false;
-                GameStateManager.instance.DailyAdsReward2 = false;
                 GameStateManager.instance.DailyNormalBox = false;
                 GameStateManager.instance.DailyEpicBox = false;
                 GameStateManager.instance.DailyNormalBox_1 = 3;
                 GameStateManager.instance.DailyNormalBox_10 = 1;
                 GameStateManager.instance.DailyEpicBox_1 = 3;
                 GameStateManager.instance.DailyEpicBox_10 = 1;
+                GameStateManager.instance.DailyAdsReward = false;
+                GameStateManager.instance.DailyAdsReward2 = false;
+                GameStateManager.instance.DailyAdsReward3 = false;
+                GameStateManager.instance.DailyGoldReward = false;
 
                 if (playerDataBase.AttendanceCheck)
                 {

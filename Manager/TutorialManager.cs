@@ -878,6 +878,8 @@ public class TutorialManager : MonoBehaviour
         if (playerDataBase.Formation == 1)
         {
             mainCanvasBackground.sprite = mainCanvasBackgroundArray[2];
+
+            SoundManager.instance.PlayBGM(GameBgmType.Story_Snow);
         }
         else
         {

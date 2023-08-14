@@ -39,8 +39,8 @@ public class EmoteManager : MonoBehaviour
     public Sprite[] emoteImgArray;
 
 
-    private float emoteCoolTime = 5.0f;
-    private float emoteCoolTime2 = 10.0f;
+    private float emoteCoolTime = 2.0f;
+    private float emoteCoolTime2 = 2.0f;
     bool isUseEmote = true;
 
 

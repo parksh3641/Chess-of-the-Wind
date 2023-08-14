@@ -14,6 +14,7 @@ public class AdmobReward : MonoBehaviour
 
     string adUnitId;
 
+    public ShopManager shopManager;
 
     void Start()
     {
@@ -67,7 +68,7 @@ public class AdmobReward : MonoBehaviour
     }
 
 
-    public void ShowAd()
+    public void ShowAd(int number)
     {
         const string rewardMsg =
             "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
@@ -76,16 +77,17 @@ public class AdmobReward : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
+                Debug.Log("광고 시청 완료");
 
-
-
-
-
+                shopManager.GetAdReward(number);
                 //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
             });
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CancleWatchAd);
+
             LoadRewardedAd();
         }
     }

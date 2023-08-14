@@ -52,7 +52,7 @@ public class SellManager : MonoBehaviour
         //titleText.text = "판매 알림";
         //sellText.text = "판매 가격";
 
-        sellPriceText.text = price.ToString();
+        sellPriceText.text = MoneyUnitString.ToCurrencyString(price);
 
         //sellButtonText.text = "판매하기";
         //cancleButtonText.text = "그만두기";
