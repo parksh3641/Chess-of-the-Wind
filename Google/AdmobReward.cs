@@ -86,7 +86,7 @@ public class AdmobReward : MonoBehaviour
         else
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-            NotionManager.instance.UseNotion(NotionType.CancleWatchAd);
+            NotionManager.instance.UseNotion(NotionType.CancelWatchAd);
 
             LoadRewardedAd();
         }

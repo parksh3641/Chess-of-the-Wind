@@ -60,6 +60,11 @@ public class NewsManager : MonoBehaviour
             alarm.SetActive(true);
             mainAlarm.SetActive(true);
         }
+
+        if(playerDataBase.ChallengeCount >= 6)
+        {
+            OpenNews();
+        }
     }
 
     public void OpenNews()

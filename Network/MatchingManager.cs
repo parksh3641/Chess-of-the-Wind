@@ -207,6 +207,11 @@ public class MatchingManager : MonoBehaviour
     [Button]
     public void CheckRankUp()
     {
+        if (!GameStateManager.instance.Win && !GameStateManager.instance.Lose)
+        {
+            return;
+        }
+
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);

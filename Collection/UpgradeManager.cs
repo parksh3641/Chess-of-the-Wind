@@ -14,6 +14,7 @@ public class UpgradeManager : MonoBehaviour
     public Text levelText;
     public Image levelFillamount;
     public LocalizationContent valueText;
+    public LocalizationContent blockValueText;
 
     public LocalizationContent successText;
     public LocalizationContent keepText;
@@ -141,6 +142,10 @@ public class UpgradeManager : MonoBehaviour
         valueText.localizationName = "CurrentValue";
         valueText.plusText = " : <color=#FFCA14>" + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
         valueText.ReLoad();
+
+        blockValueText.localizationName = "BlockValue";
+        blockValueText.plusText = " : <color=#FFCA14>" + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level) / blockDataBase.GetSize(blockClass.blockType)) + "</color>";
+        blockValueText.ReLoad();
 
         successText.localizationName = "SuccessPercent";
         successText.plusText = " : " + upgradeInformation.success + "%";

@@ -13,6 +13,11 @@ public class MoneyContent : MonoBehaviour
     private Vector3 vel = Vector3.zero;
 
 
+    void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     IEnumerator RandomMoveCorution()
     {
         float time = 0;

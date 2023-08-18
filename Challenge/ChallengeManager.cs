@@ -16,6 +16,8 @@ public class ChallengeManager : MonoBehaviour
     public UIManager uIManager;
     public MatchingManager matchingManager;
 
+    List<string> itemList = new List<string>();
+
     PlayerDataBase playerDataBase;
 
 
@@ -24,6 +26,8 @@ public class ChallengeManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         challengeView.SetActive(false);
+
+        challengeAlarm.SetActive(false);
 
         challengeGrid.anchoredPosition = new Vector2(0, -999);
     }
@@ -42,6 +46,61 @@ public class ChallengeManager : MonoBehaviour
         else
         {
             challengeView.SetActive(false);
+        }
+    }
+
+    public void CheckChallengeTutorial()
+    {
+        switch(playerDataBase.ChallengeCount)
+        {
+            case 0:
+                if (playerDataBase.CheckEquipBlock_Newbie())
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
+            case 1:
+                if (playerDataBase.NewbieWin > 0)
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
+            case 2:
+                if (playerDataBase.NewbieWin > 1)
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
+            case 3:
+                if (playerDataBase.CheckEquipBlock_Gosu() == 3)
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
+            case 4:
+                if (playerDataBase.CheckBlockLevel(0))
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
+            case 5:
+                if (playerDataBase.GosuWin > 0)
+                {
+                    OpenChallengeView();
+
+                    challengeAlarm.SetActive(true);
+                }
+                break;
         }
     }
 
@@ -85,6 +144,29 @@ public class ChallengeManager : MonoBehaviour
                 break;
             case 2:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+
+                        itemList.Clear();
+                        itemList.Add("LeftQueen_2_N");
+                        itemList.Add("LeftNight_N");
+                        itemList.Add("Rook_V2_N");
+
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
+
+                        break;
+                    case WindCharacterType.UnderWorld:
+
+                        itemList.Clear();
+                        itemList.Add("RightQueen_2_N");
+                        itemList.Add("RightNight_N");
+                        itemList.Add("Rook_V4_N");
+
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
+                        break;
+                }
                 break;
             case 3:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
@@ -106,6 +188,8 @@ public class ChallengeManager : MonoBehaviour
         CheckChallenge();
 
         lockManager.Initialize();
+
+        challengeAlarm.SetActive(false);
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         NotionManager.instance.UseNotion(NotionType.GetReward);

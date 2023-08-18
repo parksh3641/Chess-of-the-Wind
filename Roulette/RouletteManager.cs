@@ -115,6 +115,7 @@ public class RouletteManager : MonoBehaviour
 
     [Space]
     [Title("bool")]
+    private bool ballCheck = false;
     private bool buttonClick = false;
     private bool bouns = false;
     private bool aiMode = false;
@@ -235,6 +236,8 @@ public class RouletteManager : MonoBehaviour
         uIManager.OpenRouletteView();
         uIManager.CloseSurrenderView();
         emoteManager.Initialize();
+
+        ballCheck = false;
 
         if (gameManager.blockType != BlockType.Default)
         {
@@ -1156,11 +1159,18 @@ public class RouletteManager : MonoBehaviour
     [PunRPC]
     void GetNumber()
     {
-        StartCoroutine(GetNumberCoroution());
+        if(!ballCheck)
+        {
+            ballCheck = true;
+
+            StartCoroutine(GetNumberCoroution());
+        }
     }
 
     IEnumerator GetNumberCoroution()
     {
+        Debug.Log("공이 멈췄습니다");
+
         PV.RPC("EndRoulette", RpcTarget.All);
 
         yield return new WaitForSeconds(2f);
@@ -1179,6 +1189,7 @@ public class RouletteManager : MonoBehaviour
             {
                 leftQueenPoint.parent = roulette1Obj[1];
             }
+
             targetQueenNumber = mainLeftPointerManager.CheckQueenNumber(leftQueenPoint);
             leftQueenPoint.parent = leftClock[2].transform;
         }
@@ -1194,6 +1205,7 @@ public class RouletteManager : MonoBehaviour
             {
                 rightQueenPoint.parent = roulette2Obj[1];
             }
+
             targetQueenNumber = mainRightPointerManager.CheckQueenNumber(rightQueenPoint);
             rightQueenPoint.parent = rightClock[2].transform;
         }
@@ -1239,11 +1251,6 @@ public class RouletteManager : MonoBehaviour
         PV.RPC("PlayParticle", RpcTarget.All);
 
         yield return new WaitForSeconds(2.5f);
-
-        if(GameStateManager.instance.Vibration)
-        {
-            Handheld.Vibrate();
-        }
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 
@@ -1308,6 +1315,17 @@ public class RouletteManager : MonoBehaviour
         targetNormal.SetActive(true);
         targetQueen.SetActive(false);
 
+        if (GameStateManager.instance.Vibration)
+        {
+            Handheld.Vibrate();
+        }
+
+        targetText.text = number.ToString();
+
+        if (number > queenNumber)
+        {
+            number += 1;
+        }
 
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -1319,13 +1337,6 @@ public class RouletteManager : MonoBehaviour
             {
                 mainRightPointerManager.ShowTarget(number, queenNumber);
             }
-        }
-
-        targetText.text = number.ToString();
-
-        if (number > queenNumber)
-        {
-            number += 1;
         }
 
         if (gameManager.bettingNumberList.Contains(number))
@@ -1366,7 +1377,12 @@ public class RouletteManager : MonoBehaviour
 
         //targetText.text = number.ToString();
 
-        if (gameManager.bettingNumberList.Contains(queenNumber))
+        if (GameStateManager.instance.Vibration)
+        {
+            Handheld.Vibrate();
+        }
+
+        if (gameManager.bettingNumberList.Contains(number))
         {
             queenEffect.SetActive(true);
 
@@ -1392,21 +1408,6 @@ public class RouletteManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             Debug.Log("퀸에 당첨되지 않았습니다");
-        }
-    }
-
-    [PunRPC]
-    void ShowTargetNumber_NewBie(int number)
-    {
-        targetView.SetActive(true);
-
-        if (number == 0)
-        {
-            targetText.text = "흰";
-        }
-        else
-        {
-            targetText.text = "검";
         }
     }
 

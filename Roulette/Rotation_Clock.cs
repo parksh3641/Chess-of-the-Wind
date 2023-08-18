@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Rotation_Clock : MonoBehaviour
 {
-    public float speed = 40f;
+    public int speed = 40;
 
     bool start = false;
 
@@ -23,6 +23,8 @@ public class Rotation_Clock : MonoBehaviour
     public void Awake()
     {
         transform.localRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+        speed = Random.Range(speed - 2, speed + 2);
 
         PV = GetComponent<PhotonView>();
     }

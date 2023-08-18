@@ -7,6 +7,10 @@ public class PointerManager : MonoBehaviour
 {
     public List<Pointer> pointerList = new List<Pointer>();
 
+    int number = 0;
+    float temp = 0;
+    float dist = 0;
+
     private void Awake()
     {
         foreach (Transform child in transform)
@@ -25,9 +29,9 @@ public class PointerManager : MonoBehaviour
 
     public int CheckNumber(Transform target)
     {
-        int number = 0;
-        float temp = 0;
-        float dist = 0;
+        number = 0;
+        temp = 0;
+        dist = 0;
 
         for (int i = 0; i < pointerList.Count; i++)
         {
@@ -64,9 +68,9 @@ public class PointerManager : MonoBehaviour
 
     public int CheckQueenNumber(Transform target)
     {
-        int number = 0;
-        float temp = 0;
-        float dist = 0;
+        number = 0;
+        temp = 0;
+        dist = 0;
 
         for (int i = 0; i < pointerList.Count; i++)
         {

@@ -141,6 +141,6 @@ public class Pinball2D : MonoBehaviour
         rotate = false;
         wind = false;
 
-        rouletteManager.EndPinball();
+        //rouletteManager.EndPinball();
     }
 }

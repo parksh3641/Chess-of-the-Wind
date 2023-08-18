@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [Title("Developer")]
     public InputField inputTargetNumber;
     public Text developerInfo;
+    public GameObject nextButton;
 
     [Space]
     [Title("Setting")]
@@ -92,6 +93,9 @@ public class GameManager : MonoBehaviour
     private int bettingAiMoney = 0;
     private float plusAiMoney = 0; //Ai가 획득한 돈
     private bool aiMoveBlock = false; //확률적으로 Ai가 2초 남기고 위치를 바꿉니다
+
+    private int halfMoney = 0;
+    private int halfOtherMoney = 0;
 
     private int[] compareMoney = new int[2];
 
@@ -240,6 +244,9 @@ public class GameManager : MonoBehaviour
         if (blockDataBase == null) blockDataBase = Resources.Load("BlockDataBase") as BlockDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
         if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
+
+        inputTargetNumber.gameObject.SetActive(false);
+        nextButton.SetActive(false);
 
         bettingValue = new int[4];
         bettingSizeList = new int[4];
@@ -408,8 +415,8 @@ public class GameManager : MonoBehaviour
             allBlockLevelContentList.Add(levelContent);
         }
 
-        index = 0;
-        count = 0;
+        //index = 0;
+        //count = 0;
 
         //for (int i = 0; i < 16; i++)
         //{
@@ -554,6 +561,15 @@ public class GameManager : MonoBehaviour
 
     public void ExitRoom()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+
+            return;
+        }
+
         StopAllCoroutines();
 
         GameReset();
@@ -628,7 +644,7 @@ public class GameManager : MonoBehaviour
     {
         //roomText.text = "초보방";
 
-        //developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n9 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n빈칸 = 정상 진행";
 
         rouletteContentTransform_NewBie.gameObject.SetActive(true);
         rouletteContentTransform.gameObject.SetActive(false);
@@ -680,7 +696,7 @@ public class GameManager : MonoBehaviour
     {
         //roomText.text = "고수방";
 
-        //developerInfo.text = "0 = 퀸 당첨\n1 ~24 = 해당 숫자 당첨\n25 = 보너스 룰렛 실행\n빈칸 = 정상 진행";
+        developerInfo.text = "0 = 퀸 당첨\n1 ~24 = 해당 숫자 당첨\n빈칸 = 정상 진행";
 
         blockLevelContentTransform_NewBie.gameObject.SetActive(false);
         rouletteContentTransform.gameObject.SetActive(true);
@@ -911,7 +927,6 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(3);
-            //PV.RPC("GameEnd", RpcTarget.Others, 3);
         }
         else if(money <= 0) //내돈이 다 떨어졌을 때
         {
@@ -919,7 +934,6 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(1);
-            //PV.RPC("GameEnd", RpcTarget.Others, 0);
         }
         else if(otherMoney <= 0) //상대방 돈이 다 떨어졌을때
         {
@@ -927,7 +941,6 @@ public class GameManager : MonoBehaviour
             PV.RPC("SetGameEnd", RpcTarget.Others);
 
             GameEnd(0);
-            //PV.RPC("GameEnd", RpcTarget.Others, 1);
         }
         else
         {
@@ -970,6 +983,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void GameEnd(int number)
     {
+        StopAllCoroutines();
+
         GameStateManager.instance.Room = "";
 
         uIManager.dontTouchObj.SetActive(false);
@@ -1002,16 +1017,18 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            money = 0;
+
             Debug.Log("무승부");
         }
 
         SoundManager.instance.StopAllSFX();
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
 
-        StopAllCoroutines();
         timerAnimation.StopAnim();
 
         uIManager.OpenResultView(number, money);
+        rouletteManager.CloseRouletteView();
 
         if(PhotonNetwork.IsMasterClient)
         {
@@ -1060,6 +1077,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void ChangeTimer(int number)
     {
+        if (!GameStateManager.instance.Playing) return;
+
         timer = number;
 
         timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
@@ -1182,17 +1201,20 @@ public class GameManager : MonoBehaviour
     {
         turn = number;
 
-        if (turn >= 2)
+        if (turn >= 7)
         {
             if (!inGameBurning)
             {
                 inGameBurning = true;
 
-                money = money / 2;
-                otherMoney = otherMoney / 2;
+                halfMoney = money / 2;
+                halfOtherMoney = otherMoney / 2;
 
-                moneyAnimation.MinusMoneyAnimationMid(money + money / 2, money / 2, moneyText);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + otherMoney / 2, otherMoney / 2, otherMoneyText);
+                money = money - halfMoney;
+                otherMoney = otherMoney - halfOtherMoney;
+
+                moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
 
                 burningObj.SetActive(true);
 
@@ -1209,11 +1231,14 @@ public class GameManager : MonoBehaviour
             {
                 inGameBurning2 = true;
 
-                money = money / 2;
-                otherMoney = otherMoney / 2;
+                halfMoney = money / 2;
+                halfOtherMoney = otherMoney / 2;
 
-                moneyAnimation.MinusMoneyAnimationMid(money + money / 2, money / 2, moneyText);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + otherMoney / 2, otherMoney / 2, otherMoneyText);
+                money = money - halfMoney;
+                otherMoney = otherMoney - halfOtherMoney;
+
+                moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
 
                 NotionManager.instance.UseNotion(NotionType.InGameBurning2);
             }
@@ -1243,7 +1268,7 @@ public class GameManager : MonoBehaviour
                 tipObj.SetActive(true);
                 tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(0, 6).ToString()));
 
-                Invoke("CloseTip", 9f);
+                Invoke("CloseTip", 8f);
 
                 break;
             case GameType.Gosu:
@@ -1252,7 +1277,7 @@ public class GameManager : MonoBehaviour
                     tipObj.SetActive(true);
                     tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(6, 13).ToString()));
 
-                    Invoke("CloseTip", 9f);
+                    Invoke("CloseTip", 8f);
                 }
 
                 break;
@@ -1277,6 +1302,8 @@ public class GameManager : MonoBehaviour
 
         while (timer > 0)
         {
+            if (!GameStateManager.instance.Playing) break;
+
             timer -= 1;
 
             PV.RPC("ChangeTimer", RpcTarget.Others, timer);
@@ -1340,7 +1367,7 @@ public class GameManager : MonoBehaviour
             PV.RPC("DelayRoulette", RpcTarget.All);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -1351,6 +1378,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void DelayRoulette()
     {
+        if (!GameStateManager.instance.Playing) return;
+
         isTimesUp = false;
         timerText.color = new Color(7 / 255f, 80 / 255f, 93 / 255f);
         timerAnimation.StopAnim();
@@ -1379,54 +1408,57 @@ public class GameManager : MonoBehaviour
     {
         bool check = false;
 
-        if(inputTargetNumber.text.Length > 0)
+        if (inputTargetNumber.gameObject.activeInHierarchy)
         {
-            int number = int.Parse(inputTargetNumber.text.ToString());
-
-            targetQueenNumber = 0;
-
-            if(GameStateManager.instance.GameType == GameType.NewBie)
+            if (inputTargetNumber.text.Length > 0)
             {
-                if (number <= 0)
-                {
-                    targetNumber = 1;
-                    targetQueenNumber = 1;
+                int number = int.Parse(inputTargetNumber.text.ToString());
 
-                    check = true;
-                }
-                else if (number <= 8)
-                {
-                    targetNumber = number;
+                targetQueenNumber = 0;
 
-                    check = true;
+                if (GameStateManager.instance.GameType == GameType.NewBie)
+                {
+                    if (number <= 0)
+                    {
+                        targetNumber = 1;
+                        targetQueenNumber = 1;
+
+                        check = true;
+                    }
+                    else if (number <= 8)
+                    {
+                        targetNumber = number;
+
+                        check = true;
+                    }
+                    else
+                    {
+                        //GameStateManager.instance.CheckBouns = true;
+
+                        check = false;
+                    }
                 }
                 else
                 {
-                    GameStateManager.instance.CheckBouns = true;
+                    if (number <= 0)
+                    {
+                        targetNumber = 1;
+                        targetQueenNumber = 1;
 
-                    check = false;
-                }
-            }
-            else
-            {
-                if (number <= 0)
-                {
-                    targetNumber = 1;
-                    targetQueenNumber = 1;
+                        check = true;
+                    }
+                    else if (number <= 24)
+                    {
+                        targetNumber = number;
 
-                    check = true;
-                }
-                else if (number <= 24)
-                {
-                    targetNumber = number;
+                        check = true;
+                    }
+                    else
+                    {
+                        //GameStateManager.instance.CheckBouns = true;
 
-                    check = true;
-                }
-                else
-                {
-                    GameStateManager.instance.CheckBouns = true;
-
-                    check = false;
+                        check = false;
+                    }
                 }
             }
         }
@@ -1437,6 +1469,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void OpenRouletteView()
     {
+        if (!GameStateManager.instance.Playing) return;
+
         uIManager.dontTouchObj.SetActive(false);
 
         SoundManager.instance.StopSFX(GameSfxType.TimesUp);
@@ -1707,10 +1741,18 @@ public class GameManager : MonoBehaviour
         timer = bettingWaitTime;
         timerFillAmount.fillAmount = 1;
 
-        UpdateMoney();
+        if (inputTargetNumber.gameObject.activeInHierarchy)
+        {
+            nextButton.SetActive(true);
+            uIManager.dontTouchObj.SetActive(false);
+
+            return;
+        }
 
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("타이머를 다시 시작합니다");
+
             StartCoroutine(WaitTimerCoroution());
         }
     }
@@ -1753,12 +1795,12 @@ public class GameManager : MonoBehaviour
         {
             if (bettingMoney > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney, moneyText);
+                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney);
             }
 
             if (compare[0] > 0)
             {
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0], otherMoneyText);
+                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0]);
             }
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
@@ -3673,6 +3715,8 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     void ShowOtherBetting(string str)
     {
+        Debug.Log("상대방 배팅 위치 값 : " + str);
+
         string[] list = str.Split("/");
 
         for(int i = 0; i < list.Length; i ++)
@@ -3684,7 +3728,7 @@ public class GameManager : MonoBehaviour
         otherBettingNumberList = otherBettingNumberList.Distinct().ToList();
         otherBettingNumberList.Sort();
 
-        Debug.Log("상대 배팅 위치 값을 받아왔습니다");
+        Debug.Log("상대 배팅 위치 값을 저장했습니다");
     }
 
     #endregion
@@ -3776,41 +3820,34 @@ public class GameManager : MonoBehaviour
 
     public void SurrenderButton() //기권하기
     {
-        StopAllCoroutines();
-
         uIManager.CloseSurrenderView();
 
         money = 0;
 
-        GameStateManager.instance.Playing = false;
+        Debug.Log("기권");
 
+        GameStateManager.instance.Playing = false;
         GameEnd(1);
 
         PV.RPC("Surrender", RpcTarget.Others);
-
-        Debug.Log("기권");
     }
 
     [PunRPC]
     public void Surrender()
     {
-        StopAllCoroutines();
+        Debug.Log("상대방이 기권");
 
         GameStateManager.instance.Playing = false;
         GameEnd(2);
-
-        Debug.Log("상대방이 기권하여 승리하였습니다");
     }
 
     [Button]
     public void Winner()
     {
-        StopAllCoroutines();
+        Debug.Log("상대방이 방에서 튕겼습니다");
 
         GameStateManager.instance.Playing = false;
         GameEnd(2);
-
-        Debug.Log("상대방이 방에서 튕겼습니다");
     }
 
     public void Draw()
@@ -3822,4 +3859,23 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    public void OpenDeveloperInput()
+    {
+        if(!inputTargetNumber.gameObject.activeInHierarchy)
+        {
+            inputTargetNumber.gameObject.SetActive(true);
+        }
+        else
+        {
+            inputTargetNumber.gameObject.SetActive(false);
+        }
+    }
+
+    public void DeveloperContinue()
+    {
+        nextButton.SetActive(false);
+
+        StartCoroutine(WaitTimerCoroution());
+    }
 }

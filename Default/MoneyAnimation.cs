@@ -34,6 +34,9 @@ public class MoneyAnimation : MonoBehaviour
 
     private int gold = 0;
     private int max = 0;
+    private int maxOther = 0;
+    private int Money = 0;
+    private int OtherMoney = 0;
 
     [Space]
     [Title("Prefab")]
@@ -170,6 +173,9 @@ public class MoneyAnimation : MonoBehaviour
 
     IEnumerator AddMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
     {
+        Money = money;
+        OtherMoney = otherMoney;
+
         for (int i = 0; i < list.Count; i++)
         {
             list[i].gameObject.SetActive(true);
@@ -250,11 +256,17 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
+        text[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(Money + value) + "</size>";
+        text[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(OtherMoney - value) + "</size>";
+
         EndAnimation();
     }
 
     IEnumerator MinusMoneyCoroution(int money, int otherMoney, int value, List<MoneyContent> list, Text[] text)
     {
+        Money = money;
+        OtherMoney = otherMoney;
+
         for (int i = 0; i < list.Count; i++)
         {
             list[i].gameObject.SetActive(true);
@@ -335,25 +347,34 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
+        text[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(Money - value) + "</size>";
+        text[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(OtherMoney + value) + "</size>";
+
         EndAnimation();
     }
 
-    public void MinusMoneyAnimationMid(int money, int bettingMoney, Text txt) //내 돈이 가운데로 이동되는 애니메이션
+    public void MinusMoneyAnimationMid(int money, int bettingMoney) //내 돈이 가운데로 이동되는 애니메이션
     {
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
-        StartCoroutine(MinusMoneyMidCoroution(money, bettingMoney, txt));
+        changeMoneyText[0].text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(bettingMoney) + "</color>";
+
+        StartCoroutine(MinusMoneyMidCoroution(money, bettingMoney));
     }
 
-    public void MinusMoneyAnimationMidEnemy(int money, int bettingMoney, Text txt) //상대방 돈이 가운데로 이동되는 애니메이션
+    public void MinusMoneyAnimationMidEnemy(int money, int bettingMoney) //상대방 돈이 가운데로 이동되는 애니메이션
     {
         SoundManager.instance.PlaySFX(GameSfxType.MinusMoney);
 
-        StartCoroutine(MinusMoneyMidEnemyCoroution(money, bettingMoney, txt));
+        changeMoneyText[1].text = "<color=#FF712B>-" + MoneyUnitString.ToCurrencyString(bettingMoney) + "</color>";
+
+        StartCoroutine(MinusMoneyMidEnemyCoroution(money, bettingMoney));
     }
 
-    IEnumerator MinusMoneyMidCoroution(int money, int bettingMoney, Text txt)
+    IEnumerator MinusMoneyMidCoroution(int money, int bettingMoney)
     {
+        max = money - bettingMoney;
+
         for (int i = 0; i < heartPrefabList.Count; i++)
         {
             heartPrefabList[i].gameObject.SetActive(true);
@@ -365,8 +386,6 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        max = money - bettingMoney;
-
         while (money > max)
         {
             if (money - 10000000 > max)
@@ -420,19 +439,21 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            moneyText[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        moneyText[0].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(max) + "</size>";
 
         EndAnimation();
     }
 
 
-    IEnumerator MinusMoneyMidEnemyCoroution(int money, int bettingMoney, Text txt)
+    IEnumerator MinusMoneyMidEnemyCoroution(int money, int bettingMoney)
     {
+        maxOther = money - bettingMoney;
+
         for (int i = 0; i < heartPrefabList_Enemy.Count; i++)
         {
             heartPrefabList_Enemy[i].gameObject.SetActive(true);
@@ -444,47 +465,45 @@ public class MoneyAnimation : MonoBehaviour
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
-        max = money - bettingMoney;
-
-        while (money > max)
+        while (money > maxOther)
         {
-            if (money - 10000000 > max)
+            if (money - 10000000 > maxOther)
             {
                 money -= 10000000;
             }
             else
             {
-                if (money - 1000000 > max)
+                if (money - 1000000 > maxOther)
                 {
                     money -= 1000000;
                 }
                 else
                 {
-                    if (money - 100000 > max)
+                    if (money - 100000 > maxOther)
                     {
                         money -= 100000;
                     }
                     else
                     {
-                        if (money - 10000 > max)
+                        if (money - 10000 > maxOther)
                         {
                             money -= 10000;
                         }
                         else
                         {
-                            if (money - 1000 > max)
+                            if (money - 1000 > maxOther)
                             {
                                 money -= 1000;
                             }
                             else
                             {
-                                if (money - 100 > max)
+                                if (money - 100 > maxOther)
                                 {
                                     money -= 100;
                                 }
                                 else
                                 {
-                                    if (money - 10 > max)
+                                    if (money - 10 > maxOther)
                                     {
                                         money -= 10;
                                     }
@@ -499,12 +518,12 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+            moneyText[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(money) + "</size>";
+        moneyText[1].text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(maxOther) + "</size>";
 
         EndAnimation();
     }
@@ -514,12 +533,13 @@ public class MoneyAnimation : MonoBehaviour
 
     void EndAnimation()
     {
-        StopAllCoroutines();
-
         isStart = false;
 
-        changeMoneyText[0].text = "";
-        changeMoneyText[1].text = "";
+        if(!gameManager.inputTargetNumber.gameObject.activeInHierarchy)
+        {
+            changeMoneyText[0].text = "";
+            changeMoneyText[1].text = "";
+        }
 
         if (gameManager != null) gameManager.CheckWinnerPlayer();
     }
@@ -593,10 +613,6 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
-
-        yield return new WaitForSeconds(0.5f);
-
-        PlusMoney(Mathf.Abs(max));
     }
 
     public void ResultMinusMoney(int target, Text txt)

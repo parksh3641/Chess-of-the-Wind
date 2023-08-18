@@ -6,6 +6,8 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using System;
+using Random = UnityEngine.Random;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -61,10 +63,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void OnApplicationQuit()
     {
-        //if (GameStateManager.instance.Playing)
-        //{
-        //    GameStateManager.instance.Penalty = 1;
-        //}
+        if (GameStateManager.instance.Playing)
+        {
+            GameStateManager.instance.Penalty = 1;
+
+            PlayerPrefs.SetString("PenaltyTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
     }
 
 

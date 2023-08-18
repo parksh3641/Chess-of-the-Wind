@@ -17,7 +17,7 @@ public class GameStateManager : MonoBehaviour
     public class GameSettings
     {
         [Title("Developer")]
-        public bool isLogin = false;
+        public bool loginNone = false;
 
         [Title("Agree")]
         public bool privacypolicy = false;
@@ -27,6 +27,7 @@ public class GameStateManager : MonoBehaviour
         public string playfabId = "";
         public string customId = "";
         public bool autoLogin = false;
+        public bool isLogin = false;
         public LoginType login = LoginType.None;
         public string nickName = "";
 
@@ -64,7 +65,7 @@ public class GameStateManager : MonoBehaviour
         [Title("Betting")]
         public int matchingTime = 6;
         public int bettingTime = 11;
-        public int bettingWaitTime = 5;
+        public int bettingWaitTime = 6;
         public bool autoTarget = false;
         public int autoTargetNumber = 0;
         public bool blockOverlap = false;
@@ -95,15 +96,15 @@ public class GameStateManager : MonoBehaviour
     }
     #region Data
 
-    public bool IsLogin
+    public bool LoginNone
     {
         get
         {
-            return gameSettings.isLogin;
+            return gameSettings.loginNone;
         }
         set
         {
-            gameSettings.isLogin = value;
+            gameSettings.loginNone = value;
             SaveFile();
         }
     }
@@ -259,6 +260,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.autoLogin = value;
+            SaveFile();
+        }
+    }
+
+    public bool IsLogin
+    {
+        get
+        {
+            return gameSettings.isLogin;
+        }
+        set
+        {
+            gameSettings.isLogin = value;
             SaveFile();
         }
     }
@@ -712,7 +726,7 @@ public class GameStateManager : MonoBehaviour
                 gameSettings.tutorial = false;
                 gameSettings.gameRankType = GameRankType.Bronze_4;
                 gameSettings.bettingTime = 11;
-                gameSettings.bettingWaitTime = 5;
+                gameSettings.bettingWaitTime = 6;
                 gameSettings.privacypolicy = false;
                 gameSettings.dailyNormalBox_1 = 3;
                 gameSettings.dailyNormalBox_10 = 1;

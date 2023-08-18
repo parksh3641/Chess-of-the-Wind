@@ -27,7 +27,6 @@ public class AttendanceManager : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
-    public ResetManager resetManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -57,12 +56,12 @@ public class AttendanceManager : MonoBehaviour
     {
         if(!attendanceView.activeInHierarchy)
         {
+            attendanceView.SetActive(true);
+
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
             {
-                resetManager.Initialize();
+                ResetManager.instance.Initialize();
             }
-
-            attendanceView.SetActive(true);
 
             timerText.text = "";
 

@@ -1,4 +1,3 @@
-#if UNITY_IOS
 using System.IO;
 using UnityEditor;
 using UnityEditor.iOS.Xcode;
@@ -28,4 +27,3 @@ public class IOSBuildOption
         }
     }
 }
-#endif

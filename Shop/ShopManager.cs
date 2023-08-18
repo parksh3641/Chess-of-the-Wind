@@ -91,7 +91,7 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(DailyShopTimer());
+        StartCoroutine(DailyShopTimer());
     }
 
     public void OpenShopView()
@@ -100,7 +100,12 @@ public class ShopManager : MonoBehaviour
         {
             shopView.SetActive(true);
 
-            if(!first)
+            if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+            {
+                ResetManager.instance.Initialize();
+            }
+
+            if (!first)
             {
                 adShopReceiveContents[0].Initialize(RewardType.Gold, 3000);
                 adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
@@ -558,12 +563,16 @@ public class ShopManager : MonoBehaviour
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
+                SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
+
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
             case 4:
                 random = Random.Range(300000, 20000001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+
+                SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
 
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
@@ -591,7 +600,7 @@ public class ShopManager : MonoBehaviour
     {
         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-        NotionManager.instance.UseNotion(NotionType.CanclePurchase);
+        NotionManager.instance.UseNotion(NotionType.CancelPurchase);
     }
 
 

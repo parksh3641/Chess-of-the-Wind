@@ -75,6 +75,11 @@ public class EventManager : MonoBehaviour
             InitializeWelcome();
 
             CheckWelcome();
+
+            if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+            {
+                ResetManager.instance.Initialize();
+            }
         }
         else
         {

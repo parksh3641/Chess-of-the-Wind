@@ -101,24 +101,35 @@ public class PlayfabManager : MonoBehaviour
             return;
         }
 
-        if (GameStateManager.instance.AutoLogin)
+        if (GameStateManager.instance.IsLogin)
         {
-            switch (GameStateManager.instance.Login)
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
+            StartCoroutine(LoadDataCoroutine());
+#else
+        GetTitleInternalData("CheckVersion", CheckVersion);
+#endif
+        }
+        else
+        {
+            if (GameStateManager.instance.AutoLogin)
             {
-                case LoginType.None:
-                    break;
-                case LoginType.Guest:
-                    OnClickGuestLogin();
-                    break;
-                case LoginType.Google:
-                    OnClickGoogleLogin();
-                    break;
-                case LoginType.Facebook:
-                    //OnClickFacebookLogin();
-                    break;
-                case LoginType.Apple:
-                    OnClickAppleLogin();
-                    break;
+                switch (GameStateManager.instance.Login)
+                {
+                    case LoginType.None:
+                        break;
+                    case LoginType.Guest:
+                        OnClickGuestLogin();
+                        break;
+                    case LoginType.Google:
+                        OnClickGoogleLogin();
+                        break;
+                    case LoginType.Facebook:
+                        //OnClickFacebookLogin();
+                        break;
+                    case LoginType.Apple:
+                        OnClickAppleLogin();
+                        break;
+                }
             }
         }
     }
@@ -217,6 +228,10 @@ public class PlayfabManager : MonoBehaviour
     {
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
+            uiManager.LoginFail();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
@@ -252,6 +267,8 @@ public class PlayfabManager : MonoBehaviour
             OnLoginSuccess(result);
         }, error =>
         {
+            uiManager.LoginFail();
+
             isLogin = false;
 
             Debug.LogError("Login Fail - Guest");
@@ -293,8 +310,12 @@ public class PlayfabManager : MonoBehaviour
     #region Google Login
     public void OnClickGoogleLogin()
     {
-        if(!NetworkConnect.instance.CheckConnectInternet())
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
+            uiManager.LoginFail();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
@@ -346,6 +367,8 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
+                uiManager.LoginFail();
+
                 isLogin = false;
 
                 Debug.Log("Google Login Fail");
@@ -411,6 +434,10 @@ public class PlayfabManager : MonoBehaviour
     {
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
+            uiManager.LoginFail();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
@@ -441,9 +468,11 @@ public class PlayfabManager : MonoBehaviour
                 }
             }, error =>
             {
-                var authorizationErrorCode = error.GetAuthorizationErrorCode();
+                uiManager.LoginFail();
 
                 isLogin = false;
+
+                var authorizationErrorCode = error.GetAuthorizationErrorCode();
             });
     }
 
@@ -474,8 +503,6 @@ public class PlayfabManager : MonoBehaviour
                     _newAppleUser = true;
                     SignInWithApple();
                     var authorizationErrorCode = error.GetAuthorizationErrorCode();
-
-                    isLogin = false;
                 });
         }
         else

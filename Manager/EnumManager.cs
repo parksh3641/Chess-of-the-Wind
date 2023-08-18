@@ -111,7 +111,7 @@ public enum BlockType
 
 public enum BetOptionType
 {
-    Cancle,
+    Cancel,
     Double,
     Repeat
 }
@@ -231,7 +231,7 @@ public enum NotionType
     Test,
     NotEnoughMoney,
     NotBettingLocation,
-    BettingCancle,
+    BettingCancel,
     BettingTimesUp,
     YourTurn,
     BuyTicket,
@@ -275,8 +275,8 @@ public enum NotionType
     NotRewardDailyLimit,
     LowRank,
     LowPiece,
-    CanclePurchase,
-    CancleWatchAd,
+    CancelPurchase,
+    CancelWatchAd,
     HighLevelLimit
 }
 

@@ -49,66 +49,66 @@ public class LocalizationManager : MonoBehaviour
 
                 ChangeJapanese();
             }
-            else if (Application.systemLanguage == SystemLanguage.Chinese)
-            {
-                GameStateManager.instance.Language = LanguageType.Chinese;
+            //else if (Application.systemLanguage == SystemLanguage.Chinese)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Chinese;
 
-                ChangeChinese();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Portuguese)
-            {
-                GameStateManager.instance.Language = LanguageType.Portuguese;
+            //    ChangeChinese();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Portuguese)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Portuguese;
 
-                ChangePortuguese();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Russian)
-            {
-                GameStateManager.instance.Language = LanguageType.Russian;
+            //    ChangePortuguese();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Russian)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Russian;
 
-                ChangeRussian();
-            }
-            else if (Application.systemLanguage == SystemLanguage.German)
-            {
-                GameStateManager.instance.Language = LanguageType.German;
+            //    ChangeRussian();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.German)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.German;
 
-                ChangeGerman();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Spanish)
-            {
-                GameStateManager.instance.Language = LanguageType.Spanish;
+            //    ChangeGerman();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Spanish)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Spanish;
 
-                ChangeSpanish();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Arabic)
-            {
-                GameStateManager.instance.Language = LanguageType.Arabic;
+            //    ChangeSpanish();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Arabic)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Arabic;
 
-                ChangeArabic();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Indonesian)
-            {
-                GameStateManager.instance.Language = LanguageType.Indonesian;
+            //    ChangeArabic();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Indonesian)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Indonesian;
 
-                ChangeIndonesian();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Italian)
-            {
-                GameStateManager.instance.Language = LanguageType.Italian;
+            //    ChangeIndonesian();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Italian)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Italian;
 
-                ChangeItalian();
-            }
-            else if (Application.systemLanguage == SystemLanguage.Dutch)
-            {
-                GameStateManager.instance.Language = LanguageType.Dutch;
+            //    ChangeItalian();
+            //}
+            //else if (Application.systemLanguage == SystemLanguage.Dutch)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Dutch;
 
-                ChangeDutch();
-            }
-            else if (Application.systemLanguage.ToString() == "Hindi")
-            {
-                GameStateManager.instance.Language = LanguageType.Indian;
+            //    ChangeDutch();
+            //}
+            //else if (Application.systemLanguage.ToString() == "Hindi")
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Indian;
 
-                ChangeIndian();
-            }
+            //    ChangeIndian();
+            //}
             else
             {
                 GameStateManager.instance.Language = LanguageType.English;

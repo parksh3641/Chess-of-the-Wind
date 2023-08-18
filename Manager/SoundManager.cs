@@ -20,6 +20,14 @@ public class SoundManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
+    private void Start()
+    {
+        if(GameStateManager.instance.Music)
+        {
+            audioSource.Play();
+        }
+    }
+
     public void Initialize()
     {
         if (GameStateManager.instance.Music)
@@ -121,7 +129,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayLoopSFX(GameSfxType type)
     {
-        if (!GameStateManager.instance.Sfx) return;
+        if (!GameStateManager.instance.Music) return;
 
         for (int i = 0; i < sfxAudio.Length; i++)
         {

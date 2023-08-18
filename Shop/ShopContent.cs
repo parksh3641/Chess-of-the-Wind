@@ -166,6 +166,6 @@ public class ShopContent : MonoBehaviour
     {
         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-        NotionManager.instance.UseNotion(NotionType.CanclePurchase);
+        NotionManager.instance.UseNotion(NotionType.CancelPurchase);
     }
 }

@@ -15,6 +15,7 @@ public class Pinball3D : MonoBehaviour
 
     private float time = 0f;
     private float midWindPower = 0f;
+    private int random = 0;
 
     public bool move = false;
 
@@ -35,8 +36,6 @@ public class Pinball3D : MonoBehaviour
 
     void Update()
     {
-        if (!move) return;
-
         if (transform.position.y < -2)
         {
             Debug.Log("공이 밖으로 나감");
@@ -46,6 +45,8 @@ public class Pinball3D : MonoBehaviour
 
             StartRotate(index);
         }
+
+        if (!move) return;
 
         if (rigid.velocity.magnitude < 0.3f)
         {
@@ -76,16 +77,34 @@ public class Pinball3D : MonoBehaviour
 
         index = number;
 
+        random = Random.Range(0, 2);
+
         if (number == 0)
         {
-            transform.position = new Vector3(-0.9f, 0.45f, 3.3f);
+            if(random == 0)
+            {
+                transform.position = new Vector3(-0.9f, 0.45f, 3.3f);
+                transform.rotation = Quaternion.Euler(0, 20, 0);
+            }
+            else
+            {
+                transform.position = new Vector3(-4.1f, 0.45f, 3.3f);
+                transform.rotation = Quaternion.Euler(0, -20, 0);
+            }
         }
         else
         {
-            transform.position = new Vector3(4.1f, 0.45f, 3.3f);
+            if (random == 0)
+            {
+                transform.position = new Vector3(4.1f, 0.45f, 3.3f);
+                transform.rotation = Quaternion.Euler(0, 20, 0);
+            }
+            else
+            {
+                transform.position = new Vector3(0.9f, 0.45f, 3.3f);
+                transform.rotation = Quaternion.Euler(0, -20, 0);
+            }
         }
-
-        transform.rotation = Quaternion.Euler(0, 20, 0);
 
         rigid.mass = 1;
 
@@ -123,7 +142,7 @@ public class Pinball3D : MonoBehaviour
                     case 0:
                         transform.LookAt(rouletteManager.leftWindPoint[3].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
                         break;
                     case 1:
                         transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
@@ -154,7 +173,7 @@ public class Pinball3D : MonoBehaviour
                     case 5:
                         transform.LookAt(rouletteManager.leftWindPoint[2].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.25f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
                         break;
                 }
             }
@@ -168,7 +187,7 @@ public class Pinball3D : MonoBehaviour
                     case 0:
                         transform.LookAt(rouletteManager.rightWindPoint[3].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.5f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
                         break;
                     case 1:
                         transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
@@ -199,7 +218,7 @@ public class Pinball3D : MonoBehaviour
                     case 5:
                         transform.LookAt(rouletteManager.rightWindPoint[2].position + new Vector3(1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.25f + force));
+                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
                         break;
                 }
             }
@@ -214,9 +233,9 @@ public class Pinball3D : MonoBehaviour
 
         time = 0;
 
-        if(rouletteManager != null) rouletteManager.EndPinball();
-
         StopAllCoroutines();
+
+        if (rouletteManager != null) rouletteManager.EndPinball();
     }
 
     public void OnTriggerEnter(Collider other)

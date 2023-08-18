@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class ResetManager : MonoBehaviour
 {
+    public static ResetManager instance;
+
     DateTime serverTime;
     DateTime nextMondey;
 
@@ -20,6 +22,8 @@ public class ResetManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
@@ -38,7 +42,7 @@ public class ResetManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
     }
 
-    private void SetModeContent(System.DateTime time)
+    private void SetModeContent(DateTime time)
     {
         if (playerDataBase.AttendanceDay.Length < 2)
         {

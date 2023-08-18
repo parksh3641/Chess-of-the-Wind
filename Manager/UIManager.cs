@@ -78,11 +78,14 @@ public class UIManager : MonoBehaviour
     public GameManager gameManager;
     public MatchingManager matchingManager;
     public MoneyAnimation moneyAnimation;
+    public ChallengeManager challengeManager;
 
     public Image[] bottomUIImg;
 
     public int index = 0;
     Sprite[] characterArray;
+
+    bool first = false;
 
     private List<string> nicknames = new List<string>();
 
@@ -232,6 +235,19 @@ public class UIManager : MonoBehaviour
             loginButtonList[2].SetActive(true);
 #endif
         }
+    }
+
+    public void LoginFail()
+    {
+        loginUI.SetActive(true);
+
+        loginButtonList[0].SetActive(true);
+
+#if UNITY_ANDROID
+            loginButtonList[1].SetActive(true);
+#elif UNITY_IOS
+        loginButtonList[2].SetActive(true);
+#endif
     }
 
     public void OnMatchingSuccess(string player1, string player2, int otherFormation)
@@ -586,6 +602,14 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
+                if(!first)
+                {
+                    first = true;
+                }
+                else
+                {
+                    challengeManager.CheckChallengeTutorial();
+                }
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
@@ -617,5 +641,15 @@ public class UIManager : MonoBehaviour
     {
         PlayerPrefs.SetString("LoadScene", "TutorialScene");
         SceneManager.LoadScene("LoadScene");
+    }
+
+    public void Feedback()
+    {
+        Application.OpenURL("https://forms.gle/u8PT9yV5smhDRLxbA");
+    }
+
+    public void NaverCafe()
+    {
+        Application.OpenURL("https://cafe.naver.com/windchess");
     }
 }
