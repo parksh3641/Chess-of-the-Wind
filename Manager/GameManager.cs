@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
     private int limitLevel = 0;
     private int bettingTime = 0;
     private int bettingWaitTime = 0;
+    public int keepCount = 0;
 
     public int turn = 0;
     public bool inGameBurning = false;
@@ -510,6 +511,8 @@ public class GameManager : MonoBehaviour
     private void GameReset()
     {
         StopAllCoroutines();
+
+        keepCount = 0;
 
         turn = 0;
         turnText.text = LocalizationManager.instance.GetString("Turn") + " : " + turn;
@@ -1749,6 +1752,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if (bettingMoney == 0)
+        {
+            keepCount += 1;
+
+            if(keepCount >= 3)
+            {
+                Debug.Log("3턴 동안 움직이지 않아 패배합니다");
+
+                SurrenderButton();
+            }
+        }
+
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.Log("타이머를 다시 시작합니다");
@@ -2854,6 +2869,8 @@ public class GameManager : MonoBehaviour
 
     public void EnterBlock(RouletteContent rouletteContent, BlockContent blockContent)
     {
+        keepCount = 0;
+
         mainRouletteContent = rouletteContent;
 
         targetBlockContent = blockContent.transform;

@@ -22,6 +22,10 @@ public class IOSBuildOption
             var buildKey = "UIBackgroundModes";
             rootDict.CreateArray(buildKey).AddString("remote-notification");
 
+            rootDict.SetBoolean("Supports opening documents in place", true);
+            rootDict.SetBoolean("Application supports iTunes file sharing", true);
+            rootDict.SetBoolean("App Uses Non-Exempt Encryption", false);
+
             // Write to file
             File.WriteAllText(plistPath, plist.WriteToString());
         }

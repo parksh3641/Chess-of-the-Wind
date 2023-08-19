@@ -96,10 +96,9 @@ public class EmoteManager : MonoBehaviour
 
             CloseEmoteView();
 
+            myEmote.gameObject.SetActive(false);
             myEmote.gameObject.SetActive(true);
             myEmoteImg.sprite = emoteImgArray[number];
-
-            Invoke("CloseMyEmote", 4.0f);
 
             PV.RPC("UseEmote", RpcTarget.Others, number);
 
@@ -127,22 +126,11 @@ public class EmoteManager : MonoBehaviour
     [PunRPC]
     private void UseEmote(int number)
     {
+        otherEmote.gameObject.SetActive(false);
         otherEmote.gameObject.SetActive(true);
         otherEmoteImg.sprite = emoteImgArray[number];
 
         SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
-
-        Invoke("CloseOtherEmote", 4.0f);
-    }
-
-    void CloseMyEmote()
-    {
-        myEmote.SetActive(false);
-    }
-
-    void CloseOtherEmote()
-    {
-        otherEmote.SetActive(false);
     }
 
 
@@ -174,10 +162,9 @@ public class EmoteManager : MonoBehaviour
 
             CloseEmoteView2();
 
+            myEmote2.gameObject.SetActive(false);
             myEmote2.gameObject.SetActive(true);
             myEmoteImg2.sprite = emoteImgArray[number];
-
-            Invoke("CloseMyEmote2", 4.0f);
 
             PV.RPC("UseEmote2", RpcTarget.Others, number);
 
@@ -205,21 +192,10 @@ public class EmoteManager : MonoBehaviour
     [PunRPC]
     private void UseEmote2(int number)
     {
+        otherEmote2.gameObject.SetActive(false);
         otherEmote2.gameObject.SetActive(true);
         otherEmoteImg2.sprite = emoteImgArray[number];
 
         SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
-
-        Invoke("CloseOtherEmote2", 4.0f);
-    }
-
-    void CloseMyEmote2()
-    {
-        myEmote2.SetActive(false);
-    }
-
-    void CloseOtherEmote2()
-    {
-        otherEmote2.SetActive(false);
     }
 }

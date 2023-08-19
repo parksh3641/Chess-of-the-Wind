@@ -988,6 +988,8 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisResultView.SetActive(true);
 
+        SoundManager.instance.PlayLoopSFX(GameSfxType.BlockUpgradeReady);
+
         for (int i = 0; i < synthesisResultContentList.Count; i++)
         {
             synthesisResultContentList[i].gameObject.SetActive(false);
@@ -1174,6 +1176,8 @@ public class SynthesisManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2.5f);
+
+        SoundManager.instance.StopLoopSFX(GameSfxType.BlockUpgradeReady);
 
         syntheisResultView2.SetActive(true);
 

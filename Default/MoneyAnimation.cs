@@ -719,6 +719,9 @@ public class MoneyAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
+        isStart = true;
+        StartCoroutine(ChangeMoneyCoroution());
+
         max = 0;
 
         while (max < target)
@@ -778,6 +781,8 @@ public class MoneyAnimation : MonoBehaviour
 
             yield return waitForSeconds2;
         }
+
+        isStart = false;
 
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
 

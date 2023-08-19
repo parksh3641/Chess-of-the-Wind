@@ -75,7 +75,7 @@ public class StateManager : MonoBehaviour
 
                 GameStateManager.instance.Penalty = 0;
 
-                if (span.TotalSeconds > 60)
+                if (span.TotalSeconds < -60)
                 {
                     penaltyView.SetActive(true);
 

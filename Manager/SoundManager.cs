@@ -77,6 +77,8 @@ public class SoundManager : MonoBehaviour
     {
         if (!GameStateManager.instance.Music) return;
 
+        if (!audioSource.isPlaying) audioSource.Play();
+
         audioSource.volume = 1;
     }
 

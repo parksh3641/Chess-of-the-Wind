@@ -55,6 +55,7 @@ public class ShopManager : MonoBehaviour
 
     bool isDelay = false;
     bool first = false;
+    bool isTimer = false;
 
     int random = 0;
 
@@ -91,6 +92,7 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
+        isTimer = true;
         StartCoroutine(DailyShopTimer());
     }
 
@@ -103,6 +105,12 @@ public class ShopManager : MonoBehaviour
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
             {
                 ResetManager.instance.Initialize();
+            }
+
+            if(!isTimer)
+            {
+                isTimer = true;
+                StartCoroutine(DailyShopTimer());
             }
 
             if (!first)
@@ -590,6 +598,13 @@ public class ShopManager : MonoBehaviour
             System.TimeSpan h = g - f;
 
             dailyShopCountText.text = localization_Reset + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
+
+            if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+            {
+                isTimer = false;
+                ResetManager.instance.Initialize();
+                yield break;
+            }
         }
 
         yield return waitForSeconds;
