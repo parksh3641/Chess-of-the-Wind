@@ -492,6 +492,39 @@ public class RouletteManager : MonoBehaviour
             mainRightPointerManager.pointerList[i].Betting_Initialize();
         }
 
+
+        if (rouletteIndex == 0)
+        {
+            if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
+            {
+                leftQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+            }
+            else if (gameManager.bettingNumberList.Contains(queenNumber))
+            {
+                leftQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
+            }
+            else if (gameManager.otherBettingNumberList.Contains(queenNumber))
+            {
+                leftQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
+            }
+        }
+        else
+        {
+            if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
+            {
+                rightQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+            }
+            else if (gameManager.bettingNumberList.Contains(queenNumber))
+            {
+                rightQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
+            }
+            else if (gameManager.otherBettingNumberList.Contains(queenNumber))
+            {
+                rightQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
+            }
+        }
+
+
         for (int i = 0; i < gameManager.bettingNumberList.Count; i++)
         {
             if (rouletteIndex == 0)
@@ -512,19 +545,6 @@ public class RouletteManager : MonoBehaviour
                             mainLeftPointerManager.pointerList[j].Betting();
                         }
                     }
-
-                    if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
-                    {
-                        leftQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
-                    }
-                    else if (gameManager.bettingNumberList.Contains(queenNumber))
-                    {
-                        leftQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
-                    }
-                    else if (gameManager.otherBettingNumberList.Contains(queenNumber))
-                    {
-                        leftQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
-                    }
                 }
             }
             else
@@ -544,19 +564,6 @@ public class RouletteManager : MonoBehaviour
                         {
                             mainRightPointerManager.pointerList[j].Betting();
                         }
-                    }
-
-                    if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
-                    {
-                        rightQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
-                    }
-                    else if (gameManager.bettingNumberList.Contains(queenNumber))
-                    {
-                        rightQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
-                    }
-                    else if (gameManager.otherBettingNumberList.Contains(queenNumber))
-                    {
-                        rightQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
                     }
                 }
             }

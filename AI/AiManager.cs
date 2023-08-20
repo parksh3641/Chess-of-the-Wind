@@ -12,6 +12,7 @@ public class AiManager : MonoBehaviour
     public GameType gameType = GameType.NewBie;
     public WindCharacterType windCharacterType = WindCharacterType.Winter;
     public GameRankType gameRankType = GameRankType.Bronze_4;
+    public RouletteType rouletteType = RouletteType.Default;
 
     [Space]
     [Title("Prefab")]
@@ -26,6 +27,7 @@ public class AiManager : MonoBehaviour
     private int value = 0;
 
     public int blockIndex = 0;
+    public int rouletteIndex = 0;
     public int blockPos = 0;
 
 
@@ -40,14 +42,6 @@ public class AiManager : MonoBehaviour
     public BlockType[] blockTypeArray;
 
     public int[] bettingValue = new int[3];
-
-    public int[] dontBettingZone1;
-    public int[] dontBettingZone2;
-    public int[] dontBettingZone3;
-    public int[] dontBettingZone1_Twice; //이중 배팅
-    public int[] dontBettingZone2_Twice;
-    public int[] dontBettingZone3_Twice;
-
 
     RankInformation rankInformation = new RankInformation();
 
@@ -96,20 +90,6 @@ public class AiManager : MonoBehaviour
 
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
-        //if(GameStateManager.instance.GameType == GameType.NewBie)
-        //{
-        //    limitBlock = rankInformation.limitBlockLevel / 2;
-        //}
-        //else
-        //{
-        //    limitBlock = rankInformation.limitBlockLevel;
-        //}
-
-        //limitBlockLevel_N = upgradeDataBase.CheckUpgradeValue(RankType.N, limitBlock);
-        //limitBlockLevel_R = upgradeDataBase.CheckUpgradeValue(RankType.R, limitBlock);
-        //limitBlockLevel_SR = upgradeDataBase.CheckUpgradeValue(RankType.SR, limitBlock);
-        //limitBlockLevel_SSR = upgradeDataBase.CheckUpgradeValue(RankType.SSR, limitBlock);
-
         if (gameType == GameType.NewBie)
         {
             blockClassArray = new BlockClass[1];
@@ -147,10 +127,6 @@ public class AiManager : MonoBehaviour
                 blockTypeArray[1] = BlockType.LeftNight;
                 blockTypeArray[2] = BlockType.Rook_V2;
 
-                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
-                dontBettingZone3 = new int[] { };
-
                 SetBlockClass();
             }
             else
@@ -160,10 +136,6 @@ public class AiManager : MonoBehaviour
                 blockTypeArray[0] = BlockType.RightQueen_2;
                 blockTypeArray[1] = BlockType.RightNight;
                 blockTypeArray[2] = BlockType.Rook_V4;
-
-                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
 
                 SetBlockClass();
             }
@@ -218,57 +190,82 @@ public class AiManager : MonoBehaviour
         {
             blockIndex = 0;
 
-            if (random == 1)
-            {
-                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
-                dontBettingZone3 = new int[] { };
-            }
-            else
-            {
-                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
-            }
+            blockPos = Random.Range(0, 9);
 
-            blockPos = Random.Range(1, 10);
+            Debug.LogError(blockPos);
 
             otherBlockContentList[0].gameObject.SetActive(true);
-            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
+            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos].transform.position;
             otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
-
-            Debug.Log("Ai가 초보방 " + (blockPos - 1) + " 위치에 배팅했습니다");
 
             gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
 
-            gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
+            gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos, RouletteType.StraightBet);
+
+            Debug.Log("Ai가 연습방 " + blockPos + " 위치에 배팅했습니다");
         }
         else
         {
             blockIndex = Random.Range(0, 3);
+            rouletteType = RouletteType.Default + Random.Range(1, 4);
 
-            if (blockIndex == 0)
+            switch (rouletteType)
             {
-                blockPos = GenerateRandomNumber(dontBettingZone1);
+                case RouletteType.Default:
+                    break;
+                case RouletteType.StraightBet:
+                    blockPos = Random.Range(0, 25);
+                    break;
+                case RouletteType.SplitBet_Horizontal:
+                    blockPos = Random.Range(0, 19);
+                    break;
+                case RouletteType.SplitBet_Vertical:
+                    blockPos = Random.Range(0, 19);
+                    break;
+                case RouletteType.SquareBet:
+                    blockPos = Random.Range(0, 15);
+                    break;
             }
-            else if(blockIndex == 1)
+
+            Debug.LogError(blockPos);
+
+            if (gameManager.CheckAiBetting(blockClassArray[blockIndex], blockPos, rouletteType))
             {
-                blockPos = GenerateRandomNumber(dontBettingZone2);
+                otherBlockContentList[blockIndex].gameObject.SetActive(true);
+
+                switch (rouletteType)
+                {
+                    case RouletteType.Default:
+                        break;
+                    case RouletteType.StraightBet:
+                        otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos].transform.position;
+                        break;
+                    case RouletteType.SplitBet_Horizontal:
+                        otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Split_Horizontal[blockPos].transform.position;
+                        break;
+                    case RouletteType.SplitBet_Vertical:
+                        otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Split_Vertical[blockPos].transform.position;
+                        break;
+                    case RouletteType.SquareBet:
+                        break;
+                }
+
+                gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos, rouletteType);
+
+                Debug.Log("Ai가 고수방 " + rouletteType.ToString() + " " + blockPos + " 위치에 배팅했습니다");
             }
             else
             {
-                blockPos = GenerateRandomNumber(dontBettingZone3);
+                otherBlockContentList[blockIndex].gameObject.SetActive(false);
+
+                isPut = false;
+                PutBlock();
+
+                Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
             }
 
-            otherBlockContentList[blockIndex].gameObject.SetActive(true);
-            otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
             otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
-
-            Debug.Log("Ai가 고수방 " + (blockPos - 1) + " 위치에 배팅했습니다");
-
             gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
-
-            gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
         }
     }
 
@@ -278,62 +275,17 @@ public class AiManager : MonoBehaviour
 
         isMove = true;
 
-        if(gameType == GameType.NewBie)
-        {
-            blockPos = Random.Range(1, 10);
+        isPut = false;
 
-            otherBlockContentList[0].gameObject.SetActive(true);
-            otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
-            otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
-
-            Debug.Log("Ai가 초보방 " + (blockPos - 1) + " 위치로 이동했습니다");
-
-            gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos - 1);
-        }
-        else
-        {
-            if (random == 1)
-            {
-                dontBettingZone1 = new int[] { 6, 11, 16, 21 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 11, 16, 21 };
-                dontBettingZone3 = new int[] { };
-            }
-            else
-            {
-                dontBettingZone1 = new int[] { 10, 15, 20, 25 };
-                dontBettingZone2 = new int[] { 6, 7, 8, 9, 10, 15, 20, 25 };
-                dontBettingZone3 = new int[] { 21, 22, 23, 24, 25 };
-            }
-
-            if (blockIndex == 0)
-            {
-                blockPos = GenerateRandomNumber(dontBettingZone1);
-            }
-            else if (blockIndex == 1)
-            {
-                blockPos = GenerateRandomNumber(dontBettingZone2);
-            }
-            else
-            {
-                blockPos = GenerateRandomNumber(dontBettingZone3);
-            }
-
-            otherBlockContentList[blockIndex].gameObject.SetActive(true);
-            otherBlockContentList[blockIndex].transform.position = gameManager.rouletteContentList_Target[blockPos - 1].transform.position;
-            otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
-
-            Debug.Log("Ai가 고수방 " + (blockPos - 1) + " 위치로 이동했습니다");
-
-            gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos - 1);
-        }
+        PutBlock();
     }
 
     private int GenerateRandomNumber(int[] exclusionList)
     {
-        int randomValue = Random.Range(6, 26);
+        int randomValue = Random.Range(0, 26);
         while (exclusionList.Contains(randomValue))
         {
-            randomValue = Random.Range(6, 26);
+            randomValue = Random.Range(0, 26);
         }
         return randomValue;
     }

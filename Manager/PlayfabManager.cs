@@ -113,6 +113,8 @@ public class PlayfabManager : MonoBehaviour
         {
             if (GameStateManager.instance.AutoLogin)
             {
+                infoText.text = LocalizationManager.instance.GetString("Login") + "...";
+
                 switch (GameStateManager.instance.Login)
                 {
                     case LoginType.None:
@@ -295,6 +297,10 @@ public class PlayfabManager : MonoBehaviour
             OnLoginSuccess(result);
         }, error =>
         {
+            uiManager.LoginFail();
+
+            isLogin = false;
+
             Debug.LogError("Login Fail - Guest");
         });
     }

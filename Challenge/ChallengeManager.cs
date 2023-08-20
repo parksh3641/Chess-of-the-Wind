@@ -90,6 +90,8 @@ public class ChallengeManager : MonoBehaviour
                 {
                     OpenChallengeView();
 
+                    challengeGrid.anchoredPosition = new Vector2(0, 999);
+
                     challengeAlarm.SetActive(true);
                 }
                 break;
@@ -97,6 +99,8 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.GosuWin > 0)
                 {
                     OpenChallengeView();
+
+                    challengeGrid.anchoredPosition = new Vector2(0, 999);
 
                     challengeAlarm.SetActive(true);
                 }

@@ -385,6 +385,11 @@ public class UIManager : MonoBehaviour
 
         Renewal();
 
+        if(playerDataBase.ChallengeCount < 6)
+        {
+            challengeManager.CheckChallengeTutorial();
+        }
+
         matchingManager.CheckRankUp();
     }
 
@@ -414,6 +419,8 @@ public class UIManager : MonoBehaviour
 
     public void OpenResultView(int number, int gold)
     {
+        if (resultView.activeInHierarchy) return;
+
         resultView.SetActive(true);
 
         resultButton.SetActive(false);

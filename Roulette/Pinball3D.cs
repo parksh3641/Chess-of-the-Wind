@@ -133,9 +133,9 @@ public class Pinball3D : MonoBehaviour
 
         windPower = power;
 
-        if (index == 0)
+        if (index == 0) //왼쪽
         {
-            if(number == 0)
+            if(number == 0) //아래
             {
                 switch(ballPos)
                 {
@@ -154,12 +154,42 @@ public class Pinball3D : MonoBehaviour
 
                         rigid.AddForce(vector.forward * (windPower + force));
                         break;
+                    case 3:
+                        transform.LookAt(rouletteManager.leftWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        break;
+                    case 4:
+                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 5:
+                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
                 }
             }
             else
             {
                 switch (ballPos)
                 {
+                    case 0:
+                        transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 1:
+                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 2:
+                        transform.LookAt(rouletteManager.leftWindPoint[2].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        break;
                     case 3:
                         transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
 
@@ -199,12 +229,42 @@ public class Pinball3D : MonoBehaviour
 
                         rigid.AddForce(vector.forward * (windPower + force));
                         break;
+                    case 3:
+                        transform.LookAt(rouletteManager.rightWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        break;
+                    case 4:
+                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 5:
+                        transform.LookAt(rouletteManager.rightWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
                 }
             }
             else
             {
                 switch (ballPos)
                 {
+                    case 0:
+                        transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 1:
+                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower + force));
+                        break;
+                    case 2:
+                        transform.LookAt(rouletteManager.rightWindPoint[2].position + new Vector3(1, 0.5f, -1));
+
+                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        break;
                     case 3:
                         transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
 

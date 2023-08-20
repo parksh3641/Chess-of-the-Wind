@@ -35,7 +35,6 @@ public class EmoteManager : MonoBehaviour
     public Image emoteFillAmount2;
 
 
-
     public Sprite[] emoteImgArray;
 
 
@@ -135,8 +134,6 @@ public class EmoteManager : MonoBehaviour
 
 
 
-
-
     public void OpenEmoteView2()
     {
         if (isUseEmote)
@@ -197,5 +194,11 @@ public class EmoteManager : MonoBehaviour
         otherEmoteImg2.sprite = emoteImgArray[number];
 
         SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
+    }
+
+
+    public void UseEmote_Ai()
+    {
+        UseEmote(Random.Range(0, 5));
     }
 }

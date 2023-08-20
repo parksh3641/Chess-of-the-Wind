@@ -193,7 +193,7 @@ public class TutorialManager : MonoBehaviour
         leftCharacter.enabled = false;
         rightCharacter.enabled = false;
 
-        talkBarTransform.transform.localPosition = new Vector3(0, -540);
+        talkBarTransform.transform.localPosition = new Vector3(0, -620);
 
         bottomTalkbar.SetActive(false);
 
@@ -235,10 +235,7 @@ public class TutorialManager : MonoBehaviour
                 fadeInOut.FadeIn();
                 break;
             case 3:
-                if (GameStateManager.instance.NickName.Length > 15)
-                {
-                    nickNameManager.OpenFreeNickName();
-                }
+                nickNameManager.OpenFreeNickName();
                 break;
             case 8:
                 SetCharacter(0, 0);
@@ -266,7 +263,9 @@ public class TutorialManager : MonoBehaviour
 
                 talkBar.SetActive(false);
 
-                Invoke("GameStart", 1.0f);
+                fadeInOut2.canvasGroup.alpha = 1;
+
+                Invoke("GameStart", 0.9f);
 
                 //GameStart();
                 break;
@@ -295,7 +294,7 @@ public class TutorialManager : MonoBehaviour
                 StartCoroutine(HitDamage());
                 break;
             case 27:
-                talkBarTransform.transform.localPosition = new Vector3(0, -540);
+                talkBarTransform.transform.localPosition = new Vector3(0, -620);
 
                 lpPointObj.SetActive(false);
 
@@ -374,7 +373,9 @@ public class TutorialManager : MonoBehaviour
 
                 talkBar.SetActive(false);
 
-                Invoke("GoToUnder", 1.0f);
+                fadeInOut2.canvasGroup.alpha = 1;
+
+                Invoke("GoToUnder", 0.9f);
                 break;
             case 42:
                 SetCharacter(1, 1);
@@ -839,7 +840,7 @@ public class TutorialManager : MonoBehaviour
 
         SetCharacter(1, 0);
 
-        talkBarTransform.transform.localPosition = new Vector3(0, -540);
+        talkBarTransform.transform.localPosition = new Vector3(0, -620);
     }
 
     IEnumerator HitDamage()
