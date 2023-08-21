@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -403,6 +404,8 @@ public class ShopManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+            FirebaseAnalytics.LogEvent("BuyBox_NR");
         }
         else
         {
@@ -467,6 +470,8 @@ public class ShopManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+            FirebaseAnalytics.LogEvent("BuyBox_RSR");
         }
         else
         {
@@ -490,6 +495,8 @@ public class ShopManager : MonoBehaviour
                     dailyContent.Locked();
 
                     PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+
+                    FirebaseAnalytics.LogEvent("DailyReward");
                 }
                 else
                 {
@@ -507,6 +514,8 @@ public class ShopManager : MonoBehaviour
                 if (playerDataBase.Gold >= price)
                 {
                     PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+
+                    FirebaseAnalytics.LogEvent("BuyUpgradeTicket");
                 }
                 else
                 {

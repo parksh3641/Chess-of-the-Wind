@@ -55,6 +55,9 @@ public class StoryManager : MonoBehaviour
         if (!talkSkip)
         {
             talkSkip = true;
+
+            SoundManager.instance.StopSFX(GameSfxType.TalkWinter);
+            SoundManager.instance.StopSFX(GameSfxType.TalkUnder);
         }
         else
         {
@@ -74,10 +77,12 @@ public class StoryManager : MonoBehaviour
 
         if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
         {
+            SoundManager.instance.StopSFX(GameSfxType.TalkWinter);
             SoundManager.instance.PlaySFX(GameSfxType.TalkWinter);
         }
         else
         {
+            SoundManager.instance.StopSFX(GameSfxType.TalkUnder);
             SoundManager.instance.PlaySFX(GameSfxType.TalkUnder);
         }
     }

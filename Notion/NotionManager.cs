@@ -11,6 +11,7 @@ public class NotionManager : MonoBehaviour
 
     [Title("MainNotion")]
     public Notion notion;
+    public Notion notion2;
 
 
     public NotionColor[] notionColor;
@@ -33,41 +34,46 @@ public class NotionManager : MonoBehaviour
     private void Start()
     {
         notion.gameObject.SetActive(false);
+
+        if(notion2 != null)
+        {
+            notion2.gameObject.SetActive(false);
+        }
     }
 
-    void SetColor(ColorType type)
+    void SetColor(Text text, ColorType type)
     {
         switch (type)
         {
             case ColorType.White:
-                notion.txt.color = new Color(1, 1, 1);
+                text.color = new Color(1, 1, 1);
                 break;
             case ColorType.Red:
-                notion.txt.color = new Color(1, 0, 0);
+                text.color = new Color(1, 0, 0);
                 break;
             case ColorType.Orange:
-                notion.txt.color = new Color(1, 255f / 150f, 0);
+                text.color = new Color(1, 255f / 150f, 0);
                 break;
             case ColorType.Yellow:
-                notion.txt.color = new Color(1, 1, 0);
+                text.color = new Color(1, 1, 0);
                 break;
             case ColorType.Green:
-                notion.txt.color = new Color(0, 1, 0);
+                text.color = new Color(0, 1, 0);
                 break;
             case ColorType.SkyBlue:
-                notion.txt.color = new Color(0, 1, 1);
+                text.color = new Color(0, 1, 1);
                 break;
             case ColorType.Blue:
-                notion.txt.color = new Color(0, 0, 1);
+                text.color = new Color(0, 0, 1);
                 break;
             case ColorType.Purple:
-                notion.txt.color = new Color(255f / 200f, 0, 1);
+                text.color = new Color(255f / 200f, 0, 1);
                 break;
             case ColorType.Pink:
-                notion.txt.color = new Color(1, 255f / 150f, 1);
+                text.color = new Color(1, 255f / 150f, 1);
                 break;
             case ColorType.Black:
-                notion.txt.color = new Color(0, 0, 0);
+                text.color = new Color(0, 0, 0);
                 break;
         }
     }
@@ -80,23 +86,40 @@ public class NotionManager : MonoBehaviour
             if (list.notionType.Equals(type))
             {
                 notion.txt.text = LocalizationManager.instance.GetString(list.notionType.ToString());
-                SetColor(list.colorType);
-                SetEffect(list.effectType);
+                SetColor(notion.txt, list.colorType);
+                SetEffect(notion.txt, list.effectType);
             }
         }
 
         notion.gameObject.SetActive(true);
     }
 
+    public void UseNotion2(NotionType type)
+    {
+        notion2.gameObject.SetActive(false);
+
+        foreach (var list in notionColor)
+        {
+            if (list.notionType.Equals(type))
+            {
+                notion2.txt.text = LocalizationManager.instance.GetString(list.notionType.ToString());
+                SetColor(notion2.txt, list.colorType);
+                SetEffect(notion2.txt, list.effectType);
+            }
+        }
+
+        notion2.gameObject.SetActive(true);
+    }
+
     public void UseNotion(string str, ColorType color)
     {
         notion.gameObject.SetActive(false);
         notion.txt.text = str;
-        SetColor(color);
+        SetColor(notion.txt, color);
         notion.gameObject.SetActive(true);
     }
 
-    public void SetEffect(EffectType type)
+    public void SetEffect(Text text, EffectType type)
     {
         switch (type)
         {
@@ -104,7 +127,7 @@ public class NotionManager : MonoBehaviour
 
                 break;
             case EffectType.Vibration:
-                notion.txt.gameObject.transform.DOPunchPosition(Vector3.left * 50, 0.5f);
+                text.gameObject.transform.DOPunchPosition(Vector3.left * 50, 0.5f);
                 break;
         }
     }

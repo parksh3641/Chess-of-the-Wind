@@ -9,7 +9,7 @@ public class Notion : MonoBehaviour
     private float first_speed = 0.5f;
     private float first_cooltime = 0.05f;
     private float second_speed = 0.06f;
-    private float second_cooltime = 1.6f;
+    public float second_cooltime = 1.6f;
     private float second_speed_down;
     private float plus_scale = 0.9f;
     private float alpha_time = 1.5f;

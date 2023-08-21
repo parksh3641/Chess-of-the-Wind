@@ -368,7 +368,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             if(gameManager.money > 0)
             {
-                gameManager.Draw();
+                gameManager.Lose();
             }
             else
             {

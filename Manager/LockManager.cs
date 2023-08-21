@@ -7,6 +7,8 @@ public class LockManager : MonoBehaviour
     public GameObject rankDownObj;
 
     public GameObject inventoryObj;
+    public GameObject attendanceObj;
+    public GameObject eventObj;
 
     public GameObject[] collectionGosuObj;
 
@@ -25,8 +27,10 @@ public class LockManager : MonoBehaviour
 
         rankDownObj.SetActive(false);
         inventoryObj.SetActive(false);
+        attendanceObj.SetActive(false);
+        eventObj.SetActive(false);
 
-        for(int i = 0; i < collectionGosuObj.Length; i ++)
+        for (int i = 0; i < collectionGosuObj.Length; i ++)
         {
             collectionGosuObj[i].SetActive(false);
         }
@@ -43,6 +47,8 @@ public class LockManager : MonoBehaviour
         if(playerDataBase.ChallengeCount == 0)
         {
             challengeManager.OpenChallengeView();
+
+            challengeManager.exitButton.SetActive(false);
         }
 
         if(playerDataBase.ChallengeCount >= 3) //컬렉션 장착 해제
@@ -64,12 +70,9 @@ public class LockManager : MonoBehaviour
             sellObj.SetActive(true);
             synthesisObj.SetActive(true);
             inventoryObj.SetActive(true);
-        }
-
-        if(GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
-        {
+            attendanceObj.SetActive(true);
+            eventObj.SetActive(true);
             rankDownObj.SetActive(true);
         }
     }
-
 }

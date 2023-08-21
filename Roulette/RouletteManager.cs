@@ -41,6 +41,7 @@ public class RouletteManager : MonoBehaviour
 
     public GameObject windGauge;
     public Image windButton;
+    public Text windCountText;
 
     public Sprite[] windButtonArray;
 
@@ -103,6 +104,8 @@ public class RouletteManager : MonoBehaviour
     private int nextBall = 0;
     private int rouletteIndex = 0;
     private int windIndex = 0;
+    private int windCount = 0;
+    private int windCount_Ai = 0;
 
     private int leftNumber = 0;
     private int rightNumber = 0;
@@ -137,6 +140,7 @@ public class RouletteManager : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
+    WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.1f);
 
     public PhotonView PV;
 
@@ -367,6 +371,8 @@ public class RouletteManager : MonoBehaviour
         uIManager.OpenBounsView(false);
 
         roulette3D.SetActive(true);
+
+        windCountText.text = "";
 
         vectorArray[0].gameObject.SetActive(false);
         vectorArray[1].gameObject.SetActive(false);
@@ -829,6 +835,18 @@ public class RouletteManager : MonoBehaviour
                 buttonText.text = LocalizationManager.instance.GetString("Gosu_MyTurn");
             }
 
+            switch (GameStateManager.instance.GameType)
+            {
+                case GameType.NewBie:
+                    windCount = 5;
+                    windCountText.text = windCount + "/5";
+                    break;
+                case GameType.Gosu:
+                    windCount = 1;
+                    windCountText.text = windCount + "/1";
+                    break;
+            }
+
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
         else
@@ -849,8 +867,12 @@ public class RouletteManager : MonoBehaviour
                 pinball.MyTurn(rouletteIndex);
 
                 aiMode = true;
+                windCount_Ai = 5;
                 StartCoroutine(BlowWindCoroution_Ai());
             }
+
+            windCount = 0;
+            windCountText.text = "";
 
             windCharacterManager.MyWhich(1 - windIndex);
 
@@ -858,6 +880,8 @@ public class RouletteManager : MonoBehaviour
 
             buttonText.text = LocalizationManager.instance.GetString("EnemyTurn_Info");
         }
+
+        buttonText.enabled = false;
 
         if (PhotonNetwork.IsMasterClient) //다음 사람 설정
         {
@@ -929,6 +953,8 @@ public class RouletteManager : MonoBehaviour
         {
             vectorArray[1].enabled = true;
         }
+
+        buttonText.enabled = true;
     }
 
     [PunRPC]
@@ -966,22 +992,35 @@ public class RouletteManager : MonoBehaviour
 
     public void BlowWindDown()
     {
+        gameManager.keepCount = 0;
+        
         if (aiMode) return;
 
         if (!pinball.PV.IsMine || buttonClick) return;
 
         if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            if (!windDelay)
+            if (windCount > 0)
             {
-                float[] blow = new float[2];
-                blow[0] = 30;
-                blow[1] = windIndex;
+                if (!windDelay)
+                {
+                    windCount -= 1;
+                    windCountText.text = windCount + "/5";
 
-                PV.RPC("BlowingWind", RpcTarget.All, blow);
+                    float[] blow = new float[2];
+                    blow[0] = 30;
+                    blow[1] = windIndex;
 
-                windDelay = true;
-                Invoke("WindDelay", 0.5f);
+                    PV.RPC("BlowingWind", RpcTarget.All, blow);
+
+                    windDelay = true;
+                    Invoke("WindDelay", 0.5f);
+
+                    if(windCount == 0)
+                    {
+                        windButton.sprite = windButtonArray[0];
+                    }
+                }
             }
         }
         else
@@ -1083,22 +1122,30 @@ public class RouletteManager : MonoBehaviour
             return;
         }
 
-        buttonClick = true;
-        pinballPower = false;
+        if (windCount > 0)
+        {
+            windCount -= 1;
+            windCountText.text = windCount + "/1";
+            buttonClick = true;
+            pinballPower = false;
 
-        float[] blow = new float[2];
-        blow[0] = power;
-        blow[1] = windIndex;
+            float[] blow = new float[2];
+            blow[0] = power;
+            blow[1] = windIndex;
 
-        PV.RPC("BlowingWind", RpcTarget.All, blow);
+            PV.RPC("BlowingWind", RpcTarget.All, blow);
 
-        roulette1WindPoint[0].gameObject.SetActive(false);
-        roulette1WindPoint[1].gameObject.SetActive(false);
+            roulette1WindPoint[0].gameObject.SetActive(false);
+            roulette1WindPoint[1].gameObject.SetActive(false);
 
-        roulette2WindPoint[0].gameObject.SetActive(false);
-        roulette2WindPoint[1].gameObject.SetActive(false);
+            roulette2WindPoint[0].gameObject.SetActive(false);
+            roulette2WindPoint[1].gameObject.SetActive(false);
 
-        windButton.sprite = windButtonArray[0];
+            if (windCount == 0)
+            {
+                windButton.sprite = windButtonArray[0];
+            }
+        }
     }
 
     [PunRPC]
@@ -1662,17 +1709,22 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            yield return waitForSeconds2;
+            yield return waitForSeconds3;
         }
     }
 
     void BlowWind_Ai(int min, int max, int index)
     {
-        float[] blow = new float[2];
-        blow[0] = Random.Range(min, max);
-        blow[1] = index;
+        if (windCount_Ai > 0)
+        {
+            windCount_Ai -= 1;
 
-        PV.RPC("BlowingWind", RpcTarget.All, blow);
+            float[] blow = new float[2];
+            blow[0] = Random.Range(min, max);
+            blow[1] = index;
+
+            PV.RPC("BlowingWind", RpcTarget.All, blow);
+        }
 
         if (GameStateManager.instance.GameType == GameType.Gosu)
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,6 +57,8 @@ public class ProfileManager : MonoBehaviour
             profileView.SetActive(true);
 
             Initialize();
+
+            FirebaseAnalytics.LogEvent("Profile");
         }
         else
         {
@@ -104,5 +107,7 @@ public class ProfileManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
 
         SoundManager.instance.PlaySFX(GameSfxType.Success);
+
+        FirebaseAnalytics.LogEvent("CopyId");
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,6 +80,8 @@ public class OptionManager : MonoBehaviour
             {
                 bottomContents[i].SetActive(false);
             }
+
+            FirebaseAnalytics.LogEvent("OpenOption");
         }
         else
         {
@@ -171,6 +174,8 @@ public class OptionManager : MonoBehaviour
     public void RestorePurchase()
     {
         if(PlayfabManager.instance.isActive) PlayfabManager.instance.RestorePurchases();
+
+        FirebaseAnalytics.LogEvent("RestorePurchase");
     }
 
     public void OpenDeleteAccountView()
@@ -178,6 +183,8 @@ public class OptionManager : MonoBehaviour
         if (!deleteAccountView.activeInHierarchy)
         {
             deleteAccountView.SetActive(true);
+
+            FirebaseAnalytics.LogEvent("DeleteAccount");
         }
         else
         {
@@ -199,6 +206,8 @@ public class OptionManager : MonoBehaviour
 #else
         Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
 #endif
+
+        FirebaseAnalytics.LogEvent("Feedback");
     }
 
     public void RateUs()
@@ -210,5 +219,7 @@ public class OptionManager : MonoBehaviour
 #else
         Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
 #endif
+
+        FirebaseAnalytics.LogEvent("RateUs");
     }
 }

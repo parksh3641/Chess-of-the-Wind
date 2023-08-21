@@ -12,8 +12,6 @@ public class ChallengeContent : MonoBehaviour
 
     public ReceiveContent receiveContent;
 
-    public GameObject shortcutObj;
-
     public GameObject focusObj;
     public GameObject[] lockObj;
     public GameObject[] clearObj;

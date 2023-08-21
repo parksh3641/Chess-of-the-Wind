@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,6 +48,8 @@ public class InventoryManager : MonoBehaviour
             inventoryView.SetActive(true);
 
             Initialize();
+
+            FirebaseAnalytics.LogEvent("Inventory");
         }
         else
         {

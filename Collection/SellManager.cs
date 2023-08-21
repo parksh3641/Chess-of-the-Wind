@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,6 +57,8 @@ public class SellManager : MonoBehaviour
 
         //sellButtonText.text = "판매하기";
         //cancleButtonText.text = "그만두기";
+
+        FirebaseAnalytics.LogEvent("OpenSell");
     }
 
     public void SellButton()
@@ -77,6 +80,8 @@ public class SellManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.SetBlock);
 
         NotionManager.instance.UseNotion(NotionType.SellBlock);
+
+        FirebaseAnalytics.LogEvent("Sell");
     }
     public void CloseSellView()
     {

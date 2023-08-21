@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -103,6 +104,8 @@ public class EmoteManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
 
+            FirebaseAnalytics.LogEvent("UseEmote_Betting");
+
             StartCoroutine(ResetEmoteCoroutine());
         }
     }
@@ -166,6 +169,8 @@ public class EmoteManager : MonoBehaviour
             PV.RPC("UseEmote2", RpcTarget.Others, number);
 
             SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
+
+            FirebaseAnalytics.LogEvent("UseEmote_InGame");
 
             StartCoroutine(ResetEmoteCoroutine2());
         }

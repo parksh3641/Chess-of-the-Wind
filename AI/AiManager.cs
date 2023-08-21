@@ -229,6 +229,11 @@ public class AiManager : MonoBehaviour
 
             Debug.LogError(blockPos);
 
+            for(int i = 0; i < otherBlockContentList.Count; i ++)
+            {
+                otherBlockContentList[i].gameObject.SetActive(false);
+            }
+
             if (gameManager.CheckAiBetting(blockClassArray[blockIndex], blockPos, rouletteType))
             {
                 otherBlockContentList[blockIndex].gameObject.SetActive(true);
@@ -256,12 +261,12 @@ public class AiManager : MonoBehaviour
             }
             else
             {
+                Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
+
                 otherBlockContentList[blockIndex].gameObject.SetActive(false);
 
                 isPut = false;
                 PutBlock();
-
-                Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
             }
 
             otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());

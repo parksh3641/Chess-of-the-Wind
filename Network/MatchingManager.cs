@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Firebase.Analytics;
 using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -262,6 +263,8 @@ public class MatchingManager : MonoBehaviour
 
             Debug.Log("승리 : 별 1개 획득");
 
+            FirebaseAnalytics.LogEvent("Win");
+
 
             if (GameStateManager.instance.GameType == GameType.NewBie)
             {
@@ -380,6 +383,8 @@ public class MatchingManager : MonoBehaviour
 
             Debug.Log("패배 : 별 1개 감소");
 
+            FirebaseAnalytics.LogEvent("Lose");
+
             if (playerDataBase.Star <= -1)
             {
                 if(playerDataBase.NowRank != 0)
@@ -480,6 +485,8 @@ public class MatchingManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.RankUp);
 
+            FirebaseAnalytics.LogEvent("RankUp_" + GameStateManager.instance.GameRankType.ToString());
+
             Invoke("SoundDelay", 2f);
 
         }
@@ -494,6 +501,8 @@ public class MatchingManager : MonoBehaviour
     LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] + "</color>";
 
             SoundManager.instance.PlaySFX(GameSfxType.RankDown);
+
+            FirebaseAnalytics.LogEvent("RankDown_" + GameStateManager.instance.GameRankType.ToString());
         }
 
         Invoke("Delay", 1.5f);
@@ -776,10 +785,14 @@ public class MatchingManager : MonoBehaviour
         Invoke("ChangeBGM", 1.5f);
 
         Debug.Log("플레이어와 매칭되었습니다.");
+
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GameType.ToString());
     }
 
     public void AlMatching()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         isServer = false;
 
         dontTouchObj.SetActive(true);
@@ -795,6 +808,8 @@ public class MatchingManager : MonoBehaviour
         Invoke("ChangeBGM", 1.5f);
 
         Debug.Log("사람이 없는 관계로 인공지능과 매칭됩니다.");
+
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GameType.ToString());
     }
 
     public void ChangeBGM()

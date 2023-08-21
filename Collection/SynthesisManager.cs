@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Firebase.Analytics;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -598,6 +599,8 @@ public class SynthesisManager : MonoBehaviour
                 synthesisResultContentList[i].gameObject.SetActive(false);
             }
 
+            FirebaseAnalytics.LogEvent("Synthesis");
+
             StartCoroutine(SynthesisCoroution());
 
         }
@@ -917,6 +920,8 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisRankType = RankType.N;
 
+        FirebaseAnalytics.LogEvent("SynthesisAll_N");
+
         StartCoroutine(SynthesisAllCoroution());
     }
 
@@ -948,6 +953,8 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisRankType = RankType.R;
 
+        FirebaseAnalytics.LogEvent("SynthesisAll_R");
+
         StartCoroutine(SynthesisAllCoroution());
     }
 
@@ -978,6 +985,8 @@ public class SynthesisManager : MonoBehaviour
         Debug.Log("SR등급 일괄 합성 시작");
 
         synthesisRankType = RankType.SR;
+
+        FirebaseAnalytics.LogEvent("SynthesisAll_SR");
 
         StartCoroutine(SynthesisAllCoroution());
     }

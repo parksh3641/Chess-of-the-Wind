@@ -101,8 +101,12 @@ public class PlayfabManager : MonoBehaviour
             return;
         }
 
+        infoText.text = "";
+
         if (GameStateManager.instance.IsLogin)
         {
+            infoText.text = LocalizationManager.instance.GetString("Login") + "...";
+
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
             StartCoroutine(LoadDataCoroutine());
 #else

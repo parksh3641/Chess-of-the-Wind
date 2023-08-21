@@ -13,10 +13,12 @@ public class Pinball3D : MonoBehaviour
     public int index = 0;
     public int ballPos = 0;
 
+    private int rotate = 0;
+
     private float time = 0f;
-    private float midWindPower = 0f;
     private int random = 0;
 
+    public bool tutorial = false;
     public bool move = false;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
@@ -79,17 +81,23 @@ public class Pinball3D : MonoBehaviour
 
         random = Random.Range(0, 2);
 
+        if (tutorial) random = 0;
+
         if (number == 0)
         {
             if(random == 0)
             {
                 transform.position = new Vector3(-0.9f, 0.45f, 3.3f);
                 transform.rotation = Quaternion.Euler(0, 20, 0);
+
+                rotate = 0;
             }
             else
             {
                 transform.position = new Vector3(-4.1f, 0.45f, 3.3f);
                 transform.rotation = Quaternion.Euler(0, -20, 0);
+
+                rotate = 1;
             }
         }
         else
@@ -98,11 +106,15 @@ public class Pinball3D : MonoBehaviour
             {
                 transform.position = new Vector3(4.1f, 0.45f, 3.3f);
                 transform.rotation = Quaternion.Euler(0, 20, 0);
+
+                rotate = 0;
             }
             else
             {
                 transform.position = new Vector3(0.9f, 0.45f, 3.3f);
                 transform.rotation = Quaternion.Euler(0, -20, 0);
+
+                rotate = 1;
             }
         }
 
@@ -140,34 +152,55 @@ public class Pinball3D : MonoBehaviour
                 switch(ballPos)
                 {
                     case 0:
-                        transform.LookAt(rouletteManager.leftWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        if(rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
                         break;
                     case 1:
-                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
                         break;
                     case 2:
-                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[6].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+
                         break;
                     case 3:
-                        transform.LookAt(rouletteManager.leftWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[7].position + new Vector3(-1, 0.5f, -1));
 
-                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
-                        break;
-                    case 4:
-                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
 
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 5:
-                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
                         break;
                 }
             }
@@ -175,35 +208,57 @@ public class Pinball3D : MonoBehaviour
             {
                 switch (ballPos)
                 {
-                    case 0:
-                        transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 1:
-                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 2:
-                        transform.LookAt(rouletteManager.leftWindPoint[2].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
-                        break;
-                    case 3:
-                        transform.LookAt(rouletteManager.leftWindPoint[0].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
                     case 4:
-                        transform.LookAt(rouletteManager.leftWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[0].position);
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+
                         break;
                     case 5:
-                        transform.LookAt(rouletteManager.leftWindPoint[2].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[1].position);
 
-                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+
+                        break;
+                    case 6:
+                        transform.LookAt(rouletteManager.leftWindPoint[2].position);
+
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
+                        break;
+                    case 7:
+                        transform.LookAt(rouletteManager.leftWindPoint[3].position);
+
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
                         break;
                 }
             }
@@ -215,34 +270,55 @@ public class Pinball3D : MonoBehaviour
                 switch (ballPos)
                 {
                     case 0:
-                        transform.LookAt(rouletteManager.rightWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[4].position);
 
-                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
                         break;
                     case 1:
-                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[5].position);
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
                         break;
                     case 2:
-                        transform.LookAt(rouletteManager.rightWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[6].position);
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+
                         break;
                     case 3:
-                        transform.LookAt(rouletteManager.rightWindPoint[3].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[7].position);
 
-                        rigid.AddForce(vector.forward * (windPower * 1.3f + force));
-                        break;
-                    case 4:
-                        transform.LookAt(rouletteManager.rightWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
 
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 5:
-                        transform.LookAt(rouletteManager.rightWindPoint[5].position + new Vector3(-1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
                         break;
                 }
             }
@@ -250,35 +326,57 @@ public class Pinball3D : MonoBehaviour
             {
                 switch (ballPos)
                 {
-                    case 0:
-                        transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 1:
-                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
-                    case 2:
-                        transform.LookAt(rouletteManager.rightWindPoint[2].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
-                        break;
-                    case 3:
-                        transform.LookAt(rouletteManager.rightWindPoint[0].position + new Vector3(1, 0.5f, -1));
-
-                        rigid.AddForce(vector.forward * (windPower + force));
-                        break;
                     case 4:
-                        transform.LookAt(rouletteManager.rightWindPoint[1].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[0].position);
 
-                        rigid.AddForce(vector.forward * (windPower + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+
                         break;
                     case 5:
-                        transform.LookAt(rouletteManager.rightWindPoint[2].position + new Vector3(1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.rightWindPoint[1].position);
 
-                        rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+
+                        break;
+                    case 6:
+                        transform.LookAt(rouletteManager.rightWindPoint[2].position);
+
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
+                        break;
+                    case 7:
+                        transform.LookAt(rouletteManager.rightWindPoint[3].position);
+
+                        if (rotate == 0) //반 시계 방향 회전중
+                        {
+                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                        }
+                        else
+                        {
+                            rigid.AddForce(vector.forward * (windPower + force));
+                        }
+
                         break;
                 }
             }
@@ -292,6 +390,7 @@ public class Pinball3D : MonoBehaviour
         rigid.isKinematic = true;
 
         time = 0;
+        ballPos = 0;
 
         StopAllCoroutines();
 
@@ -323,6 +422,14 @@ public class Pinball3D : MonoBehaviour
         else if (other.transform.tag == "WindPoint6")
         {
             ballPos = 5;
+        }
+        else if (other.transform.tag == "WindPoint7")
+        {
+            ballPos = 6;
+        }
+        else if (other.transform.tag == "WindPoint8")
+        {
+            ballPos = 7;
         }
     }
 

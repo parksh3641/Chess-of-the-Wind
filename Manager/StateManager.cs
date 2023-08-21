@@ -22,6 +22,7 @@ public class StateManager : MonoBehaviour
     public MailBoxManager mailBoxManager;
     public LockManager lockManager;
     public NewsManager newsManager;
+    public ChallengeManager challengeManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -59,14 +60,15 @@ public class StateManager : MonoBehaviour
             mailBoxManager.Initialize();
             lockManager.Initialize();
             newsManager.Initialize();
+            challengeManager.Initialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {
-                //if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
-                //{
-                //    GameStateManager.instance.Penalty = 0;
-                //    return;
-                //}
+                if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+                {
+                    GameStateManager.instance.Penalty = 0;
+                    return;
+                }
 
                 DateTime time = DateTime.Parse(PlayerPrefs.GetString("PenaltyTime"));
                 DateTime now = DateTime.Now;

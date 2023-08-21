@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +51,8 @@ public class RankDownManager : MonoBehaviour
             rankDownView.SetActive(true);
 
             Initialize();
+
+            FirebaseAnalytics.LogEvent("RankDown");
         }
         else
         {

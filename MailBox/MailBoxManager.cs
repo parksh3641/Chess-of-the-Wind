@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.Json;
@@ -89,6 +90,8 @@ public class MailBoxManager : MonoBehaviour
 
                 GetUserInventoryCoupon();
             }
+
+            FirebaseAnalytics.LogEvent("MailBox");
         }
         else
         {

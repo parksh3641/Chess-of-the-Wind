@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 
 public class RankInfoManager : MonoBehaviour
@@ -63,6 +64,8 @@ public class RankInfoManager : MonoBehaviour
             rankInfoView.SetActive(true);
 
             CheckMy();
+
+            FirebaseAnalytics.LogEvent("RankInfo");
         }
         else
         {

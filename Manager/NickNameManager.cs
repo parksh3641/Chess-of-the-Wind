@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -227,6 +228,8 @@ public class NickNameManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.Click);
 
         nickNameView.SetActive(false);
+
+        FirebaseAnalytics.LogEvent("Nickname");
     }
 
     public void FreeSuccess()

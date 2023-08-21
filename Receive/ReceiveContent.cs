@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ReceiveContent : MonoBehaviour
 {
+    RewardType rewardType = RewardType.Gold;
+
     public Image mainBackground;
     public Image icon;
     public Text countText;
@@ -26,6 +28,8 @@ public class ReceiveContent : MonoBehaviour
     public void Initialize(RewardType type, int count)
     {
         icon.sprite = rewardArray[(int)type];
+
+        rewardType = type;
 
         switch (type)
         {
@@ -65,5 +69,10 @@ public class ReceiveContent : MonoBehaviour
         }
 
         countText.text = MoneyUnitString.ToCurrencyString(count);
+    }
+
+    public void OpenInfo()
+    {
+        ReceiveInfoManager.instance.OpenReceiveInfo(rewardType);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,8 @@ public class HelpManager : MonoBehaviour
         if (!helpView.activeSelf)
         {
             helpView.SetActive(true);
+
+            FirebaseAnalytics.LogEvent("Help");
         }
         else
         {

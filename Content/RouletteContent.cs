@@ -291,6 +291,18 @@ public class RouletteContent : MonoBehaviour, IPointerEnterHandler, IDropHandler
         isActive_Ai = false;
     }
 
+    public void SetActiveFalse()
+    {
+        blockClass = null;
+        isActive = false;
+    }
+
+    public void SetActiveFalseAi()
+    {
+        blockClass_Ai = null;
+        isActive_Ai = false;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(!tutorial)

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -63,6 +64,14 @@ public class FormationManager : MonoBehaviour
     }
     public void SelectedFormation()
     {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         if (isWait) return;
 
         isWait = true;
@@ -74,11 +83,7 @@ public class FormationManager : MonoBehaviour
     {
         if (selectNumber == 0)
         {
-            playerDataBase.Formation = 1;
-
             GameStateManager.instance.WindCharacterType = WindCharacterType.Winter;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
 
             itemList.Clear();
             //itemList.Add("LeftQueen_2_N");
@@ -88,14 +93,17 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
 
+            playerDataBase.Formation = 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 1);
+
             SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
+
+            FirebaseAnalytics.LogEvent("Winter");
 
             Debug.Log("눈의 여왕 진형 선택");
         }
         else
         {
-            playerDataBase.Formation = 2;
-
             GameStateManager.instance.WindCharacterType = WindCharacterType.UnderWorld;
 
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
@@ -108,7 +116,12 @@ public class FormationManager : MonoBehaviour
 
             PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
 
+            playerDataBase.Formation = 2;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", 2);
+
             SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
+
+            FirebaseAnalytics.LogEvent("Under");
 
             Debug.Log("지하 세계 진형 선택");
         }

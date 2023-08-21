@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Firebase.Analytics;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +35,7 @@ public class UpgradeManager : MonoBehaviour
 
     public LocalizationContent equipText;
 
+    public GameObject goldObj;
     public GameObject ticketObj;
     public GameObject defDestroyObj;
     public LocalizationContent defDestroyText;
@@ -169,6 +171,8 @@ public class UpgradeManager : MonoBehaviour
 
         valuePlusText.ReLoad();
 
+        goldObj.SetActive(true);
+
         gold = playerDataBase.Gold;
 
         goldText.localizationName = "NeedGold_Upgrade";
@@ -233,9 +237,10 @@ public class UpgradeManager : MonoBehaviour
                 //successText.localizationName = "MaxLevel";
                 successText.localizationName = "";
                 successText.plusText = "";
-                keepText.localizationName = "MaxLevel";
+                keepText.localizationName = "";
                 keepText.plusText = "";
-                downText.localizationName = "";
+                downText.localizationName = "MaxLevel";
+                downText.plusText = "";
                 destroyText.localizationName = "";
                 valuePlusText.localizationName = "";
 
@@ -248,6 +253,9 @@ public class UpgradeManager : MonoBehaviour
             downText.ReLoad();
             destroyText.ReLoad();
             valuePlusText.ReLoad();
+
+            goldObj.SetActive(false);
+            ticketObj.SetActive(false);
 
             Debug.Log("최대 레벨입니다");
         }
@@ -434,6 +442,8 @@ public class UpgradeManager : MonoBehaviour
 
             CheckDefDestroyTicket();
         }
+
+        FirebaseAnalytics.LogEvent("Upgrade");
 
         Initialize();
 

@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -71,6 +72,8 @@ public class AttendanceManager : MonoBehaviour
             Initialize();
 
             CheckAttendance();
+
+            FirebaseAnalytics.LogEvent("Attendance");
         }
         else
         {

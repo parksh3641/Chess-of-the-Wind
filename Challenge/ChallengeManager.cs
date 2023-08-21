@@ -9,6 +9,7 @@ public class ChallengeManager : MonoBehaviour
 
     public RectTransform challengeGrid;
     public GameObject challengeAlarm;
+    public GameObject exitButton;
 
     public ChallengeContent[] challengeContentArray;
 
@@ -17,6 +18,8 @@ public class ChallengeManager : MonoBehaviour
     public MatchingManager matchingManager;
 
     List<string> itemList = new List<string>();
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     PlayerDataBase playerDataBase;
 
@@ -32,12 +35,35 @@ public class ChallengeManager : MonoBehaviour
         challengeGrid.anchoredPosition = new Vector2(0, -999);
     }
 
+    public void Initialize()
+    {
+        if(playerDataBase.ChallengeCount < 6)
+        {
+            StartCoroutine(CheckCoroution());
+        }
+    }
 
-    public void OpenChallengeView()
+    IEnumerator CheckCoroution()
     {
         if (!challengeView.activeSelf)
         {
+            CheckChallengeTutorial();
+        }
+
+        yield return waitForSeconds;
+
+        StartCoroutine(CheckCoroution());
+    }
+
+    public void OpenChallengeView()
+    {
+        if (!uIManager.mainCanvas.enabled) return;
+
+        if (!challengeView.activeSelf)
+        {
             challengeView.SetActive(true);
+
+            exitButton.SetActive(true);
 
             InitializeChallenge();
 
@@ -45,11 +71,14 @@ public class ChallengeManager : MonoBehaviour
         }
         else
         {
-            challengeView.SetActive(false);
+            if(exitButton.activeInHierarchy)
+            {
+                challengeView.SetActive(false);
+            }
         }
     }
 
-    public void CheckChallengeTutorial()
+    void CheckChallengeTutorial()
     {
         switch(playerDataBase.ChallengeCount)
         {
@@ -57,6 +86,10 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckEquipBlock_Newbie())
                 {
                     OpenChallengeView();
+
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[0].lockObj[0].SetActive(true);
 
                     challengeAlarm.SetActive(true);
                 }
@@ -66,6 +99,10 @@ public class ChallengeManager : MonoBehaviour
                 {
                     OpenChallengeView();
 
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[1].lockObj[0].SetActive(true);
+
                     challengeAlarm.SetActive(true);
                 }
                 break;
@@ -73,6 +110,10 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.NewbieWin > 1)
                 {
                     OpenChallengeView();
+
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[2].lockObj[0].SetActive(true);
 
                     challengeAlarm.SetActive(true);
                 }
@@ -82,6 +123,10 @@ public class ChallengeManager : MonoBehaviour
                 {
                     OpenChallengeView();
 
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[3].lockObj[0].SetActive(true);
+
                     challengeAlarm.SetActive(true);
                 }
                 break;
@@ -89,6 +134,10 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckBlockLevel(0))
                 {
                     OpenChallengeView();
+
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[4].lockObj[0].SetActive(true);
 
                     challengeGrid.anchoredPosition = new Vector2(0, 999);
 
@@ -99,6 +148,10 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.GosuWin > 0)
                 {
                     OpenChallengeView();
+
+                    exitButton.SetActive(false);
+
+                    challengeContentArray[5].lockObj[0].SetActive(true);
 
                     challengeGrid.anchoredPosition = new Vector2(0, 999);
 
@@ -180,6 +233,10 @@ public class ChallengeManager : MonoBehaviour
                 break;
             case 5:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
+
+                exitButton.SetActive(true);
+
+                StopAllCoroutines();
                 break;
         }
 
@@ -209,9 +266,13 @@ public class ChallengeManager : MonoBehaviour
                 uIManager.OpenMainCanvas(2);
                 break;
             case 1:
+                uIManager.OpenMainCanvas(1);
+
                 matchingManager.GameStartButton_Newbie();
                 break;
             case 2:
+                uIManager.OpenMainCanvas(1);
+
                 matchingManager.GameStartButton_Newbie();
                 break;
             case 3:
@@ -221,6 +282,8 @@ public class ChallengeManager : MonoBehaviour
                 uIManager.OpenMainCanvas(2);
                 break;
             case 5:
+                uIManager.OpenMainCanvas(1);
+
                 matchingManager.GameStartButton_Gosu();
                 break;
         }

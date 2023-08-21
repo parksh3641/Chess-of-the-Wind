@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -79,6 +80,8 @@ public class NewsManager : MonoBehaviour
             }
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.ReadTitleNews(ReadTitleNews);
+
+            FirebaseAnalytics.LogEvent("News");
         }
         else
         {
@@ -105,10 +108,13 @@ public class NewsManager : MonoBehaviour
             newsContentList[i].gameObject.SetActive(true);
         }
 
-        newsContentTransform.anchoredPosition = new Vector3(0, -999, 0);
+        //newsContentTransform.anchoredPosition = new Vector3(0, -999, 0);
 
-        playerDataBase.NewsAlarm = 0;
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewsAlarm", 0);
+        if (playerDataBase.NewsAlarm > 0)
+        {
+            playerDataBase.NewsAlarm = 0;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewsAlarm", 0);
+        }
 
         alarm.SetActive(false);
         mainAlarm.SetActive(false);
@@ -120,7 +126,7 @@ public class NewsManager : MonoBehaviour
 
         infoTitleText.text = title;
         infoBodyText.text = newsInfoList[number].Body;
-        infoBodyText.rectTransform.anchoredPosition = new Vector3(0, -305f, 0);
+        //infoBodyText.rectTransform.anchoredPosition = new Vector3(0, -305f, 0);
     }
 
     public void CloseReadMore()

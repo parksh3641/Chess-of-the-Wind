@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Firebase.Analytics;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -178,11 +179,15 @@ public class UIManager : MonoBehaviour
     public void PrivacyReadMore()
     {
         Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy/home");
+
+        FirebaseAnalytics.LogEvent("Privacy Policy");
     }
 
     public void TermsReadMore()
     {
         Application.OpenURL("https://sites.google.com/view/bluebook-terms/home");
+
+        FirebaseAnalytics.LogEvent("Terms of Service");
     }
 
     public void Initialize()
@@ -385,11 +390,6 @@ public class UIManager : MonoBehaviour
 
         Renewal();
 
-        if(playerDataBase.ChallengeCount < 6)
-        {
-            challengeManager.CheckChallengeTutorial();
-        }
-
         matchingManager.CheckRankUp();
     }
 
@@ -425,8 +425,6 @@ public class UIManager : MonoBehaviour
 
         resultButton.SetActive(false);
 
-        SoundManager.instance.StopBGM();
-
         if (playerDataBase.Formation == 2)
         {
             characterImg.sprite = characterArray[1];
@@ -450,7 +448,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Win = true;
-
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else if(number == 1)
@@ -467,7 +464,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Lose = true;
-
             SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
         else if (number == 2)
@@ -484,7 +480,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Win = true;
-
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else
@@ -609,14 +604,6 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
-                if(!first)
-                {
-                    first = true;
-                }
-                else
-                {
-                    challengeManager.CheckChallengeTutorial();
-                }
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
@@ -653,10 +640,14 @@ public class UIManager : MonoBehaviour
     public void Feedback()
     {
         Application.OpenURL("https://forms.gle/u8PT9yV5smhDRLxbA");
+
+        FirebaseAnalytics.LogEvent("Feedback");
     }
 
     public void NaverCafe()
     {
         Application.OpenURL("https://cafe.naver.com/windchess");
+
+        FirebaseAnalytics.LogEvent("NaverCafe");
     }
 }

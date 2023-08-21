@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
 using System;
@@ -61,6 +62,7 @@ public class EventManager : MonoBehaviour
         else
         {
             eventView.SetActive(false);
+            welcomeView.SetActive(false);
         }
     }
 
@@ -80,6 +82,8 @@ public class EventManager : MonoBehaviour
             {
                 ResetManager.instance.Initialize();
             }
+
+            FirebaseAnalytics.LogEvent("OpenEvent");
         }
         else
         {

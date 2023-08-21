@@ -362,13 +362,14 @@ public class TutorialManager : MonoBehaviour
 
                 break;
             case 40:
-                rightCharacter.enabled = false;
-                npcText.text = "";
+                InitCharacter();
 
-                isTalkSound = true;
+                rightCharacter.enabled = false;
 
                 break;
             case 41:
+                InitCharacter();
+
                 fadeInOut.StoryFadeOut();
 
                 talkBar.SetActive(false);
@@ -440,7 +441,7 @@ public class TutorialManager : MonoBehaviour
 
         StartCoroutine(Talking(str));
 
-        if(number != 3 && number != 23 && number != 24 && number != 25 && number != 26 && number != 31 && number != 35 && number != 41 && number != 55)
+        if(number != 3 && number != 23 && number != 24 && number != 25 && number != 26 && number != 31 && number != 35 && number != 41 && number != 46 && number != 55)
         {
             if(!isTalkSound)
             {
@@ -467,6 +468,10 @@ public class TutorialManager : MonoBehaviour
         if(!talkSkip)
         {
             talkSkip = true;
+
+            SoundManager.instance.StopSFX(GameSfxType.TalkWinter);
+            SoundManager.instance.StopSFX(GameSfxType.TalkUnder);
+            SoundManager.instance.StopSFX(GameSfxType.TalkMy);
         }
         else
         {
@@ -637,6 +642,7 @@ public class TutorialManager : MonoBehaviour
         bettingView.SetActive(false);
         rouletteView.SetActive(true);
 
+        pinball.tutorial = true;
         pinball.MyTurn(0);
 
         pointerManager.Initialize(0);
@@ -863,8 +869,14 @@ public class TutorialManager : MonoBehaviour
         fadeInOut2.FadeIn();
 
         gameCanvas.enabled = false;
+        mainCanvas.enabled = true;
 
-        ContinueTalk();
+        str = LocalizationManager.instance.GetString("Tutorial_" + (talkIndex + 1).ToString()).Replace("%%",
+            GameStateManager.instance.NickName);
+
+        StartCoroutine(Talking(str));
+
+        SoundManager.instance.PlaySFX(GameSfxType.TalkMy);
 
         mainCanvasBackground.gameObject.SetActive(true);
 

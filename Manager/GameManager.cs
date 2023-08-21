@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
     public int keepCount = 0;
 
     public int turn = 0;
+    public int turnCount = 0;
     public bool inGameBurning = false;
     public bool inGameBurning2 = false;
 
@@ -529,6 +530,8 @@ public class GameManager : MonoBehaviour
 
         turn = 0;
         turnText.text = LocalizationManager.instance.GetString("Turn") + " : " + turn;
+
+        turnCount = 0;
 
         burningObj.SetActive(false);
 
@@ -1022,7 +1025,7 @@ public class GameManager : MonoBehaviour
         }
         else if(number == 1)
         {
-            money -= stakes;
+            money = -stakes;
 
             Debug.Log("패배");
         }
@@ -1041,16 +1044,17 @@ public class GameManager : MonoBehaviour
 
         SoundManager.instance.StopAllSFX();
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
+        SoundManager.instance.StopBGM();
 
         timerAnimation.StopAnim();
-
-        uIManager.OpenResultView(number, money);
-        rouletteManager.CloseRouletteView();
 
         if(PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
+
+        rouletteManager.CloseRouletteView();
+        uIManager.OpenResultView(number, money);
     }
 
     private void ClearOtherPlayerBlock()
@@ -1149,6 +1153,11 @@ public class GameManager : MonoBehaviour
         {
             newbieBlockContent.ResetPos();
 
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            {
+                rouletteContentList_Target[i].SetActiveFalseAll();
+            }
+
             for (int i = 0; i < blockLevelContentList_NewBie.Count; i++)
             {
                 blockLevelContentList_NewBie[i].Initialize();
@@ -1156,6 +1165,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalseAll();
+            }
+
             for (int i = 0; i < blockContentList.Count; i++)
             {
                 if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
@@ -1165,11 +1179,6 @@ public class GameManager : MonoBehaviour
             {
                 allBlockLevelContentList[i].Initialize();
             }
-        }
-
-        for (int i = 0; i < allContentList.Count; i++)
-        {
-            allContentList[i].SetActiveFalseAll();
         }
 
         for (int i = 0; i < bettingList.Length; i++)
@@ -1214,51 +1223,43 @@ public class GameManager : MonoBehaviour
         CheckTip();
     }
 
+    [Button]
+    void TurnUp()
+    {
+        turn += 1;
+        ChangeTurn(turn);
+    }
+
     [PunRPC]
     void ChangeTurn(int number)
     {
         turn = number;
 
-        if (turn >= 7)
+        if (!inGameBurning)
         {
-            if (!inGameBurning)
+            if (turn >= 7)
             {
                 inGameBurning = true;
 
-                halfMoney = money / 2;
-                halfOtherMoney = otherMoney / 2;
-
-                money = money - halfMoney;
-                otherMoney = otherMoney - halfOtherMoney;
-
-                moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
-
                 burningObj.SetActive(true);
 
-                NotionManager.instance.UseNotion(NotionType.InGameBurning);
-            }
-            else
-            {
-                NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
+                HalfMoney();
+
+                NotionManager.instance.UseNotion2(NotionType.InGameBurning);
             }
         }
-        else if (turn >= 11)
+
+        if (!inGameBurning2)
         {
-            if (!inGameBurning2)
+            if (turn >= 11)
             {
                 inGameBurning2 = true;
 
-                halfMoney = money / 2;
-                halfOtherMoney = otherMoney / 2;
+                turnCount = 1;
 
-                money = money - halfMoney;
-                otherMoney = otherMoney - halfOtherMoney;
+                HalfMoney();
 
-                moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
-
-                NotionManager.instance.UseNotion(NotionType.InGameBurning2);
+                NotionManager.instance.UseNotion2(NotionType.InGameBurning2);
             }
             else
             {
@@ -1267,7 +1268,20 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
+            if (turnCount >= 3)
+            {
+                turnCount = 1;
+
+                HalfMoney();
+
+                NotionManager.instance.UseNotion2(NotionType.InGameBurning3);
+            }
+            else
+            {
+                turnCount += 1;
+
+                NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
+            }
         }
 
         turnText.text = LocalizationManager.instance.GetString("Turn") + " : " + turn;
@@ -1275,6 +1289,18 @@ public class GameManager : MonoBehaviour
         Debug.Log("현재 턴 : " + turn);
 
         UpdateMoney();
+    }
+
+    void HalfMoney()
+    {
+        halfMoney = money / 2;
+        halfOtherMoney = otherMoney / 2;
+
+        money = money - halfMoney;
+        otherMoney = otherMoney - halfOtherMoney;
+
+        moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
+        moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
     }
 
     void CheckTip()
@@ -1316,14 +1342,14 @@ public class GameManager : MonoBehaviour
             aiMoveBlock = false;
             aiEmote = false;
 
-            if (Random.Range(0, 2) == 0)
+            if (Random.Range(0, 10) < 7)
             {
                 aiMoveBlock = true;
 
                 Debug.Log("Ai가 블록을 0초 남기고 이동시킬 예정입니다");
             }
 
-            if (Random.Range(0, 2) == 0)
+            if (Random.Range(0, 10) < 2)
             {
                 aiEmote = true;
 
@@ -2915,9 +2941,9 @@ public class GameManager : MonoBehaviour
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
-            for (int i = 0; i < rouletteContentList_NewBie.Count; i++)
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
             {
-                rouletteContentList_NewBie[i].SetActiveFalse(blockContent.blockClass);
+                rouletteContentList_Target[i].SetActiveFalse(blockContent.blockClass);
             }
 
             for (int i = 0; i < blockLevelContentList_NewBie.Count; i++)
@@ -3216,7 +3242,34 @@ public class GameManager : MonoBehaviour
             allIn = false;
         }
 
-        if(bettingList.Contains(1) && bettingList[blockContent.index] == 0)
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            {
+                rouletteContentList_Target[i].SetActiveFalse();
+            }
+
+            for (int i = 0; i < blockLevelContentList_Target.Count; i++)
+            {
+                blockLevelContentList_Target[i].Initialize();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalse();
+            }
+
+            for (int i = 0; i < allBlockLevelContentList.Count; i++)
+            {
+                allBlockLevelContentList[i].Initialize();
+            }
+        }
+
+
+        if (bettingList.Contains(1) && bettingList[blockContent.index] == 0)
         {
             blockContent.CancleBetting();
 
@@ -3499,13 +3552,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < allContentList.Count; i++)
-        {
-            allContentList[i].isActive_Ai = false;
-        }
-
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
+            for(int i = 0; i < rouletteContentList_Target.Count; i ++)
+            {
+                rouletteContentList_Target[i].SetActiveFalseAi();
+            }
+
             for (int i = 0; i < blockLevelContentList_Target.Count; i++)
             {
                 blockLevelContentList_Target[i].Initialize();
@@ -3513,6 +3566,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalseAi();
+            }
+
             for (int i = 0; i < allBlockLevelContentList.Count; i++)
             {
                 allBlockLevelContentList[i].Initialize();
@@ -3752,9 +3810,9 @@ public class GameManager : MonoBehaviour
     {
         if(GameStateManager.instance.GameType == GameType.NewBie)
         {
-            for (int i = 0; i < rouletteContentList_NewBie.Count; i++)
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
             {
-                rouletteContentList_NewBie[i].ResetBackgroundColor();
+                rouletteContentList_Target[i].ResetBackgroundColor();
             }
         }
         else
@@ -3782,6 +3840,11 @@ public class GameManager : MonoBehaviour
     {
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            {
+                rouletteContentList_Target[i].SetActiveFalse();
+            }
+
             if (newbieBlockContent.gameObject.activeInHierarchy)
             {
                 newbieBlockContent.ResetPos();
@@ -3789,6 +3852,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalse();
+            }
+
             for (int i = 0; i < blockContentList.Count; i++)
             {
                 if (blockContentList[i].gameObject.activeInHierarchy)
@@ -3796,11 +3864,6 @@ public class GameManager : MonoBehaviour
                     blockContentList[i].ResetPos();
                 }
             }
-        }
-
-        for (int i = 0; i < allContentList.Count; i++)
-        {
-            allContentList[i].SetActiveFalseAll();
         }
 
         for (int i = 0; i < bettingList.Length; i++)
@@ -3984,6 +4047,23 @@ public class GameManager : MonoBehaviour
     {
         BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
 
+        otherBlockType = BlockType.Default;
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < blockLevelContentList_Target.Count; i++)
+            {
+                blockLevelContentList_Target[i].Initialize_Other();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allBlockLevelContentList.Count; i++)
+            {
+                allBlockLevelContentList[i].Initialize_Other();
+            }
+        }
+
         for (int i = 0; i < otherBlockContentList.Count; i ++)
         {
             if(otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
@@ -4131,12 +4211,20 @@ public class GameManager : MonoBehaviour
         GameEnd(2);
     }
 
+    public void Lose()
+    {
+        Debug.Log("튕겨서 재접속 했으나 방이 사라져서 패배 처리되었습니다");
+
+        GameStateManager.instance.Playing = false;
+        GameEnd(1);
+    }
+
     public void Draw()
     {
+        Debug.Log("튕겨서 재접속 했으나 방이 사라져서 무승부 처리되었습니다");
+
         GameStateManager.instance.Playing = false;
         GameEnd(3);
-
-        Debug.Log("튕겨서 재접속 했으나 방이 사라져서 무승부 처리되었습니다");
     }
 
     #endregion

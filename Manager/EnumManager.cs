@@ -277,7 +277,8 @@ public enum NotionType
     LowPiece,
     CancelPurchase,
     CancelWatchAd,
-    HighLevelLimit
+    HighLevelLimit,
+    InGameBurning3
 }
 
 public enum GameRankType

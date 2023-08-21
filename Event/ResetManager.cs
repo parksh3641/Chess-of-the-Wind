@@ -60,6 +60,7 @@ public class ResetManager : MonoBehaviour
             GameStateManager.instance.DailyNormalBox_10 = 1;
             GameStateManager.instance.DailyEpicBox_1 = 3;
             GameStateManager.instance.DailyEpicBox_10 = 1;
+            GameStateManager.instance.DailyReward = false;
             GameStateManager.instance.DailyAdsReward = false;
             GameStateManager.instance.DailyAdsReward2 = false;
             GameStateManager.instance.DailyAdsReward3 = false;
@@ -111,6 +112,7 @@ public class ResetManager : MonoBehaviour
                 GameStateManager.instance.DailyNormalBox_10 = 1;
                 GameStateManager.instance.DailyEpicBox_1 = 3;
                 GameStateManager.instance.DailyEpicBox_10 = 1;
+                GameStateManager.instance.DailyReward = false;
                 GameStateManager.instance.DailyAdsReward = false;
                 GameStateManager.instance.DailyAdsReward2 = false;
                 GameStateManager.instance.DailyAdsReward3 = false;
