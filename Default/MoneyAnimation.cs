@@ -575,6 +575,11 @@ public class MoneyAnimation : MonoBehaviour
 
             gameManager.CheckWinnerPlayer();
         }
+        else
+        {
+            changeMoneyText[0].text = "";
+            changeMoneyText[1].text = "";
+        }
     }
 
 

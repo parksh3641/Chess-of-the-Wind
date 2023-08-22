@@ -43,71 +43,83 @@ public class LocalizationManager : MonoBehaviour
 
                 ChangeKorean();
             }
-            else if (Application.systemLanguage == SystemLanguage.Japanese)
+            //else if (Application.systemLanguage == SystemLanguage.Japanese)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Japanese;
+
+            //    ChangeJapanese();
+            //}
+            else if (Application.systemLanguage == SystemLanguage.Chinese)
             {
-                GameStateManager.instance.Language = LanguageType.Japanese;
+                GameStateManager.instance.Language = LanguageType.Chinese;
 
-                ChangeJapanese();
+                ChangeChinese();
             }
-            //else if (Application.systemLanguage == SystemLanguage.Chinese)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Chinese;
+            else if (Application.systemLanguage == SystemLanguage.Portuguese)
+            {
+                GameStateManager.instance.Language = LanguageType.Portuguese;
 
-            //    ChangeChinese();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Portuguese)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Portuguese;
+                ChangePortuguese();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Russian)
+            {
+                GameStateManager.instance.Language = LanguageType.Russian;
 
-            //    ChangePortuguese();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Russian)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Russian;
+                ChangeRussian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.German)
+            {
+                GameStateManager.instance.Language = LanguageType.German;
 
-            //    ChangeRussian();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.German)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.German;
+                ChangeGerman();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Spanish)
+            {
+                GameStateManager.instance.Language = LanguageType.Spanish;
 
-            //    ChangeGerman();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Spanish)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Spanish;
+                ChangeSpanish();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Arabic)
+            {
+                GameStateManager.instance.Language = LanguageType.Arabic;
 
-            //    ChangeSpanish();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Arabic)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Arabic;
+                ChangeArabic();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Indonesian)
+            {
+                GameStateManager.instance.Language = LanguageType.Indonesian;
 
-            //    ChangeArabic();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Indonesian)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Indonesian;
+                ChangeIndonesian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Italian)
+            {
+                GameStateManager.instance.Language = LanguageType.Italian;
 
-            //    ChangeIndonesian();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Italian)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Italian;
+                ChangeItalian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Dutch)
+            {
+                GameStateManager.instance.Language = LanguageType.Dutch;
 
-            //    ChangeItalian();
-            //}
-            //else if (Application.systemLanguage == SystemLanguage.Dutch)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Dutch;
+                ChangeDutch();
+            }
+            else if (Application.systemLanguage.ToString() == "Hindi")
+            {
+                GameStateManager.instance.Language = LanguageType.Indian;
 
-            //    ChangeDutch();
-            //}
-            //else if (Application.systemLanguage.ToString() == "Hindi")
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Indian;
+                ChangeIndian();
+            }
+            else if (Application.systemLanguage == SystemLanguage.Vietnamese)
+            {
+                GameStateManager.instance.Language = LanguageType.Vietnamese;
 
-            //    ChangeIndian();
+                ChangeVietnamese();
+            }
+            //else if (Application.systemLanguage == SystemLanguage.Thai)
+            //{
+            //    GameStateManager.instance.Language = LanguageType.Thai;
+
+            //    ChangeThai();
             //}
             else
             {
@@ -145,6 +157,8 @@ public class LocalizationManager : MonoBehaviour
             content.indonesian = column[12].Replace('#', '\n');
             content.italian = column[13].Replace('#', '\n');
             content.dutch = column[14].Replace('#', '\n');
+            content.vietnamese = column[15].Replace('#', '\n');
+            content.thai = column[16].Replace('#', '\n');
 
             localizationDataBase.SetLocalization(content);
         }
@@ -209,6 +223,12 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.Dutch:
                         str = item.dutch;
                         break;
+                    case LanguageType.Vietnamese:
+                        str = item.vietnamese;
+                        break;
+                    case LanguageType.Thai:
+                        str = item.thai;
+                        break;
                 }
             }
         }
@@ -265,6 +285,12 @@ public class LocalizationManager : MonoBehaviour
                 ChangeDutch();
                 break;
             case LanguageType.Dutch:
+                ChangeVietnamese();
+                break;
+            case LanguageType.Vietnamese:
+                ChangeThai();
+                break;
+            case LanguageType.Thai:
                 ChangeKorean();
                 break;
         }
@@ -315,14 +341,17 @@ public class LocalizationManager : MonoBehaviour
     {
         ChangeLanguage(LanguageType.German);
     }
+
     public void ChangeSpanish()
     {
         ChangeLanguage(LanguageType.Spanish);
     }
+
     public void ChangeArabic()
     {
         ChangeLanguage(LanguageType.Arabic);
     }
+
     public void ChangeBengali()
     {
         ChangeLanguage(LanguageType.Bengali);
@@ -343,6 +372,16 @@ public class LocalizationManager : MonoBehaviour
         ChangeLanguage(LanguageType.Dutch);
     }
 
+    public void ChangeVietnamese()
+    {
+        ChangeLanguage(LanguageType.Vietnamese);
+    }
+
+    public void ChangeThai()
+    {
+        ChangeLanguage(LanguageType.Thai);
+    }
+
     public void ChangeLanguage(LanguageType type)
     {
         if(GameStateManager.instance.Language == type)
@@ -358,17 +397,15 @@ public class LocalizationManager : MonoBehaviour
 
         switch (type)
         {
-            case LanguageType.Default:
-                break;
             case LanguageType.Korean:
                 iso = "ko";
                 break;
-            case LanguageType.English:
-                iso = "en";
-                break;
-            case LanguageType.Japanese:
-                iso = "ja";
-                break;
+            //case LanguageType.English:
+            //    iso = "en";
+            //    break;
+            //case LanguageType.Japanese:
+            //    iso = "ja";
+            //    break;
             default:
                 iso = "en";
                 break;

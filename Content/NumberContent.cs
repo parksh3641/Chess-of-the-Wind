@@ -6,16 +6,22 @@ using UnityEngine.UI;
 public class NumberContent : MonoBehaviour
 {
     public Text numberText;
+    public LocalizationContent queenText;
 
     public void Initialize(int number)
     {
-        if(number < 12)
+        queenText.enabled = false;
+
+        if (number < 12)
         {
             numberText.text = (number + 1).ToString();
         }
         else if(number == 12)
         {
-            numberText.text = LocalizationManager.instance.GetString("Queen");
+            numberText.enabled = false;
+            queenText.enabled = true;
+            queenText.localizationName = "Queen";
+            //numberText.text = LocalizationManager.instance.GetString("Queen");
         }
         else if(number > 12)
         {
@@ -25,13 +31,17 @@ public class NumberContent : MonoBehaviour
 
     public void Initialize_NewBie(int number)
     {
+        queenText.enabled = false;
+
         if (number < 4)
         {
             numberText.text = (number + 1).ToString();
         }
         else if (number == 4)
         {
-            numberText.text = LocalizationManager.instance.GetString("Queen");
+            numberText.enabled = false;
+            queenText.enabled = true;
+            queenText.localizationName = "Queen";
         }
         else if (number > 4)
         {

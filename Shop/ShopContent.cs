@@ -14,9 +14,9 @@ public class ShopContent : MonoBehaviour
 
     public Sprite[] backgroundImgArray;
 
-    public Image icon;
-
     public LocalizationContent titleText;
+
+    public ReceiveContent receiveContent;
 
     public GameObject buyButton;
     public Text priceText;
@@ -86,6 +86,8 @@ public class ShopContent : MonoBehaviour
                 goldText.text = MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);
 
+                receiveContent.Initialize(RewardType.Gold, price);
+
                 break;
             case ShopType.DailyReward_WatchAd:
                 break;
@@ -122,18 +124,21 @@ public class ShopContent : MonoBehaviour
                     }
                 }
 
+                receiveContent.Initialize(RewardType.UpgradeTicket, number);
+
                 break;
         }
 
         titleText.localizationName = type.ToString();
 
-        if (number > 0)
-        {
-            titleText.plusText = " x" + number;
-        }
+        //if (number > 0)
+        //{
+        //    titleText.plusText = " x" + number;
+        //}
+
         titleText.ReLoad();
 
-        icon.sprite = shopContentArray[(int)type];
+        //icon.sprite = shopContentArray[(int)type];
     }
 
     public void Locked()

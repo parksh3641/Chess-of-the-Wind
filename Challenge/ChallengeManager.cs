@@ -258,7 +258,7 @@ public class ChallengeManager : MonoBehaviour
 
     public void ShortCutButton(int number)
     {
-        OpenChallengeView();
+        challengeView.SetActive(false);
 
         switch(number)
         {

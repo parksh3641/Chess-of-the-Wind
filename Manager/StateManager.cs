@@ -33,6 +33,8 @@ public class StateManager : MonoBehaviour
         instance = this;
 
         penaltyView.SetActive(false);
+
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     private void Start()

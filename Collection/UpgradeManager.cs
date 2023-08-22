@@ -600,6 +600,8 @@ public class UpgradeManager : MonoBehaviour
 
         if(blockClass.rankType < RankType.SR)
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
             NotionManager.instance.UseNotion(NotionType.NotSellBlock);
             return;
         }

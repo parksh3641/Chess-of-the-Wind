@@ -239,8 +239,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
-        roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-        roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+
+        if(playerDataBase.NewbieWin < 2)
+        {
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", "Ai" } };
+        }
+        else
+        {
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        }
 
         PhotonNetwork.JoinOrCreateRoom(GameStateManager.instance.NickName, roomOption, null);
     }
@@ -249,8 +258,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
-        roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-        roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+
+        if (playerDataBase.NewbieWin < 2)
+        {
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", "Ai" } };
+        }
+        else
+        {
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        }
 
         PhotonNetwork.JoinOrCreateRoom(GameStateManager.instance.NickName, roomOption, null);
     }

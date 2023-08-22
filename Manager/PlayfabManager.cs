@@ -108,7 +108,7 @@ public class PlayfabManager : MonoBehaviour
             infoText.text = LocalizationManager.instance.GetString("Login") + "...";
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
-            StartCoroutine(LoadDataCoroutine());
+            OnClickGuestLogin();
 #else
         GetTitleInternalData("CheckVersion", CheckVersion);
 #endif
@@ -585,6 +585,8 @@ public class PlayfabManager : MonoBehaviour
 
         Debug.Log("Playfab Login Success");
 
+        GameStateManager.instance.IsLogin = true;
+
         customId = result.PlayFabId;
         entityId = result.EntityToken.Entity.Id;
         entityType = result.EntityToken.Entity.Type;
@@ -712,15 +714,15 @@ public class PlayfabManager : MonoBehaviour
 
         GetPlayerNickName();
 
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
-        yield return GetCatalog();
+        //yield return GetCatalog();
 
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
         yield return GetPlayerData();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
         isActive = true;
 

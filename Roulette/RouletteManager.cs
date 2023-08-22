@@ -1376,21 +1376,21 @@ public class RouletteManager : MonoBehaviour
 
         targetText.text = number.ToString();
 
-        if (number > queenNumber)
-        {
-            number += 1;
-        }
-
         if (!PhotonNetwork.IsMasterClient)
         {
             if (rouletteIndex == 0)
             {
-                mainLeftPointerManager.ShowTarget(number, queenNumber);
+                mainLeftPointerManager.ShowTarget(number);
             }
             else
             {
-                mainRightPointerManager.ShowTarget(number, queenNumber);
+                mainRightPointerManager.ShowTarget(number);
             }
+        }
+
+        if (number >= queenNumber)
+        {
+            number += 1;
         }
 
         if (gameManager.bettingNumberList.Contains(number))

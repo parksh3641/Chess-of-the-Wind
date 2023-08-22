@@ -40,6 +40,8 @@ public class SellManager : MonoBehaviour
             sellView.SetActive(true);
 
             Initialize(block, number);
+
+            FirebaseAnalytics.LogEvent("OpenSell");
         }
     }
 
@@ -57,8 +59,6 @@ public class SellManager : MonoBehaviour
 
         //sellButtonText.text = "판매하기";
         //cancleButtonText.text = "그만두기";
-
-        FirebaseAnalytics.LogEvent("OpenSell");
     }
 
     public void SellButton()

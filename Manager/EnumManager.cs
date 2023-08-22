@@ -192,7 +192,9 @@ public enum LanguageType
     Bengali,
     Indonesian,
     Italian,
-    Dutch
+    Dutch,
+    Vietnamese,
+    Thai
 }
 public enum LoginType
 {

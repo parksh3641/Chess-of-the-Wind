@@ -96,13 +96,8 @@ public class PointerManager : MonoBehaviour
         return number;
     }
 
-    public void ShowTarget(int number, int queenNumber)
+    public void ShowTarget(int number)
     {
-        if (number >= queenNumber)
-        {
-            number -= 1;
-        }
-
         for (int i = 0; i < pointerList.Count; i++)
         {
             if (pointerList[i].index == number)

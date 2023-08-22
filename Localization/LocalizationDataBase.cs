@@ -38,4 +38,6 @@ public class LocalizationData
     public string indonesian = "";
     public string italian = "";
     public string dutch = "";
+    public string vietnamese = "";
+    public string thai = "";
 }

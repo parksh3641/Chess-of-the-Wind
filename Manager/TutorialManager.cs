@@ -430,7 +430,7 @@ public class TutorialManager : MonoBehaviour
 
                 talkBar.SetActive(false);
 
-                Invoke("GoToHome", 1.0f);
+                Invoke("GoToHome", 0.9f);
                 break;
         }
 
@@ -468,10 +468,6 @@ public class TutorialManager : MonoBehaviour
         if(!talkSkip)
         {
             talkSkip = true;
-
-            SoundManager.instance.StopSFX(GameSfxType.TalkWinter);
-            SoundManager.instance.StopSFX(GameSfxType.TalkUnder);
-            SoundManager.instance.StopSFX(GameSfxType.TalkMy);
         }
         else
         {
