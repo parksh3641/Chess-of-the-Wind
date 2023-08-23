@@ -165,6 +165,9 @@ public class MoneyAnimation : MonoBehaviour
         }
         else
         {
+
+            yield return waitForSeconds;
+
             SoundManager.instance.StopSFX(GameSfxType.ChangeMoney);
 
             yield break;

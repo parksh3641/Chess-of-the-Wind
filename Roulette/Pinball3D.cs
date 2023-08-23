@@ -79,7 +79,14 @@ public class Pinball3D : MonoBehaviour
 
         index = number;
 
-        random = Random.Range(0, 2);
+        if(GameStateManager.instance.GameRankType > GameRankType.Platinum_1)
+        {
+            random = Random.Range(0, 2);
+        }
+        else
+        {
+            random = 0;
+        }
 
         if (tutorial) random = 0;
 

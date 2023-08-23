@@ -343,7 +343,7 @@ public class MatchingManager : MonoBehaviour
                 GameStateManager.instance.WinStreak = 0;
                 GameStateManager.instance.LoseStreak += 1;
 
-                if (GameStateManager.instance.LoseStreak >= 2)
+                if (GameStateManager.instance.LoseStreak >= 3)
                 {
                     GameStateManager.instance.LoseStreak = 0;
                     OpenSupplyPackage();

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Text))]
 public class LocalizationContent : MonoBehaviour
 {
+    public bool ios = false;
+
     private Text localizationText;
     public string forwardText;
     public string localizationName = "";
@@ -41,7 +43,18 @@ public class LocalizationContent : MonoBehaviour
                 localizationText.text = forwardText + " ";
             }
 
-            localizationText.text += LocalizationManager.instance.GetString(localizationName);
+            if (!ios)
+            {
+                localizationText.text += LocalizationManager.instance.GetString(localizationName);
+            }
+            else
+            {
+#if UNITY_IOS || UNITY_EDITOR_OSX
+                localizationText.text += LocalizationManager.instance.GetString(localizationName + "_IOS");
+#else
+                localizationText.text += LocalizationManager.instance.GetString(localizationName);
+#endif
+            }
 
             if (localizationName2.Length > 0)
             {

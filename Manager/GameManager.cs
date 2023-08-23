@@ -1168,14 +1168,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < allContentList.Count; i++)
-            {
-                allContentList[i].SetActiveFalseAll();
-            }
-
             for (int i = 0; i < blockContentList.Count; i++)
             {
                 if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].ResetPos();
+            }
+
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalseAll();
             }
 
             for (int i = 0; i < allBlockLevelContentList.Count; i++)
@@ -1183,6 +1183,9 @@ public class GameManager : MonoBehaviour
                 allBlockLevelContentList[i].Initialize();
             }
         }
+
+        bettingNumberList.Clear();
+        otherBettingNumberList.Clear();
 
         for (int i = 0; i < bettingList.Length; i++)
         {
@@ -1883,14 +1886,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (bettingMoney > 0)
+            if((int)plusMoney != compare[1])
             {
-                moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney);
-            }
+                if (bettingMoney > 0)
+                {
+                    moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney);
+                }
 
-            if (compare[0] > 0)
-            {
-                moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0]);
+                if (compare[0] > 0)
+                {
+                    moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0]);
+                }
             }
 
             RecordManager.instance.SetRecord((-bettingMoney).ToString());
@@ -2950,28 +2956,31 @@ public class GameManager : MonoBehaviour
 
         targetBlockContent = blockContent.transform;
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
+        if (bettingList.Contains(1) && bettingList[blockContent.index] != 0)
         {
-            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            if (GameStateManager.instance.GameType == GameType.NewBie)
             {
-                rouletteContentList_Target[i].SetActiveFalse(blockContent.blockClass);
-            }
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
+                {
+                    rouletteContentList_Target[i].SetActiveFalse(blockContent.blockClass);
+                }
 
-            for (int i = 0; i < blockLevelContentList_NewBie.Count; i++)
-            {
-                blockLevelContentList_NewBie[i].Initialize_My();
+                for (int i = 0; i < blockLevelContentList_NewBie.Count; i++)
+                {
+                    blockLevelContentList_NewBie[i].Initialize_My();
+                }
             }
-        }
-        else
-        {
-            for (int i = 0; i < allContentList.Count; i++)
+            else
             {
-                allContentList[i].SetActiveFalse(blockContent.blockClass);
-            }
+                for (int i = 0; i < allContentList.Count; i++)
+                {
+                    allContentList[i].SetActiveFalse(blockContent.blockClass);
+                }
 
-            for (int i = 0; i < allBlockLevelContentList.Count; i++)
-            {
-                allBlockLevelContentList[i].Initialize_My();
+                for (int i = 0; i < allBlockLevelContentList.Count; i++)
+                {
+                    allBlockLevelContentList[i].Initialize_My();
+                }
             }
         }
 
@@ -3172,66 +3181,66 @@ public class GameManager : MonoBehaviour
 
         blockOverlap = false;
 
-        if (GameStateManager.instance.BlockOverlap)
-        {
-            switch (mainRouletteContent.rouletteType)
-            {
-                case RouletteType.Default:
-                    break;
-                case RouletteType.StraightBet:
-                    for (int i = 0; i < rouletteContentList_Target.Count; i++)
-                    {
-                        if (rouletteContentList_Target[i].index.SequenceEqual(index0) || rouletteContentList_Target[i].index.SequenceEqual(index1)
-                            || rouletteContentList_Target[i].index.SequenceEqual(index2) || rouletteContentList_Target[i].index.SequenceEqual(index3)
-                            || rouletteContentList_Target[i].index.SequenceEqual(index4) || rouletteContentList_Target[i].index.SequenceEqual(index5)
-                            || rouletteContentList_Target[i].index.SequenceEqual(index6) || rouletteContentList_Target[i].index.SequenceEqual(index7)
-                            || rouletteContentList_Target[i].index.SequenceEqual(index8))
-                        {
-                            if (rouletteContentList_Target[i].isActive) blockOverlap = true;
-                        }
-                    }
-                    break;
-                case RouletteType.SplitBet_Horizontal:
-                    for (int i = 0; i < rouletteContentList_Split_Horizontal.Count; i++)
-                    {
-                        if (rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index0) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index1)
-                            || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index2) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index3)
-                            || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index4) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index5)
-                            || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index6) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index7)
-                            || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index8))
-                        {
-                            if (rouletteContentList_Split_Horizontal[i].isActive) blockOverlap = true;
-                        }
-                    }
-                    break;
-                case RouletteType.SplitBet_Vertical:
-                    for (int i = 0; i < rouletteContentList_Split_Vertical.Count; i++)
-                    {
-                        if (rouletteContentList_Split_Vertical[i].index.SequenceEqual(index0) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index1)
-                            || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index2) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index3)
-                            || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index4) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index5)
-                            || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index6) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index7)
-                            || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index8))
-                        {
-                            if (rouletteContentList_Split_Vertical[i].isActive) blockOverlap = true;
-                        }
-                    }
-                    break;
-                case RouletteType.SquareBet:
-                    for (int i = 0; i < rouletteContentList_Square.Count; i++)
-                    {
-                        if (rouletteContentList_Square[i].index.SequenceEqual(index0) || rouletteContentList_Square[i].index.SequenceEqual(index1)
-                            || rouletteContentList_Square[i].index.SequenceEqual(index2) || rouletteContentList_Square[i].index.SequenceEqual(index3)
-                            || rouletteContentList_Square[i].index.SequenceEqual(index4) || rouletteContentList_Square[i].index.SequenceEqual(index5)
-                            || rouletteContentList_Square[i].index.SequenceEqual(index6) || rouletteContentList_Square[i].index.SequenceEqual(index7)
-                            || rouletteContentList_Square[i].index.SequenceEqual(index8))
-                        {
-                            if (rouletteContentList_Square[i].isActive) blockOverlap = true;
-                        }
-                    }
-                    break;
-            }
-        }
+        //if (GameStateManager.instance.BlockOverlap)
+        //{
+        //    switch (mainRouletteContent.rouletteType)
+        //    {
+        //        case RouletteType.Default:
+        //            break;
+        //        case RouletteType.StraightBet:
+        //            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+        //            {
+        //                if (rouletteContentList_Target[i].index.SequenceEqual(index0) || rouletteContentList_Target[i].index.SequenceEqual(index1)
+        //                    || rouletteContentList_Target[i].index.SequenceEqual(index2) || rouletteContentList_Target[i].index.SequenceEqual(index3)
+        //                    || rouletteContentList_Target[i].index.SequenceEqual(index4) || rouletteContentList_Target[i].index.SequenceEqual(index5)
+        //                    || rouletteContentList_Target[i].index.SequenceEqual(index6) || rouletteContentList_Target[i].index.SequenceEqual(index7)
+        //                    || rouletteContentList_Target[i].index.SequenceEqual(index8))
+        //                {
+        //                    if (rouletteContentList_Target[i].isActive) blockOverlap = true;
+        //                }
+        //            }
+        //            break;
+        //        case RouletteType.SplitBet_Horizontal:
+        //            for (int i = 0; i < rouletteContentList_Split_Horizontal.Count; i++)
+        //            {
+        //                if (rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index0) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index1)
+        //                    || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index2) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index3)
+        //                    || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index4) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index5)
+        //                    || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index6) || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index7)
+        //                    || rouletteContentList_Split_Horizontal[i].index.SequenceEqual(index8))
+        //                {
+        //                    if (rouletteContentList_Split_Horizontal[i].isActive) blockOverlap = true;
+        //                }
+        //            }
+        //            break;
+        //        case RouletteType.SplitBet_Vertical:
+        //            for (int i = 0; i < rouletteContentList_Split_Vertical.Count; i++)
+        //            {
+        //                if (rouletteContentList_Split_Vertical[i].index.SequenceEqual(index0) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index1)
+        //                    || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index2) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index3)
+        //                    || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index4) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index5)
+        //                    || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index6) || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index7)
+        //                    || rouletteContentList_Split_Vertical[i].index.SequenceEqual(index8))
+        //                {
+        //                    if (rouletteContentList_Split_Vertical[i].isActive) blockOverlap = true;
+        //                }
+        //            }
+        //            break;
+        //        case RouletteType.SquareBet:
+        //            for (int i = 0; i < rouletteContentList_Square.Count; i++)
+        //            {
+        //                if (rouletteContentList_Square[i].index.SequenceEqual(index0) || rouletteContentList_Square[i].index.SequenceEqual(index1)
+        //                    || rouletteContentList_Square[i].index.SequenceEqual(index2) || rouletteContentList_Square[i].index.SequenceEqual(index3)
+        //                    || rouletteContentList_Square[i].index.SequenceEqual(index4) || rouletteContentList_Square[i].index.SequenceEqual(index5)
+        //                    || rouletteContentList_Square[i].index.SequenceEqual(index6) || rouletteContentList_Square[i].index.SequenceEqual(index7)
+        //                    || rouletteContentList_Square[i].index.SequenceEqual(index8))
+        //                {
+        //                    if (rouletteContentList_Square[i].isActive) blockOverlap = true;
+        //                }
+        //            }
+        //            break;
+        //    }
+        //}
     }
 
     public void ExitBlock(BlockContent blockContent)
@@ -3253,6 +3262,18 @@ public class GameManager : MonoBehaviour
             allIn = false;
         }
 
+        if (bettingList.Contains(1) && bettingList[blockContent.index] == 0)
+        {
+            blockContent.CancleBetting();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
+
+            Debug.Log("1개 이상 배팅할 수 없습니다");
+
+            return;
+        }
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
@@ -3279,27 +3300,16 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
-        if (bettingList.Contains(1) && bettingList[blockContent.index] == 0)
-        {
-            blockContent.CancleBetting();
-
-            NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
-
-            Debug.Log("1개 이상 배팅할 수 없습니다");
-
-            return;
-        }
-
-        if(!allIn)
+        if (!allIn)
         {
             if (bettingList[blockContent.index] == 0)
             {
                 bettingList[blockContent.index] = 1;
                 bettingMinusList[blockContent.index] = blockDataBase.GetBlockInfomation(blockContent.blockClass.blockType).GetSize();
-                bettingMoney += bettingValue[blockContent.index];
                 ChangeBettingMoney();
             }
+
+            bettingMoney = bettingValue[blockContent.index];
         }
         else
         {
@@ -3307,15 +3317,14 @@ public class GameManager : MonoBehaviour
             {
                 bettingList[blockContent.index] = 1;
                 bettingMinusList[blockContent.index] = blockDataBase.GetBlockInfomation(blockContent.blockClass.blockType).GetSize();
-                bettingMoney += money;
                 ChangeBettingMoney();
             }
+
+            bettingMoney = money;
         }
 
-        string notion = LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(bettingMoney) + " " +
-    LocalizationManager.instance.GetString("PowerBetting");
-
-        NotionManager.instance.UseNotion(notion, ColorType.Green);
+        NotionManager.instance.UseNotion(LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(bettingMoney) + " " +
+    LocalizationManager.instance.GetString("PowerBetting"), ColorType.Green);
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
         {
@@ -3394,9 +3403,12 @@ public class GameManager : MonoBehaviour
 
     public void ResetPosBlock(int number)
     {
-        blockType = BlockType.Default;
-
         bettingList[number] = 0;
+
+        if(!bettingList.Contains(1))
+        {
+            blockType = BlockType.Default;
+        }
 
         if(!allIn)
         {
@@ -3839,14 +3851,53 @@ public class GameManager : MonoBehaviour
     {
         ResetRouletteBackgroundColor();
 
-        BetOptionCancleButton();
+        //나 취소하면 상대방도 내가 취소했다는것을 확실히 알려줘야 근데 이건 배팅되어있는 걸 취소하는 거랑 배팅 하나되어있고 다른것을 취소했을때랑 ㄱ같은 함수인게 문제
 
-        deleteBlock = new string[2];
+        if (blockType.Equals(type))
+        {
+            deleteBlock = new string[2];
 
-        deleteBlock[0] = type.ToString();
-        deleteBlock[1] = GameStateManager.instance.NickName;
+            deleteBlock[0] = type.ToString();
+            deleteBlock[1] = GameStateManager.instance.NickName;
 
-        PV.RPC("HideOtherPlayerBlock", RpcTarget.Others, deleteBlock);
+            PV.RPC("HideOtherPlayerBlock", RpcTarget.Others, deleteBlock);
+
+            Debug.Log("상대방한테 필드에 배치한 내 블럭을 지워달라고 요청했습니다");
+        }
+    }
+
+    [PunRPC]
+    void HideOtherPlayerBlock(string[] block) //취소한 블럭이 활성화되어 있는 블럭일때만 없애기
+    {
+        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
+
+        for (int i = 0; i < otherBlockContentList.Count; i++)
+        {
+            if (otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
+            {
+                Destroy(otherBlockContentList[i].gameObject);
+                otherBlockContentList.Remove(otherBlockContentList[i]);
+
+                otherBlockType = BlockType.Default;
+
+                if (GameStateManager.instance.GameType == GameType.NewBie)
+                {
+                    for (int j = 0; j < blockLevelContentList_Target.Count; j++)
+                    {
+                        blockLevelContentList_Target[j].Initialize_Other();
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < allBlockLevelContentList.Count; j++)
+                    {
+                        allBlockLevelContentList[j].Initialize_Other();
+                    }
+                }
+
+                break;
+            }
+        }
     }
 
     public void BetOptionCancleButton() //배팅 취소
@@ -4052,38 +4103,6 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
-        }
-    }
-
-    [PunRPC]
-    void HideOtherPlayerBlock(string[] block)
-    {
-        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
-
-        otherBlockType = BlockType.Default;
-
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            for (int i = 0; i < blockLevelContentList_Target.Count; i++)
-            {
-                blockLevelContentList_Target[i].Initialize_Other();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < allBlockLevelContentList.Count; i++)
-            {
-                allBlockLevelContentList[i].Initialize_Other();
-            }
-        }
-
-        for (int i = 0; i < otherBlockContentList.Count; i ++)
-        {
-            if(otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
-            {
-                Destroy(otherBlockContentList[i].gameObject);
-                otherBlockContentList.Remove(otherBlockContentList[i]);
-            }
         }
     }
     [PunRPC]

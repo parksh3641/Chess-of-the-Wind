@@ -76,8 +76,6 @@ public class PointerManager : MonoBehaviour
         {
             dist = Vector3.Distance(pointerList[i].transform.position, target.transform.position);
 
-            //Debug.Log(i + 1 + "와의 거리 : " + dist);
-
             if (temp == 0)
             {
                 temp = dist;

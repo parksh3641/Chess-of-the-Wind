@@ -116,6 +116,8 @@ public class RouletteManager : MonoBehaviour
 
     private int aiTargetNumber = 0;
 
+    private float alpha = 0;
+
     [Space]
     [Title("bool")]
     private bool ballCheck = false;
@@ -123,6 +125,8 @@ public class RouletteManager : MonoBehaviour
     private bool bouns = false;
     private bool aiMode = false;
     private bool playing = false;
+
+    private bool flickerCheck = false;
 
     [Space]
     public int[] bettingPos0, bettingPos1, bettingPos2, bettingPos3, bettingPos4, bettingPos5;
@@ -872,7 +876,7 @@ public class RouletteManager : MonoBehaviour
             }
 
             windCount = 0;
-            windCountText.text = "";
+            windCountText.text = "0/0";
 
             windCharacterManager.MyWhich(1 - windIndex);
 
@@ -1035,12 +1039,16 @@ public class RouletteManager : MonoBehaviour
                 {
                     roulette1WindPoint[0].gameObject.SetActive(true);
 
+                    alpha = 0;
+                    flickerCheck = false;
                     StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
                 }
                 else
                 {
                     roulette1WindPoint[1].gameObject.SetActive(true);
 
+                    alpha = 0;
+                    flickerCheck = false;
                     StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
                 }
             }
@@ -1050,12 +1058,16 @@ public class RouletteManager : MonoBehaviour
                 {
                     roulette2WindPoint[0].gameObject.SetActive(true);
 
+                    alpha = 0;
+                    flickerCheck = false;
                     StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
                 }
                 else
                 {
                     roulette2WindPoint[1].gameObject.SetActive(true);
 
+                    alpha = 0;
+                    flickerCheck = false;
                     StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
                 }
             }
@@ -1069,12 +1081,9 @@ public class RouletteManager : MonoBehaviour
 
     IEnumerator FlickerCoroution(MeshRenderer mesh)
     {
-        float alpha = 0;
-        bool check = false;
-
         while(pinballPower)
         {
-            if(!check)
+            if(!flickerCheck)
             {
                 if(alpha < 60)
                 {
@@ -1084,7 +1093,7 @@ public class RouletteManager : MonoBehaviour
                 {
                     alpha = 60;
 
-                    check = true;
+                    flickerCheck = true;
                 }
             }
             else
@@ -1099,7 +1108,7 @@ public class RouletteManager : MonoBehaviour
 
                     mesh.material.color = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 0);
 
-                    check = false;
+                    flickerCheck = false;
 
                     yield return waitForSeconds2;
                 }
@@ -1291,14 +1300,18 @@ public class RouletteManager : MonoBehaviour
             yield return null;
         }
 
-        if(targetNumber != targetQueenNumber)
-        {
-            PV.RPC("ShowTargetNumberNormal", RpcTarget.All, targetNumber);
-        }
-        else
-        {
-            PV.RPC("ShowTargetNumberQueen", RpcTarget.All, targetNumber);
-        }
+        Debug.LogError(targetNumber + " / " + targetQueenNumber);
+
+        PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+
+        //if (targetNumber != targetQueenNumber)
+        //{
+        //    PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+        //}
+        //else
+        //{
+        //    PV.RPC("ShowTargetNumberQueen", RpcTarget.All, targetNumber);
+        //}
 
         yield return new WaitForSeconds(2.5f);
 
@@ -1363,18 +1376,16 @@ public class RouletteManager : MonoBehaviour
     }
 
     [PunRPC]
-    void ShowTargetNumberNormal(int number)
+    void ShowTargetNumber(int number)
     {
         targetView.SetActive(true);
-        targetNormal.SetActive(true);
+        targetNormal.SetActive(false);
         targetQueen.SetActive(false);
 
         if (GameStateManager.instance.Vibration)
         {
             Handheld.Vibrate();
         }
-
-        targetText.text = number.ToString();
 
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -1388,56 +1399,9 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        if (number >= queenNumber)
+        if (gameManager.bettingNumberList.Contains(queenNumber))
         {
-            number += 1;
-        }
-
-        if (gameManager.bettingNumberList.Contains(number))
-        {
-            normalEffect.SetActive(true);
-
-            SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
-
-            if (rouletteIndex == 0)
-            {
-                roulette1Particle.gameObject.SetActive(true);
-                roulette1Particle.Play();
-            }
-            else
-            {
-                roulette2Particle.gameObject.SetActive(true);
-                roulette2Particle.Play();
-            }
-
-            Debug.Log("숫자에 당첨되었습니다");
-        }
-        else
-        {
-            normalEffect.SetActive(false);
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            Debug.Log("숫자에 당첨되지 않았습니다");
-        }
-    }
-
-    [PunRPC]
-    void ShowTargetNumberQueen(int number)
-    {
-        targetView.SetActive(true);
-        targetNormal.SetActive(false);
-        targetQueen.SetActive(true);
-
-        //targetText.text = number.ToString();
-
-        if (GameStateManager.instance.Vibration)
-        {
-            Handheld.Vibrate();
-        }
-
-        if (gameManager.bettingNumberList.Contains(number))
-        {
+            targetQueen.SetActive(true);
             queenEffect.SetActive(true);
 
             SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
@@ -1457,13 +1421,87 @@ public class RouletteManager : MonoBehaviour
         }
         else
         {
-            queenEffect.SetActive(false);
+            targetNormal.SetActive(true);
 
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            targetText.text = number.ToString();
 
-            Debug.Log("퀸에 당첨되지 않았습니다");
+            if (number >= queenNumber)
+            {
+                number += 1;
+            }
+
+            if (gameManager.bettingNumberList.Contains(number))
+            {
+                normalEffect.SetActive(true);
+
+                SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
+
+                if (rouletteIndex == 0)
+                {
+                    roulette1Particle.gameObject.SetActive(true);
+                    roulette1Particle.Play();
+                }
+                else
+                {
+                    roulette2Particle.gameObject.SetActive(true);
+                    roulette2Particle.Play();
+                }
+
+                Debug.Log("숫자에 당첨되었습니다");
+            }
+            else
+            {
+                normalEffect.SetActive(false);
+
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                Debug.Log("숫자에 당첨되지 않았습니다");
+            }
         }
     }
+
+    //[PunRPC]
+    //void ShowTargetNumberQueen(int number)
+    //{
+    //    targetView.SetActive(true);
+    //    targetNormal.SetActive(false);
+    //    targetQueen.SetActive(true);
+
+    //    //targetText.text = number.ToString();
+
+    //    if (GameStateManager.instance.Vibration)
+    //    {
+    //        Handheld.Vibrate();
+    //    }
+
+    //    if (gameManager.bettingNumberList.Contains(number))
+    //    {
+    //        queenEffect.SetActive(true);
+
+    //        SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
+
+    //        if (rouletteIndex == 0)
+    //        {
+    //            roulette1Particle.gameObject.SetActive(true);
+    //            roulette1Particle.Play();
+    //        }
+    //        else
+    //        {
+    //            roulette2Particle.gameObject.SetActive(true);
+    //            roulette2Particle.Play();
+    //        }
+
+    //        Debug.Log("퀸에 당첨되었습니다");
+    //    }
+    //    else
+    //    {
+    //        queenEffect.SetActive(false);
+
+    //        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+    //        Debug.Log("퀸에 당첨되지 않았습니다");
+    //    }
+    //}
 
     [PunRPC]
     void GameResult(string[] target)
@@ -1586,127 +1624,157 @@ public class RouletteManager : MonoBehaviour
 
         while (!buttonClick)
         {
-            if (windIndex == 0)
+            if (rouletteIndex == 0)
             {
-                switch (pinball.ballPos)
+                if (windIndex == 0)
                 {
-                    case 3:
-                        if (bettingPosCheck0)
-                        {
-                            BlowWind_Ai(2, 30, 1);
-
-                            Debug.Log("Ai가 2번 위치 - 1번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                            {
-                                BlowWind_Ai(2, 50, 1);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                            }
-                        }
-                        break;
-                    case 4:
-                        if (bettingPosCheck1)
-                        {
-                            yield return new WaitForSeconds(0.2f);
-
-                            BlowWind_Ai(2, 10, 1);
-
-                            Debug.Log("Ai가 2번 위치 - 2번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                            {
-                                BlowWind_Ai(2, 50, 1);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                            }
-                        }
-                        break;
-                    case 5:
-                        if (bettingPosCheck2)
-                        {
-                            yield return new WaitForSeconds(0.2f);
-
-                            BlowWind_Ai(2, 30, 1);
-
-                            Debug.Log("Ai가 2번 위치 - 3번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                            {
-                                BlowWind_Ai(2, 50, 1);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                            }
-                        }
-                        break;
+                    if (pinball.ballPos == 5)
+                    {
+                        BlowWind_Ai(2, 10, 1);
+                    }
                 }
+                else
+                {
+                    if (pinball.ballPos == 1)
+                    {
+                        BlowWind_Ai(2, 10, 0);
+                    }
+                }
+
+                //switch (pinball.ballPos)
+                //{
+                //    case 3:
+                //        if (bettingPosCheck0)
+                //        {
+                //            BlowWind_Ai(2, 30, 1);
+
+                //            Debug.Log("Ai가 2번 위치 - 1번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
+                //            {
+                //                BlowWind_Ai(2, 50, 1);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //    case 4:
+                //        if (bettingPosCheck1)
+                //        {
+                //            yield return new WaitForSeconds(0.2f);
+
+                //            BlowWind_Ai(2, 10, 1);
+
+                //            Debug.Log("Ai가 2번 위치 - 2번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
+                //            {
+                //                BlowWind_Ai(2, 50, 1);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //    case 5:
+                //        if (bettingPosCheck2)
+                //        {
+                //            yield return new WaitForSeconds(0.2f);
+
+                //            BlowWind_Ai(2, 30, 1);
+
+                //            Debug.Log("Ai가 2번 위치 - 3번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
+                //            {
+                //                BlowWind_Ai(2, 50, 1);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //}
             }
             else
             {
-                switch (pinball.ballPos)
+                if (windIndex == 0)
                 {
-                    case 0:
-                        if (bettingPosCheck3)
-                        {
-                            yield return new WaitForSeconds(0.2f);
-
-                            BlowWind_Ai(2, 30, 0);
-
-                            Debug.Log("Ai가 1번 위치 - 1번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                            {
-                                BlowWind_Ai(2, 50, 0);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                            }
-                        }
-                        break;
-                    case 1:
-                        if (bettingPosCheck4)
-                        {
-                            yield return new WaitForSeconds(0.2f);
-
-                            BlowWind_Ai(2, 10, 0);
-
-                            Debug.Log("Ai가 1번 위치 - 2번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                            {
-                                BlowWind_Ai(2, 50, 0);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                            }
-                        }
-                        break;
-                    case 2:
-                        if (bettingPosCheck5)
-                        {
-                            BlowWind_Ai(2, 30, 0);
-
-                            Debug.Log("Ai가 1번 위치 - 3번째 자리에서 바람을 불었습니다");
-                        }
-                        else
-                        {
-                            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                            {
-                                BlowWind_Ai(2, 50, 0);
-
-                                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                            }
-                        }
-                        break;
+                    if (pinball.ballPos == 5)
+                    {
+                        BlowWind_Ai(2, 10, 1);
+                    }
                 }
+                else
+                {
+                    if (pinball.ballPos == 1)
+                    {
+                        BlowWind_Ai(2, 10, 0);
+                    }
+                }
+
+                //switch (pinball.ballPos)
+                //{
+                //    case 0:
+                //        if (bettingPosCheck3)
+                //        {
+                //            yield return new WaitForSeconds(0.2f);
+
+                //            BlowWind_Ai(2, 30, 0);
+
+                //            Debug.Log("Ai가 1번 위치 - 1번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
+                //            {
+                //                BlowWind_Ai(2, 50, 0);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //    case 1:
+                //        if (bettingPosCheck4)
+                //        {
+                //            yield return new WaitForSeconds(0.2f);
+
+                //            BlowWind_Ai(2, 10, 0);
+
+                //            Debug.Log("Ai가 1번 위치 - 2번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
+                //            {
+                //                BlowWind_Ai(2, 50, 0);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //    case 2:
+                //        if (bettingPosCheck5)
+                //        {
+                //            BlowWind_Ai(2, 30, 0);
+
+                //            Debug.Log("Ai가 1번 위치 - 3번째 자리에서 바람을 불었습니다");
+                //        }
+                //        else
+                //        {
+                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
+                //            {
+                //                BlowWind_Ai(2, 50, 0);
+
+                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
+                //            }
+                //        }
+                //        break;
+                //}
             }
 
             yield return waitForSeconds3;

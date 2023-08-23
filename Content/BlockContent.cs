@@ -157,6 +157,13 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 gameManager.CancleBetting(blockClass.blockType);
                 gameManager.ResetPosBlock(index);
             }
+
+            if(eventData.pointerDrag.gameObject.tag == "Block")
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
+            }
         }
         else
         {

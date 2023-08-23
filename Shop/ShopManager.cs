@@ -606,6 +606,11 @@ public class ShopManager : MonoBehaviour
             System.DateTime g = System.DateTime.Today.AddDays(1);
             System.TimeSpan h = g - f;
 
+            localization_Reset = LocalizationManager.instance.GetString("Reset");
+            localization_Days = LocalizationManager.instance.GetString("Days");
+            localization_Hours = LocalizationManager.instance.GetString("Hours");
+            localization_Minutes = LocalizationManager.instance.GetString("Minutes");
+
             dailyShopCountText.text = localization_Reset + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
 
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
