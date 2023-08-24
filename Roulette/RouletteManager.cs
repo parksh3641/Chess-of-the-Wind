@@ -1399,7 +1399,7 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        if (gameManager.bettingNumberList.Contains(queenNumber))
+        if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.bettingNumberList.Contains(number))
         {
             targetQueen.SetActive(true);
             queenEffect.SetActive(true);

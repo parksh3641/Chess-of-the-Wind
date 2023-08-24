@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -159,11 +159,11 @@ public class Pinball3D : MonoBehaviour
                 switch(ballPos)
                 {
                     case 0:
-                        transform.LookAt(rouletteManager.leftWindPoint[4].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[4].position);
 
                         if(rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
                         else
                         {
@@ -171,11 +171,11 @@ public class Pinball3D : MonoBehaviour
                         }
                         break;
                     case 1:
-                        transform.LookAt(rouletteManager.leftWindPoint[5].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[5].position);
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
                         else
                         {
@@ -184,7 +184,7 @@ public class Pinball3D : MonoBehaviour
 
                         break;
                     case 2:
-                        transform.LookAt(rouletteManager.leftWindPoint[6].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[6].position);
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
@@ -192,12 +192,12 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
 
                         break;
                     case 3:
-                        transform.LookAt(rouletteManager.leftWindPoint[7].position + new Vector3(-1, 0.5f, -1));
+                        transform.LookAt(rouletteManager.leftWindPoint[7].position);
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
@@ -205,7 +205,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
 
                         break;
@@ -224,7 +224,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
 
                         break;
@@ -237,7 +237,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
 
                         break;
@@ -246,7 +246,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
                         else
                         {
@@ -259,7 +259,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
                         else
                         {
@@ -281,7 +281,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
                         else
                         {
@@ -293,7 +293,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
                         else
                         {
@@ -310,7 +310,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
 
                         break;
@@ -323,7 +323,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
 
                         break;
@@ -342,7 +342,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
 
                         break;
@@ -355,7 +355,7 @@ public class Pinball3D : MonoBehaviour
                         }
                         else
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
 
                         break;
@@ -364,7 +364,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.1f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.2f + force));
                         }
                         else
                         {
@@ -377,7 +377,7 @@ public class Pinball3D : MonoBehaviour
 
                         if (rotate == 0) //반 시계 방향 회전중
                         {
-                            rigid.AddForce(vector.forward * (windPower * 1.3f + force));
+                            rigid.AddForce(vector.forward * (windPower * 1.4f + force));
                         }
                         else
                         {

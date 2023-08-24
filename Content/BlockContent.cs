@@ -158,12 +158,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 gameManager.ResetPosBlock(index);
             }
 
-            if(eventData.pointerDrag.gameObject.tag == "Block")
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-                NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
-            }
+            NotionManager.instance.UseNotion(NotionType.NotBettingLocation);
+
+            //if (eventData.pointerDrag.gameObject.tag == "BlockChild")
+            //{
+            //    NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
+            //}
         }
         else
         {

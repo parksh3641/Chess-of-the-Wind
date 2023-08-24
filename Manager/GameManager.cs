@@ -1886,7 +1886,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if((int)plusMoney != compare[1])
+            if ((int)plusMoney > 0 && (int)plusMoney > 0 && (int)plusMoney == compare[1])
+            {
+
+            }
+            else
             {
                 if (bettingMoney > 0)
                 {
@@ -3850,8 +3854,6 @@ public class GameManager : MonoBehaviour
     public void CancleBetting(BlockType type)
     {
         ResetRouletteBackgroundColor();
-
-        //나 취소하면 상대방도 내가 취소했다는것을 확실히 알려줘야 근데 이건 배팅되어있는 걸 취소하는 거랑 배팅 하나되어있고 다른것을 취소했을때랑 ㄱ같은 함수인게 문제
 
         if (blockType.Equals(type))
         {

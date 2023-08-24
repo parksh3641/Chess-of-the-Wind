@@ -232,7 +232,11 @@ public class UIManager : MonoBehaviour
         {
             loginUI.SetActive(true);
 
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
             loginButtonList[0].SetActive(true);
+#else
+            loginButtonList[0].SetActive(false);
+#endif
 
 #if UNITY_ANDROID
             loginButtonList[1].SetActive(true);
