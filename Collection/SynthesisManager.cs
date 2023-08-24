@@ -139,10 +139,10 @@ public class SynthesisManager : MonoBehaviour
         synthesisButton.SetActive(false);
         synthesisAllButton.SetActive(true);
 
-        for (int i = 0; i < 300; i++)
+        for (int i = 0; i < 50; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
-            content.transform.parent = blockUITransform;
+            content.transform.SetParent(blockUITransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -151,10 +151,10 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList.Add(content);
         }
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 10; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
-            content.transform.parent = synthesisTransform;
+            content.transform.SetParent(synthesisTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);

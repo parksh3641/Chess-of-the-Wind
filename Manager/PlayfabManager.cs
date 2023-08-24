@@ -41,6 +41,11 @@ public class PlayfabManager : MonoBehaviour
     public bool isDelay = false;
     public bool isNone = false;
 
+    private bool playerData = false;
+    private bool statisticsData = false;
+    private bool inventoryData = false;
+    private bool grantItemData = false;
+
 #if UNITY_IOS
     private string AppleUserIdKey = "";
     private IAppleAuthManager _appleAuthManager;
@@ -704,9 +709,12 @@ public class PlayfabManager : MonoBehaviour
             yield break;
         }
 
+        playerData = false;
+        statisticsData = false;
+        inventoryData = false;
+
         infoText.text = LocalizationManager.instance.GetString("Loading");
 
-        //infoText.text = "데이터를 읽고 있습니다.";
         Debug.Log("Load Data...");
 
         playerDataBase.Initialize();
@@ -720,19 +728,29 @@ public class PlayfabManager : MonoBehaviour
 
         //yield return new WaitForSeconds(0.5f);
 
-        yield return GetPlayerData();
+        GetPlayerData();
 
-        yield return new WaitForSeconds(1.0f);
+        while(!playerData)
+        {
+            yield return null;
+        }
 
         isActive = true;
 
-        yield return GetStatistics();
+        GetStatistics();
 
-        yield return new WaitForSeconds(0.5f);
+        while(!statisticsData)
+        {
+            yield return null;
+        }
 
-        yield return GetUserInventory();
+        GetUserInventory();
 
-        yield return new WaitForSeconds(1.0f);
+        while (!inventoryData)
+        {
+            yield return null;
+        }
+
 
         uiManager.Renewal();
 
@@ -749,7 +767,7 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public bool GetUserInventory()
+    public void GetUserInventory()
     {
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
@@ -797,9 +815,10 @@ public class PlayfabManager : MonoBehaviour
                 }
             }
 
+            inventoryData = true;
+
         }, DisplayPlayfabError);
 
-        return true;
     }
 
     public void ChangeUserInventory()
@@ -883,11 +902,11 @@ public class PlayfabManager : MonoBehaviour
         return true;
     }
 
-    public bool GetStatistics()
+    public void GetStatistics()
     {
         PlayFabClientAPI.GetPlayerStatistics(
            new GetPlayerStatisticsRequest(),
-           (Action<GetPlayerStatisticsResult>)((result) =>
+           (result) =>
            {
                foreach (var statistics in result.Statistics)
                {
@@ -1095,13 +1114,13 @@ public class PlayfabManager : MonoBehaviour
                            break;
                    }
                }
-           })
+
+               statisticsData = true;
+           }
            , (error) =>
            {
 
            });
-
-        return true;
     }
 
     public void SetPlayerData(Dictionary<string, string> data)
@@ -1138,7 +1157,7 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public bool GetPlayerData()
+    public void GetPlayerData()
     {
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
@@ -1167,9 +1186,10 @@ public class PlayfabManager : MonoBehaviour
                     playerDataBase.Newbie = eachData.Value.Value;
                 }
             }
-        }, DisplayPlayfabError);
 
-        return true;
+            playerData = true;
+
+        }, DisplayPlayfabError);
     }
 
     public void GetPlayerProfile(string playFabId, Action<string> action)
@@ -1760,9 +1780,15 @@ public class PlayfabManager : MonoBehaviour
             Debug.LogError(e.Message);
         }
     }
-
     public void GrantItemsToUser(string catalogversion, List<string> itemIds)
     {
+        grantItemData = false;
+
+        if (uiManager != null)
+        {
+            StartCoroutine(WaitGrantItemCoroution());
+        }
+
         try
         {
             if (NetworkConnect.instance.CheckConnectInternet())
@@ -1777,12 +1803,9 @@ public class PlayfabManager : MonoBehaviour
                 }
             , result =>
             {
-                OnCloudUpdateStats(result);
+                grantItemData = true;
 
-                if(uiManager != null)
-                {
-                    Invoke("ChangeUserInventory", 1.0f);
-                }
+                OnCloudUpdateStats(result);
 
             }, DisplayPlayfabError);
             }
@@ -1796,6 +1819,16 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.LogError(e.Message);
         }
+    }
+
+    IEnumerator WaitGrantItemCoroution()
+    {
+        while(!grantItemData)
+        {
+            yield return null;
+        }
+
+        ChangeUserInventory();
     }
 
     public void RestorePurchases()

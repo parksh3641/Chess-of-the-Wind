@@ -63,7 +63,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
-            monster.transform.parent = heartTransform;
+            monster.transform.SetParent(heartTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -73,7 +73,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
-            monster.transform.parent = heartTransform;
+            monster.transform.SetParent(heartTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -83,7 +83,7 @@ public class MoneyAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             MoneyContent monster = Instantiate(moneyPrefab);
-            monster.transform.parent = moneyTransform;
+            monster.transform.SetParent(moneyTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);

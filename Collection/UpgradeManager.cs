@@ -276,15 +276,31 @@ public class UpgradeManager : MonoBehaviour
             }
             else
             {
-                if(gold >= upgradeInformation.needGold)
+                if (playerDataBase.ChallengeCount < 5)
                 {
-                    upgradeButton.sprite = upgradeButtonArray[1];
+                    if (blockClass.level < 1 && gold >= upgradeInformation.needGold)
+                    {
+                        upgradeButton.sprite = upgradeButtonArray[1];
 
-                    Debug.Log("강화 준비 완료");
+                        Debug.Log("강화 준비 완료");
+                    }
+                    else
+                    {
+                        upgradeButton.sprite = upgradeButtonArray[0];
+                    }
                 }
                 else
                 {
-                    upgradeButton.sprite = upgradeButtonArray[0];
+                    if (gold >= upgradeInformation.needGold)
+                    {
+                        upgradeButton.sprite = upgradeButtonArray[1];
+
+                        Debug.Log("강화 준비 완료");
+                    }
+                    else
+                    {
+                        upgradeButton.sprite = upgradeButtonArray[0];
+                    }
                 }
             }
 
@@ -315,6 +331,17 @@ public class UpgradeManager : MonoBehaviour
 
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
+        }
+
+        if(playerDataBase.ChallengeCount < 5)
+        {
+            if(blockClass.level + 1 >= 2)
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                NotionManager.instance.UseNotion(NotionType.MaxBlockLevel);
+                return;
+            }
         }
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)

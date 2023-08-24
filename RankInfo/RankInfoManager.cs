@@ -37,7 +37,7 @@ public class RankInfoManager : MonoBehaviour
         for (int i = 0; i < rankDataBase.rankInformationArray.Length; i++)
         {
             RankInfoContent monster = Instantiate(rankInfoContent);
-            monster.transform.parent = rankInfoContentTransform;
+            monster.transform.SetParent(rankInfoContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

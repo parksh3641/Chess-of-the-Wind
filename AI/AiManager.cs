@@ -57,7 +57,7 @@ public class AiManager : MonoBehaviour
         for(int i = 0; i < 3; i ++)
         {
             OtherBlockContent content = Instantiate(otherBlockContent);
-            content.transform.parent = otherBlockContentTransform;
+            content.transform.SetParent(otherBlockContentTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -227,7 +227,7 @@ public class AiManager : MonoBehaviour
                     break;
             }
 
-            Debug.LogError(blockPos);
+            //Debug.LogError(blockPos);
 
             for(int i = 0; i < otherBlockContentList.Count; i ++)
             {
@@ -257,11 +257,11 @@ public class AiManager : MonoBehaviour
 
                 gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos, rouletteType);
 
-                Debug.Log("Ai가 고수방 " + rouletteType.ToString() + " " + blockPos + " 위치에 배팅했습니다");
+                //Debug.Log("Ai가 고수방 " + rouletteType.ToString() + " " + blockPos + " 위치에 배팅했습니다");
             }
             else
             {
-                Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
+                //Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
 
                 otherBlockContentList[blockIndex].gameObject.SetActive(false);
 

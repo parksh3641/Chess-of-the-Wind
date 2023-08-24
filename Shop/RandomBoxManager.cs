@@ -78,7 +78,7 @@ public class RandomBoxManager : MonoBehaviour
         for (int i = 0; i < 20; i++)
         {
             BlockUIContent monster = Instantiate(blockUIContent);
-            monster.transform.parent = blockUIContentTransform;
+            monster.transform.SetParent(blockUIContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

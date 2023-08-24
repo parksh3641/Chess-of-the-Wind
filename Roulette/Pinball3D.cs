@@ -36,7 +36,7 @@ public class Pinball3D : MonoBehaviour
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (transform.position.y < -2)
         {

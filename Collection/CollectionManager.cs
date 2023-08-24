@@ -54,10 +54,10 @@ public class CollectionManager : MonoBehaviour
 
         collectionView.SetActive(false);
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 50; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
-            content.transform.parent = blockUITransform;
+            content.transform.SetParent(blockUITransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);

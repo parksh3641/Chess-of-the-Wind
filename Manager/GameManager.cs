@@ -281,21 +281,21 @@ public class GameManager : MonoBehaviour
             setIndex[1] = count;
 
             RouletteContent content = Instantiate(rouletteContent);
-            content.transform.parent = rouletteContentTransform;
+            content.transform.SetParent(rouletteContentTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
             rouletteContentList.Add(content);
 
             NumberContent numContent = Instantiate(numberContent);
-            numContent.transform.parent = numberContentTransform;
+            numContent.transform.SetParent(numberContentTransform);
             numContent.transform.localPosition = Vector3.zero;
             numContent.transform.localScale = Vector3.one;
             numContent.Initialize(i);
             numberContentList.Add(numContent);
 
             BlockLevelContent levelContent = Instantiate(blockLevelContent);
-            levelContent.transform.parent = blockLevelContentTransform;
+            levelContent.transform.SetParent(blockLevelContentTransform);
             levelContent.transform.localPosition = Vector3.zero;
             levelContent.transform.localScale = Vector3.one;
             levelContent.Initialize();
@@ -324,21 +324,21 @@ public class GameManager : MonoBehaviour
             setIndex[1] = count;
 
             RouletteContent content = Instantiate(rouletteContent);
-            content.transform.parent = rouletteContentTransform_NewBie;
+            content.transform.SetParent(rouletteContentTransform_NewBie);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize_NewBie(this, blockParent.transform, RouletteType.StraightBet, setIndex, i);
             rouletteContentList_NewBie.Add(content);
 
             NumberContent numContent = Instantiate(numberContent);
-            numContent.transform.parent = numberContentTransform_NewBie;
+            numContent.transform.SetParent(numberContentTransform_NewBie);
             numContent.transform.localPosition = Vector3.zero;
             numContent.transform.localScale = Vector3.one;
             numContent.Initialize_NewBie(i);
             numberContentList_NewBie.Add(numContent);
 
             BlockLevelContent levelContent = Instantiate(blockLevelContent);
-            levelContent.transform.parent = blockLevelContentTransform_NewBie;
+            levelContent.transform.SetParent(blockLevelContentTransform_NewBie);
             levelContent.transform.localPosition = Vector3.zero;
             levelContent.transform.localScale = Vector3.one;
             levelContent.Initialize();
@@ -364,14 +364,14 @@ public class GameManager : MonoBehaviour
             setIndex[1] = count;
 
             RouletteContent content = Instantiate(rouletteContent);
-            content.transform.parent = rouletteContentTransformSplitBet_Vertical;
+            content.transform.SetParent(rouletteContentTransformSplitBet_Vertical);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockParent.transform, RouletteType.SplitBet_Vertical, setIndex, i);
             rouletteContentList_Split_Vertical.Add(content);
 
             BlockLevelContent levelContent = Instantiate(blockLevelContent);
-            levelContent.transform.parent = blockLevelContentTransform_Vertical;
+            levelContent.transform.SetParent(blockLevelContentTransform_Vertical);
             levelContent.transform.localPosition = Vector3.zero;
             levelContent.transform.localScale = Vector3.one;
             levelContent.Initialize();
@@ -400,7 +400,7 @@ public class GameManager : MonoBehaviour
             setIndex[1] = count;
 
             RouletteContent content = Instantiate(rouletteContent);
-            content.transform.parent = rouletteContentTransformSplitBet_Horizontal;
+            content.transform.SetParent(rouletteContentTransformSplitBet_Horizontal);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockParent.transform, RouletteType.SplitBet_Horizontal, setIndex, i);
@@ -408,7 +408,7 @@ public class GameManager : MonoBehaviour
 
 
             BlockLevelContent levelContent = Instantiate(blockLevelContent);
-            levelContent.transform.parent = blockLevelContentTransform_Horizontal;
+            levelContent.transform.SetParent(blockLevelContentTransform_Horizontal);
             levelContent.transform.localPosition = Vector3.zero;
             levelContent.transform.localScale = Vector3.one;
             levelContent.Initialize();
@@ -461,7 +461,7 @@ public class GameManager : MonoBehaviour
         blockContentList.Clear();
 
         newbieBlockContent = Instantiate(blockContent);
-        newbieBlockContent.transform.parent = blockContentTransform_NewBie;
+        newbieBlockContent.transform.SetParent(blockContentTransform_NewBie);
         newbieBlockContent.transform.localPosition = Vector3.zero;
         newbieBlockContent.transform.localScale = Vector3.one;
         newbieBlockContent.Initialize(this, blockRootParent.transform, blockGridParent_NewBie.transform);
@@ -470,7 +470,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             BlockContent content = Instantiate(blockContent);
-            content.transform.parent = blockContentTransform_Gosu;
+            content.transform.SetParent(blockContentTransform_Gosu);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize(this, blockRootParent.transform, blockGridParent_Gosu.transform);
@@ -3328,7 +3328,7 @@ public class GameManager : MonoBehaviour
         }
 
         NotionManager.instance.UseNotion(LocalizationManager.instance.GetString("CurrentValue") + " : " + MoneyUnitString.ToCurrencyString(bettingMoney) + " " +
-    LocalizationManager.instance.GetString("PowerBetting"), ColorType.Green);
+    LocalizationManager.instance.GetString("PowerBetting"), ColorType.White);
 
         switch (mainRouletteContent.rouletteType) //블럭 범위에 있는 모든 컨텐츠에 isActive 켜기
         {

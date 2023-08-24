@@ -198,9 +198,6 @@ public class ChallengeManager : MonoBehaviour
                 break;
             case 1:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 200);
-                break;
-            case 2:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
 
                 switch (GameStateManager.instance.WindCharacterType)
                 {
@@ -224,6 +221,10 @@ public class ChallengeManager : MonoBehaviour
                         PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
                         break;
                 }
+
+                break;
+            case 2:
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
                 break;
             case 3:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);

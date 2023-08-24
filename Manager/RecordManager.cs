@@ -25,10 +25,10 @@ public class RecordManager : MonoBehaviour
     {
         instance = this;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             RecordContent content = Instantiate(recordContent);
-            content.transform.parent = gameRecordTransform;
+            content.transform.SetParent(gameRecordTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.Initialize("");

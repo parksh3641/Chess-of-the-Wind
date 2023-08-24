@@ -29,7 +29,7 @@ public class BoxInfoManager : MonoBehaviour
         for (int i = 0; i < 200; i++)
         {
             BoxInfoContent monster = Instantiate(boxInfoContent);
-            monster.transform.parent = boxInfoContentTransform;
+            monster.transform.SetParent(boxInfoContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

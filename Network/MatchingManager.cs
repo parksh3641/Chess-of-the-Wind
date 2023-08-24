@@ -17,6 +17,7 @@ public class MatchingManager : MonoBehaviour
     RankInformation rankInformation = new RankInformation();
 
     public GameObject dontTouchObj;
+    public GameObject cancelButtonObj;
 
     [Title("Package")]
     public GameObject packageObj;
@@ -556,16 +557,6 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            isServer = false;
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            return;
-        }
-
         rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType);
 
         stakes = rankInformation.stakes;
@@ -594,6 +585,28 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
+        OpenMacthingView();
+
+        cancelButtonObj.SetActive(true);
+
+        if (playerDataBase.NewbieWin < 2)
+        {
+            cancelButtonObj.SetActive(false);
+        }
+
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            isServer = false;
+
+            isCancle = true;
+            OpenMacthingView();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         if (!PhotonNetwork.IsConnected)
         {
             networkManager.Initialize(0);
@@ -614,13 +627,17 @@ public class MatchingManager : MonoBehaviour
         {
             isServer = false;
 
+            isCancle = true;
+            OpenMacthingView();
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
 
-        OpenMacthingView();
+        isCancle = true;
+        StartCoroutine(WaitingPlayer());
 
         networkManager.JoinRandomRoom_Newbie();
 
@@ -643,16 +660,6 @@ public class MatchingManager : MonoBehaviour
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.LimitRank);
-            return;
-        }
-
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            isServer = false;
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
             return;
         }
 
@@ -685,6 +692,28 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
+        OpenMacthingView();
+
+        cancelButtonObj.SetActive(true);
+
+        if (playerDataBase.GosuWin < 1)
+        {
+            cancelButtonObj.SetActive(false);
+        }
+
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            isServer = false;
+
+            isCancle = true;
+            OpenMacthingView();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
         if (!PhotonNetwork.IsConnected)
         {
             networkManager.Initialize(1);
@@ -705,13 +734,17 @@ public class MatchingManager : MonoBehaviour
         {
             isServer = false;
 
+            isCancle = true;
+            OpenMacthingView();
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
             NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
 
-        OpenMacthingView();
+        isCancle = true;
+        StartCoroutine(WaitingPlayer());
 
         networkManager.JoinRandomRoom_Gosu();
 
@@ -726,10 +759,8 @@ public class MatchingManager : MonoBehaviour
 
             matchingButton.sprite = matchingButtonArray[1];
 
-            isCancle = true;
-
             matchingWaitTime = GameStateManager.instance.MatchingTime;
-            StartCoroutine(WaitingPlayer());
+            matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
         }
         else
         {
