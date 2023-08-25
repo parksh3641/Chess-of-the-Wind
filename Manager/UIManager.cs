@@ -452,7 +452,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Win = true;
-            SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else if(number == 1)
         {
@@ -468,7 +467,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Lose = true;
-            SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
         else if (number == 2)
         {
@@ -484,7 +482,6 @@ public class UIManager : MonoBehaviour
             }
 
             GameStateManager.instance.Win = true;
-            SoundManager.instance.PlaySFX(GameSfxType.GameWin);
         }
         else
         {
@@ -498,8 +495,6 @@ public class UIManager : MonoBehaviour
             {
                 resultTalkText.text = LocalizationManager.instance.GetString("Tie_Winter");
             }
-
-            SoundManager.instance.PlaySFX(GameSfxType.GameLose);
         }
 
         RecordManager.instance.OpenRecord();
@@ -510,6 +505,8 @@ public class UIManager : MonoBehaviour
         if (gold >= 0)
         {
             Debug.Log("돈 증가 애니메이션 발동");
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameWin);
 
             if (GameStateManager.instance.Win)
             {
@@ -532,6 +529,8 @@ public class UIManager : MonoBehaviour
         else
         {
             Debug.Log("돈 감소 애니메이션 발동");
+
+            SoundManager.instance.PlaySFX(GameSfxType.GameLose);
 
             moneyAnimation.ResultMinusMoney(-GameStateManager.instance.Stakes, resultGoldText);
 
@@ -627,11 +626,11 @@ public class UIManager : MonoBehaviour
     public void OnUpdate()
     {
 #if UNITY_ANDROID
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #elif UNITY_IOS
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #else
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #endif
     }
 

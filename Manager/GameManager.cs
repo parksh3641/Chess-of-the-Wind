@@ -1300,15 +1300,15 @@ public class GameManager : MonoBehaviour
         turnText.plusText = ": " + turn;
         turnText.ReLoad();
 
-        Debug.Log("현재 턴 : " + turn);
+        //Debug.Log("현재 턴 : " + turn);
 
         UpdateMoney();
     }
 
     void HalfMoney()
     {
-        halfMoney = money / 2;
-        halfOtherMoney = otherMoney / 2;
+        halfMoney = (int)(money * 0.5f);
+        halfOtherMoney = (int)(otherMoney * 0.5f);
 
         money = money - halfMoney;
         otherMoney = otherMoney - halfOtherMoney;

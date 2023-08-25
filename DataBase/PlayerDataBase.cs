@@ -1557,13 +1557,29 @@ public class PlayerDataBase : ScriptableObject
         return check;
     }
 
-    public int CheckBlockLevelCount(int level)
+    public int CheckBlockLevelCount()
     {
         int number = 0;
 
-        for (int i = 0; i < blockList.Count; i++)
+        if (armor != null)
         {
-            if (blockList[i].level > level)
+            if (GetBlockClass(armor).level > 0)
+            {
+                number++;
+            }
+        }
+
+        if (weapon != null)
+        {
+            if (GetBlockClass(weapon).level > 0)
+            {
+                number++;
+            }
+        }
+
+        if (shield != null)
+        {
+            if (GetBlockClass(shield).level > 0)
             {
                 number++;
             }

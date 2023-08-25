@@ -131,7 +131,7 @@ public class ChallengeManager : MonoBehaviour
                 }
                 break;
             case 4:
-                if (playerDataBase.CheckBlockLevelCount(0) > 2)
+                if (playerDataBase.CheckBlockLevelCount() == 3)
                 {
                     OpenChallengeView();
 

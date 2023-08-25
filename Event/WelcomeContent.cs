@@ -46,7 +46,7 @@ public class WelcomeContent : MonoBehaviour
             switch (index)
             {
                 case 0:
-                    if (playerDataBase.CheckBlockLevel(0))
+                    if (playerDataBase.CheckBlockLevel(1))
                     {
                         lockObj.SetActive(false);
                     }

@@ -144,7 +144,7 @@ public class RouletteManager : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
-    WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.3f);
 
     public PhotonView PV;
 
@@ -1302,7 +1302,10 @@ public class RouletteManager : MonoBehaviour
 
         Debug.LogError(targetNumber + " / " + targetQueenNumber);
 
-        PV.RPC("ShowTargetNumber", RpcTarget.All, targetNumber);
+
+        ShowTargetNumber(targetNumber);
+
+        PV.RPC("ShowTargetNumber", RpcTarget.Others, targetNumber);
 
         //if (targetNumber != targetQueenNumber)
         //{
@@ -1399,7 +1402,7 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.bettingNumberList.Contains(number))
+        if (number == targetQueenNumber && gameManager.bettingNumberList.Contains(number))
         {
             targetQueen.SetActive(true);
             queenEffect.SetActive(true);
