@@ -1566,6 +1566,8 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(armor).level > 0)
             {
                 number++;
+
+                Debug.Log("1");
             }
         }
 
@@ -1574,6 +1576,8 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(weapon).level > 0)
             {
                 number++;
+
+                Debug.Log("2");
             }
         }
 
@@ -1582,6 +1586,8 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(shield).level > 0)
             {
                 number++;
+
+                Debug.Log("3");
             }
         }
 
