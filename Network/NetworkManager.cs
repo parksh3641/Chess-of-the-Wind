@@ -76,11 +76,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (pause)
         {
-            //Disconnect();
+            if (GameStateManager.instance.Playing)
+            {
+                GameStateManager.instance.Penalty = 1;
+
+                PlayerPrefs.SetString("PenaltyTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
         }
         else
         {
-
+            if (GameStateManager.instance.Playing)
+            {
+                GameStateManager.instance.Penalty = 0;
+            }
         }
     }
 

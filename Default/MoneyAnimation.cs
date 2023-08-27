@@ -27,6 +27,8 @@ public class MoneyAnimation : MonoBehaviour
     [Title("Plus")]
     public GameObject plusMoneyView;
     public Text myMoneyText;
+
+    public GameObject myPlusMoneyObj;
     public Text myPlusMoneyText;
 
     public Transform plusMoneyStartTransform;
@@ -767,7 +769,7 @@ public class MoneyAnimation : MonoBehaviour
         gold = playerDataBase.Gold;
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold);
 
-        myPlusMoneyText.gameObject.SetActive(true);
+        myPlusMoneyObj.SetActive(true);
         myPlusMoneyText.text = "+" + MoneyUnitString.ToCurrencyString(target);
 
         StartCoroutine(PlusMoneyCoroution(target));
@@ -863,7 +865,7 @@ public class MoneyAnimation : MonoBehaviour
         isStart = false;
 
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
-        myPlusMoneyText.gameObject.SetActive(false);
+        myPlusMoneyObj.SetActive(false);
 
         yield return new WaitForSeconds(1f);
 

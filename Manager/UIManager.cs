@@ -628,7 +628,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_ANDROID
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #elif UNITY_IOS
-        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+        Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
 #else
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #endif

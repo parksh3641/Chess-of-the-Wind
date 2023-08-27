@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +35,7 @@ public class StateManager : MonoBehaviour
         penaltyView.SetActive(false);
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Application.runInBackground = true;
     }
 
     private void Start()

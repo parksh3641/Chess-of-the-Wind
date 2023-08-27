@@ -16,6 +16,7 @@ public class ChallengeManager : MonoBehaviour
     public LockManager lockManager;
     public UIManager uIManager;
     public MatchingManager matchingManager;
+    public UpgradeManager upgradeManager;
 
     List<string> itemList = new List<string>();
 
@@ -134,6 +135,8 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckBlockLevelCount() == 3)
                 {
                     OpenChallengeView();
+
+                    upgradeManager.CloseUpgradeView();
 
                     exitButton.SetActive(false);
 

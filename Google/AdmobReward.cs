@@ -18,6 +18,8 @@ public class AdmobReward : MonoBehaviour
 
     void Start()
     {
+        MobileAds.RaiseAdEventsOnUnityMainThread = true;
+
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
 
@@ -77,7 +79,7 @@ public class AdmobReward : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
-                Debug.Log("광고 시청 완료");
+                Debug.Log("광고 ?�청 ?�료");
 
                 shopManager.GetAdReward(number);
                 //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
