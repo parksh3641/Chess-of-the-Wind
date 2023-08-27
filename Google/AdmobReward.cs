@@ -79,7 +79,7 @@ public class AdmobReward : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
-                Debug.Log("광고 ?�청 ?�료");
+                Debug.Log("Ad Watch Success!");
 
                 shopManager.GetAdReward(number);
                 //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
