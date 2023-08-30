@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class StoryManager : MonoBehaviour
 {
-    public Image characterImg;
-
     public Text talkText;
     public Text nextText;
 
@@ -17,37 +15,15 @@ public class StoryManager : MonoBehaviour
 
     string str = "";
 
-    Sprite[] characterArray;
-
     WaitForSeconds talkDelay = new WaitForSeconds(0.04f);
 
     PlayerDataBase playerDataBase;
-    ImageDataBase imageDataBase;
 
     void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
-        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
-
-        characterArray = imageDataBase.GetCharacterArray();
-
-        characterImg.enabled = false;
 
         talkSkip = true;
-    }
-
-    public void Initialize()
-    {
-        if (playerDataBase.Formation == 2)
-        {
-            characterImg.sprite = characterArray[1];
-        }
-        else
-        {
-            characterImg.sprite = characterArray[0];
-        }
-
-        characterImg.enabled = true;
     }
 
     public void NextButton()

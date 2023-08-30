@@ -17,6 +17,8 @@ public class BlockUIContent : MonoBehaviour
     public Text levelText;
     private int level = 0;
 
+    private bool boxInfo = false;
+
     public GameObject gradient;
 
     public GameObject alarm;
@@ -96,6 +98,25 @@ public class BlockUIContent : MonoBehaviour
         SetLevel(blockClass.level);
     }
 
+    public void SetRank(RankType type)
+    {
+        boxInfo = true;
+
+        blockClass.rankType = type;
+
+        rankImg.sprite = rankBannerArray[(int)type];
+        backgroundImg.sprite = rankBackgroundArray[(int)type];
+
+        if (type > RankType.SR)
+        {
+            gradient.SetActive(true);
+        }
+        else
+        {
+            gradient.SetActive(false);
+        }
+    }
+
     public void NextLevel_Initialize()
     {
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType + 1];
@@ -128,6 +149,13 @@ public class BlockUIContent : MonoBehaviour
 
     public void BlockInfomationButton()
     {
+        if(boxInfo)
+        {
+            ReceiveInfoManager.instance.OpenBlockInfo(blockClass);
+
+            return;
+        }
+
         if(collectionManager != null)
         {
             collectionManager.OpenBlockInformation(instanceId);

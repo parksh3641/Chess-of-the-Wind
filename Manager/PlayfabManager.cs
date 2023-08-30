@@ -217,6 +217,8 @@ public class PlayfabManager : MonoBehaviour
         isLogin = false;
         isDelay = false;
 
+        PlayerPrefs.SetString("AppleLogin", "");
+
         Debug.Log("Logout");
 
         SceneManager.LoadScene("LoginScene");
@@ -237,6 +239,8 @@ public class PlayfabManager : MonoBehaviour
     #region GuestLogin
     public void OnClickGuestLogin()
     {
+        uiManager.loginUI.SetActive(false);
+
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             uiManager.LoginFail();
@@ -325,6 +329,8 @@ public class PlayfabManager : MonoBehaviour
     #region Google Login
     public void OnClickGoogleLogin()
     {
+        uiManager.loginUI.SetActive(false);
+
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             uiManager.LoginFail();
@@ -447,6 +453,8 @@ public class PlayfabManager : MonoBehaviour
 
     public void OnClickAppleLogin()
     {
+        uiManager.loginUI.SetActive(false);
+
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             uiManager.LoginFail();
@@ -480,6 +488,8 @@ public class PlayfabManager : MonoBehaviour
                 if (appleIdCredential != null)
                 {
                     OnClickAppleLogin(appleIdCredential.IdentityToken);
+
+                    PlayerPrefs.SetString("AppleLogin", appleIdCredential.IdentityToken.ToString());
                 }
             }, error =>
             {
@@ -493,38 +503,49 @@ public class PlayfabManager : MonoBehaviour
 
     IEnumerator AppleLoginCor()
     {
-        IOSActivate();
-
-        var _newAppleUser = false;
-
-        while (_appleAuthManager == null) yield return null;
-
-        if (!_newAppleUser)
+        if (SaveByte.LoadByteArrayToPlayerPrefs() != null)
         {
-            var quickLoginArgs = new AppleAuthQuickLoginArgs();
+            byte[] apple = SaveByte.LoadByteArrayToPlayerPrefs();
 
-            _appleAuthManager.QuickLogin(
-                quickLoginArgs,
-                credential =>
-                {
-                    var appleIdCredential = credential as IAppleIDCredential;
-                    if (appleIdCredential != null)
-                    {
-                        OnClickAppleLogin(appleIdCredential.IdentityToken);
-                    }
-                },
-                error =>
-                {
-                    _newAppleUser = true;
-                    SignInWithApple();
-                    var authorizationErrorCode = error.GetAuthorizationErrorCode();
-                });
+            Debug.Log("Apple Auto Login");
+
+            OnClickAppleLogin(apple);
         }
         else
         {
-            SignInWithApple();
+            IOSActivate();
+
+            var _newAppleUser = false;
+
+            while (_appleAuthManager == null) yield return null;
+
+            if (!_newAppleUser)
+            {
+                var quickLoginArgs = new AppleAuthQuickLoginArgs();
+
+                _appleAuthManager.QuickLogin(
+                    quickLoginArgs,
+                    credential =>
+                    {
+                        var appleIdCredential = credential as IAppleIDCredential;
+                        if (appleIdCredential != null)
+                        {
+                            OnClickAppleLogin(appleIdCredential.IdentityToken);
+                        }
+                    },
+                    error =>
+                    {
+                        _newAppleUser = true;
+                        SignInWithApple();
+                        var authorizationErrorCode = error.GetAuthorizationErrorCode();
+                    });
+            }
+            else
+            {
+                SignInWithApple();
+            }
+            yield return null;
         }
-        yield return null;
     }
 
     public void OnClickAppleLogin(byte[] identityToken)
@@ -538,6 +559,8 @@ public class PlayfabManager : MonoBehaviour
         , result =>
         {
             Debug.Log("Apple Login Success");
+
+            SaveByte.SaveByteArrayToPlayerPref(identityToken);
 
             GameStateManager.instance.AutoLogin = true;
             GameStateManager.instance.Login = LoginType.Apple;
@@ -933,6 +956,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "ChallengeCount":
                            playerDataBase.ChallengeCount = statistics.Value;
+                           break;
+                       case "ConsumeGold":
+                           playerDataBase.ConsumeGold = statistics.Value;
                            break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
@@ -1342,41 +1368,37 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
 
-        try
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "SubtractMoney",
-                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
-                    GeneratePlayStreamEvent = true,
-                }, OnCloudUpdateStats, DisplayPlayfabError);
-
-                switch (type)
-                {
-                    case MoneyType.Gold:
-                        playerDataBase.Gold -= number;
-                        break;
-                    case MoneyType.Crystal:
-                        playerDataBase.Crystal -= number;
-                        break;
-                }
-
-                uiManager.Renewal();
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
+            return;
         }
-        catch (Exception e)
+
+        if (!isActive) return;
+
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            Debug.LogError(e.Message);
+            FunctionName = "SubtractMoney",
+            FunctionParameter = new { currencyType = currentType, currencyAmount = number },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
+
+        switch (type)
+        {
+            case MoneyType.Gold:
+                playerDataBase.Gold -= number;
+
+                playerDataBase.ConsumeGold += number;
+                UpdatePlayerStatisticsInsert("ConsumeGold", playerDataBase.ConsumeGold);
+                break;
+            case MoneyType.Crystal:
+                playerDataBase.Crystal -= number;
+                break;
         }
+
+        uiManager.Renewal();
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)

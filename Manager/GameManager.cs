@@ -1008,7 +1008,16 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
 
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+
+        GameStateManager.instance.Playing = false;
         GameStateManager.instance.Room = "";
+
+        SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
+        SoundManager.instance.StopBGM();
 
         uIManager.dontTouchObj.SetActive(false);
 
@@ -1045,16 +1054,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("무승부");
         }
 
-        SoundManager.instance.StopAllSFX();
-        SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
-        SoundManager.instance.StopBGM();
-
         timerAnimation.StopAnim();
-
-        if(PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-        }
 
         rouletteManager.CloseRouletteView();
         uIManager.OpenResultView(number, money);
@@ -1441,7 +1441,7 @@ public class GameManager : MonoBehaviour
 
         SoundManager.instance.StopSFX(GameSfxType.TimesUp);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
         if (PhotonNetwork.IsMasterClient)
         {

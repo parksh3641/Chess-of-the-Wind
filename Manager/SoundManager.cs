@@ -152,7 +152,7 @@ public class SoundManager : MonoBehaviour
         {
             if (sfxAudio[i].name.Equals(type.ToString()))
             {
-                if (sfxAudio[i].isPlaying)
+                if (sfxAudio[i].isPlaying && sfxAudio[i].loop)
                 {
                     sfxAudio[i].Stop();
                     sfxAudio[i].loop = false;

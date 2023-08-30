@@ -9,6 +9,7 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
+    public LocalizationContent totalRafText;
     public Image characterImg;
 
     Sprite[] characterArray;
@@ -18,6 +19,8 @@ public class CollectionManager : MonoBehaviour
     [Space]
     [Title("Value")]
     public int sortCount = 0;
+
+    private int totalRaf = 0;
 
     public bool change = false;
     
@@ -43,12 +46,14 @@ public class CollectionManager : MonoBehaviour
 
     PlayerDataBase playerDataBase;
     ImageDataBase imageDataBase;
+    UpgradeDataBase upgradeDataBase;
 
 
     void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
 
         characterArray = imageDataBase.GetCharacterArray();
 
@@ -97,6 +102,7 @@ public class CollectionManager : MonoBehaviour
                 characterImg.sprite = characterArray[0];
             }
 
+            ChangeTotalRaf();
 
             if (!check) //딱 한번만 체크함
             {
@@ -128,6 +134,39 @@ public class CollectionManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ChangeTotalRaf()
+    {
+        totalRaf = 0;
+
+        if (playerDataBase.Armor != null)
+        {
+            totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Armor).rankType).GetValueNumber(
+                playerDataBase.GetBlockClass(playerDataBase.Armor).level);
+        }
+
+        if (playerDataBase.Weapon != null)
+        {
+            totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Weapon).rankType).GetValueNumber(
+    playerDataBase.GetBlockClass(playerDataBase.Weapon).level);
+        }
+
+        if (playerDataBase.Shield != null)
+        {
+            totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Shield).rankType).GetValueNumber(
+    playerDataBase.GetBlockClass(playerDataBase.Shield).level);
+        }
+
+        if (playerDataBase.Newbie != null)
+        {
+            totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Newbie).rankType).GetValueNumber(
+    playerDataBase.GetBlockClass(playerDataBase.Newbie).level);
+        }
+
+        totalRafText.localizationName = "CurrentValue";
+        totalRafText.plusText = "\n" + MoneyUnitString.ToCurrencyString(totalRaf);
+        totalRafText.ReLoad();
     }
 
     public void CloseCollectionView()
@@ -400,6 +439,8 @@ public class CollectionManager : MonoBehaviour
                 break;
             }
         }
+
+        ChangeTotalRaf();
     }
 
     public void CheckUnEquip(string id)
@@ -412,6 +453,8 @@ public class CollectionManager : MonoBehaviour
                 break;
             }
         }
+
+        ChangeTotalRaf();
     }
 
     #region BlockInformation

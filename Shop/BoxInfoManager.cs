@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class BoxInfoManager : MonoBehaviour
 {
+    RankType rankType = RankType.N;
+
     public GameObject boxInfoView;
 
     public Text titleText;
@@ -14,6 +17,12 @@ public class BoxInfoManager : MonoBehaviour
     public RectTransform boxInfoContentTransform;
 
     public List<BoxInfoContent> boxInfoContentList = new List<BoxInfoContent>();
+
+    public BlockUIContent blockUIContent;
+
+    public RectTransform blockUITransform;
+
+    public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
 
     public float[] percentBlock = new float[4];
@@ -37,6 +46,17 @@ public class BoxInfoManager : MonoBehaviour
 
             boxInfoContentList.Add(monster);
         }
+
+        for (int i = 0; i < 20; i++)
+        {
+            BlockUIContent content = Instantiate(blockUIContent);
+            content.transform.SetParent(blockUITransform);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+
+            blockUIContentList.Add(content);
+        }
     }
 
     public void OpenBoxInfo(int number)
@@ -48,11 +68,18 @@ public class BoxInfoManager : MonoBehaviour
             boxInfoContentList[i].gameObject.SetActive(false);
         }
 
+        for (int i = 0; i < blockUIContentList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(false);
+        }
+
         average = 0;
 
         switch (number)
         {
             case 0:
+                rankType = RankType.SSR;
+
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
@@ -66,11 +93,15 @@ public class BoxInfoManager : MonoBehaviour
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
                 break;
             case 1:
+                rankType = RankType.R;
+
                 titleText.text = LocalizationManager.instance.GetString("Box_Normal");
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
                 break;
             case 2:
+                rankType = RankType.SR;
+
                 titleText.text = LocalizationManager.instance.GetString("Box_Epic");
 
                 average = 1;
@@ -78,6 +109,8 @@ public class BoxInfoManager : MonoBehaviour
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
                 break;
             case 3:
+                rankType = RankType.SSR;
+
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
                 break;
         }
@@ -114,7 +147,7 @@ public class BoxInfoManager : MonoBehaviour
 
         index = 0;
 
-        if(percentBlock[0] > 0)
+        if (percentBlock[0] > 0)
         {
             for (int i = 0; i < temp.Length; i++)
             {
@@ -133,7 +166,6 @@ public class BoxInfoManager : MonoBehaviour
                 boxInfoContentList[index].gameObject.SetActive(true);
                 boxInfoContentList[index].Initialize(LocalizationManager.instance.GetString(temp[i]), percentBlock[1] / temp.Length * 1.0f);
                 boxInfoContentList[index].SetRank(RankType.R + average);
-
                 index++;
             }
         }
@@ -160,6 +192,13 @@ public class BoxInfoManager : MonoBehaviour
 
                 index++;
             }
+        }
+
+        for (int i = 0; i < temp.Length; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(true);
+            blockUIContentList[i].Initialize((BlockType)Enum.Parse(typeof(BlockType),temp[i]));
+            blockUIContentList[i].SetRank(rankType);
         }
 
         boxInfoContentTransform.offsetMax = new Vector2(0, -9999);

@@ -178,14 +178,14 @@ public class UIManager : MonoBehaviour
 
     public void PrivacyReadMore()
     {
-        Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy/home");
+        Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy");
 
         FirebaseAnalytics.LogEvent("Privacy Policy");
     }
 
     public void TermsReadMore()
     {
-        Application.OpenURL("https://sites.google.com/view/bluebook-terms/home");
+        Application.OpenURL("https://sites.google.com/view/bluebook-terms");
 
         FirebaseAnalytics.LogEvent("Terms of Service");
     }
@@ -250,10 +250,14 @@ public class UIManager : MonoBehaviour
     {
         loginUI.SetActive(true);
 
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
         loginButtonList[0].SetActive(true);
+#else
+            loginButtonList[0].SetActive(false);
+#endif
 
 #if UNITY_ANDROID
-            loginButtonList[1].SetActive(true);
+        loginButtonList[1].SetActive(true);
 #elif UNITY_IOS
         loginButtonList[2].SetActive(true);
 #endif
@@ -642,7 +646,7 @@ public class UIManager : MonoBehaviour
 
     public void Feedback()
     {
-        Application.OpenURL("https://forms.gle/u8PT9yV5smhDRLxbA");
+        Application.OpenURL("https://forms.gle/CixT4KwjQvQL2yDD7");
 
         FirebaseAnalytics.LogEvent("Feedback");
     }

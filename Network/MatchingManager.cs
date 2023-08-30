@@ -33,6 +33,9 @@ public class MatchingManager : MonoBehaviour
     public GameObject rankUpView;
     public GameObject rankUpEffect;
 
+    public Text rankUpWiningTitle;
+    public Text rankUpWiningReward;
+
     public Text rankUpTitle;
     public Image rankUpIcon;
     public Text rankUpText;
@@ -229,6 +232,9 @@ public class MatchingManager : MonoBehaviour
 
         tapToContinue.SetActive(false);
 
+        rankUpWiningTitle.text = "";
+        rankUpWiningReward.text = "";
+
         rankUpText.text = "";
 
         rankUpIcon.sprite = rankIconArray[(int)GameStateManager.instance.GameRankType];
@@ -246,26 +252,25 @@ public class MatchingManager : MonoBehaviour
 
             starSave = playerDataBase.Star;
 
-            //GameStateManager.instance.WinStreak += 1;
-            //if (GameStateManager.instance.WinStreak >= 3)
-            //{
-            //    playerDataBase.Star += 2;
+            GameStateManager.instance.WinStreak += 1;
+            if (GameStateManager.instance.WinStreak >= 3)
+            {
+                playerDataBase.Star += 2;
 
-            //    Debug.Log("3연승 이상 승리 :  별 2개 획득");
-            //}
-            //else
-            //{
-            //    playerDataBase.Star += 1;
+                rankUpWiningReward.text = LocalizationManager.instance.GetString("WinningReward");
 
-            //    Debug.Log("승리 : 별 1개 획득");
-            //}
+                Debug.Log("3연승 이상 승리 :  별 2개 획득");
+            }
+            else
+            {
+                playerDataBase.Star += 1;
 
-            playerDataBase.Star += 1;
+                Debug.Log("승리 : 별 1개 획득");
+            }
 
-            Debug.Log("승리 : 별 1개 획득");
+            rankUpWiningTitle.text = LocalizationManager.instance.GetString("Winning") + " : " + GameStateManager.instance.WinStreak;
 
             FirebaseAnalytics.LogEvent("Win");
-
 
             if (GameStateManager.instance.GameType == GameType.NewBie)
             {

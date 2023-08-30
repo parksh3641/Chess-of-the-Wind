@@ -98,6 +98,7 @@ public class TutorialManager : MonoBehaviour
     public Text bottomTalkbarText;
 
     public GameObject targetBlock;
+    public GameObject targetBlockVector;
 
     public Transform blowTarget;
 
@@ -198,6 +199,7 @@ public class TutorialManager : MonoBehaviour
         bottomTalkbar.SetActive(false);
 
         targetBlock.SetActive(false);
+        targetBlockVector.SetActive(false);
 
         windButtonTarget.SetActive(false);
 
@@ -326,6 +328,8 @@ public class TutorialManager : MonoBehaviour
 
                 targetBlock.SetActive(true);
                 targetBlock.transform.position = rouletteContentList[6].transform.position;
+
+                targetBlockVector.SetActive(true);
                 break;
             case 32:
                 SetCharacter(1, 0);
@@ -708,6 +712,7 @@ public class TutorialManager : MonoBehaviour
         blockContent.enabled = false;
 
         targetBlock.SetActive(false);
+        targetBlockVector.SetActive(false);
 
         otherBlockContent.gameObject.SetActive(true);
         otherBlockContent.transform.position = rouletteContentList[7].transform.position;

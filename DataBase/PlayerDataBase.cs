@@ -89,6 +89,8 @@ public class PlayerDataBase : ScriptableObject
     private int accessDate = 0;
     [SerializeField]
     private int challengeCount = 0;
+    [SerializeField]
+    private int consumeGold = 0;
 
     [Space]
     [Title("Reset")]
@@ -344,6 +346,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             challengeCount = value;
+        }
+    }
+
+    public int ConsumeGold
+    {
+        get
+        {
+            return consumeGold;
+        }
+        set
+        {
+            consumeGold = value;
         }
     }
 
@@ -1061,7 +1075,8 @@ public class PlayerDataBase : ScriptableObject
         nowRank = 0;
         highRank = 0;
         accessDate = 0;
-        ChallengeCount = 0;
+        challengeCount = 0;
+        consumeGold = 0;
 
         season = 0;
         attendanceDay = "";
@@ -1331,8 +1346,6 @@ public class PlayerDataBase : ScriptableObject
             if (armor.Equals(id))
             {
                 number = 1;
-
-                Debug.Log("장착 중인 아머가 선택되었습니다");
             }
         }
 
@@ -1341,8 +1354,6 @@ public class PlayerDataBase : ScriptableObject
             if (weapon.Equals(id))
             {
                 number = 2;
-
-                Debug.Log("장착 중인 검이 선택되었습니다");
             }
         }
 
@@ -1351,8 +1362,6 @@ public class PlayerDataBase : ScriptableObject
             if (shield.Equals(id))
             {
                 number = 3;
-
-                Debug.Log("장착 중인 쉴드가 선택되었습니다");
             }
         }
 
@@ -1361,8 +1370,6 @@ public class PlayerDataBase : ScriptableObject
             if (newbie.Equals(id))
             {
                 number = 4;
-
-                Debug.Log("장착 중인 뉴비가 선택되었습니다");
             }
         }
 

@@ -14,6 +14,8 @@ public class ReceiveInfoManager : MonoBehaviour
     public Text titleText;
     public Text infoText;
 
+    public BlockUIContent blockUIContent;
+
 
     ImageDataBase imageDataBase;
 
@@ -56,6 +58,8 @@ public class ReceiveInfoManager : MonoBehaviour
 
     void Initialize(RewardType rewardType)
     {
+        blockUIContent.gameObject.SetActive(false);
+
         titleText.text = LocalizationManager.instance.GetString(rewardType.ToString());
 
         icon.sprite = rewardArray[(int)rewardType];
@@ -109,5 +113,31 @@ public class ReceiveInfoManager : MonoBehaviour
         }
 
         infoText.text = LocalizationManager.instance.GetString(rewardType.ToString() + "_Info");
+    }
+
+    public void OpenBlockInfo(BlockClass block)
+    {
+        if (!receiveInfoView.activeInHierarchy)
+        {
+            receiveInfoView.SetActive(true);
+
+            Initialize_Block(block);
+        }
+        else
+        {
+            receiveInfoView.SetActive(false);
+        }
+    }
+
+    void Initialize_Block(BlockClass block)
+    {
+        blockUIContent.gameObject.SetActive(true);
+
+        blockUIContent.Initialize(block.blockType);
+        blockUIContent.SetRank(block.rankType);
+
+        titleText.text = LocalizationManager.instance.GetString(block.blockType.ToString());
+
+        infoText.text = LocalizationManager.instance.GetString(block.blockType.ToString() + "_Story");
     }
 }

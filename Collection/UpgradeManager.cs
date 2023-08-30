@@ -373,7 +373,7 @@ public class UpgradeManager : MonoBehaviour
 
         playerDataBase.UseUpgradeTicket(RankType.N, needTicket);
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket_N", upgradeTicket - 1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
         //switch (upgradeValue.rankType)
         //{
@@ -633,14 +633,14 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        switch(playerDataBase.CheckEquip(blockClass.instanceId))
-        {
-            case 0:
-                break;
-            default:
-                equipManager.CheckUnEquip(blockClass.instanceId);
-                break;
-        }
+        //switch(playerDataBase.CheckEquip(blockClass.instanceId))
+        //{
+        //    case 0:
+        //        break;
+        //    default:
+        //        equipManager.CheckUnEquip(blockClass.instanceId);
+        //        break;
+        //}
 
         sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 100);
 

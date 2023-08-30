@@ -38,7 +38,7 @@ public class Pinball3D : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (transform.position.y < -2)
+        if (transform.position.y < -5)
         {
             Debug.Log("공이 밖으로 나감");
 
@@ -79,7 +79,7 @@ public class Pinball3D : MonoBehaviour
 
         index = number;
 
-        if(GameStateManager.instance.GameRankType > GameRankType.Platinum_1)
+        if(GameStateManager.instance.GameRankType > GameRankType.Sliver_1)
         {
             random = Random.Range(0, 2);
         }

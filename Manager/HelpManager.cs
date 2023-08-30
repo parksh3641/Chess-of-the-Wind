@@ -53,6 +53,14 @@ public class HelpManager : MonoBehaviour
         {
             helpView.SetActive(true);
 
+            index = 0;
+
+            mainView.SetActive(true);
+            newbieView.SetActive(false);
+            rankView.SetActive(false);
+            tacticsView.SetActive(false);
+            infoView.SetActive(false);
+
             FirebaseAnalytics.LogEvent("Help");
         }
         else

@@ -15,7 +15,7 @@ public class StateManager : MonoBehaviour
     public UIManager uIManager;
     public NickNameManager nickNameManager;
     public MatchingManager matchingManager;
-    public StoryManager storyManager;
+    public FormationUIManager formationUIManager;
     public RankInfoManager rankInfoManager;
     public ResetManager resetManager;
     public EventManager eventManager;
@@ -35,7 +35,6 @@ public class StateManager : MonoBehaviour
         penaltyView.SetActive(false);
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        Application.runInBackground = true;
     }
 
     private void Start()
@@ -56,7 +55,7 @@ public class StateManager : MonoBehaviour
             uIManager.Initialize();
             gameManager.Initialize();
             matchingManager.Initialize();
-            storyManager.Initialize();
+            formationUIManager.Initialize();
             rankInfoManager.Initialize();
             resetManager.Initialize();
             eventManager.Initialize();

@@ -1402,42 +1402,14 @@ public class RouletteManager : MonoBehaviour
             }
         }
 
-        if (number == targetQueenNumber && gameManager.bettingNumberList.Contains(number))
+        if (number == targetQueenNumber)
         {
-            targetQueen.SetActive(true);
-            queenEffect.SetActive(true);
-
-            SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
-
-            if (rouletteIndex == 0)
+            if (gameManager.bettingNumberList.Contains(queenNumber))
             {
-                roulette1Particle.gameObject.SetActive(true);
-                roulette1Particle.Play();
-            }
-            else
-            {
-                roulette2Particle.gameObject.SetActive(true);
-                roulette2Particle.Play();
-            }
+                targetQueen.SetActive(true);
+                queenEffect.SetActive(true);
 
-            Debug.Log("퀸에 당첨되었습니다");
-        }
-        else
-        {
-            targetNormal.SetActive(true);
-
-            targetText.text = number.ToString();
-
-            if (number >= queenNumber)
-            {
-                number += 1;
-            }
-
-            if (gameManager.bettingNumberList.Contains(number))
-            {
-                normalEffect.SetActive(true);
-
-                SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
+                SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
 
                 if (rouletteIndex == 0)
                 {
@@ -1450,16 +1422,48 @@ public class RouletteManager : MonoBehaviour
                     roulette2Particle.Play();
                 }
 
-                Debug.Log("숫자에 당첨되었습니다");
+                Debug.Log("퀸에 당첨되었습니다");
+
+                return;
+            }
+        }
+
+
+        targetNormal.SetActive(true);
+
+        targetText.text = number.ToString();
+
+        if (number >= queenNumber)
+        {
+            number += 1;
+        }
+
+        if (gameManager.bettingNumberList.Contains(number))
+        {
+            normalEffect.SetActive(true);
+
+            SoundManager.instance.PlaySFX(GameSfxType.GetNumber);
+
+            if (rouletteIndex == 0)
+            {
+                roulette1Particle.gameObject.SetActive(true);
+                roulette1Particle.Play();
             }
             else
             {
-                normalEffect.SetActive(false);
-
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-                Debug.Log("숫자에 당첨되지 않았습니다");
+                roulette2Particle.gameObject.SetActive(true);
+                roulette2Particle.Play();
             }
+
+            Debug.Log("숫자에 당첨되었습니다");
+        }
+        else
+        {
+            normalEffect.SetActive(false);
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            Debug.Log("숫자에 당첨되지 않았습니다");
         }
     }
 

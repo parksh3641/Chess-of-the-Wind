@@ -23,6 +23,10 @@ public class ImageDataBase : ScriptableObject
 
     public Sprite[] rewardArray;
 
+    public Sprite[] formationArray;
+
+    public Sprite[] formationRedArray;
+
     public Sprite GetMoneyIcon()
     {
         return moneyIcon;
@@ -61,5 +65,15 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetRewardArray()
     {
         return rewardArray;
+    }
+
+    public Sprite[] GetFormationArray()
+    {
+        return formationArray;
+    }
+
+    public Sprite[] GetFormationRedArray()
+    {
+        return formationRedArray;
     }
 }
