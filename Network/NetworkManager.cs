@@ -37,7 +37,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        PhotonNetwork.KeepAliveInBackground = 15;
+        PhotonNetwork.KeepAliveInBackground = 10;
     }
 
     public void Initialize(int number)

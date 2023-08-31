@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class FormationUIManager : MonoBehaviour
 {
+    public bool isActive = true;
+
     public Image mainBackground;
 
     public Image[] background;
@@ -57,46 +59,52 @@ public class FormationUIManager : MonoBehaviour
     {
         if (playerDataBase.Formation == 2)
         {
-            characterImg.sprite = characterArray[0];
+            characterImg.sprite = characterArray[1];
 
-            for(int i = 0; i < background.Length; i ++)
+            if (isActive)
             {
-                background[i].sprite = formationRedArray[0];
-            }
+                for (int i = 0; i < background.Length; i++)
+                {
+                    background[i].sprite = formationRedArray[0];
+                }
 
-            topBackground.sprite = formationRedArray[1];
-            bottomBackground.sprite = formationRedArray[1];
+                topBackground.sprite = formationRedArray[1];
+                bottomBackground.sprite = formationRedArray[1];
 
-            for (int i = 0; i < selectBackground.Length; i++)
-            {
-                selectBackground[i].sprite = formationRedArray[2];
-            }
+                for (int i = 0; i < selectBackground.Length; i++)
+                {
+                    selectBackground[i].sprite = formationRedArray[2];
+                }
 
-            for (int i = 0; i < lobbyButton.Length; i++)
-            {
-                lobbyButton[i].sprite = formationRedArray[3];
+                for (int i = 0; i < lobbyButton.Length; i++)
+                {
+                    lobbyButton[i].sprite = formationRedArray[3];
+                }
             }
         }
         else
         {
             characterImg.sprite = characterArray[0];
 
-            for (int i = 0; i < background.Length; i++)
+            if (isActive)
             {
-                background[i].sprite = formationArray[0];
-            }
+                for (int i = 0; i < background.Length; i++)
+                {
+                    background[i].sprite = formationArray[0];
+                }
 
-            topBackground.sprite = formationArray[1];
-            bottomBackground.sprite = formationArray[1];
+                topBackground.sprite = formationArray[1];
+                bottomBackground.sprite = formationArray[1];
 
-            for (int i = 0; i < selectBackground.Length; i++)
-            {
-                selectBackground[i].sprite = formationArray[2];
-            }
+                for (int i = 0; i < selectBackground.Length; i++)
+                {
+                    selectBackground[i].sprite = formationArray[2];
+                }
 
-            for (int i = 0; i < lobbyButton.Length; i++)
-            {
-                lobbyButton[i].sprite = formationArray[3];
+                for (int i = 0; i < lobbyButton.Length; i++)
+                {
+                    lobbyButton[i].sprite = formationArray[3];
+                }
             }
         }
 

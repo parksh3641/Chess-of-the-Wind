@@ -615,6 +615,8 @@ public class UpgradeManager : MonoBehaviour
                 collectionManager.blockUIContentList[i].gameObject.SetActive(false);
             }
         }
+
+        collectionManager.ChangeTotalRaf();
     }
 
     public void SellButton()
