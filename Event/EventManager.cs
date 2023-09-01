@@ -94,9 +94,9 @@ public class EventManager : MonoBehaviour
     public void InitializeWelcome()
     {
         welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 2000);
-        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_R, 1);
-        welcomeContentArray[2].receiveContent.Initialize(RewardType.Box, 5);
-        welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 10000);
+        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_R, 3);
+        welcomeContentArray[2].receiveContent.Initialize(RewardType.Box, 10);
+        welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 15000);
         welcomeContentArray[4].receiveContent.Initialize(RewardType.Box, 10);
         welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 5);
         welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_SSR, 1);
@@ -134,12 +134,12 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_R = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", 1);
+                        playerDataBase.SnowBox_R = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_R = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", 1);
+                        playerDataBase.UnderworldBox_R = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", 3);
                         break;
                 }
                 break;
@@ -147,17 +147,17 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 5);
+                        playerDataBase.SnowBox = 10;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 5);
+                        playerDataBase.UnderworldBox = 10;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
                         break;
                 }
                 break;
             case 3:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 15000);
                 break;
             case 4:
                 switch (GameStateManager.instance.WindCharacterType)
