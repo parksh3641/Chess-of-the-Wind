@@ -60,11 +60,11 @@ public class InventoryManager : MonoBehaviour
     void Initialize()
     {
         inventoryText[0].text = playerDataBase.GetUpgradeTicket(RankType.N).ToString();
-        inventoryText[1].text = playerDataBase.BoxPiece_N.ToString() + "/5";
-        inventoryText[2].text = playerDataBase.BoxPiece_R.ToString() + "/5";
-        inventoryText[3].text = playerDataBase.BoxPiece_SR.ToString() + "/5";
-        inventoryText[4].text = playerDataBase.BoxPiece_SSR.ToString() + "/5";
-        inventoryText[5].text = playerDataBase.BoxPiece_UR.ToString() + "/5";
+        inventoryText[1].text = playerDataBase.BoxPiece_N.ToString() + "/3";
+        inventoryText[2].text = playerDataBase.BoxPiece_R.ToString() + "/3";
+        inventoryText[3].text = playerDataBase.BoxPiece_SR.ToString() + "/3";
+        inventoryText[4].text = playerDataBase.BoxPiece_SSR.ToString() + "/3";
+        inventoryText[5].text = playerDataBase.BoxPiece_UR.ToString() + "/3";
     }
 
     public void ChangeBox(int number)
@@ -74,7 +74,7 @@ public class InventoryManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                if(playerDataBase.BoxPiece_N < 5)
+                if(playerDataBase.BoxPiece_N < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -87,7 +87,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 1:
-                if (playerDataBase.BoxPiece_R < 5)
+                if (playerDataBase.BoxPiece_R < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -98,7 +98,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 2:
-                if (playerDataBase.BoxPiece_SR < 5)
+                if (playerDataBase.BoxPiece_SR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -110,7 +110,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 3:
-                if (playerDataBase.BoxPiece_SSR < 5)
+                if (playerDataBase.BoxPiece_SSR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -122,7 +122,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 4:
-                if (playerDataBase.BoxPiece_UR < 5)
+                if (playerDataBase.BoxPiece_UR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -161,28 +161,28 @@ public class InventoryManager : MonoBehaviour
         switch (boxIndex)
         {
             case 0:
-                pieceText.text = playerDataBase.BoxPiece_N + "/" + (5 * (number + 1));
+                pieceText.text = playerDataBase.BoxPiece_N + "/" + (3 * (number + 1));
 
                 receiveContent.Initialize(RewardType.Box_N, number + 1);
 
                 break;
             case 1:
-                pieceText.text = playerDataBase.BoxPiece_R + "/" + (5 * (number + 1));
+                pieceText.text = playerDataBase.BoxPiece_R + "/" + (3 * (number + 1));
 
                 receiveContent.Initialize(RewardType.Box_R, number + 1);
                 break;
             case 2:
-                pieceText.text = playerDataBase.BoxPiece_SR + "/" + (5 * (number + 1));
+                pieceText.text = playerDataBase.BoxPiece_SR + "/" + (3 * (number + 1));
 
                 receiveContent.Initialize(RewardType.Box_SR, number + 1);
                 break;
             case 3:
-                pieceText.text = playerDataBase.BoxPiece_SSR + "/" + (5 * (number + 1));
+                pieceText.text = playerDataBase.BoxPiece_SSR + "/" + (3 * (number + 1));
 
                 receiveContent.Initialize(RewardType.Box_SSR, number + 1);
                 break;
             case 4:
-                pieceText.text = playerDataBase.BoxPiece_UR + "/" + (5 * (number + 1));
+                pieceText.text = playerDataBase.BoxPiece_UR + "/" + (3 * (number + 1));
 
                 receiveContent.Initialize(RewardType.Box_UR, number + 1);
                 break;
@@ -195,32 +195,32 @@ public class InventoryManager : MonoBehaviour
         switch (boxIndex)
         {
             case 0:
-                if(playerDataBase.BoxPiece_N < 5 * (boxCount + 2))
+                if(playerDataBase.BoxPiece_N < 3 * (boxCount + 2))
                 {
                     return;
                 }
 
                 break;
             case 1:
-                if (playerDataBase.BoxPiece_R < 5 * (boxCount + 2))
+                if (playerDataBase.BoxPiece_R < 3 * (boxCount + 2))
                 {
                     return;
                 }
                 break;
             case 2:
-                if (playerDataBase.BoxPiece_SR < 5 * (boxCount + 2))
+                if (playerDataBase.BoxPiece_SR < 3 * (boxCount + 2))
                 {
                     return;
                 }
                 break;
             case 3:
-                if (playerDataBase.BoxPiece_SSR < 5 * (boxCount + 2))
+                if (playerDataBase.BoxPiece_SSR < 3 * (boxCount + 2))
                 {
                     return;
                 }
                 break;
             case 4:
-                if (playerDataBase.BoxPiece_UR < 5 * (boxCount + 2))
+                if (playerDataBase.BoxPiece_UR < 3 * (boxCount + 2))
                 {
                     return;
                 }
@@ -255,7 +255,7 @@ public class InventoryManager : MonoBehaviour
         switch (boxIndex)
         {
             case 0:
-                playerDataBase.BoxPiece_N -= (5 * (boxCount + 1));
+                playerDataBase.BoxPiece_N -= (3 * (boxCount + 1));
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_N", playerDataBase.BoxPiece_N);
 
@@ -272,7 +272,7 @@ public class InventoryManager : MonoBehaviour
                 }
                 break;
             case 1:
-                playerDataBase.BoxPiece_R -= (5 * (boxCount + 1));
+                playerDataBase.BoxPiece_R -= (3 * (boxCount + 1));
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_R", playerDataBase.BoxPiece_R);
 
@@ -289,7 +289,7 @@ public class InventoryManager : MonoBehaviour
                 }
                 break;
             case 2:
-                playerDataBase.BoxPiece_SR -= (5 * (boxCount + 1));
+                playerDataBase.BoxPiece_SR -= (3 * (boxCount + 1));
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SR", playerDataBase.BoxPiece_SR);
 
@@ -307,7 +307,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 3:
-                playerDataBase.BoxPiece_SSR -= (5 * (boxCount + 1));
+                playerDataBase.BoxPiece_SSR -= (3 * (boxCount + 1));
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SSR", playerDataBase.BoxPiece_SSR);
 
@@ -325,7 +325,7 @@ public class InventoryManager : MonoBehaviour
 
                 break;
             case 4:
-                playerDataBase.BoxPiece_UR -= (5 * (boxCount + 1));
+                playerDataBase.BoxPiece_UR -= (3 * (boxCount + 1));
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_UR", playerDataBase.BoxPiece_UR);
 

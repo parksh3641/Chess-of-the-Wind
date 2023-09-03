@@ -23,7 +23,11 @@ public class CollectionManager : MonoBehaviour
     private int totalRaf = 0;
 
     public bool change = false;
-    
+
+    private bool sortDelay = false;
+
+    bool first = false;
+
 
     [Space]
     [Title("Prefab")]
@@ -36,8 +40,6 @@ public class CollectionManager : MonoBehaviour
 
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
-
-    bool check = false;
 
     public EquipManager equipManager;
     public UpgradeManager upgradeManager;
@@ -104,9 +106,9 @@ public class CollectionManager : MonoBehaviour
 
             ChangeTotalRaf();
 
-            if (!check) //딱 한번만 체크함
+            if (!first) //딱 한번만 체크함
             {
-                check = true;
+                first = true;
 
                 sortCount = 0;
                 sortText.localizationName = "ByType";
@@ -164,7 +166,7 @@ public class CollectionManager : MonoBehaviour
     playerDataBase.GetBlockClass(playerDataBase.Newbie).level);
         }
 
-        totalRafText.localizationName = "CurrentValue";
+        totalRafText.localizationName = "CollectionTotal";
         totalRafText.plusText = "\n" + MoneyUnitString.ToCurrencyString(totalRaf);
         totalRafText.ReLoad();
     }
@@ -481,6 +483,10 @@ public class CollectionManager : MonoBehaviour
 
     public void SortButton()
     {
+        if (sortDelay) return;
+
+        sortDelay = true;
+
         blockList = new List<BlockClass>(blockList.Count);
 
         for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
@@ -518,10 +524,28 @@ public class CollectionManager : MonoBehaviour
             blockUIContentList[i].Collection_Initialize(blockList[i]);
         }
 
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            for (int j = 0; j < playerDataBase.sellBlockList.Count; j++)
+            {
+                if (blockList[i].instanceId.Equals(playerDataBase.sellBlockList[j]))
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         CheckEquip(playerDataBase.Armor);
         CheckEquip(playerDataBase.Weapon);
         CheckEquip(playerDataBase.Shield);
         CheckEquip(playerDataBase.Newbie);
+
+        Invoke("Delay", 0.5f);
+    }
+
+    void Delay()
+    {
+        sortDelay = false;
     }
 
     #endregion

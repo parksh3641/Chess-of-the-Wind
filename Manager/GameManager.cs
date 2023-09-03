@@ -602,7 +602,10 @@ public class GameManager : MonoBehaviour
         {
             if (blockContentList[i].isDrag)
             {
-                blockContentList[i].TimeOver();
+                if (blockContentList[i].gameObject.activeInHierarchy)
+                {
+                    blockContentList[i].TimeOver();
+                }
             }
         }
 
@@ -1474,9 +1477,7 @@ public class GameManager : MonoBehaviour
                 if (blockContentList[i].gameObject.activeInHierarchy)
                 {
                     blockContentList[i].TimeOver();
-
                 }
-                break;
             }
         }
 
@@ -1814,7 +1815,10 @@ public class GameManager : MonoBehaviour
         {
             if (blockContentList[i].isDrag)
             {
-                if (blockContentList[i].gameObject.activeInHierarchy) blockContentList[i].TimeOver();
+                if (blockContentList[i].gameObject.activeInHierarchy)
+                {
+                    blockContentList[i].TimeOver();
+                }
                 break;
             }
         }

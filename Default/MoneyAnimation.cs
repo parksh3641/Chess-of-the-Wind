@@ -55,7 +55,7 @@ public class MoneyAnimation : MonoBehaviour
 
     PlayerDataBase playerDataBase;
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.15f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.03f);
 
     private void Awake()
@@ -167,7 +167,6 @@ public class MoneyAnimation : MonoBehaviour
         }
         else
         {
-
             yield return waitForSeconds;
 
             SoundManager.instance.StopSFX(GameSfxType.ChangeMoney);
@@ -863,6 +862,8 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         isStart = false;
+
+        SoundManager.instance.StopSFX(GameSfxType.ChangeMoney);
 
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold + max);
         myPlusMoneyObj.SetActive(false);

@@ -644,7 +644,7 @@ public class UpgradeManager : MonoBehaviour
         //        break;
         //}
 
-        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 100);
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 10);
 
         //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
         //{

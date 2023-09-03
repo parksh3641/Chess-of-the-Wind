@@ -18,6 +18,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string playerNickName1 = ""; //방장
     public string playerNickName2 = "";
 
+    Hashtable roomProperties = new Hashtable();
     private RoomOptions roomOption;
 
     public int otherFormation = 0;
@@ -225,7 +226,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameStateManager.instance.GameType = GameType.NewBie;
 
-        Hashtable roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+        {
+            roomProperties = new Hashtable() { {"Developer", "ON" } };
+        }
+        else
+        {
+            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        }
 
         PhotonNetwork.JoinRandomRoom(roomProperties, 2);
     }
@@ -240,7 +248,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameStateManager.instance.GameType = GameType.Gosu;
 
-        Hashtable roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+        {
+            roomProperties = new Hashtable() { { "Developer", "ON" } };
+        }
+        else
+        {
+            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+        }
 
         PhotonNetwork.JoinRandomRoom(roomProperties, 2);
     }

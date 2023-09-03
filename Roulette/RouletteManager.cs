@@ -1404,9 +1404,12 @@ public class RouletteManager : MonoBehaviour
 
         if (number == targetQueenNumber)
         {
+            Debug.Log("퀸에 당첨되었습니다");
+
+            targetQueen.SetActive(true);
+
             if (gameManager.bettingNumberList.Contains(queenNumber))
             {
-                targetQueen.SetActive(true);
                 queenEffect.SetActive(true);
 
                 SoundManager.instance.PlaySFX(GameSfxType.GetQueen);
@@ -1422,10 +1425,18 @@ public class RouletteManager : MonoBehaviour
                     roulette2Particle.Play();
                 }
 
-                Debug.Log("퀸에 당첨되었습니다");
-
-                return;
+                Debug.Log("퀸 배팅에 성공했습니다!");
             }
+            else
+            {
+                queenEffect.SetActive(false);
+
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+                Debug.Log("퀸 배팅에 실패했습니다.");
+            }
+
+            return;
         }
 
 

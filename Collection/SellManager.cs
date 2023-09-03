@@ -23,6 +23,7 @@ public class SellManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
+    public EquipManager equipManager;
 
     PlayerDataBase playerDataBase;
 
@@ -51,14 +52,7 @@ public class SellManager : MonoBehaviour
         price = number;
 
         blockUIContent.Collection_Initialize(blockClass);
-
-        //titleText.text = "판매 알림";
-        //sellText.text = "판매 가격";
-
         sellPriceText.text = MoneyUnitString.ToCurrencyString(price);
-
-        //sellButtonText.text = "판매하기";
-        //cancleButtonText.text = "그만두기";
     }
 
     public void SellButton()
@@ -73,6 +67,8 @@ public class SellManager : MonoBehaviour
 
         upgradeManager.SellBlockOne(blockClass.instanceId);
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+
+        equipManager.CheckUnEquip(blockClass.instanceId);
 
         upgradeManager.CloseUpgradeView();
         CloseSellView();

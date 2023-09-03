@@ -201,7 +201,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             blockIcon.color = new Color(1, 1, 1, 1f);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
-            isDrag = false;
+            if (gameManager != null)
+            {
+                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.ResetPosBlock(index);
+            }
         }
 
         if (blockClass.rankType > RankType.SR)
@@ -212,6 +216,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             gradient.SetActive(false);
         }
+
+        if (gameManager != null)
+        {
+            gameManager.blockDrag = false;
+            gameManager.dragBlockType = BlockType.Default;
+        }
+
+        isDrag = false;
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(false, this);
     }
@@ -228,9 +240,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             blockIcon.color = new Color(1, 1, 1, 1f);
             blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
-            isDrag = false;
-
-            gameManager.ResetPosBlock(index);
+            if (gameManager != null)
+            {
+                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.ResetPosBlock(index);
+            }
         }
 
         if (blockClass.rankType > RankType.SR)
@@ -241,6 +255,14 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             gradient.SetActive(false);
         }
+
+        if (gameManager != null)
+        {
+            gameManager.blockDrag = false;
+            gameManager.dragBlockType = BlockType.Default;
+        }
+
+        isDrag = false;
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(false, this);
     }
@@ -255,17 +277,30 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         blockIcon.color = new Color(1, 1, 1, 1f);
         blockMainArray[(int)blockClass.blockType - 1].gameObject.SetActive(false);
 
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
-
-        gameManager.blockDrag = false;
-
-        isDrag = false;
-
         if (gameManager != null)
         {
             gameManager.CancleBetting(blockClass.blockType);
             gameManager.ResetPosBlock(index);
         }
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+
+        if (gameManager != null)
+        {
+            gameManager.blockDrag = false;
+            gameManager.dragBlockType = BlockType.Default;
+        }
+
+        if (blockClass.rankType > RankType.SR)
+        {
+            gradient.SetActive(true);
+        }
+        else
+        {
+            gradient.SetActive(false);
+        }
+
+        isDrag = false;
     }
 }
