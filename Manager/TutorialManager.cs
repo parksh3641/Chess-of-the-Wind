@@ -115,6 +115,7 @@ public class TutorialManager : MonoBehaviour
     bool isTalkSound = false;
 
     public GameObject homeButton;
+    public GameObject skipButton;
 
 
     public NickNameManager nickNameManager;
@@ -204,6 +205,7 @@ public class TutorialManager : MonoBehaviour
         windButtonTarget.SetActive(false);
 
         homeButton.SetActive(false);
+        skipButton.SetActive(true);
 
         rouletteParticle.gameObject.SetActive(false);
 
@@ -231,13 +233,25 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log(number);
 
+        if(number < 21)
+        {
+            skipButton.SetActive(true);
+        }
+        else
+        {
+            skipButton.SetActive(false);
+        }
+
         switch (number)
         {
             case 1:
                 fadeInOut.FadeIn();
                 break;
             case 3:
-                nickNameManager.OpenFreeNickName();
+                if (GameStateManager.instance.NickName.Length > 15)
+                {
+                    nickNameManager.OpenFreeNickName();
+                }
                 break;
             case 8:
                 SetCharacter(0, 0);
@@ -463,6 +477,12 @@ public class TutorialManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SkipButton()
+    {
+        talkIndex = 22;
+        Initialize(talkIndex);
     }
 
     public void NextButton()

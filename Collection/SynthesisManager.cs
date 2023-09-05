@@ -756,6 +756,17 @@ public class SynthesisManager : MonoBehaviour
                 blockUIContentList[i].gameObject.SetActive(false);
             }
         }
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            for (int j = 0; j < playerDataBase.sellBlockList.Count; j++)
+            {
+                if (blockList[i].instanceId.Equals(playerDataBase.sellBlockList[j]))
+                {
+                    blockUIContentList[i].gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     IEnumerator TextCoroution()

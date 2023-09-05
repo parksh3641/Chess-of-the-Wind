@@ -67,7 +67,16 @@ public class AiManager : MonoBehaviour
 
     public int RandomCharacter()
     {
-        random = Random.Range(1, 3);
+        if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+        {
+            random = 2;
+        }
+        else
+        {
+            random = 1;
+        }
+
+        //random = Random.Range(1, 3);
 
         return random;
     }
