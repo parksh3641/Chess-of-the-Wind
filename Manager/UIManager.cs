@@ -197,17 +197,20 @@ public class UIManager : MonoBehaviour
 
         Renewal();
 
+        if (playerDataBase.TestAccount > 0)
+        {
+            testMode.SetActive(true);
+        }
+
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         testMode.SetActive(true);
-#else
-        PlayfabManager.instance.GetTitleInternalData("TestMode", TestMode);
 #endif
     }
 
-    public void TestMode(bool check)
-    {
-        testMode.SetActive(check);
-    }
+    //public void TestMode(bool check)
+    //{
+    //    testMode.SetActive(check);
+    //}
 
     public void Renewal()
     {

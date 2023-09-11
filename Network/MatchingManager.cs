@@ -297,9 +297,16 @@ public class MatchingManager : MonoBehaviour
 
                     if(playerDataBase.NowRank > playerDataBase.HighRank)
                     {
-                        playerDataBase.HighRank = playerDataBase.NowRank;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", playerDataBase.HighRank);
+                        if (playerDataBase.TestAccount > 0)
+                        {
+                            playerDataBase.HighRank = 0;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", 0);
+                        }
+                        else
+                        {
+                            playerDataBase.HighRank = playerDataBase.NowRank;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", playerDataBase.HighRank);
+                        }
 
                         Debug.Log("최고 랭크 갱신 !");
                     }
@@ -871,6 +878,21 @@ public class MatchingManager : MonoBehaviour
     public void StarDown()
     {
         GameStateManager.instance.Lose = true;
+        CheckRankUp();
+    }
+
+    public void Legendary()
+    {
+        GameStateManager.instance.GameRankType = GameRankType.Legend_1;
+        playerDataBase.NowRank = 20;
+        playerDataBase.Star = 10;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
+
+        playerDataBase.HighRank = 0;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", 0);
+
+        GameStateManager.instance.Win = true;
         CheckRankUp();
     }
 

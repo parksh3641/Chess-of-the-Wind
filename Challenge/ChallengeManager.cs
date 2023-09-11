@@ -30,7 +30,6 @@ public class ChallengeManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         challengeView.SetActive(false);
-
         challengeAlarm.SetActive(false);
 
         challengeGrid.anchoredPosition = new Vector2(0, -999);

@@ -234,6 +234,8 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case BoxType.Random:
+                playerDataBase.SnowBox = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", number);
                 break;
             case BoxType.N:
                 playerDataBase.SnowBox_N = number;
@@ -311,6 +313,8 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case BoxType.Random:
+                playerDataBase.UnderworldBox = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", number);
                 break;
             case BoxType.N:
                 playerDataBase.UnderworldBox_N = number;
@@ -633,7 +637,7 @@ public class ShopManager : MonoBehaviour
     }
 
 
-    public void Initialize_Ad() //광고 봤는지 안 봤는지 체크
+    public void Initialize_Ad() //광고 봤는지 ??봤는지 체크
     {
         boxShopLockArray[0].SetActive(true);
         boxShopLockArray[1].SetActive(true);
@@ -942,6 +946,20 @@ public class ShopManager : MonoBehaviour
     public void PlusMoney()
     {
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000000);
+    }
+
+    [Button]
+    public void OpenRandomBox()
+    {
+        switch (GameStateManager.instance.WindCharacterType)
+        {
+            case WindCharacterType.Winter:
+                GetSnowBox(BoxType.Random, 10);
+                break;
+            case WindCharacterType.UnderWorld:
+                GetUnderworld(BoxType.Random, 10);
+                break;
+        }
     }
 
     [Button]

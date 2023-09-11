@@ -957,6 +957,9 @@ public class PlayfabManager : MonoBehaviour
                        case "ChallengeCount":
                            playerDataBase.ChallengeCount = statistics.Value;
                            break;
+                       case "TestAccount":
+                           playerDataBase.TestAccount = statistics.Value;
+                           break;
                        case "ConsumeGold":
                            playerDataBase.ConsumeGold = statistics.Value;
                            break;
@@ -1134,6 +1137,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "HighRank":
                            playerDataBase.HighRank = statistics.Value;
+                           break;
+                       case "TotalRaf":
+                           playerDataBase.TotalRaf = statistics.Value;
                            break;
                        case "NewsAlarm":
                            playerDataBase.NewsAlarm = statistics.Value;

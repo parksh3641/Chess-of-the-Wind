@@ -8,9 +8,8 @@ using UnityEngine;
 public class AiManager : MonoBehaviour
 {
     [Title("Player Information")]
-    public string aiName = "인공지능";
-    public GameType gameType = GameType.NewBie;
     public WindCharacterType windCharacterType = WindCharacterType.Winter;
+
     public GameRankType gameRankType = GameRankType.Bronze_4;
     public RouletteType rouletteType = RouletteType.Default;
 
@@ -30,7 +29,6 @@ public class AiManager : MonoBehaviour
     public int rouletteIndex = 0;
     public int blockPos = 0;
 
-
     [Space]
     [Title("bool")]
     public bool isPut = false;
@@ -46,8 +44,8 @@ public class AiManager : MonoBehaviour
     RankInformation rankInformation = new RankInformation();
 
     public GameManager gameManager;
-    public UpgradeDataBase upgradeDataBase;
-    public RankDataBase rankDataBase;
+    UpgradeDataBase upgradeDataBase;
+    RankDataBase rankDataBase;
 
     private void Awake()
     {
@@ -58,7 +56,7 @@ public class AiManager : MonoBehaviour
         {
             OtherBlockContent content = Instantiate(otherBlockContent);
             content.transform.SetParent(otherBlockContentTransform);
-            content.transform.localPosition = Vector3.zero;
+            content.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
             otherBlockContentList.Add(content);
@@ -94,12 +92,10 @@ public class AiManager : MonoBehaviour
 
     public void Initialize()
     {
-        gameType = GameStateManager.instance.GameType;
         gameRankType = GameStateManager.instance.GameRankType;
-
         rankInformation = rankDataBase.GetRankInformation(gameRankType);
 
-        if (gameType == GameType.NewBie)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             blockClassArray = new BlockClass[1];
             blockTypeArray = new BlockType[1];
@@ -108,17 +104,13 @@ public class AiManager : MonoBehaviour
             if (random == 1)
             {
                 windCharacterType = WindCharacterType.Winter;
-
                 blockTypeArray[0] = BlockType.Pawn_Snow;
-
                 SetBlockClass();
             }
             else
             {
                 windCharacterType = WindCharacterType.UnderWorld;
-
                 blockTypeArray[0] = BlockType.Pawn_Under;
-
                 SetBlockClass();
             }
         }
@@ -156,9 +148,7 @@ public class AiManager : MonoBehaviour
         for (int i = 0; i < blockClassArray.Length; i++)
         {
             BlockClass blockClass = new BlockClass();
-
             blockClass.blockType = blockTypeArray[i];
-
             blockClass.level = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
 
             if (blockClass.level < 5)
@@ -195,20 +185,17 @@ public class AiManager : MonoBehaviour
 
         isPut = true;
 
-        if (gameType == GameType.NewBie)
+        if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             blockIndex = 0;
 
             blockPos = Random.Range(0, 9);
 
-            Debug.LogError(blockPos);
-
             otherBlockContentList[0].gameObject.SetActive(true);
             otherBlockContentList[0].transform.position = gameManager.rouletteContentList_Target[blockPos].transform.position;
-            otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
+            otherBlockContentList[0].SetOtherBlock(blockClassArray[blockIndex].blockType, "Ai", value.ToString());
 
             gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
-
             gameManager.SetBettingNumber_Ai(blockClassArray[0], blockPos, RouletteType.StraightBet);
 
             Debug.Log("Ai가 연습방 " + blockPos + " 위치에 배팅했습니다");
@@ -235,8 +222,6 @@ public class AiManager : MonoBehaviour
                     blockPos = Random.Range(0, 15);
                     break;
             }
-
-            //Debug.LogError(blockPos);
 
             for(int i = 0; i < otherBlockContentList.Count; i ++)
             {
@@ -265,20 +250,16 @@ public class AiManager : MonoBehaviour
                 }
 
                 gameManager.SetBettingNumber_Ai(blockClassArray[blockIndex], blockPos, rouletteType);
-
-                //Debug.Log("Ai가 고수방 " + rouletteType.ToString() + " " + blockPos + " 위치에 배팅했습니다");
             }
             else
             {
-                //Debug.Log("고수방 " + rouletteType.ToString() + " 블록을 놓을 수 없는 위치라서 다시 설정합니다");
-
                 otherBlockContentList[blockIndex].gameObject.SetActive(false);
 
                 isPut = false;
                 PutBlock();
             }
 
-            otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, aiName, value.ToString());
+            otherBlockContentList[blockIndex].SetOtherBlock(blockClassArray[blockIndex].blockType, "Ai", value.ToString());
             gameManager.otherBlockType = blockClassArray[blockIndex].blockType;
         }
     }
@@ -288,21 +269,20 @@ public class AiManager : MonoBehaviour
         if (isMove) return;
 
         isMove = true;
-
         isPut = false;
 
         PutBlock();
     }
 
-    private int GenerateRandomNumber(int[] exclusionList)
-    {
-        int randomValue = Random.Range(0, 26);
-        while (exclusionList.Contains(randomValue))
-        {
-            randomValue = Random.Range(0, 26);
-        }
-        return randomValue;
-    }
+    //private int GenerateRandomNumber(int[] exclusionList)
+    //{
+    //    int randomValue = Random.Range(0, 26);
+    //    while (exclusionList.Contains(randomValue))
+    //    {
+    //        randomValue = Random.Range(0, 26);
+    //    }
+    //    return randomValue;
+    //}
 
     public int GetValue(BlockType type)
     {

@@ -45,6 +45,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         index = number;
 
+        if(playerDataBase.TestAccount > 0)
+        {
+            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = "kr";
+        }
+
         Connect();
     }
 
@@ -226,9 +231,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameStateManager.instance.GameType = GameType.NewBie;
 
-        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
         {
-            roomProperties = new Hashtable() { {"Developer", "ON" } };
+            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
         }
         else
         {
@@ -248,9 +253,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameStateManager.instance.GameType = GameType.Gosu;
 
-        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
         {
-            roomProperties = new Hashtable() { { "Developer", "ON" } };
+            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
         }
         else
         {
@@ -267,13 +272,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if(playerDataBase.NewbieWin < 2)
         {
-            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType" };
-            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", "Ai" } };
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "Ai" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "Ai", "ON" } };
         }
         else
         {
-            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
+            {
+                roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Test" };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+
+                Debug.Log("테스트 계정 방 생성");
+            }
+            else
+            {
+                roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+            }
         }
 
         PhotonNetwork.JoinOrCreateRoom(GameStateManager.instance.NickName, roomOption, null);
@@ -284,15 +299,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
 
-        if (playerDataBase.NewbieWin < 2)
+        if (playerDataBase.GosuWin < 1)
         {
-            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType" };
-            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", "Ai" } };
+            roomOption.CustomRoomPropertiesForLobby = new string[] { "Ai" };
+            roomOption.CustomRoomProperties = new Hashtable() { { "Ai", "ON" } };
         }
         else
         {
-            roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-            roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
+            {
+                roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Test" };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+
+                Debug.Log("테스트 계정 방 생성");
+            }
+            else
+            {
+                roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" } };
+            }
         }
 
         PhotonNetwork.JoinOrCreateRoom(GameStateManager.instance.NickName, roomOption, null);

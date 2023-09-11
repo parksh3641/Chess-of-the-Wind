@@ -79,15 +79,15 @@ public class EquipManager : MonoBehaviour
 
                     break;
                 case 2:
-                    EquipWeapon(armorBlockUI.blockClass, false);
+                    EquipWeapon(armorBlockUI.blockClass);
                     break;
                 case 3:
-                    EquipShield(armorBlockUI.blockClass, false);
+                    EquipShield(armorBlockUI.blockClass);
                     break;
             }
         }
 
-        EquipArmor(blockClass, false);
+        EquipArmor(blockClass);
 
         upgradeManager.CloseUpgradeView();
 
@@ -107,18 +107,18 @@ public class EquipManager : MonoBehaviour
             switch (playerDataBase.CheckOverlapBlock(blockClass))
             {
                 case 1:
-                    EquipArmor(weaponBlockUI.blockClass, false);
+                    EquipArmor(weaponBlockUI.blockClass);
                     break;
                 case 2:
 
                     break;
                 case 3:
-                    EquipShield(weaponBlockUI.blockClass, false);
+                    EquipShield(weaponBlockUI.blockClass);
                     break;
             }
         }
 
-        EquipWeapon(blockClass, false);
+        EquipWeapon(blockClass);
 
         upgradeManager.CloseUpgradeView();
 
@@ -138,10 +138,10 @@ public class EquipManager : MonoBehaviour
             switch (playerDataBase.CheckOverlapBlock(blockClass))
             {
                 case 1:
-                    EquipArmor(shieldBlockUI.blockClass, false);
+                    EquipArmor(shieldBlockUI.blockClass);
                     break;
                 case 2:
-                    EquipWeapon(shieldBlockUI.blockClass, false);
+                    EquipWeapon(shieldBlockUI.blockClass);
                     break;
                 case 3:
 
@@ -149,7 +149,7 @@ public class EquipManager : MonoBehaviour
             }
         }
 
-        EquipShield(blockClass, false);
+        EquipShield(blockClass);
 
         upgradeManager.CloseUpgradeView();
 
@@ -163,7 +163,7 @@ public class EquipManager : MonoBehaviour
         if(blockClass.blockType == BlockType.Pawn_Under || blockClass.blockType == BlockType.Pawn_Snow || blockClass.blockType == BlockType.Pawn_Under_2
             || blockClass.blockType == BlockType.Pawn_Snow_2)
         {
-            EquipNewBie(blockClass, false);
+            EquipNewBie(blockClass);
 
             upgradeManager.CloseUpgradeView();
 
@@ -220,22 +220,16 @@ public class EquipManager : MonoBehaviour
     }
 
 
-    public void EquipArmor(BlockClass block, bool first)
+    public void EquipArmor(BlockClass block)
     {
-        if(!first)
-        {
-            collectionManager.CheckUnEquip(playerDataBase.Armor);
-        }
+        collectionManager.CheckUnEquip(playerDataBase.Armor);
 
         armorBlockUI.gameObject.SetActive(true);
 
         playerDataBase.Armor = block.instanceId;
 
-        if (!first)
-        {
-            armorBlockUI.Collection_Initialize(block);
-            collectionManager.CheckEquip(playerDataBase.Armor);
-        }
+        armorBlockUI.Collection_Initialize(block);
+        collectionManager.CheckEquip(playerDataBase.Armor);
 
         collectionManager.Checking();
 
@@ -245,22 +239,16 @@ public class EquipManager : MonoBehaviour
         PlayfabManager.instance.SetPlayerData(blockData);
     }
 
-    public void EquipWeapon(BlockClass block, bool first)
+    public void EquipWeapon(BlockClass block)
     {
-        if(!first)
-        {
-            collectionManager.CheckUnEquip(playerDataBase.Weapon);
-        }
+        collectionManager.CheckUnEquip(playerDataBase.Weapon);
 
         weaponBlockUI.gameObject.SetActive(true);
 
         playerDataBase.Weapon = block.instanceId;
 
-        if (!first)
-        {
-            weaponBlockUI.Collection_Initialize(block);
-            collectionManager.CheckEquip(playerDataBase.Weapon);
-        }
+        weaponBlockUI.Collection_Initialize(block);
+        collectionManager.CheckEquip(playerDataBase.Weapon);
 
         collectionManager.Checking();
 
@@ -270,22 +258,16 @@ public class EquipManager : MonoBehaviour
         PlayfabManager.instance.SetPlayerData(blockData);
     }
 
-    public void EquipShield(BlockClass block, bool first)
+    public void EquipShield(BlockClass block)
     {
-        if (!first)
-        {
-            collectionManager.CheckUnEquip(playerDataBase.Shield);
-        }
+        collectionManager.CheckUnEquip(playerDataBase.Shield);
 
         shieldBlockUI.gameObject.SetActive(true);
 
         playerDataBase.Shield = block.instanceId;
 
-        if (!first)
-        {
-            shieldBlockUI.Collection_Initialize(block);
-            collectionManager.CheckEquip(playerDataBase.Shield);
-        }
+        shieldBlockUI.Collection_Initialize(block);
+        collectionManager.CheckEquip(playerDataBase.Shield);
 
         collectionManager.Checking();
 
@@ -295,22 +277,16 @@ public class EquipManager : MonoBehaviour
         PlayfabManager.instance.SetPlayerData(blockData);
     }
 
-    public void EquipNewBie(BlockClass block, bool first)
+    public void EquipNewBie(BlockClass block)
     {
-        if (!first)
-        {
-            collectionManager.CheckUnEquip(playerDataBase.Newbie);
-        }
+        collectionManager.CheckUnEquip(playerDataBase.Newbie);
 
         newbieBlockUI.gameObject.SetActive(true);
 
         playerDataBase.Newbie = block.instanceId;
 
-        if (!first)
-        {
-            newbieBlockUI.Collection_Initialize(block);
-            collectionManager.CheckEquip(playerDataBase.Newbie);
-        }
+        newbieBlockUI.Collection_Initialize(block);
+        collectionManager.CheckEquip(playerDataBase.Newbie);
 
         collectionManager.Checking();
 

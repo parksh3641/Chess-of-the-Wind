@@ -86,9 +86,13 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int highRank = 0;
     [SerializeField]
+    private int totalRaf = 0;
+    [SerializeField]
     private int accessDate = 0;
     [SerializeField]
     private int challengeCount = 0;
+    [SerializeField]
+    private int testAccount = 0;
     [SerializeField]
     private int consumeGold = 0;
 
@@ -325,6 +329,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int TotalRaf
+    {
+        get
+        {
+            return totalRaf;
+        }
+        set
+        {
+            totalRaf = value;
+        }
+    }
+
     public int AccessDate
     {
         get
@@ -346,6 +362,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             challengeCount = value;
+        }
+    }
+
+    public int TestAccount
+    {
+        get
+        {
+            return testAccount;
+        }
+        set
+        {
+            testAccount = value;
         }
     }
 
@@ -1074,8 +1102,10 @@ public class PlayerDataBase : ScriptableObject
         star = 0;
         nowRank = 0;
         highRank = 0;
+        totalRaf = 0;
         accessDate = 0;
         challengeCount = 0;
+        testAccount = 0;
         consumeGold = 0;
 
         season = 0;
@@ -1202,7 +1232,6 @@ public class PlayerDataBase : ScriptableObject
         //}
 
         BlockClass blockClass = new BlockClass();
-
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
 
         switch (item.ItemClass)
@@ -1341,7 +1370,7 @@ public class PlayerDataBase : ScriptableObject
     {
         int number = 0;
 
-        if(armor != null)
+        if(!string.IsNullOrEmpty(armor))
         {
             if (armor.Equals(id))
             {
@@ -1349,7 +1378,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (weapon != null)
+        if (!string.IsNullOrEmpty(weapon))
         {
             if (weapon.Equals(id))
             {
@@ -1357,7 +1386,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (shield != null)
+        if (!string.IsNullOrEmpty(shield))
         {
             if (shield.Equals(id))
             {
@@ -1365,7 +1394,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (newbie != null)
+        if (!string.IsNullOrEmpty(newbie))
         {
             if (newbie.Equals(id))
             {
@@ -1378,7 +1407,7 @@ public class PlayerDataBase : ScriptableObject
 
     public void CheckUnEquip(string id)
     {
-        if(armor != null)
+        if(!string.IsNullOrEmpty(armor))
         {
             if (armor.Equals(id))
             {
@@ -1388,7 +1417,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (weapon != null)
+        if (!string.IsNullOrEmpty(weapon))
         {
             if (weapon.Equals(id))
             {
@@ -1398,7 +1427,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (shield != null)
+        if (!string.IsNullOrEmpty(shield))
         {
             if (shield.Equals(id))
             {
@@ -1408,7 +1437,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (newbie != null)
+        if (!string.IsNullOrEmpty(newbie))
         {
             if (newbie.Equals(id))
             {
@@ -1423,7 +1452,7 @@ public class PlayerDataBase : ScriptableObject
     {
         int index = 0;
 
-        if(armor != null)
+        if(!string.IsNullOrEmpty(armor))
         {
             if (GetBlockClass(armor).blockType.Equals(block.blockType))
             {
@@ -1431,7 +1460,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (weapon != null)
+        if (!string.IsNullOrEmpty(weapon))
         {
             if (GetBlockClass(weapon).blockType.Equals(block.blockType))
             {
@@ -1439,7 +1468,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (shield != null)
+        if (!string.IsNullOrEmpty(shield))
         {
             if (GetBlockClass(shield).blockType.Equals(block.blockType))
             {
@@ -1501,7 +1530,7 @@ public class PlayerDataBase : ScriptableObject
     {
         int index = 0;
 
-        if (armor != null)
+        if (!string.IsNullOrEmpty(armor))
         {
             if(armor.Length > 0)
             {
@@ -1509,7 +1538,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (weapon != null)
+        if (!string.IsNullOrEmpty(weapon))
         {
             if (weapon.Length > 0)
             {
@@ -1517,7 +1546,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (shield != null)
+        if (!string.IsNullOrEmpty(shield))
         {
             if (shield.Length > 0)
             {
@@ -1532,7 +1561,7 @@ public class PlayerDataBase : ScriptableObject
     {
         bool check = true;
 
-        if(newbie == null)
+        if(string.IsNullOrEmpty(newbie))
         {
             check = false;
         }

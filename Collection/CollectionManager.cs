@@ -104,7 +104,7 @@ public class CollectionManager : MonoBehaviour
                 characterImg.sprite = characterArray[0];
             }
 
-            ChangeTotalRaf();
+            CheckTotalRaf();
 
             if (!first) //딱 한번만 체크함
             {
@@ -138,29 +138,29 @@ public class CollectionManager : MonoBehaviour
         }
     }
 
-    public void ChangeTotalRaf()
+    public void CheckTotalRaf()
     {
         totalRaf = 0;
 
-        if (playerDataBase.Armor != null)
+        if (!string.IsNullOrEmpty(playerDataBase.Armor))
         {
             totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Armor).rankType).GetValueNumber(
                 playerDataBase.GetBlockClass(playerDataBase.Armor).level);
         }
 
-        if (playerDataBase.Weapon != null)
+        if (!string.IsNullOrEmpty(playerDataBase.Weapon))
         {
             totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Weapon).rankType).GetValueNumber(
     playerDataBase.GetBlockClass(playerDataBase.Weapon).level);
         }
 
-        if (playerDataBase.Shield != null)
+        if (!string.IsNullOrEmpty(playerDataBase.Shield))
         {
             totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Shield).rankType).GetValueNumber(
     playerDataBase.GetBlockClass(playerDataBase.Shield).level);
         }
 
-        if (playerDataBase.Newbie != null)
+        if (!string.IsNullOrEmpty(playerDataBase.Newbie))
         {
             totalRaf += upgradeDataBase.GetUpgradeValue(playerDataBase.GetBlockClass(playerDataBase.Newbie).rankType).GetValueNumber(
     playerDataBase.GetBlockClass(playerDataBase.Newbie).level);
@@ -169,6 +169,20 @@ public class CollectionManager : MonoBehaviour
         totalRafText.localizationName = "CollectionTotal";
         totalRafText.plusText = "\n" + MoneyUnitString.ToCurrencyString(totalRaf);
         totalRafText.ReLoad();
+
+        if(totalRaf != playerDataBase.TotalRaf)
+        {
+            if(playerDataBase.TestAccount > 0)
+            {
+                playerDataBase.TotalRaf = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalRaf", 0);
+            }
+            else
+            {
+                playerDataBase.TotalRaf = totalRaf;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalRaf", totalRaf);
+            }
+        }
     }
 
     public void CloseCollectionView()
@@ -320,62 +334,62 @@ public class CollectionManager : MonoBehaviour
         //CheckEquipNewBie();
     }
 
-    public void FirstEquipCheck()
-    {
-        StartCoroutine(FirstEquipCoroution());
-    }
+    //public void FirstEquipCheck()
+    //{
+    //    StartCoroutine(FirstEquipCoroution());
+    //}
 
-    IEnumerator FirstEquipCoroution()
-    {
-        blockList = new List<BlockClass>(blockList.Count);
+    //IEnumerator FirstEquipCoroution()
+    //{
+    //    blockList = new List<BlockClass>(blockList.Count);
 
-        for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
-        {
-            blockList.Add(playerDataBase.GetBlockClass()[i]);
-        }
+    //    for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)
+    //    {
+    //        blockList.Add(playerDataBase.GetBlockClass()[i]);
+    //    }
 
-        for (int i = 0; i < blockList.Count; i++)
-        {
-            if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
-            {
-                equipManager.EquipArmor(blockList[i], true);
-                break;
-            }
-        }
+    //    for (int i = 0; i < blockList.Count; i++)
+    //    {
+    //        if (blockList[i].blockType == BlockType.LeftQueen_2 || blockList[i].blockType == BlockType.RightQueen_2)
+    //        {
+    //            equipManager.EquipArmor(blockList[i], true);
+    //            break;
+    //        }
+    //    }
 
-        yield return waitForSeconds;
+    //    yield return waitForSeconds;
 
-        for (int i = 0; i < blockList.Count; i++)
-        {
-            if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
-            {
-                equipManager.EquipWeapon(blockList[i], true);
-                break;
-            }
-        }
+    //    for (int i = 0; i < blockList.Count; i++)
+    //    {
+    //        if (blockList[i].blockType == BlockType.LeftNight || blockList[i].blockType == BlockType.RightNight)
+    //        {
+    //            equipManager.EquipWeapon(blockList[i], true);
+    //            break;
+    //        }
+    //    }
 
-        yield return waitForSeconds;
+    //    yield return waitForSeconds;
 
-        for (int i = 0; i < blockList.Count; i++)
-        {
-            if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V4)
-            {
-                equipManager.EquipShield(blockList[i], true);
-                break;
-            }
-        }
+    //    for (int i = 0; i < blockList.Count; i++)
+    //    {
+    //        if (blockList[i].blockType == BlockType.Rook_V2 || blockList[i].blockType == BlockType.Rook_V4)
+    //        {
+    //            equipManager.EquipShield(blockList[i], true);
+    //            break;
+    //        }
+    //    }
 
-        yield return waitForSeconds;
+    //    yield return waitForSeconds;
 
-        for (int i = 0; i < blockList.Count; i++)
-        {
-            if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
-            {
-                equipManager.EquipNewBie(blockList[i], true);
-                break;
-            }
-        }
-    }
+    //    for (int i = 0; i < blockList.Count; i++)
+    //    {
+    //        if (blockList[i].blockType == BlockType.Pawn_Snow || blockList[i].blockType == BlockType.Pawn_Under)
+    //        {
+    //            equipManager.EquipNewBie(blockList[i], true);
+    //            break;
+    //        }
+    //    }
+    //}
 
     public void CheckEquipArmor()
     {
@@ -384,7 +398,7 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].instanceId.Equals(playerDataBase.Armor))
             {
                 blockUIContentList[i].gameObject.SetActive(false);
-                equipManager.EquipArmor(blockList[i], false);
+                equipManager.EquipArmor(blockList[i]);
                 break;
             }
         }
@@ -397,7 +411,7 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].instanceId.Equals(playerDataBase.Weapon))
             {
                 blockUIContentList[i].gameObject.SetActive(false);
-                equipManager.EquipWeapon(blockList[i], false);
+                equipManager.EquipWeapon(blockList[i]);
                 break;
             }
         }
@@ -410,7 +424,7 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].instanceId.Equals(playerDataBase.Shield))
             {
                 blockUIContentList[i].gameObject.SetActive(false);
-                equipManager.EquipShield(blockList[i], false);
+                equipManager.EquipShield(blockList[i]);
                 break;
             }
         }
@@ -423,7 +437,7 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].instanceId.Equals(playerDataBase.Newbie))
             {
                 blockUIContentList[i].gameObject.SetActive(false);
-                equipManager.EquipNewBie(blockList[i], false);
+                equipManager.EquipNewBie(blockList[i]);
 
                 break;
 
@@ -442,7 +456,7 @@ public class CollectionManager : MonoBehaviour
             }
         }
 
-        ChangeTotalRaf();
+        CheckTotalRaf();
     }
 
     public void CheckUnEquip(string id)
@@ -456,7 +470,7 @@ public class CollectionManager : MonoBehaviour
             }
         }
 
-        ChangeTotalRaf();
+        CheckTotalRaf();
     }
 
     #region BlockInformation
@@ -484,7 +498,6 @@ public class CollectionManager : MonoBehaviour
     public void SortButton()
     {
         if (sortDelay) return;
-
         sortDelay = true;
 
         blockList = new List<BlockClass>(blockList.Count);

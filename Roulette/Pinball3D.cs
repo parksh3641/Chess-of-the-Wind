@@ -406,35 +406,35 @@ public class Pinball3D : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.transform.tag == "WindPoint1")
+        if (other.transform.CompareTag("WindPoint1"))
         {
             ballPos = 0;
         }
-        else if (other.transform.tag == "WindPoint2")
+        else if (other.transform.CompareTag("WindPoint2"))
         {
             ballPos = 1;
         }
-        else if (other.transform.tag == "WindPoint3")
+        else if (other.transform.CompareTag("WindPoint3"))
         {
             ballPos = 2;
         }
-        else if (other.transform.tag == "WindPoint4")
+        else if (other.transform.CompareTag("WindPoint4"))
         {
             ballPos = 3;
         }
-        else if (other.transform.tag == "WindPoint5")
+        else if (other.transform.CompareTag("WindPoint5"))
         {
             ballPos = 4;
         }
-        else if (other.transform.tag == "WindPoint6")
+        else if (other.transform.CompareTag("WindPoint6"))
         {
             ballPos = 5;
         }
-        else if (other.transform.tag == "WindPoint7")
+        else if (other.transform.CompareTag("WindPoint7"))
         {
             ballPos = 6;
         }
-        else if (other.transform.tag == "WindPoint8")
+        else if (other.transform.CompareTag("WindPoint8"))
         {
             ballPos = 7;
         }

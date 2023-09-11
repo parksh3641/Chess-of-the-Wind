@@ -106,18 +106,18 @@ public class NickNameManager : MonoBehaviour
             return;
         }
 
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (inputField.text.Contains(lines[i]))
+            {
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                return;
+            }
+        }
+
         if (playerDataBase.Gold >= 10000)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
-
-            for(int i = 0; i < lines.Length; i ++)
-            {
-                if (inputField.text.Contains(lines[i]))
-                {
-                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    return;
-                }
-            }
 
             if (inputField.text.Equals(Check) == true)
             {

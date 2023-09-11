@@ -25,7 +25,6 @@ public class ChallengeContent : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
-
     }
 
     public void Initialize(int number, ChallengeManager manager)
@@ -48,7 +47,6 @@ public class ChallengeContent : MonoBehaviour
         if (index == number)
         {
             focusObj.SetActive(true);
-
             lockObj[0].SetActive(false);
 
             switch (index)
@@ -58,14 +56,12 @@ public class ChallengeContent : MonoBehaviour
                     {
                         lockObj[1].SetActive(false);
                     }
-
                     break;
                 case 1:
                     if(playerDataBase.NewbieWin > 0)
                     {
                         lockObj[1].SetActive(false);
                     }
-
                     break;
                 case 2:
                     if (playerDataBase.NewbieWin > 1)
@@ -78,21 +74,18 @@ public class ChallengeContent : MonoBehaviour
                     {
                         lockObj[1].SetActive(false);
                     }
-
                     break;
                 case 4:
                     if (playerDataBase.CheckBlockLevelCount() == 3)
                     {
                         lockObj[1].SetActive(false);
                     }
-
                     break;
                 case 5:
                     if (playerDataBase.GosuWin > 0)
                     {
                         lockObj[1].SetActive(false);
                     }
-
                     break;
             }
         }

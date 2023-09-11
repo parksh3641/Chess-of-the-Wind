@@ -85,9 +85,9 @@ public class RouletteManager : MonoBehaviour
     private int upPower = 3;
     private int maxPower = 150;
 
-    bool windDelay = false;
-    bool pinballPower = false;
-    bool pinballPowerReturn = false;
+    private bool windDelay = false;
+    private bool pinballPower = false;
+    private bool pinballPowerReturn = false;
 
     [Title("Target")]
     public GameObject targetView;
@@ -98,6 +98,13 @@ public class RouletteManager : MonoBehaviour
 
     public GameObject normalEffect;
     public GameObject queenEffect;
+
+    Vector3 resetPos = new Vector3(0, 0.03f, 0);
+    Vector3 resetBallPos = new Vector3(5000, 5000);
+
+    Color myColor = new Color(35 / 255f, 141 / 255f, 241 / 255f);
+    Color compareColor = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+    Color enemyColor = new Color(200 / 255f, 52 / 255f, 92 / 255f);
 
     [Space]
     [Title("Value")]
@@ -145,6 +152,8 @@ public class RouletteManager : MonoBehaviour
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
     WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.3f);
+    WaitForSeconds waitForSeconds4 = new WaitForSeconds(1.5f);
+    WaitForSeconds waitForSeconds5 = new WaitForSeconds(2.5f);
 
     public PhotonView PV;
 
@@ -205,13 +214,13 @@ public class RouletteManager : MonoBehaviour
                 rightClock[i].transform.parent = roulette2Obj[0].transform;
             }
 
-            leftClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
-            leftClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
-            leftClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
+            leftClock[0].transform.localPosition = resetPos;
+            leftClock[1].transform.localPosition = resetPos;
+            leftClock[2].transform.localPosition = resetPos;
 
-            rightClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
-            rightClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
-            rightClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
+            rightClock[0].transform.localPosition = resetPos;
+            rightClock[1].transform.localPosition = resetPos;
+            rightClock[2].transform.localPosition = resetPos;
         }
         else
         {
@@ -419,19 +428,19 @@ public class RouletteManager : MonoBehaviour
                 }
             }
 
-            leftClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
-            leftClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
-            leftClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
+            leftClock[0].transform.localPosition = resetPos;
+            leftClock[1].transform.localPosition = resetPos;
+            leftClock[2].transform.localPosition = resetPos;
 
-            rightClock[0].transform.localPosition = new Vector3(0, 0.03f, 0);
-            rightClock[1].transform.localPosition = new Vector3(0, 0.03f, 0);
-            rightClock[2].transform.localPosition = new Vector3(0, 0.03f, 0);
+            rightClock[0].transform.localPosition = resetPos;
+            rightClock[1].transform.localPosition = resetPos;
+            rightClock[2].transform.localPosition = resetPos;
         }
 
         roulette1Particle.gameObject.SetActive(false);
         roulette2Particle.gameObject.SetActive(false);
 
-        pinball.transform.localPosition = new Vector3(5000, 5000);
+        pinball.transform.localPosition = resetBallPos;
 
         rouletteCamera.gameObject.SetActive(true);
         rouletteCamera.Initialize(startCameraPos);
@@ -507,30 +516,30 @@ public class RouletteManager : MonoBehaviour
         {
             if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
             {
-                leftQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+                leftQueen.material.color = compareColor;
             }
             else if (gameManager.bettingNumberList.Contains(queenNumber))
             {
-                leftQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
+                leftQueen.material.color = myColor;
             }
             else if (gameManager.otherBettingNumberList.Contains(queenNumber))
             {
-                leftQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
+                leftQueen.material.color = enemyColor;
             }
         }
         else
         {
             if (gameManager.bettingNumberList.Contains(queenNumber) && gameManager.otherBettingNumberList.Contains(queenNumber))
             {
-                rightQueen.material.color = new Color(99 / 255f, 192 / 255f, 49 / 255f);
+                rightQueen.material.color = compareColor;
             }
             else if (gameManager.bettingNumberList.Contains(queenNumber))
             {
-                rightQueen.material.color = new Color(35 / 255f, 141 / 255f, 241 / 255f);
+                rightQueen.material.color = myColor;
             }
             else if (gameManager.otherBettingNumberList.Contains(queenNumber))
             {
-                rightQueen.material.color = new Color(200 / 255f, 52 / 255f, 92 / 255f);
+                rightQueen.material.color = enemyColor;
             }
         }
 
@@ -671,7 +680,7 @@ public class RouletteManager : MonoBehaviour
         rightFingerController.gameObject.SetActive(false);
         leftFingerController.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return waitForSeconds4;
 
         buttonClick = false;
     }
@@ -685,16 +694,16 @@ public class RouletteManager : MonoBehaviour
         rightFingerController.gameObject.SetActive(false);
         leftFingerController.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return waitForSeconds4;
 
         buttonClick = false;
     }
 
     IEnumerator CheckPinBallCoroution()
     {
-        yield return new WaitForSeconds(3);
+        yield return waitForSeconds5;
 
-        if(pinball.PV.IsMine)
+        if (pinball.PV.IsMine)
         {
             bool check = false;
 
@@ -723,7 +732,7 @@ public class RouletteManager : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(2);
+        yield return waitForSeconds5;
 
         rouletteCamera.gameObject.SetActive(true);
         rouletteBallCamera.gameObject.SetActive(false);
@@ -951,11 +960,21 @@ public class RouletteManager : MonoBehaviour
         if(vectorArray[0].gameObject.activeInHierarchy)
         {
             vectorArray[0].enabled = true;
+
+            if (GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                AutoFlicker();
+            }
         }
 
         if (vectorArray[1].gameObject.activeInHierarchy)
         {
             vectorArray[1].enabled = true;
+
+            if (GameStateManager.instance.GameType == GameType.NewBie)
+            {
+                AutoFlicker();
+            }
         }
 
         buttonText.enabled = true;
@@ -1074,6 +1093,50 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
+    void AutoFlicker()
+    {
+        pinballPower = true;
+
+        if (rouletteIndex == 0)
+        {
+            if (windIndex == 0)
+            {
+                roulette1WindPoint[0].gameObject.SetActive(true);
+
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
+            }
+            else
+            {
+                roulette1WindPoint[1].gameObject.SetActive(true);
+
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
+            }
+        }
+        else
+        {
+            if (windIndex == 0)
+            {
+                roulette2WindPoint[0].gameObject.SetActive(true);
+
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
+            }
+            else
+            {
+                roulette2WindPoint[1].gameObject.SetActive(true);
+
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
+            }
+        }
+    }
+
     void WindDelay()
     {
         windDelay = false;
@@ -1118,6 +1181,8 @@ public class RouletteManager : MonoBehaviour
 
             yield return waitForSeconds;
         }
+
+        mesh.gameObject.SetActive(false);
     }
 
     public void BlowWindUp()
@@ -1236,7 +1301,7 @@ public class RouletteManager : MonoBehaviour
 
         PV.RPC("EndRoulette", RpcTarget.All);
 
-        yield return new WaitForSeconds(2f);
+        yield return waitForSeconds5;
 
         targetNumber = 0;
 
@@ -1316,16 +1381,15 @@ public class RouletteManager : MonoBehaviour
         //    PV.RPC("ShowTargetNumberQueen", RpcTarget.All, targetNumber);
         //}
 
-        yield return new WaitForSeconds(2.5f);
+        yield return waitForSeconds5;
 
         PV.RPC("PlayParticle", RpcTarget.All);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return waitForSeconds5;
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
 
         string[] target = new string[2];
-
         target[0] = targetNumber.ToString();
         target[1] = "0";
 
@@ -1363,6 +1427,8 @@ public class RouletteManager : MonoBehaviour
     {
         buttonClick = true;
         playing = false;
+
+        pinballPower = false;
 
         SoundManager.instance.PlayBGM();
         SoundManager.instance.StopLoopSFX(GameSfxType.Roulette);
@@ -1585,7 +1651,7 @@ public class RouletteManager : MonoBehaviour
             PV.RPC("ChangeMoney", RpcTarget.All, bounsRewards[0]);
         }
 
-        yield return new WaitForSeconds(2);
+        yield return waitForSeconds5;
 
         PV.RPC("SelectRoulette", RpcTarget.All, rouletteIndex);
     }
@@ -1634,7 +1700,7 @@ public class RouletteManager : MonoBehaviour
     #region Ai
     IEnumerator BlowWindCoroution_Ai()
     {
-        SetBettingPos();
+        //SetBettingPos();
 
         buttonClick = false;
 
@@ -1658,65 +1724,6 @@ public class RouletteManager : MonoBehaviour
                         BlowWind_Ai(2, 10, 0);
                     }
                 }
-
-                //switch (pinball.ballPos)
-                //{
-                //    case 3:
-                //        if (bettingPosCheck0)
-                //        {
-                //            BlowWind_Ai(2, 30, 1);
-
-                //            Debug.Log("Ai가 2번 위치 - 1번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                //            {
-                //                BlowWind_Ai(2, 50, 1);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //    case 4:
-                //        if (bettingPosCheck1)
-                //        {
-                //            yield return new WaitForSeconds(0.2f);
-
-                //            BlowWind_Ai(2, 10, 1);
-
-                //            Debug.Log("Ai가 2번 위치 - 2번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                //            {
-                //                BlowWind_Ai(2, 50, 1);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //    case 5:
-                //        if (bettingPosCheck2)
-                //        {
-                //            yield return new WaitForSeconds(0.2f);
-
-                //            BlowWind_Ai(2, 30, 1);
-
-                //            Debug.Log("Ai가 2번 위치 - 3번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck0 && !bettingPosCheck1 && !bettingPosCheck2)
-                //            {
-                //                BlowWind_Ai(2, 50, 1);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 2번 위치에서 아무데나 그냥 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //}
             }
             else
             {
@@ -1734,65 +1741,6 @@ public class RouletteManager : MonoBehaviour
                         BlowWind_Ai(2, 10, 0);
                     }
                 }
-
-                //switch (pinball.ballPos)
-                //{
-                //    case 0:
-                //        if (bettingPosCheck3)
-                //        {
-                //            yield return new WaitForSeconds(0.2f);
-
-                //            BlowWind_Ai(2, 30, 0);
-
-                //            Debug.Log("Ai가 1번 위치 - 1번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                //            {
-                //                BlowWind_Ai(2, 50, 0);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //    case 1:
-                //        if (bettingPosCheck4)
-                //        {
-                //            yield return new WaitForSeconds(0.2f);
-
-                //            BlowWind_Ai(2, 10, 0);
-
-                //            Debug.Log("Ai가 1번 위치 - 2번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                //            {
-                //                BlowWind_Ai(2, 50, 0);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //    case 2:
-                //        if (bettingPosCheck5)
-                //        {
-                //            BlowWind_Ai(2, 30, 0);
-
-                //            Debug.Log("Ai가 1번 위치 - 3번째 자리에서 바람을 불었습니다");
-                //        }
-                //        else
-                //        {
-                //            if (!bettingPosCheck3 && !bettingPosCheck4 && !bettingPosCheck5)
-                //            {
-                //                BlowWind_Ai(2, 50, 0);
-
-                //                Debug.Log("바람이 닿지 않는 곳이라 1번 위치에서 아무데나 불었습니다");
-                //            }
-                //        }
-                //        break;
-                //}
             }
 
             yield return waitForSeconds3;
@@ -1818,144 +1766,144 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
-    void SetBettingPos()
-    {
-        bettingPosCheck0 = false;
-        bettingPosCheck1 = false;
-        bettingPosCheck2 = false;
-        bettingPosCheck3 = false;
-        bettingPosCheck4 = false;
-        bettingPosCheck5 = false;
+    //void SetBettingPos()
+    //{
+    //    bettingPosCheck0 = false;
+    //    bettingPosCheck1 = false;
+    //    bettingPosCheck2 = false;
+    //    bettingPosCheck3 = false;
+    //    bettingPosCheck4 = false;
+    //    bettingPosCheck5 = false;
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            if(gameManager.otherBettingNumberList.Contains(1))
-            {
-                bettingPosCheck1 = true;
-            }
+    //    if (GameStateManager.instance.GameType == GameType.NewBie)
+    //    {
+    //        if(gameManager.otherBettingNumberList.Contains(1))
+    //        {
+    //            bettingPosCheck1 = true;
+    //        }
 
-            if (gameManager.otherBettingNumberList.Contains(2) || gameManager.otherBettingNumberList.Contains(3))
-            {
-                bettingPosCheck2 = true;
-            }
+    //        if (gameManager.otherBettingNumberList.Contains(2) || gameManager.otherBettingNumberList.Contains(3))
+    //        {
+    //            bettingPosCheck2 = true;
+    //        }
 
-            if (gameManager.otherBettingNumberList.Contains(4))
-            {
-                bettingPosCheck3 = true;
-            }
+    //        if (gameManager.otherBettingNumberList.Contains(4))
+    //        {
+    //            bettingPosCheck3 = true;
+    //        }
 
-            if (gameManager.otherBettingNumberList.Contains(5))
-            {
-                bettingPosCheck4 = true;
-            }
+    //        if (gameManager.otherBettingNumberList.Contains(5))
+    //        {
+    //            bettingPosCheck4 = true;
+    //        }
 
-            if (gameManager.otherBettingNumberList.Contains(6))
-            {
-                bettingPosCheck5 = true;
-            }
+    //        if (gameManager.otherBettingNumberList.Contains(6))
+    //        {
+    //            bettingPosCheck5 = true;
+    //        }
 
-            if (gameManager.otherBettingNumberList.Contains(7) || gameManager.otherBettingNumberList.Contains(8))
-            {
-                bettingPosCheck0 = true;
-            }
-        }
-        else
-        {
-            bettingPos0 = new int[4];
-            bettingPos1 = new int[4];
-            bettingPos2 = new int[4];
-            bettingPos3 = new int[4];
-            bettingPos4 = new int[4];
-            bettingPos5 = new int[4];
+    //        if (gameManager.otherBettingNumberList.Contains(7) || gameManager.otherBettingNumberList.Contains(8))
+    //        {
+    //            bettingPosCheck0 = true;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        bettingPos0 = new int[4];
+    //        bettingPos1 = new int[4];
+    //        bettingPos2 = new int[4];
+    //        bettingPos3 = new int[4];
+    //        bettingPos4 = new int[4];
+    //        bettingPos5 = new int[4];
 
-            aiTargetNumber = 0;
+    //        aiTargetNumber = 0;
 
-            if (rouletteIndex == 0)
-            {
-                aiTargetNumber = leftNumber;
-            }
-            else
-            {
-                aiTargetNumber = rightNumber;
-            }
+    //        if (rouletteIndex == 0)
+    //        {
+    //            aiTargetNumber = leftNumber;
+    //        }
+    //        else
+    //        {
+    //            aiTargetNumber = rightNumber;
+    //        }
 
-            SetPos(bettingPos1);
-            SetPos(bettingPos2);
-            SetPos(bettingPos3);
-            SetPos(bettingPos4);
-            SetPos(bettingPos5);
-            SetPos(bettingPos0);
+    //        SetPos(bettingPos1);
+    //        SetPos(bettingPos2);
+    //        SetPos(bettingPos3);
+    //        SetPos(bettingPos4);
+    //        SetPos(bettingPos5);
+    //        SetPos(bettingPos0);
 
-            for (int i = 0; i < bettingPos0.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos0[i]))
-                {
-                    bettingPosCheck0 = true;
-                    break;
-                }
-            }
+    //        for (int i = 0; i < bettingPos0.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos0[i]))
+    //            {
+    //                bettingPosCheck0 = true;
+    //                break;
+    //            }
+    //        }
 
-            for (int i = 0; i < bettingPos1.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos1[i]))
-                {
-                    bettingPosCheck1 = true;
-                    break;
-                }
-            }
+    //        for (int i = 0; i < bettingPos1.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos1[i]))
+    //            {
+    //                bettingPosCheck1 = true;
+    //                break;
+    //            }
+    //        }
 
-            for (int i = 0; i < bettingPos2.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos2[i]))
-                {
-                    bettingPosCheck2 = true;
-                    break;
-                }
-            }
+    //        for (int i = 0; i < bettingPos2.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos2[i]))
+    //            {
+    //                bettingPosCheck2 = true;
+    //                break;
+    //            }
+    //        }
 
-            for (int i = 0; i < bettingPos3.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos3[i]))
-                {
-                    bettingPosCheck5 = true;
-                    break;
-                }
-            }
+    //        for (int i = 0; i < bettingPos3.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos3[i]))
+    //            {
+    //                bettingPosCheck5 = true;
+    //                break;
+    //            }
+    //        }
 
-            for (int i = 0; i < bettingPos4.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos4[i]))
-                {
-                    bettingPosCheck4 = true;
-                    break;
-                }
-            }
+    //        for (int i = 0; i < bettingPos4.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos4[i]))
+    //            {
+    //                bettingPosCheck4 = true;
+    //                break;
+    //            }
+    //        }
 
-            for (int i = 0; i < bettingPos5.Length; i++)
-            {
-                if (gameManager.otherBettingNumberList.Contains(bettingPos5[i]))
-                {
-                    bettingPosCheck3 = true;
-                    break;
-                }
-            }
-        }
-    }
+    //        for (int i = 0; i < bettingPos5.Length; i++)
+    //        {
+    //            if (gameManager.otherBettingNumberList.Contains(bettingPos5[i]))
+    //            {
+    //                bettingPosCheck3 = true;
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
 
-    void SetPos(int[] betting)
-    {
-        for (int i = 0; i < betting.Length; i++)
-        {
-            betting[i] = aiTargetNumber;
+    //void SetPos(int[] betting)
+    //{
+    //    for (int i = 0; i < betting.Length; i++)
+    //    {
+    //        betting[i] = aiTargetNumber;
 
-            aiTargetNumber++;
+    //        aiTargetNumber++;
 
-            if (aiTargetNumber > 24)
-            {
-                aiTargetNumber = 0;
-            }
-        }
-    }
+    //        if (aiTargetNumber > 24)
+    //        {
+    //            aiTargetNumber = 0;
+    //        }
+    //    }
+    //}
 
     #endregion
 }

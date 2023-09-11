@@ -46,6 +46,8 @@ public class UpgradeManager : MonoBehaviour
     public Image upgradeButton;
     public Sprite[] upgradeButtonArray;
 
+    public GameObject testMode;
+
     int gold = 0;
     int upgradeTicket = 0;
     int level = 0;
@@ -104,6 +106,8 @@ public class UpgradeManager : MonoBehaviour
 
         ticketObj.SetActive(false);
         defDestroyObj.SetActive(false);
+
+        testMode.SetActive(false);
     }
 
     public void OpenUpgradeView(string id)
@@ -117,6 +121,11 @@ public class UpgradeManager : MonoBehaviour
             if(blockClass.blockType != BlockType.Default)
             {
                 Initialize();
+            }
+
+            if(playerDataBase.TestAccount > 0)
+            {
+                testMode.SetActive(true);
             }
         }
     }
@@ -616,7 +625,7 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
-        collectionManager.ChangeTotalRaf();
+        collectionManager.CheckTotalRaf();
     }
 
     public void SellButton()
@@ -710,6 +719,80 @@ public class UpgradeManager : MonoBehaviour
         else
         {
             equipManager.OpenEquipView(blockClass);
+        }
+    }
+
+
+    public void MaxLevel()
+    {
+        if (isWait) return;
+
+        int level = 0;
+
+        switch (blockClass.rankType)
+        {
+            case RankType.N:
+                level = 4;
+                break;
+            case RankType.R:
+                level = 9;
+                break;
+            case RankType.SR:
+                level = 14;
+                break;
+            case RankType.SSR:
+                level = 19;
+                break;
+            case RankType.UR:
+                level = 24;
+                break;
+        }
+
+        if (blockClass.level < level)
+        {
+            blockClass.level = level;
+
+            customData.Clear();
+            customData.Add("Level", (level).ToString());
+
+            playerDataBase.SetBlockLevel(blockClass.instanceId, level);
+            collectionManager.SetBlockLevel(blockClass.instanceId, level);
+            equipManager.SetBlockLevel(blockClass.instanceId, level);
+            blockUIContent.SetLevel(level);
+
+            PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, customData);
+
+            Initialize();
+
+            isWait = true;
+            Invoke("Delay", 0.5f);
+        }
+    }
+
+    public void ResetLevel()
+    {
+        if (isWait) return;
+
+        if (blockClass.level != 0)
+        {
+            int level = 0;
+
+            blockClass.level = 0;
+
+            customData.Clear();
+            customData.Add("Level", (level).ToString());
+
+            playerDataBase.SetBlockLevel(blockClass.instanceId, level);
+            collectionManager.SetBlockLevel(blockClass.instanceId, level);
+            equipManager.SetBlockLevel(blockClass.instanceId, level);
+            blockUIContent.SetLevel(level);
+
+            PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, customData);
+
+            Initialize();
+
+            isWait = true;
+            Invoke("Delay", 0.5f);
         }
     }
 }
