@@ -59,7 +59,7 @@ public class MailBoxManager : MonoBehaviour
             mailContentList.Add(content);
         }
 
-        mailTransform.anchoredPosition = new Vector2(0, -9999);
+        mailTransform.anchoredPosition = new Vector2(0, -999);
 
         GetUserInventoryCoupon();
     }
@@ -90,6 +90,8 @@ public class MailBoxManager : MonoBehaviour
 
                 GetUserInventoryCoupon();
             }
+
+            mailTransform.anchoredPosition = new Vector2(0, -999);
 
             FirebaseAnalytics.LogEvent("MailBox");
         }
@@ -166,6 +168,9 @@ public class MailBoxManager : MonoBehaviour
 
     public void GetUserInventoryCoupon()
     {
+        bundleItemIdList.Clear();
+        bundleInstanceIdList.Clear();
+
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
             var coupon = result.Inventory;

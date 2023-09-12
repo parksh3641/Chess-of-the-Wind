@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +9,8 @@ public class LockManager : MonoBehaviour
     public GameObject inventoryObj;
     public GameObject attendanceObj;
     public GameObject eventObj;
+    public GameObject achievementObj;
+    public GameObject questObj;
 
     public GameObject[] collectionGosuObj;
 
@@ -29,6 +31,8 @@ public class LockManager : MonoBehaviour
         inventoryObj.SetActive(false);
         attendanceObj.SetActive(false);
         eventObj.SetActive(false);
+        achievementObj.SetActive(false);
+        questObj.SetActive(false);
 
         for (int i = 0; i < collectionGosuObj.Length; i ++)
         {
@@ -73,6 +77,8 @@ public class LockManager : MonoBehaviour
             attendanceObj.SetActive(true);
             eventObj.SetActive(true);
             rankDownObj.SetActive(true);
+            achievementObj.SetActive(true);
+            //questObj.SetActive(true);
         }
     }
 }

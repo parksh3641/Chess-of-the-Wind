@@ -280,7 +280,10 @@ public enum NotionType
     CancelPurchase,
     CancelWatchAd,
     HighLevelLimit,
-    InGameBurning3
+    InGameBurning3,
+    CouponNotion1,
+    CouponNotion2,
+    CouponNotion3
 }
 
 public enum GameRankType

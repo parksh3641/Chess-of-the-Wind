@@ -10,18 +10,25 @@ public class OptionManager : MonoBehaviour
     public GameObject languageView;
     public GameObject deleteAccountView;
 
+    public GameObject coupon;
+    public GameObject deleteAccount;
+
     public OptionContent[] optionContents;
 
     public GameObject[] bottomContents;
 
     public Text versionText;
 
+    bool isActive = false;
 
     private void Awake()
     {
         optionView.SetActive(false);
         languageView.SetActive(false);
         deleteAccountView.SetActive(false);
+
+        coupon.SetActive(true);
+        deleteAccount.SetActive(false);
     }
 
     private void Start()
@@ -60,11 +67,38 @@ public class OptionManager : MonoBehaviour
             {
                 bottomContents[i].SetActive(true);
             }
+
+            if (isActive)
+            {
+                coupon.SetActive(true);
+                deleteAccount.SetActive(false);
+            }
+            else
+            {
+                coupon.SetActive(false);
+                deleteAccount.SetActive(true);
+            }
         }
         else
         {
             optionView.SetActive(false);
             languageView.SetActive(false);
+        }
+    }
+
+    public void Initialize_First()
+    {
+        PlayfabManager.instance.GetTitleInternalData("CheckVersion", CheckVersion);
+    }
+
+    void CheckVersion(bool check)
+    {
+        isActive = check;
+
+        if(isActive)
+        {
+            coupon.SetActive(false);
+            deleteAccount.SetActive(true);
         }
     }
 

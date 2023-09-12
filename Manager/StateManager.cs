@@ -23,6 +23,7 @@ public class StateManager : MonoBehaviour
     public LockManager lockManager;
     public NewsManager newsManager;
     public ChallengeManager challengeManager;
+    public OptionManager optionManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -63,6 +64,7 @@ public class StateManager : MonoBehaviour
             lockManager.Initialize();
             newsManager.Initialize();
             challengeManager.Initialize();
+            optionManager.Initialize_First();
 
             if (GameStateManager.instance.Penalty > 0)
             {

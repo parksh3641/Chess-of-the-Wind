@@ -1,11 +1,20 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChallengeManager : MonoBehaviour
 {
     public GameObject challengeView;
+
+    [Title("TopMenu")]
+    public Image[] topMenuImgArray;
+    public Sprite[] topMenuSpriteArray;
+    public GameObject[] scrollView;
+
+    private int topNumber = 0;
 
     public RectTransform challengeGrid;
     public GameObject challengeAlarm;
@@ -33,6 +42,8 @@ public class ChallengeManager : MonoBehaviour
         challengeAlarm.SetActive(false);
 
         challengeGrid.anchoredPosition = new Vector2(0, -999);
+
+        topNumber = -1;
     }
 
     public void Initialize()
@@ -40,6 +51,22 @@ public class ChallengeManager : MonoBehaviour
         if(playerDataBase.ChallengeCount < 6)
         {
             StartCoroutine(CheckCoroution());
+        }
+    }
+
+    public void ChangeTopMenu(int number)
+    {
+        if (topNumber != number)
+        {
+            topNumber = number;
+
+            for (int i = 0; i < topMenuImgArray.Length; i++)
+            {
+                topMenuImgArray[i].sprite = topMenuSpriteArray[0];
+                scrollView[i].SetActive(false);
+            }
+            topMenuImgArray[number].sprite = topMenuSpriteArray[1];
+            scrollView[number].SetActive(true);
         }
     }
 
@@ -62,6 +89,11 @@ public class ChallengeManager : MonoBehaviour
         if (!challengeView.activeSelf)
         {
             challengeView.SetActive(true);
+
+            if (topNumber == -1)
+            {
+                ChangeTopMenu(0);
+            }
 
             exitButton.SetActive(true);
 
