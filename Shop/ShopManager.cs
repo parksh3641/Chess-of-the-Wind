@@ -197,35 +197,17 @@ public class ShopManager : MonoBehaviour
     #region RandomBox
     public void BuySnowBox1()
     {
-        playerDataBase.SnowBox = 1;
+        GetSnowBox(BoxType.Random, 1);
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
-
-        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
-        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-
-        //기록
         playerDataBase.BuySnowBox += 1;
-
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
     }
 
     public void BuySnowBox2()
     {
-        playerDataBase.SnowBox = 10;
+        GetSnowBox(BoxType.Random, 10);
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
-
-        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
-        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-
-        //기록
         playerDataBase.BuySnowBox += 10;
-
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
     }
 
@@ -272,39 +254,22 @@ public class ShopManager : MonoBehaviour
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
     }
 
     public void BuyUnderworldBox1()
     {
-        playerDataBase.UnderworldBox = 1;
+        GetUnderworld(BoxType.Random, 1);
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
-
-        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
-        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-
-        //기록
         playerDataBase.BuyUnderworldBox += 1;
-
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
     }
 
     public void BuyUnderworldBox2()
     {
-        playerDataBase.UnderworldBox = 10;
+        GetUnderworld(BoxType.Random, 10);
 
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
-
-        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
-        NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-
-        //기록
         playerDataBase.BuyUnderworldBox += 10;
-
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
     }
 
@@ -406,7 +371,6 @@ public class ShopManager : MonoBehaviour
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
             FirebaseAnalytics.LogEvent("BuyBox_NR");
@@ -472,7 +436,6 @@ public class ShopManager : MonoBehaviour
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
             FirebaseAnalytics.LogEvent("BuyBox_RSR");
@@ -637,7 +600,7 @@ public class ShopManager : MonoBehaviour
     }
 
 
-    public void Initialize_Ad() //광고 봤는지 ??봤는지 체크
+    public void Initialize_Ad()
     {
         boxShopLockArray[0].SetActive(true);
         boxShopLockArray[1].SetActive(true);
@@ -949,15 +912,15 @@ public class ShopManager : MonoBehaviour
     }
 
     [Button]
-    public void OpenRandomBox()
+    public void OpenRandomBox(int number)
     {
         switch (GameStateManager.instance.WindCharacterType)
         {
             case WindCharacterType.Winter:
-                GetSnowBox(BoxType.Random, 10);
+                GetSnowBox(BoxType.Random, number);
                 break;
             case WindCharacterType.UnderWorld:
-                GetUnderworld(BoxType.Random, 10);
+                GetUnderworld(BoxType.Random, number);
                 break;
         }
     }

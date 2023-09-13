@@ -53,6 +53,7 @@ public class StateManager : MonoBehaviour
 
             SoundManager.instance.Initialize();
 
+            nickNameManager.Initialize();
             uIManager.Initialize();
             gameManager.Initialize();
             matchingManager.Initialize();

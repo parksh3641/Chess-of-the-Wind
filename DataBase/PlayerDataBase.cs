@@ -74,27 +74,81 @@ public class PlayerDataBase : ScriptableObject
     private int gold = 0;
     [SerializeField]
     private int crystal = 0;
+    [SerializeField]
+    private int millage = 0;
 
     [Space]
     [Title("User")]
     [SerializeField]
     private int formation = 0;
     [SerializeField]
-    private int star = 0;
-    [SerializeField]
     private int nowRank = 0;
     [SerializeField]
     private int highRank = 0;
     [SerializeField]
-    private int totalRaf = 0;
-    [SerializeField]
-    private int accessDate = 0;
+    private int star = 0;
     [SerializeField]
     private int challengeCount = 0;
     [SerializeField]
     private int testAccount = 0;
+
+    [Space]
+    [Title("Achievement")]
+    [SerializeField]
+    private int destroyBlockCount = 0;
+    [SerializeField]
+    private int winGetMoney = 0;
+    [SerializeField]
+    private int totalRaf = 0;
+    [SerializeField]
+    private int synthesisGetBlock = 0;
+    [SerializeField]
+    private int rankDownCount = 0;
+    [SerializeField]
+    private int rankDownStreak = 0;
+    [SerializeField]
+    private int winNumber = 0;
+    [SerializeField]
+    private int winQueen = 0;
+    [SerializeField]
+    private int goalAchieveCount = 0;
+    [SerializeField]
+    private int chargingRM = 0;
+    [SerializeField]
+    private int boxOpenCount = 0;
+    [SerializeField]
+    private int accessDate = 0;
+    [SerializeField]
+    private int upgradeSuccessCount = 0;
+    [SerializeField]
+    private int upgradeFailCount = 0;
+    [SerializeField]
+    private int useUpgradeTicket = 0;
+    [SerializeField]
+    private int repairBlockCount = 0;
     [SerializeField]
     private int consumeGold = 0;
+
+    [SerializeField]
+    private List<AchievementInfo> achievementInfoList = new List<AchievementInfo>();
+
+    [Space]
+    [Title("Coupon")]
+    [SerializeField]
+    private int comicWorld2023 = 0;
+    [SerializeField]
+    private int indieFestival2023 = 0;
+    [SerializeField]
+    private int naverCafe202310 = 0;
+    [SerializeField]
+    private int naverCafe202311 = 0;
+    [SerializeField]
+    private int naverCafe202312 = 0;
+    [SerializeField]
+    private int naverCafe202401 = 0;
+    [SerializeField]
+    private int naverCafe202402 = 0;
+
 
     [Space]
     [Title("Reset")]
@@ -281,6 +335,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int Millage
+    {
+        get
+        {
+            return millage;
+        }
+        set
+        {
+            millage = value;
+        }
+    }
+
     public int Formation
     {
         get
@@ -386,6 +452,256 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             consumeGold = value;
+        }
+    }
+
+    public int DestroyBlockCount
+    {
+        get
+        {
+            return destroyBlockCount;
+        }
+        set
+        {
+            destroyBlockCount = value;
+        }
+    }
+
+    public int WinGetMoney
+    {
+        get
+        {
+            return winGetMoney;
+        }
+        set
+        {
+            winGetMoney = value;
+        }
+    }
+    public int SynthesisGetBlock
+    {
+        get
+        {
+            return synthesisGetBlock;
+        }
+        set
+        {
+            synthesisGetBlock = value;
+        }
+    }
+
+    public int RankDownCount
+    {
+        get
+        {
+            return rankDownCount;
+        }
+        set
+        {
+            rankDownCount = value;
+        }
+    }
+    public int RankDownStreak
+    {
+        get
+        {
+            return rankDownStreak;
+        }
+        set
+        {
+            rankDownStreak = value;
+        }
+    }
+
+    public int WinNumber
+    {
+        get
+        {
+            return winNumber;
+        }
+        set
+        {
+            winNumber = value;
+        }
+    }
+
+    public int WinQueen
+    {
+        get
+        {
+            return winQueen;
+        }
+        set
+        {
+            winQueen = value;
+        }
+    }
+
+    public int GoalAchieveCount
+    {
+        get
+        {
+            return goalAchieveCount;
+        }
+        set
+        {
+            goalAchieveCount = value;
+        }
+    }
+
+    public int ChargingRM
+    {
+        get
+        {
+            return chargingRM;
+        }
+        set
+        {
+            chargingRM = value;
+        }
+    }
+
+    public int BoxOpenCount
+    {
+        get
+        {
+            return boxOpenCount;
+        }
+        set
+        {
+            boxOpenCount = value;
+        }
+    }
+
+    public int UpgradeSuccessCount
+    {
+        get
+        {
+            return upgradeSuccessCount;
+        }
+        set
+        {
+            upgradeSuccessCount = value;
+        }
+    }
+
+    public int UpgradeFailCount
+    {
+        get
+        {
+            return upgradeFailCount;
+        }
+        set
+        {
+            upgradeFailCount = value;
+        }
+    }
+
+    public int UseUpgradeTicket
+    {
+        get
+        {
+            return useUpgradeTicket;
+        }
+        set
+        {
+            useUpgradeTicket = value;
+        }
+    }
+
+    public int RepairBlockCount
+    {
+        get
+        {
+            return repairBlockCount;
+        }
+        set
+        {
+            repairBlockCount = value;
+        }
+    }
+
+    public int ComicWorld2023
+    {
+        get
+        {
+            return comicWorld2023;
+        }
+        set
+        {
+            comicWorld2023 = value;
+        }
+    }
+
+    public int IndieFestival2023
+    {
+        get
+        {
+            return indieFestival2023;
+        }
+        set
+        {
+            indieFestival2023 = value;
+        }
+    }
+
+    public int NaverCafe202310
+    {
+        get
+        {
+            return naverCafe202310;
+        }
+        set
+        {
+            naverCafe202310 = value;
+        }
+    }
+
+    public int NaverCafe202311
+    {
+        get
+        {
+            return naverCafe202311;
+        }
+        set
+        {
+            naverCafe202311 = value;
+        }
+    }
+
+    public int NaverCafe202312
+    {
+        get
+        {
+            return naverCafe202312;
+        }
+        set
+        {
+            naverCafe202312 = value;
+        }
+    }
+
+    public int NaverCafe202401
+    {
+        get
+        {
+            return naverCafe202401;
+        }
+        set
+        {
+            naverCafe202401 = value;
+        }
+    }
+
+    public int NaverCafe202402
+    {
+        get
+        {
+            return naverCafe202402;
+        }
+        set
+        {
+            naverCafe202402 = value;
         }
     }
 
@@ -1097,16 +1413,49 @@ public class PlayerDataBase : ScriptableObject
     {
         gold = 0;
         crystal = 0;
+        millage = 0;
 
         formation = 0;
         star = 0;
         nowRank = 0;
         highRank = 0;
-        totalRaf = 0;
-        accessDate = 0;
         challengeCount = 0;
         testAccount = 0;
+
+        defDestroyTicket = 0;
+        winGetMoney = 0;
+        totalRaf = 0;
+        synthesisGetBlock = 0;
+        rankDownCount = 0;
+        rankDownStreak = 0;
+        winNumber = 0;
+        winQueen = 0;
+        goalAchieveCount = 0;
+        chargingRM = 0;
+        boxOpenCount = 0;
+        accessDate = 0;
+        upgradeSuccessCount = 0;
+        upgradeFailCount = 0;
+        useUpgradeTicket = 0;
+        repairBlockCount = 0;
         consumeGold = 0;
+
+        comicWorld2023 = 0;
+        indieFestival2023 = 0;
+        naverCafe202310 = 0;
+        naverCafe202311 = 0;
+        naverCafe202312 = 0;
+        naverCafe202401 = 0;
+        naverCafe202402 = 0;
+
+        achievementInfoList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(AchievementType)).Length; i++)
+        {
+            AchievementInfo content = new AchievementInfo();
+            content.achievementType = AchievementType.AccessDate + i;
+            achievementInfoList.Add(content);
+        }
 
         season = 0;
         attendanceDay = "";
@@ -1513,7 +1862,7 @@ public class PlayerDataBase : ScriptableObject
         return ticket;
     }
 
-    public void UseUpgradeTicket(RankType type, int number)
+    public void UseUpgradeTicketCount(RankType type, int number)
     {
         for (int i = 0; i < upgradeTicketList.Count; i++)
         {
@@ -1602,8 +1951,6 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(armor).level > 0)
             {
                 number++;
-
-                Debug.Log("1");
             }
         }
 
@@ -1612,8 +1959,6 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(weapon).level > 0)
             {
                 number++;
-
-                Debug.Log("2");
             }
         }
 
@@ -1622,9 +1967,99 @@ public class PlayerDataBase : ScriptableObject
             if (GetBlockClass(shield).level > 0)
             {
                 number++;
-
-                Debug.Log("3");
             }
+        }
+
+        return number;
+    }
+
+    public void SetAchievementInfo(AchievementType type, int count)
+    {
+        for(int i = 0; i < achievementInfoList.Count; i ++)
+        {
+            if(achievementInfoList[i].achievementType.Equals(type))
+            {
+                achievementInfoList[i].count = count;
+                break;
+            }
+        }
+    }
+
+    public AchievementInfo GetAchievementInfo(AchievementType type)
+    {
+        AchievementInfo achievementInfo = new AchievementInfo();
+
+        for(int i = 0; i < achievementInfoList.Count; i ++)
+        {
+            if(achievementInfoList[i].achievementType.Equals(type))
+            {
+                achievementInfo = achievementInfoList[i];
+                break;
+            }
+        }
+        return achievementInfo;
+    }
+
+    public void SetAchievementInfoCount(AchievementType type)
+    {
+        for (int i = 0; i < achievementInfoList.Count; i++)
+        {
+            if (achievementInfoList[i].achievementType.Equals(type))
+            {
+                achievementInfoList[i].count += 1;
+                break;
+            }
+        }
+    }
+
+    public int GetAchievementCount(AchievementType type)
+    {
+        int number = 0;
+
+        switch (type)
+        {
+            case AchievementType.AccessDate:
+                number = accessDate;
+                break;
+            case AchievementType.GosuWin:
+                number = gosuWin;
+                break;
+            case AchievementType.DestroyBlockCount:
+                number = destroyBlockCount;
+                break;
+            case AchievementType.WinGetMoney:
+                number = winGetMoney;
+                break;
+            case AchievementType.TotalRaf:
+                number = totalRaf;
+                break;
+            case AchievementType.RankDownCount:
+                number = rankDownCount;
+                break;
+            case AchievementType.WinNumber:
+                number = winNumber;
+                break;
+            case AchievementType.WinQueen:
+                number = winQueen;
+                break;
+            case AchievementType.ChargingRM:
+                number = chargingRM;
+                break;
+            case AchievementType.BoxOpenCount:
+                number = boxOpenCount;
+                break;
+            case AchievementType.UpgradeSuccessCount:
+                number = upgradeSuccessCount;
+                break;
+            case AchievementType.UpgradeFailCount:
+                number = upgradeFailCount;
+                break;
+            case AchievementType.UseUpgradeTicket:
+                number = useUpgradeTicket;
+                break;
+            case AchievementType.RepairBlockCount:
+                number = repairBlockCount;
+                break;
         }
 
         return number;

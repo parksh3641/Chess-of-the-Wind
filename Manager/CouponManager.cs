@@ -12,10 +12,12 @@ public class CouponManager : MonoBehaviour
     public InputField inputFieldText;
 
     public MailBoxManager mailBoxManager;
-
+    PlayerDataBase playerDataBase;
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
         couponView.SetActive(false);
     }
 
@@ -43,6 +45,49 @@ public class CouponManager : MonoBehaviour
             return;
         }
 
+        if(inputFieldText.text.Contains("-"))
+        {
+            inputFieldText.text.ToLower();
+
+            GetCoupon();
+        }
+        else
+        {
+            switch(inputFieldText.text)
+            {
+                case "GRANDOPEN":
+                    if (System.DateTime.Now >= new System.DateTime(2023, 10, 1))
+                    {
+                        if(playerDataBase.NaverCafe202310 == 0)
+                        {
+                            GetCoupon();
+
+                            playerDataBase.NaverCafe202310 = 1;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202310", 1);
+                        }
+                        else
+                        {
+                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                        }
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                    }
+                    break;
+
+                default:
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                    break;
+            }
+        }
+    }
+
+    void GetCoupon()
+    {
         var primaryCatalogName = "Coupon"; // In your game, this should just be a constant matching your primary catalog
         var request = new RedeemCouponRequest
         {

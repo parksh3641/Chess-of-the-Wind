@@ -796,15 +796,22 @@ public class PlayfabManager : MonoBehaviour
         {
             var Inventory = result.Inventory;
             int gold = result.VirtualCurrency["GO"];
-            int crystal = result.VirtualCurrency["ST"]; //Get Money
+            int crystal = result.VirtualCurrency["ST"];
+            int millage = result.VirtualCurrency["MG"];
 
             if (gold > 999999999)
             {
                 gold = 999999999;
             }
 
+            if (millage > 999999999)
+            {
+                millage = 999999999;
+            }
+
             playerDataBase.Gold = gold;
             playerDataBase.Crystal = crystal;
+            playerDataBase.Millage = millage;
 
             playerDataBase.Initialize_BlockList();
 
@@ -951,17 +958,11 @@ public class PlayfabManager : MonoBehaviour
                            }
 
                            break;
-                       case "AccessDate":
-                           playerDataBase.AccessDate = statistics.Value;
-                           break;
                        case "ChallengeCount":
                            playerDataBase.ChallengeCount = statistics.Value;
                            break;
                        case "TestAccount":
                            playerDataBase.TestAccount = statistics.Value;
-                           break;
-                       case "ConsumeGold":
-                           playerDataBase.ConsumeGold = statistics.Value;
                            break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
@@ -1138,11 +1139,80 @@ public class PlayfabManager : MonoBehaviour
                        case "HighRank":
                            playerDataBase.HighRank = statistics.Value;
                            break;
+                       case "NewsAlarm":
+                           playerDataBase.NewsAlarm = statistics.Value;
+                           break;
+                       case "DestroyBlockCount":
+                           playerDataBase.DestroyBlockCount = statistics.Value;
+                           break;
+                       case "WinGetMoney":
+                           playerDataBase.WinGetMoney = statistics.Value;
+                           break;
                        case "TotalRaf":
                            playerDataBase.TotalRaf = statistics.Value;
                            break;
-                       case "NewsAlarm":
-                           playerDataBase.NewsAlarm = statistics.Value;
+                       case "SynthesisGetBlock":
+                           playerDataBase.SynthesisGetBlock = statistics.Value;
+                           break;
+                       case "RankDownCount":
+                           playerDataBase.RankDownCount = statistics.Value;
+                           break;
+                       case "RankDownStreak":
+                           playerDataBase.RankDownStreak = statistics.Value;
+                           break;
+                       case "WinNumber":
+                           playerDataBase.WinNumber = statistics.Value;
+                           break;
+                       case "WinQueen":
+                           playerDataBase.WinQueen = statistics.Value;
+                           break;
+                       case "GoalAchieveCount":
+                           playerDataBase.GoalAchieveCount = statistics.Value;
+                           break;
+                       case "ChargingRM":
+                           playerDataBase.ChargingRM = statistics.Value;
+                           break;
+                       case "BoxOpenCount":
+                           playerDataBase.BoxOpenCount = statistics.Value;
+                           break;
+                       case "AccessDate":
+                           playerDataBase.AccessDate = statistics.Value;
+                           break;
+                       case "UpgradeSuccessCount":
+                           playerDataBase.UpgradeSuccessCount = statistics.Value;
+                           break;
+                       case "UpgradeFailCount":
+                           playerDataBase.UpgradeFailCount = statistics.Value;
+                           break;
+                       case "UseUpgradeTicket":
+                           playerDataBase.UseUpgradeTicket = statistics.Value;
+                           break;
+                       case "RepairBlockCount":
+                           playerDataBase.RepairBlockCount = statistics.Value;
+                           break;
+                       case "ConsumeGold":
+                           playerDataBase.ConsumeGold = statistics.Value;
+                           break;
+                       case "ComicWorld2023":
+                           playerDataBase.ComicWorld2023 = statistics.Value;
+                           break;
+                       case "IndieFestival2023":
+                           playerDataBase.IndieFestival2023 = statistics.Value;
+                           break;
+                       case "NaverCafe202310":
+                           playerDataBase.NaverCafe202310 = statistics.Value;
+                           break;
+                       case "NaverCafe202311":
+                           playerDataBase.NaverCafe202311 = statistics.Value;
+                           break;
+                       case "NaverCafe202312":
+                           playerDataBase.NaverCafe202312 = statistics.Value;
+                           break;
+                       case "NaverCafe202401":
+                           playerDataBase.NaverCafe202401 = statistics.Value;
+                           break;
+                       case "NaverCafe202402":
+                           playerDataBase.NaverCafe202402 = statistics.Value;
                            break;
                    }
                }
@@ -1216,6 +1286,14 @@ public class PlayfabManager : MonoBehaviour
                 if (key.Contains("NewBie"))
                 {
                     playerDataBase.Newbie = eachData.Value.Value;
+                }
+
+                for(int i = 0; i < System.Enum.GetValues(typeof(AchievementType)).Length; i ++)
+                {
+                    if (key.Contains((AchievementType.AccessDate + i).ToString()))
+                    {
+                        playerDataBase.SetAchievementInfo((AchievementType)Enum.Parse(typeof(AchievementType), eachData.Key), int.Parse(eachData.Value.Value));
+                    }
                 }
             }
 
@@ -1321,6 +1399,18 @@ public class PlayfabManager : MonoBehaviour
                             value = number;
                         }
                         break;
+                    case MoneyType.Millage:
+                        currentType = "MG";
+                        if (playerDataBase.Millage + number > 999999999)
+                        {
+                            value = 999999999 - playerDataBase.Millage;
+                        }
+                        else
+                        {
+                            value = number;
+                        }
+
+                        break;
                 }
 
 
@@ -1331,18 +1421,20 @@ public class PlayfabManager : MonoBehaviour
                     GeneratePlayStreamEvent = true,
                 }, OnCloudUpdateStats, DisplayPlayfabError);
 
-                moneyAnimation.PlusMoney(value);
-
-                SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
-
                 switch (type)
                 {
                     case MoneyType.Gold:
-                        playerDataBase.Gold += value;
+                        SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
 
+                        moneyAnimation.PlusMoney(value);
+
+                        playerDataBase.Gold += value;
                         break;
                     case MoneyType.Crystal:
                         playerDataBase.Crystal += value;
+                        break;
+                    case MoneyType.Millage:
+                        playerDataBase.Millage += value;
                         break;
                 }
 
@@ -1372,6 +1464,9 @@ public class PlayfabManager : MonoBehaviour
             case MoneyType.Crystal:
                 currentType = "ST";
                 break;
+            case MoneyType.Millage:
+                currentType = "MG";
+                break;
         }
 
         if (!NetworkConnect.instance.CheckConnectInternet())
@@ -1395,12 +1490,14 @@ public class PlayfabManager : MonoBehaviour
         {
             case MoneyType.Gold:
                 playerDataBase.Gold -= number;
-
                 playerDataBase.ConsumeGold += number;
                 UpdatePlayerStatisticsInsert("ConsumeGold", playerDataBase.ConsumeGold);
                 break;
             case MoneyType.Crystal:
                 playerDataBase.Crystal -= number;
+                break;
+            case MoneyType.Millage:
+                playerDataBase.Millage -= number;
                 break;
         }
 

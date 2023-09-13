@@ -345,12 +345,14 @@ public class InventoryManager : MonoBehaviour
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
         NotionManager.instance.UseNotion(NotionType.GetReward);
 
         Initialize();
 
         CloseChangeBoxView();
+
+        playerDataBase.RepairBlockCount += boxCount + 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("RepairBlockCount", playerDataBase.RepairBlockCount);
 
         isDelay = true;
         Invoke("Delay", 1.0f);

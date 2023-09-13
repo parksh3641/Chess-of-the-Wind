@@ -208,7 +208,8 @@ public enum LoginType
 public enum MoneyType
 {
     Gold = 0,
-    Crystal
+    Crystal,
+    Millage
 }
 
 public enum ItemType
@@ -336,4 +337,22 @@ public enum RewardType
     Box_NR,
     Box_RSR,
     Box_SRSSR,
+}
+
+public enum AchievementType
+{
+    AccessDate,
+    GosuWin,
+    DestroyBlockCount,
+    WinGetMoney,
+    TotalRaf,
+    RankDownCount,
+    WinNumber,
+    WinQueen,
+    ChargingRM,
+    BoxOpenCount,
+    UpgradeSuccessCount,
+    UpgradeFailCount,
+    UseUpgradeTicket,
+    RepairBlockCount
 }

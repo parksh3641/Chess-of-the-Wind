@@ -148,6 +148,7 @@ public class RouletteManager : MonoBehaviour
     public EmoteManager emoteManager;
 
     ImageDataBase imageDataBase;
+    PlayerDataBase playerDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
@@ -160,6 +161,7 @@ public class RouletteManager : MonoBehaviour
     private void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         blockArray = imageDataBase.GetBlockArray();
 
@@ -1491,6 +1493,9 @@ public class RouletteManager : MonoBehaviour
                     roulette2Particle.Play();
                 }
 
+                playerDataBase.WinQueen += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinQueen", playerDataBase.WinQueen);
+
                 Debug.Log("퀸 배팅에 성공했습니다!");
             }
             else
@@ -1531,6 +1536,9 @@ public class RouletteManager : MonoBehaviour
                 roulette2Particle.gameObject.SetActive(true);
                 roulette2Particle.Play();
             }
+
+            playerDataBase.WinNumber += 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinNumber", playerDataBase.WinNumber);
 
             Debug.Log("숫자에 당첨되었습니다");
         }

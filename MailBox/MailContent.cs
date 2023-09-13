@@ -9,6 +9,8 @@ public class MailContent : MonoBehaviour
 {
     public UnityEvent unityEvent;
 
+    public LocalizationContent titleText;
+
     private RewardType rewardType = RewardType.Gold;
     private int count = 0;
 
@@ -38,38 +40,76 @@ public class MailContent : MonoBehaviour
         {
             case "Gold":
                 rewardType = RewardType.Gold;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "UpgradeTicket":
                 rewardType = RewardType.UpgradeTicket;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "Box":
                 rewardType = RewardType.Box;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxN":
                 rewardType = RewardType.Box_N;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxR":
                 rewardType = RewardType.Box_R;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxSR":
                 rewardType = RewardType.Box_SR;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxSSR":
                 rewardType = RewardType.Box_SSR;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxUR":
                 rewardType = RewardType.Box_UR;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxNR":
                 rewardType = RewardType.Box_NR;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxRSR":
                 rewardType = RewardType.Box_RSR;
+
+                titleText.localizationName = "GiftInfo";
                 break;
             case "BoxSRSSR":
                 rewardType = RewardType.Box_SRSSR;
+
+                titleText.localizationName = "GiftInfo";
+                break;
+            case "IndieFestival2023":
+                rewardType = RewardType.Box;
+
+                count = 10;
+
+                titleText.localizationName = "IndieFestival2023";
+                break;
+            case "ComicWorld2023":
+                rewardType = RewardType.Box;
+
+                count = 10;
+
+                titleText.localizationName = "ComicWorld2023";
                 break;
         }
+
+        titleText.ReLoad();
 
         receiveContent.Initialize(rewardType, count);
     }

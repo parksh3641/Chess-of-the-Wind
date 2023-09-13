@@ -1,18 +1,99 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AchievementContent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public AchievementType achievementType;
+
+    public LocalizationContent titleText;
+
+    public Text pointText;
+
+    public Image gaugeFillamount;
+    public Text gaugeText;
+
+    public LocalizationContent rewardText;
+
+    public Image buttonImg;
+
+    public Sprite[] buttonImgArray;
+
+    public bool isActive = false;
+
+    int goal = 0;
+    int count = 0;
+
+    AchievementInformation achievementInformation = new AchievementInformation();
+    AchievementInfo achievementInfo = new AchievementInfo();
+
+    AchievementManager achievementManager;
+
+    PlayerDataBase playerDataBase;
+    AchievementDataBase achievementDataBase;
+
+    private void Awake()
     {
-        
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (achievementDataBase == null) achievementDataBase = Resources.Load("AchievementDataBase") as AchievementDataBase;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize(AchievementManager manager)
     {
-        
+        achievementManager = manager;
+
+        achievementInformation = achievementDataBase.GetAchievementInfomation(achievementType);
+        achievementInfo = playerDataBase.GetAchievementInfo(achievementType);
+
+        goal = (achievementInformation.startGoal * (achievementInfo.count + 1));
+        count = playerDataBase.GetAchievementCount(achievementType);
+
+        titleText.localizationName = "Achievement" + (int)(achievementType + 1);
+        titleText.ReLoad();
+
+        pointText.text = "P + " + achievementInformation.reward;
+
+        if(count > 0)
+        {
+            gaugeText.text = MoneyUnitString.ToCurrencyString(count) + "/" + MoneyUnitString.ToCurrencyString(goal);
+            gaugeFillamount.fillAmount = count * 1.0f / goal * 1.0f;
+        }
+        else
+        {
+            gaugeText.text = "0/" + MoneyUnitString.ToCurrencyString(goal);
+            gaugeFillamount.fillAmount = 0;
+        }
+
+        if(count >= goal)
+        {
+            rewardText.localizationName = "Achieve";
+
+            buttonImg.sprite = buttonImgArray[1];
+
+            isActive = true;
+        }
+        else
+        {
+            rewardText.localizationName = "NotAchieved";
+
+            buttonImg.sprite = buttonImgArray[0];
+
+            isActive = false;
+        }
+
+        rewardText.ReLoad();
+    }
+
+    public void OnClick()
+    {
+        if(isActive)
+        {
+            isActive = false;
+
+            achievementManager.GetReward(achievementType);
+
+            Initialize(achievementManager);
+        }
     }
 }

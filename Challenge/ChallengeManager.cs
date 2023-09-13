@@ -26,6 +26,7 @@ public class ChallengeManager : MonoBehaviour
     public UIManager uIManager;
     public MatchingManager matchingManager;
     public UpgradeManager upgradeManager;
+    public AchievementManager achievementManager;
 
     List<string> itemList = new List<string>();
 
@@ -67,6 +68,17 @@ public class ChallengeManager : MonoBehaviour
             }
             topMenuImgArray[number].sprite = topMenuSpriteArray[1];
             scrollView[number].SetActive(true);
+
+            switch(number)
+            {
+                case 0:
+                    InitializeTutorial();
+                    UpdateTutorial();
+                    break;
+                case 1:
+                    achievementManager.Initialize();
+                    break;
+            }
         }
     }
 
@@ -74,7 +86,7 @@ public class ChallengeManager : MonoBehaviour
     {
         if (!challengeView.activeSelf)
         {
-            CheckChallengeTutorial();
+            CheckingTutorial();
         }
 
         yield return waitForSeconds;
@@ -90,16 +102,19 @@ public class ChallengeManager : MonoBehaviour
         {
             challengeView.SetActive(true);
 
-            if (topNumber == -1)
-            {
-                ChangeTopMenu(0);
-            }
-
             exitButton.SetActive(true);
 
-            InitializeChallenge();
-
-            CheckChallenge();
+            if (topNumber == -1)
+            {
+                if(playerDataBase.ChallengeCount >= 6)
+                {
+                    ChangeTopMenu(1);
+                }
+                else
+                {
+                    ChangeTopMenu(0);
+                }
+            }
         }
         else
         {
@@ -110,7 +125,7 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
-    void CheckChallengeTutorial()
+    void CheckingTutorial()
     {
         switch(playerDataBase.ChallengeCount)
         {
@@ -195,7 +210,7 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
-    void InitializeChallenge()
+    void InitializeTutorial()
     {
         challengeContentArray[0].receiveContent.Initialize(RewardType.Gold, 200);
         challengeContentArray[1].receiveContent.Initialize(RewardType.Gold, 200);
@@ -205,7 +220,7 @@ public class ChallengeManager : MonoBehaviour
         challengeContentArray[5].receiveContent.Initialize(RewardType.Gold, 2000);
     }
 
-    public void CheckChallenge()
+    public void UpdateTutorial()
     {
         challengeContentArray[0].Initialize(playerDataBase.ChallengeCount, this);
         challengeContentArray[1].Initialize(playerDataBase.ChallengeCount, this);
@@ -269,6 +284,8 @@ public class ChallengeManager : MonoBehaviour
             case 5:
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
 
+                ChangeTopMenu(1);
+
                 exitButton.SetActive(true);
 
                 StopAllCoroutines();
@@ -281,7 +298,7 @@ public class ChallengeManager : MonoBehaviour
 
         action.Invoke();
 
-        CheckChallenge();
+        UpdateTutorial();
 
         lockManager.Initialize();
 
@@ -321,6 +338,15 @@ public class ChallengeManager : MonoBehaviour
 
                 matchingManager.GameStartButton_Gosu();
                 break;
+        }
+    }
+
+
+    public void CheckingAcheivement()
+    {
+        if(playerDataBase.ChallengeCount >= 6)
+        {
+            achievementManager.CheckingAchievement();
         }
     }
 }

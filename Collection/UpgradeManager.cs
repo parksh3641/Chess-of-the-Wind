@@ -380,9 +380,11 @@ public class UpgradeManager : MonoBehaviour
 
         PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, upgradeInformation.needGold);
 
-        playerDataBase.UseUpgradeTicket(RankType.N, needTicket);
-
+        playerDataBase.UseUpgradeTicketCount(RankType.N, needTicket);
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+
+        playerDataBase.UseUpgradeTicket += needTicket;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UseUpgradeTicket", playerDataBase.UseUpgradeTicket);
 
         //switch (upgradeValue.rankType)
         //{
@@ -519,6 +521,9 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
 
+                playerDataBase.UpgradeFailCount += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeFailCount", playerDataBase.UpgradeFailCount);
+
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;
             case 2:
@@ -536,6 +541,9 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenLevel.text = (blockClass.level + 1).ToString() + "   ▶   <color=#FFCA14>" + (blockClass.level + 2).ToString() + "</color>";
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level + 1)) + "</color>";
+
+                playerDataBase.UpgradeSuccessCount += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeSuccessCount", playerDataBase.UpgradeSuccessCount);
 
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeSuccess);
                 break;
@@ -585,6 +593,10 @@ public class UpgradeManager : MonoBehaviour
                 collectionManager.CheckUnEquip(blockClass.instanceId);
 
                 SellBlockOne(blockClass.instanceId);
+
+                playerDataBase.DestroyBlockCount += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DestroyBlockCount", playerDataBase.DestroyBlockCount);
+
                 break;
         }
     }

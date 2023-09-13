@@ -248,10 +248,11 @@ public class TutorialManager : MonoBehaviour
                 fadeInOut.FadeIn();
                 break;
             case 3:
-                if (GameStateManager.instance.NickName.Length > 15)
-                {
-                    nickNameManager.OpenFreeNickName();
-                }
+                //if (GameStateManager.instance.NickName.Length > 15)
+                //{
+                //    nickNameManager.OpenFreeNickName();
+                //}
+                nickNameManager.OpenFreeNickName();
                 break;
             case 8:
                 SetCharacter(0, 0);

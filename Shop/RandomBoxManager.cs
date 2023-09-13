@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -466,6 +466,9 @@ public class RandomBoxManager : MonoBehaviour
         boxCountText.text = boxCount.ToString();
         boxCountSave = boxCount;
 
+        playerDataBase.BoxOpenCount += boxCount;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxOpenCount", playerDataBase.BoxOpenCount);
+
         windCharacterType = WindCharacterType.Winter;
 
         switch (boxType)
@@ -508,6 +511,9 @@ public class RandomBoxManager : MonoBehaviour
 
         boxCountText.text = boxCount.ToString();
         boxCountSave = boxCount;
+
+        playerDataBase.BoxOpenCount += boxCount;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxOpenCount", playerDataBase.BoxOpenCount);
 
         windCharacterType = WindCharacterType.UnderWorld;
 

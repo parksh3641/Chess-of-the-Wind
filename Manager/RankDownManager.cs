@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Firebase.Analytics;
 using UnityEngine;
@@ -151,5 +151,8 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
         rankDownView.SetActive(false);
 
         matchingManager.Initialize();
+
+        playerDataBase.RankDownCount += 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankDownCount", playerDataBase.RankDownCount);
     }
 }

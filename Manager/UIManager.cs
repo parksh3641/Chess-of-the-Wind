@@ -161,8 +161,6 @@ public class UIManager : MonoBehaviour
         }
 
         SetLoginUI();
-
-        OpenMainCanvas(1);
     }
 
     public void PrivacyAgree()
@@ -202,6 +200,8 @@ public class UIManager : MonoBehaviour
             testMode.SetActive(true);
         }
 
+        OpenMainCanvas(1);
+
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         testMode.SetActive(true);
 #endif
@@ -215,7 +215,7 @@ public class UIManager : MonoBehaviour
     public void Renewal()
     {
         goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Gold);
-        crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
+        //crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
 
         nickNameText.text = GameStateManager.instance.NickName;
 
@@ -531,6 +531,9 @@ public class UIManager : MonoBehaviour
 
             moneyAnimation.ResultAddMoney(gold, resultGoldText);
 
+            playerDataBase.WinGetMoney += gold;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinGetMoney", playerDataBase.WinGetMoney);
+
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, gold);
         }
         else
@@ -614,6 +617,7 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
+                challengeManager.CheckingAcheivement();
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
