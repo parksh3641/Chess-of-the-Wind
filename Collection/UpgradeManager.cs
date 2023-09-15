@@ -81,6 +81,7 @@ public class UpgradeManager : MonoBehaviour
     public CollectionManager collectionManager;
     public SellManager sellManager;
     public EquipManager equipManager;
+    public TitleManager titleManager;
 
     BlockClass blockClass;
     UpgradeValue upgradeValue;
@@ -330,6 +331,8 @@ public class UpgradeManager : MonoBehaviour
             //    isDef = false;
             //}
         }
+
+        titleManager.CheckGoal();
     }
 
     public void UpgradeButton()
@@ -383,8 +386,8 @@ public class UpgradeManager : MonoBehaviour
         playerDataBase.UseUpgradeTicketCount(RankType.N, needTicket);
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
-        playerDataBase.UseUpgradeTicket += needTicket;
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UseUpgradeTicket", playerDataBase.UseUpgradeTicket);
+        //playerDataBase.UseUpgradeTicket += needTicket;
+        //PlayfabManager.instance.UpdatePlayerStatisticsInsert("UseUpgradeTicket", playerDataBase.UseUpgradeTicket);
 
         //switch (upgradeValue.rankType)
         //{
@@ -521,8 +524,8 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
 
-                playerDataBase.UpgradeFailCount += 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeFailCount", playerDataBase.UpgradeFailCount);
+                //playerDataBase.UpgradeFailCount += 1;
+                //PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeFailCount", playerDataBase.UpgradeFailCount);
 
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
                 break;

@@ -31,6 +31,9 @@ public class ReceiveContent : MonoBehaviour
 
         rewardType = type;
 
+        countText.alignment = (TextAnchor)TextAlignment.Right;
+        countText.text = MoneyUnitString.ToCurrencyString(count);
+
         switch (type)
         {
             case RewardType.Gold:
@@ -66,9 +69,13 @@ public class ReceiveContent : MonoBehaviour
             case RewardType.Box_SRSSR:
                 mainBackground.sprite = rankBackgroundArray[2];
                 break;
-        }
+            case RewardType.ExclusiveTitle:
+                mainBackground.sprite = rankBackgroundArray[2];
 
-        countText.text = MoneyUnitString.ToCurrencyString(count);
+                countText.alignment = (TextAnchor)TextAlignment.Center;
+                countText.text = LocalizationManager.instance.GetString("ExclusiveTitle");
+                break;
+        }
     }
 
     public void OpenInfo()

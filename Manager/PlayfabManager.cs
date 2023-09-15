@@ -841,6 +841,22 @@ public class PlayfabManager : MonoBehaviour
                         }
                     }
 
+                    for (int i = 0; i < Enum.GetValues(typeof(TitleNormalType)).Length - 1; i++)
+                    {
+                        if (list.ItemId.Equals((TitleNormalType.Title1 + i).ToString()))
+                        {
+                            playerDataBase.SetNormalTitle(TitleNormalType.Title1 + i);
+                        }
+                    }
+
+                    for (int i = 0; i < Enum.GetValues(typeof(TitleSpeicalType)).Length; i++)
+                    {
+                        if (list.ItemId.Equals((TitleSpeicalType.TitleSpeical1 + i).ToString()))
+                        {
+                            playerDataBase.SetSpeicalTitle(TitleSpeicalType.TitleSpeical1 + i);
+                        }
+                    }
+
                     //shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
@@ -1192,6 +1208,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "ConsumeGold":
                            playerDataBase.ConsumeGold = statistics.Value;
+                           break;
+                       case "TitleNumber":
+                           playerDataBase.TitleNumber = statistics.Value;
                            break;
                        case "ComicWorld2023":
                            playerDataBase.ComicWorld2023 = statistics.Value;

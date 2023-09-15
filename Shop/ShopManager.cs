@@ -22,7 +22,7 @@ public class ShopManager : MonoBehaviour
 
     public Text[] dailyCountText;
     public Text dailyShopCountText;
-    public ShopContent dailyContent;
+    public ShopContent[] dailyContentArray;
 
     public Transform shopContentGoldTransform;
     public Transform shopContentTransform;
@@ -459,7 +459,7 @@ public class ShopManager : MonoBehaviour
                 {
                     GameStateManager.instance.DailyReward = true;
 
-                    dailyContent.Locked();
+                    dailyContentArray[0].Locked();
 
                     PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
 
@@ -476,6 +476,7 @@ public class ShopManager : MonoBehaviour
 
                 break;
             case ShopType.DailyReward_WatchAd:
+
                 break;
             case ShopType.UpgradeTicket:
                 if (playerDataBase.Gold >= price)
@@ -499,6 +500,19 @@ public class ShopManager : MonoBehaviour
                 SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+
+                if(number < 11)
+                {
+                    GameStateManager.instance.DailyBuy1 = true;
+
+                    dailyContentArray[1].Locked();
+                }
+                else
+                {
+                    GameStateManager.instance.DailyBuy2 = true;
+
+                    dailyContentArray[2].Locked();
+                }
 
                 break;
         }

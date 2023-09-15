@@ -61,6 +61,10 @@ public class ResetManager : MonoBehaviour
             GameStateManager.instance.DailyEpicBox_1 = 3;
             GameStateManager.instance.DailyEpicBox_10 = 1;
             GameStateManager.instance.DailyReward = false;
+            GameStateManager.instance.DailyBuy1 = false;
+            GameStateManager.instance.DailyBuy2 = false;
+            GameStateManager.instance.DailyBuyCount1 = 0;
+            GameStateManager.instance.DailyBuyCount2 = 0;
             GameStateManager.instance.DailyAdsReward = false;
             GameStateManager.instance.DailyAdsReward2 = false;
             GameStateManager.instance.DailyAdsReward3 = false;
@@ -113,6 +117,10 @@ public class ResetManager : MonoBehaviour
                 GameStateManager.instance.DailyEpicBox_1 = 3;
                 GameStateManager.instance.DailyEpicBox_10 = 1;
                 GameStateManager.instance.DailyReward = false;
+                GameStateManager.instance.DailyBuy1 = false;
+                GameStateManager.instance.DailyBuy2 = false;
+                GameStateManager.instance.DailyBuyCount1 = 0;
+                GameStateManager.instance.DailyBuyCount2 = 0;
                 GameStateManager.instance.DailyAdsReward = false;
                 GameStateManager.instance.DailyAdsReward2 = false;
                 GameStateManager.instance.DailyAdsReward3 = false;

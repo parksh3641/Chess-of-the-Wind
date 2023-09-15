@@ -110,6 +110,9 @@ public class ReceiveInfoManager : MonoBehaviour
             case RewardType.Box_SRSSR:
                 mainBackground.sprite = rankBackgroundArray[2];
                 break;
+            case RewardType.ExclusiveTitle:
+                mainBackground.sprite = rankBackgroundArray[2];
+                break;
         }
 
         infoText.text = LocalizationManager.instance.GetString(rewardType.ToString() + "_Info");

@@ -592,7 +592,7 @@ public class MatchingManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
 
             return;
         }
@@ -699,7 +699,7 @@ public class MatchingManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.NotEnoughMoney);
+            NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
 
             return;
         }

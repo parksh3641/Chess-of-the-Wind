@@ -10,6 +10,7 @@ public class ProfileManager : MonoBehaviour
 
     public Image characterImg;
 
+    public Text titleText;
     public Text nickNameText;
 
     public Image nowRankImg;
@@ -68,7 +69,8 @@ public class ProfileManager : MonoBehaviour
 
     void Initialize()
     {
-        nickNameText.text = LocalizationManager.instance.GetString("Nickname") + " : " + GameStateManager.instance.NickName;
+        titleText.text = playerDataBase.GetTitleName();
+        nickNameText.text = GameStateManager.instance.NickName;
 
         if (playerDataBase.Formation == 2)
         {

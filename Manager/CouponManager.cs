@@ -60,10 +60,13 @@ public class CouponManager : MonoBehaviour
                     {
                         if(playerDataBase.NaverCafe202310 == 0)
                         {
-                            GetCoupon();
-
                             playerDataBase.NaverCafe202310 = 1;
                             PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202310", 1);
+
+
+
+
+
                         }
                         else
                         {
@@ -106,7 +109,7 @@ public class CouponManager : MonoBehaviour
             mailBoxManager.GetUserInventoryCoupon();
 
             SoundManager.instance.PlaySFX(GameSfxType.Success);
-            NotionManager.instance.UseNotion(NotionType.CouponNotion1);
+            NotionManager.instance.UseNotion(NotionType.CouponNotion4);
         }
         else
         {

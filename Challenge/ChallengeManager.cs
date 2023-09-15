@@ -342,11 +342,11 @@ public class ChallengeManager : MonoBehaviour
     }
 
 
-    public void CheckingAcheivement()
+    public void CheckGoal()
     {
         if(playerDataBase.ChallengeCount >= 6)
         {
-            achievementManager.CheckingAchievement();
+            achievementManager.CheckGoal();
         }
     }
 }

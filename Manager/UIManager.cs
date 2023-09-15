@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     [Title("Main")]
     public Text goldText;
     public Text crystalText;
+    public LocalizationContent titleText;
     public Text nickNameText;
 
     [Space]
@@ -80,6 +81,7 @@ public class UIManager : MonoBehaviour
     public MatchingManager matchingManager;
     public MoneyAnimation moneyAnimation;
     public ChallengeManager challengeManager;
+    public TitleManager titleManager;
 
     public Image[] bottomUIImg;
 
@@ -201,6 +203,9 @@ public class UIManager : MonoBehaviour
         }
 
         OpenMainCanvas(1);
+
+        titleText.localizationName = playerDataBase.GetTitleName();
+        titleText.ReLoad();
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         testMode.SetActive(true);
@@ -402,6 +407,7 @@ public class UIManager : MonoBehaviour
         Renewal();
 
         matchingManager.CheckRankUp();
+        titleManager.CheckGoal();
     }
 
     public void OpenRouletteView()
@@ -617,7 +623,7 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
-                challengeManager.CheckingAcheivement();
+                challengeManager.CheckGoal();
                 break;
             case 2:
                 collectionManager.OpenCollectionView();

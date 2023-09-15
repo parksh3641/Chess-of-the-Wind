@@ -133,6 +133,16 @@ public class PlayerDataBase : ScriptableObject
     private List<AchievementInfo> achievementInfoList = new List<AchievementInfo>();
 
     [Space]
+    [Title("Title")]
+    [SerializeField]
+    private int titleNumber = 0;
+
+    [SerializeField]
+    private List<TitleNormalInformation> titleNormalInformationList = new List<TitleNormalInformation>();
+    [SerializeField]
+    private List<TitleSpeicalInformation> titleSpeicalInformationList = new List<TitleSpeicalInformation>();
+
+    [Space]
     [Title("Coupon")]
     [SerializeField]
     private int comicWorld2023 = 0;
@@ -308,6 +318,9 @@ public class PlayerDataBase : ScriptableObject
     public static event BoxEvent eGetSnowBox, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR, eGetSnowBox_NR, eGetSnowBox_RSR, eGetSnowBox_SRSSR,
         eGetUnderworldBox, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR, eGetUnderworldBox_NR,
         eGetUnderworldBox_RSR, eGetUnderworldBox_SRSSR;
+
+    public delegate void TitleEvent();
+    public static event TitleEvent eGetNormalTitle, eGetSpeicalTitle;
 
     #region Data
 
@@ -618,6 +631,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             repairBlockCount = value;
+        }
+    }
+
+    public int TitleNumber
+    {
+        get
+        {
+            return titleNumber;
+        }
+        set
+        {
+            titleNumber = value;
         }
     }
 
@@ -1440,6 +1465,26 @@ public class PlayerDataBase : ScriptableObject
         repairBlockCount = 0;
         consumeGold = 0;
 
+        titleNumber = 0;
+
+        titleNormalInformationList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(TitleNormalType)).Length; i++)
+        {
+            TitleNormalInformation content = new TitleNormalInformation();
+            content.titleNormalType = TitleNormalType.Default + i;
+            titleNormalInformationList.Add(content);
+        }
+
+        titleSpeicalInformationList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(TitleSpeicalType)).Length - 1; i++)
+        {
+            TitleSpeicalInformation content = new TitleSpeicalInformation();
+            content.titleSpeicalType = TitleSpeicalType.TitleSpeical1 + i;
+            titleSpeicalInformationList.Add(content);
+        }
+
         comicWorld2023 = 0;
         indieFestival2023 = 0;
         naverCafe202310 = 0;
@@ -1942,11 +1987,26 @@ public class PlayerDataBase : ScriptableObject
         return check;
     }
 
+    public int CheckSSRBlockCount()
+    {
+        int number = 0;
+
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].rankType > RankType.SR)
+            {
+                number++;
+            }
+        }
+
+        return number;
+    }
+
     public int CheckBlockLevelCount()
     {
         int number = 0;
 
-        if (armor != null)
+        if (!string.IsNullOrEmpty(armor))
         {
             if (GetBlockClass(armor).level > 0)
             {
@@ -1954,7 +2014,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (weapon != null)
+        if (!string.IsNullOrEmpty(weapon))
         {
             if (GetBlockClass(weapon).level > 0)
             {
@@ -1962,7 +2022,7 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        if (shield != null)
+        if (!string.IsNullOrEmpty(shield))
         {
             if (GetBlockClass(shield).level > 0)
             {
@@ -2060,6 +2120,113 @@ public class PlayerDataBase : ScriptableObject
             case AchievementType.RepairBlockCount:
                 number = repairBlockCount;
                 break;
+        }
+
+        return number;
+    }
+
+    public int CheckNormalTitle(TitleNormalType type)
+    {
+        int check = 0;
+
+        for(int i = 0; i < titleNormalInformationList.Count; i ++)
+        {
+            if(titleNormalInformationList[i].titleNormalType.Equals(type))
+            {
+                check = titleNormalInformationList[i].check;
+                break;
+            }
+        }
+
+        return check;
+    }
+
+    public int CheckSpeicalTitle(TitleSpeicalType type)
+    {
+        int check = 0;
+
+        for (int i = 0; i < titleNormalInformationList.Count; i++)
+        {
+            if (titleSpeicalInformationList[i].titleSpeicalType.Equals(type))
+            {
+                check = titleSpeicalInformationList[i].check;
+                break;
+            }
+        }
+
+        return check;
+    }
+
+    public void SetNormalTitle(TitleNormalType type)
+    {
+        for (int i = 0; i < titleNormalInformationList.Count; i++)
+        {
+            if (titleNormalInformationList[i].titleNormalType.Equals(type))
+            {
+                titleNormalInformationList[i].check = 1;
+                break;
+            }
+        }
+
+        eGetNormalTitle();
+    }
+
+    public void SetSpeicalTitle(TitleSpeicalType type)
+    {
+        for (int i = 0; i < titleSpeicalInformationList.Count; i++)
+        {
+            if (titleSpeicalInformationList[i].titleSpeicalType.Equals(type))
+            {
+                titleSpeicalInformationList[i].check = 1;
+                break;
+            }
+        }
+
+        eGetSpeicalTitle();
+    }
+
+    public string GetTitleName()
+    {
+        string name = "";
+
+        switch(titleNumber)
+        {
+            case 0:
+                name = LocalizationManager.instance.GetString("NoTitle");
+                break;
+            default:
+                if(titleNumber < 500)
+                {
+                    name = LocalizationManager.instance.GetString("Title" + titleNumber);
+                }
+                else
+                {
+                    name = LocalizationManager.instance.GetString("TitleSpeical" + (titleNumber - 499));
+                }
+                break;
+        }
+
+        return name;
+    }
+
+    public int GetTitleHoldNumber()
+    {
+        int number = 0;
+
+        for (int i = 0; i < titleNormalInformationList.Count; i++)
+        {
+            if (titleNormalInformationList[i].check > 0)
+            {
+                number++;
+            }
+        }
+
+        for (int i = 0; i < titleSpeicalInformationList.Count; i++)
+        {
+            if (titleSpeicalInformationList[i].check > 0)
+            {
+                number++;
+            }
         }
 
         return number;

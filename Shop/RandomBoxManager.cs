@@ -41,6 +41,7 @@ public class RandomBoxManager : MonoBehaviour
     public Text blockTitleText;
     public Text nextText;
     public GameObject blockUIEffect;
+    public Text nextBoxTapObj;
 
     [Title("Value")]
     public int boxCount = 0;
@@ -677,6 +678,17 @@ public class RandomBoxManager : MonoBehaviour
 
             StartCoroutine(OpenBoxCoroution());
         }
+
+        if (boxIndex == boxCountSave)
+        {
+            nextBoxTapObj.text = LocalizationManager.instance.GetString("EndBox");
+        }
+        else
+        {
+            nextBoxTapObj.text = LocalizationManager.instance.GetString("NextBox");
+        }
+
+        //Debug.Log(boxIndex + " / " + boxCountSave);
 
         isDelay = true;
         Invoke("Delay2", 0.3f);

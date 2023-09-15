@@ -17,6 +17,7 @@ public class RankDownManager : MonoBehaviour
 
 
     public MatchingManager matchingManager;
+    public TitleManager titleManager;
 
     RankDownInfomation rankDownInfomation;
 
@@ -57,6 +58,12 @@ public class RankDownManager : MonoBehaviour
         else
         {
             rankDownView.SetActive(false);
+
+            if (playerDataBase.RankDownStreak > 0)
+            {
+                playerDataBase.RankDownStreak = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankDownStreak", playerDataBase.RankDownStreak);
+            }
         }
     }
 
@@ -80,6 +87,8 @@ public class RankDownManager : MonoBehaviour
 
         rankDownInfo.text = LocalizationManager.instance.GetString(strArray[0]) + " <color=#FFC032>" + strArray[1] + "</color>     ▶     " +
 LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strArray2[1] + "</color>";
+
+        titleManager.CheckGoal();
     }
 
     public void ReceiveveButton()
@@ -154,5 +163,8 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
 
         playerDataBase.RankDownCount += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankDownCount", playerDataBase.RankDownCount);
+
+        playerDataBase.RankDownStreak += 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankDownStreak", playerDataBase.RankDownStreak);
     }
 }

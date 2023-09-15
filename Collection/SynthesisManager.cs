@@ -108,6 +108,7 @@ public class SynthesisManager : MonoBehaviour
 
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
+    public TitleManager titleManager;
 
     UpgradeDataBase upgradeDataBase;
     BlockDataBase blockDataBase;
@@ -151,7 +152,7 @@ public class SynthesisManager : MonoBehaviour
             blockUIContentList.Add(content);
         }
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 100; i++)
         {
             BlockUIContent content = Instantiate(blockUIContent);
             content.transform.SetParent(synthesisTransform);
@@ -304,6 +305,8 @@ public class SynthesisManager : MonoBehaviour
         isStart = false;
         isMat1 = false;
         isMat2 = false;
+
+        titleManager.CheckGoal();
 
         Debug.Log("합성 초기화");
     }

@@ -59,7 +59,8 @@ public class MailBoxManager : MonoBehaviour
             mailContentList.Add(content);
         }
 
-        mailTransform.anchoredPosition = new Vector2(0, -999);
+        mailTransform.anchoredPosition = new Vector2(0, -9999);
+        //mailTransform.offsetMax = Vector3.zero;
 
         GetUserInventoryCoupon();
     }
@@ -89,9 +90,10 @@ public class MailBoxManager : MonoBehaviour
                 }
 
                 GetUserInventoryCoupon();
-            }
 
-            mailTransform.anchoredPosition = new Vector2(0, -999);
+                mailTransform.anchoredPosition = new Vector2(0, -9999);
+                //mailTransform.offsetMax = Vector3.zero;
+            }
 
             FirebaseAnalytics.LogEvent("MailBox");
         }

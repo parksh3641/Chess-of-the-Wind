@@ -52,7 +52,9 @@ public class AchievementManager : MonoBehaviour
         {
             achievementContentList[i].achievementType = AchievementType.AccessDate + i;
 
-            if (achievementContentList[i].achievementType.Equals(AchievementType.ChargingRM))
+            if (achievementContentList[i].achievementType.Equals(AchievementType.ChargingRM) ||
+                achievementContentList[i].achievementType.Equals(AchievementType.UpgradeFailCount) ||
+                achievementContentList[i].achievementType.Equals(AchievementType.UseUpgradeTicket))
             {
                 achievementContentList[i].gameObject.SetActive(false);
             }
@@ -63,7 +65,9 @@ public class AchievementManager : MonoBehaviour
     {
         for(int i = 0; i < achievementContentList.Count; i ++)
         {
-            if (!achievementContentList[i].achievementType.Equals(AchievementType.ChargingRM))
+            if (!achievementContentList[i].achievementType.Equals(AchievementType.ChargingRM) &&
+                !achievementContentList[i].achievementType.Equals(AchievementType.UpgradeFailCount) &&
+                !achievementContentList[i].achievementType.Equals(AchievementType.UseUpgradeTicket))
             {
                 achievementContentList[i].Initialize(this);
             }
@@ -99,7 +103,7 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    public void CheckingAchievement()
+    public void CheckGoal()
     {
         for(int i = 0; i < achievementContentList.Count; i ++)
         {

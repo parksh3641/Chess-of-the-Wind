@@ -12,9 +12,12 @@ public class MailContent : MonoBehaviour
     public LocalizationContent titleText;
 
     private RewardType rewardType = RewardType.Gold;
+    private TitleSpeicalType titleSpeicalType = TitleSpeicalType.Default;
     private int count = 0;
 
-    public ReceiveContent receiveContent;
+    List<string> itemList = new List<string>();
+
+    public ReceiveContent[] receiveContent;
 
     Sprite[] rewardArray;
 
@@ -32,6 +35,11 @@ public class MailContent : MonoBehaviour
 
     public void Initialize(string name)
     {
+        receiveContent[0].gameObject.SetActive(true);
+        receiveContent[1].gameObject.SetActive(false);
+
+        titleSpeicalType = TitleSpeicalType.Default;
+
         string[] strArray = name.Split('_');
 
         count = int.Parse(strArray[1]);
@@ -97,21 +105,29 @@ public class MailContent : MonoBehaviour
                 rewardType = RewardType.Box;
 
                 count = 10;
+                titleSpeicalType = TitleSpeicalType.TitleSpeical1;
 
                 titleText.localizationName = "IndieFestival2023";
+
+                receiveContent[1].gameObject.SetActive(true);
+                receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
                 break;
             case "ComicWorld2023":
                 rewardType = RewardType.Box;
 
                 count = 10;
+                titleSpeicalType = TitleSpeicalType.TitleSpeical2;
 
                 titleText.localizationName = "ComicWorld2023";
+
+                receiveContent[1].gameObject.SetActive(true);
+                receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
                 break;
         }
 
         titleText.ReLoad();
 
-        receiveContent.Initialize(rewardType, count);
+        receiveContent[0].Initialize(rewardType, count);
     }
 
     public void Receive()
@@ -243,6 +259,25 @@ public class MailContent : MonoBehaviour
                         break;
                 }
                 break;
+        }
+
+        if(titleSpeicalType != TitleSpeicalType.Default)
+        {
+            if (playerDataBase.CheckSpeicalTitle(titleSpeicalType) == 0)
+            {
+                itemList.Clear();
+                itemList.Add(titleSpeicalType.ToString());
+
+                PlayfabManager.instance.GrantItemsToUser("Title", itemList);
+
+                playerDataBase.SetSpeicalTitle(titleSpeicalType);
+
+                Debug.Log("Àü¿ë ÄªÈ£ º¸»ó È¹µæ");
+            }
+            else
+            {
+                Debug.Log("ÀÌ¹Ì º¸À¯ÁßÀÎ ÄªÈ£ÀÔ´Ï´Ù.");
+            }
         }
 
         unityEvent.Invoke();

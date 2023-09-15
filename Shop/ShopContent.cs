@@ -68,7 +68,6 @@ public class ShopContent : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
-
                 if (GameStateManager.instance.DailyReward)
                 {
                     lockObj.SetActive(true);
@@ -96,10 +95,53 @@ public class ShopContent : MonoBehaviour
                 {
                     lockObj.SetActive(false);
 
+                    if(number < 11)
+                    {
+                        if(GameStateManager.instance.DailyBuy1)
+                        {
+                            lockObj.SetActive(true);
+
+                            number = GameStateManager.instance.DailyBuyCount1;
+                        }
+                        else
+                        {
+                            if(GameStateManager.instance.DailyBuyCount1 == 0)
+                            {
+                                number = Random.Range(1, 10);
+
+                                GameStateManager.instance.DailyBuyCount1 = number;
+                            }
+                            else
+                            {
+                                number = GameStateManager.instance.DailyBuyCount1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (GameStateManager.instance.DailyBuy2)
+                        {
+                            lockObj.SetActive(true);
+
+                            number = GameStateManager.instance.DailyBuyCount2;
+                        }
+                        else
+                        {
+                            if (GameStateManager.instance.DailyBuyCount2 == 0)
+                            {
+                                number = Random.Range(11, 51);
+
+                                GameStateManager.instance.DailyBuyCount2 = number;
+                            }
+                            else
+                            {
+                                number = GameStateManager.instance.DailyBuyCount2;
+                            }
+                        }
+                    }
+
                     buyButton.SetActive(true);
-
                     price = price * number;
-
                     priceText.text = MoneyUnitString.ToCurrencyString(price);
                 }
                 else

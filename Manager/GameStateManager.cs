@@ -82,6 +82,10 @@ public class GameStateManager : MonoBehaviour
         [Title("Daily")]
         public bool dailyWin = false;
         public bool dailyReward = false;
+        public bool dailyBuy1 = false;
+        public bool dailyBuy2 = false;
+        public int dailyBuyCount1 = 0;
+        public int dailyBuyCount2 = 0;
         public bool dailyNormalBox = false;
         public bool dailyEpicBox = false;
         public int dailyNormalBox_1 = 3;
@@ -561,6 +565,58 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.dailyReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyBuy1
+    {
+        get
+        {
+            return gameSettings.dailyBuy1;
+        }
+        set
+        {
+            gameSettings.dailyBuy1 = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyBuy2
+    {
+        get
+        {
+            return gameSettings.dailyBuy2;
+        }
+        set
+        {
+            gameSettings.dailyBuy2 = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyBuyCount1
+    {
+        get
+        {
+            return gameSettings.dailyBuyCount1;
+        }
+        set
+        {
+            gameSettings.dailyBuyCount1 = value;
+            SaveFile();
+        }
+    }
+
+    public int DailyBuyCount2
+    {
+        get
+        {
+            return gameSettings.dailyBuyCount2;
+        }
+        set
+        {
+            gameSettings.dailyBuyCount2 = value;
             SaveFile();
         }
     }

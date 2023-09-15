@@ -22,6 +22,8 @@ public class InventoryManager : MonoBehaviour
 
     bool isDelay = false;
 
+    public TitleManager titleManager;
+
     Sprite[] rankBackgroundArray;
 
 
@@ -65,6 +67,8 @@ public class InventoryManager : MonoBehaviour
         inventoryText[3].text = playerDataBase.BoxPiece_SR.ToString() + "/3";
         inventoryText[4].text = playerDataBase.BoxPiece_SSR.ToString() + "/3";
         inventoryText[5].text = playerDataBase.BoxPiece_UR.ToString() + "/3";
+
+        titleManager.CheckGoal();
     }
 
     public void ChangeBox(int number)
