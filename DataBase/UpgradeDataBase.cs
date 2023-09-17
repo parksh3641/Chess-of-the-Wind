@@ -41,7 +41,6 @@ public class UpgradeInformation
     [Title("Cost")]
     public int needGold = 0;
     public int needTicket = 0;
-    public int value = 0;
 }
 
 [CreateAssetMenu(fileName = "UpgradeDataBase", menuName = "ScriptableObjects/UpgradeDataBase")]

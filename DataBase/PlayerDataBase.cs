@@ -2209,6 +2209,31 @@ public class PlayerDataBase : ScriptableObject
         return name;
     }
 
+
+    public string GetTitleName(int number)
+    {
+        string name = "";
+
+        switch (number)
+        {
+            case 0:
+                name = LocalizationManager.instance.GetString("NoTitle");
+                break;
+            default:
+                if (titleNumber < 500)
+                {
+                    name = LocalizationManager.instance.GetString("Title" + titleNumber);
+                }
+                else
+                {
+                    name = LocalizationManager.instance.GetString("TitleSpeical" + (titleNumber - 499));
+                }
+                break;
+        }
+
+        return name;
+    }
+
     public int GetTitleHoldNumber()
     {
         int number = 0;

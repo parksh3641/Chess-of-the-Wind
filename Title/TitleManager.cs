@@ -39,6 +39,8 @@ public class TitleManager : MonoBehaviour
 
     private int topNumber = 0;
 
+    private bool isDelay = false;
+
     public TitleContent titleContent;
 
     public RectTransform titleNormalRectTransform;
@@ -122,6 +124,10 @@ public class TitleManager : MonoBehaviour
         if (!titleView.activeInHierarchy)
         {
             titleView.SetActive(true);
+
+            isDelay = false;
+
+            CheckGoal();
 
             if (topNumber == -1)
             {
@@ -245,6 +251,8 @@ public class TitleManager : MonoBehaviour
 
     public void SetNormalTitle(TitleNormalType type)
     {
+        if (isDelay) return;
+
         if(playerDataBase.TitleNumber != (int)type)
         {
             playerDataBase.TitleNumber = (int)type;
@@ -264,11 +272,16 @@ public class TitleManager : MonoBehaviour
             mainTitleText.ReLoad();
 
             profileTitleText.text = playerDataBase.GetTitleName();
+
+            isDelay = true;
+            Invoke("Delay", 0.5f);
         }
     }
 
     public void SetSpeicalTitle(TitleSpeicalType type)
     {
+        if (isDelay) return;
+
         if (playerDataBase.TitleNumber != 499 + (int)type)
         {
             playerDataBase.TitleNumber = 499 + (int)type;
@@ -285,6 +298,9 @@ public class TitleManager : MonoBehaviour
             titleSpeicalContentList[(int)type - 1].Equip();
 
             profileTitleText.text = playerDataBase.GetTitleName();
+
+            isDelay = true;
+            Invoke("Delay", 0.5f);
         }
     }
 
@@ -1345,5 +1361,10 @@ public class TitleManager : MonoBehaviour
                 playerDataBase.SetNormalTitle(TitleNormalType.Title80);
             }
         }
+    }
+
+    void Delay()
+    {
+        isDelay = false;
     }
 }

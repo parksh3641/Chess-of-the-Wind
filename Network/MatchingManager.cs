@@ -811,7 +811,7 @@ public class MatchingManager : MonoBehaviour
         AlMatching();
     }
 
-    public void PlayerMatching(string player1, string player2, int otherFormation)
+    public void PlayerMatching(string player1, string player2, int otherFormation, int otherTitle)
     {
         isServer = false;
 
@@ -821,7 +821,7 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(player1, player2, otherFormation);
+        uIManager.OnMatchingSuccess(player1, player2, otherFormation, otherTitle);
 
         mainFadeInOut.FadeOutToIn();
 
@@ -883,9 +883,9 @@ public class MatchingManager : MonoBehaviour
 
     public void Legendary()
     {
-        GameStateManager.instance.GameRankType = GameRankType.Legend_1;
-        playerDataBase.NowRank = 20;
-        playerDataBase.Star = 10;
+        GameStateManager.instance.GameRankType = GameRankType.Trials_3;
+        playerDataBase.NowRank = 25;
+        playerDataBase.Star = 14;
 
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("NowRank", playerDataBase.NowRank);
 

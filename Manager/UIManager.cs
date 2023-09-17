@@ -54,7 +54,9 @@ public class UIManager : MonoBehaviour
     public Image player1Img;
     public Image player2Img;
     public Text player1Text;
+    public Text player1TitleText;
     public Text player2Text;
+    public Text player2TitleText;
     public FadeInOut vsFadeInOut;
     public FadeInOut mainFadeInOut;
 
@@ -271,9 +273,9 @@ public class UIManager : MonoBehaviour
 #endif
     }
 
-    public void OnMatchingSuccess(string player1, string player2, int otherFormation)
+    public void OnMatchingSuccess(string player1, string player2, int otherFormation, int otherTitle)
     {
-        StartCoroutine(MatchingCoroution(player1, player2, otherFormation, false));
+        StartCoroutine(MatchingCoroution(player1, player2, otherFormation, otherTitle, false));
     }
 
     public void OnMatchingAi(int otherFormation)
@@ -281,11 +283,11 @@ public class UIManager : MonoBehaviour
         int randomIndex = Random.Range(0, nicknames.Count);
         string randomNickname = nicknames[randomIndex];
 
-        StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, true));
+        StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, 0, true));
     }
 
 
-    IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, bool aiMode)
+    IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, int otherTitle , bool aiMode)
     {
         //rankText.text = matchingManager.rankText.text;
 
@@ -307,6 +309,9 @@ public class UIManager : MonoBehaviour
             mainPlayer1Img.sprite = characterArray[0];
             mainPlayer1Img.transform.rotation = Quaternion.identity;
         }
+
+        player1TitleText.text = playerDataBase.GetTitleName(otherTitle);
+        player2TitleText.text = playerDataBase.GetTitleName();
 
         if (playerDataBase.Formation == 2)
         {

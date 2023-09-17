@@ -116,7 +116,7 @@ public class ShopManager : MonoBehaviour
 
             if (!first)
             {
-                adShopReceiveContents[0].Initialize(RewardType.Gold, 3000);
+                adShopReceiveContents[0].Initialize(RewardType.Gold, 9000);
                 adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
                 adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
 
@@ -557,7 +557,7 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 3:
-                random = Random.Range(30000, 200001);
+                random = Random.Range(10000, 100001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
@@ -566,7 +566,7 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
             case 4:
-                random = Random.Range(300000, 20000001);
+                random = Random.Range(25000, 150001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
@@ -723,7 +723,7 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (GameStateManager.instance.DailyAdsReward) return;
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 3000);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 9000);
 
                 GameStateManager.instance.DailyAdsReward = true;
 
@@ -754,7 +754,7 @@ public class ShopManager : MonoBehaviour
             case 5:
                 if (GameStateManager.instance.DailyGoldReward) return;
 
-                random = Random.Range(1000, 10001);
+                random = Random.Range(3000, 10001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 

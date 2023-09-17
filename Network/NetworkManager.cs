@@ -22,6 +22,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private RoomOptions roomOption;
 
     public int otherFormation = 0;
+    public int otherTitle = 0;
 
     public bool isDelay = false;
 
@@ -385,10 +386,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             //PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Minus", 0 } });
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Formation", playerDataBase.Formation } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Title", playerDataBase.TitleNumber } });
         }
         else
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Formation", playerDataBase.Formation } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Title", playerDataBase.TitleNumber } });
 
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
             GameStateManager.instance.Room = ht["Room"].ToString();
@@ -535,10 +538,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             otherFormation = int.Parse(ht["Player2_Formation"].ToString());
+            otherTitle = int.Parse(ht["Player2_Title"].ToString());
         }
         else
         {
             otherFormation = int.Parse(ht["Player1_Formation"].ToString());
+            otherTitle = int.Parse(ht["Player1_Title"].ToString());
         }
 
         string nickName = "";
@@ -552,6 +557,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             nickName = PhotonNetwork.PlayerList[1].NickName;
         }
 
-        matchingManager.PlayerMatching(nickName, GameStateManager.instance.NickName, otherFormation);
+        matchingManager.PlayerMatching(nickName, GameStateManager.instance.NickName, otherFormation, otherTitle);
     }
 }
