@@ -651,7 +651,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        if(blockClass.rankType < RankType.SR)
+        if(blockClass.rankType < RankType.R)
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -659,25 +659,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        //switch(playerDataBase.CheckEquip(blockClass.instanceId))
-        //{
-        //    case 0:
-        //        break;
-        //    default:
-        //        equipManager.CheckUnEquip(blockClass.instanceId);
-        //        break;
-        //}
-
         sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 10);
-
-        //if(!collectionManager.equipManager.CheckEquip(blockClass.instanceId))
-        //{
-        //    sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
-        //}
-        //else
-        //{
-        //    NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
-        //}
     }
 
     void CheckDefDestroyTicket()

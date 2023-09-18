@@ -104,8 +104,6 @@ public class CollectionManager : MonoBehaviour
                 characterImg.sprite = characterArray[0];
             }
 
-            CheckTotalRaf();
-
             if (!first) //딱 한번만 체크함
             {
                 first = true;
@@ -120,6 +118,8 @@ public class CollectionManager : MonoBehaviour
                 CheckEquipWeapon();
                 CheckEquipShield();
                 CheckEquipNewBie();
+
+                CheckTotalRaf();
             }
             else
             {

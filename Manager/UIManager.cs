@@ -206,7 +206,7 @@ public class UIManager : MonoBehaviour
 
         OpenMainCanvas(1);
 
-        titleText.localizationName = playerDataBase.GetTitleName();
+        titleText.localizationName = playerDataBase.GetMainTitleName();
         titleText.ReLoad();
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX

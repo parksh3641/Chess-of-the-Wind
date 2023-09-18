@@ -268,7 +268,7 @@ public class TitleManager : MonoBehaviour
 
             titleNormalContentList[(int)type].Equip();
 
-            mainTitleText.localizationName = playerDataBase.GetTitleName();
+            mainTitleText.localizationName = playerDataBase.GetMainTitleName();
             mainTitleText.ReLoad();
 
             profileTitleText.text = playerDataBase.GetTitleName();

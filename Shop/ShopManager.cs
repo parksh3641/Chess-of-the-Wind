@@ -320,7 +320,7 @@ public class ShopManager : MonoBehaviour
 
     public void Buy_NR(int number)
     {
-        int price = 15000 * number;
+        int price = 25000 * number;
 
         if (number >= 10)
         {
@@ -332,7 +332,7 @@ public class ShopManager : MonoBehaviour
                 return;
             }
 
-            price -= 15000;
+            price -= 25000;
         }
         else
         {
@@ -557,7 +557,7 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 3:
-                random = Random.Range(10000, 100001);
+                random = Random.Range(5000, 100001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
@@ -566,7 +566,7 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
             case 4:
-                random = Random.Range(25000, 150001);
+                random = Random.Range(50000, 1000001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
@@ -723,7 +723,7 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (GameStateManager.instance.DailyAdsReward) return;
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 9000);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000);
 
                 GameStateManager.instance.DailyAdsReward = true;
 
@@ -754,7 +754,7 @@ public class ShopManager : MonoBehaviour
             case 5:
                 if (GameStateManager.instance.DailyGoldReward) return;
 
-                random = Random.Range(3000, 10001);
+                random = Random.Range(75000, 20001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 
