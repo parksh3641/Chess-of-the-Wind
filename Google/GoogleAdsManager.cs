@@ -24,21 +24,33 @@ public class GoogleAdsManager : MonoBehaviour
         switch(number)
         {
             case 0:
+                if (GameStateManager.instance.DailyNormalBox) return;
+
                 boxNR.ShowAd(number);
                 break;
             case 1:
+                if (GameStateManager.instance.DailyEpicBox) return;
+
                 boxRSR.ShowAd(number);
                 break;
             case 2:
+                if (GameStateManager.instance.DailyAdsReward) return;
+
                 adShop1.ShowAd(number);
                 break;
             case 3:
+                if (GameStateManager.instance.DailyAdsReward2) return;
+
                 adShop2.ShowAd(number);
                 break;
             case 4:
+                if (GameStateManager.instance.DailyAdsReward3) return;
+
                 adShop3.ShowAd(number);
                 break;
             case 5:
+                if (GameStateManager.instance.DailyGoldReward) return;
+
                 goldShop.ShowAd(number);
                 break;
         }

@@ -113,12 +113,22 @@ public class MailContent : MonoBehaviour
                 receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
                 break;
             case "ComicWorld2023":
+                //rewardType = RewardType.Box;
+
+                //count = 10;
+                //titleSpeicalType = TitleSpeicalType.TitleSpeical2;
+
+                //titleText.localizationName = "ComicWorld2023";
+
+                //receiveContent[1].gameObject.SetActive(true);
+                //receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
+
                 rewardType = RewardType.Box;
 
                 count = 10;
-                titleSpeicalType = TitleSpeicalType.TitleSpeical2;
+                titleSpeicalType = TitleSpeicalType.TitleSpeical1;
 
-                titleText.localizationName = "ComicWorld2023";
+                titleText.localizationName = "IndieFestival2023";
 
                 receiveContent[1].gameObject.SetActive(true);
                 receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);

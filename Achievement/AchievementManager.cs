@@ -116,7 +116,7 @@ public class AchievementManager : MonoBehaviour
             if(count >= goal)
             {
                 alarmObj.SetActive(true);
-                achievementAlarmObj.SetActive(true);
+                achievementAlarmObj.SetActive(false);
             }
         }
     }

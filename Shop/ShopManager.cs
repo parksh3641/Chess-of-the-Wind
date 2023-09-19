@@ -116,7 +116,7 @@ public class ShopManager : MonoBehaviour
 
             if (!first)
             {
-                adShopReceiveContents[0].Initialize(RewardType.Gold, 9000);
+                adShopReceiveContents[0].Initialize(RewardType.Gold, 10000);
                 adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
                 adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
 
@@ -535,14 +535,14 @@ public class ShopManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                playerDataBase.SetUpgradeTicket(RankType.N, 10);
+                playerDataBase.SetUpgradeTicket(RankType.N, 1);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 1:
-                playerDataBase.SetUpgradeTicket(RankType.N, 100);
+                playerDataBase.SetUpgradeTicket(RankType.N, 10);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
@@ -550,7 +550,7 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 2:
-                playerDataBase.SetUpgradeTicket(RankType.N, 1000);
+                playerDataBase.SetUpgradeTicket(RankType.N, 100);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
@@ -923,6 +923,13 @@ public class ShopManager : MonoBehaviour
     public void PlusMoney()
     {
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000000);
+    }
+
+    [Button]
+    public void PlusUpgradeTicket()
+    {
+        playerDataBase.SetUpgradeTicket(RankType.N, 1000);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
     }
 
     [Button]
