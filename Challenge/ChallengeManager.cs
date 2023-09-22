@@ -133,6 +133,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckEquipBlock_Newbie())
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     exitButton.SetActive(false);
 
@@ -145,6 +146,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.NewbieWin > 0)
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     exitButton.SetActive(false);
 
@@ -157,6 +159,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.NewbieWin > 1)
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     exitButton.SetActive(false);
 
@@ -169,6 +172,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckEquipBlock_Gosu() == 3)
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     exitButton.SetActive(false);
 
@@ -181,6 +185,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.CheckBlockLevelCount() == 3)
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     upgradeManager.CloseUpgradeView();
 
@@ -197,6 +202,7 @@ public class ChallengeManager : MonoBehaviour
                 if (playerDataBase.GosuWin > 0)
                 {
                     OpenChallengeView();
+                    UpdateTutorial();
 
                     exitButton.SetActive(false);
 

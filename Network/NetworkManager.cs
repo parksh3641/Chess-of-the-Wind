@@ -26,6 +26,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public bool isDelay = false;
 
+    string nickName = "";
+
     public GameManager gameManager;
     public StateManager stateManager;
     public MatchingManager matchingManager;
@@ -545,8 +547,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             otherFormation = int.Parse(ht["Player1_Formation"].ToString());
             otherTitle = int.Parse(ht["Player1_Title"].ToString());
         }
-
-        string nickName = "";
 
         if (!PhotonNetwork.PlayerList[0].NickName.Equals(GameStateManager.instance.NickName))
         {

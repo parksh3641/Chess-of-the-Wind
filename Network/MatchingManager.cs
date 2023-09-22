@@ -813,6 +813,8 @@ public class MatchingManager : MonoBehaviour
 
     public void PlayerMatching(string player1, string player2, int otherFormation, int otherTitle)
     {
+        Debug.Log("플레이어와 매칭되었습니다.");
+
         isServer = false;
 
         dontTouchObj.SetActive(true);
@@ -826,8 +828,6 @@ public class MatchingManager : MonoBehaviour
         mainFadeInOut.FadeOutToIn();
 
         Invoke("ChangeBGM", 1.5f);
-
-        Debug.Log("플레이어와 매칭되었습니다.");
 
         FirebaseAnalytics.LogEvent(GameStateManager.instance.GameType.ToString());
     }

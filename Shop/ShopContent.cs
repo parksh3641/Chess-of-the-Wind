@@ -146,19 +146,19 @@ public class ShopContent : MonoBehaviour
                 }
                 else
                 {
-                    if(number == 10)
+                    if(number == 1)
                     {
                         rmButton[0].SetActive(true);
                         rmButtonText[0].localizationName = "UpgradeTicket_10";
                         rmButtonText[0].ReLoad();
                     }
-                    else if (number == 100)
+                    else if (number == 10)
                     {
                         rmButton[1].SetActive(true);
                         rmButtonText[1].localizationName = "UpgradeTicket_100";
                         rmButtonText[1].ReLoad();
                     }
-                    else if (number == 1000)
+                    else if (number == 100)
                     {
                         rmButton[2].SetActive(true);
                         rmButtonText[2].localizationName = "UpgradeTicket_1000";

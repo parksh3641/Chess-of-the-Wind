@@ -2209,6 +2209,30 @@ public class PlayerDataBase : ScriptableObject
         return name;
     }
 
+    public string GetTitleName(int number)
+    {
+        string name = "";
+
+        switch (number)
+        {
+            case 0:
+                name = LocalizationManager.instance.GetString("NoTitle");
+                break;
+            default:
+                if (number < 500)
+                {
+                    name = LocalizationManager.instance.GetString("Title" + number);
+                }
+                else
+                {
+                    name = LocalizationManager.instance.GetString("TitleSpeical" + (number - 499));
+                }
+                break;
+        }
+
+        return name;
+    }
+
     public string GetMainTitleName()
     {
         string name = "";
@@ -2226,31 +2250,6 @@ public class PlayerDataBase : ScriptableObject
                 else
                 {
                     name = "TitleSpeical" + (titleNumber - 499);
-                }
-                break;
-        }
-
-        return name;
-    }
-
-
-    public string GetTitleName(int number)
-    {
-        string name = "";
-
-        switch (number)
-        {
-            case 0:
-                name = LocalizationManager.instance.GetString("NoTitle");
-                break;
-            default:
-                if (titleNumber < 500)
-                {
-                    name = LocalizationManager.instance.GetString("Title" + titleNumber);
-                }
-                else
-                {
-                    name = LocalizationManager.instance.GetString("TitleSpeical" + (titleNumber - 499));
                 }
                 break;
         }
