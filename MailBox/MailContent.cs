@@ -89,7 +89,7 @@ public class MailContent : MonoBehaviour
             case "BoxNR":
                 rewardType = RewardType.Box_NR;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "NaverGiftInfo";
                 break;
             case "BoxRSR":
                 rewardType = RewardType.Box_RSR;
@@ -111,6 +111,8 @@ public class MailContent : MonoBehaviour
 
                 receiveContent[1].gameObject.SetActive(true);
                 receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
                 break;
             case "ComicWorld2023":
                 //rewardType = RewardType.Box;
@@ -132,6 +134,8 @@ public class MailContent : MonoBehaviour
 
                 receiveContent[1].gameObject.SetActive(true);
                 receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
                 break;
         }
 

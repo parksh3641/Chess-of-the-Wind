@@ -210,7 +210,7 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.Tutorial = false;
         GameStateManager.instance.GameRankType = GameRankType.Bronze_4;
         GameStateManager.instance.BettingTime = 11;
-        GameStateManager.instance.BettingWaitTime = 5;
+        GameStateManager.instance.BettingWaitTime = 4;
         GameStateManager.instance.PrivacyPolicy = false;
 
         isActive = false;

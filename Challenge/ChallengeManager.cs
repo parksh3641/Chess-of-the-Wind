@@ -218,12 +218,12 @@ public class ChallengeManager : MonoBehaviour
 
     void InitializeTutorial()
     {
-        challengeContentArray[0].receiveContent.Initialize(RewardType.Gold, 200);
-        challengeContentArray[1].receiveContent.Initialize(RewardType.Gold, 200);
-        challengeContentArray[2].receiveContent.Initialize(RewardType.Gold, 1000);
-        challengeContentArray[3].receiveContent.Initialize(RewardType.Gold, 2000);
-        challengeContentArray[4].receiveContent.Initialize(RewardType.Gold, 2000);
-        challengeContentArray[5].receiveContent.Initialize(RewardType.Gold, 2000);
+        challengeContentArray[0].receiveContent.Initialize(RewardType.Gold, 500);
+        challengeContentArray[1].receiveContent.Initialize(RewardType.Gold, 500);
+        challengeContentArray[2].receiveContent.Initialize(RewardType.Gold, 1500);
+        challengeContentArray[3].receiveContent.Initialize(RewardType.Gold, 1500);
+        challengeContentArray[4].receiveContent.Initialize(RewardType.Gold, 3000);
+        challengeContentArray[5].receiveContent.Initialize(RewardType.Gold, 3000);
     }
 
     public void UpdateTutorial()

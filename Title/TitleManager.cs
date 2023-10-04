@@ -315,7 +315,7 @@ public class TitleManager : MonoBehaviour
     {
         alarmObj.SetActive(true);
         profileAlarmObj.SetActive(true);
-        normalAlarmObj.SetActive(true);
+        speicalAlarmObj.SetActive(true);
     }
 
     public void CheckGoal()

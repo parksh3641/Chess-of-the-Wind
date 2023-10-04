@@ -164,6 +164,10 @@ public class UIManager : MonoBehaviour
             privacypolicyView.SetActive(true);
         }
 
+#if !UNITY_EDITOR
+            GameStateManager.instance.BettingWaitTime = 4;
+#endif
+
         SetLoginUI();
     }
 
@@ -674,5 +678,18 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://cafe.naver.com/windchess");
 
         FirebaseAnalytics.LogEvent("NaverCafe");
+    }
+    public void Instagram()
+    {
+        Application.OpenURL("https://www.instagram.com/windchess_official/?igshid=NGVhN2U2NjQ0Yg%3D%3D");
+
+        FirebaseAnalytics.LogEvent("Instagram");
+    }
+
+    public void Youtube()
+    {
+        Application.OpenURL("https://www.youtube.com/@windchessofficial");
+
+        FirebaseAnalytics.LogEvent("Youtube");
     }
 }

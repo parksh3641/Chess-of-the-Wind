@@ -133,6 +133,8 @@ public class RouletteManager : MonoBehaviour
     private bool aiMode = false;
     private bool playing = false;
 
+    private bool myTurn = false;
+
     private bool flickerCheck = false;
 
     [Space]
@@ -830,9 +832,13 @@ public class RouletteManager : MonoBehaviour
         vectorArray[0].gameObject.SetActive(false);
         vectorArray[1].gameObject.SetActive(false);
 
+        myTurn = false;
+
         if (ht["Pinball"].Equals(GameStateManager.instance.NickName)) //각자 내 차례인지 확인하도록!
         {
             pinball.MyTurn(rouletteIndex);
+
+            myTurn = true;
 
             windCharacterManager.MyWhich(windIndex);
 
@@ -963,7 +969,7 @@ public class RouletteManager : MonoBehaviour
         {
             vectorArray[0].enabled = true;
 
-            if (GameStateManager.instance.GameType == GameType.NewBie)
+            if (GameStateManager.instance.GameType == GameType.NewBie && myTurn)
             {
                 AutoFlicker();
             }
@@ -973,7 +979,7 @@ public class RouletteManager : MonoBehaviour
         {
             vectorArray[1].enabled = true;
 
-            if (GameStateManager.instance.GameType == GameType.NewBie)
+            if (GameStateManager.instance.GameType == GameType.NewBie && myTurn)
             {
                 AutoFlicker();
             }
@@ -1101,41 +1107,19 @@ public class RouletteManager : MonoBehaviour
 
         if (rouletteIndex == 0)
         {
-            if (windIndex == 0)
-            {
-                roulette1WindPoint[0].gameObject.SetActive(true);
+            roulette1WindPoint[windIndex].gameObject.SetActive(true);
 
-                alpha = 0;
-                flickerCheck = false;
-                StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
-            }
-            else
-            {
-                roulette1WindPoint[1].gameObject.SetActive(true);
-
-                alpha = 0;
-                flickerCheck = false;
-                StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
-            }
+            alpha = 0;
+            flickerCheck = false;
+            StartCoroutine(FlickerCoroution(roulette1WindPoint[windIndex]));
         }
         else
         {
-            if (windIndex == 0)
-            {
-                roulette2WindPoint[0].gameObject.SetActive(true);
+            roulette2WindPoint[windIndex].gameObject.SetActive(true);
 
-                alpha = 0;
-                flickerCheck = false;
-                StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
-            }
-            else
-            {
-                roulette2WindPoint[1].gameObject.SetActive(true);
-
-                alpha = 0;
-                flickerCheck = false;
-                StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
-            }
+            alpha = 0;
+            flickerCheck = false;
+            StartCoroutine(FlickerCoroution(roulette2WindPoint[windIndex]));
         }
     }
 

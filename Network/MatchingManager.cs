@@ -68,6 +68,11 @@ public class MatchingManager : MonoBehaviour
     public Image gosuLimitRankImg;
     public LocalizationContent gosuLimitRankText;
 
+    [Title("LowAllowMoney")]
+    public GameObject lowAllowMoneyView;
+    public Text lowAllowMoneyText;
+    private int lowAllowMoney = 0;
+
 
     [Title("Matching")]
     public GameObject matchingView;
@@ -116,6 +121,7 @@ public class MatchingManager : MonoBehaviour
         matchingView.SetActive(false);
         dontTouchObj.SetActive(false);
         packageObj.SetActive(false);
+        lowAllowMoneyView.SetActive(false);
 
         DOTween.RewindAll();
     }
@@ -592,7 +598,16 @@ public class MatchingManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
+            if(GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
+            {
+                lowAllowMoneyView.SetActive(true);
+                lowAllowMoney = rankInformation.stakes;
+                lowAllowMoneyText.text = lowAllowMoney.ToString();
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
+            }
 
             return;
         }
@@ -699,7 +714,16 @@ public class MatchingManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
+            if (GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
+            {
+                lowAllowMoneyView.SetActive(true);
+                lowAllowMoney = rankInformation.stakes;
+                lowAllowMoneyText.text = lowAllowMoney.ToString();
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.LowAllowMoney);
+            }
 
             return;
         }
@@ -708,10 +732,10 @@ public class MatchingManager : MonoBehaviour
 
         cancelButtonObj.SetActive(true);
 
-        if (playerDataBase.GosuWin < 1)
-        {
-            cancelButtonObj.SetActive(false);
-        }
+        //if (playerDataBase.GosuWin < 1)
+        //{
+        //    cancelButtonObj.SetActive(false);
+        //}
 
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
@@ -908,5 +932,20 @@ public class MatchingManager : MonoBehaviour
     public void CloseSupplyPackage()
     {
         packageObj.SetActive(false);
+    }
+
+
+    public void GetAdReward()
+    {
+        lowAllowMoneyView.SetActive(false);
+
+        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, rankInformation.stakes);
+      
+        NotionManager.instance.UseNotion(NotionType.GetWatchAdReward);
+    }
+
+    public void CloseLowAllowMoneyView()
+    {
+        lowAllowMoneyView.SetActive(false);
     }
 }

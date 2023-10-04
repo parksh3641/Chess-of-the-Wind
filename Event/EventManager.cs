@@ -11,13 +11,22 @@ public class EventManager : MonoBehaviour
 {
     public GameObject eventView;
 
-
+    [Space]
+    [Title("Welcome")]
     public GameObject welcomeEnterView;
     public GameObject welcomeView;
-    public RectTransform welcomGrid;
+    public RectTransform welcomeGrid;
     public GameObject welcomeAlarm;
     public GameObject welcomeAlarm2;
     public WelcomeContent[] welcomeContentArray;
+
+    [Space]
+    [Title("RankUp")]
+    public GameObject rankUpView;
+    public RectTransform rankUpGrid;
+    public GameObject rankUpAlarm;
+    public GameObject rankUpAlarm2;
+    public RankUpContent[] rankUpContentArray;
 
 
     PlayerDataBase playerDataBase;
@@ -27,12 +36,17 @@ public class EventManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         eventView.SetActive(false);
-        welcomeView.SetActive(false);
 
+        welcomeView.SetActive(false);
         welcomeAlarm.SetActive(false);
         welcomeAlarm2.SetActive(false);
+        welcomeGrid.anchoredPosition = new Vector2(0, -9999);
 
-        welcomGrid.anchoredPosition = new Vector2(0, -999);
+
+        //rankUpView.SetActive(false);
+        //rankUpAlarm.SetActive(false);
+        //rankUpAlarm2.SetActive(false);
+        //rankUpGrid.anchoredPosition = new Vector2(0, -9999);
     }
 
     public void Initialize()
@@ -58,6 +72,8 @@ public class EventManager : MonoBehaviour
         if(!eventView.activeInHierarchy)
         {
             eventView.SetActive(true);
+
+            FirebaseAnalytics.LogEvent("OpenEvent");
         }
         else
         {
@@ -83,7 +99,7 @@ public class EventManager : MonoBehaviour
                 ResetManager.instance.Initialize();
             }
 
-            FirebaseAnalytics.LogEvent("OpenEvent");
+            FirebaseAnalytics.LogEvent("OpenWelcome");
         }
         else
         {
@@ -219,6 +235,37 @@ public class EventManager : MonoBehaviour
     {
         welcomeAlarm.SetActive(false);
         welcomeAlarm2.SetActive(false);
+    }
+
+    #endregion
+
+    #region RankUp
+    public void OpenRankUpView()
+    {
+        if (!rankUpView.activeInHierarchy)
+        {
+            rankUpView.SetActive(true);
+
+            InitializeRankUp();
+
+            CheckRankUp();
+
+            FirebaseAnalytics.LogEvent("OpenRankUp");
+        }
+        else
+        {
+            rankUpView.SetActive(false);
+        }
+    }
+
+    void InitializeRankUp()
+    {
+
+    }
+
+    void CheckRankUp()
+    {
+
     }
 
     #endregion

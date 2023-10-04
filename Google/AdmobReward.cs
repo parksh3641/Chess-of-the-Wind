@@ -15,6 +15,7 @@ public class AdmobReward : MonoBehaviour
     string adUnitId;
 
     public ShopManager shopManager;
+    public MatchingManager matchingManager;
 
     void Start()
     {
@@ -81,7 +82,14 @@ public class AdmobReward : MonoBehaviour
             {
                 Debug.Log("Ad Watch Success!");
 
-                shopManager.GetAdReward(number);
+                if(number <= 5)
+                {
+                    shopManager.GetAdReward(number);
+                }
+                else
+                {
+                    matchingManager.GetAdReward();
+                }
                 //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
             });
         }

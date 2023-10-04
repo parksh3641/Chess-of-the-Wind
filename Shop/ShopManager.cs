@@ -754,7 +754,7 @@ public class ShopManager : MonoBehaviour
             case 5:
                 if (GameStateManager.instance.DailyGoldReward) return;
 
-                random = Random.Range(75000, 20001);
+                random = Random.Range(7500, 20001);
 
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
 

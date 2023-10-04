@@ -691,7 +691,7 @@ public class RandomBoxManager : MonoBehaviour
         //Debug.Log(boxIndex + " / " + boxCountSave);
 
         isDelay = true;
-        Invoke("Delay2", 0.3f);
+        Invoke("Delay2", 0.1f);
     }
 
     IEnumerator OpenBoxCoroution()

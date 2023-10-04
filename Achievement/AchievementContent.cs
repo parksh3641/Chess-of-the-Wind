@@ -49,6 +49,17 @@ public class AchievementContent : MonoBehaviour
         goal = (achievementInformation.startGoal * (achievementInfo.count + 1));
         count = playerDataBase.GetAchievementCount(achievementType);
 
+        if(achievementType != AchievementType.WinGetMoney)
+        {
+            goal = (achievementInformation.startGoal * (achievementInfo.count + 1));
+        }
+        else
+        {
+            int number = (achievementInfo.count + 1) / 10;
+
+            goal = (achievementInformation.startGoal * (achievementInfo.count + 1)) * (number + 1);
+        }
+
         titleText.localizationName = "Achievement" + (int)(achievementType + 1);
         titleText.ReLoad();
 

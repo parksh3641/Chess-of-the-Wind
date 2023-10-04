@@ -345,7 +345,8 @@ public enum RewardType
     Box_NR,
     Box_RSR,
     Box_SRSSR,
-    ExclusiveTitle
+    ExclusiveTitle,
+    None
 }
 
 public enum AchievementType

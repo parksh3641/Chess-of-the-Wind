@@ -65,7 +65,7 @@ public class GameStateManager : MonoBehaviour
         [Title("Betting")]
         public int matchingTime = 6;
         public int bettingTime = 11;
-        public int bettingWaitTime = 6;
+        public int bettingWaitTime = 4;
         public bool autoTarget = false;
         public int autoTargetNumber = 0;
         public bool blockOverlap = false;

@@ -217,6 +217,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             gradient.SetActive(false);
         }
 
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+
         if (gameManager != null)
         {
             gameManager.blockDrag = false;
@@ -255,6 +258,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             gradient.SetActive(false);
         }
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
 
         if (gameManager != null)
         {
