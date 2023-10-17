@@ -23,6 +23,8 @@ public class AchievementManager : MonoBehaviour
     int goal = 0;
     int count = 0;
 
+    bool isWait = false;
+
     public List<AchievementContent> achievementContentList = new List<AchievementContent>();
 
     Dictionary<string, string> infoData = new Dictionary<string, string>();
@@ -44,6 +46,8 @@ public class AchievementManager : MonoBehaviour
         achievementAlarmObj.SetActive(false);
 
         achievementRectTransform.offsetMax = Vector3.zero;
+
+        isWait = false;
     }
 
     private void Start()
@@ -101,6 +105,8 @@ public class AchievementManager : MonoBehaviour
             boxIcon.color = Color.gray;
             boxAnim.StopAnim();
         }
+
+        isWait = false;
     }
 
     public void CheckGoal()
@@ -123,6 +129,8 @@ public class AchievementManager : MonoBehaviour
 
     public void GetBox()
     {
+        if (isWait) return;
+
         if(playerDataBase.Millage >= 100)
         {
             if (!NetworkConnect.instance.CheckConnectInternet())
@@ -146,6 +154,14 @@ public class AchievementManager : MonoBehaviour
         {
             ReceiveInfoManager.instance.OpenReceiveInfo(RewardType.Box);
         }
+
+        isWait = true;
+        Invoke("Delay", 2.0f);
+    }
+
+    void Delay()
+    {
+        isWait = false;
     }
 
     public void GetReward(AchievementType type)

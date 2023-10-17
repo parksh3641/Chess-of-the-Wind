@@ -14,6 +14,9 @@ public class BlockUIContent : MonoBehaviour
     public Image rankImg;
     public Text rankText;
 
+    public Image rankSSRImg;
+    public Text rankSSRText;
+
     public Text levelText;
     private int level = 0;
 
@@ -50,6 +53,8 @@ public class BlockUIContent : MonoBehaviour
         alarm.SetActive(false);
         selectedObj.SetActive(false);
         lockedObj.SetActive(false);
+
+        rankSSRImg.gameObject.SetActive(false);
     }
 
     public void Reset_Initalize()
@@ -84,6 +89,7 @@ public class BlockUIContent : MonoBehaviour
 
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+        rankSSRImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();
 
         if(block.rankType > RankType.SR)
@@ -96,6 +102,16 @@ public class BlockUIContent : MonoBehaviour
         }
 
         SetLevel(blockClass.level);
+
+        if(block.ssrLevel > 0)
+        {
+            rankSSRImg.gameObject.SetActive(true);
+            rankSSRText.text = block.ssrLevel.ToString();
+        }
+        else
+        {
+            rankSSRImg.gameObject.SetActive(false);
+        }
     }
 
     public void SetRank(RankType type)
@@ -105,6 +121,7 @@ public class BlockUIContent : MonoBehaviour
         blockClass.rankType = type;
 
         rankImg.sprite = rankBannerArray[(int)type];
+        rankSSRImg.sprite = rankBannerArray[(int)type];
         backgroundImg.sprite = rankBackgroundArray[(int)type];
 
         if (type > RankType.SR)
@@ -119,9 +136,20 @@ public class BlockUIContent : MonoBehaviour
 
     public void NextLevel_Initialize()
     {
-        backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType + 1];
-        rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
-        rankText.text = (blockClass.rankType + 1).ToString();
+        if(blockClass.rankType == RankType.SSR && blockClass.ssrLevel < 4)
+        {
+            backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+            rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+            rankSSRImg.sprite = rankBannerArray[(int)blockClass.rankType];
+            rankText.text = (blockClass.rankType).ToString();
+        }
+        else
+        {
+            backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType + 1];
+            rankImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
+            rankSSRImg.sprite = rankBannerArray[(int)blockClass.rankType + 1];
+            rankText.text = (blockClass.rankType + 1).ToString();
+        }
 
         if (blockClass.rankType + 1 > RankType.SR)
         {
@@ -140,6 +168,12 @@ public class BlockUIContent : MonoBehaviour
         level = number;
 
         levelText.text = "Lv." + (level + 1).ToString();
+    }
+
+    public void SetSSRLevel(int number)
+    {
+        rankSSRImg.gameObject.SetActive(true);
+        rankSSRText.text = number.ToString();
     }
 
     public void Upgrade_Initialize(CollectionManager manager)
@@ -163,7 +197,7 @@ public class BlockUIContent : MonoBehaviour
 
         if(synthesisManager != null)
         {
-            if(blockClass.rankType != RankType.SSR && blockClass.rankType != RankType.UR)
+            if(blockClass.rankType != RankType.UR)
                 synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
         }
     }

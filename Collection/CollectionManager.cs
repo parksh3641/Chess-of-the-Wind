@@ -491,6 +491,20 @@ public class CollectionManager : MonoBehaviour
             }
         }
     }
+
+    public void SetBlockSSRLevel(string id, int level)
+    {
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                blockList[i].ssrLevel = level;
+                blockUIContentList[i].SetSSRLevel(level);
+                break;
+            }
+        }
+    }
+
     #endregion
 
     #region Sort

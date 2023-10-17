@@ -28,12 +28,25 @@ public class EventManager : MonoBehaviour
     public GameObject rankUpAlarm2;
     public RankUpContent[] rankUpContentArray;
 
+    public RankUpContent rankUpContent;
+
+    public List<RankUpContent> rankUpContentList = new List<RankUpContent>();
+
+    string[] strArray = new string[2];
+
+    Sprite[] rankIconArray;
 
     PlayerDataBase playerDataBase;
+    RankUpDataBase rankUpDataBase;
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (rankUpDataBase == null) rankUpDataBase = Resources.Load("RankUpDataBase") as RankUpDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        rankIconArray = imageDataBase.GetRankIconArray();
 
         eventView.SetActive(false);
 
@@ -43,17 +56,17 @@ public class EventManager : MonoBehaviour
         welcomeGrid.anchoredPosition = new Vector2(0, -9999);
 
 
-        //rankUpView.SetActive(false);
-        //rankUpAlarm.SetActive(false);
-        //rankUpAlarm2.SetActive(false);
-        //rankUpGrid.anchoredPosition = new Vector2(0, -9999);
+        rankUpView.SetActive(false);
+        rankUpAlarm.SetActive(false);
+        rankUpAlarm2.SetActive(false);
+        rankUpGrid.anchoredPosition = new Vector2(0, -9999);
     }
 
     public void Initialize()
     {
         if (playerDataBase.WelcomeCount >= 7)
         {
-            welcomeEnterView.SetActive(false);
+            //welcomeEnterView.SetActive(false);
         }
         else
         {
@@ -63,6 +76,31 @@ public class EventManager : MonoBehaviour
             {
                 OnSetWelcomeAlarm();
             }
+        }
+
+        for (int i = 0; i < rankUpDataBase.rankUpInfomationList.Count; i++)
+        {
+            RankUpContent monster = Instantiate(rankUpContent);
+            monster.transform.SetParent(rankUpGrid);
+            monster.transform.position = Vector3.zero;
+            monster.transform.rotation = Quaternion.identity;
+            monster.transform.localScale = Vector3.one;
+
+            strArray = rankUpDataBase.rankUpInfomationList[i].gameRankType.ToString().Split("_");
+
+            monster.Initialize(i, rankUpDataBase.rankUpInfomationList[i], rankIconArray[i + 4], strArray[0], strArray[1], this);
+
+            rankUpContentList.Add(monster);
+        }
+
+        CheckingRankUp();
+    }
+
+    public void CheckingRankUp()
+    {
+        if (playerDataBase.RankUpCount + 4 <= (int)GameStateManager.instance.GameRankType)
+        {
+            OnSetRankUpAlarm();
         }
     }
 
@@ -79,6 +117,7 @@ public class EventManager : MonoBehaviour
         {
             eventView.SetActive(false);
             welcomeView.SetActive(false);
+            rankUpView.SetActive(false);
         }
     }
 
@@ -244,9 +283,10 @@ public class EventManager : MonoBehaviour
     {
         if (!rankUpView.activeInHierarchy)
         {
-            rankUpView.SetActive(true);
+            rankUpAlarm.SetActive(false);
+            rankUpAlarm2.SetActive(false);
 
-            InitializeRankUp();
+            rankUpView.SetActive(true);
 
             CheckRankUp();
 
@@ -258,14 +298,70 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    void InitializeRankUp()
-    {
-
-    }
-
     void CheckRankUp()
     {
+        for(int i = 0; i < rankUpContentList.Count; i ++)
+        {
+            rankUpContentList[i].CheckReceived();
+        }    
+    }
 
+    public void RankUpReceiveButton(int number)
+    {
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        for (int i = 0; i < rankUpDataBase.rankUpInfomationList[number].receiveInformationList.Count; i++)
+        {
+            switch (rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].rewardType)
+            {
+                case RewardType.Gold:
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                    break;
+                case RewardType.UpgradeTicket:
+                    playerDataBase.SetUpgradeTicket(RankType.N, rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                    break;
+                case RewardType.Box:
+                    break;
+                case RewardType.Box_N:
+                    break;
+                case RewardType.Box_R:
+                    break;
+                case RewardType.Box_SR:
+                    break;
+                case RewardType.Box_SSR:
+                    break;
+                case RewardType.Box_UR:
+                    break;
+                case RewardType.Box_NR:
+                    break;
+                case RewardType.Box_RSR:
+                    break;
+                case RewardType.Box_SRSSR:
+                    break;
+            }
+        }
+
+        playerDataBase.RankUpCount += 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankUpCount", playerDataBase.RankUpCount);
+
+        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+        NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        CheckRankUp();
+    }
+
+    public void OnSetRankUpAlarm()
+    {
+        rankUpAlarm.SetActive(true);
+        rankUpAlarm2.SetActive(true);
     }
 
     #endregion

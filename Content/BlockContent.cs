@@ -17,6 +17,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public Text rankText;
     public Text levelText;
 
+    public Image rankSSRImg;
+    public Text rankSSRText;
+
     public GameObject gradient;
 
     Sprite[] rankBackgroundArray;
@@ -57,6 +60,8 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         blockMain.SetActive(true);
         blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
+
+        rankSSRImg.gameObject.SetActive(false);
     }
 
     public void Initialize(GameManager manager, Transform root, Transform grid)
@@ -95,10 +100,21 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
         rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+        rankSSRImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();
         levelText.text = "Lv." + (blockClass.level + 1).ToString();
 
         //valueText.text = MoneyUnitString.ToCurrencyString(this.value);
+
+        if (block.ssrLevel > 0)
+        {
+            rankSSRImg.gameObject.SetActive(true);
+            rankSSRText.text = block.ssrLevel.ToString();
+        }
+        else
+        {
+            rankSSRImg.gameObject.SetActive(false);
+        }
     }
 
     public void InGame_SetLevel(int number)

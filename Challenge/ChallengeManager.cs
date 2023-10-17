@@ -348,7 +348,7 @@ public class ChallengeManager : MonoBehaviour
     }
 
 
-    public void CheckGoal()
+    public void CheckingGoal()
     {
         if(playerDataBase.ChallengeCount >= 6)
         {

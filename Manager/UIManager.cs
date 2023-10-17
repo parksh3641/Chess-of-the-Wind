@@ -84,6 +84,7 @@ public class UIManager : MonoBehaviour
     public MoneyAnimation moneyAnimation;
     public ChallengeManager challengeManager;
     public TitleManager titleManager;
+    public EventManager eventManager;
 
     public Image[] bottomUIImg;
 
@@ -632,7 +633,8 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
-                challengeManager.CheckGoal();
+                challengeManager.CheckingGoal();
+                eventManager.CheckingRankUp();
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
@@ -681,14 +683,14 @@ public class UIManager : MonoBehaviour
     }
     public void Instagram()
     {
-        Application.OpenURL("https://www.instagram.com/windchess_official/?igshid=NGVhN2U2NjQ0Yg%3D%3D");
+        Application.OpenURL("https://www.instagram.com/windchess_kr_official/");
 
         FirebaseAnalytics.LogEvent("Instagram");
     }
 
     public void Youtube()
     {
-        Application.OpenURL("https://www.youtube.com/@windchessofficial");
+        Application.OpenURL("https://www.youtube.com/@windchess_kr_official/");
 
         FirebaseAnalytics.LogEvent("Youtube");
     }

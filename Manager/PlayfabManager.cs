@@ -67,7 +67,7 @@ public class PlayfabManager : MonoBehaviour
 
     private List<ItemInstance> inventoryList = new List<ItemInstance>();
 
-    Dictionary<string, string> defaultCustomData = new Dictionary<string, string>() { { "Level", "0" } };
+    Dictionary<string, string> defaultCustomData = new Dictionary<string, string>() { { "Level", "0" }, { "SSRLevel", "0" } };
 
 
     private void Awake()
@@ -976,6 +976,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "ChallengeCount":
                            playerDataBase.ChallengeCount = statistics.Value;
+                           break;
+                       case "RankUpCount":
+                           playerDataBase.RankUpCount = statistics.Value;
                            break;
                        case "TestAccount":
                            playerDataBase.TestAccount = statistics.Value;

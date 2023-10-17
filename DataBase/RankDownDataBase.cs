@@ -23,7 +23,7 @@ public class RankDownInfomation
 }
 
 
-[CreateAssetMenu(fileName = "RankDownDataBase", menuName = "ScriptableObjects/RankDataDownBase")]
+[CreateAssetMenu(fileName = "RankDownDataBase", menuName = "ScriptableObjects/RankDownBase")]
 public class RankDownDataBase : ScriptableObject
 {
     public List<RankDownInfomation> rankDownInfomationList = new List<RankDownInfomation>();

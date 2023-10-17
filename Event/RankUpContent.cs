@@ -7,10 +7,13 @@ public class RankUpContent : MonoBehaviour
 {
     public int index = 0;
 
-    public LocalizationContent titleText;
-    public LocalizationContent infoText;
+    public GameRankType gameRankType = GameRankType.Sliver_4;
 
-    public ReceiveContent receiveContent;
+    public Image icon;
+
+    public LocalizationContent titleText;
+
+    public ReceiveContent[] receiveContents;
 
     public GameObject foucsObj;
     public GameObject lockObj;
@@ -25,100 +28,67 @@ public class RankUpContent : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
-
     }
 
-    public void Initialize(int number, bool check, EventManager manager)
+    public void Initialize(int number, RankUpInfomation rankup, Sprite sp, string name ,string name2, EventManager manager)
     {
+        index = number;
+
+        gameRankType = rankup.gameRankType;
+
         eventManager = manager;
 
-        titleText.localizationName = "Welcome" + (index + 1);
+        icon.sprite = sp;
+        titleText.localizationName = name;
+        titleText.plusText = " " + name2;
         titleText.ReLoad();
 
-        infoText.localizationName = "Welcome" + (index + 1) + "_Info";
+        receiveContents[0].gameObject.SetActive(false);
+        receiveContents[1].gameObject.SetActive(false);
 
+        if (rankup.receiveInformationList.Count >= 2)
+        {
+            receiveContents[0].gameObject.SetActive(true);
+            receiveContents[1].gameObject.SetActive(true);
+
+            receiveContents[0].Initialize(rankup.receiveInformationList[0].rewardType, rankup.receiveInformationList[0].count);
+            receiveContents[1].Initialize(rankup.receiveInformationList[1].rewardType, rankup.receiveInformationList[1].count);
+        }
+        else
+        {
+            receiveContents[0].gameObject.SetActive(true);
+
+            receiveContents[0].Initialize(rankup.receiveInformationList[0].rewardType, rankup.receiveInformationList[0].count);
+        }
+    }
+
+    public void CheckReceived()
+    {
         foucsObj.SetActive(false);
         lockObj.SetActive(true);
         clearObj.SetActive(false);
 
-        if (!check)
+        if (index == playerDataBase.RankUpCount)
         {
-            switch (index)
+            foucsObj.SetActive(true);
+
+            if (gameRankType <= GameStateManager.instance.GameRankType)
             {
-                case 0:
-                    if (playerDataBase.CheckBlockLevel(1))
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 1:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Bronze_1)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 2:
-                    if (playerDataBase.Gold >= 10000)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 3:
-                    if (playerDataBase.CheckBlockLevel(4))
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 4:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 5:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_3)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 6:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
+                lockObj.SetActive(false);
             }
         }
-
-        if (index == number)
+        else if (index < playerDataBase.RankUpCount)
         {
-            if (!check)
-            {
-                foucsObj.SetActive(true);
-            }
+            clearObj.SetActive(true);
         }
         else
         {
-            if (index > number)
-            {
-                lockObj.SetActive(true);
-            }
-            else
-            {
-                foucsObj.SetActive(false);
-                clearObj.SetActive(true);
-            }
+            lockObj.SetActive(true);
         }
     }
 
     public void ReceiveButton()
     {
-        eventManager.WelcomeReceiveButton(index, SuccessReceive);
-    }
-
-    public void SuccessReceive()
-    {
-        foucsObj.SetActive(false);
-        clearObj.SetActive(true);
+        eventManager.RankUpReceiveButton(index);
     }
 }

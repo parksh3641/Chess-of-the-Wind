@@ -30,6 +30,7 @@ public class BlockClass
     public string instanceId = "";
 
     public int level = 0;
+    public int ssrLevel = 0;
     public int equipInfo = 0;
 }
 
@@ -89,6 +90,8 @@ public class PlayerDataBase : ScriptableObject
     private int star = 0;
     [SerializeField]
     private int challengeCount = 0;
+    [SerializeField]
+    private int rankUpCount = 0;
     [SerializeField]
     private int testAccount = 0;
 
@@ -441,6 +444,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             challengeCount = value;
+        }
+    }
+
+    public int RankUpCount
+    {
+        get
+        {
+            return rankUpCount;
+        }
+        set
+        {
+            rankUpCount = value;
         }
     }
 
@@ -1445,6 +1460,7 @@ public class PlayerDataBase : ScriptableObject
         nowRank = 0;
         highRank = 0;
         challengeCount = 0;
+        rankUpCount = 0;
         testAccount = 0;
 
         defDestroyTicket = 0;
@@ -1656,6 +1672,11 @@ public class PlayerDataBase : ScriptableObject
         if(item.CustomData != null)
         {
             blockClass.level = int.Parse(item.CustomData["Level"]);
+
+            if(item.CustomData.ContainsKey("SSRLevel"))
+            {
+                blockClass.ssrLevel = int.Parse(item.CustomData["SSRLevel"]);
+            }
         }
 
         for (int i = 0; i < successionLevel.Count; i++) //레벨 계승
@@ -1666,6 +1687,7 @@ public class PlayerDataBase : ScriptableObject
             {
                 levelCustomData.Clear();
                 levelCustomData.Add("Level", successionLevel[i].level.ToString());
+                levelCustomData.Add("SSRLevel", "0");
 
                 PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
                 blockClass.level = successionLevel[i].level;
@@ -1713,6 +1735,18 @@ public class PlayerDataBase : ScriptableObject
             if(blockList[i].instanceId.Equals(id))
             {
                 blockList[i].level = level;
+                break;
+            }
+        }
+    }
+
+    public void SetBlockSSRLevel(string id, int level)
+    {
+        for (int i = 0; i < blockList.Count; i++)
+        {
+            if (blockList[i].instanceId.Equals(id))
+            {
+                blockList[i].ssrLevel = level;
                 break;
             }
         }

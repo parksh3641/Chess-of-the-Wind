@@ -11,11 +11,15 @@ public class UpgradeManager : MonoBehaviour
     public BlockUIContent blockUIContent;
 
     public LocalizationContent titleText;
-    public LocalizationContent storyText;
     public Text levelText;
     public Image levelFillamount;
     public LocalizationContent valueText;
     public LocalizationContent blockValueText;
+
+    public LocalizationContent blockAbilityText1;
+    public LocalizationContent blockAbilityText2;
+
+    public LocalizationContent storyText;
 
     public LocalizationContent successText;
     public LocalizationContent keepText;
@@ -72,6 +76,7 @@ public class UpgradeManager : MonoBehaviour
     public Image pieceImg;
 
     public GameObject tapToContinue;
+    public GameObject ineventoryAlarm;
 
     Sprite[] blockArray;
     Sprite[] rankBackgroundArray;
@@ -82,6 +87,8 @@ public class UpgradeManager : MonoBehaviour
     public SellManager sellManager;
     public EquipManager equipManager;
     public TitleManager titleManager;
+
+    Color gray = new Color(200 / 255f, 200 / 255f, 200 / 255f);
 
     BlockClass blockClass;
     UpgradeValue upgradeValue;
@@ -109,6 +116,8 @@ public class UpgradeManager : MonoBehaviour
         defDestroyObj.SetActive(false);
 
         testMode.SetActive(false);
+
+        ineventoryAlarm.SetActive(false);
     }
 
     public void OpenUpgradeView(string id)
@@ -143,6 +152,11 @@ public class UpgradeManager : MonoBehaviour
         upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
         titleText.localizationName = blockClass.blockType.ToString();
+        titleText.plusText = "";
+        if (blockClass.rankType >= RankType.SSR && blockClass.ssrLevel > 0)
+        {
+            titleText.plusText = " +" + blockClass.ssrLevel.ToString();
+        }
         titleText.ReLoad();
 
         storyText.localizationName = blockClass.blockType + "_Story";
@@ -158,6 +172,33 @@ public class UpgradeManager : MonoBehaviour
         blockValueText.localizationName = "BlockValue";
         blockValueText.plusText = " : <color=#FFCA14>" + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level) / blockDataBase.GetSize(blockClass.blockType)) + "</color>";
         blockValueText.ReLoad();
+
+        blockAbilityText1.localizationName = "BlockAbility1";
+        blockAbilityText1.plusText = " + 1%";
+        blockAbilityText1.GetComponent<Text>().color = gray;
+        if (blockClass.rankType >= RankType.SSR)
+        {
+            blockAbilityText1.GetComponent<Text>().color = Color.white;
+            if (blockClass.ssrLevel > 0)
+            {
+                blockAbilityText1.plusText = " + " + (blockClass.ssrLevel + 1).ToString() + "%";
+            }
+
+            if (blockClass.rankType == RankType.UR)
+            {
+                blockAbilityText1.plusText = " + 5%";
+            }
+        }
+        blockAbilityText1.ReLoad();
+
+        blockAbilityText2.localizationName = "BlockAbility2";
+        blockAbilityText2.plusText = " + 1%";
+        blockAbilityText2.ReLoad();
+        blockAbilityText2.GetComponent<Text>().color = gray;
+        if (blockClass.rankType >= RankType.UR)
+        {
+            blockAbilityText2.GetComponent<Text>().color = Color.white;
+        }
 
         successText.localizationName = "SuccessPercent";
         successText.plusText = " : " + upgradeInformation.success + "%";
@@ -229,30 +270,55 @@ public class UpgradeManager : MonoBehaviour
 
         if (blockClass.level + 2 > upgradeValue.maxLevel)
         {
-            if(blockClass.rankType != RankType.SSR)
+            if(blockClass.rankType != RankType.UR)
             {
-                //successText.localizationName = "NextSynthesisInfo";
+                if(blockClass.rankType == RankType.SSR)
+                {
+                    if(blockClass.ssrLevel >= 4)
+                    {
+                        downText.localizationName = "NextSynthesisInfo";
+                    }
+                    else
+                    {
+                        downText.localizationName = "NextSynthesisInfoSSR";
+                    }
+                }
+                else
+                {
+                    downText.localizationName = "NextSynthesisInfo";
+                }
+
                 successText.localizationName = "";
                 successText.plusText = "";
-                keepText.localizationName = "NextSynthesisInfo";
+
+                keepText.localizationName = "";
                 keepText.plusText = "";
-                downText.localizationName = "";
+
+                downText.plusText = "";
+
                 destroyText.localizationName = "";
+
+                valuePlusText.localizationName = "";
+                valuePlusText.plusText = "";
 
                 goldNumberText.text = "-";
                 ticketNumberText.text = "-";
             }
             else
             {
-                //successText.localizationName = "MaxLevel";
                 successText.localizationName = "";
                 successText.plusText = "";
+
                 keepText.localizationName = "";
                 keepText.plusText = "";
+
                 downText.localizationName = "MaxLevel";
                 downText.plusText = "";
+
                 destroyText.localizationName = "";
+
                 valuePlusText.localizationName = "";
+                valuePlusText.plusText = "";
 
                 goldNumberText.text = "-";
                 ticketNumberText.text = "-";
@@ -437,6 +503,7 @@ public class UpgradeManager : MonoBehaviour
 
             customData.Clear();
             customData.Add("Level", (level).ToString());
+            customData.Add("SSRLevel", "0");
 
             playerDataBase.SetBlockLevel(blockClass.instanceId, level);
             collectionManager.SetBlockLevel(blockClass.instanceId, level);
@@ -562,6 +629,8 @@ public class UpgradeManager : MonoBehaviour
 
                 pieceObj.SetActive(true);
                 pieceImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+
+                ineventoryAlarm.SetActive(true);
 
                 switch (blockClass.rankType)
                 {
@@ -764,6 +833,8 @@ public class UpgradeManager : MonoBehaviour
             isWait = true;
             Invoke("Delay", 0.5f);
         }
+
+        collectionManager.CheckTotalRaf();
     }
 
     public void ResetLevel()

@@ -10,12 +10,12 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     Image backgroundImg;
 
-    public Sprite[] backgroundImgArray;
-
     public Image rankImg;
     public Text rankText;
 
-    public Sprite[] rankImgArray;
+    public Image rankSSRImg;
+    public Text rankSSRText;
+
 
     public GameObject[] blockUIArray;
 
@@ -25,12 +25,24 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     public Text levelText;
 
+    Sprite[] rankBackgroundArray;
+    Sprite[] rankBannerArray;
+
+    ImageDataBase imageDataBase;
+
     void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+        rankBannerArray = imageDataBase.GetRankBannerArray();
+
         backgroundImg = GetComponent<Image>();
         canvasGroup = GetComponent<CanvasGroup>();
 
         levelText.text = "";
+
+        rankSSRImg.gameObject.SetActive(false);
     }
 
     public void Initialize(BlockClass block)
@@ -44,8 +56,9 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
 
         blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
 
-        backgroundImg.sprite = backgroundImgArray[(int)blockClass.rankType];
-        rankImg.sprite = rankImgArray[(int)blockClass.rankType];
+        backgroundImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
+        rankImg.sprite = rankBannerArray[(int)blockClass.rankType];
+        rankSSRImg.sprite = rankBannerArray[(int)blockClass.rankType];
         rankText.text = blockClass.rankType.ToString();
 
         if (blockClass.level > 0)
@@ -55,6 +68,16 @@ public class BlockEquipUIContent : MonoBehaviour, IBeginDragHandler, IDragHandle
         else
         {
             levelText.text = "Lv.1";
+        }
+
+        if (block.ssrLevel > 0)
+        {
+            rankSSRImg.gameObject.SetActive(true);
+            rankSSRText.text = block.ssrLevel.ToString();
+        }
+        else
+        {
+            rankSSRImg.gameObject.SetActive(false);
         }
     }
 
