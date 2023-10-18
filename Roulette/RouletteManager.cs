@@ -83,7 +83,9 @@ public class RouletteManager : MonoBehaviour
 
     private int power = 0;
     private int upPower = 3;
-    private int maxPower = 150;
+    private int newBiePower = 30; //연습방 바람 세기
+    private float lowPower = 150;
+    private float maxPower = 150;
 
     private bool windDelay = false;
     private bool pinballPower = false;
@@ -257,6 +259,9 @@ public class RouletteManager : MonoBehaviour
         uIManager.OpenRouletteView();
         uIManager.CloseSurrenderView();
         emoteManager.Initialize();
+
+        lowPower = 150 - (150 * (0.01f * gameManager.windGranularity));
+        maxPower = 150 + (150 * (0.01f *  gameManager.windMax));
 
         ballCheck = false;
 
@@ -1039,7 +1044,7 @@ public class RouletteManager : MonoBehaviour
                     windCountText.text = windCount + "/5";
 
                     float[] blow = new float[2];
-                    blow[0] = 30;
+                    blow[0] = newBiePower;
                     blow[1] = windIndex;
 
                     PV.RPC("BlowingWind", RpcTarget.All, blow);
@@ -1213,7 +1218,7 @@ public class RouletteManager : MonoBehaviour
     {
         if (pinball.PV.IsMine && pinball.move)
         {
-            pinball.BlowingWind(wind[0], (int)wind[1]);
+            pinball.BlowingWind(lowPower, wind[0], (int)wind[1]);
         }
 
         PV.RPC("BlowingParticle", RpcTarget.All, (int)wind[1]);

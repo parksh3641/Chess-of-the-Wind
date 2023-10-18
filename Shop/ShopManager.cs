@@ -141,7 +141,7 @@ public class ShopManager : MonoBehaviour
             {
                 boxArray[1].SetActive(true);
 
-                boxSSRTextArray[1].forwardText = (100 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
+                boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
                 boxSSRTextArray[1].localizationName = "BoxSSRInfo";
                 boxSSRTextArray[1].ReLoad();
             }
@@ -149,7 +149,7 @@ public class ShopManager : MonoBehaviour
             {
                 boxArray[0].SetActive(true);
 
-                boxSSRTextArray[0].forwardText = (100 - playerDataBase.BuySnowBoxSSRCount).ToString();
+                boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
                 boxSSRTextArray[0].localizationName = "BoxSSRInfo";
                 boxSSRTextArray[0].ReLoad();
             }
@@ -166,7 +166,7 @@ public class ShopManager : MonoBehaviour
             {
                 boxArray[1].SetActive(true);
 
-                boxSSRTextArray[1].forwardText = (100 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
+                boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
                 boxSSRTextArray[1].localizationName = "BoxSSRInfo";
                 boxSSRTextArray[1].ReLoad();
             }
@@ -174,7 +174,7 @@ public class ShopManager : MonoBehaviour
             {
                 boxArray[0].SetActive(true);
 
-                boxSSRTextArray[0].forwardText = (100 - playerDataBase.BuySnowBoxSSRCount).ToString();
+                boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
                 boxSSRTextArray[0].localizationName = "BoxSSRInfo";
                 boxSSRTextArray[0].ReLoad();
             }

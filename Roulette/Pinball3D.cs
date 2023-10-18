@@ -8,8 +8,8 @@ public class Pinball3D : MonoBehaviour
     public Transform vector;
     public Rigidbody rigid;
 
-    private float power = 150f;
     private float windPower = 0;
+
     public int index = 0;
     public int ballPos = 0;
 
@@ -144,13 +144,13 @@ public class Pinball3D : MonoBehaviour
         StartCoroutine(GravityCoroution());
     }
 
-    public void BlowingWind(float force, int number)
+    public void BlowingWind(float defaultPower, float force, int number)
     {
         StopAllCoroutines();
 
         rigid.mass = 1;
 
-        windPower = power;
+        windPower = defaultPower;
 
         if (index == 0) //왼쪽
         {

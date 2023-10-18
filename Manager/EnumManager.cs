@@ -479,3 +479,13 @@ public enum GameEventType
     GameEvent9,
     GameEvent10,
 }
+
+public enum EmoteType
+{
+    Emote1,
+    Emote2,
+    Emote3,
+    Emote4,
+    Emote5,
+    Emote6,
+}

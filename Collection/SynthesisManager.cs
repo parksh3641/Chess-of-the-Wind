@@ -435,6 +435,7 @@ public class SynthesisManager : MonoBehaviour
             else
             {
                 titleText.localizationName = blockClass.blockType.ToString();
+                titleText.plusText = "";
                 titleText.ReLoad();
 
                 upgradeLevelText.localizationName = "MaxUpgradeLevel";

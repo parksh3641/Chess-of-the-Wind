@@ -1015,7 +1015,19 @@ public class PlayfabManager : MonoBehaviour
                                playerDataBase.WelcomeCheck = true;
                            }
                            break;
-
+                       case "WelcomeBoxCount":
+                           playerDataBase.WelcomeBoxCount = statistics.Value;
+                           break;
+                       case "WelcomeBoxCheck":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.WelcomeBoxCheck = false;
+                           }
+                           else
+                           {
+                               playerDataBase.WelcomeBoxCheck = true;
+                           }
+                           break;
                        case "NewbieWin":
                            playerDataBase.NewbieWin = statistics.Value;
                            break;
@@ -1027,6 +1039,21 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "GosuLose":
                            playerDataBase.GosuLose = statistics.Value;
+                           break;
+                       case "Emote1":
+                           playerDataBase.Emote1 = statistics.Value;
+                           break;
+                       case "Emote2":
+                           playerDataBase.Emote2 = statistics.Value;
+                           break;
+                       case "Emote3":
+                           playerDataBase.Emote3 = statistics.Value;
+                           break;
+                       case "Emote4":
+                           playerDataBase.Emote4 = statistics.Value;
+                           break;
+                       case "Emote5":
+                           playerDataBase.Emote5 = statistics.Value;
                            break;
                        case "SnowBox":
                            playerDataBase.SnowBox = statistics.Value;

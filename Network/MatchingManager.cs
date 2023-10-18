@@ -922,7 +922,7 @@ public class MatchingManager : MonoBehaviour
 
     public void OpenSupplyPackage()
     {
-        if(playerDataBase.ShopSupply == 0 && GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
+        if(playerDataBase.ShopSupply == 0 && GameStateManager.instance.GameRankType < GameRankType.Sliver_2)
         {
             packageObj.SetActive(true);
             packageContent.Initialize(packageManager);

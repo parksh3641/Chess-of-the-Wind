@@ -202,9 +202,9 @@ public class RandomBoxManager : MonoBehaviour
 
         playerDataBase.BuySnowBoxSSRCount += boxCount;
 
-        if(playerDataBase.BuySnowBoxSSRCount >= 100)
+        if(playerDataBase.BuySnowBoxSSRCount >= 50)
         {
-            playerDataBase.BuySnowBoxSSRCount -= 100;
+            playerDataBase.BuySnowBoxSSRCount -= 50;
 
             confirmationSSR = true;
         }
@@ -334,9 +334,9 @@ public class RandomBoxManager : MonoBehaviour
 
         playerDataBase.BuyUnderworldBoxSSRCount += boxCount;
 
-        if (playerDataBase.BuyUnderworldBoxSSRCount >= 100)
+        if (playerDataBase.BuyUnderworldBoxSSRCount >= 50)
         {
-            playerDataBase.BuyUnderworldBoxSSRCount -= 100;
+            playerDataBase.BuyUnderworldBoxSSRCount -= 50;
 
             confirmationSSR = true;
         }
@@ -1019,63 +1019,63 @@ public class RandomBoxManager : MonoBehaviour
         isDelay = false;
     }
 
-    public void GameReward()
-    {
-        int random = Random.Range(0, 4);
+    //public void GameReward()
+    //{
+    //    int random = Random.Range(0, 4);
 
-        string prize = "";
+    //    string prize = "";
 
-        prizeBlockStringList.Clear();
+    //    prizeBlockStringList.Clear();
 
-        switch (GameStateManager.instance.WindCharacterType)
-        {
-            case WindCharacterType.Winter:
-                switch(random)
-                {
-                    case 0:
-                        prize = "LeftQueen_2";
-                        break;
-                    case 1:
-                        prize = "LeftNight";
-                        break;
-                    case 2:
-                        prize = "Rook_V2";
-                        break;
-                    case 3:
-                        prize = "Pawn_Snow";
-                        break;
-                }
+    //    switch (GameStateManager.instance.WindCharacterType)
+    //    {
+    //        case WindCharacterType.Winter:
+    //            switch(random)
+    //            {
+    //                case 0:
+    //                    prize = "LeftQueen_2";
+    //                    break;
+    //                case 1:
+    //                    prize = "LeftNight";
+    //                    break;
+    //                case 2:
+    //                    prize = "Rook_V2";
+    //                    break;
+    //                case 3:
+    //                    prize = "Pawn_Snow";
+    //                    break;
+    //            }
 
-                prize += "_N";
+    //            prize += "_N";
 
-                prizeBlockStringList.Add(prize);
+    //            prizeBlockStringList.Add(prize);
 
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
-                break;
-            case WindCharacterType.UnderWorld:
-                switch (random)
-                {
-                    case 0:
-                        prize = "RightQueen_2";
-                        break;
-                    case 1:
-                        prize = "RightNight";
-                        break;
-                    case 2:
-                        prize = "Rook_V4";
-                        break;
-                    case 3:
-                        prize = "Pawn_Under";
-                        break;
-                }
+    //            PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
+    //            break;
+    //        case WindCharacterType.UnderWorld:
+    //            switch (random)
+    //            {
+    //                case 0:
+    //                    prize = "RightQueen_2";
+    //                    break;
+    //                case 1:
+    //                    prize = "RightNight";
+    //                    break;
+    //                case 2:
+    //                    prize = "Rook_V4";
+    //                    break;
+    //                case 3:
+    //                    prize = "Pawn_Under";
+    //                    break;
+    //            }
 
-                prize += "_N";
+    //            prize += "_N";
 
-                prizeBlockStringList.Add(prize);
+    //            prizeBlockStringList.Add(prize);
 
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
+    //            PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
 
-                break;
-        }
-    }
+    //            break;
+    //    }
+    //}
 }

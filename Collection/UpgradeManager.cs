@@ -272,16 +272,28 @@ public class UpgradeManager : MonoBehaviour
         {
             if(blockClass.rankType != RankType.UR)
             {
-                if(blockClass.rankType == RankType.SSR)
+                valuePlusText.localizationName = "MaxUpgradeLevel";
+                valuePlusText.plusText = " : " + upgradeDataBase.GetUpgradeValue(blockClass.rankType).maxLevel +
+            "   ▶   <color=#FFCA14>" + upgradeDataBase.GetUpgradeValue(blockClass.rankType + 1).maxLevel + "</color>";
+
+
+                if (blockClass.rankType == RankType.SSR)
                 {
                     if(blockClass.ssrLevel >= 4)
                     {
-                        downText.localizationName = "NextSynthesisInfo";
+                        downText.localizationName = "NextSynthesisBlockAbility2";
                     }
                     else
                     {
                         downText.localizationName = "NextSynthesisInfoSSR";
+
+                        valuePlusText.localizationName = "";
+                        valuePlusText.plusText = "";
                     }
+                }
+                else if (blockClass.rankType == RankType.SR)
+                {
+                    downText.localizationName = "NextSynthesisBlockAbility1";
                 }
                 else
                 {
@@ -297,9 +309,6 @@ public class UpgradeManager : MonoBehaviour
                 downText.plusText = "";
 
                 destroyText.localizationName = "";
-
-                valuePlusText.localizationName = "";
-                valuePlusText.plusText = "";
 
                 goldNumberText.text = "-";
                 ticketNumberText.text = "-";

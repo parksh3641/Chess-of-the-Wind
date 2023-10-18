@@ -78,6 +78,9 @@ public class GameManager : MonoBehaviour
     private int bettingWaitTime = 0;
     public int keepCount = 0;
 
+    public int windMax = 0;
+    public int windGranularity = 0;
+
     public int turn = 0;
     public int turnCount = 0;
     public bool inGameBurning = false;
@@ -702,6 +705,15 @@ public class GameManager : MonoBehaviour
             myLevel = limitLevel;
         }
 
+        if (blockClassNewbie.rankType == RankType.SSR)
+        {
+            windMax += blockClassNewbie.ssrLevel + 1;
+        }
+        else if (blockClassNewbie.rankType == RankType.UR)
+        {
+            windGranularity += 1;
+        }
+
         int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myLevel);
 
         newbieBlockContent.InGame_Initialize(blockClassNewbie, 3, value);
@@ -748,6 +760,9 @@ public class GameManager : MonoBehaviour
         limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
         int myLevel = 0;
 
+        windMax = 0;
+        windGranularity = 0;
+
         if (playerDataBase.Armor != null)
         {
             if(playerDataBase.Armor.Length > 0)
@@ -763,6 +778,16 @@ public class GameManager : MonoBehaviour
                     myLevel = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
+                }
+
+                if(blockClassArmor.rankType == RankType.SSR)
+                {
+                    windMax += blockClassArmor.ssrLevel + 1;
+                }
+                else if (blockClassArmor.rankType == RankType.UR)
+                {
+                    windMax += 5;
+                    windGranularity += 1;
                 }
 
                 int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
@@ -797,6 +822,16 @@ public class GameManager : MonoBehaviour
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
 
+                if (blockClassWeapon.rankType == RankType.SSR)
+                {
+                    windMax += blockClassWeapon.ssrLevel + 1;
+                }
+                else if (blockClassWeapon.rankType == RankType.UR)
+                {
+                    windMax += 5;
+                    windGranularity += 1;
+                }
+
                 int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
 
                 blockContentList[1].InGame_Initialize(blockClassWeapon, 1, value2);
@@ -827,6 +862,16 @@ public class GameManager : MonoBehaviour
                     myLevel = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
+                }
+
+                if (blockClassShield.rankType == RankType.SSR)
+                {
+                    windMax += blockClassShield.ssrLevel + 1;
+                }
+                else if (blockClassShield.rankType == RankType.UR)
+                {
+                    windMax += 5;
+                    windGranularity += 1;
                 }
 
                 int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);

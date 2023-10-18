@@ -35,18 +35,20 @@ public class EmoteManager : MonoBehaviour
 
     public Image emoteFillAmount2;
 
-
-    public Sprite[] emoteImgArray;
-
+    Sprite[] emoteArray;
 
     private float emoteCoolTime = 2.0f;
     private float emoteCoolTime2 = 2.0f;
     bool isUseEmote = true;
 
-
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        emoteArray = imageDataBase.GetEmoteArray();
+
         PV = GetComponent<PhotonView>();
 
         Initialize();
@@ -98,7 +100,7 @@ public class EmoteManager : MonoBehaviour
 
             myEmote.gameObject.SetActive(false);
             myEmote.gameObject.SetActive(true);
-            myEmoteImg.sprite = emoteImgArray[number];
+            myEmoteImg.sprite = emoteArray[number];
 
             PV.RPC("UseEmote", RpcTarget.Others, number);
 
@@ -130,7 +132,7 @@ public class EmoteManager : MonoBehaviour
     {
         otherEmote.gameObject.SetActive(false);
         otherEmote.gameObject.SetActive(true);
-        otherEmoteImg.sprite = emoteImgArray[number];
+        otherEmoteImg.sprite = emoteArray[number];
 
         SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
     }
@@ -164,7 +166,7 @@ public class EmoteManager : MonoBehaviour
 
             myEmote2.gameObject.SetActive(false);
             myEmote2.gameObject.SetActive(true);
-            myEmoteImg2.sprite = emoteImgArray[number];
+            myEmoteImg2.sprite = emoteArray[number];
 
             PV.RPC("UseEmote2", RpcTarget.Others, number);
 
@@ -196,7 +198,7 @@ public class EmoteManager : MonoBehaviour
     {
         otherEmote2.gameObject.SetActive(false);
         otherEmote2.gameObject.SetActive(true);
-        otherEmoteImg2.sprite = emoteImgArray[number];
+        otherEmoteImg2.sprite = emoteArray[number];
 
         SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
     }

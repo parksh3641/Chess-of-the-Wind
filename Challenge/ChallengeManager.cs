@@ -53,6 +53,41 @@ public class ChallengeManager : MonoBehaviour
         {
             StartCoroutine(CheckCoroution());
         }
+        else
+        {
+            if(playerDataBase.GetBlockListNumber() == 0)
+            {
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+
+                        itemList.Clear();
+                        itemList.Add("Pawn_Snow_N");
+                        itemList.Add("LeftQueen_2_N");
+                        itemList.Add("LeftNight_N");
+                        itemList.Add("Rook_V2_N");
+
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
+
+                        break;
+                    case WindCharacterType.UnderWorld:
+
+                        itemList.Clear();
+                        itemList.Add("Pawn_Under_N");
+                        itemList.Add("RightQueen_2_N");
+                        itemList.Add("RightNight_N");
+                        itemList.Add("Rook_V4_N");
+
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
+                        break;
+                }
+
+
+
+                Debug.Log("블럭이 없으므로 기본 블럭을 지급합니다");
+            }
+        }
+
     }
 
     public void ChangeTopMenu(int number)
@@ -259,6 +294,7 @@ public class ChallengeManager : MonoBehaviour
                     case WindCharacterType.Winter:
 
                         itemList.Clear();
+                        //itemList.Add("Pawn_Snow_N");
                         itemList.Add("LeftQueen_2_N");
                         itemList.Add("LeftNight_N");
                         itemList.Add("Rook_V2_N");
@@ -269,6 +305,7 @@ public class ChallengeManager : MonoBehaviour
                     case WindCharacterType.UnderWorld:
 
                         itemList.Clear();
+                        //itemList.Add("Pawn_Under_N");
                         itemList.Add("RightQueen_2_N");
                         itemList.Add("RightNight_N");
                         itemList.Add("Rook_V4_N");

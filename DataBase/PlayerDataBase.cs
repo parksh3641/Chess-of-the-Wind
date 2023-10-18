@@ -173,6 +173,9 @@ public class PlayerDataBase : ScriptableObject
     public int welcomeCount = 0;
     public bool welcomeCheck = false;
     [Space]
+    public int welcomeBoxCount = 0;
+    public bool welcomeBoxCheck = false;
+    [Space]
     public string nextMonday = "";
 
     [Space]
@@ -196,6 +199,19 @@ public class PlayerDataBase : ScriptableObject
     private string shield = "";
     [SerializeField]
     private string newbie = "";
+
+    [Space]
+    [Title("Emote")]
+    [SerializeField]
+    private int emote1 = 0;
+    [SerializeField]
+    private int emote2 = 1;
+    [SerializeField]
+    private int emote3 = 2;
+    [SerializeField]
+    private int emote4 = 3;
+    [SerializeField]
+    private int emote5 = 4;
 
     [Space]
     [Title("Box_Snow")]
@@ -829,6 +845,30 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int WelcomeBoxCount
+    {
+        get
+        {
+            return welcomeBoxCount;
+        }
+        set
+        {
+            welcomeBoxCount = value;
+        }
+    }
+
+    public bool WelcomeBoxCheck
+    {
+        get
+        {
+            return welcomeBoxCheck;
+        }
+        set
+        {
+            welcomeBoxCheck = value;
+        }
+    }
+
     public int NewbieWin
     {
         get
@@ -922,6 +962,66 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             newbie = value;
+        }
+    }
+
+    public int Emote1
+    {
+        get
+        {
+            return emote1;
+        }
+        set
+        {
+            emote1 = value;
+        }
+    }
+
+    public int Emote2
+    {
+        get
+        {
+            return emote2;
+        }
+        set
+        {
+            emote2 = value;
+        }
+    }
+
+    public int Emote3
+    {
+        get
+        {
+            return emote3;
+        }
+        set
+        {
+            emote3 = value;
+        }
+    }
+
+    public int Emote4
+    {
+        get
+        {
+            return emote4;
+        }
+        set
+        {
+            emote4 = value;
+        }
+    }
+
+    public int Emote5
+    {
+        get
+        {
+            return emote5;
+        }
+        set
+        {
+            emote5 = value;
         }
     }
 
@@ -1522,10 +1622,14 @@ public class PlayerDataBase : ScriptableObject
         attendanceDay = "";
         attendanceCount = 0;
         attendanceCheck = false;
-        nextMonday = "";
 
         welcomeCount = 0;
         welcomeCheck = false;
+
+        welcomeBoxCount = 0;
+        welcomeBoxCheck = false;
+
+        nextMonday = "";
 
         newbieWin = 0;
         newbieLose = 0;
@@ -1536,6 +1640,12 @@ public class PlayerDataBase : ScriptableObject
         weapon = "";
         shield = "";
         newbie = "";
+
+        emote1 = 0;
+        emote2 = 1;
+        emote3 = 2;
+        emote4 = 3;
+        emote5 = 4;
 
         snowBox = 0;
         snowBox_N = 0;
@@ -1621,6 +1731,11 @@ public class PlayerDataBase : ScriptableObject
     public void Initialize_BlockList()
     {
         blockList = new List<BlockClass>();
+    }
+
+    public int GetBlockListNumber()
+    {
+        return blockList.Count;
     }
 
     public void SetBlock(ItemInstance item)
