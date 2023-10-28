@@ -118,6 +118,8 @@ public class NewsManager : MonoBehaviour
 
         alarm.SetActive(false);
         mainAlarm.SetActive(false);
+
+        newsContentTransform.anchoredPosition = new Vector2(0, -9999);
     }
 
     public void OpenReadMore(int number, string title)

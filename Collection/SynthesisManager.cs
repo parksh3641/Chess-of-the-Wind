@@ -113,6 +113,8 @@ public class SynthesisManager : MonoBehaviour
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
 
+    List<int> list = new List<int>();
+
     public CollectionManager collectionManager;
     public UpgradeManager upgradeManager;
     public TitleManager titleManager;
@@ -474,11 +476,11 @@ public class SynthesisManager : MonoBehaviour
 
                 action.Invoke();
 
+                Debug.Log("1번째 재료 선택됨");
+
                 CheckSynthesisMaterial();
 
                 synthesisAllButton.SetActive(false);
-
-                Debug.Log("1번째 재료 선택됨");
             }
             else if (!isMat2 && matObj2.activeSelf)
             {
@@ -493,11 +495,11 @@ public class SynthesisManager : MonoBehaviour
 
                 action.Invoke();
 
+                Debug.Log("2번째 재료 선택됨");
+
                 CheckSynthesisMaterial();
 
                 synthesisAllButton.SetActive(false);
-
-                Debug.Log("2번째 재료 선택됨");
             }
         }
     }
@@ -545,12 +547,17 @@ public class SynthesisManager : MonoBehaviour
         level2 = blockClassMat1.level;
         level3 = blockClassMat2.level;
 
-        List<int> list = new List<int>();
+        list = new List<int>();
         list.Add(level1);
         list.Add(level2);
         list.Add(level3);
 
         blockMaxLevel = list.Max();
+
+        if(blockMaxLevel > 0)
+        {
+            Debug.Log("레벨 계승 준비 완료");
+        }
 
         nextBlockUIContent.SetLevel(blockMaxLevel);
 
@@ -724,6 +731,7 @@ public class SynthesisManager : MonoBehaviour
 
             synthesisResultContentList[0].gameObject.SetActive(true);
             synthesisResultContentList[0].Collection_Initialize(blockClass);
+            synthesisResultContentList[0].SetLevel(blockMaxLevel);
             synthesisResultContentList[0].NextLevel_Initialize();
 
             Debug.Log("SSR 등급업 성공!");
