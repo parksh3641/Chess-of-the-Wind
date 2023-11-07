@@ -36,10 +36,14 @@ public class GameStateManager : MonoBehaviour
         public LanguageType language = LanguageType.Default;
 
         [Space]
-        [Title("InGame")]
+        [Title("Info")]
         public WindCharacterType windCharacterType = WindCharacterType.Winter;
-        public GameType gameType = GameType.NewBie;
         public GameRankType gameRankType = GameRankType.Bronze_4;
+
+        [Space]
+        [Title("InGame")]
+        public GameType gameType = GameType.NewBie;
+        public GameEventType gameEventType = GameEventType.GameEvent1;
         public string room = "";
         public int stakes = 0;
         public int penalty = 0;
@@ -316,6 +320,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.gameType = value;
+            SaveFile();
+        }
+    }
+
+    public GameEventType GameEventType
+    {
+        get
+        {
+            return gameSettings.gameEventType;
+        }
+        set
+        {
+            gameSettings.gameEventType = value;
             SaveFile();
         }
     }

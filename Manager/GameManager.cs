@@ -227,6 +227,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("Manager")]
+    public GameEventManager gameEventManager;
     public NetworkManager networkManager;
     public UIManager uIManager;
     public RouletteManager rouletteManager;
@@ -239,6 +240,8 @@ public class GameManager : MonoBehaviour
     PlayerDataBase playerDataBase;
     BlockDataBase blockDataBase;
     RankDataBase rankDataBase;
+
+    Hashtable ht;
 
     public PhotonView PV;
 
@@ -542,13 +545,14 @@ public class GameManager : MonoBehaviour
 
         targetObj.SetActive(false);
         targetQueenObj.SetActive(false);
+        gameEventManager.eventInfoView.SetActive(false);
 
         targetText.text = "-";
 
         tipObj.SetActive(false);
 
         timer = bettingWaitTime;
-        timerText.text = timer.ToString();
+        timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
         timerFillAmount.fillAmount = 1;
 
         moneyText.text = moneyText.text = "Raf  <size=25>0</size>";
@@ -664,6 +668,25 @@ public class GameManager : MonoBehaviour
         BetOptionCancleButton();
     }
 
+    public void GameStart_Newbie_Ai()
+    {
+        aiManager.Initialize();
+
+        aiMode = true;
+
+        GameStart_Newbie();
+
+    }
+
+    public void GameStart_Gosu_Ai()
+    {
+        aiManager.Initialize();
+
+        aiMode = true;
+
+        GameStart_Gosu();
+    }
+
     public void GameStart_Newbie()
     {
         //roomText.text = "초보방";
@@ -722,7 +745,7 @@ public class GameManager : MonoBehaviour
 
         bettingSizeList[3] = blockDataBase.GetBlockInfomation(blockClassNewbie.blockType).GetSize();
 
-        GameStart();
+        GameEvent();
     }
 
     public void GameStart_Gosu()
@@ -889,26 +912,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        GameStart();
-    }
-
-    public void GameStart_Newbie_Ai()
-    {
-        aiManager.Initialize();
-
-        aiMode = true;
-
-        GameStart_Newbie();
-
-    }
-
-    public void GameStart_Gosu_Ai()
-    {
-        aiManager.Initialize();
-
-        aiMode = true;
-
-        GameStart_Gosu();
+        GameEvent();
     }
 
     void SetStakes() //판돈 설정
@@ -922,7 +926,7 @@ public class GameManager : MonoBehaviour
         otherMoneyText.text = "Raf  <size=25>" + MoneyUnitString.ToCurrencyString(otherMoney) + "</size>";
     }
 
-    public void GameStart()
+    public void GameEvent()
     {
         GameReset();
 
@@ -934,6 +938,22 @@ public class GameManager : MonoBehaviour
         turnText.plusText = ": " + turn;
         turnText.ReLoad();
 
+        if (GameStateManager.instance.ReEnter)
+        {
+            Invoke("CheckPlayerState", 1.0f);
+
+            GameStateManager.instance.ReEnter = false;
+        }
+        else
+        {
+            ht = PhotonNetwork.CurrentRoom.CustomProperties;
+
+            gameEventManager.OnEventStart(ht["Event"].ToString());
+        }
+    }
+
+    public void GameStart()
+    {
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Ready" } });
@@ -942,11 +962,19 @@ public class GameManager : MonoBehaviour
             StartCoroutine(WaitTimerCoroution());
         }
 
-        if(GameStateManager.instance.ReEnter)
+        switch (GameStateManager.instance.GameEventType)
         {
-            Invoke("CheckPlayerState", 1.0f);
-
-            GameStateManager.instance.ReEnter = false;
+            case GameEventType.GameEvent1:
+                break;
+            case GameEventType.GameEvent2:
+                ChangeTurn(7);
+                break;
+            case GameEventType.GameEvent3:
+                break;
+            case GameEventType.GameEvent4:
+                break;
+            case GameEventType.GameEvent5:
+                break;
         }
     }
 
@@ -963,7 +991,7 @@ public class GameManager : MonoBehaviour
             GameStart_Gosu();
         }
 
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
         switch (ht["Status"])
         {
@@ -979,6 +1007,8 @@ public class GameManager : MonoBehaviour
             //    rouletteManager.SpectatorRoulette();
             //    break;
         }
+
+        GameStateManager.instance.GameEventType = GameEventType.GameEvent1 + int.Parse(ht["Event"].ToString());
 
         Debug.Log("현재 게임 상태를 불러옵니다");
 
@@ -1020,7 +1050,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckGameState()
     {
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
         StopAllCoroutines();
 
@@ -1154,9 +1184,9 @@ public class GameManager : MonoBehaviour
         timer = number;
 
         timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
-        timerText.text = timer.ToString();
+        timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
 
-        if(timer <= 0)
+        if (timer <= 0)
         {
             SoundManager.instance.StopSFX(GameSfxType.TimesUp);
         }
@@ -1599,6 +1629,7 @@ public class GameManager : MonoBehaviour
         if (!GameStateManager.instance.Playing) return;
 
         uIManager.dontTouchObj.SetActive(false);
+        gameEventManager.eventInfoView.SetActive(false);
 
         SoundManager.instance.StopSFX(GameSfxType.TimesUp);
 
@@ -4217,7 +4248,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
         switch (myNumber)
         {

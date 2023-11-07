@@ -21,6 +21,9 @@ public class Pinball3D : MonoBehaviour
     public bool tutorial = false;
     public bool move = false;
 
+    Vector3 normal = new Vector3(0.15f, 0.15f, 0.15f);
+    Vector3 sizeUp = new Vector3(0.225f, 0.225f, 0.225f);
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
 
     public RouletteManager rouletteManager;
@@ -68,6 +71,15 @@ public class Pinball3D : MonoBehaviour
     public void MyTurn(int number)
     {
         if(PV != null) PV.RequestOwnership();
+
+        if(GameStateManager.instance.GameEventType == GameEventType.GameEvent5)
+        {
+            transform.localScale = sizeUp;
+        }
+        else
+        {
+            transform.localScale = normal;
+        }
 
         StartRotate(number);
     }

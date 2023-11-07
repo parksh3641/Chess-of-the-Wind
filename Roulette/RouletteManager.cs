@@ -114,6 +114,7 @@ public class RouletteManager : MonoBehaviour
     private int rouletteIndex = 0;
     private int windIndex = 0;
     private int windCount = 0;
+    private int windMaxCount = 0;
     private int windCount_Ai = 0;
 
     private int leftNumber = 0;
@@ -864,14 +865,29 @@ public class RouletteManager : MonoBehaviour
             switch (GameStateManager.instance.GameType)
             {
                 case GameType.NewBie:
-                    windCount = 5;
-                    windCountText.text = windCount + "/5";
+                    if (GameStateManager.instance.GameEventType == GameEventType.GameEvent3)
+                    {
+                        windCount = 10;
+                    }
+                    else
+                    {
+                        windCount = 5;
+                    }
                     break;
                 case GameType.Gosu:
-                    windCount = 1;
-                    windCountText.text = windCount + "/1";
+                    if(GameStateManager.instance.GameEventType == GameEventType.GameEvent3)
+                    {
+                        windCount = 3;
+                    }
+                    else
+                    {
+                        windCount = 1;
+                    }
                     break;
             }
+
+            windMaxCount = windCount;
+            windCountText.text = windCount + "/" + windMaxCount;
 
             NotionManager.instance.UseNotion(NotionType.YourTurn);
         }
@@ -893,7 +909,31 @@ public class RouletteManager : MonoBehaviour
                 pinball.MyTurn(rouletteIndex);
 
                 aiMode = true;
-                windCount_Ai = 5;
+
+                switch (GameStateManager.instance.GameType)
+                {
+                    case GameType.NewBie:
+                        if (GameStateManager.instance.GameEventType == GameEventType.GameEvent3)
+                        {
+                            windCount_Ai = 10;
+                        }
+                        else
+                        {
+                            windCount_Ai = 5;
+                        }
+                        break;
+                    case GameType.Gosu:
+                        if (GameStateManager.instance.GameEventType == GameEventType.GameEvent3)
+                        {
+                            windCount_Ai = 3;
+                        }
+                        else
+                        {
+                            windCount_Ai = 1;
+                        }
+                        break;
+                }
+
                 StartCoroutine(BlowWindCoroution_Ai());
             }
 
@@ -1041,7 +1081,7 @@ public class RouletteManager : MonoBehaviour
                 if (!windDelay)
                 {
                     windCount -= 1;
-                    windCountText.text = windCount + "/5";
+                    windCountText.text = windCount + "/" + windMaxCount;
 
                     float[] blow = new float[2];
                     blow[0] = newBiePower;
@@ -1062,6 +1102,9 @@ public class RouletteManager : MonoBehaviour
         else
         {
             pinballPower = true;
+
+            power = 0;
+            powerFillAmount.fillAmount = 0;
 
             StartCoroutine(PowerCoroution());
 
@@ -1102,6 +1145,43 @@ public class RouletteManager : MonoBehaviour
                     flickerCheck = false;
                     StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
                 }
+            }
+        }
+    }
+
+    public void BlowWindUp()
+    {
+        if (aiMode) return;
+
+        if (!pinball.PV.IsMine || buttonClick) return;
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            return;
+        }
+
+        if (windCount > 0)
+        {
+            windCount -= 1;
+            windCountText.text = windCount + "/" + windMaxCount;
+            pinballPower = false;
+
+            float[] blow = new float[2];
+            blow[0] = power;
+            blow[1] = windIndex;
+
+            PV.RPC("BlowingWind", RpcTarget.All, blow);
+
+            roulette1WindPoint[0].gameObject.SetActive(false);
+            roulette1WindPoint[1].gameObject.SetActive(false);
+
+            roulette2WindPoint[0].gameObject.SetActive(false);
+            roulette2WindPoint[1].gameObject.SetActive(false);
+
+            if (windCount == 0)
+            {
+                buttonClick = true;
+                windButton.sprite = windButtonArray[0];
             }
         }
     }
@@ -1174,43 +1254,6 @@ public class RouletteManager : MonoBehaviour
         }
 
         mesh.gameObject.SetActive(false);
-    }
-
-    public void BlowWindUp()
-    {
-        if (aiMode) return;
-
-        if (!pinball.PV.IsMine || buttonClick) return;
-
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            return;
-        }
-
-        if (windCount > 0)
-        {
-            windCount -= 1;
-            windCountText.text = windCount + "/1";
-            buttonClick = true;
-            pinballPower = false;
-
-            float[] blow = new float[2];
-            blow[0] = power;
-            blow[1] = windIndex;
-
-            PV.RPC("BlowingWind", RpcTarget.All, blow);
-
-            roulette1WindPoint[0].gameObject.SetActive(false);
-            roulette1WindPoint[1].gameObject.SetActive(false);
-
-            roulette2WindPoint[0].gameObject.SetActive(false);
-            roulette2WindPoint[1].gameObject.SetActive(false);
-
-            if (windCount == 0)
-            {
-                windButton.sprite = windButtonArray[0];
-            }
-        }
     }
 
     [PunRPC]
@@ -1757,7 +1800,7 @@ public class RouletteManager : MonoBehaviour
             PV.RPC("BlowingWind", RpcTarget.All, blow);
         }
 
-        if (GameStateManager.instance.GameType == GameType.Gosu)
+        if (windCount_Ai == 0)
         {
             buttonClick = true;
         }

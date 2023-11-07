@@ -7,6 +7,7 @@ using UnityEngine;
 public class Rotation_Clock : MonoBehaviour
 {
     public int speed = 40;
+    public int saveSpeed = 0;
 
     bool start = false;
 
@@ -26,12 +27,23 @@ public class Rotation_Clock : MonoBehaviour
 
         speed = Random.Range(speed - 2, speed + 2);
 
+        saveSpeed = speed;
+
         PV = GetComponent<PhotonView>();
     }
 
     public void StartClock()
     {
         start = true;
+
+        if (GameStateManager.instance.GameEventType == GameEventType.GameEvent4)
+        {
+            speed = saveSpeed + (saveSpeed / 2);
+        }
+        else
+        {
+            speed = saveSpeed;
+        }
     }
 
     public void StopClock()

@@ -206,6 +206,6 @@ public class EmoteManager : MonoBehaviour
 
     public void UseEmote_Ai()
     {
-        UseEmote(Random.Range(0, 5));
+        UseEmote(Random.Range(0, 6));
     }
 }

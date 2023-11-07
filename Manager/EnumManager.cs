@@ -467,17 +467,11 @@ public enum TitleSpeicalType
 
 public enum GameEventType
 {
-    Default,
     GameEvent1,
     GameEvent2,
     GameEvent3,
     GameEvent4,
     GameEvent5,
-    GameEvent6,
-    GameEvent7,
-    GameEvent8,
-    GameEvent9,
-    GameEvent10,
 }
 
 public enum EmoteType

@@ -33,7 +33,7 @@ public class RankDataBase : ScriptableObject
         return rank;
     }
 
-    public int GetRank(int money) //더 이상 사용되지 않음 
+    public int GetRank(int money) //???�상 ?�용?��? ?�음 
     {
         int count = 0;
 
@@ -48,12 +48,12 @@ public class RankDataBase : ScriptableObject
         return count;
     }
 
-    public int GetNeedStar(int level) //다음 랭크 등급 상승을 위한 별이 몇개 필요한가요?
+    public int GetNeedStar(int level) //?�음 ??�� ?�급 ?�승???�한 별이 몇개 ?�요?��???
     {
         return rankInformationArray[level].star;
     }
 
-    public int GetLimitLevel(GameRankType type) //제 랭크에서 최대로 허용되는 레벨이 몇인가요?
+    public int GetLimitLevel(GameRankType type) //????��?�서 최�?�??�용?�는 ?�벨??몇인가??
     {
         int level = 0;
 
