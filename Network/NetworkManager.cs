@@ -369,7 +369,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Pinball", GameStateManager.instance.NickName } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Room", GameStateManager.instance.NickName } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Event", Random.Range(0, System.Enum.GetValues(typeof(GameEventType)).Length - 1) } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Event", Random.Range(0, Enum.GetValues(typeof(GameEventType)).Length) } });
 
             GameStateManager.instance.Room = GameStateManager.instance.NickName;
 

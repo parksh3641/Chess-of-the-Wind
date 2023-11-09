@@ -938,6 +938,8 @@ public class GameManager : MonoBehaviour
         turnText.plusText = ": " + turn;
         turnText.ReLoad();
 
+        GameStateManager.instance.GameEventType = GameEventType.GameEvent1;
+
         if (GameStateManager.instance.ReEnter)
         {
             Invoke("CheckPlayerState", 1.0f);
@@ -948,20 +950,24 @@ public class GameManager : MonoBehaviour
         {
             ht = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            gameEventManager.OnEventStart(ht["Event"].ToString());
+            if(GameStateManager.instance.GameType == GameType.Gosu)
+            {
+                gameEventManager.OnEventStart(ht["Event"].ToString());
+            }
         }
-    }
 
-    public void GameStart()
-    {
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Ready" } });
 
             rouletteManager.CreateObj();
+            timer += 3;
             StartCoroutine(WaitTimerCoroution());
         }
+    }
 
+    public void GameStart()
+    {
         switch (GameStateManager.instance.GameEventType)
         {
             case GameEventType.GameEvent1:

@@ -38,7 +38,7 @@ public class Rotation_Clock : MonoBehaviour
 
         if (GameStateManager.instance.GameEventType == GameEventType.GameEvent4)
         {
-            speed = saveSpeed + (saveSpeed / 2);
+            speed = saveSpeed + (int)(saveSpeed * 0.4f);
         }
         else
         {

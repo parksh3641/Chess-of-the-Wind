@@ -34,8 +34,6 @@ public class GameEventManager : MonoBehaviour
     private void Awake()
     {
         eventView.SetActive(false);
-
-        eventMaxNumber = System.Enum.GetValues(typeof(GameEventType)).Length;
     }
 
     public void Initialize()
@@ -45,18 +43,17 @@ public class GameEventManager : MonoBehaviour
 
     public void OnEventStart(string number)
     {
-        GameStateManager.instance.GameEventType = GameEventType.GameEvent1;
-
-        eventString = new string[eventMaxNumber - 1];
-
-        for(int i = 0; i < eventMaxNumber -1; i ++)
-        {
-            eventString[i] = LocalizationManager.instance.GetString("GameEvent" + Random.Range(1, eventMaxNumber));
-        }
-
         eventNumber = int.Parse(number);
 
-        Debug.Log("이벤트 : " + (GameStateManager.instance.GameEventType + eventNumber).ToString());
+        eventMaxNumber = System.Enum.GetValues(typeof(GameEventType)).Length;
+
+        eventString = new string[eventMaxNumber];
+
+        for(int i = 0; i < eventMaxNumber; i ++)
+        {
+            Debug.Log(i);
+            eventString[i] = LocalizationManager.instance.GetString("GameEvent" + (i + 1));
+        }
 
         eventView.SetActive(true);
 
@@ -73,7 +70,7 @@ public class GameEventManager : MonoBehaviour
     {
         while(time > 0)
         {
-            eventText.text = eventString[Random.Range(0, eventMaxNumber - 1)];;
+            eventText.text = eventString[Random.Range(0, eventString.Length - 1)];;
 
             SoundManager.instance.PlaySFX(GameSfxType.Click);
 
@@ -89,6 +86,8 @@ public class GameEventManager : MonoBehaviour
         eventTitleText.ReLoad();
 
         GameStateManager.instance.GameEventType = GameEventType.GameEvent1 + eventNumber;
+
+        Debug.LogError("이벤트 설정 완료 : " + GameStateManager.instance.GameEventType);
 
         SoundManager.instance.PlaySFX(GameSfxType.Success);
 
