@@ -106,7 +106,7 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
             switch (rankDownInfomation.receiveInformationList[i].rewardType)
             {
                 case RewardType.Gold:
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, rankDownInfomation.receiveInformationList[i].count);
+                    PlayfabManager.instance.UpdateAddGold(rankDownInfomation.receiveInformationList[i].count);
                     break;
                 case RewardType.UpgradeTicket:
                     playerDataBase.SetUpgradeTicket(RankType.N, rankDownInfomation.receiveInformationList[i].count);

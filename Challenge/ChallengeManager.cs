@@ -284,10 +284,10 @@ public class ChallengeManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 200);
+                PlayfabManager.instance.UpdateAddGold(200);
                 break;
             case 1:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 200);
+                PlayfabManager.instance.UpdateAddGold(200);
 
                 switch (GameStateManager.instance.WindCharacterType)
                 {
@@ -316,16 +316,16 @@ public class ChallengeManager : MonoBehaviour
 
                 break;
             case 2:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
+                PlayfabManager.instance.UpdateAddGold(1000);
                 break;
             case 3:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
+                PlayfabManager.instance.UpdateAddGold(2000);
                 break;
             case 4:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
+                PlayfabManager.instance.UpdateAddGold(2000);
                 break;
             case 5:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
+                PlayfabManager.instance.UpdateAddGold(2000);
 
                 ChangeTopMenu(1);
 

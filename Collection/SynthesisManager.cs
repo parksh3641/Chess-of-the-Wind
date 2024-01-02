@@ -673,7 +673,7 @@ public class SynthesisManager : MonoBehaviour
                 return;
             }
 
-            if (playerDataBase.Gold < needGold)
+            if (playerDataBase.Coin < needGold)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -681,7 +681,7 @@ public class SynthesisManager : MonoBehaviour
                 return;
             }
 
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, needGold);
+            PlayfabManager.instance.UpdateSubtractGold(needGold);
 
             for (int i = 0; i < synthesisResultContentList.Count; i++)
             {
@@ -1000,9 +1000,9 @@ public class SynthesisManager : MonoBehaviour
         rankSRValue = rankSRCount * upgradeDataBase.GetSynthesisValue(RankType.SR);
 
 
-        synthesisRank_N_Value.text = rankNValue.ToString();
-        synthesisRank_R_Value.text = rankRValue.ToString();
-        synthesisRank_SR_Value.text = rankSRValue.ToString();
+        synthesisRank_N_Value.text = MoneyUnitString.ToCurrencyString(rankNValue);
+        synthesisRank_R_Value.text = MoneyUnitString.ToCurrencyString(rankRValue);
+        synthesisRank_SR_Value.text = MoneyUnitString.ToCurrencyString(rankSRValue);
 
         Debug.Log("일괄 합성 준비 완료");
     }
@@ -1023,7 +1023,7 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
-            if(playerDataBase.Gold < rankNValue)
+            if(playerDataBase.Coin < rankNValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -1032,7 +1032,7 @@ public class SynthesisManager : MonoBehaviour
             }
             else
             {
-                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankNValue);
+                PlayfabManager.instance.UpdateSubtractGold(rankNValue);
             }
         }
 
@@ -1056,7 +1056,7 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
-            if (playerDataBase.Gold < rankRValue)
+            if (playerDataBase.Coin < rankRValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -1065,7 +1065,7 @@ public class SynthesisManager : MonoBehaviour
             }
             else
             {
-                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankRValue);
+                PlayfabManager.instance.UpdateSubtractGold(rankRValue);
             }
         }
 
@@ -1089,7 +1089,7 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
-            if (playerDataBase.Gold < rankSRValue)
+            if (playerDataBase.Coin < rankSRValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -1098,7 +1098,7 @@ public class SynthesisManager : MonoBehaviour
             }
             else
             {
-                PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, rankSRValue);
+                PlayfabManager.instance.UpdateSubtractGold(rankSRValue);
             }
         }
 
@@ -1133,6 +1133,8 @@ public class SynthesisManager : MonoBehaviour
 
         synthesisListAllResult.Clear();
 
+        upgradeManager.sellBlockList.Clear();
+
         switch (synthesisRankType)
         {
             case RankType.N:
@@ -1140,7 +1142,7 @@ public class SynthesisManager : MonoBehaviour
                 {
                     int number = synthesisList_Rank_N_Count[i] - (synthesisList_Rank_N_Count[i] % 3);
 
-                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+                    //Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
 
                     if (number == 0) continue;
 
@@ -1169,24 +1171,22 @@ public class SynthesisManager : MonoBehaviour
                     for (int j = 0; j < synthesisList_Rank_N_Count[i] / 3; j++)
                     {
                         synthesisListAllResult.Add((BlockType.Default + 1 + i));
-
-                        synthesisResultList.Clear();
                         synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        switch (GameStateManager.instance.WindCharacterType)
-                        {
-                            case WindCharacterType.Winter:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
-                                break;
-                            case WindCharacterType.UnderWorld:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
-                                break;
-                        }
-
-                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+                        Debug.Log("획득 블럭 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
                         yield return waitForSeconds2;
                     }
+                }
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                        break;
+                    case WindCharacterType.UnderWorld:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                        break;
                 }
 
                 break;
@@ -1195,7 +1195,7 @@ public class SynthesisManager : MonoBehaviour
                 {
                     int number = synthesisList_Rank_R_Count[i] - (synthesisList_Rank_R_Count[i] % 3);
 
-                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+                    //Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
 
                     if (number == 0) continue;
 
@@ -1223,24 +1223,22 @@ public class SynthesisManager : MonoBehaviour
                     for (int j = 0; j < synthesisList_Rank_R_Count[i] / 3; j++)
                     {
                         synthesisListAllResult.Add((BlockType.Default + 1 + i));
-
-                        synthesisResultList.Clear();
                         synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        switch (GameStateManager.instance.WindCharacterType)
-                        {
-                            case WindCharacterType.Winter:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
-                                break;
-                            case WindCharacterType.UnderWorld:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
-                                break;
-                        }
-
-                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+                        Debug.Log("획득 블럭 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
                         yield return waitForSeconds2;
                     }
+                }
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                        break;
+                    case WindCharacterType.UnderWorld:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                        break;
                 }
 
                 break;
@@ -1249,7 +1247,7 @@ public class SynthesisManager : MonoBehaviour
                 {
                     int number = synthesisList_Rank_SR_Count[i] - (synthesisList_Rank_SR_Count[i] % 3);
 
-                    Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
+                    //Debug.LogError((BlockType.Default + 1 + i) + " 등급을 " + number + " 개 삭제합니다");
 
                     if (number == 0) continue;
 
@@ -1277,24 +1275,22 @@ public class SynthesisManager : MonoBehaviour
                     for (int j = 0; j < synthesisList_Rank_SR_Count[i] / 3; j++)
                     {
                         synthesisListAllResult.Add((BlockType.Default + 1 + i));
-
-                        synthesisResultList.Clear();
                         synthesisResultList.Add((BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
-                        switch (GameStateManager.instance.WindCharacterType)
-                        {
-                            case WindCharacterType.Winter:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
-                                break;
-                            case WindCharacterType.UnderWorld:
-                                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
-                                break;
-                        }
-
-                        Debug.Log("일괄 합성 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
+                        Debug.Log("획득 블럭 : " + (BlockType.Default + 1 + i) + "_" + (synthesisRankType + 1));
 
                         yield return waitForSeconds2;
                     }
+                }
+
+                switch (GameStateManager.instance.WindCharacterType)
+                {
+                    case WindCharacterType.Winter:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", synthesisResultList);
+                        break;
+                    case WindCharacterType.UnderWorld:
+                        PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", synthesisResultList);
+                        break;
                 }
 
                 break;
@@ -1303,6 +1299,8 @@ public class SynthesisManager : MonoBehaviour
             case RankType.UR:
                 break;
         }
+
+        //upgradeManager.SellBlockAll();
 
         yield return new WaitForSeconds(2.5f);
 

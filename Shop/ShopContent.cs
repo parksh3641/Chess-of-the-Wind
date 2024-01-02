@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ShopContent : MonoBehaviour
 {
-    public MoneyType moneyType = MoneyType.Gold;
+    public MoneyType moneyType = MoneyType.CoinA;
     public ShopType shopType = ShopType.UpgradeTicket;
     public int price = 0;
     public int number = 0;
@@ -91,7 +91,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.DailyReward_WatchAd:
                 break;
             case ShopType.UpgradeTicket:
-                if(moneyType == MoneyType.Gold)
+                if(moneyType == MoneyType.CoinA)
                 {
                     lockObj.SetActive(false);
 

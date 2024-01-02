@@ -46,6 +46,14 @@ public class PlayfabManager : MonoBehaviour
     private bool inventoryData = false;
     private bool grantItemData = false;
 
+    private long coin = 0;
+    private long coinA = 0;
+    private long coinB = 0;
+
+    private int consumeGold = 0;
+    private int consumeGoldA = 0;
+    private int consumeGoldB = 0;
+
 #if UNITY_IOS
     private string AppleUserIdKey = "";
     private IAppleAuthManager _appleAuthManager;
@@ -795,13 +803,29 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
             var Inventory = result.Inventory;
-            int gold = result.VirtualCurrency["GO"];
+            int coinA = result.VirtualCurrency["GO"];
+            int coinB = result.VirtualCurrency["GA"];
             int crystal = result.VirtualCurrency["ST"];
             int millage = result.VirtualCurrency["MG"];
 
-            if (gold > 999999999)
+            if (coinA < 0)
             {
-                gold = 999999999;
+                UpdateAddGold(Mathf.Abs(coinA));
+            }
+
+            if (coinA > 2000000000)
+            {
+                coinA = 2000000000;
+            }
+
+            if (coinB > 2000000000)
+            {
+                coinB = 2000000000;
+            }
+
+            if (crystal > 2000000000)
+            {
+                crystal = 2000000000;
             }
 
             if (millage > 999999999)
@@ -809,7 +833,8 @@ public class PlayfabManager : MonoBehaviour
                 millage = 999999999;
             }
 
-            playerDataBase.Gold = gold;
+            playerDataBase.CoinA = coinA;
+            playerDataBase.CoinB = coinB;
             playerDataBase.Crystal = crystal;
             playerDataBase.Millage = millage;
 
@@ -1412,102 +1437,90 @@ public class PlayfabManager : MonoBehaviour
 
     }
 
-    public void UpdateAddCurrency(MoneyType type, int number)
+    public void UpdateAddGold(int number)
     {
-        string currentType = "";
-        int value = 0;
+        moneyAnimation.PlusMoney(number);
 
-        try
+        coin = playerDataBase.Coin;
+        coinA = playerDataBase.CoinA;
+        coinB = playerDataBase.CoinB;
+
+        coin += number;
+
+        coinB = coin / 100000000;
+        coinA = coin - (coinB * 100000000);
+
+        if (coinA > playerDataBase.CoinA)
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
-
-                switch (type)
-                {
-                    case MoneyType.Gold:
-                        currentType = "GO";
-                        if (playerDataBase.Gold + number > 999999999)
-                        {
-                            value = 999999999 - playerDataBase.Gold;
-                        }
-                        else
-                        {
-                            value = number;
-                        }
-
-                        break;
-                    case MoneyType.Crystal:
-                        currentType = "ST";
-                        if (playerDataBase.Crystal + number > 999999999)
-                        {
-                            value = 999999999 - playerDataBase.Crystal;
-                        }
-                        else
-                        {
-                            value = number;
-                        }
-                        break;
-                    case MoneyType.Millage:
-                        currentType = "MG";
-                        if (playerDataBase.Millage + number > 999999999)
-                        {
-                            value = 999999999 - playerDataBase.Millage;
-                        }
-                        else
-                        {
-                            value = number;
-                        }
-
-                        break;
-                }
-
-
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "AddMoney",
-                    FunctionParameter = new { currencyType = currentType, currencyAmount = value },
-                    GeneratePlayStreamEvent = true,
-                }, OnCloudUpdateStats, DisplayPlayfabError);
-
-                switch (type)
-                {
-                    case MoneyType.Gold:
-                        SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
-
-                        moneyAnimation.PlusMoney(value);
-
-                        playerDataBase.Gold += value;
-                        break;
-                    case MoneyType.Crystal:
-                        playerDataBase.Crystal += value;
-                        break;
-                    case MoneyType.Millage:
-                        playerDataBase.Millage += value;
-                        break;
-                }
-
-                uiManager.Renewal();
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
+            UpdateAddCurrency(MoneyType.CoinA, (int)(coinA - playerDataBase.CoinA));
         }
-        catch (Exception e)
+        else if (coinA < playerDataBase.CoinA)
         {
-            Debug.LogError(e.Message);
+            UpdateSubtractCurrency(MoneyType.CoinA, (int)(playerDataBase.CoinA - coinA));
+        }
+
+        if (coinB > playerDataBase.CoinB)
+        {
+            UpdateAddCurrency(MoneyType.CoinB, (int)(coinB - playerDataBase.CoinB));
+        }
+        else if (coinB < playerDataBase.CoinB)
+        {
+            UpdateSubtractCurrency(MoneyType.CoinB, (int)(playerDataBase.CoinB - coinB));
         }
     }
+    public void UpdateSubtractGold(int number)
+    {
+        coin = playerDataBase.Coin;
+        coinA = playerDataBase.CoinA;
+        coinB = playerDataBase.CoinB;
 
-    public void UpdateSubtractCurrency(MoneyType type, int number)
+        coin -= number;
+
+        coinB = coin / 100000000;
+        coinA = coin - (coinB * 100000000);
+
+        if (coinA > playerDataBase.CoinA)
+        {
+            UpdateAddCurrency(MoneyType.CoinA, (int)(coinA - playerDataBase.CoinA));
+        }
+        else
+        {
+            UpdateSubtractCurrency(MoneyType.CoinA, (int)(playerDataBase.CoinA - coinA));
+        }
+
+        if (coinB > playerDataBase.CoinB)
+        {
+            UpdateAddCurrency(MoneyType.CoinB, (int)(coinB - playerDataBase.CoinB));
+        }
+        else
+        {
+            UpdateSubtractCurrency(MoneyType.CoinB, (int)(playerDataBase.CoinB - coinB));
+        }
+
+
+        consumeGoldA = GameStateManager.instance.ConsumeGold;
+
+        consumeGoldA += number;
+
+        if (consumeGoldA >= 1000000)
+        {
+            consumeGoldB = consumeGoldA / 1000000;
+
+            consumeGoldA /= 1000000;
+
+            playerDataBase.ConsumeGold += consumeGoldB;
+
+            GameStateManager.instance.ConsumeGold = consumeGoldA;
+            UpdatePlayerStatisticsInsert("ConsumeGold", playerDataBase.ConsumeGold);
+        }
+    }
+    public void UpdateAddCurrency(MoneyType type, int number)
     {
         string currentType = "";
 
         switch (type)
         {
-            case MoneyType.Gold:
+            case MoneyType.CoinA:
                 currentType = "GO";
                 break;
             case MoneyType.Crystal:
@@ -1515,6 +1528,71 @@ public class PlayfabManager : MonoBehaviour
                 break;
             case MoneyType.Millage:
                 currentType = "MG";
+                break;
+            case MoneyType.CoinB:
+                currentType = "GA";
+                break;
+        }
+
+        if (NetworkConnect.instance.CheckConnectInternet())
+        {
+            try
+            {
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "AddMoney",
+                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudUpdateStats, DisplayPlayfabError);
+
+                switch (type)
+                {
+                    case MoneyType.CoinA:
+                        moneyAnimation.PlusMoney(number);
+
+                        playerDataBase.CoinA += number;
+                        break;
+                    case MoneyType.Crystal:
+                        playerDataBase.Crystal += number;
+                        break;
+                    case MoneyType.Millage:
+                        playerDataBase.Millage += number;
+                        break;
+                    case MoneyType.CoinB:
+                        playerDataBase.CoinB += number;
+                        break;
+                }
+
+                uiManager.Renewal();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+        }
+
+    }
+    public void UpdateSubtractCurrency(MoneyType type, int number)
+    {
+        string currentType = "";
+
+        switch (type)
+        {
+            case MoneyType.CoinA:
+                currentType = "GO";
+                break;
+            case MoneyType.Crystal:
+                currentType = "ST";
+                break;
+            case MoneyType.Millage:
+                currentType = "MG";
+                break;
+            case MoneyType.CoinB:
+                currentType = "GA";
                 break;
         }
 
@@ -1537,8 +1615,8 @@ public class PlayfabManager : MonoBehaviour
 
         switch (type)
         {
-            case MoneyType.Gold:
-                playerDataBase.Gold -= number;
+            case MoneyType.CoinA:
+                playerDataBase.CoinA -= number;
                 playerDataBase.ConsumeGold += number;
                 UpdatePlayerStatisticsInsert("ConsumeGold", playerDataBase.ConsumeGold);
                 break;
@@ -1547,6 +1625,9 @@ public class PlayfabManager : MonoBehaviour
                 break;
             case MoneyType.Millage:
                 playerDataBase.Millage -= number;
+                break;
+            case MoneyType.CoinB:
+                playerDataBase.CoinB -= number;
                 break;
         }
 
@@ -1802,7 +1883,7 @@ public class PlayfabManager : MonoBehaviour
     #region PurchaseItem
     public void PurchaseCoin(int number)
     {
-        UpdateAddCurrency(MoneyType.Gold, number);
+        UpdateAddCurrency(MoneyType.CoinA, number);
 
         //NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1880,7 +1961,7 @@ public class PlayfabManager : MonoBehaviour
                 switch (shopClass.virtualCurrency)
                 {
                     case "GO":
-                        playerDataBase.Gold -= (int)shopClass.price;
+                        playerDataBase.Coin -= (int)shopClass.price;
                         break;
                 }
             }, error =>
@@ -1919,14 +2000,31 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public void RevokeConsumeItem(string itemInstanceID)
+    public void DeleteInventoryItem(string itemInstanceID)
     {
         try
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "RevokeConsumeItem",
+                FunctionName = "DeleteInventoryItem",
                 FunctionParameter = new { ItemInstanceId = itemInstanceID },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
+    public void DeleteInventoryItems(List<string> itemInstanceID)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "DeleteInventoryItems",
+                FunctionParameter = new { ItemsWantToDel = itemInstanceID },
                 GeneratePlayStreamEvent = true,
             }, OnCloudUpdateStats, DisplayPlayfabError);
         }

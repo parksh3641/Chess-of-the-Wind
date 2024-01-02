@@ -592,7 +592,7 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        if (playerDataBase.Coin < stakes) //입장료를 가지고 있는지?
         {
             isServer = false;
 
@@ -708,7 +708,7 @@ public class MatchingManager : MonoBehaviour
             return;
         }
 
-        if (playerDataBase.Gold < stakes) //입장료를 가지고 있는지?
+        if (playerDataBase.Coin < stakes) //입장료를 가지고 있는지?
         {
             isServer = false;
 
@@ -939,8 +939,8 @@ public class MatchingManager : MonoBehaviour
     {
         lowAllowMoneyView.SetActive(false);
 
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, rankInformation.stakes);
-      
+        PlayfabManager.instance.UpdateAddGold(rankInformation.stakes);
+
         NotionManager.instance.UseNotion(NotionType.GetWatchAdReward);
     }
 

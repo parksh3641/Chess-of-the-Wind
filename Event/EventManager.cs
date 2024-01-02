@@ -78,13 +78,30 @@ public class EventManager : MonoBehaviour
 
     public void Initialize()
     {
-        if (playerDataBase.WelcomeBoxCount < 7)
+        if (playerDataBase.WelcomeBoxCount < 9)
+        {
+            if (!playerDataBase.WelcomeBoxCheck)
+            {
+                OnWelcomeBoxAlarm();
+            }
+        }
+        else
+        {
+            welcomeBoxView.SetActive(false);
+        }
+
+        if(playerDataBase.WelcomeCount < 6)
         {
             if (!playerDataBase.WelcomeCheck)
             {
-                OnSetWelcomeAlarm();
+                OnWelcomeAlarm();
             }
         }
+        else
+        {
+            welcomeView.SetActive(false);
+        }
+
 
         for (int i = 0; i < rankUpDataBase.rankUpInfomationList.Count; i++)
         {
@@ -102,14 +119,6 @@ public class EventManager : MonoBehaviour
         }
 
         CheckingRankUp();
-
-        if (playerDataBase.WelcomeBoxCount < 10)
-        {
-            if (!playerDataBase.WelcomeBoxCheck)
-            {
-                OnSetWelcomeBoxAlarm();
-            }
-        }
     }
 
     public void CheckingRankUp()
@@ -220,23 +229,23 @@ public class EventManager : MonoBehaviour
 
         CheckWelcomeBox();
 
-        OnCheckWelcomeBoxAlarm();
+        OffWelcomeBoxAlarm();
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
     }
 
-    public void OnSetWelcomeBoxAlarm()
+    public void OnWelcomeBoxAlarm()
     {
         welcomeBoxAlarm.SetActive(true);
         welcomeBoxAlarm2.SetActive(true);
     }
 
-    public void OnCheckWelcomeBoxAlarm()
+    public void OffWelcomeBoxAlarm()
     {
-        welcomeBoxAlarm.SetActive(false);
-        welcomeBoxAlarm2.SetActive(false);
+        welcomeBoxAlarm.SetActive(true);
+        welcomeBoxAlarm2.SetActive(true);
     }
 
     #endregion
@@ -303,7 +312,7 @@ public class EventManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 2000);
+                PlayfabManager.instance.UpdateAddGold(2000);
                 break;
             case 1:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -332,7 +341,7 @@ public class EventManager : MonoBehaviour
                 }
                 break;
             case 3:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 15000);
+                PlayfabManager.instance.UpdateAddGold(15000);
                 break;
             case 4:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -377,20 +386,20 @@ public class EventManager : MonoBehaviour
 
         CheckWelcome();
 
-        OnCheckWelcomeAlarm();
+        OffWelcomeAlarm();
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
     }
 
-    public void OnSetWelcomeAlarm()
+    public void OnWelcomeAlarm()
     {
         welcomeAlarm.SetActive(true);
         welcomeAlarm2.SetActive(true);
     }
 
-    public void OnCheckWelcomeAlarm()
+    public void OffWelcomeAlarm()
     {
         welcomeAlarm.SetActive(false);
         welcomeAlarm2.SetActive(false);
@@ -441,7 +450,7 @@ public class EventManager : MonoBehaviour
             switch (rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].rewardType)
             {
                 case RewardType.Gold:
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                    PlayfabManager.instance.UpdateAddGold(rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
                     break;
                 case RewardType.UpgradeTicket:
                     playerDataBase.SetUpgradeTicket(RankType.N, rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);

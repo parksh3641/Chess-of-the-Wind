@@ -95,7 +95,7 @@ public class ResetManager : MonoBehaviour
                 playerDataBase.WelcomeCheck = false;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
 
-                eventManager.OnSetWelcomeAlarm();
+                eventManager.OnWelcomeAlarm();
             }
 
             if (playerDataBase.WelcomeBoxCheck)
@@ -105,7 +105,7 @@ public class ResetManager : MonoBehaviour
 
                 if(playerDataBase.welcomeBoxCount < 9)
                 {
-                    eventManager.OnSetWelcomeBoxAlarm();
+                    eventManager.OnWelcomeBoxAlarm();
                 }
             }
         }
@@ -162,7 +162,7 @@ public class ResetManager : MonoBehaviour
                     playerDataBase.WelcomeCheck = false;
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
 
-                    eventManager.OnSetWelcomeAlarm();
+                    eventManager.OnWelcomeAlarm();
                 }
 
                 if (playerDataBase.WelcomeBoxCheck)
@@ -172,7 +172,7 @@ public class ResetManager : MonoBehaviour
 
                     if (playerDataBase.welcomeBoxCount < 9)
                     {
-                        eventManager.OnSetWelcomeBoxAlarm();
+                        eventManager.OnWelcomeBoxAlarm();
                     }
                 }
             }

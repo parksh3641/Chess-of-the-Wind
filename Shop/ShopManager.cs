@@ -345,9 +345,9 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        if (playerDataBase.Gold >= price)
+        if (playerDataBase.Coin >= price)
         {
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+            PlayfabManager.instance.UpdateSubtractGold(price);
 
             switch (GameStateManager.instance.WindCharacterType)
             {
@@ -410,9 +410,9 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        if (playerDataBase.Gold >= price)
+        if (playerDataBase.Coin >= price)
         {
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+            PlayfabManager.instance.UpdateSubtractGold(price);
 
             switch (GameStateManager.instance.WindCharacterType)
             {
@@ -461,7 +461,7 @@ public class ShopManager : MonoBehaviour
 
                     dailyContentArray[0].Locked();
 
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+                    PlayfabManager.instance.UpdateAddGold(price);
 
                     FirebaseAnalytics.LogEvent("DailyReward");
                 }
@@ -479,9 +479,9 @@ public class ShopManager : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket:
-                if (playerDataBase.Gold >= price)
+                if (playerDataBase.Coin >= price)
                 {
-                    PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, price);
+                    PlayfabManager.instance.UpdateSubtractGold(price);
 
                     FirebaseAnalytics.LogEvent("BuyUpgradeTicket");
                 }
@@ -559,7 +559,7 @@ public class ShopManager : MonoBehaviour
             case 3:
                 random = Random.Range(5000, 100001);
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+                PlayfabManager.instance.UpdateAddGold(random);
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
 
@@ -568,7 +568,7 @@ public class ShopManager : MonoBehaviour
             case 4:
                 random = Random.Range(50000, 1000001);
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+                PlayfabManager.instance.UpdateAddGold(random);
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
 
@@ -723,7 +723,7 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (GameStateManager.instance.DailyAdsReward) return;
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000);
+                PlayfabManager.instance.UpdateAddGold(10000);
 
                 GameStateManager.instance.DailyAdsReward = true;
 
@@ -756,7 +756,7 @@ public class ShopManager : MonoBehaviour
 
                 random = Random.Range(7500, 20001);
 
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, random);
+                PlayfabManager.instance.UpdateAddGold(random);
 
                 GameStateManager.instance.DailyGoldReward = true;
 
@@ -922,7 +922,13 @@ public class ShopManager : MonoBehaviour
     [Button]
     public void PlusMoney()
     {
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 10000000);
+        PlayfabManager.instance.UpdateAddGold(100000000);
+    }
+
+    [Button]
+    public void MinusMoney()
+    {
+        PlayfabManager.instance.UpdateSubtractGold(100000000);
     }
 
     [Button]

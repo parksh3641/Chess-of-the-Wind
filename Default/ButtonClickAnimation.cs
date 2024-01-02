@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public bool isSound = true;
+    public bool isAnim = true;
 
     public UnityEvent clickSoundEvent;
 
@@ -17,7 +18,10 @@ public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointer
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        transform.localScale = Vector3.one * 0.95f;
+        if(isAnim)
+        {
+            transform.localScale = Vector3.one * 0.95f;
+        }
 
         if (isSound && GameStateManager.instance.Sfx)
         {
@@ -27,6 +31,9 @@ public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointer
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        transform.localScale = Vector3.one;
+        if (isAnim)
+        {
+            transform.localScale = Vector3.one;
+        }
     }
 }

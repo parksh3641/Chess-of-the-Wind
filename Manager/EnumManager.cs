@@ -207,9 +207,10 @@ public enum LoginType
 
 public enum MoneyType
 {
-    Gold = 0,
+    CoinA = 0,
     Crystal,
-    Millage
+    Millage,
+    CoinB
 }
 
 public enum ItemType

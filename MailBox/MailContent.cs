@@ -149,7 +149,7 @@ public class MailContent : MonoBehaviour
         switch (rewardType)
         {
             case RewardType.Gold:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, count);
+                PlayfabManager.instance.UpdateAddGold(count);
                 break;
             case RewardType.UpgradeTicket:
                 playerDataBase.SetUpgradeTicket(RankType.N, count);

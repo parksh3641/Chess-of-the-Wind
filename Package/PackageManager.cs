@@ -167,7 +167,7 @@ public class PackageManager : MonoBehaviour
             switch (type.receiveInformationList[i].rewardType)
             {
                 case RewardType.Gold:
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, count);
+                    PlayfabManager.instance.UpdateAddGold(count);
                     break;
                 case RewardType.UpgradeTicket:
                     playerDataBase.SetUpgradeTicket(RankType.N, count);

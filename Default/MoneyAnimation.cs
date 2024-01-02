@@ -753,7 +753,7 @@ public class MoneyAnimation : MonoBehaviour
     [Button]
     void PlusMoney()
     {
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 1000);
+        PlayfabManager.instance.UpdateAddGold(1000);
     }
 
     public void PlusMoney(int target)
@@ -765,7 +765,7 @@ public class MoneyAnimation : MonoBehaviour
 
         plusMoneyView.SetActive(true);
 
-        gold = playerDataBase.Gold;
+        gold = (int)playerDataBase.Coin;
         myMoneyText.text = MoneyUnitString.ToCurrencyString(gold);
 
         myPlusMoneyObj.SetActive(true);

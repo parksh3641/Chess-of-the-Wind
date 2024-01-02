@@ -12,7 +12,7 @@ public static class MoneyUnitString
     /// <param name="number"></param>
     /// <returns></returns>
     /// 
-    public static string ToCurrencyString(int number)
+    public static string ToCurrencyString(long number)
     {
         if (number != 0)
         {

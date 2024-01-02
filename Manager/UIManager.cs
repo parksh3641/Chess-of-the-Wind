@@ -87,6 +87,7 @@ public class UIManager : MonoBehaviour
     public EventManager eventManager;
 
     public Image[] bottomUIImg;
+    public Animator[] bottmUIAnimator;
 
     public int index = 0;
     Sprite[] characterArray;
@@ -226,7 +227,9 @@ public class UIManager : MonoBehaviour
 
     public void Renewal()
     {
-        goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Gold);
+        playerDataBase.Coin = playerDataBase.CoinA + (playerDataBase.CoinB * 100000000);
+
+        goldText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Coin);
         //crystalText.text = MoneyUnitString.ToCurrencyString(playerDataBase.Crystal);
 
         nickNameText.text = GameStateManager.instance.NickName;
@@ -550,7 +553,7 @@ public class UIManager : MonoBehaviour
             playerDataBase.WinGetMoney += gold;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinGetMoney", playerDataBase.WinGetMoney);
 
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, gold);
+            PlayfabManager.instance.UpdateAddGold(gold);
         }
         else
         {
@@ -560,7 +563,7 @@ public class UIManager : MonoBehaviour
 
             moneyAnimation.ResultMinusMoney(-GameStateManager.instance.Stakes, resultGoldText);
 
-            PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
+            PlayfabManager.instance.UpdateSubtractGold(GameStateManager.instance.Stakes);
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.ResultMoney);
@@ -616,13 +619,15 @@ public class UIManager : MonoBehaviour
     {
         if (index == number) return;
 
+        index = number;
+
         for (int i = 0; i < bottomUIImg.Length; i++)
         {
             bottomUIImg[i].enabled = false;
         }
 
         bottomUIImg[number].enabled = true;
-
+        bottmUIAnimator[number].Play("SizeUp");
 
         shopManager.CloseShopView();
         collectionManager.CloseCollectionView();
@@ -631,13 +636,22 @@ public class UIManager : MonoBehaviour
         {
             case 0:
                 shopManager.OpenShopView();
+
+                bottmUIAnimator[1].Play("SizeDown");
+                bottmUIAnimator[2].Play("SizeDown");
                 break;
             case 1:
                 challengeManager.CheckingGoal();
                 eventManager.CheckingRankUp();
+
+                bottmUIAnimator[0].Play("SizeDown");
+                bottmUIAnimator[2].Play("SizeDown");
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
+
+                bottmUIAnimator[0].Play("SizeDown");
+                bottmUIAnimator[1].Play("SizeDown");
                 break;
             case 3:
                 break;

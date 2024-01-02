@@ -72,7 +72,11 @@ public class PlayerDataBase : ScriptableObject
 {
     [Title("Money")]
     [SerializeField]
-    private int gold = 0;
+    private long coin = 0;
+    [SerializeField]
+    private long coinA = 0;
+    [SerializeField]
+    private long coinB = 0;
     [SerializeField]
     private int crystal = 0;
     [SerializeField]
@@ -94,6 +98,41 @@ public class PlayerDataBase : ScriptableObject
     private int rankUpCount = 0;
     [SerializeField]
     private int testAccount = 0;
+
+    [Space]
+    [Title("Daily")]
+    [SerializeField]
+    private int dailyWin = 0;
+    [SerializeField]
+    private int dailyReward = 0;
+    [SerializeField]
+    private int dailyBuy1 = 0;
+    [SerializeField]
+    private int dailyBuy2 = 0;
+    [SerializeField]
+    private int dailyBuyCount1 = 0;
+    [SerializeField]
+    private int dailyBuyCount2 = 0;
+    [SerializeField]
+    private int dailyNormalBox = 0;
+    [SerializeField]
+    private int dailyEpicBox = 0;
+    [SerializeField]
+    private int dailyNormalBox_1 = 0;
+    [SerializeField]
+    private int dailyNormalBox_10 = 0;
+    [SerializeField]
+    private int dailyEpicBox_1 = 0;
+    [SerializeField]
+    private int dailyEpicBox_10 = 0;
+    [SerializeField]
+    private int dailyAdsReward = 0;
+    [SerializeField]
+    private int dailyAdsReward2 = 0;
+    [SerializeField]
+    private int dailyAdsReward3 = 0;
+    [SerializeField]
+    private int dailyGoldReward = 0;
 
     [Space]
     [Title("Achievement")]
@@ -343,15 +382,39 @@ public class PlayerDataBase : ScriptableObject
 
     #region Data
 
-    public int Gold
+    public long Coin
     {
         get
         {
-            return gold;
+            return coin;
         }
         set
         {
-            gold = value;
+            coin = value;
+        }
+    }
+
+    public long CoinA
+    {
+        get
+        {
+            return coinA;
+        }
+        set
+        {
+            coinA = value;
+        }
+    }
+
+    public long CoinB
+    {
+        get
+        {
+            return coinB;
+        }
+        set
+        {
+            coinB = value;
         }
     }
 
@@ -486,6 +549,32 @@ public class PlayerDataBase : ScriptableObject
             testAccount = value;
         }
     }
+
+    public int DailyWin
+    {
+        get
+        {
+            return dailyWin;
+        }
+        set
+        {
+            dailyWin = value;
+        }
+    }
+
+    public int DailyReward
+    {
+        get
+        {
+            return dailyReward;
+        }
+        set
+        {
+            dailyReward = value;
+        }
+    }
+
+
 
     public int ConsumeGold
     {
@@ -1551,7 +1640,9 @@ public class PlayerDataBase : ScriptableObject
 
     public void Initialize()
     {
-        gold = 0;
+        coin = 0;
+        coinA = 0;
+        coinB = 0;
         crystal = 0;
         millage = 0;
 

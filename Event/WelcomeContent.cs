@@ -58,7 +58,7 @@ public class WelcomeContent : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if(playerDataBase.Gold >= 10000)
+                    if(playerDataBase.Coin >= 10000)
                     {
                         lockObj.SetActive(false);
                     }

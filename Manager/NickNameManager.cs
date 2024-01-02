@@ -108,14 +108,14 @@ public class NickNameManager : MonoBehaviour
 
         for (int i = 0; i < lines.Length; i++)
         {
-            if (inputField.text.Contains(lines[i]))
+            if (inputField.text.ToLower().Contains(lines[i]))
             {
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                 return;
             }
         }
 
-        if (playerDataBase.Gold >= 10000)
+        if (playerDataBase.Coin >= 10000)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
 
@@ -227,7 +227,7 @@ public class NickNameManager : MonoBehaviour
     {
         if (uIManager != null) uIManager.Renewal();
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, 10000);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractGold(10000);
 
         profileNickNameText.text = GameStateManager.instance.NickName;
 

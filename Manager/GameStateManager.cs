@@ -49,6 +49,7 @@ public class GameStateManager : MonoBehaviour
         public int penalty = 0;
         public bool playing = false;
         public bool reEnter = false;
+        public int consumeGold = 0;
 
         [Space]
         [Title("Rank")]
@@ -372,6 +373,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.reEnter = value;
+            SaveFile();
+        }
+    }
+
+    public int ConsumeGold
+    {
+        get
+        {
+            return gameSettings.consumeGold;
+        }
+        set
+        {
+            gameSettings.consumeGold = value;
             SaveFile();
         }
     }

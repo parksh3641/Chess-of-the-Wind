@@ -90,7 +90,7 @@ public class StateManager : MonoBehaviour
 
                     penaltyValue.text = "-" + GameStateManager.instance.Stakes.ToString();
 
-                    PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, GameStateManager.instance.Stakes);
+                    PlayfabManager.instance.UpdateSubtractGold(GameStateManager.instance.Stakes);
 
                     GameStateManager.instance.Playing = false;
                     GameStateManager.instance.Win = false;

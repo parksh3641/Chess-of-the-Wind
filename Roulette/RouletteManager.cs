@@ -1707,7 +1707,7 @@ public class RouletteManager : MonoBehaviour
         gameManager.otherMoney += number;
         gameManager.otherMoneyText.text = MoneyUnitString.ToCurrencyString(gameManager.otherMoney);
 
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, number);
+        PlayfabManager.instance.UpdateAddGold(number);
 
         NotionManager.instance.UseNotion("보너스 룰렛 보상 : 돈 " + number + " 만큼 획득!", ColorType.Green);
     }

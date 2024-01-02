@@ -21,6 +21,7 @@ public class AchievementContent : MonoBehaviour
     public Sprite[] buttonImgArray;
 
     public bool isActive = false;
+    public bool isDelay = false;
 
     int goal = 0;
     int count = 0;
@@ -98,6 +99,8 @@ public class AchievementContent : MonoBehaviour
 
     public void OnClick()
     {
+        if (isDelay) return;
+
         if(isActive)
         {
             isActive = false;
@@ -105,6 +108,14 @@ public class AchievementContent : MonoBehaviour
             achievementManager.GetReward(achievementType);
 
             Initialize(achievementManager);
+
+            isDelay = true;
+            Invoke("Delay", 0.5f);
         }
+    }
+
+    void Delay()
+    {
+        isDelay = false;
     }
 }

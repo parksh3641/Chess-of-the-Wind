@@ -83,6 +83,8 @@ public class UpgradeManager : MonoBehaviour
 
     Dictionary<string, string> customData = new Dictionary<string, string>();
 
+    public List<string> sellBlockList = new List<string>();
+
     public CollectionManager collectionManager;
     public SellManager sellManager;
     public EquipManager equipManager;
@@ -224,7 +226,7 @@ public class UpgradeManager : MonoBehaviour
 
         goldObj.SetActive(true);
 
-        gold = playerDataBase.Gold;
+        gold = (int)playerDataBase.Coin;
 
         goldText.localizationName = "NeedGold_Upgrade";
         goldText.ReLoad();
@@ -455,8 +457,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-
-        PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Gold, upgradeInformation.needGold);
+        PlayfabManager.instance.UpdateSubtractGold(upgradeInformation.needGold);
 
         playerDataBase.UseUpgradeTicketCount(RankType.N, needTicket);
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
@@ -699,15 +700,31 @@ public class UpgradeManager : MonoBehaviour
 
     public void SellBlock(string id)
     {
-        Debug.LogError("삭제 : " + id);
-
-        PlayfabManager.instance.RevokeConsumeItem(id);
+        PlayfabManager.instance.DeleteInventoryItem(id);
         playerDataBase.SellBlock(id);
+
+        //Debug.LogError("삭제 : " + id);
     }
+
+    public void SetSellBlock(string id)
+    {
+        sellBlockList.Add(id);
+        playerDataBase.SellBlock(id);
+
+        //Debug.LogError("삭제할 블럭 : " + id);
+    }
+
+    public void SellBlockAll()
+    {
+        PlayfabManager.instance.DeleteInventoryItems(sellBlockList);
+
+        Debug.LogError("일괄 삭제");
+    }
+
 
     public void SellBlockOne(string id)
     {
-        PlayfabManager.instance.RevokeConsumeItem(id);
+        PlayfabManager.instance.DeleteInventoryItem(id);
         playerDataBase.SellBlock(id);
 
         for(int i = 0; i < collectionManager.blockUIContentList.Count; i ++)

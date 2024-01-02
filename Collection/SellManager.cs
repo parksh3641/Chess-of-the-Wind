@@ -66,7 +66,7 @@ public class SellManager : MonoBehaviour
         }
 
         upgradeManager.SellBlockOne(blockClass.instanceId);
-        PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, price);
+        PlayfabManager.instance.UpdateAddGold(price);
 
         equipManager.CheckUnEquip(blockClass.instanceId);
 

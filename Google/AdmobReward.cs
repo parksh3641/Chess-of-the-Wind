@@ -90,11 +90,16 @@ public class AdmobReward : MonoBehaviour
                 {
                     matchingManager.GetAdReward();
                 }
+
+                LoadRewardedAd();
+
                 //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
             });
         }
         else
         {
+            LoadRewardedAd();
+
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
             NotionManager.instance.UseNotion(NotionType.CancelWatchAd);
         }

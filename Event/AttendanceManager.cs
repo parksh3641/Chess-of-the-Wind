@@ -147,7 +147,7 @@ public class AttendanceManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 3000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 1:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -163,7 +163,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 2:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 3000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 3:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -179,7 +179,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 4:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 3000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 5:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -195,7 +195,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 6:
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, 6000);
+                PlayfabManager.instance.UpdateAddGold(6000);
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
