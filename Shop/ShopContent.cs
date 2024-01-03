@@ -31,6 +31,7 @@ public class ShopContent : MonoBehaviour
 
     Sprite[] shopContentArray;
 
+    PlayerDataBase playerDataBase;
     ImageDataBase imageDataBase;
     RankDataBase rankDataBase;
 
@@ -38,6 +39,7 @@ public class ShopContent : MonoBehaviour
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
         if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
@@ -68,7 +70,7 @@ public class ShopContent : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
-                if (GameStateManager.instance.DailyReward)
+                if (playerDataBase.DailyReward == 1)
                 {
                     lockObj.SetActive(true);
                 }
@@ -97,45 +99,45 @@ public class ShopContent : MonoBehaviour
 
                     if(number < 11)
                     {
-                        if(GameStateManager.instance.DailyBuy1)
+                        if(playerDataBase.DailyBuy1 == 1)
                         {
                             lockObj.SetActive(true);
 
-                            number = GameStateManager.instance.DailyBuyCount1;
+                            number = playerDataBase.DailyBuyCount1;
                         }
                         else
                         {
-                            if(GameStateManager.instance.DailyBuyCount1 == 0)
+                            if(playerDataBase.DailyBuyCount1 == 0)
                             {
                                 number = Random.Range(1, 10);
 
-                                GameStateManager.instance.DailyBuyCount1 = number;
+                                playerDataBase.DailyBuyCount1 = number;
                             }
                             else
                             {
-                                number = GameStateManager.instance.DailyBuyCount1;
+                                number = playerDataBase.DailyBuyCount1;
                             }
                         }
                     }
                     else
                     {
-                        if (GameStateManager.instance.DailyBuy2)
+                        if (playerDataBase.DailyBuy2 == 1)
                         {
                             lockObj.SetActive(true);
 
-                            number = GameStateManager.instance.DailyBuyCount2;
+                            number = playerDataBase.DailyBuyCount2;
                         }
                         else
                         {
-                            if (GameStateManager.instance.DailyBuyCount2 == 0)
+                            if (playerDataBase.DailyBuyCount2 == 0)
                             {
                                 number = Random.Range(11, 51);
 
-                                GameStateManager.instance.DailyBuyCount2 = number;
+                                playerDataBase.DailyBuyCount2 = number;
                             }
                             else
                             {
-                                number = GameStateManager.instance.DailyBuyCount2;
+                                number = playerDataBase.DailyBuyCount2;
                             }
                         }
                     }

@@ -17,6 +17,13 @@ public class AdmobReward : MonoBehaviour
     public ShopManager shopManager;
     public MatchingManager matchingManager;
 
+    PlayerDataBase playerDataBase;
+
+    private void Awake()
+    {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+    }
+
     void Start()
     {
         MobileAds.RaiseAdEventsOnUnityMainThread = true;
@@ -90,6 +97,9 @@ public class AdmobReward : MonoBehaviour
                 {
                     matchingManager.GetAdReward();
                 }
+
+                playerDataBase.AdCount += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AdCount", playerDataBase.AdCount);
 
                 LoadRewardedAd();
 

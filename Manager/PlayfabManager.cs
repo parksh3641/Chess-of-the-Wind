@@ -203,23 +203,7 @@ public class PlayfabManager : MonoBehaviour
 
         //uiManager.OnLogout();
 
-        GameStateManager.instance.PlayfabId = "";
-        GameStateManager.instance.CustomId = "";
-        GameStateManager.instance.AutoLogin = false;
-        GameStateManager.instance.Login = LoginType.None;
-
-        GameStateManager.instance.Playing = false;
-        GameStateManager.instance.MatchingTime = 6;
-        GameStateManager.instance.Penalty = 0;
-        GameStateManager.instance.WinStreak = 0;
-        GameStateManager.instance.LoseStreak = 0;
-        GameStateManager.instance.Win = false;
-        GameStateManager.instance.Lose = false;
-        GameStateManager.instance.Tutorial = false;
-        GameStateManager.instance.GameRankType = GameRankType.Bronze_4;
-        GameStateManager.instance.BettingTime = 11;
-        GameStateManager.instance.BettingWaitTime = 4;
-        GameStateManager.instance.PrivacyPolicy = false;
+        GameStateManager.instance.Initialize();
 
         isActive = false;
         isLogin = false;
@@ -631,8 +615,10 @@ public class PlayfabManager : MonoBehaviour
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         StartCoroutine(LoadDataCoroutine());
-#else
-        GetTitleInternalData("CheckVersion", CheckVersion);
+#elif UNITY_ANDROID
+        GetTitleInternalData("CheckAOSVersion", CheckVersion);
+#elif UNITY_IOS
+        GetTitleInternalData("CheckIOSVersion", CheckVersion);
 #endif
 
     }
@@ -1203,6 +1189,12 @@ public class PlayfabManager : MonoBehaviour
                        case "Star":
                            playerDataBase.Star = statistics.Value;
                            break;
+                       case "PlayTime":
+                           playerDataBase.PlayTime = statistics.Value;
+                           break;
+                       case "AdCount":
+                           playerDataBase.AdCount = statistics.Value;
+                           break;
                        case "NowRank":
                            playerDataBase.NowRank = statistics.Value;
                            GameStateManager.instance.GameRankType = GameRankType.Bronze_4 + playerDataBase.NowRank;
@@ -1263,6 +1255,54 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "ConsumeGold":
                            playerDataBase.ConsumeGold = statistics.Value;
+                           break;
+                       case "DailyWin":
+                           playerDataBase.DailyWin = statistics.Value;
+                           break;
+                       case "DailyReward":
+                           playerDataBase.DailyReward = statistics.Value;
+                           break;
+                       case "DailyBuy1":
+                           playerDataBase.DailyBuy1 = statistics.Value;
+                           break;
+                       case "DailyBuy2":
+                           playerDataBase.DailyBuy2 = statistics.Value;
+                           break;
+                       case "DailyBuyCount1":
+                           playerDataBase.DailyBuyCount1 = statistics.Value;
+                           break;
+                       case "DailyBuyCount2":
+                           playerDataBase.DailyBuyCount2 = statistics.Value;
+                           break;
+                       case "DailyNormalBox":
+                           playerDataBase.DailyNormalBox = statistics.Value;
+                           break;
+                       case "DailyEpicBox":
+                           playerDataBase.DailyEpicBox = statistics.Value;
+                           break;
+                       case "DailyNormalBox_1":
+                           playerDataBase.DailyNormalBox_1 = statistics.Value;
+                           break;
+                       case "DailyNormalBox_10":
+                           playerDataBase.DailyNormalBox_10 = statistics.Value;
+                           break;
+                       case "DailyEpicBox_1":
+                           playerDataBase.DailyEpicBox_1 = statistics.Value;
+                           break;
+                       case "DailyEpicBox_10":
+                           playerDataBase.DailyEpicBox_10 = statistics.Value;
+                           break;
+                       case "DailyAdsReward":
+                           playerDataBase.DailyAdsReward = statistics.Value;
+                           break;
+                       case "DailyAdsReward2":
+                           playerDataBase.DailyAdsReward2 = statistics.Value;
+                           break;
+                       case "DailyAdsReward3":
+                           playerDataBase.DailyAdsReward3 = statistics.Value;
+                           break;
+                       case "DailyGoldReward":
+                           playerDataBase.DailyGoldReward = statistics.Value;
                            break;
                        case "TitleNumber":
                            playerDataBase.TitleNumber = statistics.Value;
@@ -1700,7 +1740,18 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if(name.Equals("CheckVersion"))
+                if (name.Equals("CheckAOSVersion"))
+                {
+                    if (result.Data[name].Equals("ON"))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
+                }
+                if (name.Equals("CheckIOSVersion"))
                 {
                     if (result.Data[name].Equals("ON"))
                     {
@@ -1734,6 +1785,17 @@ public class PlayfabManager : MonoBehaviour
                     }
                 }
                 else if (name.Equals("TestMode"))
+                {
+                    if (result.Data[name].Equals("ON"))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
+                }
+                else if (name.Equals("Coupon"))
                 {
                     if (result.Data[name].Equals("ON"))
                     {

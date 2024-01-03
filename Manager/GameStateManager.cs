@@ -83,25 +83,6 @@ public class GameStateManager : MonoBehaviour
         [Title("Tutorial")]
         public bool tutorial = true;
 
-        [Space]
-        [Title("Daily")]
-        public bool dailyWin = false;
-        public bool dailyReward = false;
-        public bool dailyBuy1 = false;
-        public bool dailyBuy2 = false;
-        public int dailyBuyCount1 = 0;
-        public int dailyBuyCount2 = 0;
-        public bool dailyNormalBox = false;
-        public bool dailyEpicBox = false;
-        public int dailyNormalBox_1 = 3;
-        public int dailyNormalBox_10 = 1;
-        public int dailyEpicBox_1 = 3;
-        public int dailyEpicBox_10 = 1;
-        public bool dailyAdsReward = false;
-        public bool dailyAdsReward2 = false;
-        public bool dailyAdsReward3 = false;
-        public bool dailyGoldReward = false;
-
     }
     #region Data
 
@@ -573,215 +554,6 @@ public class GameStateManager : MonoBehaviour
             SaveFile();
         }
     }
-
-    public bool DailyWin
-    {
-        get
-        {
-            return gameSettings.dailyWin;
-        }
-        set
-        {
-            gameSettings.dailyWin = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyReward
-    {
-        get
-        {
-            return gameSettings.dailyReward;
-        }
-        set
-        {
-            gameSettings.dailyReward = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyBuy1
-    {
-        get
-        {
-            return gameSettings.dailyBuy1;
-        }
-        set
-        {
-            gameSettings.dailyBuy1 = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyBuy2
-    {
-        get
-        {
-            return gameSettings.dailyBuy2;
-        }
-        set
-        {
-            gameSettings.dailyBuy2 = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyBuyCount1
-    {
-        get
-        {
-            return gameSettings.dailyBuyCount1;
-        }
-        set
-        {
-            gameSettings.dailyBuyCount1 = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyBuyCount2
-    {
-        get
-        {
-            return gameSettings.dailyBuyCount2;
-        }
-        set
-        {
-            gameSettings.dailyBuyCount2 = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyAdsReward
-    {
-        get
-        {
-            return gameSettings.dailyAdsReward;
-        }
-        set
-        {
-            gameSettings.dailyAdsReward = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyAdsReward2
-    {
-        get
-        {
-            return gameSettings.dailyAdsReward2;
-        }
-        set
-        {
-            gameSettings.dailyAdsReward2 = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyAdsReward3
-    {
-        get
-        {
-            return gameSettings.dailyAdsReward3;
-        }
-        set
-        {
-            gameSettings.dailyAdsReward3 = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyGoldReward
-    {
-        get
-        {
-            return gameSettings.dailyGoldReward;
-        }
-        set
-        {
-            gameSettings.dailyGoldReward = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyNormalBox
-    {
-        get
-        {
-            return gameSettings.dailyNormalBox;
-        }
-        set
-        {
-            gameSettings.dailyNormalBox = value;
-            SaveFile();
-        }
-    }
-
-    public bool DailyEpicBox
-    {
-        get
-        {
-            return gameSettings.dailyEpicBox;
-        }
-        set
-        {
-            gameSettings.dailyEpicBox = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyNormalBox_1
-    {
-        get
-        {
-            return gameSettings.dailyNormalBox_1;
-        }
-        set
-        {
-            gameSettings.dailyNormalBox_1 = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyNormalBox_10
-    {
-        get
-        {
-            return gameSettings.dailyNormalBox_10;
-        }
-        set
-        {
-            gameSettings.dailyNormalBox_10 = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyEpicBox_1
-    {
-        get
-        {
-            return gameSettings.dailyEpicBox_1;
-        }
-        set
-        {
-            gameSettings.dailyEpicBox_1 = value;
-            SaveFile();
-        }
-    }
-
-    public int DailyEpicBox_10
-    {
-        get
-        {
-            return gameSettings.dailyEpicBox_10;
-        }
-        set
-        {
-            gameSettings.dailyEpicBox_10 = value;
-            SaveFile();
-        }
-    }
-
     #endregion
 
     private void Awake()
@@ -790,6 +562,15 @@ public class GameStateManager : MonoBehaviour
 
         LoadData();
     }
+
+    public void Initialize()
+    {
+        gameSettings = new GameSettings();
+
+        string str = JsonUtility.ToJson(gameSettings);
+        FileIO.SaveData(DEVICESETTINGFILENAME, str, true);
+    }
+
     private void LoadData()
     {
         try
@@ -803,22 +584,9 @@ public class GameStateManager : MonoBehaviour
             else
             {
                 gameSettings = new GameSettings();
-                gameSettings.playing = false;
-                gameSettings.matchingTime = 6;
-                gameSettings.penalty = 0;
-                gameSettings.winStreak = 0;
-                gameSettings.loseStreak = 0;
-                gameSettings.win = false;
-                gameSettings.lose = false;
-                gameSettings.tutorial = false;
-                gameSettings.gameRankType = GameRankType.Bronze_4;
-                gameSettings.bettingTime = 11;
-                gameSettings.bettingWaitTime = 6;
-                gameSettings.privacypolicy = false;
-                gameSettings.dailyNormalBox_1 = 3;
-                gameSettings.dailyNormalBox_10 = 1;
-                gameSettings.dailyEpicBox_1 = 3;
-                gameSettings.dailyEpicBox_10 = 1;
+
+                        string str = JsonUtility.ToJson(gameSettings);
+        FileIO.SaveData(DEVICESETTINGFILENAME, str, true);
             }
         }
         catch (Exception e)

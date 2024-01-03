@@ -29,10 +29,17 @@ public class StateManager : MonoBehaviour
     public GameObject penaltyView;
     public Text penaltyValue;
 
+    int playTime = 0;
+
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(1.0f);
+
+    PlayerDataBase playerDataBase;
 
     void Awake()
     {
         instance = this;
+
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         penaltyView.SetActive(false);
 
@@ -41,9 +48,7 @@ public class StateManager : MonoBehaviour
 
     private void Start()
     {
-        //GameStateManager.instance.Playing = false;
-        //GameStateManager.instance.Win = false;
-        //GameStateManager.instance.Lose = false;
+
     }
 
     public void Initialize()
@@ -106,6 +111,19 @@ public class StateManager : MonoBehaviour
                 }
             }
 
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Version", int.Parse(Application.version.Replace(".", "")));
+
+#if UNITY_ANDROID
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 0);
+#elif UNITY_IOS
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 1);
+#else
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 2);
+#endif
+
+            playTime = 0;
+            StartCoroutine(PlayTimeCoroution());
+
             Debug.Log("Initialize Complete!");
         }
     }
@@ -113,5 +131,24 @@ public class StateManager : MonoBehaviour
     public void ClosePenaltyView()
     {
         penaltyView.SetActive(false);
+    }
+
+    IEnumerator PlayTimeCoroution()
+    {
+        if (playTime >= 60)
+        {
+            playTime = 0;
+            playerDataBase.PlayTime += 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("PlayTime", playerDataBase.PlayTime);
+
+            Debug.LogError("1분 지남");
+        }
+        else
+        {
+            playTime += 1;
+        }
+
+        yield return waitForSeconds2;
+        StartCoroutine(PlayTimeCoroution());
     }
 }

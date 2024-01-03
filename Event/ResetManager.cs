@@ -18,6 +18,8 @@ public class ResetManager : MonoBehaviour
     public AttendanceManager attendanceManager;
     public EventManager eventManager;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.6f);
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -48,66 +50,10 @@ public class ResetManager : MonoBehaviour
         {
             Debug.Log("데일리 미션 맨 처음 초기화");
 
-            playerDataBase.AttendanceDay = DateTime.Now.AddDays(1).ToString("yyyyMMdd");
-            playerDataBase.AccessDate += 1;
+            ResetValue();
+
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
-
-            GameStateManager.instance.DailyWin = false;
-            GameStateManager.instance.DailyNormalBox = false;
-            GameStateManager.instance.DailyEpicBox = false;
-            GameStateManager.instance.DailyNormalBox_1 = 3;
-            GameStateManager.instance.DailyNormalBox_10 = 1;
-            GameStateManager.instance.DailyEpicBox_1 = 3;
-            GameStateManager.instance.DailyEpicBox_10 = 1;
-            GameStateManager.instance.DailyReward = false;
-            GameStateManager.instance.DailyBuy1 = false;
-            GameStateManager.instance.DailyBuy2 = false;
-            GameStateManager.instance.DailyBuyCount1 = 0;
-            GameStateManager.instance.DailyBuyCount2 = 0;
-            GameStateManager.instance.DailyAdsReward = false;
-            GameStateManager.instance.DailyAdsReward2 = false;
-            GameStateManager.instance.DailyAdsReward3 = false;
-            GameStateManager.instance.DailyGoldReward = false;
-
-            if (playerDataBase.AttendanceCheck)
-            {
-                playerDataBase.AttendanceCheck = false;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
-
-                if (playerDataBase.AttendanceCount >= 7)
-                {
-                    playerDataBase.AttendanceCount = 0;
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCount", 0);
-
-                    Debug.Log("출석 체크 보상 리셋");
-                }
-                else
-                {
-                    Debug.Log("다음 출석 체크 보상 오픈");
-                }
-
-                attendanceManager.OnSetAlarm();
-            }
-
-            if(playerDataBase.WelcomeCheck)
-            {
-                playerDataBase.WelcomeCheck = false;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
-
-                eventManager.OnWelcomeAlarm();
-            }
-
-            if (playerDataBase.WelcomeBoxCheck)
-            {
-                playerDataBase.WelcomeBoxCheck = false;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
-
-                if(playerDataBase.welcomeBoxCount < 9)
-                {
-                    eventManager.OnWelcomeBoxAlarm();
-                }
-            }
         }
         else
         {
@@ -115,66 +61,8 @@ public class ResetManager : MonoBehaviour
             {
                 Debug.Log("하루가 지났습니다");
 
-                playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
-                playerDataBase.AccessDate += 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
-
-                GameStateManager.instance.DailyWin = false;
-                GameStateManager.instance.DailyNormalBox = false;
-                GameStateManager.instance.DailyEpicBox = false;
-                GameStateManager.instance.DailyNormalBox_1 = 3;
-                GameStateManager.instance.DailyNormalBox_10 = 1;
-                GameStateManager.instance.DailyEpicBox_1 = 3;
-                GameStateManager.instance.DailyEpicBox_10 = 1;
-                GameStateManager.instance.DailyReward = false;
-                GameStateManager.instance.DailyBuy1 = false;
-                GameStateManager.instance.DailyBuy2 = false;
-                GameStateManager.instance.DailyBuyCount1 = 0;
-                GameStateManager.instance.DailyBuyCount2 = 0;
-                GameStateManager.instance.DailyAdsReward = false;
-                GameStateManager.instance.DailyAdsReward2 = false;
-                GameStateManager.instance.DailyAdsReward3 = false;
-                GameStateManager.instance.DailyGoldReward = false;
-
-                if (playerDataBase.AttendanceCheck)
-                {
-                    playerDataBase.AttendanceCheck = false;
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
-
-                    if(playerDataBase.AttendanceCount >= 7)
-                    {
-                        playerDataBase.AttendanceCount = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCount", 0);
-
-                        Debug.Log("출석 체크 보상 리셋");
-                    }
-                    else
-                    {
-                        Debug.Log("다음 출석 체크 보상 오픈");
-                    }
-
-                    attendanceManager.OnSetAlarm();
-                }
-
-                if (playerDataBase.WelcomeCheck)
-                {
-                    playerDataBase.WelcomeCheck = false;
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
-
-                    eventManager.OnWelcomeAlarm();
-                }
-
-                if (playerDataBase.WelcomeBoxCheck)
-                {
-                    playerDataBase.WelcomeBoxCheck = false;
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
-
-                    if (playerDataBase.welcomeBoxCount < 9)
-                    {
-                        eventManager.OnWelcomeBoxAlarm();
-                    }
-                }
+                ResetValue();
+                StartCoroutine(ResetCoroution());
             }
             else
             {
@@ -184,7 +72,7 @@ public class ResetManager : MonoBehaviour
 
         if (playerDataBase.NextMonday.Length < 2)
         {
-            Debug.Log("위클리 미션 초기화");
+            Debug.Log("주간 미션 초기화");
 
             nextMondey = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7);
 
@@ -194,7 +82,6 @@ public class ResetManager : MonoBehaviour
             }
 
             playerDataBase.NextMonday = nextMondey.ToString("yyyyMMdd");
-
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("NextMonday", int.Parse(playerDataBase.NextMonday));
         }
         else
@@ -266,5 +153,109 @@ public class ResetManager : MonoBehaviour
         }
 
         return c;
+    }
+
+    [Button]
+    void ResetInitialize()
+    {
+        ResetValue();
+        StartCoroutine(ResetCoroution());
+    }
+
+    void ResetValue()
+    {
+        playerDataBase.AttendanceDay = DateTime.Now.AddDays(1).ToString("yyyyMMdd");
+        playerDataBase.AccessDate += 1;
+
+        if (playerDataBase.AttendanceCheck)
+        {
+            playerDataBase.AttendanceCheck = false;
+
+            if (playerDataBase.AttendanceCount >= 7)
+            {
+                playerDataBase.AttendanceCount = 0;
+
+                Debug.Log("출석 체크 보상 리셋");
+            }
+            else
+            {
+                Debug.Log("다음 출석 체크 보상 오픈");
+            }
+
+            attendanceManager.OnSetAlarm();
+        }
+
+        if (playerDataBase.WelcomeCheck)
+        {
+            playerDataBase.WelcomeCheck = false;
+
+            if (playerDataBase.WelcomeCount < 7)
+            {
+                eventManager.OnWelcomeAlarm();
+            }
+        }
+
+        if (playerDataBase.WelcomeBoxCheck)
+        {
+            playerDataBase.WelcomeBoxCheck = false;
+
+            if (playerDataBase.welcomeBoxCount < 9)
+            {
+                eventManager.OnWelcomeBoxAlarm();
+            }
+        }
+
+        playerDataBase.DailyWin = 0;
+        playerDataBase.DailyNormalBox_1 = 3;
+        playerDataBase.DailyNormalBox_10 = 1;
+        playerDataBase.DailyEpicBox_1 = 3;
+        playerDataBase.DailyEpicBox_10 = 1;
+        playerDataBase.DailyReward = 0;
+        playerDataBase.DailyBuy1 = 0;
+        playerDataBase.DailyBuy2 = 0;
+        playerDataBase.DailyBuyCount1 = 0;
+        playerDataBase.DailyBuyCount2 = 0;
+        playerDataBase.DailyAdsReward = 0;
+        playerDataBase.DailyAdsReward2 = 0;
+        playerDataBase.DailyAdsReward3 = 0;
+        playerDataBase.DailyGoldReward = 0;
+    }
+
+    IEnumerator ResetCoroution()
+    {
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCount", 0);
+
+        yield return waitForSeconds;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyWin", playerDataBase.DailyWin);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox_1", playerDataBase.DailyNormalBox_1);
+
+        yield return waitForSeconds;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox_10", playerDataBase.DailyNormalBox_10);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox_1", playerDataBase.DailyEpicBox_1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox_10", playerDataBase.DailyEpicBox_10);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReward", playerDataBase.DailyReward);
+
+        yield return waitForSeconds;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy1", playerDataBase.DailyBuy1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy2", playerDataBase.DailyBuy2);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount1", playerDataBase.DailyBuyCount1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount2", playerDataBase.DailyBuyCount2);
+
+        yield return waitForSeconds;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward", playerDataBase.DailyAdsReward);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward2", playerDataBase.DailyAdsReward2);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward3", playerDataBase.DailyAdsReward3);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyGoldReward", playerDataBase.DailyGoldReward);
+
+        yield return waitForSeconds;
     }
 }

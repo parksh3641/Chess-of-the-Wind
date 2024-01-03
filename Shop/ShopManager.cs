@@ -183,10 +183,10 @@ public class ShopManager : MonoBehaviour
 
     void Initialize_Count()
     {
-        dailyCountText[0].text = GameStateManager.instance.DailyNormalBox_1 + "/3";
-        dailyCountText[1].text = GameStateManager.instance.DailyNormalBox_10 + "/1";
-        dailyCountText[2].text = GameStateManager.instance.DailyEpicBox_1 + "/3";
-        dailyCountText[3].text = GameStateManager.instance.DailyEpicBox_10 + "/1";
+        dailyCountText[0].text = playerDataBase.DailyNormalBox_1 + "/3";
+        dailyCountText[1].text = playerDataBase.DailyNormalBox_10 + "/1";
+        dailyCountText[2].text = playerDataBase.DailyEpicBox_1 + "/3";
+        dailyCountText[3].text = playerDataBase.DailyEpicBox_10 + "/1";
     }
 
     public void CloseShopView()
@@ -324,7 +324,7 @@ public class ShopManager : MonoBehaviour
 
         if (number >= 10)
         {
-            if(GameStateManager.instance.DailyNormalBox_10 <= 0)
+            if(playerDataBase.DailyNormalBox_10 <= 0)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
                 
@@ -336,7 +336,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            if (GameStateManager.instance.DailyNormalBox_1 <= 0)
+            if (playerDataBase.DailyNormalBox_1 <= 0)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -361,11 +361,11 @@ public class ShopManager : MonoBehaviour
 
             if(number >= 10)
             {
-                GameStateManager.instance.DailyNormalBox_10 -= 1;
+                playerDataBase.DailyNormalBox_10 -= 1;
             }
             else
             {
-                GameStateManager.instance.DailyNormalBox_1 -= 1;
+                playerDataBase.DailyNormalBox_1 -= 1;
             }
 
             Initialize_Count();
@@ -389,7 +389,7 @@ public class ShopManager : MonoBehaviour
 
         if (number >= 10)
         {
-            if (GameStateManager.instance.DailyEpicBox_10 <= 0)
+            if (playerDataBase.DailyEpicBox_10 <= 0)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -401,7 +401,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            if (GameStateManager.instance.DailyEpicBox_1 <= 0)
+            if (playerDataBase.DailyEpicBox_1 <= 0)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -426,11 +426,11 @@ public class ShopManager : MonoBehaviour
 
             if (number >= 10)
             {
-                GameStateManager.instance.DailyEpicBox_10 -= 1;
+                playerDataBase.DailyEpicBox_10 -= 1;
             }
             else
             {
-                GameStateManager.instance.DailyEpicBox_1 -= 1;
+                playerDataBase.DailyEpicBox_1 -= 1;
             }
 
             Initialize_Count();
@@ -455,9 +455,10 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
-                if(!GameStateManager.instance.DailyReward)
+                if(playerDataBase.DailyReward == 0)
                 {
-                    GameStateManager.instance.DailyReward = true;
+                    playerDataBase.DailyReward = 1;
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReward", playerDataBase.DailyReward);
 
                     dailyContentArray[0].Locked();
 
@@ -503,13 +504,15 @@ public class ShopManager : MonoBehaviour
 
                 if(number < 11)
                 {
-                    GameStateManager.instance.DailyBuy1 = true;
+                    playerDataBase.DailyBuy1 = 1;
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy1", playerDataBase.DailyBuy1);
 
                     dailyContentArray[1].Locked();
                 }
                 else
                 {
-                    GameStateManager.instance.DailyBuy2 = true;
+                    playerDataBase.DailyBuy2 = 1;
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy2", playerDataBase.DailyBuy2);
 
                     dailyContentArray[2].Locked();
                 }
@@ -625,7 +628,7 @@ public class ShopManager : MonoBehaviour
 
         goldShopLockArray.SetActive(true);
 
-        if (GameStateManager.instance.DailyNormalBox)
+        if (playerDataBase.DailyNormalBox == 1)
         {
             LoadAd_BoxNR();
         }
@@ -634,7 +637,7 @@ public class ShopManager : MonoBehaviour
             SetWatchAd_BoxNR(false);
         }
 
-        if (GameStateManager.instance.DailyEpicBox)
+        if (playerDataBase.DailyEpicBox == 1)
         {
             LoadAd_BoxRSR();
         }
@@ -643,12 +646,12 @@ public class ShopManager : MonoBehaviour
             SetWatchAd_BoxRSR(false);
         }
 
-        if (!GameStateManager.instance.DailyAdsReward)
+        if (playerDataBase.DailyAdsReward == 0)
         {
             adShopClearArray[0].SetActive(false);
         }
 
-        if (!GameStateManager.instance.DailyAdsReward2)
+        if (playerDataBase.DailyAdsReward2 == 0)
         {
             adShopClearArray[1].SetActive(false);
 
@@ -662,7 +665,7 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        if (!GameStateManager.instance.DailyAdsReward3)
+        if (playerDataBase.DailyAdsReward3 == 0)
         {
             adShopClearArray[2].SetActive(false);
 
@@ -676,7 +679,7 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        if (!GameStateManager.instance.DailyGoldReward)
+        if (playerDataBase.DailyGoldReward == 0)
         {
             goldShopLockArray.SetActive(false);
         }
@@ -687,7 +690,7 @@ public class ShopManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                if (GameStateManager.instance.DailyNormalBox) return;
+                if (playerDataBase.DailyNormalBox == 1) return;
 
                 switch (GameStateManager.instance.WindCharacterType)
                 {
@@ -704,7 +707,7 @@ public class ShopManager : MonoBehaviour
                 SetWatchAd_BoxNR(true);
                 break;
             case 1:
-                if (GameStateManager.instance.DailyEpicBox) return;
+                if (playerDataBase.DailyEpicBox == 1) return;
 
                 switch (GameStateManager.instance.WindCharacterType)
                 {
@@ -721,44 +724,48 @@ public class ShopManager : MonoBehaviour
                 SetWatchAd_BoxRSR(true);
                 break;
             case 2:
-                if (GameStateManager.instance.DailyAdsReward) return;
+                if (playerDataBase.DailyAdsReward == 1) return;
 
                 PlayfabManager.instance.UpdateAddGold(10000);
 
-                GameStateManager.instance.DailyAdsReward = true;
+                playerDataBase.DailyAdsReward = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward", playerDataBase.DailyAdsReward);
 
                 Initialize_Ad();
                 break;
             case 3:
-                if (GameStateManager.instance.DailyAdsReward2) return;
+                if (playerDataBase.DailyAdsReward2 == 1) return;
 
                 playerDataBase.SetUpgradeTicket(RankType.N, 1);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
-                GameStateManager.instance.DailyAdsReward2 = true;
+                playerDataBase.DailyAdsReward2 = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward2", playerDataBase.DailyAdsReward2);
 
                 Initialize_Ad();
                 break;
             case 4:
-                if (GameStateManager.instance.DailyAdsReward3) return;
+                if (playerDataBase.DailyAdsReward3 == 1) return;
 
                 playerDataBase.SetUpgradeTicket(RankType.N, 10);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
 
-                GameStateManager.instance.DailyAdsReward3 = true;
+                playerDataBase.DailyAdsReward3 = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward3", playerDataBase.DailyAdsReward3);
 
                 Initialize_Ad();
                 break;
             case 5:
-                if (GameStateManager.instance.DailyGoldReward) return;
+                if (playerDataBase.DailyGoldReward == 1) return;
 
                 random = Random.Range(7500, 20001);
 
                 PlayfabManager.instance.UpdateAddGold(random);
 
-                GameStateManager.instance.DailyGoldReward = true;
+                playerDataBase.DailyGoldReward = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyGoldReward", playerDataBase.DailyGoldReward);
 
                 Initialize_Ad();
                 break;
@@ -803,7 +810,8 @@ public class ShopManager : MonoBehaviour
             Debug.Log("Watch Ad BoxNR Play");
 
             boxShopLockArray[0].SetActive(true);
-            GameStateManager.instance.DailyNormalBox = true;
+            playerDataBase.DailyNormalBox = 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox", playerDataBase.DailyNormalBox);
 
             PlayerPrefs.SetString("AdCoolTime_BoxNR", DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -816,7 +824,8 @@ public class ShopManager : MonoBehaviour
             Debug.Log("Watch Ad BoxNR Stop");
 
             boxShopLockArray[0].SetActive(false);
-            GameStateManager.instance.DailyNormalBox = false;
+            playerDataBase.DailyNormalBox = 0;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox", playerDataBase.DailyNormalBox);
 
             adCoolTime_BoxNR = 0;
         }
@@ -871,7 +880,8 @@ public class ShopManager : MonoBehaviour
             Debug.Log("Watch Ad BoxRSR Play");
 
             boxShopLockArray[1].SetActive(true);
-            GameStateManager.instance.DailyEpicBox = true;
+            playerDataBase.DailyEpicBox = 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox", playerDataBase.DailyEpicBox);
 
             PlayerPrefs.SetString("AdCoolTime_BoxRSR", DateTime.Now.AddDays(3).ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -884,7 +894,8 @@ public class ShopManager : MonoBehaviour
             Debug.Log("Watch Ad BoxRSR Stop");
 
             boxShopLockArray[1].SetActive(false);
-            GameStateManager.instance.DailyEpicBox = false;
+            playerDataBase.DailyEpicBox = 0;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox", playerDataBase.DailyEpicBox);
 
             adCoolTime_BoxRSR = 0;
         }

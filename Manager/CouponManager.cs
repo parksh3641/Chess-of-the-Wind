@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
@@ -72,6 +73,7 @@ public class CouponManager : MonoBehaviour
                             SoundManager.instance.PlaySFX(GameSfxType.Success);
                             NotionManager.instance.UseNotion(NotionType.CouponNotion4);
 
+                            FirebaseAnalytics.LogEvent("Coupon");
                         }
                         else
                         {
@@ -100,6 +102,7 @@ public class CouponManager : MonoBehaviour
                             SoundManager.instance.PlaySFX(GameSfxType.Success);
                             NotionManager.instance.UseNotion(NotionType.CouponNotion4);
 
+                            FirebaseAnalytics.LogEvent("Coupon");
                         }
                         else
                         {
@@ -128,6 +131,7 @@ public class CouponManager : MonoBehaviour
                             SoundManager.instance.PlaySFX(GameSfxType.Success);
                             NotionManager.instance.UseNotion(NotionType.CouponNotion4);
 
+                            FirebaseAnalytics.LogEvent("Coupon");
                         }
                         else
                         {
@@ -156,6 +160,7 @@ public class CouponManager : MonoBehaviour
                             SoundManager.instance.PlaySFX(GameSfxType.Success);
                             NotionManager.instance.UseNotion(NotionType.CouponNotion4);
 
+                            FirebaseAnalytics.LogEvent("Coupon");
                         }
                         else
                         {

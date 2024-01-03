@@ -93,6 +93,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int star = 0;
     [SerializeField]
+    private int playTime = 0;
+    [SerializeField]
+    private int adCount = 0;
+    [SerializeField]
     private int challengeCount = 0;
     [SerializeField]
     private int rankUpCount = 0;
@@ -466,6 +470,30 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int PlayTime
+    {
+        get
+        {
+            return playTime;
+        }
+        set
+        {
+            playTime = value;
+        }
+    }
+
+    public int AdCount
+    {
+        get
+        {
+            return adCount;
+        }
+        set
+        {
+            adCount = value;
+        }
+    }
+
     public int NowRank
     {
         get
@@ -574,6 +602,173 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int DailyBuy1
+    {
+        get
+        {
+            return dailyBuy1;
+        }
+        set
+        {
+            dailyBuy1 = value;
+        }
+    }
+
+    public int DailyBuy2
+    {
+        get
+        {
+            return dailyBuy2;
+        }
+        set
+        {
+            dailyBuy2 = value;
+        }
+    }
+
+    public int DailyBuyCount1
+    {
+        get
+        {
+            return dailyBuyCount1;
+        }
+        set
+        {
+            dailyBuyCount1 = value;
+        }
+    }
+
+    public int DailyBuyCount2
+    {
+        get
+        {
+            return dailyBuyCount2;
+        }
+        set
+        {
+            dailyBuyCount2 = value;
+        }
+    }
+
+    public int DailyNormalBox
+    {
+        get
+        {
+            return dailyNormalBox;
+        }
+        set
+        {
+            dailyNormalBox = value;
+        }
+    }
+
+    public int DailyEpicBox
+    {
+        get
+        {
+            return dailyEpicBox;
+        }
+        set
+        {
+            dailyEpicBox = value;
+        }
+    }
+
+    public int DailyNormalBox_1
+    {
+        get
+        {
+            return dailyNormalBox_1;
+        }
+        set
+        {
+            dailyNormalBox_1 = value;
+        }
+    }
+
+    public int DailyNormalBox_10
+    {
+        get
+        {
+            return dailyNormalBox_10;
+        }
+        set
+        {
+            dailyNormalBox_10 = value;
+        }
+    }
+
+    public int DailyEpicBox_1
+    {
+        get
+        {
+            return dailyEpicBox_1;
+        }
+        set
+        {
+            dailyEpicBox_1 = value;
+        }
+    }
+
+    public int DailyEpicBox_10
+    {
+        get
+        {
+            return dailyEpicBox_10;
+        }
+        set
+        {
+            dailyEpicBox_10 = value;
+        }
+    }
+
+    public int DailyAdsReward
+    {
+        get
+        {
+            return dailyAdsReward;
+        }
+        set
+        {
+            dailyAdsReward = value;
+        }
+    }
+
+    public int DailyAdsReward2
+    {
+        get
+        {
+            return dailyAdsReward2;
+        }
+        set
+        {
+            dailyAdsReward2 = value;
+        }
+    }
+
+    public int DailyAdsReward3
+    {
+        get
+        {
+            return dailyAdsReward3;
+        }
+        set
+        {
+            dailyAdsReward3 = value;
+        }
+    }
+
+    public int DailyGoldReward
+    {
+        get
+        {
+            return dailyGoldReward;
+        }
+        set
+        {
+            dailyGoldReward = value;
+        }
+    }
 
 
     public int ConsumeGold
@@ -1648,6 +1843,8 @@ public class PlayerDataBase : ScriptableObject
 
         formation = 0;
         star = 0;
+        playTime = 0;
+        adCount = 0;
         nowRank = 0;
         highRank = 0;
         challengeCount = 0;
@@ -1671,6 +1868,23 @@ public class PlayerDataBase : ScriptableObject
         useUpgradeTicket = 0;
         repairBlockCount = 0;
         consumeGold = 0;
+
+        dailyWin = 0;
+        dailyReward = 0;
+        dailyBuy1 = 0;
+        dailyBuy2 = 0;
+        dailyBuyCount1 = 0;
+        dailyBuyCount2 = 0;
+        dailyNormalBox = 0;
+        dailyEpicBox = 0;
+        dailyNormalBox_1 = 0;
+        dailyNormalBox_10 = 0;
+        dailyEpicBox_1 = 0;
+        dailyEpicBox_10 = 0;
+        dailyAdsReward = 0;
+        dailyAdsReward2 = 0;
+        dailyAdsReward3 = 0;
+        dailyGoldReward = 0;
 
         titleNumber = 0;
 
