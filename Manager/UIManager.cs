@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+
     public GameObject updateView;
 
     public GameObject privacypolicyView;
@@ -103,6 +105,8 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
@@ -214,6 +218,14 @@ public class UIManager : MonoBehaviour
 
         titleText.localizationName = playerDataBase.GetMainTitleName();
         titleText.ReLoad();
+
+        if(playerDataBase.Update > 0)
+        {
+            playerDataBase.Update = 0;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Update", playerDataBase.Update);
+
+            OnNeedUpdate();
+        }
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         testMode.SetActive(true);

@@ -253,12 +253,12 @@ public class ChallengeManager : MonoBehaviour
 
     void InitializeTutorial()
     {
-        challengeContentArray[0].receiveContent.Initialize(RewardType.Gold, 500);
-        challengeContentArray[1].receiveContent.Initialize(RewardType.Gold, 500);
-        challengeContentArray[2].receiveContent.Initialize(RewardType.Gold, 1500);
-        challengeContentArray[3].receiveContent.Initialize(RewardType.Gold, 1500);
-        challengeContentArray[4].receiveContent.Initialize(RewardType.Gold, 3000);
-        challengeContentArray[5].receiveContent.Initialize(RewardType.Gold, 3000);
+        challengeContentArray[0].receiveContent.Initialize(RewardType.Gold, 1000);
+        challengeContentArray[1].receiveContent.Initialize(RewardType.Gold, 1000);
+        challengeContentArray[2].receiveContent.Initialize(RewardType.Gold, 3000);
+        challengeContentArray[3].receiveContent.Initialize(RewardType.Gold, 3000);
+        challengeContentArray[4].receiveContent.Initialize(RewardType.Gold, 6000);
+        challengeContentArray[5].receiveContent.Initialize(RewardType.Gold, 6000);
     }
 
     public void UpdateTutorial()
@@ -284,10 +284,10 @@ public class ChallengeManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddGold(200);
+                PlayfabManager.instance.UpdateAddGold(1000);
                 break;
             case 1:
-                PlayfabManager.instance.UpdateAddGold(200);
+                PlayfabManager.instance.UpdateAddGold(1000);
 
                 switch (GameStateManager.instance.WindCharacterType)
                 {
@@ -316,16 +316,16 @@ public class ChallengeManager : MonoBehaviour
 
                 break;
             case 2:
-                PlayfabManager.instance.UpdateAddGold(1000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 3:
-                PlayfabManager.instance.UpdateAddGold(2000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 4:
-                PlayfabManager.instance.UpdateAddGold(2000);
+                PlayfabManager.instance.UpdateAddGold(6000);
                 break;
             case 5:
-                PlayfabManager.instance.UpdateAddGold(2000);
+                PlayfabManager.instance.UpdateAddGold(6000);
 
                 ChangeTopMenu(1);
 

@@ -226,6 +226,8 @@ public class UpgradeManager : MonoBehaviour
 
         goldObj.SetActive(true);
 
+        UIManager.instance.Renewal();
+
         gold = (int)playerDataBase.Coin;
 
         goldText.localizationName = "NeedGold_Upgrade";

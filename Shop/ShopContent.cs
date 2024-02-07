@@ -75,14 +75,7 @@ public class ShopContent : MonoBehaviour
                     lockObj.SetActive(true);
                 }
 
-                if(GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
-                {
-                    price = rankDataBase.GetRankInformation(GameRankType.Sliver_4).stakes;
-                }
-                else
-                {
-                    price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
-                }
+                price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
 
                 goldText.text = MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);

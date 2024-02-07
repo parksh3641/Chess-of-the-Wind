@@ -68,9 +68,9 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Betting")]
-        public int matchingTime = 6;
-        public int bettingTime = 11;
-        public int bettingWaitTime = 4;
+        public int matchingTime = 5;
+        public int bettingTime = 9;
+        public int bettingWaitTime = 3;
         public bool autoTarget = false;
         public int autoTargetNumber = 0;
         public bool blockOverlap = false;
@@ -580,6 +580,10 @@ public class GameStateManager : MonoBehaviour
             if (!string.IsNullOrEmpty(stjs))
             {
                 gameSettings = JsonUtility.FromJson<GameSettings>(stjs);
+
+                gameSettings.matchingTime = 5;
+                gameSettings.bettingTime = 9;
+                gameSettings.bettingWaitTime = 3;
             }
             else
             {

@@ -115,6 +115,8 @@ public class NickNameManager : MonoBehaviour
             }
         }
 
+        UIManager.instance.Renewal();
+
         if (playerDataBase.Coin >= 10000)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
@@ -227,7 +229,7 @@ public class NickNameManager : MonoBehaviour
     {
         if (uIManager != null) uIManager.Renewal();
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractGold(10000);
+        PlayfabManager.instance.UpdateSubtractGold(10000);
 
         profileNickNameText.text = GameStateManager.instance.NickName;
 

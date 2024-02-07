@@ -318,6 +318,12 @@ public class TitleManager : MonoBehaviour
         speicalAlarmObj.SetActive(true);
     }
 
+    void GetSound()
+    {
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
+        NotionManager.instance.UseNotion(NotionType.NewTitleNotion);
+    }
+
     public void CheckGoal()
     {
         if(playerDataBase.GosuWin >= 3)
@@ -330,6 +336,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title1].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title1);
+
+                GetSound();
             }
         }
 
@@ -343,6 +351,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title2].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title2);
+
+                GetSound();
             }
         }
 
@@ -356,6 +366,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title3].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title3);
+
+                GetSound();
             }
         }
 
@@ -369,6 +381,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title4].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title4);
+
+                GetSound();
             }
         }
 
@@ -382,6 +396,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title5].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title5);
+
+                GetSound();
             }
         }
 
@@ -395,6 +411,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title6].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title6);
+
+                GetSound();
             }
         }
 
@@ -408,6 +426,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title7].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title7);
+
+                GetSound();
             }
         }
 
@@ -421,6 +441,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title8].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title8);
+
+                GetSound();
             }
         }
 
@@ -434,6 +456,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title9].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title9);
+
+                GetSound();
             }
         }
 
@@ -447,6 +471,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title10].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title10);
+
+                GetSound();
             }
         }
 
@@ -460,6 +486,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title11].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title11);
+
+                GetSound();
             }
         }
 
@@ -473,6 +501,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title12].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title12);
+
+                GetSound();
             }
         }
 
@@ -486,6 +516,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title13].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title13);
+
+                GetSound();
             }
         }
 
@@ -499,6 +531,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title14].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title14);
+
+                GetSound();
             }
         }
 
@@ -512,6 +546,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title15].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title15);
+
+                GetSound();
             }
         }
 
@@ -525,6 +561,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title16].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title16);
+
+                GetSound();
             }
         }
 
@@ -538,6 +576,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title17].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title17);
+
+                GetSound();
             }
         }
 
@@ -551,6 +591,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title18].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title18);
+
+                GetSound();
             }
         }
 
@@ -564,6 +606,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title19].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title19);
+
+                GetSound();
             }
         }
 
@@ -577,6 +621,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title20].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title20);
+
+                GetSound();
             }
         }
 
@@ -590,6 +636,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title21].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title21);
+
+                GetSound();
             }
         }
 
@@ -603,6 +651,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title22].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title22);
+
+                GetSound();
             }
         }
 
@@ -616,6 +666,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title23].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title23);
+
+                GetSound();
             }
         }
 
@@ -629,6 +681,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title24].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title24);
+
+                GetSound();
             }
         }
 
@@ -642,6 +696,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title25].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title25);
+
+                GetSound();
             }
         }
 
@@ -655,6 +711,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title26].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title26);
+
+                GetSound();
             }
         }
 
@@ -668,6 +726,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title27].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title27);
+
+                GetSound();
             }
         }
 
@@ -681,6 +741,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title28].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title28);
+
+                GetSound();
             }
         }
 
@@ -694,6 +756,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title29].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title29);
+
+                GetSound();
             }
         }
 
@@ -707,6 +771,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title30].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title30);
+
+                GetSound();
             }
         }
 
@@ -720,6 +786,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title31].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title31);
+
+                GetSound();
             }
         }
 
@@ -733,6 +801,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title32].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title32);
+
+                GetSound();
             }
         }
 
@@ -746,6 +816,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title33].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title33);
+
+                GetSound();
             }
         }
 
@@ -759,6 +831,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title34].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title34);
+
+                GetSound();
             }
         }
 
@@ -772,6 +846,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title35].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title35);
+
+                GetSound();
             }
         }
 
@@ -785,6 +861,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title36].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title36);
+
+                GetSound();
             }
         }
 
@@ -798,6 +876,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title37].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title37);
+
+                GetSound();
             }
         }
 
@@ -811,6 +891,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title38].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title38);
+
+                GetSound();
             }
         }
 
@@ -824,6 +906,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title39].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title39);
+
+                GetSound();
             }
         }
 
@@ -837,6 +921,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title40].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title40);
+
+                GetSound();
             }
         }
 
@@ -850,6 +936,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title41].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title41);
+
+                GetSound();
             }
         }
 
@@ -863,6 +951,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title42].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title42);
+
+                GetSound();
             }
         }
 
@@ -876,6 +966,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title43].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title43);
+
+                GetSound();
             }
         }
 
@@ -889,6 +981,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title44].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title44);
+
+                GetSound();
             }
         }
 
@@ -902,6 +996,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title45].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title45);
+
+                GetSound();
             }
         }
 
@@ -915,6 +1011,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title46].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title46);
+
+                GetSound();
             }
         }
 
@@ -928,6 +1026,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title47].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title47);
+
+                GetSound();
             }
         }
 
@@ -941,6 +1041,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title48].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title48);
+
+                GetSound();
             }
         }
 
@@ -954,6 +1056,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title49].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title49);
+
+                GetSound();
             }
         }
 
@@ -967,6 +1071,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title50].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title50);
+
+                GetSound();
             }
         }
 
@@ -980,6 +1086,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title51].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title51);
+
+                GetSound();
             }
         }
 
@@ -993,6 +1101,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title52].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title52);
+
+                GetSound();
             }
         }
 
@@ -1006,6 +1116,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title53].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title53);
+
+                GetSound();
             }
         }
 
@@ -1019,6 +1131,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title54].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title54);
+
+                GetSound();
             }
         }
 
@@ -1032,6 +1146,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title55].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title55);
+
+                GetSound();
             }
         }
 
@@ -1045,6 +1161,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title56].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title56);
+
+                GetSound();
             }
         }
 
@@ -1058,6 +1176,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title57].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title57);
+
+                GetSound();
             }
         }
 
@@ -1071,6 +1191,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title58].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title58);
+
+                GetSound();
             }
         }
 
@@ -1084,6 +1206,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title59].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title59);
+
+                GetSound();
             }
         }
 
@@ -1097,6 +1221,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title60].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title60);
+
+                GetSound();
             }
         }
 
@@ -1110,6 +1236,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title61].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title61);
+
+                GetSound();
             }
         }
 
@@ -1123,6 +1251,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title62].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title62);
+
+                GetSound();
             }
         }
 
@@ -1136,6 +1266,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title63].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title63);
+
+                GetSound();
             }
         }
 
@@ -1149,6 +1281,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title64].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title64);
+
+                GetSound();
             }
         }
 
@@ -1162,6 +1296,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title65].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title65);
+
+                GetSound();
             }
         }
 
@@ -1175,6 +1311,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title66].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title66);
+
+                GetSound();
             }
         }
 
@@ -1188,6 +1326,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title67].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title67);
+
+                GetSound();
             }
         }
 
@@ -1201,6 +1341,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title68].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title68);
+
+                GetSound();
             }
         }
 
@@ -1214,6 +1356,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title69].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title69);
+
+                GetSound();
             }
         }
 
@@ -1227,6 +1371,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title70].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title70);
+
+                GetSound();
             }
         }
 
@@ -1242,6 +1388,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title71].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title71);
+
+                GetSound();
             }
         }
 
@@ -1255,6 +1403,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title72].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title72);
+
+                GetSound();
             }
         }
 
@@ -1268,6 +1418,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title73].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title73);
+
+                GetSound();
             }
         }
 
@@ -1281,6 +1433,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title74].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title74);
+
+                GetSound();
             }
         }
 
@@ -1294,6 +1448,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title75].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title75);
+
+                GetSound();
             }
         }
 
@@ -1307,6 +1463,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title76].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title76);
+
+                GetSound();
             }
         }
 
@@ -1320,6 +1478,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title77].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title77);
+
+                GetSound();
             }
         }
 
@@ -1333,6 +1493,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title78].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title78);
+
+                GetSound();
             }
         }
 
@@ -1346,6 +1508,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title79].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title79);
+
+                GetSound();
             }
         }
 
@@ -1359,6 +1523,8 @@ public class TitleManager : MonoBehaviour
 
                 titleNormalContentList[(int)TitleNormalType.Title80].SetAlarm(true);
                 playerDataBase.SetNormalTitle(TitleNormalType.Title80);
+
+                GetSound();
             }
         }
     }

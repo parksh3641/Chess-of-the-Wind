@@ -345,6 +345,8 @@ public class ShopManager : MonoBehaviour
             }
         }
 
+        UIManager.instance.Renewal();
+
         if (playerDataBase.Coin >= price)
         {
             PlayfabManager.instance.UpdateSubtractGold(price);
@@ -409,6 +411,8 @@ public class ShopManager : MonoBehaviour
                 return;
             }
         }
+
+        UIManager.instance.Renewal();
 
         if (playerDataBase.Coin >= price)
         {
@@ -480,6 +484,8 @@ public class ShopManager : MonoBehaviour
 
                 break;
             case ShopType.UpgradeTicket:
+                UIManager.instance.Renewal();
+
                 if (playerDataBase.Coin >= price)
                 {
                     PlayfabManager.instance.UpdateSubtractGold(price);

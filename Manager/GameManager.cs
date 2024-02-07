@@ -526,6 +526,11 @@ public class GameManager : MonoBehaviour
         bettingWaitTime = GameStateManager.instance.BettingWaitTime;
 
         blockMotherInformation = blockDataBase.blockMotherInformation;
+
+        if(playerDataBase.Update > 0)
+        {
+
+        }
     }
 
     private void GameReset()

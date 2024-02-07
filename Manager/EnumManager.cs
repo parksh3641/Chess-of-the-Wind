@@ -288,7 +288,8 @@ public enum NotionType
     CouponNotion3,
     LowAllowMoney,
     CouponNotion4,
-    EquipTitle
+    EquipTitle,
+    NewTitleNotion
 }
 
 public enum GameRankType

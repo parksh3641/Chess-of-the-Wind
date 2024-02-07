@@ -222,7 +222,7 @@ public class PlayfabManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         if (error) Debug.LogError("<color=red>" + message + "</color>");
-        else Debug.Log(message);
+        //else Debug.Log(message);
 #endif
     }
     private void DisplayPlayfabError(PlayFabError error) => SetEditorOnlyMessage("error : " + error.GenerateErrorReport(), true);
@@ -1328,6 +1328,9 @@ public class PlayfabManager : MonoBehaviour
                        case "NaverCafe202402":
                            playerDataBase.NaverCafe202402 = statistics.Value;
                            break;
+                       case "Update":
+                           playerDataBase.Update = statistics.Value;
+                           break;
                    }
                }
 
@@ -1508,6 +1511,7 @@ public class PlayfabManager : MonoBehaviour
             UpdateSubtractCurrency(MoneyType.CoinB, (int)(playerDataBase.CoinB - coinB));
         }
     }
+
     public void UpdateSubtractGold(int number)
     {
         coin = playerDataBase.Coin;

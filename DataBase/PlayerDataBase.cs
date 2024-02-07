@@ -220,6 +220,8 @@ public class PlayerDataBase : ScriptableObject
     public bool welcomeBoxCheck = false;
     [Space]
     public string nextMonday = "";
+    [SerializeField]
+    private int update = 0;
 
     [Space]
     [Title("Info")]
@@ -1105,6 +1107,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int Update
+    {
+        get
+        {
+            return update;
+        }
+        set
+        {
+            update = value;
+        }
+    }
+
     public int WelcomeCount
     {
         get
@@ -1935,6 +1949,7 @@ public class PlayerDataBase : ScriptableObject
         welcomeBoxCheck = false;
 
         nextMonday = "";
+        update = 0;
 
         newbieWin = 0;
         newbieLose = 0;

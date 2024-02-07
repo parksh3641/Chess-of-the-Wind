@@ -673,6 +673,8 @@ public class SynthesisManager : MonoBehaviour
                 return;
             }
 
+            UIManager.instance.Renewal();
+
             if (playerDataBase.Coin < needGold)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
@@ -1023,7 +1025,9 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
-            if(playerDataBase.Coin < rankNValue)
+            UIManager.instance.Renewal();
+
+            if (playerDataBase.Coin < rankNValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -1056,6 +1060,8 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
+            UIManager.instance.Renewal();
+
             if (playerDataBase.Coin < rankRValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
@@ -1089,6 +1095,8 @@ public class SynthesisManager : MonoBehaviour
         }
         else
         {
+            UIManager.instance.Renewal();
+
             if (playerDataBase.Coin < rankSRValue)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
