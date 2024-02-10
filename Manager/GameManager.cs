@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Firebase.Analytics;
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -1117,10 +1118,14 @@ public class GameManager : MonoBehaviour
                 money = GameStateManager.instance.Stakes + (int)(GameStateManager.instance.Stakes * 0.1f);
 
                 Debug.Log("리타이어 승리");
+
+                FirebaseAnalytics.LogEvent("Win_Retire");
             }
             else
             {
                 Debug.Log("승리");
+
+                FirebaseAnalytics.LogEvent("Win");
             }
 
         }
@@ -1129,18 +1134,24 @@ public class GameManager : MonoBehaviour
             money = -stakes;
 
             Debug.Log("패배");
+
+            FirebaseAnalytics.LogEvent("Lose");
         }
         else if (number == 2)
         {
             money = GameStateManager.instance.Stakes + (int)(GameStateManager.instance.Stakes * 0.1f);
 
             Debug.Log("상대방 항복으로 승리");
+
+            FirebaseAnalytics.LogEvent("Win_Surrender");
         }
         else
         {
             money = 0;
 
             Debug.Log("무승부");
+
+            FirebaseAnalytics.LogEvent("Tie");
         }
 
         timerAnimation.StopAnim();

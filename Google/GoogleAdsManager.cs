@@ -22,7 +22,14 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void WatchAd(int number)
     {
-        switch(number)
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            return;
+        }
+
+        switch (number)
         {
             case 0:
                 if (playerDataBase.DailyNormalBox == 1) return;

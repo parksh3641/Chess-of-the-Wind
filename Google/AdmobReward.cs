@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
+using Firebase.Analytics;
 
 public class AdmobReward : MonoBehaviour
 {
@@ -87,8 +88,6 @@ public class AdmobReward : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
-                Debug.Log("Ad Watch Success!");
-
                 if(number <= 5)
                 {
                     shopManager.GetAdReward(number);
@@ -103,7 +102,8 @@ public class AdmobReward : MonoBehaviour
 
                 LoadRewardedAd();
 
-                //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+                Debug.Log("Watch Ad");
+                FirebaseAnalytics.LogEvent("WatchAd");
             });
         }
         else

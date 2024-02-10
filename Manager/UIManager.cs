@@ -265,7 +265,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
             loginButtonList[0].SetActive(true);
 #else
-            loginButtonList[0].SetActive(false);
+            loginButtonList[0].SetActive(true);
 #endif
 
 #if UNITY_ANDROID
@@ -283,7 +283,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         loginButtonList[0].SetActive(true);
 #else
-            loginButtonList[0].SetActive(false);
+        loginButtonList[0].SetActive(true);
 #endif
 
 #if UNITY_ANDROID

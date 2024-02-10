@@ -813,8 +813,6 @@ public class ShopManager : MonoBehaviour
     {
         if (check)
         {
-            Debug.Log("Watch Ad BoxNR Play");
-
             boxShopLockArray[0].SetActive(true);
             playerDataBase.DailyNormalBox = 1;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox", playerDataBase.DailyNormalBox);
@@ -823,15 +821,17 @@ public class ShopManager : MonoBehaviour
 
             adCoolTime_BoxNR = 86400;
 
+            Debug.Log("Watch Ad BoxNR Play");
+
             StartCoroutine(WatchAdCorution_BoxNR());
         }
         else
         {
-            Debug.Log("Watch Ad BoxNR Stop");
-
             boxShopLockArray[0].SetActive(false);
             playerDataBase.DailyNormalBox = 0;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox", playerDataBase.DailyNormalBox);
+
+            Debug.Log("Watch Ad BoxNR Stop");
 
             adCoolTime_BoxNR = 0;
         }
@@ -883,8 +883,6 @@ public class ShopManager : MonoBehaviour
     {
         if (check)
         {
-            Debug.Log("Watch Ad BoxRSR Play");
-
             boxShopLockArray[1].SetActive(true);
             playerDataBase.DailyEpicBox = 1;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox", playerDataBase.DailyEpicBox);
@@ -893,15 +891,17 @@ public class ShopManager : MonoBehaviour
 
             adCoolTime_BoxRSR = 86400 * 3;
 
+            Debug.Log("Watch Ad BoxRSR Play");
+
             StartCoroutine(WatchAdCorution_BoxRSR());
         }
         else
         {
-            Debug.Log("Watch Ad BoxRSR Stop");
-
             boxShopLockArray[1].SetActive(false);
             playerDataBase.DailyEpicBox = 0;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox", playerDataBase.DailyEpicBox);
+
+            Debug.Log("Watch Ad BoxRSR Stop");
 
             adCoolTime_BoxRSR = 0;
         }

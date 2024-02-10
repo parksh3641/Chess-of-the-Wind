@@ -153,6 +153,18 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
+    void LoginFail()
+    {
+        infoText.text = "";
+
+        uiManager.LoginFail();
+
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+        NotionManager.instance.UseNotion(NotionType.CheckInternet);
+    }
+
+
     #region Initialize
 
 #if UNITY_ANDROID
@@ -235,11 +247,7 @@ public class PlayfabManager : MonoBehaviour
 
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            uiManager.LoginFail();
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            LoginFail();
             return;
         }
 
@@ -325,11 +333,7 @@ public class PlayfabManager : MonoBehaviour
 
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            uiManager.LoginFail();
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            LoginFail();
             return;
         }
 
@@ -449,11 +453,7 @@ public class PlayfabManager : MonoBehaviour
 
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            uiManager.LoginFail();
-
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+            LoginFail();
             return;
         }
 

@@ -18,6 +18,8 @@ public class LocalizationContent : MonoBehaviour
     private void Awake()
     {
         localizationText = GetComponent<Text>();
+
+        localizationText.raycastTarget = true;
     }
 
     public string GetText()

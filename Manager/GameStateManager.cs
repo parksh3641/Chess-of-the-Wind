@@ -81,7 +81,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Tutorial")]
-        public bool tutorial = true;
+        public bool tutorial = false;
 
     }
     #region Data
