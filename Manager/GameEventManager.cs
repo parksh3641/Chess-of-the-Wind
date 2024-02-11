@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class GameEventManager : MonoBehaviour
 {
-
     public GameObject eventView;
+
+    public GameObject eventInfoButton;
 
     public GameObject eventInfoView;
 
@@ -34,6 +35,8 @@ public class GameEventManager : MonoBehaviour
     private void Awake()
     {
         eventView.SetActive(false);
+
+        eventInfoButton.SetActive(false);
     }
 
     public void Initialize()
@@ -100,6 +103,8 @@ public class GameEventManager : MonoBehaviour
     public void OnEventEnd()
     {
         eventView.SetActive(false);
+
+        eventInfoButton.SetActive(true);
 
         gameManager.GameStart();
     }

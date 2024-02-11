@@ -655,6 +655,8 @@ public class GameManager : MonoBehaviour
         numberContentTransform_NewBie.gameObject.SetActive(false);
         numberContentTransform.gameObject.SetActive(false);
 
+        gameEventManager.eventView.SetActive(false);
+
         aiMode = false;
         aiManager.RestartGame();
 
@@ -968,6 +970,7 @@ public class GameManager : MonoBehaviour
 
             rouletteManager.CreateObj();
             timer += 3;
+            bettingWaitTime += 3;
             StartCoroutine(WaitTimerCoroution());
         }
     }
@@ -1191,6 +1194,8 @@ public class GameManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
+            bettingWaitTime = GameStateManager.instance.BettingWaitTime;
+
             PV.RPC("RestartGame", RpcTarget.All);
 
             StartCoroutine(TimerCoroution());
@@ -1355,6 +1360,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Click);
                 NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
             }
         }
@@ -1374,6 +1380,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    SoundManager.instance.PlaySFX(GameSfxType.Click);
                     NotionManager.instance.UseNotion(NotionType.BettingTimesUp);
                 }
             }
@@ -1884,6 +1891,11 @@ public class GameManager : MonoBehaviour
 
         Debug.LogError("My : " + plusMoney);
         Debug.LogError("Ai : " + plusAiMoney);
+
+        if(GameStateManager.instance.Newbie)
+        {
+            plusAiMoney *= 0.1f;
+        }
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {

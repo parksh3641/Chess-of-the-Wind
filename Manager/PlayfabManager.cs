@@ -979,9 +979,13 @@ public class PlayfabManager : MonoBehaviour
                            {
                                GameStateManager.instance.WindCharacterType = WindCharacterType.UnderWorld;
                            }
-                           else
+                           else if (playerDataBase.Formation == 1)
                            {
                                GameStateManager.instance.WindCharacterType = WindCharacterType.Winter;
+                           }
+                           else
+                           {
+                               GameStateManager.instance.Tutorial = false;
                            }
 
                            break;

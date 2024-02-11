@@ -101,8 +101,8 @@ public class NickNameManager : MonoBehaviour
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
             NotionManager.instance.UseNotion(NotionType.CheckInternet);
+
             return;
         }
 
@@ -110,6 +110,7 @@ public class NickNameManager : MonoBehaviour
         {
             if (inputField.text.ToLower().Contains(lines[i]))
             {
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                 return;
             }
@@ -144,44 +145,51 @@ public class NickNameManager : MonoBehaviour
                     else
                     {
                         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                         NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                     }
                 }
                 else
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
                 }
             }
             else
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
             }
         }
         else
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
             NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
         }
     }
 
     public void CheckFreeNickName()
     {
-        string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣 ]", "", RegexOptions.Singleline);
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+
+            return;
+        }
 
         for (int i = 0; i < lines.Length; i++)
         {
-            if (inputFieldFree.text.Contains(lines[i]))
+            if (inputFieldFree.text.ToLower().Contains(lines[i]))
             {
+                Debug.Log("123");
+
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                 return;
             }
         }
+
+        string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
 
         if (inputFieldFree.text.Equals(Check) == true)
         {
@@ -206,21 +214,18 @@ public class NickNameManager : MonoBehaviour
                 else
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                 }
             }
             else
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
             }
         }
         else
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
             NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
         }
     }

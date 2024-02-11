@@ -38,6 +38,7 @@ public class CollectionManager : MonoBehaviour
     public List<string> alarmList = new List<string>();
     public List<BlockUIContent> blockUIContentList = new List<BlockUIContent>();
 
+    List<string> itemList = new List<string>();
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
 
@@ -200,6 +201,24 @@ public class CollectionManager : MonoBehaviour
     public void Initialize()
     {
         blockList = new List<BlockClass>(blockList.Count);
+
+        if(blockList.Count == 0)
+        {
+            if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+            {
+                itemList.Clear();
+                itemList.Add("Pawn_Snow_N");
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", itemList);
+            }
+            else
+            {
+                itemList.Clear();
+                itemList.Add("Pawn_Under_N");
+
+                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
+            }
+        }
 
         for (int i = 0; i < playerDataBase.GetBlockClass().Count; i ++)
         {

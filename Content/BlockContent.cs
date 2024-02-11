@@ -175,13 +175,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             }
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
             NotionManager.instance.UseNotion(NotionType.NotBettingLocation);
-
-            //if (eventData.pointerDrag.gameObject.tag == "BlockChild")
-            //{
-            //    NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
-            //}
         }
         else
         {
@@ -202,7 +196,6 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         isDrag = false;
 
         blockMainArray[(int)blockClass.blockType - 1].Betting(true, this);
-        //blockMainArray[(int)blockClass.blockType - 1].SetBlock(GameStateManager.instance.NickName, value.ToString());
     }
 
     public void CancleBetting()

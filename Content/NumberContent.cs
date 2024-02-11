@@ -8,9 +8,15 @@ public class NumberContent : MonoBehaviour
     public Text numberText;
     public LocalizationContent queenText;
 
+    private void Awake()
+    {
+        
+    }
+
     public void Initialize(int number)
     {
         queenText.enabled = false;
+        queenText.GetComponent<Text>().raycastTarget = false;
 
         if (number < 12)
         {
@@ -32,6 +38,7 @@ public class NumberContent : MonoBehaviour
     public void Initialize_NewBie(int number)
     {
         queenText.enabled = false;
+        queenText.GetComponent<Text>().raycastTarget = false;
 
         if (number < 4)
         {

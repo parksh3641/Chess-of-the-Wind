@@ -50,6 +50,7 @@ public class GameStateManager : MonoBehaviour
         public bool playing = false;
         public bool reEnter = false;
         public int consumeGold = 0;
+        public bool newbie = false; //맨 처음 몇 판 데미지 보정시키기
 
         [Space]
         [Title("Rank")]
@@ -367,6 +368,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.consumeGold = value;
+            SaveFile();
+        }
+    }
+
+    public bool Newbie
+    {
+        get
+        {
+            return gameSettings.newbie;
+        }
+        set
+        {
+            gameSettings.newbie = value;
             SaveFile();
         }
     }

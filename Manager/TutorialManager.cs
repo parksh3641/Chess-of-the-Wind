@@ -41,14 +41,15 @@ public class TutorialManager : MonoBehaviour
 
     [Space]
     [Title("Betting")]
+    public Transform blockRootParent;
+    public Transform blockParent;
+    public Transform blockGridParent_NewBie;
+
     public RouletteContent rouletteContent;
     public NumberContent numberContent;
 
     public RectTransform rouletteContentTransform;
     public RectTransform numberContentTransform;
-
-    public Transform blockParent;
-    public Transform blockGridParent;
 
     public Image playerImg;
 
@@ -85,7 +86,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject targetEffect;
     public Text targetText;
 
-    [Title("Betting")]
+    [Title("Target")]
     public GameObject targetObj;
 
     public MoneyAnimation moneyAnimation;
@@ -603,7 +604,7 @@ public class TutorialManager : MonoBehaviour
         blockClass.level = 0;
 
         blockContent.gameObject.SetActive(true);
-        blockContent.Initialize(null, blockParent, blockGridParent);
+        blockContent.Initialize(null, blockRootParent, blockGridParent_NewBie);
         blockContent.InGame_Initialize(blockClass, 0, 0);
         blockContent.gameObject.SetActive(false);
 
@@ -727,7 +728,7 @@ public class TutorialManager : MonoBehaviour
 
     public void SetBlockPos()
     {
-        blockContent.transform.parent = blockParent;
+        blockContent.transform.parent = blockRootParent;
         blockContent.transform.position = rouletteContentList[6].transform.position;
         blockContent.blockIcon.color = new Color(1, 1, 1, 1);
         blockContent.enabled = false;

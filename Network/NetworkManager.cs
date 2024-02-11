@@ -273,8 +273,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
 
-        if(playerDataBase.NewbieWin < 2)
+        GameStateManager.instance.Newbie = false;
+
+        if (playerDataBase.NewbieWin < 2)
         {
+            GameStateManager.instance.Newbie = true;
+
             roomOption.CustomRoomPropertiesForLobby = new string[] { "Ai" };
             roomOption.CustomRoomProperties = new Hashtable() { { "Ai", "ON" } };
         }
@@ -302,8 +306,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions roomOption = new RoomOptions();
         roomOption.MaxPlayers = 2;
 
+        GameStateManager.instance.Newbie = false;
+
         if (playerDataBase.GosuWin < 1)
         {
+            GameStateManager.instance.Newbie = true;
+
             roomOption.CustomRoomPropertiesForLobby = new string[] { "Ai" };
             roomOption.CustomRoomProperties = new Hashtable() { { "Ai", "ON" } };
         }
