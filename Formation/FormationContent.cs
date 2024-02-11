@@ -33,6 +33,9 @@ public class FormationContent : MonoBehaviour
             //titleText.text = "지하 세계";
         }
 
-        //selectText.text = "선택하기";
+        blockContents[0].SetRank(RankType.N);
+        blockContents[1].SetRank(RankType.N);
+        blockContents[2].SetRank(RankType.N);
+        blockContents[3].SetRank(RankType.N);
     }
 }

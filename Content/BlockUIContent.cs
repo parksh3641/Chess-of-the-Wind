@@ -120,9 +120,10 @@ public class BlockUIContent : MonoBehaviour
 
         blockClass.rankType = type;
 
+        backgroundImg.sprite = rankBackgroundArray[(int)type];
         rankImg.sprite = rankBannerArray[(int)type];
         rankSSRImg.sprite = rankBannerArray[(int)type];
-        backgroundImg.sprite = rankBackgroundArray[(int)type];
+        rankText.text = type.ToString();
 
         if (type > RankType.SR)
         {

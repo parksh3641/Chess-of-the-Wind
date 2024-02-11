@@ -122,9 +122,13 @@ public class PlayfabManager : MonoBehaviour
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
             OnClickGuestLogin();
-#else
-        GetTitleInternalData("CheckVersion", CheckVersion);
+#elif UNITY_ANDROID
+        GetTitleInternalData("CheckAOSVersion", CheckVersion);
+#elif UNITY_IOS
+        GetTitleInternalData("CheckIOSVersion", CheckVersion);
 #endif
+
+            Debug.Log("튜토리얼에서 복귀");
         }
         else
         {
