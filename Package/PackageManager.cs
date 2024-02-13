@@ -124,9 +124,11 @@ public class PackageManager : MonoBehaviour
 
     public void BuyPurchase(PackageInfomation type)
     {
+        Debug.LogError(type.packageType + " ±¸¸Å");
+
         packageType = type.packageType;
 
-        switch (type.packageType)
+        switch (packageType)
         {
             case PackageType.Default:
                 break;

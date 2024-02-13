@@ -1757,7 +1757,7 @@ public class PlayerDataBase : ScriptableObject
         }
         set
         {
-            shopNewbie = value;
+            shopSliver = value;
         }
     }
 

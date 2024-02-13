@@ -920,6 +920,7 @@ public class MatchingManager : MonoBehaviour
         CheckRankUp();
     }
 
+    [Button]
     public void OpenSupplyPackage()
     {
         if(playerDataBase.ShopSupply == 0 && GameStateManager.instance.GameRankType < GameRankType.Sliver_2)
