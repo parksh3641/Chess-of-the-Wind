@@ -7,6 +7,8 @@ public class SystemManager : MonoBehaviour
 {
     void Start()
     {
+        QualitySettings.SetQualityLevel(2);
+
         GameStateManager.instance.IsLogin = false;
 
         if (GameStateManager.instance.Language == LanguageType.Default)

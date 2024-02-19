@@ -121,10 +121,10 @@ public class PlayfabManager : MonoBehaviour
             infoText.text = LocalizationManager.instance.GetString("Login") + "...";
 
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
-            OnClickGuestLogin();
+        OnClickGuestLogin();
 #elif UNITY_ANDROID
         GetTitleInternalData("CheckAOSVersion", CheckVersion);
-#elif UNITY_IOS
+#else
         GetTitleInternalData("CheckIOSVersion", CheckVersion);
 #endif
 

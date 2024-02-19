@@ -795,8 +795,8 @@ public class MatchingManager : MonoBehaviour
 
             matchingButton.sprite = matchingButtonArray[1];
 
-            matchingWaitTime = GameStateManager.instance.MatchingTime;
-            matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
+            matchingWaitTime = GameStateManager.instance.MatchingTime + Random.Range(0, 3);
+            //matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
         }
         else
         {
@@ -818,7 +818,7 @@ public class MatchingManager : MonoBehaviour
         while(matchingWaitTime > 0)
         {
             matchingWaitTime -= 1;
-            matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
+            //matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
 
             if(matchingWaitTime <= 1)
             {
