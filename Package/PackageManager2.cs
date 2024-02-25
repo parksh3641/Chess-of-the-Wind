@@ -72,7 +72,7 @@ public class PackageManager2 : MonoBehaviour
             localization_Hours = LocalizationManager.instance.GetString("Hours");
             localization_Minutes = LocalizationManager.instance.GetString("Minutes");
 
-            j = DateTime.ParseExact(playerDataBase.nextMonday,"yyyyMMdd", null);
+            j = DateTime.ParseExact(playerDataBase.nextMonday, "yyyyMMdd", null);
             m = DateTime.ParseExact(playerDataBase.nextMonth, "yyyyMMdd", null);
 
             StartCoroutine(TimerCoroution());
