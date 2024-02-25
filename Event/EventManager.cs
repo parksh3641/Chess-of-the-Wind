@@ -357,9 +357,7 @@ public class EventManager : MonoBehaviour
                 }
                 break;
             case 5:
-                playerDataBase.SetUpgradeTicket(RankType.N, 5);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(5);
                 break;
             case 6:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -453,9 +451,7 @@ public class EventManager : MonoBehaviour
                     PlayfabManager.instance.UpdateAddGold(rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
                     break;
                 case RewardType.UpgradeTicket:
-                    playerDataBase.SetUpgradeTicket(RankType.N, rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
-
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                    ItemAnimManager.instance.GetUpgradeTicket(rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
                     break;
                 case RewardType.Box:
                     break;

@@ -21,6 +21,8 @@ public class CollectionManager : MonoBehaviour
     public int sortCount = 0;
 
     private int totalRaf = 0;
+    private int saveTotalRaf = 0;
+    private int number = 0;
 
     public bool change = false;
 
@@ -170,6 +172,26 @@ public class CollectionManager : MonoBehaviour
         totalRafText.localizationName = "CollectionTotal";
         totalRafText.plusText = "\n" + MoneyUnitString.ToCurrencyString(totalRaf);
         totalRafText.ReLoad();
+
+        if(saveTotalRaf == 0)
+        {
+            saveTotalRaf = totalRaf;
+        }
+        else
+        {
+            if(saveTotalRaf > totalRaf)
+            {
+                number = saveTotalRaf - totalRaf;
+
+                NotionManager.instance.UseNotion(Color.red, LocalizationManager.instance.GetString("CollectionTotal") + " -" + number);
+            }
+            else if(saveTotalRaf < totalRaf)
+            {
+                number = totalRaf - saveTotalRaf;
+
+                NotionManager.instance.UseNotion(Color.green, LocalizationManager.instance.GetString("CollectionTotal") + " +" + number);
+            }
+        }
 
         if(totalRaf != playerDataBase.TotalRaf)
         {

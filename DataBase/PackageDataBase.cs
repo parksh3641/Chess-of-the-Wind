@@ -20,7 +20,6 @@ public class PackageDataBase : ScriptableObject
 {
     public List<PackageInfomation> PackageInfomationList = new List<PackageInfomation>();
 
-
     public PackageInfomation GetPackageInfomation(PackageType type)
     {
         PackageInfomation package = new PackageInfomation();
@@ -36,5 +35,4 @@ public class PackageDataBase : ScriptableObject
 
         return package;
     }
-
 }

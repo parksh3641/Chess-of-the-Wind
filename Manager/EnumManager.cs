@@ -331,7 +331,26 @@ public enum PackageType
     Platinum,
     Diamond,
     Legend,
-    Supply
+    Supply,
+    Trials,
+    NewRank,
+    NewRank2,
+    NewRank3,
+    Daily1,
+    Daily2,
+    Daily3,
+    Daily4,
+    Daily5,
+    Weekly1,
+    Weekly2,
+    Weekly3,
+    Weekly4,
+    Weekly5,
+    Monthly1,
+    Monthly2,
+    Monthly3,
+    Monthly4,
+    Monthly5,
 }
 
 public enum RewardType

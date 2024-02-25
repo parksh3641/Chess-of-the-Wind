@@ -137,6 +137,47 @@ public class PlayerDataBase : ScriptableObject
     private int dailyAdsReward3 = 0;
     [SerializeField]
     private int dailyGoldReward = 0;
+    [SerializeField]
+    private int dailyReset = 0;
+
+    [Space]
+    [Title("Package_Daily")]
+    [SerializeField]
+    private int package_Daily1 = 0;
+    [SerializeField]
+    private int package_Daily2 = 0;
+    [SerializeField]
+    private int package_Daily3 = 0;
+    [SerializeField]
+    private int package_Daily4 = 0;
+    [SerializeField]
+    private int package_Daily5 = 0;
+
+    [Space]
+    [Title("Package_Weekly")]
+    [SerializeField]
+    private int package_Weekly1 = 0;
+    [SerializeField]
+    private int package_Weekly2 = 0;
+    [SerializeField]
+    private int package_Weekly3 = 0;
+    [SerializeField]
+    private int package_Weekly4 = 0;
+    [SerializeField]
+    private int package_Weekly5 = 0;
+
+    [Space]
+    [Title("Package_Monthly")]
+    [SerializeField]
+    private int package_Monthly1 = 0;
+    [SerializeField]
+    private int package_Monthly2 = 0;
+    [SerializeField]
+    private int package_Monthly3 = 0;
+    [SerializeField]
+    private int package_Monthly4 = 0;
+    [SerializeField]
+    private int package_Monthly5 = 0;
 
     [Space]
     [Title("Achievement")]
@@ -204,22 +245,53 @@ public class PlayerDataBase : ScriptableObject
     private int naverCafe202401 = 0;
     [SerializeField]
     private int naverCafe202402 = 0;
+    [SerializeField]
+    private int naverCafe202403 = 0;
+    [SerializeField]
+    private int naverCafe202404 = 0;
+    [SerializeField]
+    private int naverCafe202405 = 0;
+    [SerializeField]
+    private int naverCafe202406 = 0;
+    [SerializeField]
+    private int naverCafe202407 = 0;
+    [SerializeField]
+    private int naverCafe202408 = 0;
+    [SerializeField]
+    private int naverCafe202409 = 0;
+    [SerializeField]
+    private int naverCafe202410 = 0;
+    [SerializeField]
+    private int naverCafe202411 = 0;
+    [SerializeField]
+    private int naverCafe202412 = 0;
 
 
     [Space]
     [Title("Reset")]
+    [SerializeField]
     public int season = 0;
+    [SerializeField]
     public string attendanceDay = "";
+    [SerializeField]
     public int attendanceCount = 0;
+    [SerializeField]
     public bool attendanceCheck = false;
     [Space]
+    [SerializeField]
     public int welcomeCount = 0;
+    [SerializeField]
     public bool welcomeCheck = false;
     [Space]
+    [SerializeField]
     public int welcomeBoxCount = 0;
+    [SerializeField]
     public bool welcomeBoxCheck = false;
     [Space]
+    [SerializeField]
     public string nextMonday = "";
+    [Space]
+    public string nextMonth = "";
     [SerializeField]
     private int update = 0;
 
@@ -772,6 +844,102 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int DailyReset
+    {
+        get { return dailyReset ; } 
+        set { dailyReset = value; }
+    }
+
+    public int Package_Daily1
+    {
+        get { return package_Daily1; }
+        set { package_Daily1 = value; }
+    }
+
+    public int Package_Daily2
+    {
+        get { return package_Daily2; }
+        set { package_Daily2 = value; }
+    }
+
+    public int Package_Daily3
+    {
+        get { return package_Daily3; }
+        set { package_Daily3 = value; }
+    }
+
+    public int Package_Daily4
+    {
+        get { return package_Daily4; }
+        set { package_Daily4 = value; }
+    }
+
+    public int Package_Daily5
+    {
+        get { return package_Daily5; }
+        set { package_Daily5 = value; }
+    }
+
+    public int Package_Weekly1
+    {
+        get { return package_Weekly1; }
+        set { package_Weekly1 = value; }
+    }
+
+    public int Package_Weekly2
+    {
+        get { return package_Weekly2; }
+        set { package_Weekly2 = value; }
+    }
+
+    public int Package_Weekly3
+    {
+        get { return package_Weekly3; }
+        set { package_Weekly3 = value; }
+    }
+
+    public int Package_Weekly4
+    {
+        get { return package_Weekly4; }
+        set { package_Weekly4 = value; }
+    }
+
+    public int Package_Weekly5
+    {
+        get { return package_Weekly5; }
+        set { package_Weekly5 = value; }
+    }
+
+    public int Package_Monthly1
+    {
+        get { return package_Monthly1; }
+        set { package_Monthly1 = value; }
+    }
+
+    public int Package_Monthly2
+    {
+        get { return package_Monthly2; }
+        set { package_Monthly2 = value; }
+    }
+
+    public int Package_Monthly3
+    {
+        get { return package_Monthly3; }
+        set { package_Monthly3 = value; }
+    }
+
+    public int Package_Monthly4
+    {
+        get { return package_Monthly4; }
+        set { package_Monthly4 = value; }
+    }
+
+    public int Package_Monthly5
+    {
+        get { return package_Monthly5; }
+        set { package_Monthly5 = value; }
+    }
+
 
     public int ConsumeGold
     {
@@ -1047,6 +1215,126 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int NaverCafe202403
+    {
+        get
+        {
+            return naverCafe202403;
+        }
+        set
+        {
+            naverCafe202403 = value;
+        }
+    }
+
+    public int NaverCafe202404
+    {
+        get
+        {
+            return naverCafe202404;
+        }
+        set
+        {
+            naverCafe202404 = value;
+        }
+    }
+
+    public int NaverCafe202405
+    {
+        get
+        {
+            return naverCafe202405;
+        }
+        set
+        {
+            naverCafe202405 = value;
+        }
+    }
+
+    public int NaverCafe202406
+    {
+        get
+        {
+            return naverCafe202406;
+        }
+        set
+        {
+            naverCafe202406 = value;
+        }
+    }
+
+    public int NaverCafe202407
+    {
+        get
+        {
+            return naverCafe202407;
+        }
+        set
+        {
+            naverCafe202407 = value;
+        }
+    }
+
+    public int NaverCafe202408
+    {
+        get
+        {
+            return naverCafe202408;
+        }
+        set
+        {
+            naverCafe202408 = value;
+        }
+    }
+
+    public int NaverCafe202409
+    {
+        get
+        {
+            return naverCafe202409;
+        }
+        set
+        {
+            naverCafe202409 = value;
+        }
+    }
+
+    public int NaverCafe202410
+    {
+        get
+        {
+            return naverCafe202410;
+        }
+        set
+        {
+            naverCafe202410 = value;
+        }
+    }
+
+    public int NaverCafe202411
+    {
+        get
+        {
+            return naverCafe202411;
+        }
+        set
+        {
+            naverCafe202411 = value;
+        }
+    }
+
+    public int NaverCafe202412
+    {
+        get
+        {
+            return naverCafe202412;
+        }
+        set
+        {
+            naverCafe202412 = value;
+        }
+    }
+
     public int Season
     {
         get
@@ -1104,6 +1392,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             nextMonday = value;
+        }
+    }
+
+    public string NextMonth
+    {
+        get
+        {
+            return nextMonth;
+        }
+        set
+        {
+            nextMonth = value;
         }
     }
 
@@ -1899,6 +2199,26 @@ public class PlayerDataBase : ScriptableObject
         dailyAdsReward2 = 0;
         dailyAdsReward3 = 0;
         dailyGoldReward = 0;
+        dailyReset = 0;
+
+        package_Daily1 = 0;
+        package_Daily2 = 0;
+        package_Daily3 = 0;
+        package_Daily4 = 0;
+        package_Daily5 = 0;
+
+        package_Weekly1 = 0;
+        package_Weekly2 = 0;
+        package_Weekly3 = 0;
+        package_Weekly4 = 0;
+        package_Weekly5 = 0;
+
+        package_Monthly1 = 0;
+        package_Monthly2 = 0;
+        package_Monthly3 = 0;
+        package_Monthly4 = 0;
+        package_Monthly5 = 0;
+
 
         titleNumber = 0;
 
@@ -1927,6 +2247,16 @@ public class PlayerDataBase : ScriptableObject
         naverCafe202312 = 0;
         naverCafe202401 = 0;
         naverCafe202402 = 0;
+        naverCafe202403 = 0;
+        naverCafe202404 = 0;
+        naverCafe202405 = 0;
+        naverCafe202406 = 0;
+        naverCafe202407 = 0;
+        naverCafe202408 = 0;
+        naverCafe202409 = 0;
+        naverCafe202410 = 0;
+        naverCafe202411 = 0;
+        naverCafe202412 = 0;
 
         achievementInfoList.Clear();
 
@@ -1949,6 +2279,7 @@ public class PlayerDataBase : ScriptableObject
         welcomeBoxCheck = false;
 
         nextMonday = "";
+        nextMonth = "";
         update = 0;
 
         newbieWin = 0;

@@ -152,9 +152,7 @@ public class MailContent : MonoBehaviour
                 PlayfabManager.instance.UpdateAddGold(count);
                 break;
             case RewardType.UpgradeTicket:
-                playerDataBase.SetUpgradeTicket(RankType.N, count);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(count);
                 break;
             case RewardType.Box:
                 switch (GameStateManager.instance.WindCharacterType)

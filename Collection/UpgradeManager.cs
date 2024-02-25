@@ -644,34 +644,7 @@ public class UpgradeManager : MonoBehaviour
 
                 ineventoryAlarm.SetActive(true);
 
-                switch (blockClass.rankType)
-                {
-                    case RankType.N:
-                        playerDataBase.BoxPiece_N += 1;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_N", playerDataBase.BoxPiece_N);
-                        break;
-                    case RankType.R:
-                        playerDataBase.BoxPiece_R += 1;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_R", playerDataBase.BoxPiece_R);
-                        break;
-                    case RankType.SR:
-                        playerDataBase.BoxPiece_SR += 1;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SR", playerDataBase.BoxPiece_SR);
-                        break;
-                    case RankType.SSR:
-                        playerDataBase.BoxPiece_SSR += 1;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SSR", playerDataBase.BoxPiece_SSR);
-                        break;
-                    case RankType.UR:
-                        playerDataBase.BoxPiece_UR += 1;
-
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_UR", playerDataBase.BoxPiece_UR);
-                        break;
-                }
+                ItemAnimManager.instance.GetBoxPiece(blockClass.rankType, 1);
 
                 equipManager.CheckUnEquip(blockClass.instanceId);
                 collectionManager.CheckUnEquip(blockClass.instanceId);

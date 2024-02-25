@@ -26,6 +26,9 @@ public class AttendanceManager : MonoBehaviour
     string localization_Hours = "";
     string localization_Minutes = "";
 
+    DateTime f, g, i, j, l, m;
+    TimeSpan h, k, n;
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     PlayerDataBase playerDataBase;
@@ -208,9 +211,7 @@ public class AttendanceManager : MonoBehaviour
                         break;
                 }
 
-                playerDataBase.SetUpgradeTicket(RankType.N, 1);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(1);
 
                 clearObj.SetActive(true);
 
@@ -236,13 +237,26 @@ public class AttendanceManager : MonoBehaviour
 
     IEnumerator TimerCoroution()
     {
-        System.DateTime f = System.DateTime.Now;
-        System.DateTime g = System.DateTime.Today.AddDays(1);
-        System.TimeSpan h = g - f;
+        f = System.DateTime.Now;
+        g = System.DateTime.Today.AddDays(1);
+        h = g - f;
 
         timerText.text = localization_NextQuest + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
 
+        if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+        {
+            ResetManager.instance.Initialize();
+
+            Invoke("RestartTimer", 2.0f);
+            yield break;
+        }
+
         yield return waitForSeconds;
+        StartCoroutine(TimerCoroution());
+    }
+
+    void ReStartTimer()
+    {
         StartCoroutine(TimerCoroution());
     }
 

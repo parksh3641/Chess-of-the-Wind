@@ -88,13 +88,13 @@ public class AdmobReward : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
-                if(number <= 5)
+                if(number == 10)
                 {
-                    shopManager.GetAdReward(number);
+                    matchingManager.GetAdReward();
                 }
                 else
                 {
-                    matchingManager.GetAdReward();
+                    shopManager.GetAdReward(number);
                 }
 
                 playerDataBase.AdCount += 1;

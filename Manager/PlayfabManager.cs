@@ -1008,6 +1008,9 @@ public class PlayfabManager : MonoBehaviour
                        case "NextMonday":
                            playerDataBase.NextMonday = statistics.Value.ToString();
                            break;
+                       case "NextMonth":
+                           playerDataBase.NextMonth = statistics.Value.ToString();
+                           break;
                        case "AttendanceCount":
                            playerDataBase.AttendanceCount = statistics.Value;
                            break;
@@ -1312,6 +1315,54 @@ public class PlayfabManager : MonoBehaviour
                        case "DailyGoldReward":
                            playerDataBase.DailyGoldReward = statistics.Value;
                            break;
+                       case "DailyReset":
+                           playerDataBase.DailyReset = statistics.Value;
+                           break;
+                       case "Package_Daily1":
+                           playerDataBase.Package_Daily1 = statistics.Value;
+                           break;
+                       case "Package_Daily2":
+                           playerDataBase.Package_Daily2 = statistics.Value;
+                           break;
+                       case "Package_Daily3":
+                           playerDataBase.Package_Daily3 = statistics.Value;
+                           break;
+                       case "Package_Daily4":
+                           playerDataBase.Package_Daily4 = statistics.Value;
+                           break;
+                       case "Package_Daily5":
+                           playerDataBase.Package_Daily5 = statistics.Value;
+                           break;
+                       case "Package_Weekly1":
+                           playerDataBase.Package_Weekly1 = statistics.Value;
+                           break;
+                       case "Package_Weekly2":
+                           playerDataBase.Package_Weekly2 = statistics.Value;
+                           break;
+                       case "Package_Weekly3":
+                           playerDataBase.Package_Weekly3 = statistics.Value;
+                           break;
+                       case "Package_Weekly4":
+                           playerDataBase.Package_Weekly4 = statistics.Value;
+                           break;
+                       case "Package_Weekly5":
+                           playerDataBase.Package_Weekly5 = statistics.Value;
+                           break;
+                       case "Package_Monthly1":
+                           playerDataBase.Package_Monthly1 = statistics.Value;
+                           break;
+                       case "Package_Monthly2":
+                           playerDataBase.Package_Monthly2 = statistics.Value;
+                           break;
+                       case "Package_Monthly3":
+                           playerDataBase.Package_Monthly3 = statistics.Value;
+                           break;
+                       case "Package_Monthly4":
+                           playerDataBase.Package_Monthly4 = statistics.Value;
+                           break;
+                       case "Package_Monthly5":
+                           playerDataBase.Package_Monthly5 = statistics.Value;
+                           break;
                        case "TitleNumber":
                            playerDataBase.TitleNumber = statistics.Value;
                            break;
@@ -1335,6 +1386,36 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "NaverCafe202402":
                            playerDataBase.NaverCafe202402 = statistics.Value;
+                           break;
+                       case "NaverCafe202403":
+                           playerDataBase.NaverCafe202403 = statistics.Value;
+                           break;
+                       case "NaverCafe202404":
+                           playerDataBase.NaverCafe202404 = statistics.Value;
+                           break;
+                       case "NaverCafe202405":
+                           playerDataBase.NaverCafe202405 = statistics.Value;
+                           break;
+                       case "NaverCafe202406":
+                           playerDataBase.NaverCafe202406 = statistics.Value;
+                           break;
+                       case "NaverCafe202407":
+                           playerDataBase.NaverCafe202407 = statistics.Value;
+                           break;
+                       case "NaverCafe202408":
+                           playerDataBase.NaverCafe202408 = statistics.Value;
+                           break;
+                       case "NaverCafe202409":
+                           playerDataBase.NaverCafe202409 = statistics.Value;
+                           break;
+                       case "NaverCafe202410":
+                           playerDataBase.NaverCafe202410 = statistics.Value;
+                           break;
+                       case "NaverCafe202411":
+                           playerDataBase.NaverCafe202411 = statistics.Value;
+                           break;
+                       case "NaverCafe202412":
+                           playerDataBase.NaverCafe202412 = statistics.Value;
                            break;
                        case "Update":
                            playerDataBase.Update = statistics.Value;

@@ -9,6 +9,7 @@ public class LockManager : MonoBehaviour
     public GameObject inventoryObj;
     public GameObject attendanceObj;
     public GameObject eventObj;
+    public GameObject packageObj;
 
     public GameObject tutorialObj;
     public GameObject achievementObj;
@@ -33,6 +34,7 @@ public class LockManager : MonoBehaviour
         inventoryObj.SetActive(false);
         attendanceObj.SetActive(false);
         eventObj.SetActive(false);
+        packageObj.SetActive(false);
         tutorialObj.SetActive(true);
         achievementObj.SetActive(false);
         questObj.SetActive(false);
@@ -79,6 +81,7 @@ public class LockManager : MonoBehaviour
             inventoryObj.SetActive(true);
             attendanceObj.SetActive(true);
             eventObj.SetActive(true);
+            packageObj.SetActive(true);
             tutorialObj.SetActive(false);
             rankDownObj.SetActive(true);
             achievementObj.SetActive(true);

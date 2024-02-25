@@ -7,8 +7,10 @@ public class ShopContent : MonoBehaviour
 {
     public MoneyType moneyType = MoneyType.CoinA;
     public ShopType shopType = ShopType.UpgradeTicket;
+    public int index = 0;
     public int price = 0;
     public int number = 0;
+    public int totalPrice = 0;
 
     public Image backgroundImg;
 
@@ -76,6 +78,7 @@ public class ShopContent : MonoBehaviour
                 }
 
                 price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
+                totalPrice = price;
 
                 goldText.text = MoneyUnitString.ToCurrencyString(price);
                 freeButton.gameObject.SetActive(true);
@@ -86,11 +89,11 @@ public class ShopContent : MonoBehaviour
             case ShopType.DailyReward_WatchAd:
                 break;
             case ShopType.UpgradeTicket:
-                if(moneyType == MoneyType.CoinA)
+                if (moneyType == MoneyType.CoinA)
                 {
                     lockObj.SetActive(false);
 
-                    if(number < 11)
+                    if(index == 0)
                     {
                         if(playerDataBase.DailyBuy1 == 1)
                         {
@@ -105,6 +108,8 @@ public class ShopContent : MonoBehaviour
                                 number = Random.Range(1, 10);
 
                                 playerDataBase.DailyBuyCount1 = number;
+
+                                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount1", playerDataBase.DailyBuyCount1);
                             }
                             else
                             {
@@ -127,6 +132,8 @@ public class ShopContent : MonoBehaviour
                                 number = Random.Range(11, 51);
 
                                 playerDataBase.DailyBuyCount2 = number;
+
+                                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount2", playerDataBase.DailyBuyCount2);
                             }
                             else
                             {
@@ -136,8 +143,8 @@ public class ShopContent : MonoBehaviour
                     }
 
                     buyButton.SetActive(true);
-                    price = price * number;
-                    priceText.text = MoneyUnitString.ToCurrencyString(price);
+                    totalPrice = price * number;
+                    priceText.text = MoneyUnitString.ToCurrencyString(totalPrice);
                 }
                 else
                 {
@@ -178,6 +185,11 @@ public class ShopContent : MonoBehaviour
         //icon.sprite = shopContentArray[(int)type];
     }
 
+    public void UnLocked()
+    {
+        lockObj.SetActive(false);
+    }
+
     public void Locked()
     {
         lockObj.SetActive(true);
@@ -185,7 +197,7 @@ public class ShopContent : MonoBehaviour
 
     public void BuyButton()
     {
-        shopManager.BuyItem(shopType, price, number);
+        shopManager.BuyItem(shopType, totalPrice, number);
     }
 
     public void BuyUpgradeTicket1()

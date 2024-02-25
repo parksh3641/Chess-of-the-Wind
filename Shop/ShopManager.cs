@@ -35,6 +35,10 @@ public class ShopManager : MonoBehaviour
     public GameObject[] adShopClearArray;
     public GameObject goldShopLockArray;
 
+
+    public GameObject adResetView;
+    public GameObject adReset;
+
     public Text watchAdCountText_BoxNR;
     public Text watchAdCountText_BoxRSR;
 
@@ -56,12 +60,14 @@ public class ShopManager : MonoBehaviour
 
     bool isDelay = false;
     bool first = false;
-    bool isTimer = false;
 
     int random = 0;
 
     public UIManager uIManager;
     public PackageManager packageManager;
+
+    DateTime f, g, i, j, l, m;
+    TimeSpan h, k, n;
 
     PlayerDataBase playerDataBase;
 
@@ -93,8 +99,7 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
-        isTimer = true;
-        StartCoroutine(DailyShopTimer());
+        StartCoroutine(TimerCoroution());
     }
 
     public void OpenShopView()
@@ -108,12 +113,6 @@ public class ShopManager : MonoBehaviour
                 ResetManager.instance.Initialize();
             }
 
-            if(!isTimer)
-            {
-                isTimer = true;
-                StartCoroutine(DailyShopTimer());
-            }
-
             if (!first)
             {
                 adShopReceiveContents[0].Initialize(RewardType.Gold, 10000);
@@ -121,6 +120,12 @@ public class ShopManager : MonoBehaviour
                 adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
 
                 first = true;
+            }
+
+            adReset.SetActive(false);
+            if (playerDataBase.DailyReset == 0)
+            {
+                adReset.SetActive(true);
             }
 
             Initialize_Ad();
@@ -156,6 +161,11 @@ public class ShopManager : MonoBehaviour
 
             Initialize_Count();
         }
+    }
+
+    void ReStartTimer()
+    {
+        StartCoroutine(TimerCoroution());
     }
 
     public void Change()
@@ -500,9 +510,7 @@ public class ShopManager : MonoBehaviour
                     return;
                 }
 
-                playerDataBase.SetUpgradeTicket(RankType.N, number);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(number);
 
                 SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
@@ -544,25 +552,15 @@ public class ShopManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                playerDataBase.SetUpgradeTicket(RankType.N, 1);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
-
+                ItemAnimManager.instance.GetUpgradeTicket(1);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 1:
-                playerDataBase.SetUpgradeTicket(RankType.N, 10);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
-
-
+                ItemAnimManager.instance.GetUpgradeTicket(10);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 2:
-                playerDataBase.SetUpgradeTicket(RankType.N, 100);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
-
+                ItemAnimManager.instance.GetUpgradeTicket(100);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
                 break;
             case 3:
@@ -588,13 +586,13 @@ public class ShopManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
-    IEnumerator DailyShopTimer()
+    IEnumerator TimerCoroution()
     {
         if (dailyShopCountText.gameObject.activeInHierarchy)
         {
-            System.DateTime f = System.DateTime.Now;
-            System.DateTime g = System.DateTime.Today.AddDays(1);
-            System.TimeSpan h = g - f;
+            f = System.DateTime.Now;
+            g = System.DateTime.Today.AddDays(1);
+            h = g - f;
 
             localization_Reset = LocalizationManager.instance.GetString("Reset");
             localization_Days = LocalizationManager.instance.GetString("Days");
@@ -605,23 +603,35 @@ public class ShopManager : MonoBehaviour
 
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
             {
-                isTimer = false;
                 ResetManager.instance.Initialize();
+
+                Invoke("RestartTimer", 2.0f);
                 yield break;
             }
         }
 
         yield return waitForSeconds;
-        StartCoroutine(DailyShopTimer());
+        StartCoroutine(TimerCoroution());
     }
 
     public void Failed()
     {
         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
         NotionManager.instance.UseNotion(NotionType.CancelPurchase);
     }
 
+
+    public void OpenAdResetView()
+    {
+        if(!adResetView.activeInHierarchy)
+        {
+            adResetView.SetActive(true);
+        }
+        else
+        {
+            adResetView.SetActive(false);
+        }
+    }
 
     public void Initialize_Ad()
     {
@@ -742,9 +752,7 @@ public class ShopManager : MonoBehaviour
             case 3:
                 if (playerDataBase.DailyAdsReward2 == 1) return;
 
-                playerDataBase.SetUpgradeTicket(RankType.N, 1);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(1);
 
                 playerDataBase.DailyAdsReward2 = 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward2", playerDataBase.DailyAdsReward2);
@@ -754,9 +762,7 @@ public class ShopManager : MonoBehaviour
             case 4:
                 if (playerDataBase.DailyAdsReward3 == 1) return;
 
-                playerDataBase.SetUpgradeTicket(RankType.N, 10);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                ItemAnimManager.instance.GetUpgradeTicket(10);
 
                 playerDataBase.DailyAdsReward3 = 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward3", playerDataBase.DailyAdsReward3);
@@ -775,11 +781,48 @@ public class ShopManager : MonoBehaviour
 
                 Initialize_Ad();
                 break;
+            case 6:
+                if (playerDataBase.DailyReset == 1) return;
+
+                StartCoroutine(AdResetCoroution());
+
+                break;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
         NotionManager.instance.UseNotion(NotionType.GetWatchAdReward);
+    }
+
+    IEnumerator AdResetCoroution()
+    {
+        adReset.SetActive(false);
+        adResetView.SetActive(false);
+
+        playerDataBase.DailyReset = 1;
+        playerDataBase.DailyReward = 0;
+        playerDataBase.DailyBuy1 = 0;
+        playerDataBase.DailyBuy2 = 0;
+        playerDataBase.DailyBuyCount1 = 0;
+        playerDataBase.DailyBuyCount2 = 0;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReset", playerDataBase.DailyReset);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReward", playerDataBase.DailyReward);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy1", playerDataBase.DailyBuy1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy2", playerDataBase.DailyBuy2);
+
+        yield return waitForSeconds;
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount1", playerDataBase.DailyBuyCount1);
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount2", playerDataBase.DailyBuyCount2);
+
+        for (int i = 0; i < dailyContentArray.Length; i++)
+        {
+            dailyContentArray[i].UnLocked();
+        }
+
+        dailyContentArray[0].Initialize(ShopType.DailyReward);
+        dailyContentArray[1].Initialize(ShopType.UpgradeTicket);
+        dailyContentArray[2].Initialize(ShopType.UpgradeTicket);
     }
 
     #endregion
@@ -951,8 +994,7 @@ public class ShopManager : MonoBehaviour
     [Button]
     public void PlusUpgradeTicket()
     {
-        playerDataBase.SetUpgradeTicket(RankType.N, 1000);
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+        ItemAnimManager.instance.GetUpgradeTicket(1000);
     }
 
     [Button]

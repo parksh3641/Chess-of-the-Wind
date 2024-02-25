@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,9 @@ public class PackageManager : MonoBehaviour
     public GameObject specialShop;
 
     public RectTransform packageGrid;
-
     public PackageContent[] packageContentArray;
 
     private int count = 0;
-
     bool first = false;
 
     public MatchingManager matchingManager;
@@ -126,6 +125,8 @@ public class PackageManager : MonoBehaviour
     {
         Debug.LogError(type.packageType + " ±¸¸Å");
 
+        FirebaseAnalytics.LogEvent(type.ToString());
+
         packageType = type.packageType;
 
         switch (packageType)
@@ -133,32 +134,32 @@ public class PackageManager : MonoBehaviour
             case PackageType.Default:
                 break;
             case PackageType.Newbie:
-                playerDataBase.ShopNewbie = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopNewbie", 1);
+                playerDataBase.ShopNewbie += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopNewbie", playerDataBase.ShopNewbie);
                 break;
             case PackageType.Sliver:
-                playerDataBase.ShopSliver = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopSliver", 1);
+                playerDataBase.ShopSliver += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopSliver", playerDataBase.ShopSliver);
                 break;
             case PackageType.Gold:
-                playerDataBase.ShopGold = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopGold", 1);
+                playerDataBase.ShopGold += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopGold", playerDataBase.ShopGold);
                 break;
             case PackageType.Platinum:
-                playerDataBase.ShopPlatinum = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopPlatinum", 1);
+                playerDataBase.ShopPlatinum += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopPlatinum", playerDataBase.ShopPlatinum);
                 break;
             case PackageType.Diamond:
-                playerDataBase.ShopDiamond = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopDiamond", 1);
+                playerDataBase.ShopDiamond += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopDiamond", playerDataBase.ShopDiamond);
                 break;
             case PackageType.Legend:
-                playerDataBase.ShopLegend = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopLegend", 1);
+                playerDataBase.ShopLegend += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopLegend", playerDataBase.ShopLegend);
                 break;
             case PackageType.Supply:
-                playerDataBase.ShopSupply = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopSupply", 1);
+                playerDataBase.ShopSupply += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopSupply", playerDataBase.ShopSupply);
                 break;
         }
 
@@ -172,9 +173,7 @@ public class PackageManager : MonoBehaviour
                     PlayfabManager.instance.UpdateAddGold(count);
                     break;
                 case RewardType.UpgradeTicket:
-                    playerDataBase.SetUpgradeTicket(RankType.N, count);
-
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                    ItemAnimManager.instance.GetUpgradeTicket(count);
                     break;
                 case RewardType.Box:
                     switch (GameStateManager.instance.WindCharacterType)

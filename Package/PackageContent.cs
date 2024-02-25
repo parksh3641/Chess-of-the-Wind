@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using UnityEngine.UI;
 
 public class PackageContent : MonoBehaviour
@@ -8,10 +9,9 @@ public class PackageContent : MonoBehaviour
     public PackageType packageType = PackageType.Default;
 
     public LocalizationContent titleText;
-    public GameObject[] buyButton;
 
-    public LocalizationContent[] buyButtonTotalText;
-    public LocalizationContent[] buyButtonPriceText;
+    public CodelessIAPButton iapButton;
+    public LocalizationContent iapPriceText;
 
     public ReceiveContent[] receiveContents;
 
@@ -43,20 +43,46 @@ public class PackageContent : MonoBehaviour
             receiveContents[i].Initialize(packageInfomation.receiveInformationList[i].rewardType, packageInfomation.receiveInformationList[i].count);
         }
 
-        for(int i = 0; i < buyButton.Length; i ++)
-        {
-            buyButton[i].SetActive(false);
-        }
-
         titleText.localizationName = "Package_" + packageType.ToString();
-
-        buyButton[(int)packageType - 1].SetActive(true);
-        buyButtonTotalText[(int)packageType - 1].localizationName = "PackageTotal_" + packageType.ToString();
-        buyButtonPriceText[(int)packageType - 1].localizationName = "PackagePrice_" + packageType.ToString();
-
         titleText.ReLoad();
-        buyButtonTotalText[(int)packageType - 1].ReLoad();
-        buyButtonPriceText[(int)packageType - 1].ReLoad();
+
+        iapPriceText.localizationName = "PackagePrice_" + packageType.ToString();
+        iapPriceText.ReLoad();
+
+        switch (packageType)
+        {
+            case PackageType.Default:
+                break;
+            case PackageType.Newbie:
+                iapButton.productId = "shop.windchess.shopnewbie";
+                break;
+            case PackageType.Sliver:
+                iapButton.productId = "shop.windchess.shopsliver";
+                break;
+            case PackageType.Gold:
+                iapButton.productId = "shop.windchess.shopgold";
+                break;
+            case PackageType.Platinum:
+                iapButton.productId = "shop.windchess.shopplatinum";
+                break;
+            case PackageType.Diamond:
+                iapButton.productId = "shop.windchess.shopdiamond";
+                break;
+            case PackageType.Legend:
+                iapButton.productId = "shop.windchess.shoplegend";
+                break;
+            case PackageType.Supply:
+                iapButton.productId = "shop.windchess.shopsupply";
+                break;
+            case PackageType.Trials:
+                break;
+            case PackageType.NewRank:
+                break;
+            case PackageType.NewRank2:
+                break;
+            case PackageType.NewRank3:
+                break;
+        }
     }
 
     public void BuyPurchase()

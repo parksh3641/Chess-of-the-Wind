@@ -8,6 +8,8 @@ public class RankDownManager : MonoBehaviour
 {
     public GameObject rankDownView;
 
+    public GameObject alarm;
+
     public Text rankDownInfo;
 
     public ReceiveContent[] receiveContents;
@@ -35,12 +37,22 @@ public class RankDownManager : MonoBehaviour
         rankDownView.SetActive(false);
     }
 
+    private void Start()
+    {
+        alarm.SetActive(false);
+
+        if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
+        {
+            alarm.SetActive(true);
+        }
+    }
+
 
     public void OpenRankDownView()
     {
         if (!rankDownView.activeInHierarchy)
         {
-            if(GameStateManager.instance.GameRankType < GameRankType.Sliver_3)
+            if(GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -50,6 +62,7 @@ public class RankDownManager : MonoBehaviour
             }
 
             rankDownView.SetActive(true);
+            alarm.SetActive(false);
 
             Initialize();
 
@@ -109,9 +122,7 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
                     PlayfabManager.instance.UpdateAddGold(rankDownInfomation.receiveInformationList[i].count);
                     break;
                 case RewardType.UpgradeTicket:
-                    playerDataBase.SetUpgradeTicket(RankType.N, rankDownInfomation.receiveInformationList[i].count);
-
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));
+                    ItemAnimManager.instance.GetUpgradeTicket(rankDownInfomation.receiveInformationList[i].count);
                     break;
                 case RewardType.Box:
                     switch (GameStateManager.instance.WindCharacterType)

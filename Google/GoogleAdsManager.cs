@@ -11,7 +11,7 @@ public class GoogleAdsManager : MonoBehaviour
     public AdmobReward adShop2;
     public AdmobReward adShop3;
     public AdmobReward goldShop;
-    public AdmobReward bronze;
+    public AdmobReward all;
 
     PlayerDataBase playerDataBase;
 
@@ -62,7 +62,13 @@ public class GoogleAdsManager : MonoBehaviour
                 goldShop.ShowAd(number);
                 break;
             case 6:
-                bronze.ShowAd(number);
+                if (playerDataBase.DailyReset == 1) return;
+
+                all.ShowAd(number);
+                break;
+
+            case 10:
+                all.ShowAd(number);
                 break;
         }
     }
