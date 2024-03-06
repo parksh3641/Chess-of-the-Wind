@@ -778,6 +778,8 @@ public class GameManager : MonoBehaviour
 
         blockGridParent_Gosu.SetActive(true);
         blockContentTransform_Gosu.gameObject.SetActive(true);
+        blockContentTransform_Gosu.GetComponent<GridLayoutGroup>().enabled = true;
+
         numberContentTransform.gameObject.SetActive(true);
 
         rouletteContentList_Target = rouletteContentList;
@@ -836,7 +838,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(playerDataBase.Weapon != null)
+        if (playerDataBase.Weapon != null)
         {
             if (playerDataBase.Weapon.Length > 0)
             {
@@ -920,7 +922,19 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Invoke("GridDelay", 0.5f);
+
         GameEvent();
+    }
+
+    void GridDelay()
+    {
+        for(int i = 0; i < blockContentList.Count; i ++)
+        {
+            blockContentList[i].SetPos();
+        }
+
+        blockContentTransform_Gosu.GetComponent<GridLayoutGroup>().enabled = false;
     }
 
     void SetStakes() //판돈 설정
@@ -3382,15 +3396,18 @@ public class GameManager : MonoBehaviour
 
         if (bettingList.Contains(1) && bettingList[blockContent.index] == 0)
         {
-            blockContent.CancleBetting();
+            for(int i = 0; i < bettingList.Length; i ++)
+            {
+                if(bettingList[i] == 1)
+                {
+                    blockContentList[i].CancleBetting();
+                }
+            }
 
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            //SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            //NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
 
-            NotionManager.instance.UseNotion(NotionType.OverBettingBlock);
-
-            Debug.Log("1개 이상 배팅할 수 없습니다");
-
-            return;
+            Debug.Log("기존에 있던 블럭을 해제합니다");
         }
 
         if (GameStateManager.instance.GameType == GameType.NewBie)
@@ -3519,7 +3536,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void ResetPosBlock(int number)
+    public void ResetBlockPos(int number)
     {
         bettingList[number] = 0;
 

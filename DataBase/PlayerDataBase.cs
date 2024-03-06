@@ -2992,7 +2992,7 @@ public class PlayerDataBase : ScriptableObject
         switch(titleNumber)
         {
             case 0:
-                name = LocalizationManager.instance.GetString("NoTitle");
+                name = LocalizationManager.instance.GetString("-");
                 break;
             default:
                 if(titleNumber < 500)
@@ -3040,7 +3040,7 @@ public class PlayerDataBase : ScriptableObject
         switch (titleNumber)
         {
             case 0:
-                name = "NoTitle";
+                name = "-";
                 break;
             default:
                 if (titleNumber < 500)

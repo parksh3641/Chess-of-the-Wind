@@ -52,10 +52,9 @@ public class RankDownManager : MonoBehaviour
     {
         if (!rankDownView.activeInHierarchy)
         {
-            if(GameStateManager.instance.GameRankType < GameRankType.Sliver_4)
+            if(GameStateManager.instance.GameRankType < GameRankType.Sliver_3)
             {
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                 NotionManager.instance.UseNotion(NotionType.LowRank);
 
                 return;

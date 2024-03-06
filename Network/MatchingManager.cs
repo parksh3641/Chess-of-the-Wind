@@ -796,7 +796,7 @@ public class MatchingManager : MonoBehaviour
             matchingButton.sprite = matchingButtonArray[1];
 
             matchingWaitTime = GameStateManager.instance.MatchingTime + Random.Range(0, 3);
-            //matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
+            //matchingText.text = = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
         }
         else
         {
@@ -820,7 +820,7 @@ public class MatchingManager : MonoBehaviour
             matchingWaitTime -= 1;
             //matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
 
-            if(matchingWaitTime <= 1)
+            if (matchingWaitTime <= 1)
             {
                 matchingButton.sprite = matchingButtonArray[0];
 

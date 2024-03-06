@@ -309,7 +309,7 @@ public class RouletteManager : MonoBehaviour
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             roulettePlane[0].SetActive(true);
-            windGauge.SetActive(false);
+            windGauge.SetActive(true);
         }
         else
         {
@@ -1074,77 +1074,75 @@ public class RouletteManager : MonoBehaviour
 
         if (!pinball.PV.IsMine || buttonClick) return;
 
-        if(GameStateManager.instance.GameType == GameType.NewBie)
+        //if (GameStateManager.instance.GameType == GameType.NewBie)
+        //{
+        //    if (windCount > 0)
+        //    {
+        //        if (!windDelay)
+        //        {
+        //            windCount -= 1;
+        //            windCountText.text = windCount + "/" + windMaxCount;
+
+        //            float[] blow = new float[2];
+        //            blow[0] = newBiePower;
+        //            blow[1] = windIndex;
+
+        //            PV.RPC("BlowingWind", RpcTarget.All, blow);
+
+        //            windDelay = true;
+        //            Invoke("WindDelay", 0.5f);
+
+        //            if (windCount == 0)
+        //            {
+        //                windButton.sprite = windButtonArray[0];
+        //            }
+        //        }
+        //    }
+        //}
+
+        pinballPower = true;
+
+        power = 0;
+        powerFillAmount.fillAmount = 0;
+
+        StartCoroutine(PowerCoroution());
+
+        if (rouletteIndex == 0)
         {
-            if (windCount > 0)
+            if (windIndex == 0)
             {
-                if (!windDelay)
-                {
-                    windCount -= 1;
-                    windCountText.text = windCount + "/" + windMaxCount;
+                roulette1WindPoint[0].gameObject.SetActive(true);
 
-                    float[] blow = new float[2];
-                    blow[0] = newBiePower;
-                    blow[1] = windIndex;
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
+            }
+            else
+            {
+                roulette1WindPoint[1].gameObject.SetActive(true);
 
-                    PV.RPC("BlowingWind", RpcTarget.All, blow);
-
-                    windDelay = true;
-                    Invoke("WindDelay", 0.5f);
-
-                    if(windCount == 0)
-                    {
-                        windButton.sprite = windButtonArray[0];
-                    }
-                }
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
             }
         }
         else
         {
-            pinballPower = true;
-
-            power = 0;
-            powerFillAmount.fillAmount = 0;
-
-            StartCoroutine(PowerCoroution());
-
-            if (rouletteIndex == 0)
+            if (windIndex == 0)
             {
-                if (windIndex == 0)
-                {
-                    roulette1WindPoint[0].gameObject.SetActive(true);
+                roulette2WindPoint[0].gameObject.SetActive(true);
 
-                    alpha = 0;
-                    flickerCheck = false;
-                    StartCoroutine(FlickerCoroution(roulette1WindPoint[0]));
-                }
-                else
-                {
-                    roulette1WindPoint[1].gameObject.SetActive(true);
-
-                    alpha = 0;
-                    flickerCheck = false;
-                    StartCoroutine(FlickerCoroution(roulette1WindPoint[1]));
-                }
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
             }
             else
             {
-                if (windIndex == 0)
-                {
-                    roulette2WindPoint[0].gameObject.SetActive(true);
+                roulette2WindPoint[1].gameObject.SetActive(true);
 
-                    alpha = 0;
-                    flickerCheck = false;
-                    StartCoroutine(FlickerCoroution(roulette2WindPoint[0]));
-                }
-                else
-                {
-                    roulette2WindPoint[1].gameObject.SetActive(true);
-
-                    alpha = 0;
-                    flickerCheck = false;
-                    StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
-                }
+                alpha = 0;
+                flickerCheck = false;
+                StartCoroutine(FlickerCoroution(roulette2WindPoint[1]));
             }
         }
     }
@@ -1155,15 +1153,16 @@ public class RouletteManager : MonoBehaviour
 
         if (!pinball.PV.IsMine || buttonClick) return;
 
-        if (GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            return;
-        }
+        //if (GameStateManager.instance.GameType == GameType.NewBie)
+        //{
+        //    return;
+        //}
 
         if (windCount > 0)
         {
             windCount -= 1;
             windCountText.text = windCount + "/" + windMaxCount;
+
             pinballPower = false;
 
             float[] blow = new float[2];

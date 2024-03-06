@@ -40,7 +40,9 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private CanvasGroup canvasGroup;
     public bool isDrag = false;
 
-    public int index = 0;
+    Vector3 resetPos = new Vector3();
+
+    public int index = 0; //맨 처음 위치값 저장
     public int value = 0;
 
     GameManager gameManager;
@@ -69,6 +71,11 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         gameManager = manager;
         blockRootParent = root;
         previousParent = grid;
+    }
+
+    public void SetPos()
+    {
+        resetPos = transform.position;
     }
 
     public void InGame_Initialize(BlockClass block, int number, int value)
@@ -161,8 +168,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if (transform.parent == blockRootParent)
         {
-            transform.SetParent(previousParent);
-            transform.position = previousParent.GetComponent<RectTransform>().position;
+            ResetBlockPos();
 
             blockMain.SetActive(true);
             blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
@@ -171,7 +177,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (gameManager != null)
             {
                 gameManager.CancleBetting(blockClass.blockType);
-                gameManager.ResetPosBlock(index);
+                gameManager.ResetBlockPos(index);
             }
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
@@ -202,8 +208,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if (transform.parent != previousParent)
         {
-            transform.SetParent(previousParent);
-            transform.position = previousParent.GetComponent<RectTransform>().position;
+            ResetBlockPos();
 
             blockMain.SetActive(true);
             blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
@@ -213,7 +218,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (gameManager != null)
             {
                 gameManager.CancleBetting(blockClass.blockType);
-                gameManager.ResetPosBlock(index);
+                gameManager.ResetBlockPos(index);
             }
         }
 
@@ -244,8 +249,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if (transform.parent != previousParent)
         {
-            transform.SetParent(previousParent);
-            transform.position = previousParent.GetComponent<RectTransform>().position;
+            ResetBlockPos();
 
             blockMain.SetActive(true);
             blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
@@ -255,7 +259,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (gameManager != null)
             {
                 gameManager.CancleBetting(blockClass.blockType);
-                gameManager.ResetPosBlock(index);
+                gameManager.ResetBlockPos(index);
             }
         }
 
@@ -284,8 +288,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void TimeOver()
     {
-        transform.SetParent(previousParent);
-        transform.position = previousParent.GetComponent<RectTransform>().position;
+        ResetBlockPos();
 
         blockMain.SetActive(true);
         blockUI.color = new Color(blockUI.color.r, blockUI.color.g, blockUI.color.b, 1);
@@ -295,7 +298,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (gameManager != null)
         {
             gameManager.CancleBetting(blockClass.blockType);
-            gameManager.ResetPosBlock(index);
+            gameManager.ResetBlockPos(index);
         }
 
         canvasGroup.alpha = 1f;
@@ -317,5 +320,12 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
 
         isDrag = false;
+    }
+
+    void ResetBlockPos()
+    {
+        transform.SetParent(previousParent);
+        transform.position = previousParent.GetComponent<RectTransform>().position;
+        transform.position = resetPos;
     }
 }
