@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -82,7 +83,7 @@ public class ChallengeManager : MonoBehaviour
                         break;
                 }
 
-
+                FirebaseAnalytics.LogEvent("Nothing_Block");
 
                 Debug.Log("블럭이 없으므로 기본 블럭을 지급합니다");
             }
@@ -349,6 +350,8 @@ public class ChallengeManager : MonoBehaviour
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        FirebaseAnalytics.LogEvent("Clear_Challenge_" + number);
     }
 
     public void ShortCutButton(int number)

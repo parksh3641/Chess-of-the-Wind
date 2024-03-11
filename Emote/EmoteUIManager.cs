@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,8 @@ public class EmoteUIManager : MonoBehaviour
             emoteUIView.SetActive(true);
 
             Initialize();
+
+            FirebaseAnalytics.LogEvent("Open_Emote");
         }
         else
         {

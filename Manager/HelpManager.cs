@@ -61,7 +61,7 @@ public class HelpManager : MonoBehaviour
             tacticsView.SetActive(false);
             infoView.SetActive(false);
 
-            FirebaseAnalytics.LogEvent("Help");
+            FirebaseAnalytics.LogEvent("Open_Help");
         }
         else
         {
@@ -90,6 +90,8 @@ public class HelpManager : MonoBehaviour
                 tacticsView.SetActive(true);
                 break;
         }
+
+        FirebaseAnalytics.LogEvent("Open_Help_" + number);
     }
 
     public void OpenNewbieView(int number)

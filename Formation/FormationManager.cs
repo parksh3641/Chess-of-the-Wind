@@ -98,7 +98,7 @@ public class FormationManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.ChoiceWinter);
 
-            FirebaseAnalytics.LogEvent("Winter");
+            FirebaseAnalytics.LogEvent("Select_Winter");
 
             Debug.Log("눈의 여왕 진형 선택");
         }
@@ -121,7 +121,7 @@ public class FormationManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.ChoiceUnder);
 
-            FirebaseAnalytics.LogEvent("Under");
+            FirebaseAnalytics.LogEvent("Select_Under");
 
             Debug.Log("지하 세계 진형 선택");
         }

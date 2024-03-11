@@ -244,7 +244,7 @@ public class NickNameManager : MonoBehaviour
 
         nickNameView.SetActive(false);
 
-        FirebaseAnalytics.LogEvent("Nickname");
+        FirebaseAnalytics.LogEvent("Open_Nickname");
     }
 
     public void FreeSuccess()

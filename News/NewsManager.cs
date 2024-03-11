@@ -81,7 +81,7 @@ public class NewsManager : MonoBehaviour
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.ReadTitleNews(ReadTitleNews);
 
-            FirebaseAnalytics.LogEvent("News");
+            FirebaseAnalytics.LogEvent("Open_News");
         }
         else
         {

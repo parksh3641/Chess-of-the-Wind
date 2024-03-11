@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [Title("Target")]
     public List<RouletteContent> rouletteContentList_Target = new List<RouletteContent>();
-    public List<BlockLevelContent> blockLevelContentList_Target = new List<BlockLevelContent>();
+    public List<BlockLevelContent> blockLevelContentList_Target = new List<BlockLevelContent>(); //상대방 블럭 값 저장
 
 
     BlockClass blockClassArmor = new BlockClass();
@@ -524,6 +524,7 @@ public class GameManager : MonoBehaviour
     public void Initialize()
     {
         bettingTime = GameStateManager.instance.BettingTime;
+        //bettingTime = 999;
         bettingWaitTime = GameStateManager.instance.BettingWaitTime;
 
         blockMotherInformation = blockDataBase.blockMotherInformation;
@@ -701,12 +702,16 @@ public class GameManager : MonoBehaviour
 
         developerInfo.text = "0 = 퀸 당첨\n1 ~ 8 = 해당 숫자 당첨\n빈칸 = 정상 진행";
 
+        for (int i = 0; i < numberContentList_NewBie.Count; i++)
+        {
+            numberContentList_NewBie[i].Betting_Initialize();
+        }
+
         rouletteContentTransform_NewBie.gameObject.SetActive(true);
         rouletteContentTransform.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(false);
         rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(false);
         rouletteContentTransformSquareBet.gameObject.SetActive(false);
-
 
         blockLevelContentTransform_NewBie.gameObject.SetActive(true);
         blockLevelContentTransform.gameObject.SetActive(false);
@@ -762,12 +767,16 @@ public class GameManager : MonoBehaviour
 
         developerInfo.text = "0 = 퀸 당첨\n1 ~ 24 = 해당 숫자 당첨\n빈칸 = 정상 진행";
 
+        for (int i = 0; i < numberContentList.Count; i++)
+        {
+            numberContentList[i].Betting_Initialize();
+        }
+
         blockLevelContentTransform_NewBie.gameObject.SetActive(false);
         rouletteContentTransform.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Vertical.gameObject.SetActive(true);
         rouletteContentTransformSplitBet_Horizontal.gameObject.SetActive(true);
         rouletteContentTransformSquareBet.gameObject.SetActive(true);
-
 
         blockLevelContentTransform_NewBie.gameObject.SetActive(false);
         blockLevelContentTransform.gameObject.SetActive(true);
@@ -1136,13 +1145,13 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("리타이어 승리");
 
-                FirebaseAnalytics.LogEvent("Win_Retire");
+                FirebaseAnalytics.LogEvent("InGame_Win_Retire");
             }
             else
             {
                 Debug.Log("승리");
 
-                FirebaseAnalytics.LogEvent("Win");
+                FirebaseAnalytics.LogEvent("InGame_Win");
             }
 
         }
@@ -1152,7 +1161,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("패배");
 
-            FirebaseAnalytics.LogEvent("Lose");
+            FirebaseAnalytics.LogEvent("InGame_Lose");
         }
         else if (number == 2)
         {
@@ -1160,7 +1169,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("상대방 항복으로 승리");
 
-            FirebaseAnalytics.LogEvent("Win_Surrender");
+            FirebaseAnalytics.LogEvent("InGame_Win_Surrender");
         }
         else
         {
@@ -1168,7 +1177,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("무승부");
 
-            FirebaseAnalytics.LogEvent("Tie");
+            FirebaseAnalytics.LogEvent("InGame_Tie");
         }
 
         timerAnimation.StopAnim();
@@ -1233,7 +1242,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (timer <= 5)
+            if (timer <= 3)
             {
                 if (!isTimesUp)
                 {
@@ -1284,6 +1293,11 @@ public class GameManager : MonoBehaviour
             {
                 blockLevelContentList_NewBie[i].Initialize();
             }
+
+            for (int i = 0; i < numberContentList_NewBie.Count; i++)
+            {
+                numberContentList_NewBie[i].Betting_Initialize();
+            }
         }
         else
         {
@@ -1300,6 +1314,11 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < allBlockLevelContentList.Count; i++)
             {
                 allBlockLevelContentList[i].Initialize();
+            }
+
+            for (int i = 0; i < numberContentList.Count; i++)
+            {
+                numberContentList[i].Betting_Initialize();
             }
         }
 
@@ -1601,7 +1620,7 @@ public class GameManager : MonoBehaviour
 
         ResetRouletteBackgroundColor();
 
-        ShowBettingNumber();
+        ShowBettingNumber_Total();
     }
 
     bool CheckDeveloper()
@@ -3375,7 +3394,7 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    public void ExitBlock(BlockContent blockContent)
+    public void ExitBlock(BlockContent blockContent) //내 블럭 배치 및 상대방한테 내 블럭 위치 전송
     {
         SoundManager.instance.PlaySFX(GameSfxType.Click);
 
@@ -3533,6 +3552,8 @@ public class GameManager : MonoBehaviour
         insertBlock[5] = blockContent.blockClass.level.ToString();
 
         PV.RPC("ShowOtherPlayerBlock", RpcTarget.Others, insertBlock);
+
+        ShowBettingNumber_My();
     }
 
 
@@ -3562,7 +3583,7 @@ public class GameManager : MonoBehaviour
         ChangeBettingMoney();
     }
 
-    public bool CheckAiBetting(BlockClass block, int number, RouletteType rouletteType)
+    public bool CheckBetting_Ai(BlockClass block, int number, RouletteType rouletteType) //Ai가 배팅을 했는지?
     {
         bool check = false;
 
@@ -3698,7 +3719,7 @@ public class GameManager : MonoBehaviour
         return check;
     }
 
-    public void SetBettingNumber_Ai(BlockClass block, int number, RouletteType rouletteType)
+    public void SetBettingNumber_Ai(BlockClass block, int number, RouletteType rouletteType) //Ai가 배팅한 숫자 저장
     {
         if (otherMoney - upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) < 0)
         {
@@ -3848,9 +3869,120 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+
+        ShowBettingNumber_Ai();
     }
 
-    void ShowBettingNumber()
+    public void ResetRouletteBackgroundColor()
+    {
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            {
+                rouletteContentList_Target[i].ResetBackgroundColor();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].ResetBackgroundColor();
+            }
+        }
+    }
+
+    public void CancelBetting(BlockType type) //배팅 취소
+    {
+        ResetRouletteBackgroundColor();
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < numberContentList_NewBie.Count; i++)
+            {
+                numberContentList_NewBie[i].Betting_My_Initialize();
+            }
+
+            for (int i = 0; i < bettingNumberList.Count; i++)
+            {
+                if (bettingNumberList[i] > 0)
+                {
+                    numberContentList_NewBie[bettingNumberList[i] - 1].Betting();
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numberContentList.Count; i++)
+            {
+                numberContentList[i].Betting_My_Initialize();
+            }
+
+            for (int i = 0; i < bettingNumberList.Count; i++)
+            {
+                if (bettingNumberList[i] > 0)
+                {
+                    numberContentList[bettingNumberList[i] - 1].Betting();
+                }
+            }
+        }
+
+
+        if (blockType.Equals(type))
+        {
+            deleteBlock = new string[2];
+
+            deleteBlock[0] = type.ToString();
+            deleteBlock[1] = GameStateManager.instance.NickName;
+
+            PV.RPC("HideOtherPlayerBlock", RpcTarget.Others, deleteBlock);
+
+            Debug.Log("상대방한테 필드에 배치한 내 블럭을 지워달라고 요청했습니다");
+        }
+    }
+
+    public void BetOptionCancleButton() //배팅 취소 버튼 누르기
+    {
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < rouletteContentList_Target.Count; i++)
+            {
+                rouletteContentList_Target[i].SetActiveFalse();
+            }
+
+            if (newbieBlockContent.gameObject.activeInHierarchy)
+            {
+                newbieBlockContent.ResetPos();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allContentList.Count; i++)
+            {
+                allContentList[i].SetActiveFalse();
+            }
+
+            for (int i = 0; i < blockContentList.Count; i++)
+            {
+                if (blockContentList[i].gameObject.activeInHierarchy)
+                {
+                    blockContentList[i].ResetPos();
+                }
+            }
+        }
+
+        for (int i = 0; i < bettingList.Length; i++)
+        {
+            bettingList[i] = 0;
+        }
+
+        ResetBettingMoney();
+
+        //NotionManager.instance.UseNotion(NotionType.Cancle);
+    }
+
+
+    #region ShowBetting
+    void ShowBettingNumber_Total() //나, 상대방 배팅한 위치 값 정리
     {
         bettingNumberList.Clear();
         otherBettingNumberList.Clear();
@@ -3964,126 +4096,177 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetRouletteBackgroundColor()
+    void ShowBettingNumber_My() //내가 어느 숫자에 배치했는지 정리
     {
-        if(GameStateManager.instance.GameType == GameType.NewBie)
-        {
-            for (int i = 0; i < rouletteContentList_Target.Count; i++)
-            {
-                rouletteContentList_Target[i].ResetBackgroundColor();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < allContentList.Count; i++)
-            {
-                allContentList[i].ResetBackgroundColor();
-            }
-        }
-    }
+        bettingNumberList.Clear();
 
-    public void CancleBetting(BlockType type)
-    {
-        ResetRouletteBackgroundColor();
-
-        if (blockType.Equals(type))
-        {
-            deleteBlock = new string[2];
-
-            deleteBlock[0] = type.ToString();
-            deleteBlock[1] = GameStateManager.instance.NickName;
-
-            PV.RPC("HideOtherPlayerBlock", RpcTarget.Others, deleteBlock);
-
-            Debug.Log("상대방한테 필드에 배치한 내 블럭을 지워달라고 요청했습니다");
-        }
-    }
-
-    [PunRPC]
-    void HideOtherPlayerBlock(string[] block) //취소한 블럭이 활성화되어 있는 블럭일때만 없애기
-    {
-        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
-
-        for (int i = 0; i < otherBlockContentList.Count; i++)
-        {
-            if (otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
-            {
-                Destroy(otherBlockContentList[i].gameObject);
-                otherBlockContentList.Remove(otherBlockContentList[i]);
-
-                otherBlockType = BlockType.Default;
-
-                if (GameStateManager.instance.GameType == GameType.NewBie)
-                {
-                    for (int j = 0; j < blockLevelContentList_Target.Count; j++)
-                    {
-                        blockLevelContentList_Target[j].Initialize_Other();
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < allBlockLevelContentList.Count; j++)
-                    {
-                        allBlockLevelContentList[j].Initialize_Other();
-                    }
-                }
-
-                break;
-            }
-        }
-    }
-
-    public void BetOptionCancleButton() //배팅 취소
-    {
         if (GameStateManager.instance.GameType == GameType.NewBie)
         {
             for (int i = 0; i < rouletteContentList_Target.Count; i++)
             {
-                rouletteContentList_Target[i].SetActiveFalse();
+                if (rouletteContentList_Target[i].isActive)
+                {
+                    switch (rouletteContentList_Target[i].rouletteType)
+                    {
+                        case RouletteType.StraightBet:
+                            bettingNumberList.Add(rouletteContentList_Target[i].number);
+                            break;
+                        default:
+                            for (int j = 0; j < rouletteContentList_Target[i].numberList.Length; j++)
+                            {
+                                bettingNumberList.Add(rouletteContentList_Target[i].numberList[j]);
+                            }
+                            break;
+                    }
+                }
             }
 
-            if (newbieBlockContent.gameObject.activeInHierarchy)
+            for (int i = 0; i < numberContentList_NewBie.Count; i++)
             {
-                newbieBlockContent.ResetPos();
+                numberContentList_NewBie[i].Betting_My_Initialize();
+            }
+
+            for (int i = 0; i < bettingNumberList.Count; i++)
+            {
+                if (bettingNumberList[i] > 0)
+                {
+                    numberContentList_NewBie[bettingNumberList[i] - 1].Betting();
+                }
             }
         }
         else
         {
             for (int i = 0; i < allContentList.Count; i++)
             {
-                allContentList[i].SetActiveFalse();
+                if (allContentList[i].isActive)
+                {
+                    switch (allContentList[i].rouletteType)
+                    {
+                        case RouletteType.StraightBet:
+                            bettingNumberList.Add(allContentList[i].number);
+                            break;
+                        default:
+                            for (int j = 0; j < allContentList[i].numberList.Length; j++)
+                            {
+                                bettingNumberList.Add(allContentList[i].numberList[j]);
+                            }
+                            break;
+                    }
+                }
             }
 
-            for (int i = 0; i < blockContentList.Count; i++)
+            for (int i = 0; i < numberContentList.Count; i++)
             {
-                if (blockContentList[i].gameObject.activeInHierarchy)
+                numberContentList[i].Betting_My_Initialize();
+            }
+
+            for (int i = 0; i < bettingNumberList.Count; i++)
+            {
+                if (bettingNumberList[i] > 0)
                 {
-                    blockContentList[i].ResetPos();
+                    numberContentList[bettingNumberList[i] - 1].Betting();
                 }
             }
         }
 
-        for (int i = 0; i < bettingList.Length; i++)
+        if (!aiMode)
         {
-            bettingList[i] = 0;
+            otherBettingList = "";
+
+            for (int i = 0; i < bettingNumberList.Count; i++)
+            {
+                otherBettingList += bettingNumberList[i].ToString() + "/";
+            }
+
+            if (otherBettingList.Length > 0)
+            {
+                PV.RPC("ShowOtherBetting", RpcTarget.Others, otherBettingList.TrimEnd('/'));
+            }
         }
-
-        ResetBettingMoney();
-
-        //NotionManager.instance.UseNotion(NotionType.Cancle);
     }
 
-    [PunRPC]
-    void ChatRPC(string msg)
+    void ShowBettingNumber_Ai() //Ai가 어느 숫자에 배치했는지 정리
     {
-        RecordManager.instance.SetGameRecord(msg);
+        otherBettingNumberList.Clear();
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            if (aiMode)
+            {
+                for (int i = 0; i < rouletteContentList_Target.Count; i++)
+                {
+                    if (rouletteContentList_Target[i].isActive_Ai)
+                    {
+                        switch (rouletteContentList_Target[i].rouletteType)
+                        {
+                            case RouletteType.StraightBet:
+                                otherBettingNumberList.Add(rouletteContentList_Target[i].number);
+                                break;
+                            default:
+                                for (int j = 0; j < rouletteContentList_Target[i].numberList.Length; j++)
+                                {
+                                    otherBettingNumberList.Add(rouletteContentList_Target[i].numberList[j]);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < numberContentList_NewBie.Count; i++)
+            {
+                numberContentList_NewBie[i].Betting_Other_Initialize();
+            }
+
+            for (int i = 0; i < otherBettingNumberList.Count; i++)
+            {
+                if (otherBettingNumberList[i] > 0)
+                {
+                    numberContentList_NewBie[otherBettingNumberList[i] - 1].Betting_Other();
+                }
+            }
+        }
+        else
+        {
+            if (aiMode)
+            {
+                for (int i = 0; i < allContentList.Count; i++)
+                {
+                    if (allContentList[i].isActive_Ai)
+                    {
+                        switch (allContentList[i].rouletteType)
+                        {
+                            case RouletteType.StraightBet:
+                                otherBettingNumberList.Add(allContentList[i].number);
+                                break;
+                            default:
+                                for (int j = 0; j < allContentList[i].numberList.Length; j++)
+                                {
+                                    otherBettingNumberList.Add(allContentList[i].numberList[j]);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < numberContentList.Count; i++)
+            {
+                numberContentList[i].Betting_Other_Initialize();
+            }
+
+            for (int i = 0; i < otherBettingNumberList.Count; i++)
+            {
+                if (otherBettingNumberList[i] > 0)
+                {
+                    numberContentList[otherBettingNumberList[i] - 1].Betting_Other();
+                }
+            }
+        }
     }
 
-
-    #region ShowBetting
-
     [PunRPC]
-    void ShowOtherPlayerBlock(string[] block)
+    void ShowOtherPlayerBlock(string[] block) //상대방 블럭 배치
     {
         RouletteType rouletteType = (RouletteType)System.Enum.Parse(typeof(RouletteType), block[0]);
         BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[1]);
@@ -4238,10 +4421,62 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
     [PunRPC]
-    void ShowOtherBetting(string str)
+    void HideOtherPlayerBlock(string[] block) //상대방이 블럭을 취소했습니다
+    {
+        BlockType blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block[0]);
+
+        for (int i = 0; i < otherBlockContentList.Count; i++)
+        {
+            if (otherBlockContentList[i].nickName.Equals(block[1]) && otherBlockContentList[i].blockType == blockType)
+            {
+                Destroy(otherBlockContentList[i].gameObject);
+                otherBlockContentList.Remove(otherBlockContentList[i]);
+
+                otherBlockType = BlockType.Default;
+
+                if (GameStateManager.instance.GameType == GameType.NewBie)
+                {
+                    for (int j = 0; j < blockLevelContentList_Target.Count; j++)
+                    {
+                        blockLevelContentList_Target[j].Initialize_Other();
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < allBlockLevelContentList.Count; j++)
+                    {
+                        allBlockLevelContentList[j].Initialize_Other();
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if (GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for (int i = 0; i < numberContentList_NewBie.Count; i++)
+            {
+                numberContentList_NewBie[i].Betting_Other_Initialize();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numberContentList.Count; i++)
+            {
+                numberContentList[i].Betting_Other_Initialize();
+            }
+        }
+    }
+
+    [PunRPC]
+    void ShowOtherBetting(string str) //상대방 블럭 위치 값 받기
     {
         Debug.Log("상대방 배팅 위치 값 : " + str);
+
+        otherBettingNumberList.Clear();
 
         string[] list = str.Split("/");
 
@@ -4251,13 +4486,50 @@ public class GameManager : MonoBehaviour
             list[i].Replace("/", "");
         }
 
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            for(int i = 0; i < numberContentList_NewBie.Count; i ++)
+            {
+                numberContentList_NewBie[i].Betting_Other_Initialize();
+            }
+
+            for (int i = 0; i < otherBettingNumberList.Count; i++)
+            {
+                if (otherBettingNumberList[i] > 0)
+                {
+                    numberContentList_NewBie[otherBettingNumberList[i] - 1].Betting_Other();
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numberContentList.Count; i++)
+            {
+                numberContentList[i].Betting_Other_Initialize();
+            }
+
+            for (int i = 0; i < otherBettingNumberList.Count; i++)
+            {
+                if (otherBettingNumberList[i] > 0)
+                {
+                    numberContentList[otherBettingNumberList[i] - 1].Betting_Other();
+                }
+            }
+        }
+
         otherBettingNumberList = otherBettingNumberList.Distinct().ToList();
         otherBettingNumberList.Sort();
 
-        Debug.Log("상대 배팅 위치 값을 저장했습니다");
+        Debug.Log("상대방의 배팅 위치 값을 받아서 저장했습니다");
     }
 
     #endregion
+
+    [PunRPC]
+    void ChatRPC(string msg) //전체 메세지
+    {
+        RecordManager.instance.SetGameRecord(msg);
+    }
 
 
     #region InGame

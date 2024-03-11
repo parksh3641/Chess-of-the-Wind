@@ -326,6 +326,8 @@ public class SynthesisManager : MonoBehaviour
     {
         if (!isStart)
         {
+            FirebaseAnalytics.LogEvent("Open_Synthesis");
+
             for (int i = 0; i < blockUIContentList.Count; i++)
             {
                 blockUIContentList[i].SynthesisUnSelected();
@@ -690,7 +692,7 @@ public class SynthesisManager : MonoBehaviour
                 synthesisResultContentList[i].gameObject.SetActive(false);
             }
 
-            FirebaseAnalytics.LogEvent("Synthesis");
+            FirebaseAnalytics.LogEvent("Play_Synthesis");
 
             StartCoroutine(SynthesisCoroution());
 

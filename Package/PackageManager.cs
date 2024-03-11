@@ -125,7 +125,7 @@ public class PackageManager : MonoBehaviour
     {
         Debug.LogError(type.packageType + " ±¸¸Å");
 
-        FirebaseAnalytics.LogEvent(type.ToString());
+        FirebaseAnalytics.LogEvent("Buy_Package_Speical_" + type.ToString());
 
         packageType = type.packageType;
 

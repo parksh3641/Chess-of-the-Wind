@@ -511,7 +511,7 @@ public class UpgradeManager : MonoBehaviour
         {
             OpenUpgradeScreen(1);
 
-            int level = blockClass.level - 1;
+            level = blockClass.level - 1;
 
             customData.Clear();
             customData.Add("Level", (level).ToString());
@@ -537,7 +537,7 @@ public class UpgradeManager : MonoBehaviour
         {
             OpenUpgradeScreen(3);
 
-            int level = blockClass.level + 1;
+            level = blockClass.level + 1;
 
             customData.Clear();
             customData.Add("Level", (level).ToString());
@@ -563,7 +563,7 @@ public class UpgradeManager : MonoBehaviour
             CheckDefDestroyTicket();
         }
 
-        FirebaseAnalytics.LogEvent("Upgrade");
+        FirebaseAnalytics.LogEvent("Play_Upgrade : " + level);
 
         Initialize();
 
@@ -596,6 +596,8 @@ public class UpgradeManager : MonoBehaviour
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
 
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
+
+                FirebaseAnalytics.LogEvent("Play_Upgrade_FailureDef");
                 break;
             case 1:
                 upgradeScreenTitle.text = LocalizationManager.instance.GetString("FailureUpgrade");
@@ -603,10 +605,9 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenValue.text = MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "    ▶    <color=#FFCA14>"
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level - 1)) + "</color>";
 
-                //playerDataBase.UpgradeFailCount += 1;
-                //PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeFailCount", playerDataBase.UpgradeFailCount);
-
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
+
+                FirebaseAnalytics.LogEvent("Play_Upgrade_Failure");
                 break;
             case 2:
                 upgradeScreenTitle.text = LocalizationManager.instance.GetString("RetentionUpgrade");
@@ -615,6 +616,8 @@ public class UpgradeManager : MonoBehaviour
                     + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) + "</color>";
 
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeFail);
+
+                FirebaseAnalytics.LogEvent("Play_Upgrade_Retention");
                 break;
             case 3:
                 upgradeScreenEffect.SetActive(true);
@@ -628,6 +631,8 @@ public class UpgradeManager : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeSuccessCount", playerDataBase.UpgradeSuccessCount);
 
                 SoundManager.instance.PlaySFX(GameSfxType.BlockUpgradeSuccess);
+
+                FirebaseAnalytics.LogEvent("Play_Upgrade_Success");
                 break;
             case 4:
                 upgradeScreenIcon.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
@@ -654,6 +659,7 @@ public class UpgradeManager : MonoBehaviour
                 playerDataBase.DestroyBlockCount += 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DestroyBlockCount", playerDataBase.DestroyBlockCount);
 
+                FirebaseAnalytics.LogEvent("Play_Upgrade_Destroy");
                 break;
         }
     }

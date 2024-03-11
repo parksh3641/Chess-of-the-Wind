@@ -76,7 +76,7 @@ public class AttendanceManager : MonoBehaviour
 
             CheckAttendance();
 
-            FirebaseAnalytics.LogEvent("Attendance");
+            FirebaseAnalytics.LogEvent("Open_Attendance");
         }
         else
         {
@@ -233,6 +233,8 @@ public class AttendanceManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        FirebaseAnalytics.LogEvent("Clear_Attendance");
     }
 
     IEnumerator TimerCoroution()

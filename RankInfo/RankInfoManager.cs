@@ -65,7 +65,7 @@ public class RankInfoManager : MonoBehaviour
 
             CheckMy();
 
-            FirebaseAnalytics.LogEvent("RankInfo");
+            FirebaseAnalytics.LogEvent("Open_RankInfo");
         }
         else
         {

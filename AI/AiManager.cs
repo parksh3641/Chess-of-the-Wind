@@ -228,7 +228,7 @@ public class AiManager : MonoBehaviour
                 otherBlockContentList[i].gameObject.SetActive(false);
             }
 
-            if (gameManager.CheckAiBetting(blockClassArray[blockIndex], blockPos, rouletteType))
+            if (gameManager.CheckBetting_Ai(blockClassArray[blockIndex], blockPos, rouletteType))
             {
                 otherBlockContentList[blockIndex].gameObject.SetActive(true);
 

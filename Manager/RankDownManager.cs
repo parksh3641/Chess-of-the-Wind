@@ -65,7 +65,7 @@ public class RankDownManager : MonoBehaviour
 
             Initialize();
 
-            FirebaseAnalytics.LogEvent("RankDown");
+            FirebaseAnalytics.LogEvent("Open_RankDown");
         }
         else
         {
@@ -176,5 +176,7 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
 
         playerDataBase.RankDownStreak += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("RankDownStreak", playerDataBase.RankDownStreak);
+
+        FirebaseAnalytics.LogEvent("Open_RankDown_" + GameStateManager.instance.GameRankType);
     }
 }

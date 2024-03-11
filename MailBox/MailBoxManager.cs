@@ -95,7 +95,7 @@ public class MailBoxManager : MonoBehaviour
                 //mailTransform.offsetMax = Vector3.zero;
             }
 
-            FirebaseAnalytics.LogEvent("MailBox");
+            FirebaseAnalytics.LogEvent("Open_MailBox");
         }
         else
         {

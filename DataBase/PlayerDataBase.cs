@@ -3016,7 +3016,7 @@ public class PlayerDataBase : ScriptableObject
         switch (number)
         {
             case 0:
-                name = LocalizationManager.instance.GetString("NoTitle");
+                name = LocalizationManager.instance.GetString("-");
                 break;
             default:
                 if (number < 500)

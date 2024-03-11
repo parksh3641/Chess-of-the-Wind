@@ -24,6 +24,7 @@ using EntityKey = PlayFab.ProfilesModels.EntityKey;
 using System.Text;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Firebase.Analytics;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -693,6 +694,8 @@ public class PlayfabManager : MonoBehaviour
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
                 //nickNameManager.OpenFreeNickName();
+
+                FirebaseAnalytics.LogEvent("New_" + DateTime.Now.ToString("yyyyMMdd"));
             }
             // GameStateManager.Instance.SavePlayerData();
         },

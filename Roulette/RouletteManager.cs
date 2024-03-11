@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Firebase.Analytics;
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -1505,6 +1506,8 @@ public class RouletteManager : MonoBehaviour
         {
             Debug.Log("퀸에 당첨되었습니다");
 
+            FirebaseAnalytics.LogEvent("InGame_Check_Queen");
+
             targetQueen.SetActive(true);
 
             if (gameManager.bettingNumberList.Contains(queenNumber))
@@ -1528,6 +1531,8 @@ public class RouletteManager : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinQueen", playerDataBase.WinQueen);
 
                 Debug.Log("퀸 배팅에 성공했습니다!");
+
+                FirebaseAnalytics.LogEvent("InGame_Success_Queen");
             }
             else
             {
@@ -1536,6 +1541,8 @@ public class RouletteManager : MonoBehaviour
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
                 Debug.Log("퀸 배팅에 실패했습니다.");
+
+                FirebaseAnalytics.LogEvent("InGame_Fail_Queen");
             }
 
             return;
@@ -1571,6 +1578,8 @@ public class RouletteManager : MonoBehaviour
             playerDataBase.WinNumber += 1;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinNumber", playerDataBase.WinNumber);
 
+            FirebaseAnalytics.LogEvent("InGame_Success_Number");
+
             Debug.Log("숫자에 당첨되었습니다");
         }
         else
@@ -1578,6 +1587,8 @@ public class RouletteManager : MonoBehaviour
             normalEffect.SetActive(false);
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            FirebaseAnalytics.LogEvent("InGame_Fail_Number");
 
             Debug.Log("숫자에 당첨되지 않았습니다");
         }

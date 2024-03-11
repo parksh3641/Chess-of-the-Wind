@@ -192,14 +192,14 @@ public class UIManager : MonoBehaviour
     {
         Application.OpenURL("https://sites.google.com/view/bluebook-privacypolicy");
 
-        FirebaseAnalytics.LogEvent("Privacy Policy");
+        FirebaseAnalytics.LogEvent("Open_Privacy Policy");
     }
 
     public void TermsReadMore()
     {
         Application.OpenURL("https://sites.google.com/view/bluebook-terms");
 
-        FirebaseAnalytics.LogEvent("Terms of Service");
+        FirebaseAnalytics.LogEvent("Open_Terms of Service");
     }
 
     public void Initialize()
@@ -544,6 +544,8 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("돈 증가 애니메이션 발동");
 
+            gold += GameStateManager.instance.Stakes;
+
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
 
             if (GameStateManager.instance.Win)
@@ -699,26 +701,26 @@ public class UIManager : MonoBehaviour
     {
         Application.OpenURL("https://forms.gle/CixT4KwjQvQL2yDD7");
 
-        FirebaseAnalytics.LogEvent("Feedback");
+        FirebaseAnalytics.LogEvent("Open_Feedback");
     }
 
     public void NaverCafe()
     {
         Application.OpenURL("https://cafe.naver.com/windchess");
 
-        FirebaseAnalytics.LogEvent("NaverCafe");
+        FirebaseAnalytics.LogEvent("Open_NaverCafe");
     }
     public void Instagram()
     {
         Application.OpenURL("https://www.instagram.com/windchess_kr_official/");
 
-        FirebaseAnalytics.LogEvent("Instagram");
+        FirebaseAnalytics.LogEvent("Open_Instagram");
     }
 
     public void Youtube()
     {
         Application.OpenURL("https://www.youtube.com/@windchess_kr_official/");
 
-        FirebaseAnalytics.LogEvent("Youtube");
+        FirebaseAnalytics.LogEvent("Open_Youtube");
     }
 }

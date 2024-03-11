@@ -136,7 +136,7 @@ public class EventManager : MonoBehaviour
         {
             eventView.SetActive(true);
 
-            FirebaseAnalytics.LogEvent("OpenEvent");
+            FirebaseAnalytics.LogEvent("Open_Event");
         }
         else
         {
@@ -162,7 +162,7 @@ public class EventManager : MonoBehaviour
                 ResetManager.instance.Initialize();
             }
 
-            FirebaseAnalytics.LogEvent("OpenWelcomeBox");
+            FirebaseAnalytics.LogEvent("Open_WelcomeBox");
         }
         else
         {
@@ -234,6 +234,8 @@ public class EventManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
 
         NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        FirebaseAnalytics.LogEvent("Clear_WelcomeBox");
     }
 
     public void OnWelcomeBoxAlarm()
@@ -267,7 +269,7 @@ public class EventManager : MonoBehaviour
                 ResetManager.instance.Initialize();
             }
 
-            FirebaseAnalytics.LogEvent("OpenWelcome");
+            FirebaseAnalytics.LogEvent("Open_Welcome");
         }
         else
         {
@@ -387,8 +389,9 @@ public class EventManager : MonoBehaviour
         OffWelcomeAlarm();
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
         NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        FirebaseAnalytics.LogEvent("Clear_Welcome");
     }
 
     public void OnWelcomeAlarm()
@@ -417,7 +420,7 @@ public class EventManager : MonoBehaviour
 
             CheckRankUp();
 
-            FirebaseAnalytics.LogEvent("OpenRankUp");
+            FirebaseAnalytics.LogEvent("Open_RankUp");
         }
         else
         {
@@ -479,6 +482,8 @@ public class EventManager : MonoBehaviour
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         NotionManager.instance.UseNotion(NotionType.GetReward);
+
+        FirebaseAnalytics.LogEvent("Clear_RankUp");
 
         CheckRankUp();
     }

@@ -42,7 +42,7 @@ public class SellManager : MonoBehaviour
 
             Initialize(block, number);
 
-            FirebaseAnalytics.LogEvent("OpenSell");
+            FirebaseAnalytics.LogEvent("Open_Sell");
         }
     }
 
@@ -77,7 +77,7 @@ public class SellManager : MonoBehaviour
 
         NotionManager.instance.UseNotion(NotionType.SellBlock);
 
-        FirebaseAnalytics.LogEvent("Sell");
+        FirebaseAnalytics.LogEvent("Play_Sell");
     }
     public void CloseSellView()
     {

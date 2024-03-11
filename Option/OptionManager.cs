@@ -113,7 +113,7 @@ public class OptionManager : MonoBehaviour
                 bottomContents[i].SetActive(false);
             }
 
-            FirebaseAnalytics.LogEvent("OpenOption");
+            FirebaseAnalytics.LogEvent("Open_Option");
         }
         else
         {
@@ -239,7 +239,7 @@ public class OptionManager : MonoBehaviour
         Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
 #endif
 
-        FirebaseAnalytics.LogEvent("Feedback");
+        FirebaseAnalytics.LogEvent("Open_Feedback");
     }
 
     public void RateUs()
@@ -252,6 +252,6 @@ public class OptionManager : MonoBehaviour
         Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
 #endif
 
-        FirebaseAnalytics.LogEvent("RateUs");
+        FirebaseAnalytics.LogEvent("Open_RateUs");
     }
 }

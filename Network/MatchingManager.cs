@@ -276,7 +276,7 @@ public class MatchingManager : MonoBehaviour
 
             rankUpWiningTitle.text = LocalizationManager.instance.GetString("Winning") + " : " + GameStateManager.instance.WinStreak;
 
-            FirebaseAnalytics.LogEvent("Win");
+            FirebaseAnalytics.LogEvent("StarUp");
 
             if (GameStateManager.instance.GameType == GameType.NewBie)
             {
@@ -402,7 +402,7 @@ public class MatchingManager : MonoBehaviour
 
             Debug.Log("패배 : 별 1개 감소");
 
-            FirebaseAnalytics.LogEvent("Lose");
+            FirebaseAnalytics.LogEvent("StarDown");
 
             if (playerDataBase.Star <= -1)
             {
@@ -832,7 +832,7 @@ public class MatchingManager : MonoBehaviour
 
         yield return waitForSeconds;
 
-        AlMatching();
+        AiMatching();
     }
 
     public void PlayerMatching(string player1, string player2, int otherFormation, int otherTitle)
@@ -853,10 +853,10 @@ public class MatchingManager : MonoBehaviour
 
         Invoke("ChangeBGM", 1.5f);
 
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GameType.ToString());
+        FirebaseAnalytics.LogEvent("Match_" + GameStateManager.instance.GameType.ToString());
     }
 
-    public void AlMatching()
+    public void AiMatching()
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
 
@@ -876,7 +876,7 @@ public class MatchingManager : MonoBehaviour
 
         Debug.Log("사람이 없는 관계로 인공지능과 매칭됩니다.");
 
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GameType.ToString());
+        FirebaseAnalytics.LogEvent("Match_Ai");
     }
 
     public void ChangeBGM()

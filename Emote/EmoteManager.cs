@@ -106,7 +106,7 @@ public class EmoteManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
 
-            FirebaseAnalytics.LogEvent("UseEmote_Betting");
+            FirebaseAnalytics.LogEvent("UseEmote_Betting_" + number);
 
             StartCoroutine(ResetEmoteCoroutine());
         }
@@ -172,7 +172,7 @@ public class EmoteManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.UseEmotion);
 
-            FirebaseAnalytics.LogEvent("UseEmote_InGame");
+            FirebaseAnalytics.LogEvent("UseEmote_InGame_" + number);
 
             StartCoroutine(ResetEmoteCoroutine2());
         }

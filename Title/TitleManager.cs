@@ -146,7 +146,7 @@ public class TitleManager : MonoBehaviour
                 }
             }
 
-            FirebaseAnalytics.LogEvent("Title");
+            FirebaseAnalytics.LogEvent("Open_Title");
         }
         else
         {
@@ -275,6 +275,8 @@ public class TitleManager : MonoBehaviour
 
             isDelay = true;
             Invoke("Delay", 0.5f);
+
+            FirebaseAnalytics.LogEvent("ChangeTitle_Normal");
         }
     }
 
@@ -301,6 +303,8 @@ public class TitleManager : MonoBehaviour
 
             isDelay = true;
             Invoke("Delay", 0.5f);
+
+            FirebaseAnalytics.LogEvent("ChangeTitle_Speical");
         }
     }
 

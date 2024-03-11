@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
 
             Initialize();
 
-            FirebaseAnalytics.LogEvent("Inventory");
+            FirebaseAnalytics.LogEvent("Open_Inventory");
         }
         else
         {
@@ -81,22 +81,16 @@ public class InventoryManager : MonoBehaviour
                 if(playerDataBase.BoxPiece_N < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.LowPiece);
-
                     return;
                 }
-
-
 
                 break;
             case 1:
                 if (playerDataBase.BoxPiece_R < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.LowPiece);
-
                     return;
                 }
 
@@ -105,36 +99,27 @@ public class InventoryManager : MonoBehaviour
                 if (playerDataBase.BoxPiece_SR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.LowPiece);
-
                     return;
                 }
-
 
                 break;
             case 3:
                 if (playerDataBase.BoxPiece_SSR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.LowPiece);
-
                     return;
                 }
-
 
                 break;
             case 4:
                 if (playerDataBase.BoxPiece_UR < 3)
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.LowPiece);
-
                     return;
                 }
-
 
                 break;
         }
@@ -153,6 +138,8 @@ public class InventoryManager : MonoBehaviour
         boxCount = 0;
 
         CountInitialize(boxCount);
+
+        FirebaseAnalytics.LogEvent("ExChangeBox_" + number);
     }
 
     public void CloseChangeBoxView()

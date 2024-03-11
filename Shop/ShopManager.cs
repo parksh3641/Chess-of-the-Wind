@@ -374,18 +374,20 @@ public class ShopManager : MonoBehaviour
             if(number >= 10)
             {
                 playerDataBase.DailyNormalBox_10 -= 1;
+
+                FirebaseAnalytics.LogEvent("BuyBox_Normal10");
             }
             else
             {
                 playerDataBase.DailyNormalBox_1 -= 1;
+
+                FirebaseAnalytics.LogEvent("BuyBox_Normal1");
             }
 
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-            FirebaseAnalytics.LogEvent("BuyBox_NR");
         }
         else
         {
@@ -441,18 +443,20 @@ public class ShopManager : MonoBehaviour
             if (number >= 10)
             {
                 playerDataBase.DailyEpicBox_10 -= 1;
+
+                FirebaseAnalytics.LogEvent("BuyBox_Epic10");
             }
             else
             {
                 playerDataBase.DailyEpicBox_1 -= 1;
+
+                FirebaseAnalytics.LogEvent("BuyBox_Epic1");
             }
 
             Initialize_Count();
 
             SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
             NotionManager.instance.UseNotion(NotionType.BuyShopItem);
-
-            FirebaseAnalytics.LogEvent("BuyBox_RSR");
         }
         else
         {
@@ -478,14 +482,12 @@ public class ShopManager : MonoBehaviour
 
                     PlayfabManager.instance.UpdateAddGold(price);
 
-                    FirebaseAnalytics.LogEvent("DailyReward");
+                    FirebaseAnalytics.LogEvent("Clear_DailyReward");
                 }
                 else
                 {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
                     NotionManager.instance.UseNotion(NotionType.NotRewardDailyLimit);
-
                     return;
                 }
 
@@ -500,7 +502,7 @@ public class ShopManager : MonoBehaviour
                 {
                     PlayfabManager.instance.UpdateSubtractGold(price);
 
-                    FirebaseAnalytics.LogEvent("BuyUpgradeTicket");
+                    FirebaseAnalytics.LogEvent("Buy_UpgradeTicket");
                 }
                 else
                 {
@@ -513,7 +515,6 @@ public class ShopManager : MonoBehaviour
                 ItemAnimManager.instance.GetUpgradeTicket(number);
 
                 SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
 
                 if(number < 11)
@@ -569,7 +570,6 @@ public class ShopManager : MonoBehaviour
                 PlayfabManager.instance.UpdateAddGold(random);
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
-
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
             case 4:
@@ -578,10 +578,11 @@ public class ShopManager : MonoBehaviour
                 PlayfabManager.instance.UpdateAddGold(random);
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
-
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
                 break;
         }
+
+        FirebaseAnalytics.LogEvent("Buy_Purhcase_" + number);
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
@@ -1007,6 +1008,19 @@ public class ShopManager : MonoBehaviour
                 break;
             case WindCharacterType.UnderWorld:
                 GetUnderworld(BoxType.Random, number);
+                break;
+        }
+    }
+
+    public void OpenBox_SSR()
+    {
+        switch (GameStateManager.instance.WindCharacterType)
+        {
+            case WindCharacterType.Winter:
+                OpenSnowBox_SSR();
+                break;
+            case WindCharacterType.UnderWorld:
+                OpenUnderworld_SSR();
                 break;
         }
     }

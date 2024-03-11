@@ -27,6 +27,11 @@ public class LocalizationContent : MonoBehaviour
         return localizationText.text;
     }
 
+    public void SetColor(Color color)
+    {
+        localizationText.color = color;
+    }
+
     private void Start()
     {
         ReLoad();

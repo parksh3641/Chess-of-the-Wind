@@ -176,7 +176,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             if (gameManager != null)
             {
-                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.CancelBetting(blockClass.blockType);
                 gameManager.ResetBlockPos(index);
             }
 
@@ -217,7 +217,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             if (gameManager != null)
             {
-                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.CancelBetting(blockClass.blockType);
                 gameManager.ResetBlockPos(index);
             }
         }
@@ -258,7 +258,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             if (gameManager != null)
             {
-                gameManager.CancleBetting(blockClass.blockType);
+                gameManager.CancelBetting(blockClass.blockType);
                 gameManager.ResetBlockPos(index);
             }
         }
@@ -297,7 +297,7 @@ public class BlockContent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         if (gameManager != null)
         {
-            gameManager.CancleBetting(blockClass.blockType);
+            gameManager.CancelBetting(blockClass.blockType);
             gameManager.ResetBlockPos(index);
         }
 

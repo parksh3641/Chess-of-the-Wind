@@ -59,7 +59,7 @@ public class ProfileManager : MonoBehaviour
 
             Initialize();
 
-            FirebaseAnalytics.LogEvent("Profile");
+            FirebaseAnalytics.LogEvent("Open_Profile");
         }
         else
         {
