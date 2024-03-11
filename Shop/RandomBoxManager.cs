@@ -194,19 +194,6 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetUnderworldBox_SRSSR -= OpenUnderworldBox_SRSSR;
     }
 
-    public void OpenBox_SSR()
-    {
-        switch (GameStateManager.instance.WindCharacterType)
-        {
-            case WindCharacterType.Winter:
-                OpenSnowBox_SSR();
-                break;
-            case WindCharacterType.UnderWorld:
-                OpenUnderworldBox_SSR();
-                break;
-        }
-    }
-
     public void OpenSnowBox()
     {
         boxType = BoxType.Random;
@@ -473,8 +460,6 @@ public class RandomBoxManager : MonoBehaviour
 
     public void OpenSnowBox_Initialize()
     {
-        Debug.LogError("Open_SnowBox");
-
         ResetView();
 
         boxIcon.sprite = boxInitIcon[(int)boxType];
@@ -521,8 +506,6 @@ public class RandomBoxManager : MonoBehaviour
 
     public void OpenUnderworldBox_Initialize()
     {
-        Debug.LogError("Open_UnderworldBox");
-
         ResetView();
 
         boxIcon.sprite = boxInitIcon[(int)boxType];
