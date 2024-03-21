@@ -16,6 +16,8 @@ public class ReceiveInfoManager : MonoBehaviour
 
     public BlockUIContent blockUIContent;
 
+    public GameObject effect;
+
 
     ImageDataBase imageDataBase;
 
@@ -33,6 +35,8 @@ public class ReceiveInfoManager : MonoBehaviour
         rewardArray = imageDataBase.GetRewardArray();
 
         rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+
+        effect.SetActive(false);
     }
 
 
@@ -64,13 +68,17 @@ public class ReceiveInfoManager : MonoBehaviour
 
         icon.sprite = rewardArray[(int)rewardType];
 
+        effect.SetActive(false);
+
         switch (rewardType)
         {
             case RewardType.Gold:
                 mainBackground.sprite = rankBackgroundArray[0];
+                effect.SetActive(true);
                 break;
             case RewardType.UpgradeTicket:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.Box:
                 mainBackground.sprite = rankBackgroundArray[3];
@@ -94,12 +102,15 @@ public class ReceiveInfoManager : MonoBehaviour
                 break;
             case RewardType.Box_SR:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_SSR:
                 mainBackground.sprite = rankBackgroundArray[3];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_UR:
                 mainBackground.sprite = rankBackgroundArray[4];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_NR:
                 mainBackground.sprite = rankBackgroundArray[0];
@@ -109,9 +120,23 @@ public class ReceiveInfoManager : MonoBehaviour
                 break;
             case RewardType.Box_SRSSR:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.ExclusiveTitle:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
+                break;
+            case RewardType.None:
+                break;
+            case RewardType.GoldShop1:
+                mainBackground.sprite = rankBackgroundArray[0];
+                break;
+            case RewardType.GoldShop2:
+                mainBackground.sprite = rankBackgroundArray[0];
+                break;
+            case RewardType.GoldShop3:
+                mainBackground.sprite = rankBackgroundArray[0];
+                effect.SetActive(true);
                 break;
         }
 

@@ -1,4 +1,8 @@
-﻿using Firebase.Analytics;
+﻿#if UNITY_ANDROID
+using Google.Play.AppUpdate;
+using Google.Play.Common;
+#endif
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -682,14 +686,74 @@ public class UIManager : MonoBehaviour
 
     public void OnUpdate()
     {
-#if UNITY_ANDROID
-        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+#if UNITY_EDITOR
+        updateView.SetActive(false);
+#elif UNITY_ANDROID
+        StartCoroutine(CheckForUpdate());
 #elif UNITY_IOS
         Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
-#else
-        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
 #endif
+
+        FirebaseAnalytics.LogEvent("Open_Update");
     }
+
+
+#if UNITY_ANDROID
+    IEnumerator CheckForUpdate()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        AppUpdateManager appUpdateManager = new AppUpdateManager();
+
+        PlayAsyncOperation<AppUpdateInfo, AppUpdateErrorCode> appUpdateInfoOperation = appUpdateManager.GetAppUpdateInfo();
+
+        yield return appUpdateInfoOperation;
+
+        if (appUpdateInfoOperation.IsSuccessful)
+        {
+            var appUpdateInfoResult = appUpdateInfoOperation.GetResult();
+
+            if (appUpdateInfoResult.UpdateAvailability == UpdateAvailability.UpdateAvailable)
+            {
+                var appUpdateOptions = AppUpdateOptions.ImmediateAppUpdateOptions();
+                var startUpdateRequest = appUpdateManager.StartUpdate(appUpdateInfoResult, appUpdateOptions);
+
+                while (!startUpdateRequest.IsDone)
+                {
+                    if (startUpdateRequest.Status == AppUpdateStatus.Downloading)
+                    {
+                        Debug.Log("업데이트 다운로드 진행중");
+
+                    }
+                    else if (startUpdateRequest.Status == AppUpdateStatus.Downloaded)
+                    {
+                        Debug.Log("다운로드가 완료");
+                    }
+
+                    yield return null;
+                }
+
+                var result = appUpdateManager.CompleteUpdate();
+
+                while (!result.IsDone)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+
+                yield return (int)startUpdateRequest.Status;
+            }
+            else if (appUpdateInfoResult.UpdateAvailability == UpdateAvailability.UpdateNotAvailable)
+            {
+                Debug.Log("업데이트가 없습니다");
+            }
+        }
+        else
+        {
+            Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+            Debug.Log("업데이트 에러");
+        }
+    }
+#endif
 
     public void GoToTutorial()
     {
