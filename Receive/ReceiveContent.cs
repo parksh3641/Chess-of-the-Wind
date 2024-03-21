@@ -11,6 +11,8 @@ public class ReceiveContent : MonoBehaviour
     public Image icon;
     public Text countText;
 
+    public GameObject effect;
+
     ImageDataBase imageDataBase;
 
     Sprite[] rewardArray;
@@ -23,6 +25,8 @@ public class ReceiveContent : MonoBehaviour
         rewardArray = imageDataBase.GetRewardArray();
 
         rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
+
+        effect.SetActive(false);
     }
 
     public void Initialize(RewardType type, int count)
@@ -34,13 +38,17 @@ public class ReceiveContent : MonoBehaviour
         countText.alignment = (TextAnchor)TextAlignment.Right;
         countText.text = MoneyUnitString.ToCurrencyString(count);
 
+        effect.SetActive(false);
+
         switch (type)
         {
             case RewardType.Gold:
                 mainBackground.sprite = rankBackgroundArray[0];
+                effect.SetActive(true);
                 break;
             case RewardType.UpgradeTicket:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.Box:
                 mainBackground.sprite = rankBackgroundArray[3];
@@ -53,12 +61,15 @@ public class ReceiveContent : MonoBehaviour
                 break;
             case RewardType.Box_SR:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_SSR:
                 mainBackground.sprite = rankBackgroundArray[3];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_UR:
                 mainBackground.sprite = rankBackgroundArray[4];
+                effect.SetActive(true);
                 break;
             case RewardType.Box_NR:
                 mainBackground.sprite = rankBackgroundArray[0];
@@ -68,12 +79,26 @@ public class ReceiveContent : MonoBehaviour
                 break;
             case RewardType.Box_SRSSR:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
                 break;
             case RewardType.ExclusiveTitle:
                 mainBackground.sprite = rankBackgroundArray[2];
+                effect.SetActive(true);
 
                 countText.alignment = (TextAnchor)TextAlignment.Center;
                 countText.text = LocalizationManager.instance.GetString("ExclusiveTitle");
+                break;
+            case RewardType.None:
+                break;
+            case RewardType.GoldShop1:
+                mainBackground.sprite = rankBackgroundArray[0];
+                break;
+            case RewardType.GoldShop2:
+                mainBackground.sprite = rankBackgroundArray[0];
+                break;
+            case RewardType.GoldShop3:
+                mainBackground.sprite = rankBackgroundArray[0];
+                effect.SetActive(true);
                 break;
         }
     }

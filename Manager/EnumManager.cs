@@ -289,7 +289,11 @@ public enum NotionType
     LowAllowMoney,
     CouponNotion4,
     EquipTitle,
-    NewTitleNotion
+    NewTitleNotion,
+    AlreadyLink,
+    SuccessLink,
+    FailLink,
+    WaitTimeNotion
 }
 
 public enum GameRankType
@@ -367,7 +371,10 @@ public enum RewardType
     Box_RSR,
     Box_SRSSR,
     ExclusiveTitle,
-    None
+    None,
+    GoldShop1,
+    GoldShop2,
+    GoldShop3
 }
 
 public enum AchievementType

@@ -422,7 +422,6 @@ public class PlayfabManager : MonoBehaviour
 
                     LinkGoogleAccountRequest request = new LinkGoogleAccountRequest()
                     {
-                        ForceLink = true,
                         ServerAuthCode = serverAuthCode
                     };
 
@@ -432,19 +431,41 @@ public class PlayfabManager : MonoBehaviour
 
                         GameStateManager.instance.AutoLogin = true;
                         GameStateManager.instance.Login = LoginType.Google;
+
+                        SoundManager.instance.PlaySFX(GameSfxType.Success);
+                        NotionManager.instance.UseNotion(NotionType.SuccessLink);
                     }, error =>
                     {
-                        Debug.Log(error.GenerateErrorReport());
+                        if (error.Error == PlayFabErrorCode.AccountAlreadyLinked)
+                        {
+                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                            NotionManager.instance.UseNotion(NotionType.AlreadyLink);
+                        }
+                        else
+                        {
+                            Debug.Log(error.GenerateErrorReport());
+
+                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                            NotionManager.instance.UseNotion(NotionType.FailLink);
+
+                            Debug.Log("Link Google Account Fail");
+                        }
                     });
                 }
                 else
                 {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.FailLink);
+
                     Debug.Log("Link Google Account Fail");
                 }
             });
         }
         else
         {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.FailLink);
+
             Debug.Log("Link Google Account Fail");
         }
 #endif
@@ -581,6 +602,11 @@ public class PlayfabManager : MonoBehaviour
         }, error =>
         {
             var authorizationErrorCode = error.GetAuthorizationErrorCode();
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.FailLink);
+
+            Debug.Log("Link Apple Account Fail");
         });
     }
 
@@ -597,7 +623,9 @@ public class PlayfabManager : MonoBehaviour
 
             GameStateManager.instance.AutoLogin = true;
             GameStateManager.instance.Login = LoginType.Apple;
-            //optionContent.SuccessLink(LoginType.Apple);
+            
+            SoundManager.instance.PlaySFX(GameSfxType.Success);
+            NotionManager.instance.UseNotion(NotionType.SuccessLink);
         }
         , DisplayPlayfabError);
     }
@@ -694,6 +722,20 @@ public class PlayfabManager : MonoBehaviour
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
                 //nickNameManager.OpenFreeNickName();
+
+#if UNITY_ANDROID
+                playerDataBase.OS = 0;
+                UpdatePlayerStatisticsInsert("OS", 0);
+                FirebaseAnalytics.LogEvent("Google");
+#elif UNITY_IOS
+                playerDataBase.OS = 1;
+                UpdatePlayerStatisticsInsert("OS", 1);
+                FirebaseAnalytics.LogEvent("Apple");
+#else
+                playerDataBase.OS = 2;
+                UpdatePlayerStatisticsInsert("OS", 2);
+                FirebaseAnalytics.LogEvent("Web");
+#endif
 
                 FirebaseAnalytics.LogEvent("New_" + DateTime.Now.ToString("yyyyMMdd"));
             }
@@ -1004,6 +1046,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "TestAccount":
                            playerDataBase.TestAccount = statistics.Value;
+                           break;
+                       case "OS":
+                           playerDataBase.OS = statistics.Value;
                            break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
@@ -2038,7 +2083,7 @@ public class PlayfabManager : MonoBehaviour
     }
 
 
-    #region PurchaseItem
+#region PurchaseItem
     public void PurchaseCoin(int number)
     {
         UpdateAddCurrency(MoneyType.CoinA, number);
@@ -2192,7 +2237,7 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 
     public void GrantItemToUser(string itemIds, string catalogVersion)
     {

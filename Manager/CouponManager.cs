@@ -146,7 +146,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202402":
+                case "THISMUCH":
                     if (System.DateTime.Now >= new System.DateTime(2024, 2, 1))
                     {
                         if (playerDataBase.NaverCafe202402 == 0)
@@ -168,7 +168,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202403":
+                case "BEGINNER":
                     if (System.DateTime.Now >= new System.DateTime(2024, 3, 1))
                     {
                         if (playerDataBase.NaverCafe202403 == 0)
@@ -190,7 +190,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202404":
+                case "BRAIN":
                     if (System.DateTime.Now >= new System.DateTime(2024, 4, 1))
                     {
                         if (playerDataBase.NaverCafe202404 == 0)
@@ -212,7 +212,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202405":
+                case "CONTROLLER":
                     if (System.DateTime.Now >= new System.DateTime(2024, 5, 1))
                     {
                         if (playerDataBase.NaverCafe202405 == 0)
@@ -234,7 +234,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202406":
+                case "FATE":
                     if (System.DateTime.Now >= new System.DateTime(2024, 6, 1))
                     {
                         if (playerDataBase.NaverCafe202406 == 0)
@@ -256,7 +256,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202407":
+                case "THEEND":
                     if (System.DateTime.Now >= new System.DateTime(2024, 7, 1))
                     {
                         if (playerDataBase.NaverCafe202407 == 0)
@@ -278,7 +278,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202408":
+                case "STRUGGLE":
                     if (System.DateTime.Now >= new System.DateTime(2024, 8, 1))
                     {
                         if (playerDataBase.NaverCafe202408 == 0)
@@ -300,7 +300,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202409":
+                case "BUTT":
                     if (System.DateTime.Now >= new System.DateTime(2024, 9, 1))
                     {
                         if (playerDataBase.NaverCafe202409 == 0)
@@ -322,7 +322,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202410":
+                case "GOALLOUT":
                     if (System.DateTime.Now >= new System.DateTime(2024, 10, 1))
                     {
                         if (playerDataBase.NaverCafe202410 == 0)
@@ -344,7 +344,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202411":
+                case "DNA":
                     if (System.DateTime.Now >= new System.DateTime(2024, 11, 1))
                     {
                         if (playerDataBase.NaverCafe202411 == 0)
@@ -366,7 +366,7 @@ public class CouponManager : MonoBehaviour
                         NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                     }
                     break;
-                case "202412":
+                case "ISTHISRIGHT":
                     if (System.DateTime.Now >= new System.DateTime(2024, 12, 1))
                     {
                         if (playerDataBase.NaverCafe202412 == 0)

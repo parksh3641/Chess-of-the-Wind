@@ -54,6 +54,7 @@ public class RandomBoxManager : MonoBehaviour
     public List<string> prizeBlockStringList = new List<string>();
 
     private bool isWait = false;
+    private bool isServerWait = false;
     private bool isStart = false;
     private bool isDelay = false;
 
@@ -76,7 +77,7 @@ public class RandomBoxManager : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 100; i++)
         {
             BlockUIContent monster = Instantiate(blockUIContent);
             monster.transform.SetParent(blockUIContentTransform);
@@ -588,6 +589,7 @@ public class RandomBoxManager : MonoBehaviour
 
         boxAnim.PlayAnim();
 
+        isServerWait = false;
         StartCoroutine(RandomBoxCoroution());
     }
 
@@ -604,12 +606,23 @@ public class RandomBoxManager : MonoBehaviour
 
         boxAnim.PlayAnim();
 
+        isServerWait = false;
         StartCoroutine(RandomBoxCoroution());
     }
 
     public void OpenBox()
     {
-        if (!isStart) return;
+        if(!isServerWait)
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.WaitTimeNotion);
+            return;
+        }
+
+        if (!isStart)
+        {
+            return;
+        }
 
         isStart = false;
 
@@ -892,7 +905,7 @@ public class RandomBoxManager : MonoBehaviour
             }
 
             isStart = true;
-
+            isServerWait = true;
             StartCoroutine(SetUserPriceBlockCoroution());
         }
     }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PackageManager2 : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class PackageManager2 : MonoBehaviour
 
     private int topNumber = 0;
     private int count = 0;
+
+    private int gold = 0;
 
     DateTime f, g, i, j, l, m;
     TimeSpan h, k, n;
@@ -235,6 +238,8 @@ public class PackageManager2 : MonoBehaviour
                 break;
         }
 
+        gold = 0;
+
         for (int i = 0; i < type.receiveInformationList.Count; i++)
         {
             count = type.receiveInformationList[i].count;
@@ -364,7 +369,30 @@ public class PackageManager2 : MonoBehaviour
                             break;
                     }
                     break;
+                case RewardType.ExclusiveTitle:
+                    break;
+                case RewardType.None:
+                    break;
+                case RewardType.GoldShop1:
+                    gold += Random.Range(7500, 20001);
+
+                    break;
+                case RewardType.GoldShop2:
+                    gold += Random.Range(5000, 100001);
+
+                    break;
+                case RewardType.GoldShop3:
+                    gold += Random.Range(50000, 1000001);
+
+                    break;
             }
+        }
+
+        if(gold > 0)
+        {
+            PlayfabManager.instance.UpdateAddGold(gold);
+
+            gold = 0;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);

@@ -265,7 +265,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
             loginButtonList[0].SetActive(true);
 #else
-            loginButtonList[0].SetActive(true);
+            loginButtonList[0].SetActive(false);
 #endif
 
 #if UNITY_ANDROID
@@ -283,7 +283,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         loginButtonList[0].SetActive(true);
 #else
-        loginButtonList[0].SetActive(true);
+        loginButtonList[0].SetActive(false);
 #endif
 
 #if UNITY_ANDROID
@@ -722,5 +722,12 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://www.youtube.com/@windchess_kr_official/");
 
         FirebaseAnalytics.LogEvent("Open_Youtube");
+    }
+
+    public void KakaoTalk()
+    {
+        Application.OpenURL("https://open.kakao.com/o/gtU2erhg");
+
+        FirebaseAnalytics.LogEvent("Open_KakaoTalk");
     }
 }

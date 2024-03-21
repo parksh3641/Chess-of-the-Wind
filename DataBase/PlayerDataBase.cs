@@ -102,6 +102,8 @@ public class PlayerDataBase : ScriptableObject
     private int rankUpCount = 0;
     [SerializeField]
     private int testAccount = 0;
+    [SerializeField]
+    private int os = 0;
 
     [Space]
     [Title("Daily")]
@@ -649,6 +651,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             testAccount = value;
+        }
+    }
+
+    public int OS
+    {
+        get
+        {
+            return os;
+        }
+        set
+        {
+            os = value;
         }
     }
 
