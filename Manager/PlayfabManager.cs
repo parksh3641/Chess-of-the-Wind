@@ -46,6 +46,7 @@ public class PlayfabManager : MonoBehaviour
     private bool statisticsData = false;
     private bool inventoryData = false;
     private bool grantItemData = false;
+    private bool waitGrantItem = false;
 
     private long coin = 0;
     private long coinA = 0;
@@ -585,7 +586,14 @@ public class PlayfabManager : MonoBehaviour
 
             OnLoginSuccess(result);
         }
-        , DisplayPlayfabError);
+        , error =>
+        {
+            uiManager.LoginFail();
+
+            isLogin = false;
+
+            Debug.Log("Apple Login Fail");
+        });
     }
 
     public void OnClickAppleLink(bool forceLink = false)
@@ -630,7 +638,7 @@ public class PlayfabManager : MonoBehaviour
         , DisplayPlayfabError);
     }
 #endif
-    #endregion
+#endregion
 
     public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
@@ -1973,11 +1981,11 @@ public class PlayfabManager : MonoBehaviour
         );
     }
 
-    public void GetLeaderboarder(string name, Action<GetLeaderboardResult> successCalback)
+    public void GetLeaderboarder(string name, int min, Action<GetLeaderboardResult> successCalback)
     {
         var requestLeaderboard = new GetLeaderboardRequest
         {
-            StartPosition = 0,
+            StartPosition = min,
             StatisticName = name,
             MaxResultsCount = 100,
 
@@ -1989,7 +1997,13 @@ public class PlayfabManager : MonoBehaviour
             }
         };
 
-        PlayFabClientAPI.GetLeaderboard(requestLeaderboard, successCalback, DisplayPlayfabError);
+        PlayFabClientAPI.GetLeaderboard(requestLeaderboard, successCalback, error =>
+        {
+            RankingManager.instance.isDelay = false;
+
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+        });
     }
 
     public void GetLeaderboardMyRank(string name, Action<GetLeaderboardAroundPlayerResult> successCalback)
@@ -2261,7 +2275,11 @@ public class PlayfabManager : MonoBehaviour
 
         if (uiManager != null)
         {
-            StartCoroutine(WaitGrantItemCoroution());
+            if(!waitGrantItem)
+            {
+                waitGrantItem = true;
+                StartCoroutine(WaitGrantItemCoroution());
+            }
         }
 
         try
@@ -2304,6 +2322,8 @@ public class PlayfabManager : MonoBehaviour
         }
 
         ChangeUserInventory();
+
+        waitGrantItem = false;
     }
 
     public void RestorePurchases()

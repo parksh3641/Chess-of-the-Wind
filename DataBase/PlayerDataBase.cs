@@ -3071,6 +3071,30 @@ public class PlayerDataBase : ScriptableObject
         return name;
     }
 
+    public string GetMainTitleName(int number)
+    {
+        string name = "";
+
+        switch (number)
+        {
+            case 0:
+                name = "-";
+                break;
+            default:
+                if (number < 500)
+                {
+                    name = "Title" + number;
+                }
+                else
+                {
+                    name = "TitleSpeical" + (number - 499);
+                }
+                break;
+        }
+
+        return name;
+    }
+
     public int GetTitleHoldNumber()
     {
         int number = 0;

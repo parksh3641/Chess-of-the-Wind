@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,7 +55,6 @@ public class GameEventManager : MonoBehaviour
 
         for(int i = 0; i < eventMaxNumber; i ++)
         {
-            Debug.Log(i);
             eventString[i] = LocalizationManager.instance.GetString("GameEvent" + (i + 1));
         }
 
@@ -91,6 +91,8 @@ public class GameEventManager : MonoBehaviour
         GameStateManager.instance.GameEventType = GameEventType.GameEvent1 + eventNumber;
 
         Debug.LogError("이벤트 설정 완료 : " + GameStateManager.instance.GameEventType);
+
+        FirebaseAnalytics.LogEvent("Event : " + GameStateManager.instance.GameEventType.ToString());
 
         SoundManager.instance.PlaySFX(GameSfxType.Success);
 

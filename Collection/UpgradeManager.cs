@@ -206,12 +206,14 @@ public class UpgradeManager : MonoBehaviour
         successText.plusText = " : " + upgradeInformation.success + "%";
         successText.ReLoad();
 
-        keepText.localizationName = "RetentionPercent";
-        keepText.plusText = " : " + upgradeInformation.keep + "%";
-        keepText.ReLoad();
+        //keepText.localizationName = "RetentionPercent";
+        //keepText.plusText = " : " + upgradeInformation.keep + "%";
+        //keepText.ReLoad();
 
-        downText.localizationName = "LowerPercent";
-        downText.plusText = " : " + upgradeInformation.down + "%";
+        //downText.localizationName = "LowerPercent";
+        //downText.plusText = " : " + upgradeInformation.down + "%";
+        downText.localizationName = "";
+        downText.plusText = "";
         downText.ReLoad();
 
         destroyText.localizationName = "DestroyPercent";
@@ -307,8 +309,8 @@ public class UpgradeManager : MonoBehaviour
                 successText.localizationName = "";
                 successText.plusText = "";
 
-                keepText.localizationName = "";
-                keepText.plusText = "";
+                //keepText.localizationName = "";
+                //keepText.plusText = "";
 
                 downText.plusText = "";
 
@@ -322,8 +324,8 @@ public class UpgradeManager : MonoBehaviour
                 successText.localizationName = "";
                 successText.plusText = "";
 
-                keepText.localizationName = "";
-                keepText.plusText = "";
+                //keepText.localizationName = "";
+                //keepText.plusText = "";
 
                 downText.localizationName = "MaxLevel";
                 downText.plusText = "";
@@ -338,7 +340,7 @@ public class UpgradeManager : MonoBehaviour
             }
 
             successText.ReLoad();
-            keepText.ReLoad();
+            //keepText.ReLoad();
             downText.ReLoad();
             destroyText.ReLoad();
             valuePlusText.ReLoad();
