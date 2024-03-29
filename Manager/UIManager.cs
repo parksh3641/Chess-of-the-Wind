@@ -49,6 +49,10 @@ public class UIManager : MonoBehaviour
     public GameObject disconnectedView;
 
     [Space]
+    [Title("AppReview")]
+    public GameObject appReview;
+
+    [Space]
     public GameObject dontTouchObj;
     public GameObject waitingObj;
 
@@ -135,6 +139,7 @@ public class UIManager : MonoBehaviour
         resultView.SetActive(false);
         surrenderView.SetActive(false);
         disconnectedView.SetActive(false);
+        appReview.SetActive(false);
 
         dontTouchObj.SetActive(false);
         waitingObj.SetActive(false);
@@ -304,8 +309,9 @@ public class UIManager : MonoBehaviour
 
     public void OnMatchingAi(int otherFormation)
     {
-        int randomIndex = Random.Range(0, nicknames.Count);
-        string randomNickname = nicknames[randomIndex];
+        string randomNickname = nicknames[Random.Range(0, nicknames.Count)];
+
+        Debug.Log(randomNickname);
 
         StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, 0, true));
     }
@@ -793,5 +799,31 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://open.kakao.com/o/gtU2erhg");
 
         FirebaseAnalytics.LogEvent("Open_KakaoTalk");
+    }
+
+    public void OpenAppReview()
+    {
+        if (playerDataBase.AppReview == 1) return;
+
+        appReview.SetActive(true);
+    }
+
+    public void CloseAppReview()
+    {
+        appReview.SetActive(false);
+    }
+
+    public void OpenReview()
+    {
+#if UNITY_ANDROID || UNITY_EDITOR
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+#elif UNITY_IOS
+        Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
+#endif
+
+        playerDataBase.AppReview = 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);
+
+        FirebaseAnalytics.LogEvent("Open__AppReview");
     }
 }

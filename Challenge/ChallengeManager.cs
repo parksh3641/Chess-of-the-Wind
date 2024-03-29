@@ -337,7 +337,6 @@ public class ChallengeManager : MonoBehaviour
         }
 
         playerDataBase.ChallengeCount += 1;
-
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("ChallengeCount", playerDataBase.ChallengeCount);
 
         action.Invoke();

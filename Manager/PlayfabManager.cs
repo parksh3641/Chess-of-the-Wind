@@ -674,6 +674,8 @@ public class PlayfabManager : MonoBehaviour
             GetTitleInternalData("AOSVersion", CheckUpdate);
 #elif UNITY_IOS
             GetTitleInternalData("IOSVersion", CheckUpdate);
+#else
+            StartCoroutine(LoadDataCoroutine());
 #endif
         }
         else
@@ -1057,6 +1059,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "OS":
                            playerDataBase.OS = statistics.Value;
+                           break;
+                       case "AppReview":
+                           playerDataBase.AppReview = statistics.Value;
                            break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();

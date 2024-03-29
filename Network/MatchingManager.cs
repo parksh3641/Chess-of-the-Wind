@@ -95,6 +95,7 @@ public class MatchingManager : MonoBehaviour
     BlockClass blockClass3;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
 
     public FadeInOut mainFadeInOut;
     public NetworkManager networkManager;
@@ -616,6 +617,8 @@ public class MatchingManager : MonoBehaviour
 
         cancelButtonObj.SetActive(true);
 
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo");
+
         if (playerDataBase.NewbieWin < 2)
         {
             cancelButtonObj.SetActive(false);
@@ -664,7 +667,9 @@ public class MatchingManager : MonoBehaviour
         }
 
         isCancle = true;
+        StopAllCoroutines();
         StartCoroutine(WaitingPlayer());
+        StartCoroutine(MatchingCoroution());
 
         networkManager.JoinRandomRoom_Newbie();
 
@@ -732,6 +737,8 @@ public class MatchingManager : MonoBehaviour
 
         cancelButtonObj.SetActive(true);
 
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo");
+
         //if (playerDataBase.GosuWin < 1)
         //{
         //    cancelButtonObj.SetActive(false);
@@ -780,7 +787,9 @@ public class MatchingManager : MonoBehaviour
         }
 
         isCancle = true;
+        StopAllCoroutines();
         StartCoroutine(WaitingPlayer());
+        StartCoroutine(MatchingCoroution());
 
         networkManager.JoinRandomRoom_Gosu();
 
@@ -818,7 +827,6 @@ public class MatchingManager : MonoBehaviour
         while(matchingWaitTime > 0)
         {
             matchingWaitTime -= 1;
-            //matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + " : " + matchingWaitTime;
 
             if (matchingWaitTime <= 1)
             {
@@ -833,6 +841,27 @@ public class MatchingManager : MonoBehaviour
         yield return waitForSeconds;
 
         AiMatching();
+    }
+
+    IEnumerator MatchingCoroution()
+    {
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo");
+
+        yield return waitForSeconds2;
+
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + ".";
+
+        yield return waitForSeconds2;
+
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + "..";
+
+        yield return waitForSeconds2;
+
+        matchingText.text = LocalizationManager.instance.GetString("MatchingInfo") + "...";
+
+        yield return waitForSeconds2;
+
+        StartCoroutine(MatchingCoroution());
     }
 
     public void PlayerMatching(string player1, string player2, int otherFormation, int otherTitle)

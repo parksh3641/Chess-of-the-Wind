@@ -104,6 +104,8 @@ public class PlayerDataBase : ScriptableObject
     private int testAccount = 0;
     [SerializeField]
     private int os = 0;
+    [SerializeField]
+    private int appReview = 0;
 
     [Space]
     [Title("Daily")]
@@ -663,6 +665,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             os = value;
+        }
+    }
+
+    public int AppReview
+    {
+        get
+        {
+            return appReview;
+        }
+        set
+        {
+            appReview = value;
         }
     }
 
@@ -2178,6 +2192,8 @@ public class PlayerDataBase : ScriptableObject
         challengeCount = 0;
         rankUpCount = 0;
         testAccount = 0;
+        os = 0;
+        appReview = 0;
 
         defDestroyTicket = 0;
         winGetMoney = 0;

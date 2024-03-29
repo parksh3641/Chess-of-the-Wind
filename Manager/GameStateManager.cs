@@ -65,11 +65,11 @@ public class GameStateManager : MonoBehaviour
         public bool sfx = true;
         public bool vibration = true;
         public bool sleepMode = false;
-        public bool inAppReview = false;
+        public bool appReview = false;
 
         [Space]
         [Title("Betting")]
-        public int matchingTime = 5;
+        public int matchingTime = 9;
         public int bettingTime = 9;
         public int bettingWaitTime = 3;
         public bool autoTarget = false;
@@ -556,15 +556,15 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public bool InAppReview
+    public bool AppReview
     {
         get
         {
-            return gameSettings.inAppReview;
+            return gameSettings.appReview;
         }
         set
         {
-            gameSettings.inAppReview = value;
+            gameSettings.appReview = value;
             SaveFile();
         }
     }
@@ -595,7 +595,7 @@ public class GameStateManager : MonoBehaviour
             {
                 gameSettings = JsonUtility.FromJson<GameSettings>(stjs);
 
-                gameSettings.matchingTime = 5;
+                gameSettings.matchingTime = 9;
                 gameSettings.bettingTime = 9;
                 gameSettings.bettingWaitTime = 3;
             }

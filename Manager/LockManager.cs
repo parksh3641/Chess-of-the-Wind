@@ -89,6 +89,8 @@ public class LockManager : MonoBehaviour
             rankDownObj.SetActive(true);
             achievementObj.SetActive(true);
             //questObj.SetActive(true);
+
+            UIManager.instance.OpenAppReview();
         }
     }
 }
