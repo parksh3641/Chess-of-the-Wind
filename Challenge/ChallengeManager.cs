@@ -28,6 +28,8 @@ public class ChallengeManager : MonoBehaviour
     public MatchingManager matchingManager;
     public UpgradeManager upgradeManager;
     public AchievementManager achievementManager;
+    public EventManager eventManager;
+    public AttendanceManager attendanceManager;
 
     List<string> itemList = new List<string>();
 
@@ -333,6 +335,11 @@ public class ChallengeManager : MonoBehaviour
                 exitButton.SetActive(true);
 
                 StopAllCoroutines();
+                break;
+            case 6:
+                eventManager.OpenWelcomBoxView();
+                attendanceManager.OpenAttendanceView();
+
                 break;
         }
 

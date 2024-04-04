@@ -25,6 +25,7 @@ public class StateManager : MonoBehaviour
     public ChallengeManager challengeManager;
     public OptionManager optionManager;
     public TitleManager titleManager;
+    public AttendanceManager attendanceManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -44,11 +45,6 @@ public class StateManager : MonoBehaviour
         penaltyView.SetActive(false);
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-    }
-
-    private void Start()
-    {
-
     }
 
     public void Initialize()
@@ -71,8 +67,8 @@ public class StateManager : MonoBehaviour
             lockManager.Initialize();
             newsManager.Initialize();
             challengeManager.Initialize();
-            optionManager.Initialize_First();
             titleManager.Initialize();
+            attendanceManager.CheckInitialize();
 
             if (GameStateManager.instance.Penalty > 0)
             {

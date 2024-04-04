@@ -811,6 +811,9 @@ public class UIManager : MonoBehaviour
     public void CloseAppReview()
     {
         appReview.SetActive(false);
+
+        playerDataBase.AppReview = 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);
     }
 
     public void OpenReview()
@@ -820,6 +823,8 @@ public class UIManager : MonoBehaviour
 #elif UNITY_IOS
         Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
 #endif
+
+        appReview.SetActive(false);
 
         playerDataBase.AppReview = 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);

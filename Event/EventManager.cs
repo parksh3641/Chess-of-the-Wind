@@ -83,6 +83,8 @@ public class EventManager : MonoBehaviour
             if (!playerDataBase.WelcomeBoxCheck)
             {
                 OnWelcomeBoxAlarm();
+
+                OpenWelcomView();
             }
         }
         else
@@ -119,6 +121,14 @@ public class EventManager : MonoBehaviour
         }
 
         CheckingRankUp();
+
+        if(playerDataBase.ChallengeCount >= 6)
+        {
+            if (playerDataBase.WelcomeBoxCount < 9 && !playerDataBase.WelcomeCheck)
+            {
+                OpenWelcomBoxView();
+            }
+        }
     }
 
     public void CheckingRankUp()

@@ -84,6 +84,17 @@ public class AttendanceManager : MonoBehaviour
         }
     }
 
+    public void CheckInitialize()
+    {
+        if (playerDataBase.ChallengeCount >= 6)
+        {
+            if (!playerDataBase.attendanceCheck)
+            {
+                OpenAttendanceView();
+            }
+        }
+    }
+
     public void Initialize()
     {
         attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, 3000);

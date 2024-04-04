@@ -19,13 +19,15 @@ public class OptionManager : MonoBehaviour
 
     public Text versionText;
 
+    public bool first = false;
+
     private void Awake()
     {
         optionView.SetActive(false);
         languageView.SetActive(false);
         deleteAccountView.SetActive(false);
 
-        coupon.SetActive(true);
+        coupon.SetActive(false);
         deleteAccount.SetActive(false);
     }
 
@@ -59,6 +61,12 @@ public class OptionManager : MonoBehaviour
         {
             optionView.SetActive(true);
 
+            if (!first)
+            {
+                PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
+                first = true;
+            }
+
             Initialize();
 
             for (int i = 0; i < bottomContents.Length; i++)
@@ -72,12 +80,6 @@ public class OptionManager : MonoBehaviour
             languageView.SetActive(false);
         }
     }
-
-    public void Initialize_First()
-    {
-        PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
-    }
-
     void CheckVersion(bool check)
     {
 #if UNITY_EDITOR
@@ -86,7 +88,7 @@ public class OptionManager : MonoBehaviour
 #elif UNITY_ANDROID
         coupon.SetActive(true);
         deleteAccount.SetActive(false);
-#else
+#elif UNITY_IOS
         if(check)
         {
             coupon.SetActive(true);
