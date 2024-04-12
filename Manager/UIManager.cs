@@ -282,6 +282,11 @@ public class UIManager : MonoBehaviour
 #elif UNITY_IOS
             loginButtonList[2].SetActive(true);
 #endif
+            if(GameStateManager.instance.StoreType == StoreType.OneStore)
+            {
+                loginButtonList[0].SetActive(true);
+                loginButtonList[1].SetActive(false);
+            }
         }
     }
 
@@ -816,6 +821,17 @@ public class UIManager : MonoBehaviour
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);
     }
 
+    public void OpenAppReviewEvent()
+    {
+#if UNITY_ANDROID || UNITY_EDITOR
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+#elif UNITY_IOS
+        Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
+#endif
+
+        FirebaseAnalytics.LogEvent("Open__AppReview_Event");
+    }
+
     public void OpenReview()
     {
 #if UNITY_ANDROID || UNITY_EDITOR
@@ -830,5 +846,11 @@ public class UIManager : MonoBehaviour
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);
 
         FirebaseAnalytics.LogEvent("Open__AppReview");
+    }
+
+    public void ComingSoon()
+    {
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+        NotionManager.instance.UseNotion(NotionType.ComingSoon);
     }
 }

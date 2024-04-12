@@ -26,16 +26,20 @@ public class AttendanceManager : MonoBehaviour
     string localization_Hours = "";
     string localization_Minutes = "";
 
+    private int price = 0;
+
     DateTime f, g, i, j, l, m;
     TimeSpan h, k, n;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     PlayerDataBase playerDataBase;
+    RankDataBase rankDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         attendanceView.SetActive(false);
         lockObj.SetActive(true);
@@ -97,14 +101,16 @@ public class AttendanceManager : MonoBehaviour
 
     public void Initialize()
     {
-        attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, 3000);
+        price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
+
+        attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, price);
         attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_N, 1);
-        attendanceContentArray[2].receiveContent.Initialize(RewardType.Gold, 3000);
+        attendanceContentArray[2].receiveContent.Initialize(RewardType.Gold, price);
         attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_N, 1);
-        attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, 3000);
+        attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, price);
         attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_N, 1);
 
-        receiveContentArray[0].Initialize(RewardType.Gold, 6000);
+        receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
         receiveContentArray[1].Initialize(RewardType.Box_RSR, 3);
         receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 1);
     }
@@ -161,7 +167,7 @@ public class AttendanceManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddGold(3000);
+                PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 1:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -177,7 +183,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 2:
-                PlayfabManager.instance.UpdateAddGold(3000);
+                PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 3:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -193,7 +199,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 4:
-                PlayfabManager.instance.UpdateAddGold(3000);
+                PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 5:
                 switch (GameStateManager.instance.WindCharacterType)
@@ -209,7 +215,7 @@ public class AttendanceManager : MonoBehaviour
                 }
                 break;
             case 6:
-                PlayfabManager.instance.UpdateAddGold(6000);
+                PlayfabManager.instance.UpdateAddGold(price * 2);
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:

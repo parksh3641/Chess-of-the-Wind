@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LocalizationContent : MonoBehaviour
 {
     public bool purchase = false;
+    public bool rayCast = true;
 
     private Text localizationText;
     public string forwardText;
@@ -19,7 +20,7 @@ public class LocalizationContent : MonoBehaviour
     {
         localizationText = GetComponent<Text>();
 
-        localizationText.raycastTarget = true;
+        localizationText.raycastTarget = rayCast;
     }
 
     public string GetText()

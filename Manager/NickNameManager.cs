@@ -20,6 +20,8 @@ public class NickNameManager : MonoBehaviour
 
     public Text profileNickNameText;
 
+    private int value = 1000000;
+
     public string[] lines;
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 
@@ -118,7 +120,7 @@ public class NickNameManager : MonoBehaviour
 
         UIManager.instance.Renewal();
 
-        if (playerDataBase.Coin >= 10000)
+        if (playerDataBase.Coin >= value)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
 
@@ -234,7 +236,7 @@ public class NickNameManager : MonoBehaviour
     {
         if (uIManager != null) uIManager.Renewal();
 
-        PlayfabManager.instance.UpdateSubtractGold(10000);
+        PlayfabManager.instance.UpdateSubtractGold(value);
 
         profileNickNameText.text = GameStateManager.instance.NickName;
 

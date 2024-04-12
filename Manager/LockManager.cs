@@ -83,14 +83,18 @@ public class LockManager : MonoBehaviour
             inventoryObj.SetActive(true);
             attendanceObj.SetActive(true);
             eventObj.SetActive(true);
-            packageObj.SetActive(true);
+            packageObj.SetActive(false);
             rankingObj.SetActive(true);
             tutorialObj.SetActive(false);
             rankDownObj.SetActive(true);
             achievementObj.SetActive(true);
             //questObj.SetActive(true);
 
-            UIManager.instance.OpenAppReview();
+            if(GameStateManager.instance.StoreType != StoreType.OneStore)
+            {
+                UIManager.instance.OpenAppReview();
+                packageObj.SetActive(true);
+            }
         }
     }
 }

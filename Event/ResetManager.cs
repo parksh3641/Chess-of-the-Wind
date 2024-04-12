@@ -48,7 +48,7 @@ public class ResetManager : MonoBehaviour
 
     public void OnCheckAttendanceDay()
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
+        PlayfabManager.instance.GetServerTime(SetModeContent);
     }
 
     private void SetModeContent(DateTime time)
@@ -155,6 +155,8 @@ public class ResetManager : MonoBehaviour
         {
             StartCoroutine(ResetCoroution());
         }
+
+        StateManager.instance.OtherInitialize();
     }
 
     public bool ComparisonDate(string target, System.DateTime time)
@@ -264,6 +266,7 @@ public class ResetManager : MonoBehaviour
             }
 
             playerDataBase.DailyWin = 0;
+            playerDataBase.DailyStar = 0;
             playerDataBase.DailyNormalBox_1 = 3;
             playerDataBase.DailyNormalBox_10 = 1;
             playerDataBase.DailyEpicBox_1 = 3;
@@ -353,11 +356,13 @@ public class ResetManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily1", playerDataBase.Package_Daily1);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily2", playerDataBase.Package_Daily2);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily3", playerDataBase.Package_Daily3);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily4", playerDataBase.Package_Daily4);
 
             yield return waitForSeconds;
 
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily4", playerDataBase.Package_Daily4);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily5", playerDataBase.Package_Daily5);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyStar", playerDataBase.DailyStar);
+
         }
 
         yield return waitForSeconds;

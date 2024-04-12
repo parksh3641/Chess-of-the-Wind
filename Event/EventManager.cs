@@ -11,6 +11,10 @@ public class EventManager : MonoBehaviour
 {
     public GameObject eventView;
 
+    public RectTransform rectTransform;
+
+    public GameObject appReviewEvent;
+
     [Space]
     [Title("WelcomBox")]
     public GameObject welcomeBoxView;
@@ -59,6 +63,8 @@ public class EventManager : MonoBehaviour
         rankIconArray = imageDataBase.GetRankIconArray();
 
         eventView.SetActive(false);
+
+        rectTransform.anchoredPosition = new Vector2(0, -9999);
 
         welcomeBoxView.SetActive(false);
         welcomeBoxAlarm.SetActive(false);
@@ -145,6 +151,13 @@ public class EventManager : MonoBehaviour
         if(!eventView.activeInHierarchy)
         {
             eventView.SetActive(true);
+
+            appReviewEvent.SetActive(true);
+
+            if(playerDataBase.ReviewNumber == 1 || GameStateManager.instance.StoreType == StoreType.OneStore)
+            {
+                appReviewEvent.SetActive(false);
+            }
 
             FirebaseAnalytics.LogEvent("Open_Event");
         }
@@ -401,7 +414,7 @@ public class EventManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         NotionManager.instance.UseNotion(NotionType.GetReward);
 
-        FirebaseAnalytics.LogEvent("Clear_Welcome");
+        FirebaseAnalytics.LogEvent("Clear_Welcome : " + playerDataBase.WelcomeCount);
     }
 
     public void OnWelcomeAlarm()
@@ -493,7 +506,7 @@ public class EventManager : MonoBehaviour
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
         NotionManager.instance.UseNotion(NotionType.GetReward);
 
-        FirebaseAnalytics.LogEvent("Clear_RankUp");
+        FirebaseAnalytics.LogEvent("Clear_RankUp : " + number);
 
         CheckRankUp();
     }

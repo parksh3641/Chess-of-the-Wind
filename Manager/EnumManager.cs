@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class EnumManager : MonoBehaviour
 {
+
 }
+
+public enum StoreType
+{
+    None,
+    Google,
+    Apple,
+    OneStore,
+    Amazon,
+}
+
 public enum GameType
 {
     NewBie,
@@ -293,7 +304,8 @@ public enum NotionType
     AlreadyLink,
     SuccessLink,
     FailLink,
-    WaitTimeNotion
+    WaitTimeNotion,
+    ComingSoon
 }
 
 public enum GameRankType

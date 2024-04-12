@@ -10,6 +10,8 @@ public class NewsManager : MonoBehaviour
 {
     public GameObject newsView;
 
+    public Text versionText;
+
     public GameObject alarm;
     public GameObject mainAlarm;
 
@@ -52,6 +54,8 @@ public class NewsManager : MonoBehaviour
 
             newsContentList.Add(monster);
         }
+
+        versionText.text = "v" + Application.version;
     }
 
     public void Initialize()

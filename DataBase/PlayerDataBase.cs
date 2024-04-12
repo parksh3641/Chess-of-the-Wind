@@ -106,11 +106,15 @@ public class PlayerDataBase : ScriptableObject
     private int os = 0;
     [SerializeField]
     private int appReview = 0;
+    [SerializeField]
+    private int reviewNumber = 0;
 
     [Space]
     [Title("Daily")]
     [SerializeField]
     private int dailyWin = 0;
+    [SerializeField]
+    private int dailyStar = 0;
     [SerializeField]
     private int dailyReward = 0;
     [SerializeField]
@@ -680,6 +684,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int ReviewNumber
+    {
+        get
+        {
+            return reviewNumber;
+        }
+        set
+        {
+            reviewNumber = value;
+        }
+    }
+
     public int DailyWin
     {
         get
@@ -689,6 +705,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             dailyWin = value;
+        }
+    }
+
+    public int DailyStar
+    {
+        get
+        {
+            return dailyStar;
+        }
+        set
+        {
+            dailyStar = value;
         }
     }
 
@@ -2194,6 +2222,7 @@ public class PlayerDataBase : ScriptableObject
         testAccount = 0;
         os = 0;
         appReview = 0;
+        reviewNumber = 0;
 
         defDestroyTicket = 0;
         winGetMoney = 0;
@@ -2214,6 +2243,7 @@ public class PlayerDataBase : ScriptableObject
         consumeGold = 0;
 
         dailyWin = 0;
+        dailyStar = 0;
         dailyReward = 0;
         dailyBuy1 = 0;
         dailyBuy2 = 0;

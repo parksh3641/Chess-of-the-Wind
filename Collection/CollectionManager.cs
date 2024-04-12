@@ -183,11 +183,15 @@ public class CollectionManager : MonoBehaviour
             {
                 number = saveTotalRaf - totalRaf;
 
+                saveTotalRaf = totalRaf;
+
                 NotionManager.instance.UseNotion(Color.red, LocalizationManager.instance.GetString("CollectionTotal") + " -" + number);
             }
             else if(saveTotalRaf < totalRaf)
             {
                 number = totalRaf - saveTotalRaf;
+
+                saveTotalRaf = totalRaf;
 
                 NotionManager.instance.UseNotion(Color.green, LocalizationManager.instance.GetString("CollectionTotal") + " +" + number);
             }

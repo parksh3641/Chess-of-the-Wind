@@ -115,16 +115,6 @@ public class MailContent : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
                 break;
             case "ComicWorld2023":
-                //rewardType = RewardType.Box;
-
-                //count = 10;
-                //titleSpeicalType = TitleSpeicalType.TitleSpeical2;
-
-                //titleText.localizationName = "ComicWorld2023";
-
-                //receiveContent[1].gameObject.SetActive(true);
-                //receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
-
                 rewardType = RewardType.Box;
 
                 count = 10;
@@ -136,6 +126,14 @@ public class MailContent : MonoBehaviour
                 receiveContent[1].Initialize(RewardType.ExclusiveTitle, 1);
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
+                break;
+            case "AppReview":
+                rewardType = RewardType.Box_RSR;
+
+                titleText.localizationName = "AppReviewTitle";
+
+                playerDataBase.ReviewNumber = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("ReviewNumber", 1);
                 break;
         }
 

@@ -28,6 +28,10 @@ public class ShopManager : MonoBehaviour
     public Transform shopContentTransform;
 
     [Space]
+    [Title("OneStore")]
+    public GameObject[] oneStore;
+
+    [Space]
     [Title("Ad")]
     public GameObject[] boxShopLockArray;
     public ReceiveContent[] adShopReceiveContents;
@@ -70,12 +74,14 @@ public class ShopManager : MonoBehaviour
     TimeSpan h, k, n;
 
     PlayerDataBase playerDataBase;
+    RankDataBase rankDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         shopView.SetActive(false);
 
@@ -108,6 +114,11 @@ public class ShopManager : MonoBehaviour
         {
             shopView.SetActive(true);
 
+            for(int i = 0; i < oneStore.Length; i ++)
+            {
+                oneStore[i].SetActive(false);
+            }
+
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
             {
                 ResetManager.instance.Initialize();
@@ -115,7 +126,7 @@ public class ShopManager : MonoBehaviour
 
             if (!first)
             {
-                adShopReceiveContents[0].Initialize(RewardType.Gold, 10000);
+                adShopReceiveContents[0].Initialize(RewardType.Gold, rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 2);
                 adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
                 adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
 
@@ -130,8 +141,6 @@ public class ShopManager : MonoBehaviour
 
             Initialize_Ad();
 
-            packageManager.OpenShop();
-
             boxArray[0].SetActive(false);
             boxArray[1].SetActive(false);
 
@@ -141,6 +150,13 @@ public class ShopManager : MonoBehaviour
             localization_Minutes = LocalizationManager.instance.GetString("Minutes");
 
             shopRectTransform.offsetMax = Vector3.zero;
+
+            if(GameStateManager.instance.StoreType == StoreType.OneStore)
+            {
+                return;
+            }
+
+            packageManager.OpenShop();
 
             if (playerDataBase.Formation == 2)
             {
@@ -743,7 +759,7 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (playerDataBase.DailyAdsReward == 1) return;
 
-                PlayfabManager.instance.UpdateAddGold(10000);
+                PlayfabManager.instance.UpdateAddGold(rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 2);
 
                 playerDataBase.DailyAdsReward = 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward", playerDataBase.DailyAdsReward);

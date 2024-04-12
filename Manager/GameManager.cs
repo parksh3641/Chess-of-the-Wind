@@ -524,15 +524,9 @@ public class GameManager : MonoBehaviour
     public void Initialize()
     {
         bettingTime = GameStateManager.instance.BettingTime;
-        //bettingTime = 999;
         bettingWaitTime = GameStateManager.instance.BettingWaitTime;
 
         blockMotherInformation = blockDataBase.blockMotherInformation;
-
-        if(playerDataBase.Update > 0)
-        {
-
-        }
     }
 
     private void GameReset()
@@ -731,7 +725,7 @@ public class GameManager : MonoBehaviour
 
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
-        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.PlayRankType) - 1;
         int myLevel = 0;
 
         myLevel = blockClassNewbie.level;
@@ -799,7 +793,7 @@ public class GameManager : MonoBehaviour
         //    blockContentList[i].gameObject.SetActive(true);
         //}
 
-        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.GameRankType) - 1;
+        limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.PlayRankType) - 1;
         int myLevel = 0;
 
         windMax = 0;

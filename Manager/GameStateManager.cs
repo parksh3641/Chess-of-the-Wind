@@ -16,6 +16,9 @@ public class GameStateManager : MonoBehaviour
     [Serializable]
     public class GameSettings
     {
+        public StoreType storeType = StoreType.None;
+        [Space]
+
         [Title("Developer")]
         public bool loginNone = false;
 
@@ -39,6 +42,7 @@ public class GameStateManager : MonoBehaviour
         [Title("Info")]
         public WindCharacterType windCharacterType = WindCharacterType.Winter;
         public GameRankType gameRankType = GameRankType.Bronze_4;
+        public GameRankType playRankType = GameRankType.Bronze_4;
 
         [Space]
         [Title("InGame")]
@@ -281,6 +285,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public StoreType StoreType
+    {
+        get
+        {
+            return gameSettings.storeType;
+        }
+        set
+        {
+            gameSettings.storeType = value;
+            SaveFile();
+        }
+    }
+
     public WindCharacterType WindCharacterType
     {
         get
@@ -329,6 +346,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.gameRankType = value;
+            SaveFile();
+        }
+    }
+
+    public GameRankType PlayRankType
+    {
+        get
+        {
+            return gameSettings.playRankType;
+        }
+        set
+        {
+            gameSettings.playRankType = value;
             SaveFile();
         }
     }

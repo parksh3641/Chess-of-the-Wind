@@ -216,9 +216,18 @@ public class UpgradeManager : MonoBehaviour
         downText.plusText = "";
         downText.ReLoad();
 
-        destroyText.localizationName = "DestroyPercent";
-        destroyText.plusText = " : " + upgradeInformation.destroy + "%";
-        destroyText.ReLoad();
+        if(upgradeInformation.destroy > 0)
+        {
+            destroyText.localizationName = "DestroyPercent";
+            destroyText.plusText = " : " + upgradeInformation.destroy + "%";
+            destroyText.ReLoad();
+        }
+        else
+        {
+            destroyText.forwardText = "";
+            destroyText.plusText = "";
+            destroyText.ReLoad();
+        }
 
         valuePlusText.localizationName = "Value";
         valuePlusText.plusText = " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +

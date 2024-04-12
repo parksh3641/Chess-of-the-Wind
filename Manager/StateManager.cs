@@ -55,73 +55,70 @@ public class StateManager : MonoBehaviour
 
             SoundManager.instance.Initialize();
 
+            resetManager.Initialize();
             nickNameManager.Initialize();
             uIManager.Initialize();
             gameManager.Initialize();
             matchingManager.Initialize();
             formationUIManager.Initialize();
             rankInfoManager.Initialize();
-            resetManager.Initialize();
-            eventManager.Initialize();
             mailBoxManager.Initialize();
             lockManager.Initialize();
             newsManager.Initialize();
             challengeManager.Initialize();
             titleManager.Initialize();
-            attendanceManager.CheckInitialize();
+        }
+    }
 
-            if (GameStateManager.instance.Penalty > 0)
+    public void OtherInitialize()
+    {
+        eventManager.Initialize();
+        attendanceManager.CheckInitialize();
+
+
+        if (GameStateManager.instance.Penalty > 0)
+        {
+            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
             {
-                if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
-                {
-                    GameStateManager.instance.Penalty = 0;
-                    return;
-                }
-
-                DateTime time = DateTime.Parse(PlayerPrefs.GetString("PenaltyTime"));
-                DateTime now = DateTime.Now;
-
-                TimeSpan span = time - now;
-
                 GameStateManager.instance.Penalty = 0;
-
-                if (span.TotalSeconds < -60)
-                {
-                    penaltyView.SetActive(true);
-
-                    penaltyValue.text = "-" + GameStateManager.instance.Stakes.ToString();
-
-                    PlayfabManager.instance.UpdateSubtractGold(GameStateManager.instance.Stakes);
-
-                    GameStateManager.instance.Playing = false;
-                    GameStateManager.instance.Win = false;
-                    GameStateManager.instance.Lose = true;
-
-                    matchingManager.CheckRankUp();
-
-                    Debug.Log("튕긴 지 60초가 지났기 때문에 패널티 처리");
-                }
-                else
-                {
-                    Debug.Log("튕긴 지 60초가 안 지났습니다");
-                }
+                return;
             }
 
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Version", int.Parse(Application.version.Replace(".", "")));
+            DateTime time = DateTime.Parse(PlayerPrefs.GetString("PenaltyTime"));
+            DateTime now = DateTime.Now;
 
-#if UNITY_ANDROID
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 0);
-#elif UNITY_IOS
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 1);
-#else
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("OS", 2);
-#endif
+            TimeSpan span = time - now;
 
-            playTime = 0;
-            StartCoroutine(PlayTimeCoroution());
+            GameStateManager.instance.Penalty = 0;
 
-            Debug.Log("Initialize Complete!");
+            if (span.TotalSeconds < -60)
+            {
+                penaltyView.SetActive(true);
+
+                penaltyValue.text = "-" + GameStateManager.instance.Stakes.ToString();
+
+                PlayfabManager.instance.UpdateSubtractGold(GameStateManager.instance.Stakes);
+
+                GameStateManager.instance.Playing = false;
+                GameStateManager.instance.Win = false;
+                GameStateManager.instance.Lose = true;
+
+                matchingManager.CheckRankUp();
+
+                Debug.Log("튕긴 지 60초가 지났기 때문에 패널티 처리");
+            }
+            else
+            {
+                Debug.Log("튕긴 지 60초가 안 지났습니다");
+            }
         }
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Version", int.Parse(Application.version.Replace(".", "")));
+
+        playTime = 0;
+        StartCoroutine(PlayTimeCoroution());
+
+        Debug.Log("Initialize Complete!");
     }
 
     public void ClosePenaltyView()

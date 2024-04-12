@@ -123,8 +123,8 @@ public class SynthesisManager : MonoBehaviour
     BlockDataBase blockDataBase;
     PlayerDataBase playerDataBase;
 
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.2f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.2f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.3f);
     WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.5f);
 
     private void Awake()

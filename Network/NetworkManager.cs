@@ -23,10 +23,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public int otherFormation = 0;
     public int otherTitle = 0;
+    private GameRankType playerRank1;
+    private GameRankType playerRank2;
 
     public bool isDelay = false;
 
-    string nickName = "";
+    private string nickName = "";
+    private string[] strArray = new string[2];
 
     public GameManager gameManager;
     public StateManager stateManager;
@@ -35,11 +38,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public GameObject disConnectedView;
 
+    RankInformation rankInformation = new RankInformation();
+
+    private int stakes = 0;
+
     PlayerDataBase playerDataBase;
+    RankDataBase rankDataBase;
 
     void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         PhotonNetwork.KeepAliveInBackground = 10;
     }
@@ -236,11 +245,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
         {
-            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+            roomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
         }
         else
         {
-            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
+            roomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
         }
 
         PhotonNetwork.JoinRandomRoom(roomProperties, 2);
@@ -258,11 +267,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
         {
-            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+            roomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
         }
         else
         {
-            roomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
+            roomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
         }
 
         PhotonNetwork.JoinRandomRoom(roomProperties, 2);
@@ -287,14 +296,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
             {
                 roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Test" };
-                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
 
                 Debug.Log("테스트 계정 방 생성");
             }
             else
             {
                 roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version } };
             }
         }
 
@@ -320,18 +329,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor || playerDataBase.TestAccount > 0)
             {
                 roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Test" };
-                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Test", "ON" } };
 
                 Debug.Log("테스트 계정 방 생성");
             }
             else
             {
                 roomOption.CustomRoomPropertiesForLobby = new string[] { "GameRank", "GameType", "Status" };
-                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GameStateManager.instance.GameRankType }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version} };
+                roomOption.CustomRoomProperties = new Hashtable() { { "GameRank", GetRank(0) }, { "GameType", GameStateManager.instance.GameType }, { "Status", "Waiting" }, { "Version", Application.version} };
             }
         }
 
         PhotonNetwork.JoinOrCreateRoom(GameStateManager.instance.NickName, roomOption, null);
+    }
+
+    public string GetRank(int number)
+    {
+        strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
+
+        return strArray[number];
     }
 
     void SetNickName()
@@ -378,6 +394,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Room", GameStateManager.instance.NickName } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Event", Random.Range(0, Enum.GetValues(typeof(GameEventType)).Length) } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Rank", GetRank(1) } });
 
             GameStateManager.instance.Room = GameStateManager.instance.NickName;
 
@@ -403,6 +420,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Formation", playerDataBase.Formation } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Title", playerDataBase.TitleNumber } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Rank", GetRank(1) } });
 
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
             GameStateManager.instance.Room = ht["Room"].ToString();
@@ -550,12 +568,36 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             otherFormation = int.Parse(ht["Player2_Formation"].ToString());
             otherTitle = int.Parse(ht["Player2_Title"].ToString());
+            playerRank1 = GameStateManager.instance.GameRankType;
+            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), GetRank(0) + int.Parse(ht["Player2_Rank"].ToString()));
         }
         else
         {
             otherFormation = int.Parse(ht["Player1_Formation"].ToString());
             otherTitle = int.Parse(ht["Player1_Title"].ToString());
+            playerRank1 = GameStateManager.instance.GameRankType;
+            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), GetRank(0) + int.Parse(ht["Player1_Rank"].ToString()));
         }
+
+        if ((int)playerRank1 > (int)playerRank2)
+        {
+            GameStateManager.instance.PlayRankType = playerRank2;
+        }
+        else if ((int)playerRank1 < (int)playerRank2)
+        {
+            GameStateManager.instance.PlayRankType = playerRank1;
+        }
+        else
+        {
+            GameStateManager.instance.PlayRankType = GameStateManager.instance.GameRankType;
+        }
+
+
+        rankInformation = rankDataBase.GetRankInformation(GameStateManager.instance.PlayRankType);
+
+        stakes = rankInformation.stakes;
+        GameStateManager.instance.Stakes = stakes;
+
 
         if (!PhotonNetwork.PlayerList[0].NickName.Equals(GameStateManager.instance.NickName))
         {

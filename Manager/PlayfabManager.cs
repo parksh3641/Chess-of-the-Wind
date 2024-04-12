@@ -134,6 +134,43 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
+            //GameStateManager.instance.StoreType = StoreType.None;
+
+#if !UNITY_EDITOR && UNITY_ANDROID
+        AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject currentActivity = up.GetStatic<AndroidJavaObject>("currentActivity");
+        AndroidJavaObject packageManager = currentActivity.Call<AndroidJavaObject>("getPackageManager");
+        string installerPackageName = packageManager.Call<string>("getInstallerPackageName", Application.identifier);
+
+        // 패키지명으로부터 설치된 스토어 확인
+
+        if (installerPackageName.Equals("com.android.vending"))
+        {
+            GameStateManager.instance.StoreType = StoreType.Google;
+
+            Debug.Log("앱은 Google Play 스토어에서 설치되었습니다.");
+        }
+        else if (installerPackageName.Equals("com.amazon.venezia"))
+        {
+            GameStateManager.instance.StoreType = StoreType.Amazon;
+
+            Debug.Log("앱은 Amazon Appstore에서 설치되었습니다.");
+        }
+        else if (installerPackageName.Equals("com.skt.skaf.A000Z00040") || installerPackageName.Equals("com.kt.olleh.storefront")
+            || installerPackageName.Equals("android.lgt.appstore") || installerPackageName.Equals("com.lguplus.appstore"))
+        {
+            GameStateManager.instance.StoreType = StoreType.OneStore;
+
+            Debug.Log("앱은 OneStore에서 설치되었습니다.");
+        }
+        else
+        {
+            GameStateManager.instance.StoreType = StoreType.None;
+
+            Debug.Log("앱은 알 수 없는 소스에서 설치되었습니다.");
+        }
+#endif
+
             if (GameStateManager.instance.AutoLogin)
             {
                 infoText.text = LocalizationManager.instance.GetString("Login") + "...";
@@ -690,6 +727,7 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
+            //버전이 다를 경우 업데이트 실행
             uiManager.OnNeedUpdate();
         }
     }
@@ -1061,6 +1099,9 @@ public class PlayfabManager : MonoBehaviour
                        case "AppReview":
                            playerDataBase.AppReview = statistics.Value;
                            break;
+                       case "ReviewNumber":
+                           playerDataBase.ReviewNumber = statistics.Value;
+                           break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
                            break;
@@ -1328,6 +1369,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "DailyWin":
                            playerDataBase.DailyWin = statistics.Value;
+                           break;
+                       case "DailyStar":
+                           playerDataBase.DailyStar = statistics.Value;
                            break;
                        case "DailyReward":
                            playerDataBase.DailyReward = statistics.Value;

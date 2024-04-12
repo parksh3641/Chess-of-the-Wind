@@ -35,6 +35,7 @@ public class MatchingManager : MonoBehaviour
 
     public Text rankUpWiningTitle;
     public Text rankUpWiningReward;
+    public Text rankUpWiningDaily;
 
     public Text rankUpTitle;
     public Image rankUpIcon;
@@ -241,6 +242,7 @@ public class MatchingManager : MonoBehaviour
 
         rankUpWiningTitle.text = "";
         rankUpWiningReward.text = "";
+        rankUpWiningDaily.text = "";
 
         rankUpText.text = "";
 
@@ -260,6 +262,19 @@ public class MatchingManager : MonoBehaviour
             starSave = playerDataBase.Star;
 
             GameStateManager.instance.WinStreak += 1;
+
+            if(playerDataBase.DailyStar == 0)
+            {
+                playerDataBase.Star += 1;
+
+                rankUpWiningDaily.text = LocalizationManager.instance.GetString("WinningDaily");
+
+                playerDataBase.DailyStar = 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyStar", 1);
+
+                Debug.Log("첫 승리 보상 : 별 1개 추가 획득");
+            }
+
             if (GameStateManager.instance.WinStreak >= 3)
             {
                 playerDataBase.Star += 2;
@@ -366,7 +381,11 @@ public class MatchingManager : MonoBehaviour
                 if (GameStateManager.instance.LoseStreak >= 3)
                 {
                     GameStateManager.instance.LoseStreak = 0;
-                    OpenSupplyPackage();
+
+                    if (GameStateManager.instance.StoreType != StoreType.OneStore)
+                    {
+                        OpenSupplyPackage();
+                    }
                 }
 
                 Debug.Log("브론즈 단계에서는 랭크가 하락하지 않습니다");
@@ -383,7 +402,11 @@ public class MatchingManager : MonoBehaviour
             if(GameStateManager.instance.LoseStreak >= 2)
             {
                 GameStateManager.instance.LoseStreak = 0;
-                OpenSupplyPackage();
+
+                if (GameStateManager.instance.StoreType != StoreType.OneStore)
+                {
+                    OpenSupplyPackage();
+                }
             }
 
             starSave = playerDataBase.Star;
