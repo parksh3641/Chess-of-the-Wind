@@ -69,6 +69,10 @@ public class UIManager : MonoBehaviour
     public Text player2TitleText;
     public FadeInOut vsFadeInOut;
     public FadeInOut mainFadeInOut;
+    public Image player1Rank;
+    public Text player1RankText;
+    public Image player2Rank;
+    public Text player2RankText;
 
     [Space]
     [Title("Roulette")]
@@ -102,7 +106,7 @@ public class UIManager : MonoBehaviour
     public int index = 0;
     Sprite[] characterArray;
 
-    bool first = false;
+    string[] strArray = new string[2];
 
     private List<string> nicknames = new List<string>();
 
@@ -110,6 +114,7 @@ public class UIManager : MonoBehaviour
     [Title("DataBase")]
     PlayerDataBase playerDataBase;
     ImageDataBase imageDataBase;
+    RankDataBase rankDataBase;
 
     private void Awake()
     {
@@ -117,6 +122,7 @@ public class UIManager : MonoBehaviour
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (rankDataBase == null) rankDataBase = Resources.Load("RankDataBase") as RankDataBase;
 
         characterArray = imageDataBase.GetCharacterArray();
 
@@ -307,9 +313,9 @@ public class UIManager : MonoBehaviour
 #endif
     }
 
-    public void OnMatchingSuccess(string player1, string player2, int otherFormation, int otherTitle)
+    public void OnMatchingSuccess(string player1, string player2, GameRankType gameRankType, int otherFormation, int otherTitle)
     {
-        StartCoroutine(MatchingCoroution(player1, player2, otherFormation, otherTitle, false));
+        StartCoroutine(MatchingCoroution(player1, player2, gameRankType, otherFormation, otherTitle, false));
     }
 
     public void OnMatchingAi(int otherFormation)
@@ -318,15 +324,25 @@ public class UIManager : MonoBehaviour
 
         Debug.Log(randomNickname);
 
-        StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, otherFormation, 0, true));
+        StartCoroutine(MatchingCoroution(randomNickname, GameStateManager.instance.NickName, GameStateManager.instance.GameRankType, otherFormation, 0, true));
     }
 
 
-    IEnumerator MatchingCoroution(string player1, string player2, int otherFormation, int otherTitle , bool aiMode)
+    IEnumerator MatchingCoroution(string player1, string player2, GameRankType gameRankType, int otherFormation, int otherTitle , bool aiMode)
     {
         //rankText.text = matchingManager.rankText.text;
 
-        tipText.text = LocalizationManager.instance.GetString("Tip_" + (Random.Range(13,24).ToString()));
+        tipText.text = LocalizationManager.instance.GetString("Tip_" + Random.Range(13,24).ToString());
+
+        strArray = rankDataBase.rankInformationArray[(int)gameRankType].gameRankType.ToString().Split("_");
+
+        player1Rank.sprite = imageDataBase.GetRankIconArray(GameStateManager.instance.GameRankType);
+        player1RankText.text = strArray[1];
+
+        strArray = rankDataBase.rankInformationArray[(int)GameStateManager.instance.GameRankType].gameRankType.ToString().Split("_");
+
+        player2Rank.sprite = imageDataBase.GetRankIconArray(GameStateManager.instance.GameRankType);
+        player2RankText.text = strArray[1];
 
         if (otherFormation == 2)
         {
@@ -561,6 +577,8 @@ public class UIManager : MonoBehaviour
 
             gold += GameStateManager.instance.Stakes;
 
+            Debug.Log("획득한 돈 : " + gold);
+
             SoundManager.instance.PlaySFX(GameSfxType.GameWin);
 
             if (GameStateManager.instance.Win)
@@ -570,9 +588,10 @@ public class UIManager : MonoBehaviour
                     playerDataBase.DailyWin = 1;
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyWin", playerDataBase.DailyWin);
 
-                    dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : +" + MoneyUnitString.ToCurrencyString((int)(gold * 0.5f));
+                    dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : " + MoneyUnitString.ToCurrencyString(gold)
+                        + "  (+" + MoneyUnitString.ToCurrencyString((int)(gold * 0.5f)) + ")";
 
-                    gold = gold + (int)(gold * 0.5f);
+                    gold += (int)(gold * 0.5f);
 
                     Debug.Log("오늘 첫 승 1.5배 보너스");
                 }

@@ -102,39 +102,7 @@ public class PlayfabManager : MonoBehaviour
 
     private void Start()
     {
-        //if(GameStateManager.instance.IsLogin)
-        //{
-        //    StateManager.instance.ServerInitialize();
-
-        //    return;
-        //}
-
-        if(isNone)
-        {
-            isActive = true;
-            isLogin = true;
-            return;
-        }
-
-        infoText.text = "";
-
-        if (GameStateManager.instance.IsLogin)
-        {
-            infoText.text = LocalizationManager.instance.GetString("Login") + "...";
-
-#if UNITY_EDITOR || UNITY_EDITOR_OSX
-        OnClickGuestLogin();
-#elif UNITY_ANDROID
-        GetTitleInternalData("CheckAOSVersion", CheckVersion);
-#else
-        GetTitleInternalData("CheckIOSVersion", CheckVersion);
-#endif
-
-            Debug.Log("튜토리얼에서 복귀");
-        }
-        else
-        {
-            //GameStateManager.instance.StoreType = StoreType.None;
+        GameStateManager.instance.StoreType = StoreType.None;
 
 #if !UNITY_EDITOR && UNITY_ANDROID
         AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -171,6 +139,31 @@ public class PlayfabManager : MonoBehaviour
         }
 #endif
 
+        if (isNone)
+        {
+            isActive = true;
+            isLogin = true;
+            return;
+        }
+
+        infoText.text = "";
+
+        if (GameStateManager.instance.IsLogin)
+        {
+            infoText.text = LocalizationManager.instance.GetString("Login") + "...";
+
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
+        OnClickGuestLogin();
+#elif UNITY_ANDROID
+        GetTitleInternalData("CheckAOSVersion", CheckVersion);
+#else
+        GetTitleInternalData("CheckIOSVersion", CheckVersion);
+#endif
+
+            Debug.Log("튜토리얼에서 복귀");
+        }
+        else
+        {
             if (GameStateManager.instance.AutoLogin)
             {
                 infoText.text = LocalizationManager.instance.GetString("Login") + "...";

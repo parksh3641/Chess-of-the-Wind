@@ -394,7 +394,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Status", "Waiting" } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Room", GameStateManager.instance.NickName } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Event", Random.Range(0, Enum.GetValues(typeof(GameEventType)).Length) } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Rank", GetRank(1) } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player1_Rank", GameStateManager.instance.GameRankType.ToString() } });
 
             GameStateManager.instance.Room = GameStateManager.instance.NickName;
 
@@ -420,7 +420,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Formation", playerDataBase.Formation } });
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Title", playerDataBase.TitleNumber } });
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Rank", GetRank(1) } });
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "Player2_Rank", GameStateManager.instance.GameRankType.ToString() } });
 
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
             GameStateManager.instance.Room = ht["Room"].ToString();
@@ -485,7 +485,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log("방 참가 실패했습니다.");
+            matchingManager.CancelMatching();
+
+            Debug.Log("방 참가에 실패했습니다.");
         }
     }
 
@@ -569,14 +571,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             otherFormation = int.Parse(ht["Player2_Formation"].ToString());
             otherTitle = int.Parse(ht["Player2_Title"].ToString());
             playerRank1 = GameStateManager.instance.GameRankType;
-            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), GetRank(0) + int.Parse(ht["Player2_Rank"].ToString()));
+            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), ht["Player2_Rank"].ToString());
         }
         else
         {
             otherFormation = int.Parse(ht["Player1_Formation"].ToString());
             otherTitle = int.Parse(ht["Player1_Title"].ToString());
             playerRank1 = GameStateManager.instance.GameRankType;
-            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), GetRank(0) + int.Parse(ht["Player1_Rank"].ToString()));
+            playerRank2 = (GameRankType)Enum.Parse(typeof(GameRankType), ht["Player1_Rank"].ToString());
         }
 
         if ((int)playerRank1 > (int)playerRank2)
@@ -608,6 +610,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             nickName = PhotonNetwork.PlayerList[1].NickName;
         }
 
-        matchingManager.PlayerMatching(nickName, GameStateManager.instance.NickName, otherFormation, otherTitle);
+        matchingManager.PlayerMatching(nickName, GameStateManager.instance.NickName, playerRank2, otherFormation, otherTitle);
     }
 }

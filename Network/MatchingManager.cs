@@ -292,7 +292,7 @@ public class MatchingManager : MonoBehaviour
 
             rankUpWiningTitle.text = LocalizationManager.instance.GetString("Winning") + " : " + GameStateManager.instance.WinStreak;
 
-            FirebaseAnalytics.LogEvent("StarUp");
+            FirebaseAnalytics.LogEvent("Win_StarUp");
 
             if (GameStateManager.instance.GameType == GameType.NewBie)
             {
@@ -426,7 +426,7 @@ public class MatchingManager : MonoBehaviour
 
             Debug.Log("패배 : 별 1개 감소");
 
-            FirebaseAnalytics.LogEvent("StarDown");
+            FirebaseAnalytics.LogEvent("Lose_StarDown");
 
             if (playerDataBase.Star <= -1)
             {
@@ -804,7 +804,6 @@ public class MatchingManager : MonoBehaviour
             OpenMacthingView();
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-
             NotionManager.instance.UseNotion(NotionType.LockedMode);
             return;
         }
@@ -817,6 +816,20 @@ public class MatchingManager : MonoBehaviour
         networkManager.JoinRandomRoom_Gosu();
 
         Debug.Log("고수방 매칭중입니다.");
+    }
+
+    public void CancelMatching()
+    {
+        isServer = false;
+
+        StopAllCoroutines();
+
+        networkManager.LeaveRoom();
+
+        matchingView.SetActive(false);
+
+        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+        NotionManager.instance.UseNotion(NotionType.WaitTimeNotion);
     }
 
     public void OpenMacthingView()
@@ -887,7 +900,7 @@ public class MatchingManager : MonoBehaviour
         StartCoroutine(MatchingCoroution());
     }
 
-    public void PlayerMatching(string player1, string player2, int otherFormation, int otherTitle)
+    public void PlayerMatching(string player1, string player2, GameRankType gameRankType, int otherFormation, int otherTitle)
     {
         Debug.Log("플레이어와 매칭되었습니다.");
 
@@ -899,7 +912,7 @@ public class MatchingManager : MonoBehaviour
 
         matchingView.SetActive(false);
 
-        uIManager.OnMatchingSuccess(player1, player2, otherFormation, otherTitle);
+        uIManager.OnMatchingSuccess(player1, player2, gameRankType, otherFormation, otherTitle);
 
         mainFadeInOut.FadeOutToIn();
 

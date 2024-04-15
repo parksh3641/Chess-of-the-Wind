@@ -113,6 +113,9 @@ public class StateManager : MonoBehaviour
             }
         }
 
+        GameStateManager.instance.Win = false;
+        GameStateManager.instance.Lose = false;
+
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("Version", int.Parse(Application.version.Replace(".", "")));
 
         playTime = 0;

@@ -54,7 +54,7 @@ public class PackageManager2 : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         packageView.SetActive(false);
-        alarm.SetActive(false);
+        alarm.SetActive(true);
 
         for(int i = 0; i < grid.Length; i ++)
         {
@@ -117,6 +117,8 @@ public class PackageManager2 : MonoBehaviour
         if (!packageView.activeSelf)
         {
             packageView.SetActive(true);
+
+            alarm.SetActive(false);
 
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
             {

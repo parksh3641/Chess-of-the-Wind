@@ -64,6 +64,11 @@ public class ImageDataBase : ScriptableObject
         return rankIconArray;
     }
 
+    public Sprite GetRankIconArray(GameRankType gameRankType)
+    {
+        return rankIconArray[(int)gameRankType];
+    }
+
     public Sprite[] GetRewardArray()
     {
         return rewardArray;

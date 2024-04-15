@@ -114,9 +114,12 @@ public class ShopManager : MonoBehaviour
         {
             shopView.SetActive(true);
 
-            for(int i = 0; i < oneStore.Length; i ++)
+            if (GameStateManager.instance.StoreType == StoreType.OneStore)
             {
-                oneStore[i].SetActive(false);
+                for (int i = 0; i < oneStore.Length; i++)
+                {
+                    oneStore[i].SetActive(false);
+                }
             }
 
             if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))

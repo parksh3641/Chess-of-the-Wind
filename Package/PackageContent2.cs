@@ -8,6 +8,8 @@ public class PackageContent2 : MonoBehaviour
 {
     public PackageType packageType = PackageType.Default;
 
+    public LocalizationContent titleText;
+
     public CodelessIAPButton iapButton;
     public LocalizationContent iapPriceText;
 
@@ -54,6 +56,9 @@ public class PackageContent2 : MonoBehaviour
         switch (type)
         {
             case PackageType.Daily1:
+                titleText.localizationName = "Daily";
+                titleText.plusText = " 1";
+
                 iapButton.productId = "shop.windchess.packagedaily1";
 
                 if (playerDataBase.Package_Daily1 == 0)
@@ -62,6 +67,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Daily2:
+                titleText.localizationName = "Daily";
+                titleText.plusText = " 2";
+
                 iapButton.productId = "shop.windchess.packagedaily2";
 
                 if (playerDataBase.Package_Daily2 == 0)
@@ -70,6 +78,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Daily3:
+                titleText.localizationName = "Daily";
+                titleText.plusText = " 3";
+
                 iapButton.productId = "shop.windchess.packagedaily3";
 
                 if (playerDataBase.Package_Daily3 == 0)
@@ -78,6 +89,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Daily4:
+                titleText.localizationName = "Daily";
+                titleText.plusText = " 4";
+
                 iapButton.productId = "shop.windchess.packagedaily4";
 
                 if (playerDataBase.Package_Daily4 == 0)
@@ -86,6 +100,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Daily5:
+                titleText.localizationName = "Daily";
+                titleText.plusText = " 5";
+
                 iapButton.productId = "shop.windchess.packagedaily5";
 
                 if (playerDataBase.Package_Daily5 == 0)
@@ -94,6 +111,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Weekly1:
+                titleText.localizationName = "Weekly";
+                titleText.plusText = " 1";
+
                 iapButton.productId = "shop.windchess.packageweekly1";
 
                 if (playerDataBase.Package_Weekly1 == 0)
@@ -102,6 +122,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Weekly2:
+                titleText.localizationName = "Weekly";
+                titleText.plusText = " 2";
+
                 iapButton.productId = "shop.windchess.packageweekly2";
 
                 if (playerDataBase.Package_Weekly2 == 0)
@@ -110,6 +133,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Weekly3:
+                titleText.localizationName = "Weekly";
+                titleText.plusText = " 3";
+
                 iapButton.productId = "shop.windchess.packageweekly3";
 
                 if (playerDataBase.Package_Weekly3 == 0)
@@ -118,6 +144,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Weekly4:
+                titleText.localizationName = "Weekly";
+                titleText.plusText = " 4";
+
                 iapButton.productId = "shop.windchess.packageweekly4";
 
                 if (playerDataBase.Package_Weekly4 == 0)
@@ -126,6 +155,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Weekly5:
+                titleText.localizationName = "Weekly";
+                titleText.plusText = " 5";
+
                 iapButton.productId = "shop.windchess.packageweekly5";
 
                 if (playerDataBase.Package_Weekly5 == 0)
@@ -134,6 +166,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Monthly1:
+                titleText.localizationName = "Monthly";
+                titleText.plusText = " 1";
+
                 iapButton.productId = "shop.windchess.packagemonthly1";
 
                 if (playerDataBase.Package_Monthly1 == 0)
@@ -142,6 +177,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Monthly2:
+                titleText.localizationName = "Monthly";
+                titleText.plusText = " 2";
+
                 iapButton.productId = "shop.windchess.packagemonthly2";
 
                 if (playerDataBase.Package_Monthly2 == 0)
@@ -150,6 +188,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Monthly3:
+                titleText.localizationName = "Monthly";
+                titleText.plusText = " 3";
+
                 iapButton.productId = "shop.windchess.packagemonthly3";
 
                 if (playerDataBase.Package_Monthly3 == 0)
@@ -158,6 +199,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Monthly4:
+                titleText.localizationName = "Monthly";
+                titleText.plusText = " 4";
+
                 iapButton.productId = "shop.windchess.packagemonthly4";
 
                 if (playerDataBase.Package_Monthly4 == 0)
@@ -166,6 +210,9 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
             case PackageType.Monthly5:
+                titleText.localizationName = "Monthly";
+                titleText.plusText = " 5";
+
                 iapButton.productId = "shop.windchess.packagemonthly5";
 
                 if (playerDataBase.Package_Monthly5 == 0)
@@ -174,6 +221,8 @@ public class PackageContent2 : MonoBehaviour
                 }
                 break;
         }
+
+        titleText.ReLoad();
     }
 
     public void BuyPurchase()

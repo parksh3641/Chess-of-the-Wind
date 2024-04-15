@@ -40,6 +40,8 @@ public class MoneyAnimation : MonoBehaviour
     private int Money = 0;
     private int OtherMoney = 0;
 
+    private bool reset = false;
+
     [Space]
     [Title("Prefab")]
     public MoneyContent heartPrefab;
@@ -57,6 +59,7 @@ public class MoneyAnimation : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.15f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.03f);
+    WaitForSeconds waitForSeconds3 = new WaitForSeconds(2);
 
     private void Awake()
     {
@@ -93,6 +96,8 @@ public class MoneyAnimation : MonoBehaviour
         }
 
         if(plusMoneyView != null) plusMoneyView.gameObject.SetActive(false);
+
+        reset = false;
     }
 
     [Button]
@@ -186,7 +191,7 @@ public class MoneyAnimation : MonoBehaviour
             list[i].GoToTarget(otherMoneyStartTransform.localPosition, moneyStartTransform.localPosition);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return waitForSeconds3;
 
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
@@ -195,6 +200,12 @@ public class MoneyAnimation : MonoBehaviour
 
         while (money < max)
         {
+            if (reset)
+            {
+                reset = false;
+                break;
+            }
+
             if (money + 100000000 < max)
             {
                 money += 100000000;
@@ -285,7 +296,7 @@ public class MoneyAnimation : MonoBehaviour
             list[i].GoToTarget(moneyStartTransform.localPosition, otherMoneyStartTransform.localPosition);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return waitForSeconds3;
 
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
@@ -294,6 +305,12 @@ public class MoneyAnimation : MonoBehaviour
 
         while (money > max)
         {
+            if(reset)
+            {
+                reset = false;
+                break;
+            }
+
             if (money - 100000000 > max)
             {
                 money -= 100000000;
@@ -401,13 +418,19 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList[i].GoToTarget(moneyStartTransform.localPosition, moneyMidTransform.localPosition);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return waitForSeconds3;
 
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
         while (money > max)
         {
+            if (reset)
+            {
+                reset = false;
+                break;
+            }
+
             if (money - 100000000 > max)
             {
                 money -= 100000000;
@@ -487,13 +510,19 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList_Enemy[i].GoToTarget(otherMoneyStartTransform.localPosition, otherMoneyMidTransform.localPosition);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return waitForSeconds3;
 
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
 
         while (money > maxOther)
         {
+            if (reset)
+            {
+                reset = false;
+                break;
+            }
+
             if (money - 100000000 > maxOther)
             {
                 money -= 100000000;
@@ -628,32 +657,25 @@ public class MoneyAnimation : MonoBehaviour
                             }
                             else
                             {
-                                if (max + 10000 < target)
+                                if (max + 1000 < target)
                                 {
-                                    max += 10000;
+                                    max += 1000;
                                 }
                                 else
                                 {
-                                    if (max + 1000 < target)
+                                    if (max + 100 < target)
                                     {
-                                        max += 1000;
+                                        max += 100;
                                     }
                                     else
                                     {
-                                        if (max + 100 < target)
+                                        if (max + 10 < target)
                                         {
-                                            max += 100;
+                                            max += 10;
                                         }
                                         else
                                         {
-                                            if (max + 10 < target)
-                                            {
-                                                max += 10;
-                                            }
-                                            else
-                                            {
-                                                max += 1;
-                                            }
+                                            max += 1;
                                         }
                                     }
                                 }
@@ -663,12 +685,12 @@ public class MoneyAnimation : MonoBehaviour
                 }
             }
 
-            txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+            txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(max) + "</color>";
 
             yield return waitForSeconds2;
         }
 
-        txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(Mathf.Abs(max)) + "</color>";
+        txt.text = "<color=#27FFFC>" + LocalizationManager.instance.GetString("AddMoney") + " : " + MoneyUnitString.ToCurrencyString(target) + "</color>";
     }
 
     public void ResultMinusMoney(int target, Text txt)
@@ -745,7 +767,7 @@ public class MoneyAnimation : MonoBehaviour
             yield return waitForSeconds2;
         }
 
-        txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(max) + "</color>";
+        txt.text = "<color=#FF712B>" + LocalizationManager.instance.GetString("MinusMoney") + " : " + MoneyUnitString.ToCurrencyString(target) + "</color>";
 
         uIManager.EndResultGoldAnimation();
     }
@@ -760,7 +782,7 @@ public class MoneyAnimation : MonoBehaviour
     {
         if (plusMoneyView.activeInHierarchy)
         {
-            StopAllCoroutines();
+            reset = true;
         }
 
         plusMoneyView.SetActive(true);
@@ -782,7 +804,7 @@ public class MoneyAnimation : MonoBehaviour
             moneyPrefabList[i].GoToTarget(plusMoneyStartTransform.localPosition, plusMoneyEndTransform.localPosition);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return waitForSeconds3;
 
         isStart = true;
         StartCoroutine(ChangeMoneyCoroution());
@@ -791,6 +813,12 @@ public class MoneyAnimation : MonoBehaviour
 
         while (max < target)
         {
+            if (reset)
+            {
+                reset = false;
+                break;
+            }
+
             if (max + 100000000 < target)
             {
                 max += 100000000;
