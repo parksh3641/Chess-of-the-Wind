@@ -8,6 +8,8 @@ public class ProfileManager : MonoBehaviour
 {
     public GameObject profileView;
 
+    public GameObject mainAlarm; //메인화면 
+
     public Image characterImg;
 
     public Text titleText;
@@ -49,6 +51,8 @@ public class ProfileManager : MonoBehaviour
         rankIconArray = imageDataBase.GetRankIconArray();
 
         profileView.SetActive(false);
+
+        mainAlarm.SetActive(true);
     }
 
     public void OpenProfileView()
@@ -56,6 +60,8 @@ public class ProfileManager : MonoBehaviour
         if (!profileView.activeInHierarchy)
         {
             profileView.SetActive(true);
+
+            mainAlarm.SetActive(false);
 
             Initialize();
 

@@ -11,6 +11,8 @@ public class ShopManager : MonoBehaviour
 {
     public GameObject shopView;
 
+    public GameObject alarm;
+
     public RectTransform shopRectTransform;
 
     public ContentSizeFitter contentSizeFitter;
@@ -101,6 +103,8 @@ public class ShopManager : MonoBehaviour
         //}
 
         //shopRectTransform.sizeDelta = new Vector2(0, -999);
+
+        alarm.SetActive(true);
     }
 
     private void Start()
@@ -113,6 +117,8 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
+
+            alarm.SetActive(false);
 
             if (GameStateManager.instance.StoreType == StoreType.OneStore)
             {

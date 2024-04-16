@@ -7,6 +7,8 @@ public class RankInfoManager : MonoBehaviour
 {
     public GameObject rankInfoView;
 
+    public GameObject alarm;
+
     public RankInfoContent rankInfoContent;
 
     public RectTransform rankInfoContentTransform;
@@ -30,6 +32,8 @@ public class RankInfoManager : MonoBehaviour
         rankIconArray = imageDataBase.GetRankIconArray();
 
         rankInfoView.SetActive(false);
+
+        alarm.SetActive(true);
     }
 
     public void Initialize()
@@ -62,6 +66,8 @@ public class RankInfoManager : MonoBehaviour
         if(!rankInfoView.activeInHierarchy)
         {
             rankInfoView.SetActive(true);
+
+            alarm.SetActive(false);
 
             CheckMy();
 

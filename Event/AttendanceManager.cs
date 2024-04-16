@@ -47,11 +47,6 @@ public class AttendanceManager : MonoBehaviour
         alarm.SetActive(false);
     }
 
-    private void Start()
-    {
-        StartCoroutine(TimerCoroution());
-    }
-
     [Button]
     public void NextDay()
     {
@@ -79,6 +74,9 @@ public class AttendanceManager : MonoBehaviour
             Initialize();
 
             CheckAttendance();
+
+            StopAllCoroutines();
+            StartCoroutine(TimerCoroution());
 
             FirebaseAnalytics.LogEvent("Open_Attendance");
         }
@@ -256,8 +254,8 @@ public class AttendanceManager : MonoBehaviour
 
     IEnumerator TimerCoroution()
     {
-        f = System.DateTime.Now;
-        g = System.DateTime.Today.AddDays(1);
+        f = DateTime.Now;
+        g = DateTime.Today.AddDays(1);
         h = g - f;
 
         timerText.text = localization_NextQuest + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;

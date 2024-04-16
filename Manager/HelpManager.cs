@@ -8,6 +8,7 @@ public class HelpManager : MonoBehaviour
 {
     public GameObject helpView;
 
+    public GameObject alarm;
 
     public GameObject mainView;
 
@@ -44,6 +45,8 @@ public class HelpManager : MonoBehaviour
         newbieTransform.offsetMax = new Vector2(0, -999);
         rankTransform.offsetMax = new Vector2(0, -999);
         tacticsTransform.offsetMax = new Vector2(0, -999);
+
+        alarm.SetActive(true);
     }
 
 
@@ -52,6 +55,8 @@ public class HelpManager : MonoBehaviour
         if (!helpView.activeSelf)
         {
             helpView.SetActive(true);
+
+            alarm.SetActive(false);
 
             index = 0;
 

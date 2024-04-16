@@ -302,7 +302,7 @@ public class EventManager : MonoBehaviour
 
     public void InitializeWelcome()
     {
-        welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 2000);
+        welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 3000);
         welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_R, 3);
         welcomeContentArray[2].receiveContent.Initialize(RewardType.Box, 10);
         welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 15000);
@@ -337,7 +337,7 @@ public class EventManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddGold(2000);
+                PlayfabManager.instance.UpdateAddGold(3000);
                 break;
             case 1:
                 switch (GameStateManager.instance.WindCharacterType)
