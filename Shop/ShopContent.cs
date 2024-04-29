@@ -37,6 +37,8 @@ public class ShopContent : MonoBehaviour
     ImageDataBase imageDataBase;
     RankDataBase rankDataBase;
 
+    private Dictionary<string, string> playerData = new Dictionary<string, string>();
+
     public ShopManager shopManager;
 
     private void Awake()
@@ -72,7 +74,7 @@ public class ShopContent : MonoBehaviour
         switch (type)
         {
             case ShopType.DailyReward:
-                if (playerDataBase.DailyReward == 1)
+                if (playerDataBase.ResetInfo.dailyReward == 1)
                 {
                     lockObj.SetActive(true);
                 }
@@ -95,49 +97,53 @@ public class ShopContent : MonoBehaviour
 
                     if(index == 0)
                     {
-                        if(playerDataBase.DailyBuy1 == 1)
+                        if(playerDataBase.ResetInfo.dailyBuy1 == 1)
                         {
                             lockObj.SetActive(true);
 
-                            number = playerDataBase.DailyBuyCount1;
+                            number = playerDataBase.ResetInfo.dailyBuyCount1;
                         }
                         else
                         {
-                            if(playerDataBase.DailyBuyCount1 == 0)
+                            if(playerDataBase.ResetInfo.dailyBuyCount1 == 0)
                             {
                                 number = Random.Range(1, 10);
 
-                                playerDataBase.DailyBuyCount1 = number;
+                                playerDataBase.ResetInfo.dailyBuyCount1 = number;
 
-                                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount1", playerDataBase.DailyBuyCount1);
+                                playerData.Clear();
+                                playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
+                                PlayfabManager.instance.SetPlayerData(playerData);
                             }
                             else
                             {
-                                number = playerDataBase.DailyBuyCount1;
+                                number = playerDataBase.ResetInfo.dailyBuyCount1;
                             }
                         }
                     }
                     else
                     {
-                        if (playerDataBase.DailyBuy2 == 1)
+                        if (playerDataBase.ResetInfo.dailyBuy2 == 1)
                         {
                             lockObj.SetActive(true);
 
-                            number = playerDataBase.DailyBuyCount2;
+                            number = playerDataBase.ResetInfo.dailyBuyCount2;
                         }
                         else
                         {
-                            if (playerDataBase.DailyBuyCount2 == 0)
+                            if (playerDataBase.ResetInfo.dailyBuyCount2 == 0)
                             {
                                 number = Random.Range(11, 51);
 
-                                playerDataBase.DailyBuyCount2 = number;
+                                playerDataBase.ResetInfo.dailyBuyCount2 = number;
 
-                                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount2", playerDataBase.DailyBuyCount2);
+                                playerData.Clear();
+                                playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
+                                PlayfabManager.instance.SetPlayerData(playerData);
                             }
                             else
                             {
-                                number = playerDataBase.DailyBuyCount2;
+                                number = playerDataBase.ResetInfo.dailyBuyCount2;
                             }
                         }
                     }

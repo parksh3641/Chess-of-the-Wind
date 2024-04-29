@@ -263,14 +263,13 @@ public class MatchingManager : MonoBehaviour
 
             GameStateManager.instance.WinStreak += 1;
 
-            if(playerDataBase.DailyStar == 0)
+            if(playerDataBase.ResetInfo.dailyStar == 0)
             {
                 playerDataBase.Star += 1;
 
                 rankUpWiningDaily.text = LocalizationManager.instance.GetString("WinningDaily");
 
-                playerDataBase.DailyStar = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyStar", 1);
+                ResetManager.instance.SetResetInfo(ResetType.DailyStar);
 
                 Debug.Log("첫 승리 보상 : 별 1개 추가 획득");
             }

@@ -171,7 +171,7 @@ public class BlockUIContent : MonoBehaviour
         levelText.text = "Lv." + (level + 1).ToString();
     }
 
-    public void SetSSRLevel(int number)
+    public void SetPieceLevel(int number)
     {
         rankSSRImg.gameObject.SetActive(true);
         rankSSRText.text = number.ToString();

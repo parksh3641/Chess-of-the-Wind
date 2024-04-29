@@ -61,7 +61,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagedaily1";
 
-                if (playerDataBase.Package_Daily1 == 0)
+                if (playerDataBase.ResetInfo.package_Daily1 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -72,7 +72,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagedaily2";
 
-                if (playerDataBase.Package_Daily2 == 0)
+                if (playerDataBase.ResetInfo.package_Daily2 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -83,7 +83,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagedaily3";
 
-                if (playerDataBase.Package_Daily3 == 0)
+                if (playerDataBase.ResetInfo.package_Daily3 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -94,7 +94,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagedaily4";
 
-                if (playerDataBase.Package_Daily4 == 0)
+                if (playerDataBase.ResetInfo.package_Daily4 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -105,7 +105,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagedaily5";
 
-                if (playerDataBase.Package_Daily5 == 0)
+                if (playerDataBase.ResetInfo.package_Daily5 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -116,7 +116,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packageweekly1";
 
-                if (playerDataBase.Package_Weekly1 == 0)
+                if (playerDataBase.ResetInfo.package_Weekly1 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -127,7 +127,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packageweekly2";
 
-                if (playerDataBase.Package_Weekly2 == 0)
+                if (playerDataBase.ResetInfo.package_Weekly2 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -138,7 +138,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packageweekly3";
 
-                if (playerDataBase.Package_Weekly3 == 0)
+                if (playerDataBase.ResetInfo.package_Weekly3 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -149,7 +149,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packageweekly4";
 
-                if (playerDataBase.Package_Weekly4 == 0)
+                if (playerDataBase.ResetInfo.package_Weekly4 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -160,7 +160,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packageweekly5";
 
-                if (playerDataBase.Package_Weekly5 == 0)
+                if (playerDataBase.ResetInfo.package_Weekly5 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -171,7 +171,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagemonthly1";
 
-                if (playerDataBase.Package_Monthly1 == 0)
+                if (playerDataBase.ResetInfo.package_Monthly1 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -182,7 +182,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagemonthly2";
 
-                if (playerDataBase.Package_Monthly2 == 0)
+                if (playerDataBase.ResetInfo.package_Monthly2 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -193,7 +193,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagemonthly3";
 
-                if (playerDataBase.Package_Monthly3 == 0)
+                if (playerDataBase.ResetInfo.package_Monthly3 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -204,7 +204,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagemonthly4";
 
-                if (playerDataBase.Package_Monthly4 == 0)
+                if (playerDataBase.ResetInfo.package_Monthly4 == 0)
                 {
                     lockedObj.SetActive(false);
                 }
@@ -215,7 +215,7 @@ public class PackageContent2 : MonoBehaviour
 
                 iapButton.productId = "shop.windchess.packagemonthly5";
 
-                if (playerDataBase.Package_Monthly5 == 0)
+                if (playerDataBase.ResetInfo.package_Monthly5 == 0)
                 {
                     lockedObj.SetActive(false);
                 }

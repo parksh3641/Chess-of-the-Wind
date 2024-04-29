@@ -30,7 +30,7 @@ public enum WindCharacterType
 
 public enum BoxType
 {
-    Random,
+    Random, //일반 상자
     N,
     R,
     SR,
@@ -38,7 +38,9 @@ public enum BoxType
     UR,
     NR,
     RSR,
-    SRSSR
+    SRSSR,
+    Epic,
+    Speical
 }
 
 public enum PresentType
@@ -305,7 +307,8 @@ public enum NotionType
     SuccessLink,
     FailLink,
     WaitTimeNotion,
-    ComingSoon
+    ComingSoon,
+    ExchangeNotion
 }
 
 public enum GameRankType
@@ -522,4 +525,41 @@ public enum EmoteType
     Emote4,
     Emote5,
     Emote6,
+}
+
+public enum ResetType
+{
+    DailyWin,
+    DailyStar,
+    DailyReward,
+    DailyBuy1,
+    DailyBuy2,
+    DailyBuyCount1,
+    DailyBuyCount2,
+    DailyNormalBox,
+    DailyEpicBox,
+    DailyNormalBox_1,
+    DailyNormalBox_10,
+    DailyEpicBox_1,
+    DailyEpicBox_10,
+    DailyAdsReward,
+    DailyAdsReward2,
+    DailyAdsReward3,
+    DailyGoldReward,
+    DailyReset,
+    Package_Daily1,
+    Package_Daily2,
+    Package_Daily3,
+    Package_Daily4,
+    Package_Daily5,
+    Package_Weekly1,
+    Package_Weekly2,
+    Package_Weekly3,
+    Package_Weekly4,
+    Package_Weekly5,
+    Package_Monthly1,
+    Package_Monthly2,
+    Package_Monthly3,
+    Package_Monthly4,
+    Package_Monthly5
 }

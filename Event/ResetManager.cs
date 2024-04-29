@@ -8,10 +8,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class ResetInfo
+{
+    public int dailyWin = 0;
+    public int dailyStar = 0;
+    public int dailyReward = 0;
+    public int dailyBuy1 = 0;
+    public int dailyBuy2 = 0;
+    public int dailyBuyCount1 = 0;
+    public int dailyBuyCount2 = 0;
+    public int dailyNormalBox = 0;
+    public int dailyEpicBox = 0;
+    public int dailyNormalBox_1 = 3;
+    public int dailyNormalBox_10 = 1;
+    public int dailyEpicBox_1 = 3;
+    public int dailyEpicBox_10 = 1;
+    public int dailyAdsReward = 0;
+    public int dailyAdsReward2 = 0;
+    public int dailyAdsReward3 = 0;
+    public int dailyGoldReward = 0;
+    public int dailyReset = 0;
+
+    public int package_Daily1 = 0;
+    public int package_Daily2 = 0;
+    public int package_Daily3 = 0;
+    public int package_Daily4 = 0;
+    public int package_Daily5 = 0;
+
+    public int package_Weekly1 = 0;
+    public int package_Weekly2 = 0;
+    public int package_Weekly3 = 0;
+    public int package_Weekly4 = 0;
+    public int package_Weekly5 = 0;
+
+    public int package_Monthly1 = 0;
+    public int package_Monthly2 = 0;
+    public int package_Monthly3 = 0;
+    public int package_Monthly4 = 0;
+    public int package_Monthly5 = 0;
+}
+
 
 public class ResetManager : MonoBehaviour
 {
     public static ResetManager instance;
+
+    private ResetInfo resetInfo = new ResetInfo();
 
     DateTime serverTime;
     DateTime nextMondey;
@@ -26,6 +69,8 @@ public class ResetManager : MonoBehaviour
     public EventManager eventManager;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.6f);
+
+    private Dictionary<string, string> playerData = new Dictionary<string, string>();
 
     PlayerDataBase playerDataBase;
 
@@ -215,7 +260,7 @@ public class ResetManager : MonoBehaviour
 
     void ResetValue()
     {
-        if(!isNextDay && !isNextMonday && !isNextMonth)
+        if (!isNextDay && !isNextMonday && !isNextMonth)
         {
             return;
         }
@@ -265,46 +310,54 @@ public class ResetManager : MonoBehaviour
                 }
             }
 
-            playerDataBase.DailyWin = 0;
-            playerDataBase.DailyStar = 0;
-            playerDataBase.DailyNormalBox_1 = 3;
-            playerDataBase.DailyNormalBox_10 = 1;
-            playerDataBase.DailyEpicBox_1 = 3;
-            playerDataBase.DailyEpicBox_10 = 1;
-            playerDataBase.DailyReward = 0;
-            playerDataBase.DailyBuy1 = 0;
-            playerDataBase.DailyBuy2 = 0;
-            playerDataBase.DailyBuyCount1 = 0;
-            playerDataBase.DailyBuyCount2 = 0;
-            playerDataBase.DailyAdsReward = 0;
-            playerDataBase.DailyAdsReward2 = 0;
-            playerDataBase.DailyAdsReward3 = 0;
-            playerDataBase.DailyGoldReward = 0;
-            playerDataBase.DailyReset = 0;
+            Debug.Log("일일 초기화");
 
-            playerDataBase.Package_Daily1 = 0;
-            playerDataBase.Package_Daily2 = 0;
-            playerDataBase.Package_Daily3 = 0;
-            playerDataBase.Package_Daily4 = 0;
-            playerDataBase.Package_Daily5 = 0;
+            playerDataBase.ResetInfo.dailyWin = 0;
+            playerDataBase.ResetInfo.dailyStar = 0;
+            playerDataBase.ResetInfo.dailyReward = 0;
+            playerDataBase.ResetInfo.dailyBuy1 = 0;
+            playerDataBase.ResetInfo.dailyBuy2 = 0;
+            playerDataBase.ResetInfo.dailyBuyCount1 = 0;
+            playerDataBase.ResetInfo.dailyBuyCount2 = 0;
+            playerDataBase.ResetInfo.dailyNormalBox = 0;
+            playerDataBase.ResetInfo.dailyEpicBox = 0;
+            playerDataBase.ResetInfo.dailyNormalBox_1 = 3;
+            playerDataBase.ResetInfo.dailyNormalBox_10 = 1;
+            playerDataBase.ResetInfo.dailyEpicBox_1 = 3;
+            playerDataBase.ResetInfo.dailyEpicBox_10 = 1;
+            playerDataBase.ResetInfo.dailyAdsReward = 0;
+            playerDataBase.ResetInfo.dailyAdsReward2 = 0;
+            playerDataBase.ResetInfo.dailyAdsReward3 = 0;
+            playerDataBase.ResetInfo.dailyGoldReward = 0;
+            playerDataBase.ResetInfo.dailyReset = 0;
+
+            playerDataBase.ResetInfo.package_Daily1 = 0;
+            playerDataBase.ResetInfo.package_Daily2 = 0;
+            playerDataBase.ResetInfo.package_Daily3 = 0;
+            playerDataBase.ResetInfo.package_Daily4 = 0;
+            playerDataBase.ResetInfo.package_Daily5 = 0;
         }
 
-        if(isNextMonday)
+        if (isNextMonday)
         {
-            playerDataBase.Package_Weekly1 = 0;
-            playerDataBase.Package_Weekly2 = 0;
-            playerDataBase.Package_Weekly3 = 0;
-            playerDataBase.Package_Weekly4 = 0;
-            playerDataBase.Package_Weekly5 = 0;
+            Debug.Log("주간 초기화");
+
+            playerDataBase.ResetInfo.package_Weekly1 = 0;
+            playerDataBase.ResetInfo.package_Weekly2 = 0;
+            playerDataBase.ResetInfo.package_Weekly3 = 0;
+            playerDataBase.ResetInfo.package_Weekly4 = 0;
+            playerDataBase.ResetInfo.package_Weekly5 = 0;
         }
 
-        if(isNextMonth)
+        if (isNextMonth)
         {
-            playerDataBase.Package_Monthly1 = 0;
-            playerDataBase.Package_Monthly2 = 0;
-            playerDataBase.Package_Monthly3 = 0;
-            playerDataBase.Package_Monthly4 = 0;
-            playerDataBase.Package_Monthly5 = 0;
+            Debug.Log("월간 초기화");
+
+            playerDataBase.ResetInfo.package_Monthly1 = 0;
+            playerDataBase.ResetInfo.package_Monthly2 = 0;
+            playerDataBase.ResetInfo.package_Monthly3 = 0;
+            playerDataBase.ResetInfo.package_Monthly4 = 0;
+            playerDataBase.ResetInfo.package_Monthly5 = 0;
         }
 
     }
@@ -315,8 +368,6 @@ public class ResetManager : MonoBehaviour
 
         if (isNextDay)
         {
-            Debug.Log("일일 초기화");
-
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
@@ -326,77 +377,125 @@ public class ResetManager : MonoBehaviour
 
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyWin", playerDataBase.DailyWin);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox_1", playerDataBase.DailyNormalBox_1);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyNormalBox_10", playerDataBase.DailyNormalBox_10);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox_1", playerDataBase.DailyEpicBox_1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyEpicBox_10", playerDataBase.DailyEpicBox_10);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReward", playerDataBase.DailyReward);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy1", playerDataBase.DailyBuy1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuy2", playerDataBase.DailyBuy2);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount1", playerDataBase.DailyBuyCount1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyBuyCount2", playerDataBase.DailyBuyCount2);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward", playerDataBase.DailyAdsReward);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward2", playerDataBase.DailyAdsReward2);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyAdsReward3", playerDataBase.DailyAdsReward3);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyGoldReward", playerDataBase.DailyGoldReward);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyReset", playerDataBase.DailyReset);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily1", playerDataBase.Package_Daily1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily2", playerDataBase.Package_Daily2);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily3", playerDataBase.Package_Daily3);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily4", playerDataBase.Package_Daily4);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily5", playerDataBase.Package_Daily5);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyStar", playerDataBase.DailyStar);
 
         }
 
         yield return waitForSeconds;
 
-        if (isNextMonday)
-        {
-            Debug.Log("주간 초기화");
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly1", playerDataBase.Package_Weekly1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly2", playerDataBase.Package_Weekly2);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly3", playerDataBase.Package_Weekly3);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly4", playerDataBase.Package_Weekly4);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly5", playerDataBase.Package_Weekly5);
-        }
-
-        yield return waitForSeconds;
-
-        if (isNextMonth)
-        {
-            Debug.Log("월간 초기화");
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly1", playerDataBase.Package_Monthly1);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly2", playerDataBase.Package_Monthly2);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly3", playerDataBase.Package_Monthly3);
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly4", playerDataBase.Package_Monthly4);
-
-            yield return waitForSeconds;
-
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly5", playerDataBase.Package_Monthly5);
-        }
+        playerData.Clear();
+        playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
+        PlayfabManager.instance.SetPlayerData(playerData);
 
         Debug.LogError("초기화 작업 완료");
+    }
+
+    public void SetResetInfo(ResetType type)
+    {
+        switch (type)
+        {
+            case ResetType.DailyWin:
+                playerDataBase.ResetInfo.dailyWin = 1;
+                break;
+            case ResetType.DailyStar:
+                playerDataBase.ResetInfo.dailyStar = 1;
+                break;
+            case ResetType.DailyReward:
+                playerDataBase.ResetInfo.dailyReward = 1;
+                break;
+            case ResetType.DailyBuy1:
+                playerDataBase.ResetInfo.dailyBuy1 = 1;
+                break;
+            case ResetType.DailyBuy2:
+                playerDataBase.ResetInfo.dailyBuy2 = 1;
+                break;
+            case ResetType.DailyBuyCount1:
+                playerDataBase.ResetInfo.dailyBuyCount1 = 1;
+                break;
+            case ResetType.DailyBuyCount2:
+                playerDataBase.ResetInfo.dailyBuyCount2 = 1;
+                break;
+            case ResetType.DailyNormalBox:
+                playerDataBase.ResetInfo.dailyNormalBox = 1;
+                break;
+            case ResetType.DailyEpicBox:
+                playerDataBase.ResetInfo.dailyEpicBox = 1;
+                break;
+            case ResetType.DailyNormalBox_1:
+                playerDataBase.ResetInfo.dailyNormalBox_1 -= 1;
+                break;
+            case ResetType.DailyNormalBox_10:
+                playerDataBase.ResetInfo.dailyNormalBox_10 -= 1;
+                break;
+            case ResetType.DailyEpicBox_1:
+                playerDataBase.ResetInfo.dailyEpicBox_1 -= 1;
+                break;
+            case ResetType.DailyEpicBox_10:
+                playerDataBase.ResetInfo.dailyEpicBox_10 -= 1;
+                break;
+            case ResetType.DailyAdsReward:
+                playerDataBase.ResetInfo.dailyAdsReward = 1;
+                break;
+            case ResetType.DailyAdsReward2:
+                playerDataBase.ResetInfo.dailyAdsReward2 = 1;
+                break;
+            case ResetType.DailyAdsReward3:
+                playerDataBase.ResetInfo.dailyAdsReward3 = 1;
+                break;
+            case ResetType.DailyGoldReward:
+                playerDataBase.ResetInfo.dailyGoldReward = 1;
+                break;
+            case ResetType.DailyReset:
+                playerDataBase.ResetInfo.dailyReset = 1;
+                break;
+            case ResetType.Package_Daily1:
+                playerDataBase.ResetInfo.package_Daily1 = 1;
+                break;
+            case ResetType.Package_Daily2:
+                playerDataBase.ResetInfo.package_Daily2 = 1;
+                break;
+            case ResetType.Package_Daily3:
+                playerDataBase.ResetInfo.package_Daily3 = 1;
+                break;
+            case ResetType.Package_Daily4:
+                playerDataBase.ResetInfo.package_Daily4 = 1;
+                break;
+            case ResetType.Package_Daily5:
+                playerDataBase.ResetInfo.package_Daily5 = 1;
+                break;
+            case ResetType.Package_Weekly1:
+                playerDataBase.ResetInfo.package_Weekly1 = 1;
+                break;
+            case ResetType.Package_Weekly2:
+                playerDataBase.ResetInfo.package_Weekly2 = 1;
+                break;
+            case ResetType.Package_Weekly3:
+                playerDataBase.ResetInfo.package_Weekly3 = 1;
+                break;
+            case ResetType.Package_Weekly4:
+                playerDataBase.ResetInfo.package_Weekly4 = 1;
+                break;
+            case ResetType.Package_Weekly5:
+                playerDataBase.ResetInfo.package_Weekly5 = 1;
+                break;
+            case ResetType.Package_Monthly1:
+                playerDataBase.ResetInfo.package_Monthly1 = 1;
+                break;
+            case ResetType.Package_Monthly2:
+                playerDataBase.ResetInfo.package_Monthly2 = 1;
+                break;
+            case ResetType.Package_Monthly3:
+                playerDataBase.ResetInfo.package_Monthly3 = 1;
+                break;
+            case ResetType.Package_Monthly4:
+                playerDataBase.ResetInfo.package_Monthly4 = 1;
+                break;
+            case ResetType.Package_Monthly5:
+                playerDataBase.ResetInfo.package_Monthly5 = 1;
+                break;
+        }
+
+        playerData.Clear();
+        playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
+        PlayfabManager.instance.SetPlayerData(playerData);
     }
 }

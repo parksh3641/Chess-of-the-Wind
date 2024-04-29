@@ -9,6 +9,8 @@ public class CollectionManager : MonoBehaviour
 {
     public GameObject collectionView;
 
+    public GameObject mainAlarm;
+
     public LocalizationContent totalRafText;
     public Image characterImg;
 
@@ -75,6 +77,8 @@ public class CollectionManager : MonoBehaviour
 
             blockUIContentList.Add(content);
         }
+
+        mainAlarm.SetActive(true);
     }
 
     [Button]
@@ -98,7 +102,9 @@ public class CollectionManager : MonoBehaviour
         {
             collectionView.SetActive(true);
 
-            if(playerDataBase.Formation == 2)
+            mainAlarm.SetActive(false);
+
+            if (playerDataBase.Formation == 2)
             {
                 characterImg.sprite = characterArray[1];
             }
@@ -544,7 +550,7 @@ public class CollectionManager : MonoBehaviour
             if (blockList[i].instanceId.Equals(id))
             {
                 blockList[i].ssrLevel = level;
-                blockUIContentList[i].SetSSRLevel(level);
+                blockUIContentList[i].SetPieceLevel(level);
                 break;
             }
         }

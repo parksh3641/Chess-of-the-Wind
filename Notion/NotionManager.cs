@@ -16,6 +16,17 @@ public class NotionManager : MonoBehaviour
 
     public NotionColor[] notionColor;
 
+    private Color whiteColor = new Color(1, 1, 1);
+    private Color redColor = new Color(1, 0, 0);
+    private Color orangeColor = new Color(1, 150f / 255f, 0);
+    private Color yellowColor = new Color(1, 1, 0);
+    private Color greenColor = new Color(0, 1, 0);
+    private Color skyblueColor = new Color(0, 1, 1);
+    private Color blueColor = new Color(1, 150f / 255f, 1);
+    private Color purpleColor = new Color(1, 50f / 255f, 1);
+    private Color pinkColor = new Color(1, 150 / 255f, 1);
+    private Color blackColor = new Color(0, 0, 0);
+
 
     [System.Serializable]
     public class NotionColor
@@ -41,39 +52,39 @@ public class NotionManager : MonoBehaviour
         }
     }
 
-    void SetColor(Text text, ColorType type)
+    void SetColor(Text txt, ColorType type)
     {
         switch (type)
         {
             case ColorType.White:
-                text.color = new Color(1, 1, 1);
+                txt.color = whiteColor;
                 break;
             case ColorType.Red:
-                text.color = new Color(1, 0, 0);
+                txt.color = redColor;
                 break;
             case ColorType.Orange:
-                text.color = new Color(1, 255f / 150f, 0);
+                txt.color = orangeColor;
                 break;
             case ColorType.Yellow:
-                text.color = new Color(1, 1, 0);
+                txt.color = yellowColor;
                 break;
             case ColorType.Green:
-                text.color = new Color(0, 1, 0);
+                txt.color = greenColor;
                 break;
             case ColorType.SkyBlue:
-                text.color = new Color(0, 1, 1);
+                txt.color = skyblueColor;
                 break;
             case ColorType.Blue:
-                text.color = new Color(0, 0, 1);
+                txt.color = blueColor;
                 break;
             case ColorType.Purple:
-                text.color = new Color(255f / 200f, 0, 1);
+                txt.color = purpleColor;
                 break;
             case ColorType.Pink:
-                text.color = new Color(1, 255f / 150f, 1);
+                txt.color = pinkColor;
                 break;
             case ColorType.Black:
-                text.color = new Color(0, 0, 0);
+                txt.color = blackColor;
                 break;
         }
     }

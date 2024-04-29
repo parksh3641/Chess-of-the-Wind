@@ -399,7 +399,7 @@ public class CouponManager : MonoBehaviour
     void NaverCafeCoupon()
     {
         itemList.Clear();
-        itemList.Add("BoxNR_5");
+        itemList.Add("Box_10");
         PlayfabManager.instance.GrantItemsToUser("Coupon", itemList);
 
         SoundManager.instance.PlaySFX(GameSfxType.Success);

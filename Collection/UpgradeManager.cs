@@ -76,7 +76,6 @@ public class UpgradeManager : MonoBehaviour
     public Image pieceImg;
 
     public GameObject tapToContinue;
-    public GameObject ineventoryAlarm;
 
     Sprite[] blockArray;
     Sprite[] rankBackgroundArray;
@@ -89,6 +88,7 @@ public class UpgradeManager : MonoBehaviour
     public SellManager sellManager;
     public EquipManager equipManager;
     public TitleManager titleManager;
+    public InventoryManager inventoryManager;
 
     Color gray = new Color(200 / 255f, 200 / 255f, 200 / 255f);
 
@@ -118,8 +118,6 @@ public class UpgradeManager : MonoBehaviour
         defDestroyObj.SetActive(false);
 
         testMode.SetActive(false);
-
-        ineventoryAlarm.SetActive(false);
     }
 
     public void OpenUpgradeView(string id)
@@ -658,7 +656,7 @@ public class UpgradeManager : MonoBehaviour
                 pieceObj.SetActive(true);
                 pieceImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
 
-                ineventoryAlarm.SetActive(true);
+                inventoryManager.mainAlarm.SetActive(true);
 
                 ItemAnimManager.instance.GetBoxPiece(blockClass.rankType, 1);
 
@@ -746,7 +744,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level) * 10);
+        sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
     }
 
     void CheckDefDestroyTicket()

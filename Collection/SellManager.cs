@@ -49,7 +49,27 @@ public class SellManager : MonoBehaviour
     void Initialize(BlockClass block, int number)
     {
         blockClass = block;
+
         price = number;
+
+        switch (blockClass.rankType)
+        {
+            case RankType.N:
+                price *= 10;
+                break;
+            case RankType.R:
+                price *= 20;
+                break;
+            case RankType.SR:
+                price *= 50;
+                break;
+            case RankType.SSR:
+                price *= 100;
+                break;
+            case RankType.UR:
+                price *= 500;
+                break;
+        }
 
         blockUIContent.Collection_Initialize(blockClass);
         sellPriceText.text = MoneyUnitString.ToCurrencyString(price);

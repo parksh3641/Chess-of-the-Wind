@@ -149,92 +149,77 @@ public class PackageManager2 : MonoBehaviour
         switch (packageType)
         {
             case PackageType.Daily1:
-                playerDataBase.Package_Daily1 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily1", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Daily1);
 
                 dailyPackageContent[0].Locked();
                 break;
             case PackageType.Daily2:
-                playerDataBase.Package_Daily2 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily2", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Daily2);
 
                 dailyPackageContent[1].Locked();
                 break;
             case PackageType.Daily3:
-                playerDataBase.Package_Daily3 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily3", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Daily3);
 
                 dailyPackageContent[2].Locked();
                 break;
             case PackageType.Daily4:
-                playerDataBase.Package_Daily4 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily4", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Daily4);
 
                 dailyPackageContent[3].Locked();
                 break;
             case PackageType.Daily5:
-                playerDataBase.Package_Daily5 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Daily5", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Daily5);
 
                 dailyPackageContent[4].Locked();
                 break;
             case PackageType.Weekly1:
-                playerDataBase.Package_Weekly1 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly1", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Weekly1);
 
                 weeklyPackageContent[0].Locked();
                 break;
             case PackageType.Weekly2:
-                playerDataBase.Package_Weekly2 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly2", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Weekly2);
 
                 weeklyPackageContent[1].Locked();
                 break;
             case PackageType.Weekly3:
-                playerDataBase.Package_Weekly3 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly3", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Weekly3);
 
                 weeklyPackageContent[2].Locked();
                 break;
             case PackageType.Weekly4:
-                playerDataBase.Package_Weekly4 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly4", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Weekly4);
 
                 weeklyPackageContent[3].Locked();
                 break;
             case PackageType.Weekly5:
-                playerDataBase.Package_Weekly5 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Weekly5", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Weekly5);
 
                 weeklyPackageContent[4].Locked();
                 break;
             case PackageType.Monthly1:
-                playerDataBase.Package_Monthly1 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly1", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Monthly1);
 
                 monthlyPackageContent[0].Locked();
                 break;
             case PackageType.Monthly2:
-                playerDataBase.Package_Monthly2 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly2", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Monthly2);
 
                 monthlyPackageContent[1].Locked();
                 break;
             case PackageType.Monthly3:
-                playerDataBase.Package_Monthly3 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly3", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Monthly3);
 
                 monthlyPackageContent[2].Locked();
                 break;
             case PackageType.Monthly4:
-                playerDataBase.Package_Monthly4 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly4", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Monthly4);
 
                 monthlyPackageContent[3].Locked();
                 break;
             case PackageType.Monthly5:
-                playerDataBase.Package_Monthly5 = 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("Package_Monthly5", 1);
+                ResetManager.instance.SetResetInfo(ResetType.Package_Monthly5);
 
                 monthlyPackageContent[4].Locked();
                 break;

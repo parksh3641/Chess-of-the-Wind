@@ -620,10 +620,9 @@ public class UIManager : MonoBehaviour
 
             if (GameStateManager.instance.Win)
             {
-                if (playerDataBase.DailyWin == 0)
+                if (playerDataBase.ResetInfo.dailyWin == 0)
                 {
-                    playerDataBase.DailyWin = 1;
-                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyWin", playerDataBase.DailyWin);
+                    ResetManager.instance.SetResetInfo(ResetType.DailyWin);
 
                     dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : " + MoneyUnitString.ToCurrencyString(gold)
                         + "  (+" + MoneyUnitString.ToCurrencyString((int)(gold * 0.5f)) + ")";

@@ -110,82 +110,13 @@ public class PlayerDataBase : ScriptableObject
     private int reviewNumber = 0;
 
     [Space]
+    [SerializeField]
+    private PieceInfo pieceInfo;
+
+    [Space]
     [Title("Daily")]
     [SerializeField]
-    private int dailyWin = 0;
-    [SerializeField]
-    private int dailyStar = 0;
-    [SerializeField]
-    private int dailyReward = 0;
-    [SerializeField]
-    private int dailyBuy1 = 0;
-    [SerializeField]
-    private int dailyBuy2 = 0;
-    [SerializeField]
-    private int dailyBuyCount1 = 0;
-    [SerializeField]
-    private int dailyBuyCount2 = 0;
-    [SerializeField]
-    private int dailyNormalBox = 0;
-    [SerializeField]
-    private int dailyEpicBox = 0;
-    [SerializeField]
-    private int dailyNormalBox_1 = 0;
-    [SerializeField]
-    private int dailyNormalBox_10 = 0;
-    [SerializeField]
-    private int dailyEpicBox_1 = 0;
-    [SerializeField]
-    private int dailyEpicBox_10 = 0;
-    [SerializeField]
-    private int dailyAdsReward = 0;
-    [SerializeField]
-    private int dailyAdsReward2 = 0;
-    [SerializeField]
-    private int dailyAdsReward3 = 0;
-    [SerializeField]
-    private int dailyGoldReward = 0;
-    [SerializeField]
-    private int dailyReset = 0;
-
-    [Space]
-    [Title("Package_Daily")]
-    [SerializeField]
-    private int package_Daily1 = 0;
-    [SerializeField]
-    private int package_Daily2 = 0;
-    [SerializeField]
-    private int package_Daily3 = 0;
-    [SerializeField]
-    private int package_Daily4 = 0;
-    [SerializeField]
-    private int package_Daily5 = 0;
-
-    [Space]
-    [Title("Package_Weekly")]
-    [SerializeField]
-    private int package_Weekly1 = 0;
-    [SerializeField]
-    private int package_Weekly2 = 0;
-    [SerializeField]
-    private int package_Weekly3 = 0;
-    [SerializeField]
-    private int package_Weekly4 = 0;
-    [SerializeField]
-    private int package_Weekly5 = 0;
-
-    [Space]
-    [Title("Package_Monthly")]
-    [SerializeField]
-    private int package_Monthly1 = 0;
-    [SerializeField]
-    private int package_Monthly2 = 0;
-    [SerializeField]
-    private int package_Monthly3 = 0;
-    [SerializeField]
-    private int package_Monthly4 = 0;
-    [SerializeField]
-    private int package_Monthly5 = 0;
+    private ResetInfo resetInfo;
 
     [Space]
     [Title("Achievement")]
@@ -696,306 +627,29 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int DailyWin
+    public PieceInfo PieceInfo
     {
         get
         {
-            return dailyWin;
+            return pieceInfo;
         }
         set
         {
-            dailyWin = value;
+            pieceInfo = value;
         }
     }
 
-    public int DailyStar
+    public ResetInfo ResetInfo
     {
         get
         {
-            return dailyStar;
+            return resetInfo;
         }
         set
         {
-            dailyStar = value;
+            resetInfo = value;
         }
     }
-
-    public int DailyReward
-    {
-        get
-        {
-            return dailyReward;
-        }
-        set
-        {
-            dailyReward = value;
-        }
-    }
-
-    public int DailyBuy1
-    {
-        get
-        {
-            return dailyBuy1;
-        }
-        set
-        {
-            dailyBuy1 = value;
-        }
-    }
-
-    public int DailyBuy2
-    {
-        get
-        {
-            return dailyBuy2;
-        }
-        set
-        {
-            dailyBuy2 = value;
-        }
-    }
-
-    public int DailyBuyCount1
-    {
-        get
-        {
-            return dailyBuyCount1;
-        }
-        set
-        {
-            dailyBuyCount1 = value;
-        }
-    }
-
-    public int DailyBuyCount2
-    {
-        get
-        {
-            return dailyBuyCount2;
-        }
-        set
-        {
-            dailyBuyCount2 = value;
-        }
-    }
-
-    public int DailyNormalBox
-    {
-        get
-        {
-            return dailyNormalBox;
-        }
-        set
-        {
-            dailyNormalBox = value;
-        }
-    }
-
-    public int DailyEpicBox
-    {
-        get
-        {
-            return dailyEpicBox;
-        }
-        set
-        {
-            dailyEpicBox = value;
-        }
-    }
-
-    public int DailyNormalBox_1
-    {
-        get
-        {
-            return dailyNormalBox_1;
-        }
-        set
-        {
-            dailyNormalBox_1 = value;
-        }
-    }
-
-    public int DailyNormalBox_10
-    {
-        get
-        {
-            return dailyNormalBox_10;
-        }
-        set
-        {
-            dailyNormalBox_10 = value;
-        }
-    }
-
-    public int DailyEpicBox_1
-    {
-        get
-        {
-            return dailyEpicBox_1;
-        }
-        set
-        {
-            dailyEpicBox_1 = value;
-        }
-    }
-
-    public int DailyEpicBox_10
-    {
-        get
-        {
-            return dailyEpicBox_10;
-        }
-        set
-        {
-            dailyEpicBox_10 = value;
-        }
-    }
-
-    public int DailyAdsReward
-    {
-        get
-        {
-            return dailyAdsReward;
-        }
-        set
-        {
-            dailyAdsReward = value;
-        }
-    }
-
-    public int DailyAdsReward2
-    {
-        get
-        {
-            return dailyAdsReward2;
-        }
-        set
-        {
-            dailyAdsReward2 = value;
-        }
-    }
-
-    public int DailyAdsReward3
-    {
-        get
-        {
-            return dailyAdsReward3;
-        }
-        set
-        {
-            dailyAdsReward3 = value;
-        }
-    }
-
-    public int DailyGoldReward
-    {
-        get
-        {
-            return dailyGoldReward;
-        }
-        set
-        {
-            dailyGoldReward = value;
-        }
-    }
-
-    public int DailyReset
-    {
-        get { return dailyReset ; } 
-        set { dailyReset = value; }
-    }
-
-    public int Package_Daily1
-    {
-        get { return package_Daily1; }
-        set { package_Daily1 = value; }
-    }
-
-    public int Package_Daily2
-    {
-        get { return package_Daily2; }
-        set { package_Daily2 = value; }
-    }
-
-    public int Package_Daily3
-    {
-        get { return package_Daily3; }
-        set { package_Daily3 = value; }
-    }
-
-    public int Package_Daily4
-    {
-        get { return package_Daily4; }
-        set { package_Daily4 = value; }
-    }
-
-    public int Package_Daily5
-    {
-        get { return package_Daily5; }
-        set { package_Daily5 = value; }
-    }
-
-    public int Package_Weekly1
-    {
-        get { return package_Weekly1; }
-        set { package_Weekly1 = value; }
-    }
-
-    public int Package_Weekly2
-    {
-        get { return package_Weekly2; }
-        set { package_Weekly2 = value; }
-    }
-
-    public int Package_Weekly3
-    {
-        get { return package_Weekly3; }
-        set { package_Weekly3 = value; }
-    }
-
-    public int Package_Weekly4
-    {
-        get { return package_Weekly4; }
-        set { package_Weekly4 = value; }
-    }
-
-    public int Package_Weekly5
-    {
-        get { return package_Weekly5; }
-        set { package_Weekly5 = value; }
-    }
-
-    public int Package_Monthly1
-    {
-        get { return package_Monthly1; }
-        set { package_Monthly1 = value; }
-    }
-
-    public int Package_Monthly2
-    {
-        get { return package_Monthly2; }
-        set { package_Monthly2 = value; }
-    }
-
-    public int Package_Monthly3
-    {
-        get { return package_Monthly3; }
-        set { package_Monthly3 = value; }
-    }
-
-    public int Package_Monthly4
-    {
-        get { return package_Monthly4; }
-        set { package_Monthly4 = value; }
-    }
-
-    public int Package_Monthly5
-    {
-        get { return package_Monthly5; }
-        set { package_Monthly5 = value; }
-    }
-
 
     public int ConsumeGold
     {
@@ -2205,6 +1859,11 @@ public class PlayerDataBase : ScriptableObject
 
     public void Initialize()
     {
+        pieceInfo = new PieceInfo();
+        pieceInfo.Initialize();
+
+        resetInfo = new ResetInfo();
+
         coin = 0;
         coinA = 0;
         coinB = 0;
@@ -2241,44 +1900,6 @@ public class PlayerDataBase : ScriptableObject
         useUpgradeTicket = 0;
         repairBlockCount = 0;
         consumeGold = 0;
-
-        dailyWin = 0;
-        dailyStar = 0;
-        dailyReward = 0;
-        dailyBuy1 = 0;
-        dailyBuy2 = 0;
-        dailyBuyCount1 = 0;
-        dailyBuyCount2 = 0;
-        dailyNormalBox = 0;
-        dailyEpicBox = 0;
-        dailyNormalBox_1 = 0;
-        dailyNormalBox_10 = 0;
-        dailyEpicBox_1 = 0;
-        dailyEpicBox_10 = 0;
-        dailyAdsReward = 0;
-        dailyAdsReward2 = 0;
-        dailyAdsReward3 = 0;
-        dailyGoldReward = 0;
-        dailyReset = 0;
-
-        package_Daily1 = 0;
-        package_Daily2 = 0;
-        package_Daily3 = 0;
-        package_Daily4 = 0;
-        package_Daily5 = 0;
-
-        package_Weekly1 = 0;
-        package_Weekly2 = 0;
-        package_Weekly3 = 0;
-        package_Weekly4 = 0;
-        package_Weekly5 = 0;
-
-        package_Monthly1 = 0;
-        package_Monthly2 = 0;
-        package_Monthly3 = 0;
-        package_Monthly4 = 0;
-        package_Monthly5 = 0;
-
 
         titleNumber = 0;
 
@@ -2459,14 +2080,6 @@ public class PlayerDataBase : ScriptableObject
             }
         }
 
-        //for(int i = 0; i < sellBlockList.Count; i ++)
-        //{
-        //    if(item.ItemInstanceId.Equals(sellBlockList[i]))
-        //    {
-        //        return;
-        //    }
-        //}
-
         BlockClass blockClass = new BlockClass();
         blockClass.blockType = (BlockType)Enum.Parse(typeof(BlockType), item.DisplayName.ToString());
 
@@ -2501,53 +2114,54 @@ public class PlayerDataBase : ScriptableObject
 
             if(item.CustomData.ContainsKey("SSRLevel"))
             {
-                blockClass.ssrLevel = int.Parse(item.CustomData["SSRLevel"]);
+                //blockClass.ssrLevel = int.Parse(item.CustomData["SSRLevel"]);
+                blockClass.ssrLevel = 0;
             }
         }
 
-        for (int i = 0; i < successionLevel.Count; i++) //레벨 계승
-        {
-            if(blockClass.level == 0 && 
-                blockClass.blockType.Equals(successionLevel[i].blockType) && 
-                blockClass.rankType.Equals(successionLevel[i].rankType))
-            {
-                levelCustomData.Clear();
-                levelCustomData.Add("Level", successionLevel[i].level.ToString());
-                levelCustomData.Add("SSRLevel", "0");
+        //for (int i = 0; i < successionLevel.Count; i++) //레벨 계승
+        //{
+        //    if(blockClass.level == 0 && 
+        //        blockClass.blockType.Equals(successionLevel[i].blockType) && 
+        //        blockClass.rankType.Equals(successionLevel[i].rankType))
+        //    {
+        //        levelCustomData.Clear();
+        //        levelCustomData.Add("Level", successionLevel[i].level.ToString());
+        //        levelCustomData.Add("SSRLevel", "0");
 
-                PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
-                blockClass.level = successionLevel[i].level;
+        //        PlayfabManager.instance.SetInventoryCustomData(blockClass.instanceId, levelCustomData);
+        //        blockClass.level = successionLevel[i].level;
 
-                if (successionLevel[i].equipInfo == 1)
-                {
-                    armor = blockClass.instanceId;
+        //        if (successionLevel[i].equipInfo == 1)
+        //        {
+        //            armor = blockClass.instanceId;
 
-                    Debug.Log("아머로 장비가 계승되었습니다");
-                }
-                else if (successionLevel[i].equipInfo == 2)
-                {
-                    weapon = blockClass.instanceId;
+        //            Debug.Log("아머로 장비가 계승되었습니다");
+        //        }
+        //        else if (successionLevel[i].equipInfo == 2)
+        //        {
+        //            weapon = blockClass.instanceId;
 
-                    Debug.Log("검으로 장비가 계승되었습니다");
-                }
-                else if (successionLevel[i].equipInfo == 3)
-                {
-                    shield = blockClass.instanceId;
+        //            Debug.Log("검으로 장비가 계승되었습니다");
+        //        }
+        //        else if (successionLevel[i].equipInfo == 3)
+        //        {
+        //            shield = blockClass.instanceId;
 
-                    Debug.Log("쉴드로 장비가 계승되었습니다");
-                }
-                else if (successionLevel[i].equipInfo == 4)
-                {
-                    newbie = blockClass.instanceId;
+        //            Debug.Log("쉴드로 장비가 계승되었습니다");
+        //        }
+        //        else if (successionLevel[i].equipInfo == 4)
+        //        {
+        //            newbie = blockClass.instanceId;
 
-                    Debug.Log("뉴비로 장비가 계승되었습니다");
-                }
+        //            Debug.Log("뉴비로 장비가 계승되었습니다");
+        //        }
 
-                Debug.LogError(blockClass.blockType + "_" + blockClass.rankType + " 가 " + (successionLevel[i].level + 1) + " 레벨로 계승되었습니다");
+        //        Debug.LogError(blockClass.blockType + "_" + blockClass.rankType + " 가 " + (successionLevel[i].level + 1) + " 레벨로 계승되었습니다");
 
-                successionLevel.RemoveAt(i);
-            }
-        }
+        //        successionLevel.RemoveAt(i);
+        //    }
+        //}
 
         //Debug.Log(blockClass.blockType + "_" + blockClass.rankType + " 블럭이 추가되었습니다");
 

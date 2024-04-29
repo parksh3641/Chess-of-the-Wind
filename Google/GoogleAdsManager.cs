@@ -32,37 +32,37 @@ public class GoogleAdsManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                if (playerDataBase.DailyNormalBox == 1) return;
+                if (playerDataBase.ResetInfo.dailyNormalBox == 1) return;
 
                 boxNR.ShowAd(number);
                 break;
             case 1:
-                if (playerDataBase.DailyEpicBox == 1) return;
+                if (playerDataBase.ResetInfo.dailyEpicBox == 1) return;
 
                 boxRSR.ShowAd(number);
                 break;
             case 2:
-                if (playerDataBase.DailyAdsReward == 1) return;
+                if (playerDataBase.ResetInfo.dailyAdsReward == 1) return;
 
                 adShop1.ShowAd(number);
                 break;
             case 3:
-                if (playerDataBase.DailyAdsReward2 == 1) return;
+                if (playerDataBase.ResetInfo.dailyAdsReward2 == 1) return;
 
                 adShop2.ShowAd(number);
                 break;
             case 4:
-                if (playerDataBase.DailyAdsReward3 == 1) return;
+                if (playerDataBase.ResetInfo.dailyAdsReward3 == 1) return;
 
                 adShop3.ShowAd(number);
                 break;
             case 5:
-                if (playerDataBase.DailyGoldReward == 1) return;
+                if (playerDataBase.ResetInfo.dailyGoldReward == 1) return;
 
                 goldShop.ShowAd(number);
                 break;
             case 6:
-                if (playerDataBase.DailyReset == 1) return;
+                if (playerDataBase.ResetInfo.dailyReset == 1) return;
 
                 all.ShowAd(number);
                 break;

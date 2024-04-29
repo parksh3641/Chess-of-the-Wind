@@ -409,7 +409,7 @@ public class SynthesisManager : MonoBehaviour
                 }
                 else
                 {
-                    nextBlockUIContent.SetSSRLevel(blockClass.ssrLevel + 1);
+                    nextBlockUIContent.SetPieceLevel(blockClass.ssrLevel + 1);
 
                     upgradeLevelText.localizationName = "BlockAbility1";
                     upgradeLevelText.plusText = " : +" + (blockClass.ssrLevel + 1) + "% ▶ <color=#FF6123>+" + (blockClass.ssrLevel + 2) + "%</color>";

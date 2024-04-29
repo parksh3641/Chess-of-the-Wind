@@ -1329,105 +1329,6 @@ public class PlayfabManager : MonoBehaviour
                        case "ConsumeGold":
                            playerDataBase.ConsumeGold = statistics.Value;
                            break;
-                       case "DailyWin":
-                           playerDataBase.DailyWin = statistics.Value;
-                           break;
-                       case "DailyStar":
-                           playerDataBase.DailyStar = statistics.Value;
-                           break;
-                       case "DailyReward":
-                           playerDataBase.DailyReward = statistics.Value;
-                           break;
-                       case "DailyBuy1":
-                           playerDataBase.DailyBuy1 = statistics.Value;
-                           break;
-                       case "DailyBuy2":
-                           playerDataBase.DailyBuy2 = statistics.Value;
-                           break;
-                       case "DailyBuyCount1":
-                           playerDataBase.DailyBuyCount1 = statistics.Value;
-                           break;
-                       case "DailyBuyCount2":
-                           playerDataBase.DailyBuyCount2 = statistics.Value;
-                           break;
-                       case "DailyNormalBox":
-                           playerDataBase.DailyNormalBox = statistics.Value;
-                           break;
-                       case "DailyEpicBox":
-                           playerDataBase.DailyEpicBox = statistics.Value;
-                           break;
-                       case "DailyNormalBox_1":
-                           playerDataBase.DailyNormalBox_1 = statistics.Value;
-                           break;
-                       case "DailyNormalBox_10":
-                           playerDataBase.DailyNormalBox_10 = statistics.Value;
-                           break;
-                       case "DailyEpicBox_1":
-                           playerDataBase.DailyEpicBox_1 = statistics.Value;
-                           break;
-                       case "DailyEpicBox_10":
-                           playerDataBase.DailyEpicBox_10 = statistics.Value;
-                           break;
-                       case "DailyAdsReward":
-                           playerDataBase.DailyAdsReward = statistics.Value;
-                           break;
-                       case "DailyAdsReward2":
-                           playerDataBase.DailyAdsReward2 = statistics.Value;
-                           break;
-                       case "DailyAdsReward3":
-                           playerDataBase.DailyAdsReward3 = statistics.Value;
-                           break;
-                       case "DailyGoldReward":
-                           playerDataBase.DailyGoldReward = statistics.Value;
-                           break;
-                       case "DailyReset":
-                           playerDataBase.DailyReset = statistics.Value;
-                           break;
-                       case "Package_Daily1":
-                           playerDataBase.Package_Daily1 = statistics.Value;
-                           break;
-                       case "Package_Daily2":
-                           playerDataBase.Package_Daily2 = statistics.Value;
-                           break;
-                       case "Package_Daily3":
-                           playerDataBase.Package_Daily3 = statistics.Value;
-                           break;
-                       case "Package_Daily4":
-                           playerDataBase.Package_Daily4 = statistics.Value;
-                           break;
-                       case "Package_Daily5":
-                           playerDataBase.Package_Daily5 = statistics.Value;
-                           break;
-                       case "Package_Weekly1":
-                           playerDataBase.Package_Weekly1 = statistics.Value;
-                           break;
-                       case "Package_Weekly2":
-                           playerDataBase.Package_Weekly2 = statistics.Value;
-                           break;
-                       case "Package_Weekly3":
-                           playerDataBase.Package_Weekly3 = statistics.Value;
-                           break;
-                       case "Package_Weekly4":
-                           playerDataBase.Package_Weekly4 = statistics.Value;
-                           break;
-                       case "Package_Weekly5":
-                           playerDataBase.Package_Weekly5 = statistics.Value;
-                           break;
-                       case "Package_Monthly1":
-                           playerDataBase.Package_Monthly1 = statistics.Value;
-                           break;
-                       case "Package_Monthly2":
-                           playerDataBase.Package_Monthly2 = statistics.Value;
-                           break;
-                       case "Package_Monthly3":
-                           playerDataBase.Package_Monthly3 = statistics.Value;
-                           break;
-                       case "Package_Monthly4":
-                           playerDataBase.Package_Monthly4 = statistics.Value;
-                           break;
-                       case "Package_Monthly5":
-                           playerDataBase.Package_Monthly5 = statistics.Value;
-                           break;
                        case "TitleNumber":
                            playerDataBase.TitleNumber = statistics.Value;
                            break;
@@ -1535,9 +1436,24 @@ public class PlayfabManager : MonoBehaviour
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
-            foreach(var eachData in result.Data)
+            PieceInfo pieceInfo = new PieceInfo();
+            ResetInfo resetInfo = new ResetInfo();
+
+            foreach (var eachData in result.Data)
             {
                 string key = eachData.Key;
+
+                if (key.Contains("PieceInfo"))
+                {
+                    pieceInfo = JsonUtility.FromJson<PieceInfo>(eachData.Value.Value);
+                    playerDataBase.PieceInfo = pieceInfo;
+                }
+
+                if (key.Contains("ResetInfo"))
+                {
+                    resetInfo = JsonUtility.FromJson<ResetInfo>(eachData.Value.Value);
+                    playerDataBase.ResetInfo = resetInfo;
+                }
 
                 if (key.Contains("Armor"))
                 {

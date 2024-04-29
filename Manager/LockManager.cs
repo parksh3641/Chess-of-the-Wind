@@ -79,7 +79,7 @@ public class LockManager : MonoBehaviour
         if (playerDataBase.ChallengeCount >= 6) //튜토리얼 끝났을 때
         {
             sellObj.SetActive(true);
-            synthesisObj.SetActive(true);
+            synthesisObj.SetActive(false);
             inventoryObj.SetActive(true);
             attendanceObj.SetActive(true);
             eventObj.SetActive(true);

@@ -102,14 +102,14 @@ public class AttendanceManager : MonoBehaviour
         price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
 
         attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_N, 1);
+        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box, 1);
         attendanceContentArray[2].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_N, 1);
+        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box, 1);
         attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_N, 1);
+        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box, 1);
 
         receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
-        receiveContentArray[1].Initialize(RewardType.Box_RSR, 3);
+        receiveContentArray[1].Initialize(RewardType.Box, 3);
         receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 1);
     }
 
@@ -171,12 +171,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_N = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", 1);
+                        playerDataBase.SnowBox = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_N = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", 1);
+                        playerDataBase.UnderworldBox = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
                 break;
@@ -187,12 +187,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_N = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", 1);
+                        playerDataBase.SnowBox = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_N = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", 1);
+                        playerDataBase.UnderworldBox = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
                 break;
@@ -203,26 +203,27 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_N = 1;
+                        playerDataBase.SnowBox = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_N = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", 1);
+                        playerDataBase.UnderworldBox = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
                 break;
             case 6:
                 PlayfabManager.instance.UpdateAddGold(price * 2);
+
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_RSR = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", 3);
+                        playerDataBase.SnowBox = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_RSR = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", 3);
+                        playerDataBase.UnderworldBox = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 3);
                         break;
                 }
 

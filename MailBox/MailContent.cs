@@ -128,7 +128,7 @@ public class MailContent : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
                 break;
             case "AppReview":
-                rewardType = RewardType.Box_RSR;
+                rewardType = RewardType.Box_R;
 
                 titleText.localizationName = "AppReviewTitle";
 
