@@ -1139,8 +1139,14 @@ public class PlayfabManager : MonoBehaviour
                        case "Emote5":
                            playerDataBase.Emote5 = statistics.Value;
                            break;
-                       case "SnowBox":
-                           playerDataBase.SnowBox = statistics.Value;
+                       case "SnowBox_Normal":
+                           playerDataBase.SnowBox_Normal = statistics.Value;
+                           break;
+                       case "SnowBox_Epic":
+                           playerDataBase.SnowBox_Epic = statistics.Value;
+                           break;
+                       case "SnowBox_Speical":
+                           playerDataBase.SnowBox_Speical = statistics.Value;
                            break;
                        case "SnowBox_N":
                            playerDataBase.SnowBox_N = statistics.Value;
@@ -1166,8 +1172,14 @@ public class PlayfabManager : MonoBehaviour
                        case "SnowBox_SRSSR":
                            playerDataBase.SnowBox_SRSSR = statistics.Value;
                            break;
-                       case "UnderworldBox":
-                           playerDataBase.UnderworldBox = statistics.Value;
+                       case "UnderworldBox_Normal":
+                           playerDataBase.UnderworldBox_Normal = statistics.Value;
+                           break;
+                       case "UnderworldBox_Epic":
+                           playerDataBase.UnderworldBox_Epic = statistics.Value;
+                           break;
+                       case "UnderworldBox_Speical":
+                           playerDataBase.UnderworldBox_Speical = statistics.Value;
                            break;
                        case "UnderworldBox_N":
                            playerDataBase.UnderworldBox_N = statistics.Value;

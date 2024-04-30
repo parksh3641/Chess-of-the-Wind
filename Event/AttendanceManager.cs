@@ -171,11 +171,11 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 1;
+                        playerDataBase.SnowBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 1;
+                        playerDataBase.UnderworldBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
@@ -187,11 +187,11 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 1;
+                        playerDataBase.SnowBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 1;
+                        playerDataBase.UnderworldBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
@@ -203,11 +203,11 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 1;
+                        playerDataBase.SnowBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 1;
+                        playerDataBase.UnderworldBox_Normal = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 1);
                         break;
                 }
@@ -218,11 +218,11 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 3;
+                        playerDataBase.SnowBox_Normal = 3;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 3;
+                        playerDataBase.UnderworldBox_Normal = 3;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 3);
                         break;
                 }

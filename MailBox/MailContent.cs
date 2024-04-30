@@ -156,11 +156,11 @@ public class MailContent : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = count;
+                        playerDataBase.SnowBox_Normal = count;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", count);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = count;
+                        playerDataBase.UnderworldBox_Normal = count;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", count);
                         break;
                 }

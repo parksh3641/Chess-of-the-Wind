@@ -30,7 +30,7 @@ public enum WindCharacterType
 
 public enum BoxType
 {
-    Random, //일반 상자
+    Normal, //일반 상자
     N,
     R,
     SR,
@@ -102,24 +102,95 @@ public enum BlockType
     RightDownNight,
     LeftDownNight,
     Rook_V2,
-    Rook_V2H2,
     Pawn_Under,
     Pawn_Snow,
-    Spider,
     Rook_V4,
-    Tetris_I_Hor,
-    Tetris_T,
-    Tetris_L,
-    Tetris_J,
-    Tetris_S,
-    Tetris_Z,
-    Tetris_Speical,
     RightNight_Mirror,
     LeftNight_Mirror,
     Rook_V4_2,
     Rook_V2_2,
     Pawn_Under_2,
     Pawn_Snow_2,
+}
+
+public enum BoxInfoType
+{
+    RightQueen_2_N,
+    RightQueen_3_N,
+    RightNight_N,
+    RightNight_Mirror_N,
+    Rook_V2_N,
+    Rook_V2_2_N,
+    Pawn_Under_N,
+    Pawn_Under_2_N,
+
+    RightQueen_2_R,
+    RightQueen_3_R,
+    RightNight_R,
+    RightNight_Mirror_R,
+    Rook_V2_R,
+    Rook_V2_2_R,
+    Pawn_Under_R,
+    Pawn_Under_2_R,
+
+    RightQueen_2_SR,
+    RightQueen_3_SR,
+    RightNight_SR,
+    RightNight_Mirror_SR,
+    Rook_V2_SR,
+    Rook_V2_2_SR,
+    Pawn_Under_SR,
+    Pawn_Under_2_SR,
+
+    RightQueen_2_SSR,
+    RightQueen_3_SSR,
+    RightNight_SSR,
+    RightNight_Mirror_SSR,
+    Rook_V2_SSR,
+    Rook_V2_2_SSR,
+    Pawn_Under_SSR,
+    Pawn_Under_2_SSR,
+
+    LeftQueen_2_N,
+    LeftQueen_3_N,
+    LeftNight_N,
+    LeftNight_Mirror_N,
+    Rook_V4_N,
+    Rook_V4_2_N,
+    Pawn_Snow_N,
+    Pawn_Snow_2_N,
+
+    LeftQueen_2_R,
+    LeftQueen_3_R,
+    LeftNight_R,
+    LeftNight_Mirror_R,
+    Rook_V4_R,
+    Rook_V4_2_R,
+    Pawn_Snow_R,
+    Pawn_Snow_2_R,
+
+    LeftQueen_2_SR,
+    LeftQueen_3_SR,
+    LeftNight_SR,
+    LeftNight_Mirror_SR,
+    Rook_V4_SR,
+    Rook_V4_2_SR,
+    Pawn_Snow_SR,
+    Pawn_Snow_2_SR,
+
+    LeftQueen_2_SSR,
+    LeftQueen_3_SSR,
+    LeftNight_SSR,
+    LeftNight_Mirror_SSR,
+    Rook_V4_SSR,
+    Rook_V4_2_SSR,
+    Pawn_Snow_SSR,
+    Pawn_Snow_2_SSR,
+
+    Gold1,
+    Gold2,
+    UpgradeTicket1,
+    UpgradeTicket2
 }
 
 public enum BetOptionType

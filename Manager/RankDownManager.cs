@@ -127,11 +127,11 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
                     switch (GameStateManager.instance.WindCharacterType)
                     {
                         case WindCharacterType.Winter:
-                            playerDataBase.SnowBox = rankDownInfomation.receiveInformationList[i].count;
+                            playerDataBase.SnowBox_Normal = rankDownInfomation.receiveInformationList[i].count;
                             PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", rankDownInfomation.receiveInformationList[i].count);
                             break;
                         case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox = rankDownInfomation.receiveInformationList[i].count;
+                            playerDataBase.UnderworldBox_Normal = rankDownInfomation.receiveInformationList[i].count;
                             PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", rankDownInfomation.receiveInformationList[i].count);
                             break;
                     }

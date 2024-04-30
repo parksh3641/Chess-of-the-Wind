@@ -4,10 +4,366 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class RandomBoxInfo
+{
+    [Title("Normal")]
+    public List<RandomBox> randomBox_Winter_Normal_List = new List<RandomBox>();
+    public List<RandomBox> randomBox_Underworld_Normal_List = new List<RandomBox>();
+
+    [Space]
+    [Title("Epic")]
+    public List<RandomBox> randomBox_Winter_Epic_List = new List<RandomBox>();
+    public List<RandomBox> randomBox_Underworld_Epic_List = new List<RandomBox>();
+
+    [Space]
+    [Title("Speical")]
+    public List<RandomBox> randomBox_Winter_Speical_List = new List<RandomBox>();
+    public List<RandomBox> randomBox_Underworld_Speical_List = new List<RandomBox>();
+
+    List<float> percent = new List<float>();
+    List<int> confirm = new List<int>();
+
+    private RandomBox_Block randomBox_Block = new RandomBox_Block();
+
+    public List<float> GetPercent(BoxType boxType)
+    {
+        percent.Clear();
+
+        switch (boxType)
+        {
+            case BoxType.Normal:
+                if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Normal_List.Count; i ++)
+                    {
+                        percent.Add(randomBox_Underworld_Normal_List[i].percent);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Normal_List.Count; i++)
+                    {
+                        percent.Add(randomBox_Underworld_Normal_List[i].percent);
+                    }
+                }
+                break;
+            case BoxType.N:
+                break;
+            case BoxType.R:
+                break;
+            case BoxType.SR:
+                break;
+            case BoxType.SSR:
+                break;
+            case BoxType.UR:
+                break;
+            case BoxType.NR:
+                break;
+            case BoxType.RSR:
+                break;
+            case BoxType.SRSSR:
+                break;
+            case BoxType.Epic:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Epic_List.Count; i++)
+                    {
+                        percent.Add(randomBox_Winter_Epic_List[i].percent);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Epic_List.Count; i++)
+                    {
+                        percent.Add(randomBox_Underworld_Epic_List[i].percent);
+                    }
+                }
+                break;
+            case BoxType.Speical:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Speical_List.Count; i++)
+                    {
+                        percent.Add(randomBox_Winter_Speical_List[i].percent);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Speical_List.Count; i++)
+                    {
+                        percent.Add(randomBox_Underworld_Speical_List[i].percent);
+                    }
+                }
+                break;
+        }
+
+        return percent;
+    }
+
+    public List<int> GetConfrim(BoxType boxType, RankType rankType) //확정 조각
+    {
+        confirm.Clear();
+
+        switch (boxType)
+        {
+            case BoxType.Normal:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Normal_List.Count; i++)
+                    {
+                        if(randomBox_Winter_Normal_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Winter_Normal_List[i].boxInfoType);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Normal_List.Count; i++)
+                    {
+                        if (randomBox_Underworld_Normal_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Underworld_Normal_List[i].boxInfoType);
+                        }
+                    }
+                }
+                break;
+            case BoxType.N:
+                break;
+            case BoxType.R:
+                break;
+            case BoxType.SR:
+                break;
+            case BoxType.SSR:
+                break;
+            case BoxType.UR:
+                break;
+            case BoxType.NR:
+                break;
+            case BoxType.RSR:
+                break;
+            case BoxType.SRSSR:
+                break;
+            case BoxType.Epic:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Epic_List.Count; i++)
+                    {
+                        if (randomBox_Winter_Epic_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Winter_Epic_List[i].boxInfoType);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Epic_List.Count; i++)
+                    {
+                        if (randomBox_Underworld_Epic_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Underworld_Epic_List[i].boxInfoType);
+                        }
+                    }
+                }
+                break;
+            case BoxType.Speical:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    for (int i = 0; i < randomBox_Winter_Speical_List.Count; i++)
+                    {
+                        if (randomBox_Winter_Speical_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Winter_Speical_List[i].boxInfoType);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < randomBox_Underworld_Speical_List.Count; i++)
+                    {
+                        if (randomBox_Underworld_Speical_List[i].boxInfoType.ToString().Contains(rankType.ToString()))
+                        {
+                            confirm.Add((int)randomBox_Underworld_Speical_List[i].boxInfoType);
+                        }
+                    }
+                }
+                break;
+        }
+
+        return confirm;
+    }
+
+    public void Initialize()
+    {
+        randomBox_Winter_Normal_List.Clear();
+        randomBox_Underworld_Normal_List.Clear();
+        randomBox_Winter_Epic_List.Clear();
+        randomBox_Underworld_Epic_List.Clear();
+        randomBox_Winter_Speical_List.Clear();
+        randomBox_Underworld_Speical_List.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(BoxInfoType)).Length - 1; i ++)
+        {
+            RandomBox randomBox1 = new RandomBox();
+            RandomBox randomBox2 = new RandomBox();
+            RandomBox randomBox3 = new RandomBox();
+            RandomBox randomBox4 = new RandomBox();
+            RandomBox randomBox5 = new RandomBox();
+            RandomBox randomBox6 = new RandomBox();
+
+            randomBox_Winter_Normal_List.Add(randomBox1);
+            randomBox_Underworld_Normal_List.Add(randomBox2);
+            randomBox_Winter_Epic_List.Add(randomBox3);
+            randomBox_Underworld_Epic_List.Add(randomBox4);
+            randomBox_Winter_Speical_List.Add(randomBox5);
+            randomBox_Underworld_Speical_List.Add(randomBox6);
+        }
+
+        if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+        {
+            randomBox_Winter_Normal_List[0].boxInfoType = BoxInfoType.RightQueen_2_N;
+            randomBox_Winter_Normal_List[1].boxInfoType = BoxInfoType.RightQueen_2_R;
+            randomBox_Winter_Normal_List[2].boxInfoType = BoxInfoType.RightQueen_2_SR;
+            randomBox_Winter_Normal_List[3].boxInfoType = BoxInfoType.RightQueen_2_SSR;
+
+            randomBox_Winter_Normal_List[0].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 });
+            randomBox_Winter_Normal_List[1].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 });
+            randomBox_Winter_Normal_List[2].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 });
+            randomBox_Winter_Normal_List[3].SetPercent(new float[] { 0.75f, 0.75f, 0.1f, 0.75f, 0 });
+
+            randomBox_Winter_Normal_List[4].boxInfoType = BoxInfoType.RightQueen_3_N;
+            randomBox_Winter_Normal_List[5].boxInfoType = BoxInfoType.RightQueen_3_R;
+            randomBox_Winter_Normal_List[6].boxInfoType = BoxInfoType.RightQueen_3_SR;
+            randomBox_Winter_Normal_List[7].boxInfoType = BoxInfoType.RightQueen_3_SSR;
+
+            randomBox_Winter_Normal_List[4].SetPercent(new float[] { 1, 0.1f, 1f, 0, 0 });
+            randomBox_Winter_Normal_List[5].SetPercent(new float[] { 1, 0.1f, 1f, 0, 0 });
+            randomBox_Winter_Normal_List[6].SetPercent(new float[] { 1, 0.1f, 1f, 0, 0 });
+            randomBox_Winter_Normal_List[7].SetPercent(new float[] { 1, 0.1f, 1f, 0, 0 });
+
+        }
+        else
+        {
+
+        }
+    }
+
+    public RandomBox_Block GetRandom(BoxType boxType, int index)
+    {
+        switch (boxType)
+        {
+            case BoxType.Normal:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    randomBox_Block = randomBox_Underworld_Normal_List[index].GetRandom();
+                }
+                else
+                {
+                    randomBox_Block = randomBox_Underworld_Normal_List[index].GetRandom();
+                }
+                break;
+            case BoxType.N:
+                break;
+            case BoxType.R:
+                break;
+            case BoxType.SR:
+                break;
+            case BoxType.SSR:
+                break;
+            case BoxType.UR:
+                break;
+            case BoxType.NR:
+                break;
+            case BoxType.RSR:
+                break;
+            case BoxType.SRSSR:
+                break;
+            case BoxType.Epic:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    randomBox_Block = randomBox_Winter_Epic_List[index].GetRandom();
+                }
+                else
+                {
+                    randomBox_Block = randomBox_Underworld_Epic_List[index].GetRandom();
+                }
+                break;
+            case BoxType.Speical:
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
+                {
+                    randomBox_Block = randomBox_Winter_Speical_List[index].GetRandom();
+                }
+                else
+                {
+                    randomBox_Block = randomBox_Underworld_Speical_List[index].GetRandom();
+                }
+                break;
+        }
+
+        return randomBox_Block;
+    }
+
+}
+
+
+[System.Serializable]
+public class RandomBox
+{
+    public BoxInfoType boxInfoType = BoxInfoType.RightQueen_2_N;
+
+    public float percent = 0; //전체 비율에서
+
+    public float[] index = new float[5]; //걸렸을 경우에서 또 나누기
+
+    float random = 0;
+    RandomBox_Block randomBox_Block = new RandomBox_Block();
+
+    public void SetPercent(float[] value)
+    {
+        index = value;
+
+        percent = 0;
+
+        for (int i = 0; i < index.Length; i ++)
+        {
+            percent += index[i];
+        }
+    }
+
+    public RandomBox_Block GetRandom() //몇번째 조각이 당첨되었는지 알려주기
+    {
+        random = Random.Range(0f, percent);
+
+        for(int i = 0; i < index.Length; i ++)
+        {
+            if (random <= index[i])
+            {
+                randomBox_Block.boxInfoType = boxInfoType;
+                randomBox_Block.number = i;
+                break;
+            }
+        }
+
+        return randomBox_Block;
+    }
+}
+
+[System.Serializable]
+public class RandomBox_Block //당첨된 블럭 정보
+{
+    public BoxInfoType boxInfoType = BoxInfoType.RightQueen_2_N;
+    public int number = 0;
+}
+
+
 public class RandomBoxManager : MonoBehaviour
 {
     public WindCharacterType windCharacterType = WindCharacterType.Winter;
-    public BoxType boxType = BoxType.Random;
+    public BoxType boxType = BoxType.Normal;
+
+    [SerializeField]
+    public RandomBoxInfo randomBoxInfo;
 
     public GameObject boxView;
 
@@ -47,26 +403,27 @@ public class RandomBoxManager : MonoBehaviour
     public int boxCount = 0;
     public int boxCountSave = 0;
     public int boxIndex = 0;
-    public float[] percentBlock;
-    public List<string> allowSnowBlockList = new List<string>();
-    public List<string> allowUnderworldBlockList = new List<string>();
-    public List<BlockClass> prizeBlockList = new List<BlockClass>();
-    public List<string> prizeBlockStringList = new List<string>();
 
-    private bool isWait = false;
-    private bool isServerWait = false;
     private bool isStart = false;
     private bool isDelay = false;
 
-    private bool nR = false;
-    private bool rSR = false;
-    private bool sRSSR = false;
-
     private float random = 0;
-    private string block = "";
+    private int gold = 0;
 
     private bool confirmationSR = false;
     private bool confirmationSSR = false;
+
+    private List<float> percent = new List<float>(); //확률
+    private List<int> confirm_N = new List<int>(); //확정 조각
+    private List<int> confirm_R = new List<int>();
+    private List<int> confirm_SR = new List<int>();
+    private List<int> confirm_SSR = new List<int>();
+    private List<int> confirm_UR = new List<int>();
+
+
+
+    private List<int> prize = new List<int>(); //당첨된 것 (숫자)
+    private List<RandomBox_Block> prize_Block = new List<RandomBox_Block>(); //당첨된 블럭 조각
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
 
@@ -94,20 +451,8 @@ public class RandomBoxManager : MonoBehaviour
 
     void ResetView()
     {
-        percentBlock = new float[4];
-
-        allowSnowBlockList.Clear();
-        allowUnderworldBlockList.Clear();
-        prizeBlockList.Clear();
-        prizeBlockStringList.Clear();
-
-        isWait = false;
         isStart = false;
         isDelay = false;
-
-        nR = false;
-        rSR = false;
-        sRSSR = false;
 
         boxView.SetActive(false);
         boxPanel.SetActive(false);
@@ -127,7 +472,9 @@ public class RandomBoxManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerDataBase.eGetSnowBox += OpenSnowBox;
+        PlayerDataBase.eGetSnowBox_Normal += OpenSnowBox_Normal;
+        PlayerDataBase.eGetSnowBox_Epic += OpenSnowBox_Epic;
+        PlayerDataBase.eGetSnowBox_Speical += OpenSnowBox_Speical;
         PlayerDataBase.eGetSnowBox_N += OpenSnowBox_N;
         PlayerDataBase.eGetSnowBox_R += OpenSnowBox_R;
         PlayerDataBase.eGetSnowBox_SR += OpenSnowBox_SR;
@@ -137,8 +484,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_RSR += OpenSnowBox_RSR;
         PlayerDataBase.eGetSnowBox_SRSSR += OpenSnowBox_SRSSR;
 
-
-        PlayerDataBase.eGetUnderworldBox += OpenUnderworldBox;
+        PlayerDataBase.eGetUnderworldBox_Normal += OpenUnderworldBox_Normal;
+        PlayerDataBase.eGetUnderworldBox_Epic += OpenUnderworldBox_Epic;
+        PlayerDataBase.eGetUnderworldBox_Speical += OpenUnderworldBox_Speical;
         PlayerDataBase.eGetUnderworldBox_N += OpenUnderworldBox_N;
         PlayerDataBase.eGetUnderworldBox_R += OpenUnderworldBox_R;
         PlayerDataBase.eGetUnderworldBox_SR += OpenUnderworldBox_SR;
@@ -151,7 +499,9 @@ public class RandomBoxManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerDataBase.eGetSnowBox -= OpenSnowBox;
+        PlayerDataBase.eGetSnowBox_Normal -= OpenSnowBox_Normal;
+        PlayerDataBase.eGetSnowBox_Epic -= OpenSnowBox_Epic;
+        PlayerDataBase.eGetSnowBox_Speical -= OpenSnowBox_Speical;
         PlayerDataBase.eGetSnowBox_N -= OpenSnowBox_N;
         PlayerDataBase.eGetSnowBox_R -= OpenSnowBox_R;
         PlayerDataBase.eGetSnowBox_SR -= OpenSnowBox_SR;
@@ -161,7 +511,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_RSR -= OpenSnowBox_RSR;
         PlayerDataBase.eGetSnowBox_SRSSR -= OpenSnowBox_SRSSR;
 
-        PlayerDataBase.eGetUnderworldBox -= OpenUnderworldBox;
+        PlayerDataBase.eGetUnderworldBox_Normal -= OpenUnderworldBox_Normal;
+        PlayerDataBase.eGetUnderworldBox_Epic -= OpenUnderworldBox_Epic;
+        PlayerDataBase.eGetUnderworldBox_Speical -= OpenUnderworldBox_Speical;
         PlayerDataBase.eGetUnderworldBox_N -= OpenUnderworldBox_N;
         PlayerDataBase.eGetUnderworldBox_R -= OpenUnderworldBox_R;
         PlayerDataBase.eGetUnderworldBox_SR -= OpenUnderworldBox_SR;
@@ -174,7 +526,9 @@ public class RandomBoxManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayerDataBase.eGetSnowBox -= OpenSnowBox;
+        PlayerDataBase.eGetSnowBox_Normal -= OpenSnowBox_Normal;
+        PlayerDataBase.eGetSnowBox_Epic -= OpenSnowBox_Epic;
+        PlayerDataBase.eGetSnowBox_Speical -= OpenSnowBox_Speical;
         PlayerDataBase.eGetSnowBox_N -= OpenSnowBox_N;
         PlayerDataBase.eGetSnowBox_R -= OpenSnowBox_R;
         PlayerDataBase.eGetSnowBox_SR -= OpenSnowBox_SR;
@@ -184,7 +538,9 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetSnowBox_RSR -= OpenSnowBox_RSR;
         PlayerDataBase.eGetSnowBox_SRSSR -= OpenSnowBox_SRSSR;
 
-        PlayerDataBase.eGetUnderworldBox -= OpenUnderworldBox;
+        PlayerDataBase.eGetUnderworldBox_Normal -= OpenUnderworldBox_Normal;
+        PlayerDataBase.eGetUnderworldBox_Epic -= OpenUnderworldBox_Epic;
+        PlayerDataBase.eGetUnderworldBox_Speical -= OpenUnderworldBox_Speical;
         PlayerDataBase.eGetUnderworldBox_N -= OpenUnderworldBox_N;
         PlayerDataBase.eGetUnderworldBox_R -= OpenUnderworldBox_R;
         PlayerDataBase.eGetUnderworldBox_SR -= OpenUnderworldBox_SR;
@@ -195,15 +551,43 @@ public class RandomBoxManager : MonoBehaviour
         PlayerDataBase.eGetUnderworldBox_SRSSR -= OpenUnderworldBox_SRSSR;
     }
 
-    public void OpenSnowBox()
+    public void Initialize()
     {
-        boxType = BoxType.Random;
+        randomBoxInfo = new RandomBoxInfo();
+        randomBoxInfo.Initialize();
+    }
 
-        boxCount = playerDataBase.SnowBox;
+    public void OpenSnowBox_Normal()
+    {
+        boxType = BoxType.Normal;
 
-        playerDataBase.BuySnowBoxSSRCount += boxCount;
+        boxCount = playerDataBase.SnowBox_Normal;
 
-        if(playerDataBase.BuySnowBoxSSRCount >= 50)
+        if (boxCount > 0)
+        {
+            OpenSnowBox_Initialize();
+        }
+    }
+
+    public void OpenSnowBox_Epic()
+    {
+        boxType = BoxType.Epic;
+
+        boxCount = playerDataBase.SnowBox_Epic;
+
+        if (boxCount > 0)
+        {
+            OpenSnowBox_Initialize();
+        }
+    }
+
+    public void OpenSnowBox_Speical()
+    {
+        boxType = BoxType.Speical;
+
+        boxCount = playerDataBase.SnowBox_Speical;
+
+        if (playerDataBase.BuySnowBoxSSRCount >= 50)
         {
             playerDataBase.BuySnowBoxSSRCount -= 50;
 
@@ -214,6 +598,7 @@ public class RandomBoxManager : MonoBehaviour
             confirmationSSR = false;
         }
 
+        playerDataBase.BuySnowBoxSSRCount += boxCount;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBoxSSRCount", playerDataBase.BuySnowBoxSSRCount);
 
         if (boxCount >= 10)
@@ -327,13 +712,35 @@ public class RandomBoxManager : MonoBehaviour
         }
     }
 
-    public void OpenUnderworldBox()
+    public void OpenUnderworldBox_Normal()
     {
-        boxType = BoxType.Random;
+        boxType = BoxType.Normal;
 
-        boxCount = playerDataBase.UnderworldBox;
+        boxCount = playerDataBase.UnderworldBox_Normal;
 
-        playerDataBase.BuyUnderworldBoxSSRCount += boxCount;
+        if (boxCount > 0)
+        {
+            OpenUnderworldBox_Initialize();
+        }
+    }
+
+    public void OpenUnderworldBox_Epic()
+    {
+        boxType = BoxType.Epic;
+
+        boxCount = playerDataBase.UnderworldBox_Epic;
+
+        if (boxCount > 0)
+        {
+            OpenUnderworldBox_Initialize();
+        }
+    }
+
+    public void OpenUnderworldBox_Speical()
+    {
+        boxType = BoxType.Speical;
+
+        boxCount = playerDataBase.UnderworldBox_Speical;
 
         if (playerDataBase.BuyUnderworldBoxSSRCount >= 50)
         {
@@ -346,6 +753,7 @@ public class RandomBoxManager : MonoBehaviour
             confirmationSSR = false;
         }
 
+        playerDataBase.BuyUnderworldBoxSSRCount += boxCount;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBoxSSRCount", playerDataBase.BuyUnderworldBoxSSRCount);
 
         if (boxCount >= 10)
@@ -473,36 +881,20 @@ public class RandomBoxManager : MonoBehaviour
 
         windCharacterType = WindCharacterType.Winter;
 
-        switch (boxType)
-        {
-            case BoxType.Random:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.N:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.R:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.SR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.SSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.UR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.NR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
-                break;
-            case BoxType.RSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
-                break;
-            case BoxType.SRSSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
-                break;
-        }
+        percent = randomBoxInfo.GetPercent(boxType);
+        confirm_N = randomBoxInfo.GetConfrim(boxType, RankType.N);
+        confirm_R = randomBoxInfo.GetConfrim(boxType, RankType.R);
+        confirm_SR = randomBoxInfo.GetConfrim(boxType, RankType.SR);
+        confirm_SSR = randomBoxInfo.GetConfrim(boxType, RankType.SSR);
+        confirm_UR = randomBoxInfo.GetConfrim(boxType, RankType.UR);
+
+        prize.Clear();
+        prize_Block.Clear();
+
+        boxView.SetActive(true);
+        boxAnim.PlayAnim();
+
+        RandomBox();
     }
 
     public void OpenUnderworldBox_Initialize()
@@ -519,36 +911,20 @@ public class RandomBoxManager : MonoBehaviour
 
         windCharacterType = WindCharacterType.UnderWorld;
 
-        switch (boxType)
-        {
-            case BoxType.Random:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.N:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.R:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.SR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.SSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.UR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
-                break;
-            case BoxType.NR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
-                break;
-            case BoxType.RSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
-                break;
-            case BoxType.SRSSR:
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
-                break;
-        }
+        percent = randomBoxInfo.GetPercent(boxType);
+        confirm_N = randomBoxInfo.GetConfrim(boxType, RankType.N);
+        confirm_R = randomBoxInfo.GetConfrim(boxType, RankType.R);
+        confirm_SR = randomBoxInfo.GetConfrim(boxType, RankType.SR);
+        confirm_SSR = randomBoxInfo.GetConfrim(boxType, RankType.SSR);
+        confirm_UR = randomBoxInfo.GetConfrim(boxType, RankType.UR);
+
+        prize.Clear();
+        prize_Block.Clear();
+
+        boxView.SetActive(true);
+        boxAnim.PlayAnim();
+
+        RandomBox();
     }
 
     public void CloseBoxView()
@@ -556,88 +932,24 @@ public class RandomBoxManager : MonoBehaviour
         boxView.SetActive(false);
     }
 
-    void InitializePercent(string check)
-    {
-        string[] temp = check.Split(",");
-
-        percentBlock[0] = float.Parse(temp[0]);
-        percentBlock[1] = float.Parse(temp[1]);
-        percentBlock[2] = float.Parse(temp[2]);
-        percentBlock[3] = float.Parse(temp[3]);
-
-        switch (windCharacterType)
-        {
-            case WindCharacterType.Winter:
-                PlayfabManager.instance.GetTitleInternalData("AllowSnowBlock", InitializeAllowSnowBlock);
-                break;
-            case WindCharacterType.UnderWorld:
-                PlayfabManager.instance.GetTitleInternalData("AllowUnderworldBlock", InitializeAllowUnderworldBlock);
-                break;
-        }
-    }
-
-    void InitializeAllowSnowBlock(string check)
-    {
-        string[] temp = check.Split(",");
-
-        for(int i = 0; i < temp.Length; i ++)
-        {
-            allowSnowBlockList.Add(temp[i]);
-        }
-
-        boxView.SetActive(true);
-
-        boxAnim.PlayAnim();
-
-        isServerWait = false;
-        StartCoroutine(RandomBoxCoroution());
-    }
-
-    void InitializeAllowUnderworldBlock(string check)
-    {
-        string[] temp = check.Split(",");
-
-        for (int i = 0; i < temp.Length; i++)
-        {
-            allowUnderworldBlockList.Add(temp[i]);
-        }
-
-        boxView.SetActive(true);
-
-        boxAnim.PlayAnim();
-
-        isServerWait = false;
-        StartCoroutine(RandomBoxCoroution());
-    }
-
     public void OpenBox()
     {
-        if(!isServerWait)
+        if(!isStart)
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
             NotionManager.instance.UseNotion(NotionType.WaitTimeNotion);
             return;
         }
 
-        if (!isStart)
-        {
-            return;
-        }
-
         isStart = false;
 
         boxIcon.sprite = boxOpenIcon[(int)boxType];
-
         gradient.SetActive(false);
-
         boxOpenEffect.SetActive(true);
-
         boxAnim.StopAnim();
 
         SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
         SoundManager.instance.PlaySFX(GameSfxType.BoxOpen2);
-
-        //StartCoroutine(OpenBoxCoroution());
 
         StartCoroutine(NextButtonCoroution());
     }
@@ -654,129 +966,19 @@ public class RandomBoxManager : MonoBehaviour
         NextButton();
     }
 
-    public void NextButton()
+    void RandomBox()
     {
-        if (isDelay) return;
-
-        if (boxIndex < boxCountSave)
-        {
-            boxOpenView.SetActive(true);
-
-            blockUIEffect.SetActive(false);
-
-            if (prizeBlockList[boxIndex].rankType >= RankType.SSR)
-            {
-                fadeInOut.gameObject.SetActive(true);
-                fadeInOut.FadeOut();
-
-                blockUIEffect.SetActive(true);
-
-                SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
-            }
-
-            blockUIContent_Detail.Collection_Initialize(prizeBlockList[boxIndex]);
-
-            blockTitleText.text = LocalizationManager.instance.GetString(prizeBlockList[boxIndex].blockType.ToString());
-            nextText.text = (boxIndex + 1) + "/" + boxCountSave;
-
-            boxIndex++;
-        }
-        else
-        {
-            boxOpenView.SetActive(false);
-
-            StartCoroutine(OpenBoxCoroution());
-        }
-
-        if (boxIndex == boxCountSave)
-        {
-            nextBoxTapObj.text = LocalizationManager.instance.GetString("EndBox");
-        }
-        else
-        {
-            nextBoxTapObj.text = LocalizationManager.instance.GetString("NextBox");
-        }
-
-        //Debug.Log(boxIndex + " / " + boxCountSave);
-
-        isDelay = true;
-        Invoke("Delay2", 0.1f);
-    }
-
-    IEnumerator OpenBoxCoroution()
-    {
-        boxCountText.text = "0";
-
-        boxPanel.SetActive(true);
-
-        for (int i = 0; i < blockUIContentList.Count; i++)
-        {
-            blockUIContentList[i].gameObject.SetActive(false);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        for (int i = 0; i < prizeBlockList.Count; i++)
-        {
-            blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Collection_Initialize(prizeBlockList[i]);
-
-            //boxCountSave -= 1;
-            //boxCountText.text = boxCountSave.ToString();
-
-            SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
-
-            yield return waitForSeconds;
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        tapObj.SetActive(true);
-
-        closePanel.SetActive(true);
-    }
-
-    IEnumerator RandomBoxCoroution()
-    {
-        if (boxCount > 0)
+        while (boxCount > 0)
         {
             boxCount -= 1;
 
-            while (isWait)
-            {
-                yield return null;
-            }
-
             random = Random.Range(0f, 100.0f);
-            block = "";
-
-            switch (windCharacterType)
-            {
-                case WindCharacterType.Winter:
-                    int snow = Random.Range(0, allowSnowBlockList.Count);
-
-                    block = allowSnowBlockList[snow];
-                    break;
-                case WindCharacterType.UnderWorld:
-                    int underworld = Random.Range(0, allowUnderworldBlockList.Count);
-
-                    block = allowUnderworldBlockList[underworld];
-                    break;
-            }
-
-            BlockClass blockClass = new BlockClass();
-            blockClass.blockType = (BlockType)System.Enum.Parse(typeof(BlockType), block);
 
             if (confirmationSSR)
             {
                 confirmationSSR = false;
 
-                blockClass.rankType = RankType.SSR;
-                block += "_SSR";
+                prize.Add(confirm_SSR[Random.Range(0, confirm_SSR.Count)]);
 
                 gradient.SetActive(true);
 
@@ -788,146 +990,361 @@ public class RandomBoxManager : MonoBehaviour
                 {
                     confirmationSR = false;
 
-                    blockClass.rankType = RankType.SR;
-                    block += "_SR";
+                    prize.Add(confirm_SR[Random.Range(0, confirm_SR.Count)]);
 
                     Debug.Log("SR 확정");
                 }
                 else
                 {
-                    switch (boxType)
+                    for (int i = 0; i < percent.Count; i++)
                     {
-                        case BoxType.Random:
-                            if (random <= percentBlock[3])
-                            {
-                                blockClass.rankType = RankType.SSR;
-                                block += "_SSR";
-
-                                gradient.SetActive(true);
-                            }
-                            else if (random <= percentBlock[2])
-                            {
-                                blockClass.rankType = RankType.SR;
-                                block += "_SR";
-                            }
-                            else if (random <= percentBlock[1])
-                            {
-                                blockClass.rankType = RankType.R;
-                                block += "_R";
-                            }
-                            else
-                            {
-                                blockClass.rankType = RankType.N;
-                                block += "_N";
-                            }
+                        if (random <= percent[i])
+                        {
+                            prize.Add(i);
                             break;
-                        case BoxType.N:
-                            blockClass.rankType = RankType.N;
-                            block += "_N";
-
-                            break;
-                        case BoxType.R:
-                            blockClass.rankType = RankType.R;
-                            block += "_R";
-
-                            break;
-                        case BoxType.SR:
-                            blockClass.rankType = RankType.SR;
-                            block += "_SR";
-                            break;
-                        case BoxType.SSR:
-                            blockClass.rankType = RankType.SSR;
-                            block += "_SSR";
-
-                            gradient.SetActive(true);
-                            break;
-                        case BoxType.UR:
-                            blockClass.rankType = RankType.UR;
-                            block += "_UR";
-
-                            gradient.SetActive(true);
-                            break;
-                        case BoxType.NR:
-                            if (random <= percentBlock[0])
-                            {
-                                blockClass.rankType = RankType.N;
-                                block += "_N";
-                            }
-                            else
-                            {
-                                blockClass.rankType = RankType.R;
-                                block += "_R";
-                            }
-                            break;
-                        case BoxType.RSR:
-                            if (random <= percentBlock[0])
-                            {
-                                blockClass.rankType = RankType.R;
-                                block += "_R";
-                            }
-                            else
-                            {
-                                blockClass.rankType = RankType.SR;
-                                block += "_SR";
-                            }
-                            break;
-                        case BoxType.SRSSR:
-                            if (random <= percentBlock[0])
-                            {
-                                blockClass.rankType = RankType.SR;
-                                block += "_SR";
-                            }
-                            else
-                            {
-                                blockClass.rankType = RankType.SSR;
-                                block += "_SSR";
-
-                                gradient.SetActive(true);
-                            }
-                            break;
+                        }
                     }
                 }
             }
-
-            prizeBlockList.Add(blockClass);
-            prizeBlockStringList.Add(block);
-
-            isWait = true;
-            Invoke("Delay", 0.1f);
-
-            StartCoroutine(RandomBoxCoroution());
         }
-        else
-        {
-            while (isWait)
-            {
-                yield return null;
-            }
 
-            isStart = true;
-            isServerWait = true;
-            StartCoroutine(SetUserPriceBlockCoroution());
-        }
+        isStart = true;
+
+        BoxOff();
     }
 
-    IEnumerator SetUserPriceBlockCoroution()
+    void BoxOff()
     {
-        while (isWait)
+        //Prize에 걸린 숫자에 따라 이제 조각 획득하기
+
+        gold = 0;
+
+        for (int i = 0; i < prize.Count; i ++)
         {
-            yield return null;
+            prize_Block.Add(randomBoxInfo.GetRandom(boxType ,prize[i]));
         }
 
-        switch (windCharacterType)
+        for(int i = 0; i < prize_Block.Count; i ++)
         {
-            case WindCharacterType.Winter:
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
-                break;
-            case WindCharacterType.UnderWorld:
-                PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
-                break;
+            switch (prize_Block[i].boxInfoType)
+            {
+                case BoxInfoType.RightQueen_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_2, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightQueen_3_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_3, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_Mirror_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight_Mirror, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2_2, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under_2, RankType.N, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.RightQueen_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_2, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightQueen_3_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_3, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_Mirror_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight_Mirror, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2_2, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under_2, RankType.R, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.RightQueen_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_2, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightQueen_3_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_3, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_Mirror_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight_Mirror, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2_2, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under_2, RankType.SR, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.RightQueen_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_2, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightQueen_3_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightQueen_3, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.RightNight_Mirror_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.RightNight_Mirror, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V2_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V2_2, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Under_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Under_2, RankType.SSR, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.LeftQueen_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_2, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftQueen_3_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_3, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_Mirror_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight_Mirror, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4_2, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow, RankType.N, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_2_N:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow_2, RankType.N, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.LeftQueen_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_2, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftQueen_3_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_3, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_Mirror_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight_Mirror, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4_2, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow, RankType.R, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_2_R:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow_2, RankType.R, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.LeftQueen_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_2, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftQueen_3_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_3, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_Mirror_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight_Mirror, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4_2, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow, RankType.SR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_2_SR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow_2, RankType.SR, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.LeftQueen_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_2, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftQueen_3_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftQueen_3, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.LeftNight_Mirror_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.LeftNight_Mirror, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Rook_V4_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Rook_V4_2, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow, RankType.SSR, prize_Block[i].number);
+                    break;
+                case BoxInfoType.Pawn_Snow_2_SSR:
+                    playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow_2, RankType.SSR, prize_Block[i].number);
+                    break;
+
+
+                case BoxInfoType.Gold1:
+                    switch(prize_Block[i].number)
+                    {
+                        case 0:
+                            gold += Random.Range(5000, 10001);
+
+                            break;
+                        case 1:
+                            gold += Random.Range(10000, 20001);
+
+                            break;
+                        case 2:
+                            gold += Random.Range(20000, 30001);
+
+                            break;
+                        case 3:
+                            gold += Random.Range(30000, 40001);
+
+                            break;
+                        case 4:
+                            gold += Random.Range(40000, 50001);
+
+                            break;
+                    }
+                    break;
+                case BoxInfoType.Gold2:
+                    switch (prize_Block[i].number)
+                    {
+                        case 0:
+                            gold += Random.Range(50000, 60001);
+
+                            break;
+                        case 1:
+                            gold += Random.Range(60000, 70001);
+
+                            break;
+                        case 2:
+                            gold += Random.Range(70000, 80001);
+
+                            break;
+                        case 3:
+                            gold += Random.Range(80000, 90001);
+
+                            break;
+                        case 4:
+                            gold += Random.Range(90000, 100001);
+
+                            break;
+                    }
+                    break;
+                case BoxInfoType.UpgradeTicket1:
+                    switch (prize_Block[i].number)
+                    {
+                        case 0:
+
+
+                            break;
+                        case 1:
+
+
+                            break;
+                        case 2:
+
+
+                            break;
+                        case 3:
+
+
+                            break;
+                        case 4:
+
+
+                            break;
+                    }
+                    break;
+                case BoxInfoType.UpgradeTicket2:
+                    switch (prize_Block[i].number)
+                    {
+                        case 0:
+
+
+                            break;
+                        case 1:
+
+
+                            break;
+                        case 2:
+
+
+                            break;
+                        case 3:
+
+
+                            break;
+                        case 4:
+
+
+                            break;
+                    }
+                    break;
+            }
         }
 
-        yield return new WaitForSeconds(0.5f);
+
+        if(gold > 0)
+        {
+            PlayfabManager.instance.UpdateAddGold(gold);
+        }
+
 
         switch (windCharacterType)
         {
@@ -935,9 +1352,9 @@ public class RandomBoxManager : MonoBehaviour
 
                 switch (boxType)
                 {
-                    case BoxType.Random:
-                        playerDataBase.SnowBox = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 0);
+                    case BoxType.Normal:
+                        playerDataBase.SnowBox_Normal = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 0);
                         break;
                     case BoxType.N:
                         playerDataBase.SnowBox_N = 0;
@@ -971,6 +1388,14 @@ public class RandomBoxManager : MonoBehaviour
                         playerDataBase.SnowBox_SRSSR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SRSSR", 0);
                         break;
+                    case BoxType.Epic:
+                        playerDataBase.SnowBox_Epic = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 0);
+                        break;
+                    case BoxType.Speical:
+                        playerDataBase.SnowBox_Speical = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", 0);
+                        break;
                 }
 
                 break;
@@ -978,9 +1403,9 @@ public class RandomBoxManager : MonoBehaviour
 
                 switch (boxType)
                 {
-                    case BoxType.Random:
-                        playerDataBase.UnderworldBox = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 0);
+                    case BoxType.Normal:
+                        playerDataBase.UnderworldBox_Normal = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 0);
                         break;
                     case BoxType.N:
                         playerDataBase.UnderworldBox_N = 0;
@@ -1014,6 +1439,14 @@ public class RandomBoxManager : MonoBehaviour
                         playerDataBase.UnderworldBox_SRSSR = 0;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SRSSR", 0);
                         break;
+                    case BoxType.Epic:
+                        playerDataBase.UnderworldBox_Epic = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 0);
+                        break;
+                    case BoxType.Speical:
+                        playerDataBase.UnderworldBox_Speical = 0;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", 0);
+                        break;
                 }
 
                 break;
@@ -1022,73 +1455,93 @@ public class RandomBoxManager : MonoBehaviour
         shopManager.Change();
     }
 
-    void Delay()
+    public void NextButton()
     {
-        isWait = false;
+        if (isDelay) return;
+
+        if (boxIndex < boxCountSave)
+        {
+            boxOpenView.SetActive(true);
+
+            blockUIEffect.SetActive(false);
+
+            if (prize_Block[boxIndex].boxInfoType.ToString().Contains(RankType.SSR.ToString()))
+            {
+                fadeInOut.gameObject.SetActive(true);
+                fadeInOut.FadeOut();
+
+                blockUIEffect.SetActive(true);
+
+                SoundManager.instance.PlaySFX(GameSfxType.BoxOpen);
+            }
+            else
+            {
+                SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
+            }
+
+            blockUIContent_Detail.Initialize_RandomBox(prize_Block[boxIndex]);
+
+            blockTitleText.text = "";
+            //blockTitleText.text = LocalizationManager.instance.GetString(prize_Block[boxIndex].boxInfoType.ToString());
+            nextText.text = (boxIndex + 1) + "/" + boxCountSave;
+
+            boxIndex++;
+        }
+        else
+        {
+            boxOpenView.SetActive(false);
+
+            StartCoroutine(OpenBoxCoroution());
+        }
+
+        if (boxIndex == boxCountSave)
+        {
+            nextBoxTapObj.text = LocalizationManager.instance.GetString("EndBox");
+        }
+        else
+        {
+            nextBoxTapObj.text = LocalizationManager.instance.GetString("NextBox");
+        }
+
+        //Debug.Log(boxIndex + " / " + boxCountSave);
+
+        isDelay = true;
+        Invoke("Delay", 0.1f);
     }
 
-    void Delay2()
+    IEnumerator OpenBoxCoroution() //마지막에 전체 보여주기
+    {
+        boxCountText.text = "0";
+
+        boxPanel.SetActive(true);
+
+        for (int i = 0; i < blockUIContentList.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < prize_Block.Count; i++)
+        {
+            blockUIContentList[i].gameObject.SetActive(true);
+            blockUIContentList[i].Initialize_RandomBox(prize_Block[i]);
+
+            SoundManager.instance.PlaySFX(GameSfxType.GetBlock);
+
+            yield return waitForSeconds;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        tapObj.SetActive(true);
+
+        closePanel.SetActive(true);
+    }
+
+
+    void Delay()
     {
         isDelay = false;
     }
-
-    //public void GameReward()
-    //{
-    //    int random = Random.Range(0, 4);
-
-    //    string prize = "";
-
-    //    prizeBlockStringList.Clear();
-
-    //    switch (GameStateManager.instance.WindCharacterType)
-    //    {
-    //        case WindCharacterType.Winter:
-    //            switch(random)
-    //            {
-    //                case 0:
-    //                    prize = "LeftQueen_2";
-    //                    break;
-    //                case 1:
-    //                    prize = "LeftNight";
-    //                    break;
-    //                case 2:
-    //                    prize = "Rook_V2";
-    //                    break;
-    //                case 3:
-    //                    prize = "Pawn_Snow";
-    //                    break;
-    //            }
-
-    //            prize += "_N";
-
-    //            prizeBlockStringList.Add(prize);
-
-    //            PlayfabManager.instance.GrantItemsToUser("Kingdom of Snow", prizeBlockStringList);
-    //            break;
-    //        case WindCharacterType.UnderWorld:
-    //            switch (random)
-    //            {
-    //                case 0:
-    //                    prize = "RightQueen_2";
-    //                    break;
-    //                case 1:
-    //                    prize = "RightNight";
-    //                    break;
-    //                case 2:
-    //                    prize = "Rook_V4";
-    //                    break;
-    //                case 3:
-    //                    prize = "Pawn_Under";
-    //                    break;
-    //            }
-
-    //            prize += "_N";
-
-    //            prizeBlockStringList.Add(prize);
-
-    //            PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", prizeBlockStringList);
-
-    //            break;
-    //    }
-    //}
 }

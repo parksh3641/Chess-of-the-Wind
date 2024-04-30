@@ -294,7 +294,7 @@ public class SynthesisManager : MonoBehaviour
         for (int i = 0; i < blockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Collection_Initialize(blockList[i]);
+            blockUIContentList[i].Initialize_UI(blockList[i]);
 
             if (blockList[i].rankType == RankType.UR || playerDataBase.CheckEquip(blockList[i].instanceId) != 0)
             {
@@ -355,11 +355,11 @@ public class SynthesisManager : MonoBehaviour
             upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 
             nextBlockUIContent.gameObject.SetActive(true);
-            nextBlockUIContent.Collection_Initialize(blockClass);
+            nextBlockUIContent.Initialize_UI(blockClass);
             nextBlockUIContent.NextLevel_Initialize();
 
             targetBlockUIContent.gameObject.SetActive(true);
-            targetBlockUIContent.Collection_Initialize(blockClass);
+            targetBlockUIContent.Initialize_UI(blockClass);
 
             plusObj.SetActive(true);
             matObj1.SetActive(true);
@@ -472,7 +472,7 @@ public class SynthesisManager : MonoBehaviour
                 playerDataBase.CheckEquip(id);
 
                 matBlockUIContent1.gameObject.SetActive(true);
-                matBlockUIContent1.Collection_Initialize(blockClassMat1);
+                matBlockUIContent1.Initialize_UI(blockClassMat1);
 
                 isMat1 = true;
 
@@ -491,7 +491,7 @@ public class SynthesisManager : MonoBehaviour
                 playerDataBase.CheckEquip(id);
 
                 matBlockUIContent2.gameObject.SetActive(true);
-                matBlockUIContent2.Collection_Initialize(blockClassMat2);
+                matBlockUIContent2.Initialize_UI(blockClassMat2);
 
                 isMat2 = true;
 
@@ -734,7 +734,7 @@ public class SynthesisManager : MonoBehaviour
             synthesisResultEffect.SetActive(true);
 
             synthesisResultContentList[0].gameObject.SetActive(true);
-            synthesisResultContentList[0].Collection_Initialize(blockClass);
+            synthesisResultContentList[0].Initialize_UI(blockClass);
             synthesisResultContentList[0].SetLevel(blockMaxLevel);
             synthesisResultContentList[0].NextLevel_Initialize();
 
@@ -803,7 +803,7 @@ public class SynthesisManager : MonoBehaviour
             for (int i = 0; i < synthesisResultList.Count; i++)
             {
                 synthesisResultContentList[i].gameObject.SetActive(true);
-                synthesisResultContentList[i].Collection_Initialize(block2);
+                synthesisResultContentList[i].Initialize_UI(block2);
             }
 
             Debug.Log("합성 성공!");
@@ -861,7 +861,7 @@ public class SynthesisManager : MonoBehaviour
         for (int i = 0; i < blockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Collection_Initialize(blockList[i]);
+            blockUIContentList[i].Initialize_UI(blockList[i]);
 
             if (blockList[i].rankType == RankType.UR ||
     playerDataBase.CheckEquip(blockList[i].instanceId) != 0)
@@ -1329,7 +1329,7 @@ public class SynthesisManager : MonoBehaviour
             block.rankType = synthesisRankType + 1;
             block.level = 0;
 
-            synthesisResultContentList[i].Collection_Initialize(block);
+            synthesisResultContentList[i].Initialize_UI(block);
         }
 
         for (int i = 0; i < synthesisListAllResult.Count; i++)

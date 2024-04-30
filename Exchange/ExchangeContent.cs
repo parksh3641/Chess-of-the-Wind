@@ -60,20 +60,24 @@ public class ExchangeContent : MonoBehaviour
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightQueen_3:
-                gameObject.SetActive(false);
+                needPiece = 3;
 
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftQueen_3:
-                gameObject.SetActive(false);
+                needPiece = 3;
 
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightNight:
                 needPiece = 3;
+
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftNight:
                 needPiece = 3;
+
+                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightDownNight:
                 gameObject.SetActive(false);
@@ -90,9 +94,6 @@ public class ExchangeContent : MonoBehaviour
 
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
-            case BlockType.Rook_V2H2:
-                gameObject.SetActive(false);
-                break;
             case BlockType.Pawn_Under:
                 needPiece = 5;
 
@@ -103,34 +104,10 @@ public class ExchangeContent : MonoBehaviour
 
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
-            case BlockType.Spider:
-                gameObject.SetActive(false);
-                break;
             case BlockType.Rook_V4:
                 needPiece = 4;
 
                 if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_I_Hor:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_T:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_L:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_J:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_S:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_Z:
-                gameObject.SetActive(false);
-                break;
-            case BlockType.Tetris_Speical:
-                gameObject.SetActive(false);
                 break;
             case BlockType.RightNight_Mirror:
                 needPiece = 3;
@@ -177,11 +154,11 @@ public class ExchangeContent : MonoBehaviour
             blockHoldNumberText[i].gameObject.SetActive(true);
 
             blockUIContentArray[i].Initialize(blockType);
-            blockUIContentArray[i].SetRank(rankType);
+            blockUIContentArray[i].Initialize_Rank(rankType);
         }
 
         blockUIContent_Reward.Initialize(blockType);
-        blockUIContent_Reward.SetRank(rankType);
+        blockUIContent_Reward.Initialize_Rank(rankType);
 
         Initialize();
     }
@@ -235,8 +212,10 @@ public class ExchangeContent : MonoBehaviour
                 windCharacterType = WindCharacterType.Winter;
                 break;
             case BlockType.RightQueen_3:
+                windCharacterType = WindCharacterType.UnderWorld;
                 break;
             case BlockType.LeftQueen_3:
+                windCharacterType = WindCharacterType.Winter;
                 break;
             case BlockType.RightNight:
                 windCharacterType = WindCharacterType.UnderWorld;
@@ -251,32 +230,14 @@ public class ExchangeContent : MonoBehaviour
             case BlockType.Rook_V2:
                 windCharacterType = WindCharacterType.Winter;
                 break;
-            case BlockType.Rook_V2H2:
-                break;
             case BlockType.Pawn_Under:
                 windCharacterType = WindCharacterType.UnderWorld;
                 break;
             case BlockType.Pawn_Snow:
                 windCharacterType = WindCharacterType.Winter;
                 break;
-            case BlockType.Spider:
-                break;
             case BlockType.Rook_V4:
                 windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.Tetris_I_Hor:
-                break;
-            case BlockType.Tetris_T:
-                break;
-            case BlockType.Tetris_L:
-                break;
-            case BlockType.Tetris_J:
-                break;
-            case BlockType.Tetris_S:
-                break;
-            case BlockType.Tetris_Z:
-                break;
-            case BlockType.Tetris_Speical:
                 break;
             case BlockType.RightNight_Mirror:
                 windCharacterType = WindCharacterType.UnderWorld;

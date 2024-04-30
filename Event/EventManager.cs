@@ -233,11 +233,11 @@ public class EventManager : MonoBehaviour
         switch (GameStateManager.instance.WindCharacterType)
         {
             case WindCharacterType.Winter:
-                playerDataBase.SnowBox = 10;
+                playerDataBase.SnowBox_Normal = 10;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
                 break;
             case WindCharacterType.UnderWorld:
-                playerDataBase.UnderworldBox = 10;
+                playerDataBase.UnderworldBox_Normal = 10;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
                 break;
         }
@@ -343,11 +343,11 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 5;
+                        playerDataBase.SnowBox_Normal = 5;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 5);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 5;
+                        playerDataBase.UnderworldBox_Normal = 5;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 5);
                         break;
                 }
@@ -356,11 +356,11 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 10;
+                        playerDataBase.SnowBox_Normal = 10;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 10;
+                        playerDataBase.UnderworldBox_Normal = 10;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
                         break;
                 }
@@ -372,11 +372,11 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox = 15;
+                        playerDataBase.SnowBox_Normal = 15;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 15);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox = 15;
+                        playerDataBase.UnderworldBox_Normal = 15;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 15);
                         break;
                 }

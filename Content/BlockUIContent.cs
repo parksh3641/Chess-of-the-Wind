@@ -80,7 +80,193 @@ public class BlockUIContent : MonoBehaviour
         blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
     }
 
-    public void Collection_Initialize(BlockClass block)
+    public void Initialize_RandomBox(RandomBox_Block randomBox_Block)
+    {
+        SetPieceLevel(randomBox_Block.number);
+
+        switch (randomBox_Block.boxInfoType)
+        {
+            case BoxInfoType.RightQueen_2_N:
+                blockClass.blockType = BlockType.RightQueen_2;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.RightQueen_3_N:
+                blockClass.blockType = BlockType.RightQueen_3;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.RightNight_N:
+                blockClass.blockType = BlockType.RightNight;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.RightNight_Mirror_N:
+                blockClass.blockType = BlockType.RightNight_Mirror;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.Rook_V2_N:
+                blockClass.blockType = BlockType.Rook_V2;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.Rook_V2_2_N:
+                blockClass.blockType = BlockType.Rook_V2_2;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.Pawn_Under_N:
+                blockClass.blockType = BlockType.Pawn_Under;
+                blockClass.rankType = RankType.N;
+                break;
+            case BoxInfoType.Pawn_Under_2_N:
+                blockClass.blockType = BlockType.Pawn_Under_2;
+                blockClass.rankType = RankType.N;
+                break;
+
+
+            case BoxInfoType.RightQueen_2_R:
+                blockClass.blockType = BlockType.RightQueen_2;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.RightQueen_3_R:
+                blockClass.blockType = BlockType.RightQueen_3;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.RightNight_R:
+                blockClass.blockType = BlockType.RightNight;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.RightNight_Mirror_R:
+                blockClass.blockType = BlockType.RightNight_Mirror;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.Rook_V2_R:
+                blockClass.blockType = BlockType.Rook_V2;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.Rook_V2_2_R:
+                blockClass.blockType = BlockType.Rook_V2_2;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.Pawn_Under_R:
+                blockClass.blockType = BlockType.Pawn_Under;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.Pawn_Under_2_R:
+                blockClass.blockType = BlockType.Pawn_Under_2;
+                blockClass.rankType = RankType.R;
+                break;
+            case BoxInfoType.RightQueen_2_SR:
+                blockClass.blockType = BlockType.RightQueen_2;
+                blockClass.rankType = RankType.SR;
+                break;
+            case BoxInfoType.RightQueen_3_SR:
+                blockClass.blockType = BlockType.RightQueen_3;
+                blockClass.rankType = RankType.SR;
+                break;
+            case BoxInfoType.RightNight_SR:
+                break;
+            case BoxInfoType.RightNight_Mirror_SR:
+                break;
+            case BoxInfoType.Rook_V2_SR:
+                break;
+            case BoxInfoType.Rook_V2_2_SR:
+                break;
+            case BoxInfoType.Pawn_Under_SR:
+                break;
+            case BoxInfoType.Pawn_Under_2_SR:
+                break;
+            case BoxInfoType.RightQueen_2_SSR:
+                break;
+            case BoxInfoType.RightQueen_3_SSR:
+                break;
+            case BoxInfoType.RightNight_SSR:
+                break;
+            case BoxInfoType.RightNight_Mirror_SSR:
+                break;
+            case BoxInfoType.Rook_V2_SSR:
+                break;
+            case BoxInfoType.Rook_V2_2_SSR:
+                break;
+            case BoxInfoType.Pawn_Under_SSR:
+                break;
+            case BoxInfoType.Pawn_Under_2_SSR:
+                break;
+            case BoxInfoType.LeftQueen_2_N:
+                break;
+            case BoxInfoType.LeftQueen_3_N:
+                break;
+            case BoxInfoType.LeftNight_N:
+                break;
+            case BoxInfoType.LeftNight_Mirror_N:
+                break;
+            case BoxInfoType.Rook_V4_N:
+                break;
+            case BoxInfoType.Rook_V4_2_N:
+                break;
+            case BoxInfoType.Pawn_Snow_N:
+                break;
+            case BoxInfoType.Pawn_Snow_2_N:
+                break;
+            case BoxInfoType.LeftQueen_2_R:
+                break;
+            case BoxInfoType.LeftQueen_3_R:
+                break;
+            case BoxInfoType.LeftNight_R:
+                break;
+            case BoxInfoType.LeftNight_Mirror_R:
+                break;
+            case BoxInfoType.Rook_V4_R:
+                break;
+            case BoxInfoType.Rook_V4_2_R:
+                break;
+            case BoxInfoType.Pawn_Snow_R:
+                break;
+            case BoxInfoType.Pawn_Snow_2_R:
+                break;
+            case BoxInfoType.LeftQueen_2_SR:
+                break;
+            case BoxInfoType.LeftQueen_3_SR:
+                break;
+            case BoxInfoType.LeftNight_SR:
+                break;
+            case BoxInfoType.LeftNight_Mirror_SR:
+                break;
+            case BoxInfoType.Rook_V4_SR:
+                break;
+            case BoxInfoType.Rook_V4_2_SR:
+                break;
+            case BoxInfoType.Pawn_Snow_SR:
+                break;
+            case BoxInfoType.Pawn_Snow_2_SR:
+                break;
+            case BoxInfoType.LeftQueen_2_SSR:
+                break;
+            case BoxInfoType.LeftQueen_3_SSR:
+                break;
+            case BoxInfoType.LeftNight_SSR:
+                break;
+            case BoxInfoType.LeftNight_Mirror_SSR:
+                break;
+            case BoxInfoType.Rook_V4_SSR:
+                break;
+            case BoxInfoType.Rook_V4_2_SSR:
+                break;
+            case BoxInfoType.Pawn_Snow_SSR:
+                break;
+            case BoxInfoType.Pawn_Snow_2_SSR:
+                break;
+            case BoxInfoType.Gold1:
+                break;
+            case BoxInfoType.Gold2:
+                break;
+            case BoxInfoType.UpgradeTicket1:
+                break;
+            case BoxInfoType.UpgradeTicket2:
+                break;
+        }
+
+        Initialize_UI(blockClass);
+    }
+
+
+    public void Initialize_UI(BlockClass block)
     {
         blockClass = block;
         instanceId = blockClass.instanceId;
@@ -114,7 +300,7 @@ public class BlockUIContent : MonoBehaviour
         }
     }
 
-    public void SetRank(RankType type)
+    public void Initialize_Rank(RankType type)
     {
         boxInfo = true;
 

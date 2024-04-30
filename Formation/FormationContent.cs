@@ -33,9 +33,9 @@ public class FormationContent : MonoBehaviour
             //titleText.text = "지하 세계";
         }
 
-        blockContents[0].SetRank(RankType.N);
-        blockContents[1].SetRank(RankType.N);
-        blockContents[2].SetRank(RankType.N);
-        blockContents[3].SetRank(RankType.N);
+        blockContents[0].Initialize_Rank(RankType.N);
+        blockContents[1].Initialize_Rank(RankType.N);
+        blockContents[2].Initialize_Rank(RankType.N);
+        blockContents[3].Initialize_Rank(RankType.N);
     }
 }

@@ -234,7 +234,7 @@ public class ShopManager : MonoBehaviour
     #region RandomBox
     public void BuySnowBox1()
     {
-        GetSnowBox(BoxType.Random, 1);
+        GetSnowBox(BoxType.Normal, 1);
 
         playerDataBase.BuySnowBox += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
@@ -242,7 +242,7 @@ public class ShopManager : MonoBehaviour
 
     public void BuySnowBox2()
     {
-        GetSnowBox(BoxType.Random, 10);
+        GetSnowBox(BoxType.Normal, 10);
 
         playerDataBase.BuySnowBox += 10;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
@@ -252,8 +252,8 @@ public class ShopManager : MonoBehaviour
     {
         switch (type)
         {
-            case BoxType.Random:
-                playerDataBase.SnowBox = number;
+            case BoxType.Normal:
+                playerDataBase.SnowBox_Normal = number;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", number);
                 break;
             case BoxType.N:
@@ -296,7 +296,7 @@ public class ShopManager : MonoBehaviour
 
     public void BuyUnderworldBox1()
     {
-        GetUnderworld(BoxType.Random, 1);
+        GetUnderworld(BoxType.Normal, 1);
 
         playerDataBase.BuyUnderworldBox += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
@@ -304,7 +304,7 @@ public class ShopManager : MonoBehaviour
 
     public void BuyUnderworldBox2()
     {
-        GetUnderworld(BoxType.Random, 10);
+        GetUnderworld(BoxType.Normal, 10);
 
         playerDataBase.BuyUnderworldBox += 10;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
@@ -314,8 +314,8 @@ public class ShopManager : MonoBehaviour
     {
         switch (type)
         {
-            case BoxType.Random:
-                playerDataBase.UnderworldBox = number;
+            case BoxType.Normal:
+                playerDataBase.UnderworldBox_Normal = number;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", number);
                 break;
             case BoxType.N:
@@ -1028,10 +1028,10 @@ public class ShopManager : MonoBehaviour
         switch (GameStateManager.instance.WindCharacterType)
         {
             case WindCharacterType.Winter:
-                GetSnowBox(BoxType.Random, number);
+                GetSnowBox(BoxType.Normal, number);
                 break;
             case WindCharacterType.UnderWorld:
-                GetUnderworld(BoxType.Random, number);
+                GetUnderworld(BoxType.Normal, number);
                 break;
         }
     }

@@ -272,7 +272,11 @@ public class PlayerDataBase : ScriptableObject
     [Space]
     [Title("Box_Snow")]
     [SerializeField]
-    private int snowBox = 0;
+    private int snowBox_Normal = 0;
+    [SerializeField]
+    private int snowBox_Epic = 0;
+    [SerializeField]
+    private int snowBox_Speical = 0;
     [SerializeField]
     private int snowBox_N = 0;
     [SerializeField]
@@ -293,7 +297,11 @@ public class PlayerDataBase : ScriptableObject
     [Space]
     [Title("Box_Under")]
     [SerializeField]
-    private int underworldBox = 0;
+    private int underworldBox_Normal = 0;
+    [SerializeField]
+    private int underworldBox_Epic = 0;
+    [SerializeField]
+    private int underworldBox_Speical = 0;
     [SerializeField]
     private int underworldBox_N = 0;
     [SerializeField]
@@ -390,8 +398,8 @@ public class PlayerDataBase : ScriptableObject
     Dictionary<string, string> levelCustomData = new Dictionary<string, string>();
 
     public delegate void BoxEvent();
-    public static event BoxEvent eGetSnowBox, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR, eGetSnowBox_NR, eGetSnowBox_RSR, eGetSnowBox_SRSSR,
-        eGetUnderworldBox, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR, eGetUnderworldBox_NR,
+    public static event BoxEvent eGetSnowBox_Normal, eGetSnowBox_Epic, eGetSnowBox_Speical, eGetSnowBox_N, eGetSnowBox_R, eGetSnowBox_SR, eGetSnowBox_SSR, eGetSnowBox_UR, eGetSnowBox_NR, eGetSnowBox_RSR, eGetSnowBox_SRSSR,
+        eGetUnderworldBox_Normal, eGetUnderworldBox_Epic, eGetUnderworldBox_Speical, eGetUnderworldBox_N, eGetUnderworldBox_R, eGetUnderworldBox_SR, eGetUnderworldBox_SSR, eGetUnderworldBox_UR, eGetUnderworldBox_NR,
         eGetUnderworldBox_RSR, eGetUnderworldBox_SRSSR;
 
     public delegate void TitleEvent();
@@ -1333,19 +1341,53 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int SnowBox
+    public int SnowBox_Normal
     {
         get
         {
-            return snowBox;
+            return snowBox_Normal;
         }
         set
         {
-            snowBox = value;
+            snowBox_Normal = value;
 
-            if (snowBox > 0)
+            if (snowBox_Normal > 0)
             {
-                eGetSnowBox();
+                eGetSnowBox_Normal();
+            }
+        }
+    }
+
+    public int SnowBox_Epic
+    {
+        get
+        {
+            return snowBox_Epic;
+        }
+        set
+        {
+            snowBox_Epic = value;
+
+            if (snowBox_Epic > 0)
+            {
+                eGetSnowBox_Epic();
+            }
+        }
+    }
+
+    public int SnowBox_Speical
+    {
+        get
+        {
+            return snowBox_Speical;
+        }
+        set
+        {
+            snowBox_Speical = value;
+
+            if (snowBox_Speical > 0)
+            {
+                eGetSnowBox_Speical();
             }
         }
     }
@@ -1486,19 +1528,53 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int UnderworldBox
+    public int UnderworldBox_Normal
     {
         get
         {
-            return underworldBox;
+            return underworldBox_Normal;
         }
         set
         {
-            underworldBox = value;
+            underworldBox_Normal = value;
 
-            if (underworldBox > 0)
+            if (underworldBox_Normal > 0)
             {
-                eGetUnderworldBox();
+                eGetUnderworldBox_Normal();
+            }
+        }
+    }
+
+    public int UnderworldBox_Epic
+    {
+        get
+        {
+            return underworldBox_Epic;
+        }
+        set
+        {
+            underworldBox_Epic = value;
+
+            if (underworldBox_Epic > 0)
+            {
+                eGetUnderworldBox_Epic();
+            }
+        }
+    }
+
+    public int UnderworldBox_Speical
+    {
+        get
+        {
+            return underworldBox_Speical;
+        }
+        set
+        {
+            underworldBox_Speical = value;
+
+            if (underworldBox_Speical > 0)
+            {
+                eGetUnderworldBox_Speical();
             }
         }
     }
@@ -1979,7 +2055,9 @@ public class PlayerDataBase : ScriptableObject
         emote4 = 3;
         emote5 = 4;
 
-        snowBox = 0;
+        snowBox_Normal = 0;
+        snowBox_Epic = 0;
+        snowBox_Speical = 0;
         snowBox_N = 0;
         snowBox_R = 0;
         snowBox_SR = 0;
@@ -1989,7 +2067,9 @@ public class PlayerDataBase : ScriptableObject
         snowBox_RSR = 0;
         snowBox_SRSSR = 0;
 
-        underworldBox = 0;
+        underworldBox_Normal = 0;
+        underworldBox_Epic = 0;
+        underworldBox_Speical = 0;
         underworldBox_N = 0;
         underworldBox_R = 0;
         underworldBox_SR = 0;

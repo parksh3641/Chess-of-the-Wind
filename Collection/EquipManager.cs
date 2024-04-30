@@ -228,7 +228,7 @@ public class EquipManager : MonoBehaviour
 
         playerDataBase.Armor = block.instanceId;
 
-        armorBlockUI.Collection_Initialize(block);
+        armorBlockUI.Initialize_UI(block);
         collectionManager.CheckEquip(playerDataBase.Armor);
 
         collectionManager.Checking();
@@ -247,7 +247,7 @@ public class EquipManager : MonoBehaviour
 
         playerDataBase.Weapon = block.instanceId;
 
-        weaponBlockUI.Collection_Initialize(block);
+        weaponBlockUI.Initialize_UI(block);
         collectionManager.CheckEquip(playerDataBase.Weapon);
 
         collectionManager.Checking();
@@ -266,7 +266,7 @@ public class EquipManager : MonoBehaviour
 
         playerDataBase.Shield = block.instanceId;
 
-        shieldBlockUI.Collection_Initialize(block);
+        shieldBlockUI.Initialize_UI(block);
         collectionManager.CheckEquip(playerDataBase.Shield);
 
         collectionManager.Checking();
@@ -285,7 +285,7 @@ public class EquipManager : MonoBehaviour
 
         playerDataBase.Newbie = block.instanceId;
 
-        newbieBlockUI.Collection_Initialize(block);
+        newbieBlockUI.Initialize_UI(block);
         collectionManager.CheckEquip(playerDataBase.Newbie);
 
         collectionManager.Checking();

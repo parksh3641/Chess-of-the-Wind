@@ -284,7 +284,7 @@ public class CollectionManager : MonoBehaviour
         for(int i = 0; i < blockList.Count; i ++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Collection_Initialize(blockList[i]);
+            blockUIContentList[i].Initialize_UI(blockList[i]);
             alarmList.Add(blockList[i].instanceId);
         }
 
@@ -343,7 +343,7 @@ public class CollectionManager : MonoBehaviour
                 !blockList[i].instanceId.Equals(playerDataBase.Newbie))
             {
                 blockUIContentList[i].gameObject.SetActive(true);
-                blockUIContentList[i].Collection_Initialize(blockList[i]);
+                blockUIContentList[i].Initialize_UI(blockList[i]);
             }
         }
 
@@ -599,7 +599,7 @@ public class CollectionManager : MonoBehaviour
         for (int i = 0; i < blockList.Count; i++)
         {
             blockUIContentList[i].gameObject.SetActive(true);
-            blockUIContentList[i].Collection_Initialize(blockList[i]);
+            blockUIContentList[i].Initialize_UI(blockList[i]);
         }
 
         for (int i = 0; i < blockList.Count; i++)

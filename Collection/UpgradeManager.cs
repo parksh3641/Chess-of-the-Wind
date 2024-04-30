@@ -147,7 +147,7 @@ public class UpgradeManager : MonoBehaviour
 
     void Initialize()
     {
-        blockUIContent.Collection_Initialize(blockClass);
+        blockUIContent.Initialize_UI(blockClass);
         upgradeValue = upgradeDataBase.GetUpgradeValue(blockClass.rankType);
         upgradeInformation = upgradeDataBase.GetUpgradeInformation(blockClass.level + 1);
 

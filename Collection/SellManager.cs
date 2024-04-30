@@ -71,7 +71,7 @@ public class SellManager : MonoBehaviour
                 break;
         }
 
-        blockUIContent.Collection_Initialize(blockClass);
+        blockUIContent.Initialize_UI(blockClass);
         sellPriceText.text = MoneyUnitString.ToCurrencyString(price);
     }
 

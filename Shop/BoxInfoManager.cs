@@ -198,7 +198,7 @@ public class BoxInfoManager : MonoBehaviour
         {
             blockUIContentList[i].gameObject.SetActive(true);
             blockUIContentList[i].Initialize((BlockType)Enum.Parse(typeof(BlockType),temp[i]));
-            blockUIContentList[i].SetRank(rankType);
+            blockUIContentList[i].Initialize_Rank(rankType);
         }
 
         boxInfoContentTransform.offsetMax = new Vector2(0, -9999);

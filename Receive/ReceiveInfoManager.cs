@@ -162,7 +162,7 @@ public class ReceiveInfoManager : MonoBehaviour
         blockUIContent.gameObject.SetActive(true);
 
         blockUIContent.Initialize(block.blockType);
-        blockUIContent.SetRank(block.rankType);
+        blockUIContent.Initialize_Rank(block.rankType);
 
         titleText.text = LocalizationManager.instance.GetString(block.blockType.ToString());
 
