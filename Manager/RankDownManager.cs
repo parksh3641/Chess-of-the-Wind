@@ -123,7 +123,7 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
                 case RewardType.UpgradeTicket:
                     ItemAnimManager.instance.GetUpgradeTicket(rankDownInfomation.receiveInformationList[i].count);
                     break;
-                case RewardType.Box:
+                case RewardType.Box_Normal:
                     switch (GameStateManager.instance.WindCharacterType)
                     {
                         case WindCharacterType.Winter:
@@ -135,22 +135,6 @@ LocalizationManager.instance.GetString(strArray2[0]) + " <color=#FFC032>" + strA
                             PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", rankDownInfomation.receiveInformationList[i].count);
                             break;
                     }
-                    break;
-                case RewardType.Box_N:
-                    break;
-                case RewardType.Box_R:
-                    break;
-                case RewardType.Box_SR:
-                    break;
-                case RewardType.Box_SSR:
-                    break;
-                case RewardType.Box_UR:
-                    break;
-                case RewardType.Box_NR:
-                    break;
-                case RewardType.Box_RSR:
-                    break;
-                case RewardType.Box_SRSSR:
                     break;
             }
         }

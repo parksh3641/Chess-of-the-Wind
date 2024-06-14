@@ -26,7 +26,6 @@ public class StateManager : MonoBehaviour
     public OptionManager optionManager;
     public TitleManager titleManager;
     public AttendanceManager attendanceManager;
-    public RandomBoxManager randomBoxManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -68,7 +67,6 @@ public class StateManager : MonoBehaviour
             newsManager.Initialize();
             challengeManager.Initialize();
             titleManager.Initialize();
-            randomBoxManager.Initialize();
         }
     }
 

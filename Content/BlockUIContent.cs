@@ -9,6 +9,8 @@ public class BlockUIContent : MonoBehaviour
     public BlockClass blockClass;
     public string instanceId = "";
 
+    public ShopUIType shopUIType = ShopUIType.Default;
+
     public Image backgroundImg;
 
     public Image rankImg;
@@ -29,6 +31,7 @@ public class BlockUIContent : MonoBehaviour
     public GameObject lockedObj;
 
     public GameObject[] blockUIArray;
+    public GameObject[] shopUIArray;
 
     Sprite[] rankBackgroundArray;
     Sprite[] rankBannerArray;
@@ -64,6 +67,11 @@ public class BlockUIContent : MonoBehaviour
             blockUIArray[i].SetActive(false);
         }
 
+        for (int i = 0; i < shopUIArray.Length; i++)
+        {
+            shopUIArray[i].SetActive(false);
+        }
+
         selectedObj.SetActive(false);
         lockedObj.SetActive(false);
     }
@@ -77,12 +85,24 @@ public class BlockUIContent : MonoBehaviour
             blockUIArray[i].SetActive(false);
         }
 
-        blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
+        for (int i = 0; i < shopUIArray.Length; i++)
+        {
+            shopUIArray[i].SetActive(false);
+        }
+
+        if (shopUIType == ShopUIType.Default)
+        {
+            blockUIArray[(int)blockClass.blockType - 1].SetActive(true);
+        }
+        else
+        {
+            shopUIArray[(int)shopUIType - 1].SetActive(true);
+        }
     }
 
     public void Initialize_RandomBox(RandomBox_Block randomBox_Block)
     {
-        SetPieceLevel(randomBox_Block.number);
+        shopUIType = ShopUIType.Default;
 
         switch (randomBox_Block.boxInfoType)
         {
@@ -118,8 +138,6 @@ public class BlockUIContent : MonoBehaviour
                 blockClass.blockType = BlockType.Pawn_Under_2;
                 blockClass.rankType = RankType.N;
                 break;
-
-
             case BoxInfoType.RightQueen_2_R:
                 blockClass.blockType = BlockType.RightQueen_2;
                 blockClass.rankType = RankType.R;
@@ -161,113 +179,217 @@ public class BlockUIContent : MonoBehaviour
                 blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.RightNight_SR:
+                blockClass.blockType = BlockType.RightNight;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.RightNight_Mirror_SR:
+                blockClass.blockType = BlockType.RightNight_Mirror;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Rook_V2_SR:
+                blockClass.blockType = BlockType.Rook_V2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Rook_V2_2_SR:
+                blockClass.blockType = BlockType.Rook_V2_2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Pawn_Under_SR:
+                blockClass.blockType = BlockType.Pawn_Under;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Pawn_Under_2_SR:
+                blockClass.blockType = BlockType.Pawn_Under_2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.RightQueen_2_SSR:
+                blockClass.blockType = BlockType.RightQueen_2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.RightQueen_3_SSR:
+                blockClass.blockType = BlockType.RightQueen_3;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.RightNight_SSR:
+                blockClass.blockType = BlockType.RightNight;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.RightNight_Mirror_SSR:
+                blockClass.blockType = BlockType.RightNight_Mirror;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Rook_V2_SSR:
+                blockClass.blockType = BlockType.Rook_V2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Rook_V2_2_SSR:
+                blockClass.blockType = BlockType.Rook_V2_2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Pawn_Under_SSR:
+                blockClass.blockType = BlockType.Pawn_Under;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Pawn_Under_2_SSR:
+                blockClass.blockType = BlockType.Pawn_Under_2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.LeftQueen_2_N:
+                blockClass.blockType = BlockType.LeftQueen_2;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.LeftQueen_3_N:
+                blockClass.blockType = BlockType.LeftQueen_3;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.LeftNight_N:
+                blockClass.blockType = BlockType.LeftNight;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.LeftNight_Mirror_N:
+                blockClass.blockType = BlockType.LeftNight_Mirror;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.Rook_V4_N:
+                blockClass.blockType = BlockType.Rook_V4;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.Rook_V4_2_N:
+                blockClass.blockType = BlockType.Rook_V4_2;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.Pawn_Snow_N:
+                blockClass.blockType = BlockType.Pawn_Snow;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.Pawn_Snow_2_N:
+                blockClass.blockType = BlockType.Pawn_Snow_2;
+                blockClass.rankType = RankType.N;
                 break;
             case BoxInfoType.LeftQueen_2_R:
+                blockClass.blockType = BlockType.LeftQueen_2;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.LeftQueen_3_R:
+                blockClass.blockType = BlockType.LeftQueen_3;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.LeftNight_R:
+                blockClass.blockType = BlockType.LeftNight;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.LeftNight_Mirror_R:
+                blockClass.blockType = BlockType.LeftNight_Mirror;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.Rook_V4_R:
+                blockClass.blockType = BlockType.Rook_V4;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.Rook_V4_2_R:
+                blockClass.blockType = BlockType.Rook_V4_2;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.Pawn_Snow_R:
+                blockClass.blockType = BlockType.Pawn_Snow;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.Pawn_Snow_2_R:
+                blockClass.blockType = BlockType.Pawn_Snow_2;
+                blockClass.rankType = RankType.R;
                 break;
             case BoxInfoType.LeftQueen_2_SR:
+                blockClass.blockType = BlockType.LeftQueen_2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.LeftQueen_3_SR:
+                blockClass.blockType = BlockType.LeftQueen_3;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.LeftNight_SR:
+                blockClass.blockType = BlockType.LeftNight;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.LeftNight_Mirror_SR:
+                blockClass.blockType = BlockType.LeftNight_Mirror;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Rook_V4_SR:
+                blockClass.blockType = BlockType.Rook_V4;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Rook_V4_2_SR:
+                blockClass.blockType = BlockType.Rook_V4_2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Pawn_Snow_SR:
+                blockClass.blockType = BlockType.Pawn_Snow;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.Pawn_Snow_2_SR:
+                blockClass.blockType = BlockType.Pawn_Snow_2;
+                blockClass.rankType = RankType.SR;
                 break;
             case BoxInfoType.LeftQueen_2_SSR:
+                blockClass.blockType = BlockType.LeftQueen_2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.LeftQueen_3_SSR:
+                blockClass.blockType = BlockType.LeftQueen_3;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.LeftNight_SSR:
+                blockClass.blockType = BlockType.LeftNight;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.LeftNight_Mirror_SSR:
+                blockClass.blockType = BlockType.LeftNight_Mirror;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Rook_V4_SSR:
+                blockClass.blockType = BlockType.Rook_V4;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Rook_V4_2_SSR:
+                blockClass.blockType = BlockType.Rook_V4_2;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Pawn_Snow_SSR:
+                blockClass.blockType = BlockType.Pawn_Snow;
+                blockClass.rankType = RankType.SSR;
                 break;
             case BoxInfoType.Pawn_Snow_2_SSR:
+                blockClass.blockType = BlockType.Pawn_Snow_2;
+                blockClass.rankType = RankType.SSR;
                 break;
-            case BoxInfoType.Gold1:
+            case BoxInfoType.Gold_N:
+                shopUIType = ShopUIType.Gold1;
+                blockClass.rankType = RankType.N;
                 break;
-            case BoxInfoType.Gold2:
+            case BoxInfoType.Gold_R:
+                shopUIType = ShopUIType.Gold2;
+                blockClass.rankType = RankType.R;
                 break;
-            case BoxInfoType.UpgradeTicket1:
+            case BoxInfoType.UpgradeTicket_N:
+                shopUIType = ShopUIType.UpgradeTicket1;
+                blockClass.rankType = RankType.N;
                 break;
-            case BoxInfoType.UpgradeTicket2:
+            case BoxInfoType.UpgradeTicket_R:
+                shopUIType = ShopUIType.UpgradeTicket2;
+                blockClass.rankType = RankType.R;
                 break;
         }
 
         Initialize_UI(blockClass);
+
+        SetPieceLevel(randomBox_Block.number);
     }
 
 
     public void Initialize_UI(BlockClass block)
     {
+        boxInfo = true;
+
         blockClass = block;
         instanceId = blockClass.instanceId;
 
@@ -289,7 +411,7 @@ public class BlockUIContent : MonoBehaviour
 
         SetLevel(blockClass.level);
 
-        if(block.ssrLevel > 0)
+        if (block.ssrLevel > 0)
         {
             rankSSRImg.gameObject.SetActive(true);
             rankSSRText.text = block.ssrLevel.ToString();
@@ -359,8 +481,17 @@ public class BlockUIContent : MonoBehaviour
 
     public void SetPieceLevel(int number)
     {
-        rankSSRImg.gameObject.SetActive(true);
-        rankSSRText.text = number.ToString();
+        if (shopUIType == ShopUIType.Default)
+        {
+            rankSSRImg.gameObject.SetActive(true);
+            rankSSRText.text = (number + 1).ToString();
+            levelText.text = "";
+        }
+        else
+        {
+            rankSSRImg.gameObject.SetActive(false);
+            levelText.text = "";
+        }
     }
 
     public void Upgrade_Initialize(CollectionManager manager)
@@ -372,7 +503,10 @@ public class BlockUIContent : MonoBehaviour
     {
         if(boxInfo)
         {
-            ReceiveInfoManager.instance.OpenBlockInfo(blockClass);
+            if(shopUIType == ShopUIType.Default)
+            {
+                ReceiveInfoManager.instance.OpenBlockInfo(blockClass);
+            }
 
             return;
         }

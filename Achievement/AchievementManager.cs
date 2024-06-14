@@ -152,7 +152,7 @@ public class AchievementManager : MonoBehaviour
         }
         else
         {
-            ReceiveInfoManager.instance.OpenReceiveInfo(RewardType.Box);
+            ReceiveInfoManager.instance.OpenReceiveInfo(RewardType.Box_Normal);
         }
 
         isWait = true;

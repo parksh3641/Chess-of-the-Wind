@@ -18,54 +18,144 @@ public class PieceInfo
 
     public void Initialize()
     {
-        pieceList_N.Clear();
-        pieceList_R.Clear();
-        pieceList_SR.Clear();
-        pieceList_SSR.Clear();
-        pieceList_UR.Clear();
+        //pieceList_N.Clear();
+        //pieceList_R.Clear();
+        //pieceList_SR.Clear();
+        //pieceList_SSR.Clear();
+        //pieceList_UR.Clear();
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i ++)
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i ++)
+        //{
+        //    Piece piece = new Piece();
+        //    piece.blockType = BlockType.Default + 1 + i;
+        //    piece.rankType = RankType.N;
+        //    pieceList_N.Add(piece);
+        //}
+
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        //{
+        //    Piece piece = new Piece();
+        //    piece.blockType = BlockType.Default + 1 + i;
+        //    piece.rankType = RankType.R;
+        //    pieceList_R.Add(piece);
+        //}
+
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        //{
+        //    Piece piece = new Piece();
+        //    piece.blockType = BlockType.Default + 1 + i;
+        //    piece.rankType = RankType.SR;
+        //    pieceList_SR.Add(piece);
+        //}
+
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        //{
+        //    Piece piece = new Piece();
+        //    piece.blockType = BlockType.Default + 1 + i;
+        //    piece.rankType = RankType.UR;
+        //    pieceList_UR.Add(piece);
+        //}
+
+        //for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        //{
+        //    Piece piece = new Piece();
+        //    piece.blockType = BlockType.Default + 1 + i;
+        //    piece.rankType = RankType.SSR;
+        //    pieceList_SSR.Add(piece);
+        //}
+
+        for(int i = 0; i < pieceList_N.Count; i ++)
         {
-            Piece piece = new Piece();
-            piece.blockType = BlockType.Default + 1 + i;
-            piece.rankType = RankType.N;
-            pieceList_N.Add(piece);
+            pieceList_N[i].Initialize();
         }
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        for (int i = 0; i < pieceList_R.Count; i++)
         {
-            Piece piece = new Piece();
-            piece.blockType = BlockType.Default + 1 + i;
-            piece.rankType = RankType.R;
-            pieceList_R.Add(piece);
+            pieceList_R[i].Initialize();
         }
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        for (int i = 0; i < pieceList_SR.Count; i++)
         {
-            Piece piece = new Piece();
-            piece.blockType = BlockType.Default + 1 + i;
-            piece.rankType = RankType.SR;
-            pieceList_SR.Add(piece);
+            pieceList_SR[i].Initialize();
         }
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        for (int i = 0; i < pieceList_SSR.Count; i++)
         {
-            Piece piece = new Piece();
-            piece.blockType = BlockType.Default + 1 + i;
-            piece.rankType = RankType.UR;
-            pieceList_UR.Add(piece);
+            pieceList_SSR[i].Initialize();
         }
 
-        for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
+        for (int i = 0; i < pieceList_UR.Count; i++)
         {
-            Piece piece = new Piece();
-            piece.blockType = BlockType.Default + 1 + i;
-            piece.rankType = RankType.SSR;
-            pieceList_SSR.Add(piece);
+            pieceList_UR[i].Initialize();
+        }
+
+        Debug.LogError("조각 데이터베이스 초기화 완료");
+    }
+
+    public void SaveServerData(PieceInfo pieceInfo)
+    {
+        for (int i = 0; i < pieceInfo.pieceList_N.Count; i++)
+        {
+            if (i >= pieceList_N.Count)
+            {
+                pieceList_N.Add(pieceInfo.pieceList_N[i]);
+            }
+            else
+            {
+                pieceList_N[i] = pieceInfo.pieceList_N[i];
+            }
+        }
+
+        for (int i = 0; i < pieceInfo.pieceList_R.Count; i++)
+        {
+            if (i >= pieceList_R.Count)
+            {
+                pieceList_R.Add(pieceInfo.pieceList_R[i]);
+            }
+            else
+            {
+                pieceList_R[i] = pieceInfo.pieceList_R[i];
+            }
+        }
+
+        for (int i = 0; i < pieceInfo.pieceList_SR.Count; i++)
+        {
+            if (i >= pieceList_SR.Count)
+            {
+                pieceList_SR.Add(pieceInfo.pieceList_SR[i]);
+            }
+            else
+            {
+                pieceList_SR[i] = pieceInfo.pieceList_SR[i];
+            }
+        }
+
+        for (int i = 0; i < pieceInfo.pieceList_SSR.Count; i++)
+        {
+            if (i >= pieceList_SSR.Count)
+            {
+                pieceList_SSR.Add(pieceInfo.pieceList_SSR[i]);
+            }
+            else
+            {
+                pieceList_SSR[i] = pieceInfo.pieceList_SSR[i];
+            }
+        }
+
+        for (int i = 0; i < pieceInfo.pieceList_UR.Count; i++)
+        {
+            if (i >= pieceList_UR.Count)
+            {
+                pieceList_UR.Add(pieceInfo.pieceList_UR[i]);
+            }
+            else
+            {
+                pieceList_UR[i] = pieceInfo.pieceList_UR[i];
+            }
         }
     }
 
-    public void AddPiece(BlockType blockType, RankType rankType,int number)
+    public void AddPiece(BlockType blockType, RankType rankType, int number)
     {
         switch (rankType)
         {
@@ -85,6 +175,8 @@ public class PieceInfo
                 pieceList_UR[(int)blockType].PlusPiece(number);
                 break;
         }
+
+        Debug.Log(blockType + " / " + rankType + " / " + (number + 1) + "번째 조각 획득");
     }
 
     public void MinusPiece(BlockType blockType, RankType rankType)
@@ -217,24 +309,33 @@ public class Piece
 
     int[] piece = new int[5];
 
+    public void Initialize()
+    {
+        index1 = 0;
+        index2 = 0;
+        index3 = 0;
+        index4 = 0;
+        index5 = 0;
+    }
+
     public void PlusPiece(int number)
     {
         switch(number)
         {
             case 0:
-                index1 += number;
+                index1 += 1;
                 break;
             case 1:
-                index2 += number;
+                index2 += 1;
                 break;
             case 2:
-                index3 += number;
+                index3 += 1;
                 break;
             case 3:
-                index4 += number;
+                index4 += 1;
                 break;
             case 4:
-                index5 += number;
+                index5 += 1;
                 break;
         }
     }
@@ -628,35 +729,35 @@ public class InventoryManager : MonoBehaviour
 
     void CountInitialize(int number)
     {
-        switch (boxIndex)
-        {
-            case 0:
-                pieceText.text = playerDataBase.BoxPiece_N + "/" + (changeBoxCount * (number + 1));
+        //switch (boxIndex)
+        //{
+        //    case 0:
+        //        pieceText.text = playerDataBase.BoxPiece_N + "/" + (changeBoxCount * (number + 1));
 
-                receiveContent.Initialize(RewardType.Box_N, number + 1);
+        //        receiveContent.Initialize(RewardType.Box_N, number + 1);
 
-                break;
-            case 1:
-                pieceText.text = playerDataBase.BoxPiece_R + "/" + (changeBoxCount * (number + 1));
+        //        break;
+        //    case 1:
+        //        pieceText.text = playerDataBase.BoxPiece_R + "/" + (changeBoxCount * (number + 1));
 
-                receiveContent.Initialize(RewardType.Box_R, number + 1);
-                break;
-            case 2:
-                pieceText.text = playerDataBase.BoxPiece_SR + "/" + (changeBoxCount * (number + 1));
+        //        receiveContent.Initialize(RewardType.Box_R, number + 1);
+        //        break;
+        //    case 2:
+        //        pieceText.text = playerDataBase.BoxPiece_SR + "/" + (changeBoxCount * (number + 1));
 
-                receiveContent.Initialize(RewardType.Box_SR, number + 1);
-                break;
-            case 3:
-                pieceText.text = playerDataBase.BoxPiece_SSR + "/" + (changeBoxCount * (number + 1));
+        //        receiveContent.Initialize(RewardType.Box_SR, number + 1);
+        //        break;
+        //    case 3:
+        //        pieceText.text = playerDataBase.BoxPiece_SSR + "/" + (changeBoxCount * (number + 1));
 
-                receiveContent.Initialize(RewardType.Box_SSR, number + 1);
-                break;
-            case 4:
-                pieceText.text = playerDataBase.BoxPiece_UR + "/" + (changeBoxCount * (number + 1));
+        //        receiveContent.Initialize(RewardType.Box_SSR, number + 1);
+        //        break;
+        //    case 4:
+        //        pieceText.text = playerDataBase.BoxPiece_UR + "/" + (changeBoxCount * (number + 1));
 
-                receiveContent.Initialize(RewardType.Box_UR, number + 1);
-                break;
-        }
+        //        receiveContent.Initialize(RewardType.Box_UR, number + 1);
+        //        break;
+        //}
     }
 
 
@@ -712,123 +813,123 @@ public class InventoryManager : MonoBehaviour
     }
 
 
-    public void ChangeBox()
-    {
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+    //public void ChangeBox()
+    //{
+    //    if (!NetworkConnect.instance.CheckConnectInternet())
+    //    {
+    //        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            return;
-        }
+    //        NotionManager.instance.UseNotion(NotionType.CheckInternet);
+    //        return;
+    //    }
 
-        switch (boxIndex)
-        {
-            case 0:
-                playerDataBase.BoxPiece_N -= (changeBoxCount * (boxCount + 1));
+    //    switch (boxIndex)
+    //    {
+    //        case 0:
+    //            playerDataBase.BoxPiece_N -= (changeBoxCount * (boxCount + 1));
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_N", playerDataBase.BoxPiece_N);
+    //            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_N", playerDataBase.BoxPiece_N);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_N = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", boxCount + 1);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_N = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", boxCount + 1);
-                        break;
-                }
-                break;
-            case 1:
-                playerDataBase.BoxPiece_R -= (changeBoxCount * (boxCount + 1));
+    //            switch (GameStateManager.instance.WindCharacterType)
+    //            {
+    //                case WindCharacterType.Winter:
+    //                    playerDataBase.SnowBox_N = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", boxCount + 1);
+    //                    break;
+    //                case WindCharacterType.UnderWorld:
+    //                    playerDataBase.UnderworldBox_N = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", boxCount + 1);
+    //                    break;
+    //            }
+    //            break;
+    //        case 1:
+    //            playerDataBase.BoxPiece_R -= (changeBoxCount * (boxCount + 1));
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_R", playerDataBase.BoxPiece_R);
+    //            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_R", playerDataBase.BoxPiece_R);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_R = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", boxCount + 1);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_R = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", boxCount + 1);
-                        break;
-                }
-                break;
-            case 2:
-                playerDataBase.BoxPiece_SR -= (changeBoxCount * (boxCount + 1));
+    //            switch (GameStateManager.instance.WindCharacterType)
+    //            {
+    //                case WindCharacterType.Winter:
+    //                    playerDataBase.SnowBox_R = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", boxCount + 1);
+    //                    break;
+    //                case WindCharacterType.UnderWorld:
+    //                    playerDataBase.UnderworldBox_R = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", boxCount + 1);
+    //                    break;
+    //            }
+    //            break;
+    //        case 2:
+    //            playerDataBase.BoxPiece_SR -= (changeBoxCount * (boxCount + 1));
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SR", playerDataBase.BoxPiece_SR);
+    //            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SR", playerDataBase.BoxPiece_SR);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_SR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SR", boxCount + 1);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_SR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SR", boxCount + 1);
-                        break;
-                }
+    //            switch (GameStateManager.instance.WindCharacterType)
+    //            {
+    //                case WindCharacterType.Winter:
+    //                    playerDataBase.SnowBox_SR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SR", boxCount + 1);
+    //                    break;
+    //                case WindCharacterType.UnderWorld:
+    //                    playerDataBase.UnderworldBox_SR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SR", boxCount + 1);
+    //                    break;
+    //            }
 
-                break;
-            case 3:
-                playerDataBase.BoxPiece_SSR -= (changeBoxCount * (boxCount + 1));
+    //            break;
+    //        case 3:
+    //            playerDataBase.BoxPiece_SSR -= (changeBoxCount * (boxCount + 1));
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SSR", playerDataBase.BoxPiece_SSR);
+    //            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_SSR", playerDataBase.BoxPiece_SSR);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_SSR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SSR", boxCount + 1);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_SSR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SSR", boxCount + 1);
-                        break;
-                }
+    //            switch (GameStateManager.instance.WindCharacterType)
+    //            {
+    //                case WindCharacterType.Winter:
+    //                    playerDataBase.SnowBox_SSR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SSR", boxCount + 1);
+    //                    break;
+    //                case WindCharacterType.UnderWorld:
+    //                    playerDataBase.UnderworldBox_SSR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SSR", boxCount + 1);
+    //                    break;
+    //            }
 
-                break;
-            case 4:
-                playerDataBase.BoxPiece_UR -= (changeBoxCount * (boxCount + 1));
+    //            break;
+    //        case 4:
+    //            playerDataBase.BoxPiece_UR -= (changeBoxCount * (boxCount + 1));
 
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_UR", playerDataBase.BoxPiece_UR);
+    //            PlayfabManager.instance.UpdatePlayerStatisticsInsert("BoxPiece_UR", playerDataBase.BoxPiece_UR);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_UR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", boxCount + 1);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_UR = boxCount + 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", boxCount + 1);
-                        break;
-                }
+    //            switch (GameStateManager.instance.WindCharacterType)
+    //            {
+    //                case WindCharacterType.Winter:
+    //                    playerDataBase.SnowBox_UR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", boxCount + 1);
+    //                    break;
+    //                case WindCharacterType.UnderWorld:
+    //                    playerDataBase.UnderworldBox_UR = boxCount + 1;
+    //                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", boxCount + 1);
+    //                    break;
+    //            }
 
-                break;
-        }
+    //            break;
+    //    }
 
-        SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-        NotionManager.instance.UseNotion(NotionType.GetReward);
+    //    SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
+    //    NotionManager.instance.UseNotion(NotionType.GetReward);
 
-        Exchange_Speical_Initialize();
+    //    Exchange_Speical_Initialize();
 
-        CloseChangeBoxView();
+    //    CloseChangeBoxView();
 
-        playerDataBase.RepairBlockCount += boxCount + 1;
-        PlayfabManager.instance.UpdatePlayerStatisticsInsert("RepairBlockCount", playerDataBase.RepairBlockCount);
+    //    playerDataBase.RepairBlockCount += boxCount + 1;
+    //    PlayfabManager.instance.UpdatePlayerStatisticsInsert("RepairBlockCount", playerDataBase.RepairBlockCount);
 
-        collectionManager.mainAlarm.SetActive(true);
+    //    collectionManager.mainAlarm.SetActive(true);
 
-        isDelay = true;
-        Invoke("Delay", 1.0f);
-    }
+    //    isDelay = true;
+    //    Invoke("Delay", 1.0f);
+    //}
 
     void Delay()
     {

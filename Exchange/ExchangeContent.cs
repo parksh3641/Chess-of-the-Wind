@@ -150,7 +150,7 @@ public class ExchangeContent : MonoBehaviour
         for(int i = 0; i < needPiece; i ++)
         {
             blockUIContentArray[i].gameObject.SetActive(true);
-            blockUIContentArray[i].SetPieceLevel(i + 1);
+            blockUIContentArray[i].SetPieceLevel(i);
             blockHoldNumberText[i].gameObject.SetActive(true);
 
             blockUIContentArray[i].Initialize(blockType);
@@ -169,7 +169,7 @@ public class ExchangeContent : MonoBehaviour
 
         for(int i = 0; i < needPiece; i ++)
         {
-            blockHoldNumberText[i].text = piece[0] + "/1";
+            blockHoldNumberText[i].text = piece[i] + "/1";
         }
 
         lockedObj.SetActive(true);

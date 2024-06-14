@@ -232,17 +232,17 @@ public class ShopManager : MonoBehaviour
     }
 
     #region RandomBox
-    public void BuySnowBox1()
+    public void BuySnowBox1() //상점에서 현금 상자 1개 구입
     {
-        GetSnowBox(BoxType.Normal, 1);
+        GetSnowBox(BoxType.Speical, 1);
 
         playerDataBase.BuySnowBox += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
     }
 
-    public void BuySnowBox2()
+    public void BuySnowBox2() //상점에서 현금 상자 10개 구입
     {
-        GetSnowBox(BoxType.Normal, 10);
+        GetSnowBox(BoxType.Speical, 10);
 
         playerDataBase.BuySnowBox += 10;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
@@ -254,39 +254,15 @@ public class ShopManager : MonoBehaviour
         {
             case BoxType.Normal:
                 playerDataBase.SnowBox_Normal = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", number);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", number);
                 break;
-            case BoxType.N:
-                playerDataBase.SnowBox_N = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", number);
+            case BoxType.Epic:
+                playerDataBase.SnowBox_Epic = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", number);
                 break;
-            case BoxType.R:
-                playerDataBase.SnowBox_R = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", number);
-                break;
-            case BoxType.SR:
-                playerDataBase.SnowBox_SR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SR", number);
-                break;
-            case BoxType.SSR:
-                playerDataBase.SnowBox_SSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SSR", number);
-                break;
-            case BoxType.UR:
-                playerDataBase.SnowBox_UR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", number);
-                break;
-            case BoxType.NR:
-                playerDataBase.SnowBox_NR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", number);
-                break;
-            case BoxType.RSR:
-                playerDataBase.SnowBox_RSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", number);
-                break;
-            case BoxType.SRSSR:
-                playerDataBase.SnowBox_SRSSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SRSSR", number);
+            case BoxType.Speical:
+                playerDataBase.SnowBox_Speical = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", number);
                 break;
         }
 
@@ -318,44 +294,20 @@ public class ShopManager : MonoBehaviour
                 playerDataBase.UnderworldBox_Normal = number;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", number);
                 break;
-            case BoxType.N:
-                playerDataBase.UnderworldBox_N = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", number);
+            case BoxType.Epic:
+                playerDataBase.UnderworldBox_Epic = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", number);
                 break;
-            case BoxType.R:
-                playerDataBase.UnderworldBox_R = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", number);
-                break;
-            case BoxType.SR:
-                playerDataBase.UnderworldBox_SR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SR", number);
-                break;
-            case BoxType.SSR:
-                playerDataBase.UnderworldBox_SSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SSR", number);
-                break;
-            case BoxType.UR:
-                playerDataBase.UnderworldBox_UR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", number);
-                break;
-            case BoxType.NR:
-                playerDataBase.UnderworldBox_NR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", number);
-                break;
-            case BoxType.RSR:
-                playerDataBase.UnderworldBox_RSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", number);
-                break;
-            case BoxType.SRSSR:
-                playerDataBase.UnderworldBox_SRSSR = number;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SRSSR", number);
+            case BoxType.Speical:
+                playerDataBase.UnderworldBox_Speical = number;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", number);
                 break;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
 
-    public void Buy_NR(int number)
+    public void Buy_NormalBox(int number)
     {
         int price = 25000 * number;
 
@@ -391,10 +343,10 @@ public class ShopManager : MonoBehaviour
             switch (GameStateManager.instance.WindCharacterType)
             {
                 case WindCharacterType.Winter:
-                    GetSnowBox(BoxType.NR, number);
+                    GetSnowBox(BoxType.Normal, number);
                     break;
                 case WindCharacterType.UnderWorld:
-                    GetUnderworld(BoxType.NR, number);
+                    GetUnderworld(BoxType.Normal, number);
                     break;
             }
 
@@ -424,7 +376,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void Buy_RSR(int number)
+    public void Buy_EpicBox(int number)
     {
         int price = 100000 * number;
 
@@ -460,10 +412,10 @@ public class ShopManager : MonoBehaviour
             switch (GameStateManager.instance.WindCharacterType)
             {
                 case WindCharacterType.Winter:
-                    GetSnowBox(BoxType.RSR, number);
+                    GetSnowBox(BoxType.Epic, number);
                     break;
                 case WindCharacterType.UnderWorld:
-                    GetUnderworld(BoxType.RSR, number);
+                    GetUnderworld(BoxType.Epic, number);
                     break;
             }
 
@@ -736,12 +688,12 @@ public class ShopManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_NR = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", 1);
+                        playerDataBase.SnowBox_Normal = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_NR = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", 1);
+                        playerDataBase.UnderworldBox_Normal = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 1);
                         break;
                 }
 
@@ -753,12 +705,12 @@ public class ShopManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_RSR = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", 1);
+                        playerDataBase.SnowBox_Epic = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_RSR = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", 1);
+                        playerDataBase.UnderworldBox_Epic = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 1);
                         break;
                 }
 
@@ -876,6 +828,7 @@ public class ShopManager : MonoBehaviour
             boxShopLockArray[0].SetActive(true);
 
             playerDataBase.ResetInfo.dailyNormalBox = 1;
+            ResetManager.instance.SetResetInfo(ResetType.DailyNormalBox);
 
             playerData.Clear();
             playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
@@ -892,8 +845,6 @@ public class ShopManager : MonoBehaviour
         else
         {
             boxShopLockArray[0].SetActive(false);
-
-            ResetManager.instance.SetResetInfo(ResetType.DailyNormalBox);
 
             Debug.Log("Watch Ad BoxNR Stop");
 
@@ -950,6 +901,7 @@ public class ShopManager : MonoBehaviour
             boxShopLockArray[1].SetActive(true);
 
             playerDataBase.ResetInfo.dailyEpicBox = 1;
+            ResetManager.instance.SetResetInfo(ResetType.DailyEpicBox);
 
             playerData.Clear();
             playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
@@ -966,8 +918,6 @@ public class ShopManager : MonoBehaviour
         else
         {
             boxShopLockArray[1].SetActive(false);
-
-            ResetManager.instance.SetResetInfo(ResetType.DailyEpicBox);
 
             Debug.Log("Watch Ad BoxRSR Stop");
 
@@ -1036,115 +986,43 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void OpenBox_SSR()
+    [Button]
+    public void OpenSnowBox_Normal()
     {
-        switch (GameStateManager.instance.WindCharacterType)
-        {
-            case WindCharacterType.Winter:
-                OpenSnowBox_SSR();
-                break;
-            case WindCharacterType.UnderWorld:
-                OpenUnderworld_SSR();
-                break;
-        }
+        GetSnowBox(BoxType.Normal, 10);
     }
 
     [Button]
-    public void OpenSnowBox_N()
+    public void OpenSnowBox_Epic()
     {
-        GetSnowBox(BoxType.N, 10);
+        GetSnowBox(BoxType.Epic, 10);
     }
 
     [Button]
-    public void OpenSnowBox_R()
+    public void OpenSnowBox_Speical()
     {
-        GetSnowBox(BoxType.R, 10);
-    }
-
-    [Button]
-    public void OpenSnowBox_SR()
-    {
-        GetSnowBox(BoxType.SR, 10);
-    }
-
-    [Button]
-    public void OpenSnowBox_SSR()
-    {
-        GetSnowBox(BoxType.SSR, 10);
-    }
-
-    [Button]
-    public void OpenSnowBox_UR()
-    {
-        GetSnowBox(BoxType.UR, 10);
-    }
-
-    [Button]
-    public void OpenSnowBox_NR()
-    {
-        GetSnowBox(BoxType.NR, 10);
-    }
-
-    [Button]
-    public void OpenSnowBox_RSR()
-    {
-        GetSnowBox(BoxType.RSR, 10);
+        GetSnowBox(BoxType.Speical, 10);
     }
 
 
     [Button]
-    public void OpenSnowBox_SRSSR()
+    public void OpenUnderworld_Normal()
     {
-        GetSnowBox(BoxType.SRSSR, 10);
+        GetUnderworld(BoxType.Normal, 10);
     }
 
     [Button]
-    public void OpenUnderworld_N()
+    public void OpenUnderworld_Epic()
     {
-        GetUnderworld(BoxType.N, 10);
+        GetUnderworld(BoxType.Epic, 10);
     }
 
     [Button]
-    public void OpenUnderworld_R()
+    public void OpenUnderworld_Speical()
     {
-        GetUnderworld(BoxType.R, 10);
+        GetUnderworld(BoxType.Speical, 10);
     }
 
-    [Button]
-    public void OpenUnderworld_SR()
-    {
-        GetUnderworld(BoxType.SR, 10);
-    }
-
-    [Button]
-    public void OpenUnderworld_SSR()
-    {
-        GetUnderworld(BoxType.SSR, 10);
-    }
-
-    [Button]
-    public void OpenUnderworld_UR()
-    {
-        GetUnderworld(BoxType.UR, 10);
-    }
-
-    [Button]
-    public void OpenUnderworld_NR()
-    {
-        GetUnderworld(BoxType.NR, 10);
-    }
-
-    [Button]
-    public void OpenUnderworld_RSR()
-    {
-        GetUnderworld(BoxType.RSR, 10);
-    }
-
-    [Button]
-    public void OpenUnderworld_SRSSR()
-    {
-        GetUnderworld(BoxType.SRSSR, 10);
-    }
 
     #endregion
 }

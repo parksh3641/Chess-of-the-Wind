@@ -47,6 +47,86 @@ public class ResetInfo
     public int package_Monthly3 = 0;
     public int package_Monthly4 = 0;
     public int package_Monthly5 = 0;
+
+    public void Initialize()
+    {
+        dailyWin = 0;
+        dailyStar = 0;
+        dailyReward = 0;
+        dailyBuy1 = 0;
+        dailyBuy2 = 0;
+        dailyBuyCount1 = 0;
+        dailyBuyCount2 = 0;
+        dailyNormalBox = 0;
+        dailyEpicBox = 0;
+        dailyNormalBox_1 = 3;
+        dailyNormalBox_10 = 1;
+        dailyEpicBox_1 = 3;
+        dailyEpicBox_10 = 1;
+        dailyAdsReward = 0;
+        dailyAdsReward2 = 0;
+        dailyAdsReward3 = 0;
+        dailyGoldReward = 0;
+        dailyReset = 0;
+
+        package_Daily1 = 0;
+        package_Daily2 = 0;
+        package_Daily3 = 0;
+        package_Daily4 = 0;
+        package_Daily5 = 0;
+
+        package_Weekly1 = 0;
+        package_Weekly2 = 0;
+        package_Weekly3 = 0;
+        package_Weekly4 = 0;
+        package_Weekly5 = 0;
+
+        package_Monthly1 = 0;
+        package_Monthly2 = 0;
+        package_Monthly3 = 0;
+        package_Monthly4 = 0;
+        package_Monthly5 = 0;
+    }
+
+    public void SaveServerData(ResetInfo resetInfo)
+    {
+        dailyWin = resetInfo.dailyWin;
+        dailyStar = resetInfo.dailyStar;
+        dailyReward = resetInfo.dailyReward;
+        dailyBuy1 = resetInfo.dailyBuy1;
+        dailyBuy2 = resetInfo.dailyBuy2;
+        dailyBuyCount1 = resetInfo.dailyBuyCount1;
+        dailyBuyCount2 = resetInfo.dailyBuyCount2;
+        dailyNormalBox = resetInfo.dailyNormalBox;
+        dailyEpicBox = resetInfo.dailyEpicBox;
+        dailyNormalBox_1 = resetInfo.dailyNormalBox_1;
+        dailyNormalBox_10 = resetInfo.dailyNormalBox_10;
+        dailyEpicBox_1 = resetInfo.dailyEpicBox_1;
+        dailyEpicBox_10 = resetInfo.dailyEpicBox_10;
+        dailyAdsReward = resetInfo.dailyAdsReward;
+        dailyAdsReward2 = resetInfo.dailyAdsReward2;
+        dailyAdsReward3 = resetInfo.dailyAdsReward3;
+        dailyGoldReward = resetInfo.dailyGoldReward;
+        dailyReset = resetInfo.dailyReset;
+
+        package_Daily1 = resetInfo.package_Daily1;
+        package_Daily2 = resetInfo.package_Daily2;
+        package_Daily3 = resetInfo.package_Daily3;
+        package_Daily4 = resetInfo.package_Daily4;
+        package_Daily5 = resetInfo.package_Daily5;
+
+        package_Weekly1 = resetInfo.package_Weekly1;
+        package_Weekly2 = resetInfo.package_Weekly2;
+        package_Weekly3 = resetInfo.package_Weekly3;
+        package_Weekly4 = resetInfo.package_Weekly4;
+        package_Weekly5 = resetInfo.package_Weekly5;
+
+        package_Monthly1 = resetInfo.package_Monthly1;
+        package_Monthly2 = resetInfo.package_Monthly2;
+        package_Monthly3 = resetInfo.package_Monthly3;
+        package_Monthly4 = resetInfo.package_Monthly4;
+        package_Monthly5 = resetInfo.package_Monthly5;
+    }
 }
 
 
@@ -196,10 +276,7 @@ public class ResetManager : MonoBehaviour
 
         ResetValue();
 
-        if (!isFirst)
-        {
-            StartCoroutine(ResetCoroution());
-        }
+        StartCoroutine(ResetCoroution());
 
         StateManager.instance.OtherInitialize();
     }
@@ -336,6 +413,8 @@ public class ResetManager : MonoBehaviour
             playerDataBase.ResetInfo.package_Daily3 = 0;
             playerDataBase.ResetInfo.package_Daily4 = 0;
             playerDataBase.ResetInfo.package_Daily5 = 0;
+
+
         }
 
         if (isNextMonday)
@@ -378,15 +457,27 @@ public class ResetManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
 
+            playerData.Clear();
+            playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
+            PlayfabManager.instance.SetPlayerData(playerData);
+
+            Debug.LogError("서버 초기화 완료");
         }
 
-        yield return waitForSeconds;
-
-        playerData.Clear();
-        playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));
-        PlayfabManager.instance.SetPlayerData(playerData);
-
         Debug.LogError("초기화 작업 완료");
+    }
+
+    public void SetResetInfo(ResetType type, int index)
+    {
+        switch (type)
+        {
+            case ResetType.DailyNormalBox:
+                playerDataBase.ResetInfo.dailyNormalBox = index;
+                break;
+            case ResetType.DailyEpicBox:
+                playerDataBase.ResetInfo.dailyEpicBox = index;
+                break;
+        }
     }
 
     public void SetResetInfo(ResetType type)
@@ -413,12 +504,6 @@ public class ResetManager : MonoBehaviour
                 break;
             case ResetType.DailyBuyCount2:
                 playerDataBase.ResetInfo.dailyBuyCount2 = 1;
-                break;
-            case ResetType.DailyNormalBox:
-                playerDataBase.ResetInfo.dailyNormalBox = 1;
-                break;
-            case ResetType.DailyEpicBox:
-                playerDataBase.ResetInfo.dailyEpicBox = 1;
                 break;
             case ResetType.DailyNormalBox_1:
                 playerDataBase.ResetInfo.dailyNormalBox_1 -= 1;

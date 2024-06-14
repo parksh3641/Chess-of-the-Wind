@@ -30,15 +30,15 @@ public enum WindCharacterType
 
 public enum BoxType
 {
-    Normal, //일반 상자
-    N,
-    R,
-    SR,
-    SSR,
-    UR,
-    NR,
-    RSR,
-    SRSSR,
+    Normal,
+    //N,
+    //R,
+    //SR,
+    //SSR,
+    //UR,
+    //NR,
+    //RSR,
+    //SRSSR,
     Epic,
     Speical
 }
@@ -111,6 +111,15 @@ public enum BlockType
     Rook_V2_2,
     Pawn_Under_2,
     Pawn_Snow_2,
+}
+
+public enum ShopUIType
+{
+    Default,
+    Gold1,
+    Gold2,
+    UpgradeTicket1,
+    UpgradeTicket2
 }
 
 public enum BoxInfoType
@@ -187,10 +196,10 @@ public enum BoxInfoType
     Pawn_Snow_SSR,
     Pawn_Snow_2_SSR,
 
-    Gold1,
-    Gold2,
-    UpgradeTicket1,
-    UpgradeTicket2
+    Gold_N,
+    Gold_R,
+    UpgradeTicket_N,
+    UpgradeTicket_R
 }
 
 public enum BetOptionType
@@ -447,20 +456,14 @@ public enum RewardType
 {
     Gold,
     UpgradeTicket,
-    Box,
-    Box_N,
-    Box_R,
-    Box_SR,
-    Box_SSR,
-    Box_UR,
-    Box_NR,
-    Box_RSR,
-    Box_SRSSR,
+    Box_Normal,
+    Box_Epic,
+    Box_Speical,
     ExclusiveTitle,
     None,
     GoldShop1,
     GoldShop2,
-    GoldShop3
+    GoldShop3,
 }
 
 public enum AchievementType

@@ -119,6 +119,10 @@ public class PlayerDataBase : ScriptableObject
     private ResetInfo resetInfo;
 
     [Space]
+    [SerializeField]
+    private RandomBoxInfo randomBoxInfo;
+
+    [Space]
     [Title("Achievement")]
     [SerializeField]
     private int destroyBlockCount = 0;
@@ -277,22 +281,6 @@ public class PlayerDataBase : ScriptableObject
     private int snowBox_Epic = 0;
     [SerializeField]
     private int snowBox_Speical = 0;
-    [SerializeField]
-    private int snowBox_N = 0;
-    [SerializeField]
-    private int snowBox_R = 0;
-    [SerializeField]
-    private int snowBox_SR = 0;
-    [SerializeField]
-    private int snowBox_SSR = 0;
-    [SerializeField]
-    private int snowBox_UR = 0;
-    [SerializeField]
-    private int snowBox_NR = 0;
-    [SerializeField]
-    private int snowBox_RSR = 0;
-    [SerializeField]
-    private int snowBox_SRSSR = 0;
 
     [Space]
     [Title("Box_Under")]
@@ -302,22 +290,6 @@ public class PlayerDataBase : ScriptableObject
     private int underworldBox_Epic = 0;
     [SerializeField]
     private int underworldBox_Speical = 0;
-    [SerializeField]
-    private int underworldBox_N = 0;
-    [SerializeField]
-    private int underworldBox_R = 0;
-    [SerializeField]
-    private int underworldBox_SR = 0;
-    [SerializeField]
-    private int underworldBox_SSR = 0;
-    [SerializeField]
-    private int underworldBox_UR = 0;
-    [SerializeField]
-    private int underworldBox_NR = 0;
-    [SerializeField]
-    private int underworldBox_RSR = 0;
-    [SerializeField]
-    private int underworldBox_SRSSR = 0;
 
     [Space]
     [Title("Box_Piece")]
@@ -656,6 +628,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             resetInfo = value;
+        }
+    }
+
+    public RandomBoxInfo RandomBoxInfo
+    {
+        get
+        {
+            return randomBoxInfo;
+        }
+        set
+        {
+            randomBoxInfo = value;
         }
     }
 
@@ -1392,141 +1376,141 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int SnowBox_N
-    {
-        get
-        {
-            return snowBox_N;
-        }
-        set
-        {
-            snowBox_N = value;
+    //public int SnowBox_N
+    //{
+    //    get
+    //    {
+    //        return snowBox_N;
+    //    }
+    //    set
+    //    {
+    //        snowBox_N = value;
 
-            if (snowBox_N > 0)
-            {
-                eGetSnowBox_N();
-            }
-        }
-    }
+    //        if (snowBox_N > 0)
+    //        {
+    //            eGetSnowBox_N();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_R
-    {
-        get
-        {
-            return snowBox_R;
-        }
-        set
-        {
-            snowBox_R = value;
+    //public int SnowBox_R
+    //{
+    //    get
+    //    {
+    //        return snowBox_R;
+    //    }
+    //    set
+    //    {
+    //        snowBox_R = value;
 
-            if (snowBox_R > 0)
-            {
-                eGetSnowBox_R();
-            }
-        }
-    }
+    //        if (snowBox_R > 0)
+    //        {
+    //            eGetSnowBox_R();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_SR
-    {
-        get
-        {
-            return snowBox_SR;
-        }
-        set
-        {
-            snowBox_SR = value;
+    //public int SnowBox_SR
+    //{
+    //    get
+    //    {
+    //        return snowBox_SR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_SR = value;
 
-            if (snowBox_SR > 0)
-            {
-                eGetSnowBox_SR();
-            }
-        }
-    }
+    //        if (snowBox_SR > 0)
+    //        {
+    //            eGetSnowBox_SR();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_SSR
-    {
-        get
-        {
-            return snowBox_SSR;
-        }
-        set
-        {
-            snowBox_SSR = value;
+    //public int SnowBox_SSR
+    //{
+    //    get
+    //    {
+    //        return snowBox_SSR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_SSR = value;
 
-            if (snowBox_SSR > 0)
-            {
-                eGetSnowBox_SSR();
-            }
-        }
-    }
+    //        if (snowBox_SSR > 0)
+    //        {
+    //            eGetSnowBox_SSR();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_UR
-    {
-        get
-        {
-            return snowBox_UR;
-        }
-        set
-        {
-            snowBox_UR = value;
+    //public int SnowBox_UR
+    //{
+    //    get
+    //    {
+    //        return snowBox_UR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_UR = value;
 
-            if (snowBox_UR > 0)
-            {
-                eGetSnowBox_UR();
-            }
-        }
-    }
+    //        if (snowBox_UR > 0)
+    //        {
+    //            eGetSnowBox_UR();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_NR
-    {
-        get
-        {
-            return snowBox_NR;
-        }
-        set
-        {
-            snowBox_NR = value;
+    //public int SnowBox_NR
+    //{
+    //    get
+    //    {
+    //        return snowBox_NR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_NR = value;
 
-            if (snowBox_NR > 0)
-            {
-                eGetSnowBox_NR();
-            }
-        }
-    }
+    //        if (snowBox_NR > 0)
+    //        {
+    //            eGetSnowBox_NR();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_RSR
-    {
-        get
-        {
-            return snowBox_RSR;
-        }
-        set
-        {
-            snowBox_RSR = value;
+    //public int SnowBox_RSR
+    //{
+    //    get
+    //    {
+    //        return snowBox_RSR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_RSR = value;
 
-            if (snowBox_RSR > 0)
-            {
-                eGetSnowBox_RSR();
-            }
-        }
-    }
+    //        if (snowBox_RSR > 0)
+    //        {
+    //            eGetSnowBox_RSR();
+    //        }
+    //    }
+    //}
 
-    public int SnowBox_SRSSR
-    {
-        get
-        {
-            return snowBox_SRSSR;
-        }
-        set
-        {
-            snowBox_SRSSR = value;
+    //public int SnowBox_SRSSR
+    //{
+    //    get
+    //    {
+    //        return snowBox_SRSSR;
+    //    }
+    //    set
+    //    {
+    //        snowBox_SRSSR = value;
 
-            if (snowBox_SRSSR > 0)
-            {
-                eGetSnowBox_SRSSR();
-            }
-        }
-    }
+    //        if (snowBox_SRSSR > 0)
+    //        {
+    //            eGetSnowBox_SRSSR();
+    //        }
+    //    }
+    //}
 
     public int UnderworldBox_Normal
     {
@@ -1579,141 +1563,141 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int UnderworldBox_N
-    {
-        get
-        {
-            return underworldBox_N;
-        }
-        set
-        {
-            underworldBox_N = value;
+    //public int UnderworldBox_N
+    //{
+    //    get
+    //    {
+    //        return underworldBox_N;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_N = value;
 
-            if (underworldBox_N > 0)
-            {
-                eGetUnderworldBox_N();
-            }
-        }
-    }
+    //        if (underworldBox_N > 0)
+    //        {
+    //            eGetUnderworldBox_N();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_R
-    {
-        get
-        {
-            return underworldBox_R;
-        }
-        set
-        {
-            underworldBox_R = value;
+    //public int UnderworldBox_R
+    //{
+    //    get
+    //    {
+    //        return underworldBox_R;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_R = value;
 
-            if (underworldBox_R > 0)
-            {
-                eGetUnderworldBox_R();
-            }
-        }
-    }
+    //        if (underworldBox_R > 0)
+    //        {
+    //            eGetUnderworldBox_R();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_SR
-    {
-        get
-        {
-            return underworldBox_SR;
-        }
-        set
-        {
-            underworldBox_SR = value;
+    //public int UnderworldBox_SR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_SR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_SR = value;
 
-            if (underworldBox_SR > 0)
-            {
-                eGetUnderworldBox_SR();
-            }
-        }
-    }
+    //        if (underworldBox_SR > 0)
+    //        {
+    //            eGetUnderworldBox_SR();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_SSR
-    {
-        get
-        {
-            return underworldBox_SSR;
-        }
-        set
-        {
-            underworldBox_SSR = value;
+    //public int UnderworldBox_SSR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_SSR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_SSR = value;
 
-            if (underworldBox_SSR > 0)
-            {
-                eGetUnderworldBox_SSR();
-            }
-        }
-    }
+    //        if (underworldBox_SSR > 0)
+    //        {
+    //            eGetUnderworldBox_SSR();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_UR
-    {
-        get
-        {
-            return underworldBox_UR;
-        }
-        set
-        {
-            underworldBox_UR = value;
+    //public int UnderworldBox_UR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_UR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_UR = value;
 
-            if (underworldBox_UR > 0)
-            {
-                eGetUnderworldBox_UR();
-            }
-        }
-    }
+    //        if (underworldBox_UR > 0)
+    //        {
+    //            eGetUnderworldBox_UR();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_NR
-    {
-        get
-        {
-            return underworldBox_NR;
-        }
-        set
-        {
-            underworldBox_NR = value;
+    //public int UnderworldBox_NR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_NR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_NR = value;
 
-            if (underworldBox_NR > 0)
-            {
-                eGetUnderworldBox_NR();
-            }
-        }
-    }
+    //        if (underworldBox_NR > 0)
+    //        {
+    //            eGetUnderworldBox_NR();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_RSR
-    {
-        get
-        {
-            return underworldBox_RSR;
-        }
-        set
-        {
-            underworldBox_RSR = value;
+    //public int UnderworldBox_RSR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_RSR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_RSR = value;
 
-            if (underworldBox_RSR > 0)
-            {
-                eGetUnderworldBox_RSR();
-            }
-        }
-    }
+    //        if (underworldBox_RSR > 0)
+    //        {
+    //            eGetUnderworldBox_RSR();
+    //        }
+    //    }
+    //}
 
-    public int UnderworldBox_SRSSR
-    {
-        get
-        {
-            return underworldBox_SRSSR;
-        }
-        set
-        {
-            underworldBox_SRSSR = value;
+    //public int UnderworldBox_SRSSR
+    //{
+    //    get
+    //    {
+    //        return underworldBox_SRSSR;
+    //    }
+    //    set
+    //    {
+    //        underworldBox_SRSSR = value;
 
-            if (underworldBox_SRSSR > 0)
-            {
-                eGetUnderworldBox_SRSSR();
-            }
-        }
-    }
+    //        if (underworldBox_SRSSR > 0)
+    //        {
+    //            eGetUnderworldBox_SRSSR();
+    //        }
+    //    }
+    //}
 
 
     public int BoxPiece_N
@@ -1935,10 +1919,9 @@ public class PlayerDataBase : ScriptableObject
 
     public void Initialize()
     {
-        pieceInfo = new PieceInfo();
         pieceInfo.Initialize();
-
-        resetInfo = new ResetInfo();
+        resetInfo.Initialize();
+        //randomBoxInfo.Initialize();
 
         coin = 0;
         coinA = 0;
@@ -2058,26 +2041,10 @@ public class PlayerDataBase : ScriptableObject
         snowBox_Normal = 0;
         snowBox_Epic = 0;
         snowBox_Speical = 0;
-        snowBox_N = 0;
-        snowBox_R = 0;
-        snowBox_SR = 0;
-        snowBox_SSR = 0;
-        snowBox_UR = 0;
-        snowBox_NR = 0;
-        snowBox_RSR = 0;
-        snowBox_SRSSR = 0;
 
         underworldBox_Normal = 0;
         underworldBox_Epic = 0;
         underworldBox_Speical = 0;
-        underworldBox_N = 0;
-        underworldBox_R = 0;
-        underworldBox_SR = 0;
-        underworldBox_SSR = 0;
-        underworldBox_UR = 0;
-        underworldBox_NR = 0;
-        underworldBox_RSR = 0;
-        underworldBox_SRSSR = 0;
 
         boxPiece_N = 0;
         boxPiece_R = 0;

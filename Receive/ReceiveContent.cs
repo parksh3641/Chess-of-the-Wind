@@ -50,35 +50,15 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[2];
                 effect.SetActive(true);
                 break;
-            case RewardType.Box:
+            case RewardType.Box_Normal:
                 mainBackground.sprite = rankBackgroundArray[0];
                 break;
-            case RewardType.Box_N:
-                mainBackground.sprite = rankBackgroundArray[0];
-                break;
-            case RewardType.Box_R:
-                mainBackground.sprite = rankBackgroundArray[1];
-                break;
-            case RewardType.Box_SR:
+            case RewardType.Box_Epic:
                 mainBackground.sprite = rankBackgroundArray[2];
                 effect.SetActive(true);
                 break;
-            case RewardType.Box_SSR:
-                mainBackground.sprite = rankBackgroundArray[3];
-                effect.SetActive(true);
-                break;
-            case RewardType.Box_UR:
+            case RewardType.Box_Speical:
                 mainBackground.sprite = rankBackgroundArray[4];
-                effect.SetActive(true);
-                break;
-            case RewardType.Box_NR:
-                mainBackground.sprite = rankBackgroundArray[0];
-                break;
-            case RewardType.Box_RSR:
-                mainBackground.sprite = rankBackgroundArray[1];
-                break;
-            case RewardType.Box_SRSSR:
-                mainBackground.sprite = rankBackgroundArray[2];
                 effect.SetActive(true);
                 break;
             case RewardType.ExclusiveTitle:

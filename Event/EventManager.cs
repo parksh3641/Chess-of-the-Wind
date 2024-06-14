@@ -194,15 +194,15 @@ public class EventManager : MonoBehaviour
     }
     public void InitializeWelcomeBox()
     {
-        welcomeBoxContentArray[0].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[1].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[2].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[3].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[4].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[5].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[6].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[7].receiveContent.Initialize(RewardType.Box, 10);
-        welcomeBoxContentArray[8].receiveContent.Initialize(RewardType.Box, 20);
+        welcomeBoxContentArray[0].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[2].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[3].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[4].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[6].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[7].receiveContent.Initialize(RewardType.Box_Normal, 10);
+        welcomeBoxContentArray[8].receiveContent.Initialize(RewardType.Box_Normal, 20);
     }
 
     public void CheckWelcomeBox()
@@ -234,11 +234,11 @@ public class EventManager : MonoBehaviour
         {
             case WindCharacterType.Winter:
                 playerDataBase.SnowBox_Normal = 10;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
                 break;
             case WindCharacterType.UnderWorld:
                 playerDataBase.UnderworldBox_Normal = 10;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
                 break;
         }
 
@@ -303,12 +303,12 @@ public class EventManager : MonoBehaviour
     public void InitializeWelcome()
     {
         welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 3000);
-        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box, 5);
-        welcomeContentArray[2].receiveContent.Initialize(RewardType.Box, 10);
+        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 5);
+        welcomeContentArray[2].receiveContent.Initialize(RewardType.Box_Normal, 10);
         welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 15000);
-        welcomeContentArray[4].receiveContent.Initialize(RewardType.Box, 15);
+        welcomeContentArray[4].receiveContent.Initialize(RewardType.Box_Normal, 15);
         welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 5);
-        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_R, 1);
+        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Epic, 5);
     }
 
     public void CheckWelcome()
@@ -344,11 +344,11 @@ public class EventManager : MonoBehaviour
                 {
                     case WindCharacterType.Winter:
                         playerDataBase.SnowBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 5);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 5);
                         break;
                     case WindCharacterType.UnderWorld:
                         playerDataBase.UnderworldBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 5);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 5);
                         break;
                 }
                 break;
@@ -357,11 +357,11 @@ public class EventManager : MonoBehaviour
                 {
                     case WindCharacterType.Winter:
                         playerDataBase.SnowBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 10);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
                         break;
                     case WindCharacterType.UnderWorld:
                         playerDataBase.UnderworldBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 10);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
                         break;
                 }
                 break;
@@ -373,11 +373,11 @@ public class EventManager : MonoBehaviour
                 {
                     case WindCharacterType.Winter:
                         playerDataBase.SnowBox_Normal = 15;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", 15);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 15);
                         break;
                     case WindCharacterType.UnderWorld:
                         playerDataBase.UnderworldBox_Normal = 15;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", 15);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 15);
                         break;
                 }
                 break;
@@ -388,12 +388,12 @@ public class EventManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_R = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", 1);
+                        playerDataBase.SnowBox_Epic = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 1);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_R = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", 1);
+                        playerDataBase.UnderworldBox_Epic = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 1);
                         break;
                 }
                 break;
@@ -479,23 +479,44 @@ public class EventManager : MonoBehaviour
                 case RewardType.UpgradeTicket:
                     ItemAnimManager.instance.GetUpgradeTicket(rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
                     break;
-                case RewardType.Box:
+                case RewardType.Box_Normal:
+                    switch (GameStateManager.instance.WindCharacterType)
+                    {
+                        case WindCharacterType.Winter:
+                            playerDataBase.SnowBox_Normal = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                        case WindCharacterType.UnderWorld:
+                            playerDataBase.UnderworldBox_Normal = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                    }
                     break;
-                case RewardType.Box_N:
+                case RewardType.Box_Epic:
+                    switch (GameStateManager.instance.WindCharacterType)
+                    {
+                        case WindCharacterType.Winter:
+                            playerDataBase.SnowBox_Epic = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                        case WindCharacterType.UnderWorld:
+                            playerDataBase.UnderworldBox_Epic = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                    }
                     break;
-                case RewardType.Box_R:
-                    break;
-                case RewardType.Box_SR:
-                    break;
-                case RewardType.Box_SSR:
-                    break;
-                case RewardType.Box_UR:
-                    break;
-                case RewardType.Box_NR:
-                    break;
-                case RewardType.Box_RSR:
-                    break;
-                case RewardType.Box_SRSSR:
+                case RewardType.Box_Speical:
+                    switch (GameStateManager.instance.WindCharacterType)
+                    {
+                        case WindCharacterType.Winter:
+                            playerDataBase.SnowBox_Speical = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                        case WindCharacterType.UnderWorld:
+                            playerDataBase.UnderworldBox_Speical = rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", rankUpDataBase.rankUpInfomationList[number].receiveInformationList[i].count);
+                            break;
+                    }
                     break;
             }
         }

@@ -239,126 +239,44 @@ public class PackageManager2 : MonoBehaviour
                 case RewardType.UpgradeTicket:
                     ItemAnimManager.instance.GetUpgradeTicket(count);
                     break;
-                case RewardType.Box:
+                case RewardType.Box_Normal:
                     switch (GameStateManager.instance.WindCharacterType)
                     {
                         case WindCharacterType.Winter:
                             playerDataBase.SnowBox_Normal = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox", count);
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", count);
                             break;
                         case WindCharacterType.UnderWorld:
                             playerDataBase.UnderworldBox_Normal = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox", count);
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", count);
                             break;
                     }
                     break;
-                case RewardType.Box_N:
+                case RewardType.Box_Epic:
                     switch (GameStateManager.instance.WindCharacterType)
                     {
                         case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_N = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_N", count);
+                            playerDataBase.SnowBox_Epic = count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", count);
                             break;
                         case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_N = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_N", count);
+                            playerDataBase.UnderworldBox_Epic = count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", count);
                             break;
                     }
                     break;
-                case RewardType.Box_R:
+                case RewardType.Box_Speical:
                     switch (GameStateManager.instance.WindCharacterType)
                     {
                         case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_R = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_R", count);
+                            playerDataBase.SnowBox_Speical = count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", count);
                             break;
                         case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_R = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_R", count);
+                            playerDataBase.UnderworldBox_Speical = count;
+                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", count);
                             break;
                     }
-                    break;
-                case RewardType.Box_SR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_SR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_SR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.Box_SSR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_SSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SSR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_SSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SSR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.Box_UR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_UR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_UR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_UR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_UR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.Box_NR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_NR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_NR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_NR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_NR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.Box_RSR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_RSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_RSR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_RSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_RSR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.Box_SRSSR:
-                    switch (GameStateManager.instance.WindCharacterType)
-                    {
-                        case WindCharacterType.Winter:
-                            playerDataBase.SnowBox_SRSSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_SRSSR", count);
-                            break;
-                        case WindCharacterType.UnderWorld:
-                            playerDataBase.UnderworldBox_SRSSR = count;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_SRSSR", count);
-                            break;
-                    }
-                    break;
-                case RewardType.ExclusiveTitle:
-                    break;
-                case RewardType.None:
                     break;
                 case RewardType.GoldShop1:
                     gold += Random.Range(7500, 20001);
