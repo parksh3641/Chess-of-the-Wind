@@ -157,26 +157,56 @@ public class PieceInfo
 
     public void AddPiece(BlockType blockType, RankType rankType, int number)
     {
+        Debug.Log(blockType + " / " + rankType + " / " + (number + 1) + "¹øÂ° Á¶°¢ È¹µæ");
+
         switch (rankType)
         {
             case RankType.N:
-                pieceList_N[(int)blockType].PlusPiece(number);
+                for(int i = 0; i < pieceList_N.Count; i ++)
+                {
+                    if(pieceList_N[i].blockType.Equals(blockType))
+                    {
+                        pieceList_N[i].PlusPiece(number);
+                    }
+                }
                 break;
             case RankType.R:
-                pieceList_R[(int)blockType].PlusPiece(number);
+                for (int i = 0; i < pieceList_R.Count; i++)
+                {
+                    if (pieceList_R[i].blockType.Equals(blockType))
+                    {
+                        pieceList_R[i].PlusPiece(number);
+                    }
+                }
                 break;
             case RankType.SR:
-                pieceList_SR[(int)blockType].PlusPiece(number);
+                for (int i = 0; i < pieceList_SR.Count; i++)
+                {
+                    if (pieceList_SR[i].blockType.Equals(blockType))
+                    {
+                        pieceList_SR[i].PlusPiece(number);
+                    }
+                }
                 break;
             case RankType.SSR:
-                pieceList_SSR[(int)blockType].PlusPiece(number);
+                for (int i = 0; i < pieceList_SSR.Count; i++)
+                {
+                    if (pieceList_SSR[i].blockType.Equals(blockType))
+                    {
+                        pieceList_SSR[i].PlusPiece(number);
+                    }
+                }
                 break;
             case RankType.UR:
-                pieceList_UR[(int)blockType].PlusPiece(number);
+                for (int i = 0; i < pieceList_UR.Count; i++)
+                {
+                    if (pieceList_UR[i].blockType.Equals(blockType))
+                    {
+                        pieceList_UR[i].PlusPiece(number);
+                    }
+                }
                 break;
         }
-
-        Debug.Log(blockType + " / " + rankType + " / " + (number + 1) + "¹øÂ° Á¶°¢ È¹µæ");
     }
 
     public void MinusPiece(BlockType blockType, RankType rankType)

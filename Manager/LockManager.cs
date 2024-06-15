@@ -6,7 +6,6 @@ public class LockManager : MonoBehaviour
 {
     public GameObject rankDownObj;
 
-    public GameObject inventoryObj;
     public GameObject attendanceObj;
     public GameObject eventObj;
     public GameObject packageObj;
@@ -32,7 +31,6 @@ public class LockManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         rankDownObj.SetActive(false);
-        inventoryObj.SetActive(false);
         attendanceObj.SetActive(false);
         eventObj.SetActive(false);
         packageObj.SetActive(false);
@@ -80,7 +78,6 @@ public class LockManager : MonoBehaviour
         {
             sellObj.SetActive(true);
             synthesisObj.SetActive(false);
-            inventoryObj.SetActive(true);
             attendanceObj.SetActive(true);
             eventObj.SetActive(true);
             packageObj.SetActive(false);

@@ -90,28 +90,26 @@ public class BoxInfoManager : MonoBehaviour
                         break;
                 }
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
+                PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
                 break;
             case 1:
                 rankType = RankType.R;
 
                 titleText.text = LocalizationManager.instance.GetString("Box_Normal");
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
+                PlayfabManager.instance.GetTitleInternalData("NRBox", InitializePercent);
                 break;
             case 2:
                 rankType = RankType.SR;
 
                 titleText.text = LocalizationManager.instance.GetString("Box_Epic");
 
-                average = 1;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
+                PlayfabManager.instance.GetTitleInternalData("RSRBox", InitializePercent);
                 break;
             case 3:
                 rankType = RankType.SSR;
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData("SRSSRBox", InitializePercent);
+                PlayfabManager.instance.GetTitleInternalData("_", InitializePercent);
                 break;
         }
     }

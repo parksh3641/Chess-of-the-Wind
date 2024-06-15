@@ -62,17 +62,17 @@ public class MailContent : MonoBehaviour
                 titleText.localizationName = "GiftInfo";
                 break;
             case "BoxEpic":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Epic;
 
                 titleText.localizationName = "GiftInfo";
                 break;
             case "BoxSpeical":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Speical;
 
                 titleText.localizationName = "GiftInfo";
                 break;
             case "IndieFestival2023":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Speical;
 
                 count = 10;
                 titleSpeicalType = TitleSpeicalType.TitleSpeical1;
@@ -85,7 +85,7 @@ public class MailContent : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("IndieFestival2023", 1);
                 break;
             case "ComicWorld2023":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Speical;
 
                 count = 10;
                 titleSpeicalType = TitleSpeicalType.TitleSpeical1;
@@ -100,6 +100,7 @@ public class MailContent : MonoBehaviour
             case "AppReview":
                 rewardType = RewardType.Box_Epic;
 
+                count = 10;
                 titleText.localizationName = "AppReviewTitle";
 
                 playerDataBase.ReviewNumber = 1;

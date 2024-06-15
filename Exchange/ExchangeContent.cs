@@ -170,6 +170,15 @@ public class ExchangeContent : MonoBehaviour
         for(int i = 0; i < needPiece; i ++)
         {
             blockHoldNumberText[i].text = piece[i] + "/1";
+
+            if(piece[i] == 0)
+            {
+                blockUIContentArray[i].lockedObj.SetActive(true);
+            }
+            else
+            {
+                blockUIContentArray[i].lockedObj.SetActive(false);
+            }
         }
 
         lockedObj.SetActive(true);

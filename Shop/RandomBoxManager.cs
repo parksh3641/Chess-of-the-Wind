@@ -991,7 +991,11 @@ public class RandomBoxManager : MonoBehaviour
         prize_Block.Clear();
 
         boxView.SetActive(true);
-        boxAnim.PlayAnim();
+
+        if(boxAnim.gameObject.activeInHierarchy)
+        {
+            boxAnim.PlayAnim();
+        }
 
         RandomBox();
     }
@@ -1016,7 +1020,10 @@ public class RandomBoxManager : MonoBehaviour
         prize_Block.Clear();
 
         boxView.SetActive(true);
-        boxAnim.PlayAnim();
+        if (boxAnim.gameObject.activeInHierarchy)
+        {
+            boxAnim.PlayAnim();
+        }
 
         RandomBox();
     }
@@ -1108,11 +1115,6 @@ public class RandomBoxManager : MonoBehaviour
 
                     prize_Block[i].SetRank(RankType.SSR);
 
-                    fadeInOut.gameObject.SetActive(true);
-                    fadeInOut.FadeOut();
-
-                    blockUIEffect.SetActive(true);
-
                     Debug.Log("SSR 확정");
                 }
             }
@@ -1127,6 +1129,11 @@ public class RandomBoxManager : MonoBehaviour
                     Debug.Log("SR 확정");
                 }
             }
+        }
+
+        if(prize_Block[0].boxInfoType.ToString().Contains("SSR"))
+        {
+            gradient.SetActive(true);
         }
 
         for(int i = 0; i < prize_Block.Count; i ++)
@@ -1459,7 +1466,6 @@ public class RandomBoxManager : MonoBehaviour
         switch (windCharacterType)
         {
             case WindCharacterType.Winter:
-
                 switch (boxType)
                 {
                     case BoxType.Normal:
@@ -1478,7 +1484,6 @@ public class RandomBoxManager : MonoBehaviour
 
                 break;
             case WindCharacterType.UnderWorld:
-
                 switch (boxType)
                 {
                     case BoxType.Normal:

@@ -99,6 +99,7 @@ public class UIManager : MonoBehaviour
     public ChallengeManager challengeManager;
     public TitleManager titleManager;
     public EventManager eventManager;
+    public InventoryManager inventoryManager;
 
     public Image[] bottomUIImg;
     public Animator[] bottmUIAnimator;
@@ -712,7 +713,11 @@ public class UIManager : MonoBehaviour
         }
 
         bottomUIImg[number].enabled = true;
-        bottmUIAnimator[number].Play("SizeUp");
+
+        for(int i = 0; i < bottmUIAnimator.Length; i ++)
+        {
+            bottmUIAnimator[i].Play("SizeDown");
+        }
 
         shopManager.CloseShopView();
         collectionManager.CloseCollectionView();
@@ -722,27 +727,23 @@ public class UIManager : MonoBehaviour
             case 0:
                 shopManager.OpenShopView();
 
-                bottmUIAnimator[1].Play("SizeDown");
-                bottmUIAnimator[2].Play("SizeDown");
                 break;
             case 1:
                 challengeManager.CheckingGoal();
                 eventManager.CheckingRankUp();
 
-                bottmUIAnimator[0].Play("SizeDown");
-                bottmUIAnimator[2].Play("SizeDown");
                 break;
             case 2:
                 collectionManager.OpenCollectionView();
-
-                bottmUIAnimator[0].Play("SizeDown");
-                bottmUIAnimator[1].Play("SizeDown");
                 break;
             case 3:
+                inventoryManager.OpenInventoryView();
                 break;
             case 4:
                 break;
-        }    
+        }
+
+        bottmUIAnimator[number].Play("SizeUp");
     }
 
     public void OnNeedUpdate()

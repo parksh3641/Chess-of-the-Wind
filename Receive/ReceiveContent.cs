@@ -58,7 +58,7 @@ public class ReceiveContent : MonoBehaviour
                 effect.SetActive(true);
                 break;
             case RewardType.Box_Speical:
-                mainBackground.sprite = rankBackgroundArray[4];
+                mainBackground.sprite = rankBackgroundArray[3];
                 effect.SetActive(true);
                 break;
             case RewardType.ExclusiveTitle:
