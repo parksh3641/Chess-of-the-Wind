@@ -689,7 +689,7 @@ public class InventoryManager : MonoBehaviour
 
                     for (int i = 0; i < exchangeContentList_R.Count; i++)
                     {
-                        exchangeContentList_R[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+                        exchangeContentList_R[i].Initialize(BlockType.Default + 1 + i, RankType.R, this);
 
                         if (exchangeContentList_R[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_R[i].isNone)
                         {
@@ -717,7 +717,7 @@ public class InventoryManager : MonoBehaviour
 
                     for (int i = 0; i < exchangeContentList_SR.Count; i++)
                     {
-                        exchangeContentList_SR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+                        exchangeContentList_SR[i].Initialize(BlockType.Default + 1 + i, RankType.SR, this);
 
                         if (exchangeContentList_SR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_SR[i].isNone)
                         {
@@ -745,7 +745,7 @@ public class InventoryManager : MonoBehaviour
 
                     for (int i = 0; i < exchangeContentList_SSR.Count; i++)
                     {
-                        exchangeContentList_SSR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+                        exchangeContentList_SSR[i].Initialize(BlockType.Default + 1 + i, RankType.SSR, this);
 
                         if (exchangeContentList_SSR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_SSR[i].isNone)
                         {
@@ -773,7 +773,7 @@ public class InventoryManager : MonoBehaviour
 
                     for (int i = 0; i < exchangeContentList_UR.Count; i++)
                     {
-                        exchangeContentList_UR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+                        exchangeContentList_UR[i].Initialize(BlockType.Default + 1 + i, RankType.UR, this);
 
                         if (exchangeContentList_UR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_UR[i].isNone)
                         {
