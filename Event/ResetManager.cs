@@ -20,10 +20,10 @@ public class ResetInfo
     public int dailyBuyCount2 = 0;
     public int dailyNormalBox = 0;
     public int dailyEpicBox = 0;
-    public int dailyNormalBox_1 = 3;
-    public int dailyNormalBox_10 = 1;
-    public int dailyEpicBox_1 = 3;
-    public int dailyEpicBox_10 = 1;
+    public int dailyNormalBox_1 = 50;
+    public int dailyNormalBox_10 = 5;
+    public int dailyEpicBox_1 = 50;
+    public int dailyEpicBox_10 = 5;
     public int dailyAdsReward = 0;
     public int dailyAdsReward2 = 0;
     public int dailyAdsReward3 = 0;
@@ -48,6 +48,14 @@ public class ResetInfo
     public int package_Monthly4 = 0;
     public int package_Monthly5 = 0;
 
+    public int package_ShopDaily1 = 0;
+    public int package_ShopDaily2 = 0;
+    public int package_ShopDaily3 = 0;
+
+    public int package_ShopWeekly1 = 0;
+    public int package_ShopWeekly2 = 0;
+    public int package_ShopWeekly3 = 0;
+
     public void Initialize()
     {
         dailyWin = 0;
@@ -59,33 +67,36 @@ public class ResetInfo
         dailyBuyCount2 = 0;
         dailyNormalBox = 0;
         dailyEpicBox = 0;
-        dailyNormalBox_1 = 3;
-        dailyNormalBox_10 = 1;
-        dailyEpicBox_1 = 3;
-        dailyEpicBox_10 = 1;
+        dailyNormalBox_1 = 50;
+        dailyNormalBox_10 = 5;
+        dailyEpicBox_1 = 50;
+        dailyEpicBox_10 = 5;
         dailyAdsReward = 0;
         dailyAdsReward2 = 0;
         dailyAdsReward3 = 0;
         dailyGoldReward = 0;
         dailyReset = 0;
-
         package_Daily1 = 0;
         package_Daily2 = 0;
         package_Daily3 = 0;
         package_Daily4 = 0;
         package_Daily5 = 0;
-
         package_Weekly1 = 0;
         package_Weekly2 = 0;
         package_Weekly3 = 0;
         package_Weekly4 = 0;
         package_Weekly5 = 0;
-
         package_Monthly1 = 0;
         package_Monthly2 = 0;
         package_Monthly3 = 0;
         package_Monthly4 = 0;
         package_Monthly5 = 0;
+        package_ShopDaily1 = 0;
+        package_ShopDaily2 = 0;
+        package_ShopDaily3 = 0;
+        package_ShopWeekly1 = 0;
+        package_ShopWeekly2 = 0;
+        package_ShopWeekly3 = 0;
     }
 
     public void SaveServerData(ResetInfo resetInfo)
@@ -126,6 +137,14 @@ public class ResetInfo
         package_Monthly3 = resetInfo.package_Monthly3;
         package_Monthly4 = resetInfo.package_Monthly4;
         package_Monthly5 = resetInfo.package_Monthly5;
+
+        package_ShopDaily1 = resetInfo.package_ShopDaily1;
+        package_ShopDaily2 = resetInfo.package_ShopDaily2;
+        package_ShopDaily3 = resetInfo.package_ShopDaily3;
+
+        package_ShopWeekly1 = resetInfo.package_ShopWeekly1;
+        package_ShopWeekly2 = resetInfo.package_ShopWeekly2;
+        package_ShopWeekly3 = resetInfo.package_ShopWeekly3;
     }
 }
 
@@ -398,10 +417,10 @@ public class ResetManager : MonoBehaviour
             playerDataBase.ResetInfo.dailyBuyCount2 = 0;
             playerDataBase.ResetInfo.dailyNormalBox = 0;
             playerDataBase.ResetInfo.dailyEpicBox = 0;
-            playerDataBase.ResetInfo.dailyNormalBox_1 = 3;
-            playerDataBase.ResetInfo.dailyNormalBox_10 = 1;
-            playerDataBase.ResetInfo.dailyEpicBox_1 = 3;
-            playerDataBase.ResetInfo.dailyEpicBox_10 = 1;
+            playerDataBase.ResetInfo.dailyNormalBox_1 = 50;
+            playerDataBase.ResetInfo.dailyNormalBox_10 = 5;
+            playerDataBase.ResetInfo.dailyEpicBox_1 = 50;
+            playerDataBase.ResetInfo.dailyEpicBox_10 = 5;
             playerDataBase.ResetInfo.dailyAdsReward = 0;
             playerDataBase.ResetInfo.dailyAdsReward2 = 0;
             playerDataBase.ResetInfo.dailyAdsReward3 = 0;
@@ -414,7 +433,9 @@ public class ResetManager : MonoBehaviour
             playerDataBase.ResetInfo.package_Daily4 = 0;
             playerDataBase.ResetInfo.package_Daily5 = 0;
 
-
+            playerDataBase.ResetInfo.package_ShopDaily1 = 0;
+            playerDataBase.ResetInfo.package_ShopDaily2 = 0;
+            playerDataBase.ResetInfo.package_ShopDaily3 = 0;
         }
 
         if (isNextMonday)
@@ -426,6 +447,10 @@ public class ResetManager : MonoBehaviour
             playerDataBase.ResetInfo.package_Weekly3 = 0;
             playerDataBase.ResetInfo.package_Weekly4 = 0;
             playerDataBase.ResetInfo.package_Weekly5 = 0;
+
+            playerDataBase.ResetInfo.package_ShopWeekly1 = 0;
+            playerDataBase.ResetInfo.package_ShopWeekly2 = 0;
+            playerDataBase.ResetInfo.package_ShopWeekly3 = 0;
         }
 
         if (isNextMonth)
@@ -576,6 +601,24 @@ public class ResetManager : MonoBehaviour
                 break;
             case ResetType.Package_Monthly5:
                 playerDataBase.ResetInfo.package_Monthly5 = 1;
+                break;
+            case ResetType.Package_ShopDaily1:
+                playerDataBase.ResetInfo.package_ShopDaily1 = 1;
+                break;
+            case ResetType.Package_ShopDaily2:
+                playerDataBase.ResetInfo.package_ShopDaily2 = 1;
+                break;
+            case ResetType.Package_ShopDaily3:
+                playerDataBase.ResetInfo.package_ShopDaily3 = 1;
+                break;
+            case ResetType.Package_ShopWeekly1:
+                playerDataBase.ResetInfo.package_ShopWeekly1 = 1;
+                break;
+            case ResetType.Package_ShopWeekly2:
+                playerDataBase.ResetInfo.package_ShopWeekly2 = 1;
+                break;
+            case ResetType.Package_ShopWeekly3:
+                playerDataBase.ResetInfo.package_ShopWeekly3 = 1;
                 break;
         }
 

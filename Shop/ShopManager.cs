@@ -9,6 +9,10 @@ using Random = UnityEngine.Random;
 
 public class ShopManager : MonoBehaviour
 {
+    [Space]
+    [Title("OneStore")]
+    public GameObject[] oneStore;
+
     public GameObject shopView;
 
     public GameObject alarm;
@@ -28,10 +32,6 @@ public class ShopManager : MonoBehaviour
 
     public Transform shopContentGoldTransform;
     public Transform shopContentTransform;
-
-    [Space]
-    [Title("OneStore")]
-    public GameObject[] oneStore;
 
     [Space]
     [Title("Ad")]
@@ -138,8 +138,8 @@ public class ShopManager : MonoBehaviour
             if (!first)
             {
                 adShopReceiveContents[0].Initialize(RewardType.Gold, rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 2);
-                adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 1);
-                adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 10);
+                adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 10);
+                adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 100);
 
                 first = true;
             }
@@ -154,6 +154,8 @@ public class ShopManager : MonoBehaviour
 
             boxArray[0].SetActive(false);
             boxArray[1].SetActive(false);
+            boxArray[2].SetActive(false);
+            boxArray[3].SetActive(false);
 
             localization_Reset = LocalizationManager.instance.GetString("Reset");
             localization_Days = LocalizationManager.instance.GetString("Days");
@@ -172,6 +174,7 @@ public class ShopManager : MonoBehaviour
             if (playerDataBase.Formation == 2)
             {
                 boxArray[1].SetActive(true);
+                boxArray[3].SetActive(true);
 
                 boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
                 boxSSRTextArray[1].localizationName = "BoxSSRInfo";
@@ -180,6 +183,7 @@ public class ShopManager : MonoBehaviour
             else
             {
                 boxArray[0].SetActive(true);
+                boxArray[2].SetActive(true);
 
                 boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
                 boxSSRTextArray[0].localizationName = "BoxSSRInfo";
@@ -201,7 +205,8 @@ public class ShopManager : MonoBehaviour
         {
             if (playerDataBase.Formation == 2)
             {
-                boxArray[1].SetActive(true);
+                boxArray[1].SetActive(true); //전설 상자
+                boxArray[3].SetActive(true); //에픽 상자
 
                 boxSSRTextArray[1].forwardText = (50 - playerDataBase.BuyUnderworldBoxSSRCount).ToString();
                 boxSSRTextArray[1].localizationName = "BoxSSRInfo";
@@ -209,7 +214,8 @@ public class ShopManager : MonoBehaviour
             }
             else
             {
-                boxArray[0].SetActive(true);
+                boxArray[0].SetActive(true); //전설 상자
+                boxArray[2].SetActive(true); //에픽 상자
 
                 boxSSRTextArray[0].forwardText = (50 - playerDataBase.BuySnowBoxSSRCount).ToString();
                 boxSSRTextArray[0].localizationName = "BoxSSRInfo";
@@ -220,10 +226,10 @@ public class ShopManager : MonoBehaviour
 
     void Initialize_Count()
     {
-        dailyCountText[0].text = playerDataBase.ResetInfo.dailyNormalBox_1 + "/3";
-        dailyCountText[1].text = playerDataBase.ResetInfo.dailyNormalBox_10 + "/1";
-        dailyCountText[2].text = playerDataBase.ResetInfo.dailyEpicBox_1 + "/3";
-        dailyCountText[3].text = playerDataBase.ResetInfo.dailyEpicBox_10 + "/1";
+        dailyCountText[0].text = playerDataBase.ResetInfo.dailyNormalBox_1 + "/50";
+        dailyCountText[1].text = playerDataBase.ResetInfo.dailyNormalBox_10 + "/5";
+        dailyCountText[2].text = playerDataBase.ResetInfo.dailyEpicBox_1 + "/50";
+        dailyCountText[3].text = playerDataBase.ResetInfo.dailyEpicBox_10 + "/5";
     }
 
     public void CloseShopView()
@@ -246,6 +252,16 @@ public class ShopManager : MonoBehaviour
 
         playerDataBase.BuySnowBox += 10;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuySnowBox", playerDataBase.BuySnowBox);
+    }
+
+    public void BuySnowBoxEpic1() //상점에서 현금 상자 1개 구입
+    {
+        GetSnowBox(BoxType.Epic, 1);
+    }
+
+    public void BuySnowBoxEpic2() //상점에서 현금 상자 10개 구입
+    {
+        GetSnowBox(BoxType.Epic, 10);
     }
 
     public void GetSnowBox(BoxType type, int number)
@@ -272,7 +288,7 @@ public class ShopManager : MonoBehaviour
 
     public void BuyUnderworldBox1()
     {
-        GetUnderworld(BoxType.Normal, 1);
+        GetUnderworld(BoxType.Speical, 1);
 
         playerDataBase.BuyUnderworldBox += 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
@@ -280,10 +296,20 @@ public class ShopManager : MonoBehaviour
 
     public void BuyUnderworldBox2()
     {
-        GetUnderworld(BoxType.Normal, 10);
+        GetUnderworld(BoxType.Speical, 10);
 
         playerDataBase.BuyUnderworldBox += 10;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("BuyUnderworldBox", playerDataBase.BuyUnderworldBox);
+    }
+
+    public void BuyUnderworldBoxEpic1()
+    {
+        GetUnderworld(BoxType.Epic, 1);
+    }
+
+    public void BuyUnderworldBoxEpic2()
+    {
+        GetUnderworld(BoxType.Epic, 10);
     }
 
     public void GetUnderworld(BoxType type, int number)
@@ -309,7 +335,7 @@ public class ShopManager : MonoBehaviour
 
     public void Buy_NormalBox(int number)
     {
-        int price = 25000 * number;
+        int price = 5000 * number;
 
         if (number >= 10)
         {
@@ -320,8 +346,6 @@ public class ShopManager : MonoBehaviour
                 NotionManager.instance.UseNotion(NotionType.NotBuyDailyLimit);
                 return;
             }
-
-            price -= 25000;
         }
         else
         {
@@ -354,13 +378,13 @@ public class ShopManager : MonoBehaviour
             {
                 ResetManager.instance.SetResetInfo(ResetType.DailyNormalBox_10);
 
-                FirebaseAnalytics.LogEvent("BuyBox_Normal10");
+                FirebaseAnalytics.LogEvent("Buy_NoramlBox_10");
             }
             else
             {
                 ResetManager.instance.SetResetInfo(ResetType.DailyNormalBox_1);
 
-                FirebaseAnalytics.LogEvent("BuyBox_Normal1");
+                FirebaseAnalytics.LogEvent("Buy_NoramlBox_1");
             }
 
             Initialize_Count();
@@ -423,13 +447,13 @@ public class ShopManager : MonoBehaviour
             {
                 ResetManager.instance.SetResetInfo(ResetType.DailyEpicBox_10);
 
-                FirebaseAnalytics.LogEvent("BuyBox_Epic10");
+                FirebaseAnalytics.LogEvent("Buy_EpicBox_10");
             }
             else
             {
                 ResetManager.instance.SetResetInfo(ResetType.DailyEpicBox_1);
 
-                FirebaseAnalytics.LogEvent("BuyBox_Epic1");
+                FirebaseAnalytics.LogEvent("Buy_EpicBox_1");
             }
 
             Initialize_Count();
@@ -529,16 +553,22 @@ public class ShopManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                ItemAnimManager.instance.GetUpgradeTicket(1);
-                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
-                break;
-            case 1:
                 ItemAnimManager.instance.GetUpgradeTicket(10);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+
+                FirebaseAnalytics.LogEvent("Purhcase_UpgradeTicket10");
+                break;
+            case 1:
+                ItemAnimManager.instance.GetUpgradeTicket(50);
+                NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+
+                FirebaseAnalytics.LogEvent("Purhcase_UpgradeTicket50");
                 break;
             case 2:
                 ItemAnimManager.instance.GetUpgradeTicket(100);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
+
+                FirebaseAnalytics.LogEvent("Purhcase_UpgradeTicket100");
                 break;
             case 3:
                 random = Random.Range(5000, 100001);
@@ -547,6 +577,8 @@ public class ShopManager : MonoBehaviour
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney1);
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+                FirebaseAnalytics.LogEvent("Purhcase_Gold2");
                 break;
             case 4:
                 random = Random.Range(50000, 1000001);
@@ -555,10 +587,10 @@ public class ShopManager : MonoBehaviour
 
                 SoundManager.instance.PlaySFX(GameSfxType.PlusMoney2);
                 NotionManager.instance.UseNotion(NotionType.BuyShopItem);
+
+                FirebaseAnalytics.LogEvent("Purhcase_Gold3");
                 break;
         }
-
-        FirebaseAnalytics.LogEvent("Buy_Purhcase_" + number);
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
     }
@@ -728,7 +760,7 @@ public class ShopManager : MonoBehaviour
             case 3:
                 if (playerDataBase.ResetInfo.dailyAdsReward2 == 1) return;
 
-                ItemAnimManager.instance.GetUpgradeTicket(1);
+                ItemAnimManager.instance.GetUpgradeTicket(10);
 
                 ResetManager.instance.SetResetInfo(ResetType.DailyAdsReward2);
 
@@ -737,7 +769,7 @@ public class ShopManager : MonoBehaviour
             case 4:
                 if (playerDataBase.ResetInfo.dailyAdsReward3 == 1) return;
 
-                ItemAnimManager.instance.GetUpgradeTicket(10);
+                ItemAnimManager.instance.GetUpgradeTicket(100);
 
                 ResetManager.instance.SetResetInfo(ResetType.DailyAdsReward3);
 
@@ -978,10 +1010,40 @@ public class ShopManager : MonoBehaviour
         switch (GameStateManager.instance.WindCharacterType)
         {
             case WindCharacterType.Winter:
+                GetSnowBox(BoxType.Speical, number);
+                break;
+            case WindCharacterType.UnderWorld:
+                GetUnderworld(BoxType.Speical, number);
+                break;
+        }
+
+        FirebaseAnalytics.LogEvent("Purhcase_RandomBox_" + number);
+    }
+
+    [Button]
+    public void OpenNormalBox(int number)
+    {
+        switch (GameStateManager.instance.WindCharacterType)
+        {
+            case WindCharacterType.Winter:
                 GetSnowBox(BoxType.Normal, number);
                 break;
             case WindCharacterType.UnderWorld:
                 GetUnderworld(BoxType.Normal, number);
+                break;
+        }
+    }
+
+    [Button]
+    public void OpenEpicBox(int number)
+    {
+        switch (GameStateManager.instance.WindCharacterType)
+        {
+            case WindCharacterType.Winter:
+                GetSnowBox(BoxType.Epic, number);
+                break;
+            case WindCharacterType.UnderWorld:
+                GetUnderworld(BoxType.Epic, number);
                 break;
         }
     }

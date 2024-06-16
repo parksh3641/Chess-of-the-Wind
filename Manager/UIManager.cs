@@ -721,6 +721,7 @@ public class UIManager : MonoBehaviour
 
         shopManager.CloseShopView();
         collectionManager.CloseCollectionView();
+        inventoryManager.CloseInventoryView();
 
         switch (number)
         {

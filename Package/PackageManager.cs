@@ -10,7 +10,10 @@ public class PackageManager : MonoBehaviour
     public GameObject specialShop;
 
     public RectTransform packageGrid;
+    public RectTransform packageGrid2;
+
     public PackageContent[] packageContentArray;
+    public PackageContent[] packageContentArray2;
 
     private int count = 0;
     bool first = false;
@@ -31,6 +34,12 @@ public class PackageManager : MonoBehaviour
             packageContentArray[i].gameObject.SetActive(true);
             packageContentArray[i].Initialize(this);
         }
+
+        for (int i = 0; i < packageContentArray2.Length; i++)
+        {
+            packageContentArray2[i].gameObject.SetActive(true);
+            packageContentArray2[i].Initialize(this);
+        }
     }
 
     public void OpenShop()
@@ -40,6 +49,7 @@ public class PackageManager : MonoBehaviour
             Initialize();
 
             packageGrid.anchoredPosition = new Vector2(9999, 0);
+            packageGrid2.anchoredPosition = new Vector2(9999, 0);
 
             first = true;
         }
@@ -98,6 +108,60 @@ public class PackageManager : MonoBehaviour
         else
         {
             packageContentArray[5].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopDaily1 == 0)
+        {
+            packageContentArray2[0].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[0].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopDaily2 == 0)
+        {
+            packageContentArray2[1].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[1].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopDaily3 == 0)
+        {
+            packageContentArray2[2].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[2].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopWeekly1 == 0)
+        {
+            packageContentArray2[3].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[3].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopWeekly2 == 0)
+        {
+            packageContentArray2[4].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[4].gameObject.SetActive(false);
+        }
+
+        if (playerDataBase.ResetInfo.package_ShopWeekly3 == 0)
+        {
+            packageContentArray2[5].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[5].gameObject.SetActive(false);
         }
 
         CheckSpeicalShop();
@@ -161,6 +225,48 @@ public class PackageManager : MonoBehaviour
                 playerDataBase.ShopSupply += 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("ShopSupply", playerDataBase.ShopSupply);
                 break;
+            case PackageType.ShopDaily1:
+                if (playerDataBase.ResetInfo.package_ShopDaily1 == 1) return;
+
+                packageContentArray2[0].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopDaily1);
+                break;
+            case PackageType.ShopDaily2:
+                if (playerDataBase.ResetInfo.package_ShopDaily2 == 1) return;
+
+                packageContentArray2[1].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopDaily2);
+                break;
+            case PackageType.ShopDaily3:
+                if (playerDataBase.ResetInfo.package_ShopDaily3 == 1) return;
+
+                packageContentArray2[2].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopDaily3);
+                break;
+            case PackageType.ShopWeekly1:
+                if (playerDataBase.ResetInfo.package_ShopWeekly1 == 1) return;
+
+                packageContentArray2[3].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopWeekly1);
+                break;
+            case PackageType.ShopWeekly2:
+                if (playerDataBase.ResetInfo.package_ShopWeekly2 == 1) return;
+
+                packageContentArray2[4].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopWeekly2);
+                break;
+            case PackageType.ShopWeekly3:
+                if (playerDataBase.ResetInfo.package_ShopWeekly3 == 1) return;
+
+                packageContentArray2[5].Locked();
+
+                ResetManager.instance.SetResetInfo(ResetType.Package_ShopWeekly3);
+                break;
         }
 
         for (int i = 0; i < type.receiveInformationList.Count; i++)
@@ -218,7 +324,6 @@ public class PackageManager : MonoBehaviour
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-
         NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
         Invoke("OffObj", 0.5f);

@@ -109,8 +109,8 @@ public class AttendanceManager : MonoBehaviour
         attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 1);
 
         receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
-        receiveContentArray[1].Initialize(RewardType.Box_Normal, 3);
-        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 1);
+        receiveContentArray[1].Initialize(RewardType.Box_Normal, 5);
+        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 10);
     }
 
     public void CheckAttendance()
@@ -204,7 +204,7 @@ public class AttendanceManager : MonoBehaviour
                 {
                     case WindCharacterType.Winter:
                         playerDataBase.SnowBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox__Normal", 1);
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 1);
                         break;
                     case WindCharacterType.UnderWorld:
                         playerDataBase.UnderworldBox_Normal = 1;
@@ -218,16 +218,16 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
+                        playerDataBase.SnowBox_Normal = 5;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 5);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
+                        playerDataBase.UnderworldBox_Normal = 5;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 5);
                         break;
                 }
 
-                ItemAnimManager.instance.GetUpgradeTicket(1);
+                ItemAnimManager.instance.GetUpgradeTicket(10);
 
                 clearObj.SetActive(true);
 

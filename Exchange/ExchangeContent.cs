@@ -22,13 +22,16 @@ public class ExchangeContent : MonoBehaviour
 
     private int needPiece = 0; //블럭마다 교환시 필요한 조각 개수가 3개 ~ 5개까지 차이가 있음
 
-    private bool check = false;
+    public bool isActive = false;
+    public bool isNone = false;
 
-    int[] piece = new int[5];
+    public int[] piece = new int[5];
 
     List<string> itemList = new List<string>();
 
     private Dictionary<string, string> playerData = new Dictionary<string, string>();
+
+    InventoryManager inventoryManager;
 
     PlayerDataBase playerDataBase;
 
@@ -38,7 +41,116 @@ public class ExchangeContent : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
-    public void Initialize(BlockType type, RankType type2)
+    public void Initialize(BlockType type, RankType type2, InventoryManager manager)
+    {
+        blockType = type;
+        rankType = type2;
+        inventoryManager = manager;
+
+        titleText.text = LocalizationManager.instance.GetString(type.ToString());
+
+        switch (blockType)
+        {
+            case BlockType.Default:
+                break;
+            case BlockType.RightQueen_2:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.LeftQueen_2:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.RightQueen_3:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.LeftQueen_3:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.RightNight:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.LeftNight:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.RightDownNight:
+                isNone = true;
+                break;
+            case BlockType.LeftDownNight:
+                isNone = true;
+                break;
+            case BlockType.Rook_V2:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.Pawn_Under:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.Pawn_Snow:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.Rook_V4:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.RightNight_Mirror:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.LeftNight_Mirror:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.Rook_V4_2:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.Rook_V2_2:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+            case BlockType.Pawn_Under_2:
+                windCharacterType = WindCharacterType.UnderWorld;
+                break;
+            case BlockType.Pawn_Snow_2:
+                windCharacterType = WindCharacterType.Winter;
+                break;
+        }
+
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        Initialize_UI(blockType, rankType);
+
+        piece = playerDataBase.PieceInfo.GetPiece(blockType, rankType);
+
+        for (int i = 0; i < needPiece; i++)
+        {
+            blockHoldNumberText[i].text = piece[i] + "/1";
+
+            if (piece[i] == 0)
+            {
+                blockUIContentArray[i].lockedObj.SetActive(true);
+            }
+            else
+            {
+                blockUIContentArray[i].lockedObj.SetActive(false);
+            }
+        }
+
+        lockedObj.SetActive(true);
+
+        isActive = true;
+
+        for (int i = 0; i < needPiece; i++)
+        {
+            if (piece[i] <= 0)
+            {
+                isActive = false;
+            }
+        }
+
+        if (isActive)
+        {
+            lockedObj.SetActive(false);
+        }
+    }
+
+    public void Initialize_UI(BlockType type, RankType type2)
     {
         blockType = type;
         rankType = type2;
@@ -51,103 +163,67 @@ public class ExchangeContent : MonoBehaviour
                 break;
             case BlockType.RightQueen_2:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftQueen_2:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightQueen_3:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftQueen_3:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightNight:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftNight:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.RightDownNight:
-                gameObject.SetActive(false);
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
+                needPiece = 3;
                 break;
             case BlockType.LeftDownNight:
-                gameObject.SetActive(false);
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
+                needPiece = 3;
                 break;
             case BlockType.Rook_V2:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.Pawn_Under:
                 needPiece = 5;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.Pawn_Snow:
                 needPiece = 5;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.Rook_V4:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.RightNight_Mirror:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.LeftNight_Mirror:
                 needPiece = 3;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.Rook_V4_2:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.Rook_V2_2:
                 needPiece = 4;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
             case BlockType.Pawn_Under_2:
                 needPiece = 5;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.Winter) gameObject.SetActive(false);
                 break;
             case BlockType.Pawn_Snow_2:
                 needPiece = 5;
-
-                if (GameStateManager.instance.WindCharacterType == WindCharacterType.UnderWorld) gameObject.SetActive(false);
                 break;
         }
 
-        for(int i = 0; i < blockUIContentArray.Length; i ++)
+        for (int i = 0; i < blockUIContentArray.Length; i++)
         {
             blockUIContentArray[i].gameObject.SetActive(false);
             blockHoldNumberText[i].gameObject.SetActive(false);
         }
 
-        for(int i = 0; i < needPiece; i ++)
+        for (int i = 0; i < needPiece; i++)
         {
             blockUIContentArray[i].gameObject.SetActive(true);
             blockUIContentArray[i].SetPieceLevel(i);
@@ -159,44 +235,6 @@ public class ExchangeContent : MonoBehaviour
 
         blockUIContent_Reward.Initialize(blockType);
         blockUIContent_Reward.Initialize_Rank(rankType);
-
-        Initialize();
-    }
-
-    public void Initialize()
-    {
-        piece = playerDataBase.PieceInfo.GetPiece(blockType, rankType);
-
-        for(int i = 0; i < needPiece; i ++)
-        {
-            blockHoldNumberText[i].text = piece[i] + "/1";
-
-            if(piece[i] == 0)
-            {
-                blockUIContentArray[i].lockedObj.SetActive(true);
-            }
-            else
-            {
-                blockUIContentArray[i].lockedObj.SetActive(false);
-            }
-        }
-
-        lockedObj.SetActive(true);
-
-        check = true;
-
-        for (int i = 0; i < needPiece; i ++)
-        {
-            if(piece[i] <= 0)
-            {
-                check = false;
-            }
-        }
-
-        if(check)
-        {
-            lockedObj.SetActive(false);
-        }
     }
 
     public void Exchange()
@@ -208,65 +246,6 @@ public class ExchangeContent : MonoBehaviour
         playerData.Clear();
         playerData.Add("PieceInfo", JsonUtility.ToJson(playerDataBase.PieceInfo));
         PlayfabManager.instance.SetPlayerData(playerData);
-
-
-        switch (blockType)
-        {
-            case BlockType.Default:
-                break;
-            case BlockType.RightQueen_2:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.LeftQueen_2:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.RightQueen_3:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.LeftQueen_3:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.RightNight:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.LeftNight:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.RightDownNight:
-                break;
-            case BlockType.LeftDownNight:
-                break;
-            case BlockType.Rook_V2:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.Pawn_Under:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.Pawn_Snow:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.Rook_V4:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.RightNight_Mirror:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.LeftNight_Mirror:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.Rook_V4_2:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.Rook_V2_2:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-            case BlockType.Pawn_Under_2:
-                windCharacterType = WindCharacterType.UnderWorld;
-                break;
-            case BlockType.Pawn_Snow_2:
-                windCharacterType = WindCharacterType.Winter;
-                break;
-        }
 
         itemList.Clear();
         itemList.Add(blockType + "_" + rankType);
@@ -282,11 +261,12 @@ public class ExchangeContent : MonoBehaviour
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
-        NotionManager.instance.UseNotion(NotionType.ExchangeNotion);
+        //NotionManager.instance.UseNotion(NotionType.ExchangeNotion);
 
-        Initialize(blockType, rankType);
+        inventoryManager.SuccessFusion(blockType, rankType);
+
+        Initialize(blockType, rankType, inventoryManager);
 
         FirebaseAnalytics.LogEvent("Exchange : " +  blockType + "_" + rankType);
     }
-
 }

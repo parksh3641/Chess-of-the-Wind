@@ -501,25 +501,31 @@ public class BlockUIContent : MonoBehaviour
 
     public void BlockInfomationButton()
     {
-        if(boxInfo)
-        {
-            if(shopUIType == ShopUIType.Default)
-            {
-                ReceiveInfoManager.instance.OpenBlockInfo(blockClass);
-            }
-
-            return;
-        }
-
         if(collectionManager != null)
         {
             collectionManager.OpenBlockInformation(instanceId);
+
+            return;
         }
 
         if(synthesisManager != null)
         {
             if(blockClass.rankType != RankType.UR)
+            {
                 synthesisManager.OpenSynthesisView(instanceId, SynthesisSelected);
+            }
+
+            return;
+        }
+
+        if (boxInfo)
+        {
+            if (shopUIType == ShopUIType.Default)
+            {
+                ReceiveInfoManager.instance.OpenBlockInfo(blockClass);
+            }
+
+            return;
         }
     }
 

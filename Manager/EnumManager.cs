@@ -450,6 +450,12 @@ public enum PackageType
     Monthly3,
     Monthly4,
     Monthly5,
+    ShopDaily1,
+    ShopDaily2,
+    ShopDaily3,
+    ShopWeekly1,
+    ShopWeekly2,
+    ShopWeekly3,
 }
 
 public enum RewardType
@@ -635,5 +641,11 @@ public enum ResetType
     Package_Monthly2,
     Package_Monthly3,
     Package_Monthly4,
-    Package_Monthly5
+    Package_Monthly5,
+    Package_ShopDaily1,
+    Package_ShopDaily2,
+    Package_ShopDaily3,
+    Package_ShopWeekly1,
+    Package_ShopWeekly2,
+    Package_ShopWeekly3,
 }

@@ -66,7 +66,9 @@ public class ShopContent : MonoBehaviour
         goldText.text = "";
         freeButton.gameObject.SetActive(false);
 
-        for(int i = 0; i < rmButton.Length; i ++)
+        titleText.localizationName = type.ToString();
+
+        for (int i = 0; i < rmButton.Length; i ++)
         {
             rmButton[i].SetActive(false);
         }
@@ -107,7 +109,7 @@ public class ShopContent : MonoBehaviour
                         {
                             if(playerDataBase.ResetInfo.dailyBuyCount1 == 0)
                             {
-                                number = Random.Range(1, 10);
+                                number = Random.Range(10, 31);
 
                                 playerDataBase.ResetInfo.dailyBuyCount1 = number;
 
@@ -133,7 +135,7 @@ public class ShopContent : MonoBehaviour
                         {
                             if (playerDataBase.ResetInfo.dailyBuyCount2 == 0)
                             {
-                                number = Random.Range(11, 51);
+                                number = Random.Range(50, 101);
 
                                 playerDataBase.ResetInfo.dailyBuyCount2 = number;
 
@@ -154,20 +156,26 @@ public class ShopContent : MonoBehaviour
                 }
                 else
                 {
-                    if(number == 1)
+                    if(number == 10)
                     {
+                        titleText.plusText = "x10";
+
                         rmButton[0].SetActive(true);
                         rmButtonText[0].localizationName = "UpgradeTicket_10";
                         rmButtonText[0].ReLoad();
                     }
-                    else if (number == 10)
+                    else if (number == 50)
                     {
+                        titleText.plusText = "x50";
+
                         rmButton[1].SetActive(true);
                         rmButtonText[1].localizationName = "UpgradeTicket_100";
                         rmButtonText[1].ReLoad();
                     }
                     else if (number == 100)
                     {
+                        titleText.plusText = "x100";
+
                         rmButton[2].SetActive(true);
                         rmButtonText[2].localizationName = "UpgradeTicket_1000";
                         rmButtonText[2].ReLoad();
@@ -179,16 +187,7 @@ public class ShopContent : MonoBehaviour
                 break;
         }
 
-        titleText.localizationName = type.ToString();
-
-        //if (number > 0)
-        //{
-        //    titleText.plusText = " x" + number;
-        //}
-
         titleText.ReLoad();
-
-        //icon.sprite = shopContentArray[(int)type];
     }
 
     public void UnLocked()

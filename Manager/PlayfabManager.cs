@@ -1148,30 +1148,6 @@ public class PlayfabManager : MonoBehaviour
                        case "SnowBox_Speical":
                            playerDataBase.SnowBox_Speical = statistics.Value;
                            break;
-                       //case "SnowBox_N":
-                       //    playerDataBase.SnowBox_N = statistics.Value;
-                       //    break;
-                       //case "SnowBox_R":
-                       //    playerDataBase.SnowBox_R = statistics.Value;
-                       //    break;
-                       //case "SnowBox_SR":
-                       //    playerDataBase.SnowBox_SR = statistics.Value;
-                       //    break;
-                       //case "SnowBox_SSR":
-                       //    playerDataBase.SnowBox_SSR = statistics.Value;
-                       //    break;
-                       //case "SnowBox_UR":
-                       //    playerDataBase.SnowBox_UR = statistics.Value;
-                       //    break;
-                       //case "SnowBox_NR":
-                       //    playerDataBase.SnowBox_NR = statistics.Value;
-                       //    break;
-                       //case "SnowBox_RSR":
-                       //    playerDataBase.SnowBox_RSR = statistics.Value;
-                       //    break;
-                       //case "SnowBox_SRSSR":
-                       //    playerDataBase.SnowBox_SRSSR = statistics.Value;
-                       //    break;
                        case "UnderworldBox_Normal":
                            playerDataBase.UnderworldBox_Normal = statistics.Value;
                            break;
@@ -1181,30 +1157,6 @@ public class PlayfabManager : MonoBehaviour
                        case "UnderworldBox_Speical":
                            playerDataBase.UnderworldBox_Speical = statistics.Value;
                            break;
-                       //case "UnderworldBox_N":
-                       //    playerDataBase.UnderworldBox_N = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_R":
-                       //    playerDataBase.UnderworldBox_R = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_SR":
-                       //    playerDataBase.UnderworldBox_SR = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_SSR":
-                       //    playerDataBase.UnderworldBox_SSR = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_UR":
-                       //    playerDataBase.UnderworldBox_UR = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_NR":
-                       //    playerDataBase.UnderworldBox_NR = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_RSR":
-                       //    playerDataBase.UnderworldBox_RSR = statistics.Value;
-                       //    break;
-                       //case "UnderworldBox_SRSSR":
-                       //    playerDataBase.UnderworldBox_SRSSR = statistics.Value;
-                       //    break;
                        case "BoxPiece_N":
                            playerDataBase.BoxPiece_N = statistics.Value;
                            break;

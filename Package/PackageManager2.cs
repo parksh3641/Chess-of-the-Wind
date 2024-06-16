@@ -28,10 +28,6 @@ public class PackageManager2 : MonoBehaviour
     public PackageContent2[] weeklyPackageContent;
     public PackageContent2[] monthlyPackageContent;
 
-    private int hours;
-    private int minutes;
-    private int seconds;
-
     string localization_Reset = "";
     string localization_Days = "";
     string localization_Hours = "";

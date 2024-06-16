@@ -70,6 +70,19 @@ public class UpgradeTicketClass
 [CreateAssetMenu(fileName = "PlayerDataBase", menuName = "ScriptableObjects/PlayerDataBase")]
 public class PlayerDataBase : ScriptableObject
 {
+    [Space]
+    [Title("Information")]
+    [SerializeField]
+    private PieceInfo pieceInfo;
+
+    [Space]
+    [SerializeField]
+    private ResetInfo resetInfo;
+
+    [Space]
+    [SerializeField]
+    private RandomBoxInfo randomBoxInfo;
+
     [Title("Money")]
     [SerializeField]
     private long coin = 0;
@@ -108,19 +121,6 @@ public class PlayerDataBase : ScriptableObject
     private int appReview = 0;
     [SerializeField]
     private int reviewNumber = 0;
-
-    [Space]
-    [SerializeField]
-    private PieceInfo pieceInfo;
-
-    [Space]
-    [Title("Daily")]
-    [SerializeField]
-    private ResetInfo resetInfo;
-
-    [Space]
-    [SerializeField]
-    private RandomBoxInfo randomBoxInfo;
 
     [Space]
     [Title("Achievement")]

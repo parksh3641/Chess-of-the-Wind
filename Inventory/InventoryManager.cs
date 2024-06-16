@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -157,8 +158,6 @@ public class PieceInfo
 
     public void AddPiece(BlockType blockType, RankType rankType, int number)
     {
-        Debug.Log(blockType + " / " + rankType + " / " + (number + 1) + "¹øÂ° Á¶°¢ È¹µæ");
-
         switch (rankType)
         {
             case RankType.N:
@@ -398,6 +397,10 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject changeBoxView;
 
+    public GameObject successView;
+    public BlockUIContent successBlockUIContent;
+    public GameObject successContinue;
+
     public GameObject mainAlarm;
 
     [Title("TopMenu")]
@@ -426,6 +429,19 @@ public class InventoryManager : MonoBehaviour
     private List<ExchangeContent> exchangeContentList_SSR = new List<ExchangeContent>();
     private List<ExchangeContent> exchangeContentList_UR = new List<ExchangeContent>();
 
+    private List<ExchangeContent> exchangeContentList_N_Sort = new List<ExchangeContent>();
+    private List<ExchangeContent> exchangeContentList_R_Sort = new List<ExchangeContent>();
+    private List<ExchangeContent> exchangeContentList_SR_Sort = new List<ExchangeContent>();
+    private List<ExchangeContent> exchangeContentList_SSR_Sort = new List<ExchangeContent>();
+    private List<ExchangeContent> exchangeContentList_UR_Sort = new List<ExchangeContent>();
+
+
+    private List<int> exchangeContentList_N_List = new List<int>();
+    private List<int> exchangeContentList_R_List = new List<int>();
+    private List<int> exchangeContentList_SR_List = new List<int>();
+    private List<int> exchangeContentList_SSR_List = new List<int>();
+    private List<int> exchangeContentList_UR_List = new List<int>();
+
     private int boxIndex = 0;
     private int boxCount = 0;
 
@@ -435,9 +451,19 @@ public class InventoryManager : MonoBehaviour
     private int changeBoxCount = 10;
 
     bool isDelay = false;
+    private bool isSuccessDelay = false;
+
+    private bool init1 = false;
+    private bool init2 = false;
+    private bool init3 = false;
+    private bool init4 = false;
+    private bool init5 = false;
 
     public TitleManager titleManager;
     public CollectionManager collectionManager;
+
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
 
     Sprite[] rankBackgroundArray;
 
@@ -455,8 +481,15 @@ public class InventoryManager : MonoBehaviour
 
         inventoryView.SetActive(false);
         changeBoxView.SetActive(false);
+        successView.SetActive(false);
 
         mainAlarm.SetActive(true);
+
+        init1 = false;
+        init2 = false;
+        init3 = false;
+        init4 = false;
+        init5 = false;
 
         for (int i = 0; i < System.Enum.GetValues(typeof(BlockType)).Length - 1; i++)
         {
@@ -547,6 +580,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void CloseInventoryView()
+    {
+        inventoryView.SetActive(false);
+    }
+
     public void ChangeTopMenu(int number)
     {
         if (topNumber == number) return;
@@ -596,24 +634,166 @@ public class InventoryManager : MonoBehaviour
         topMenuImgArray2[number].sprite = topMenuSpriteArray[1];
         scrollView2[number].SetActive(true);
 
-        switch(number)
+        switch (number)
         {
             case 0:
-                Exchange_Initialize(RankType.N);
+                if (!init1)
+                {
+                    init1 = true;
+
+                    for (int i = 0; i < exchangeContentList_N.Count; i++)
+                    {
+                        exchangeContentList_N[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+
+                        if (exchangeContentList_N[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_N[i].isNone)
+                        {
+                            exchangeContentList_N[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            exchangeContentList_N_Sort.Add(exchangeContentList_N[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exchangeContentList_N_Sort.Count; i++)
+                    {
+                        exchangeContentList_N_Sort[i].Initialize();
+                    }
+                }
+
+                //exchangeContentList_N_Sort.Clear();
+                //exchangeContentList_N_List.Clear();
+
+                //for (int i = 0; i < exchangeContentList_N.Count; i++)
+                //{
+                //    if (exchangeContentList_N[i].windCharacterType == GameStateManager.instance.WindCharacterType && !exchangeContentList_N[i].isNone)
+                //    {
+                //        exchangeContentList_N_Sort.Add(exchangeContentList_N[i]);
+                //        exchangeContentList_N_List.Add(i);
+                //    }
+                //}
+
+                //exchangeContentList_N_Sort = exchangeContentList_N_Sort.OrderByDescending(x => x.blockType).OrderByDescending(x => x.isActive).ToList();
+
+                //for (int i = 0; i < exchangeContentList_N_Sort.Count; i++)
+                //{
+                //    exchangeContentList_N[exchangeContentList_N_List[i]].Initialize_Sort(exchangeContentList_N_Sort[i].blockType, RankType.N);
+                //}
                 break;
             case 1:
-                Exchange_Initialize(RankType.R);
+                if (!init2)
+                {
+                    init2 = true;
+
+                    for (int i = 0; i < exchangeContentList_R.Count; i++)
+                    {
+                        exchangeContentList_R[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+
+                        if (exchangeContentList_R[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_R[i].isNone)
+                        {
+                            exchangeContentList_R[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            exchangeContentList_R_Sort.Add(exchangeContentList_R[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exchangeContentList_R_Sort.Count; i++)
+                    {
+                        exchangeContentList_R_Sort[i].Initialize();
+                    }
+                }
+
                 break;
             case 2:
-                Exchange_Initialize(RankType.SR);
+                if (!init3)
+                {
+                    init3 = true;
+
+                    for (int i = 0; i < exchangeContentList_SR.Count; i++)
+                    {
+                        exchangeContentList_SR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+
+                        if (exchangeContentList_SR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_SR[i].isNone)
+                        {
+                            exchangeContentList_SR[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            exchangeContentList_SR_Sort.Add(exchangeContentList_SR[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exchangeContentList_SR_Sort.Count; i++)
+                    {
+                        exchangeContentList_SR_Sort[i].Initialize();
+                    }
+                }
+
                 break;
             case 3:
-                Exchange_Initialize(RankType.SSR);
+                if (!init4)
+                {
+                    init4 = true;
+
+                    for (int i = 0; i < exchangeContentList_SSR.Count; i++)
+                    {
+                        exchangeContentList_SSR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+
+                        if (exchangeContentList_SSR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_SSR[i].isNone)
+                        {
+                            exchangeContentList_SSR[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            exchangeContentList_SSR_Sort.Add(exchangeContentList_SSR[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exchangeContentList_SSR_Sort.Count; i++)
+                    {
+                        exchangeContentList_SSR_Sort[i].Initialize();
+                    }
+                }
+
                 break;
             case 4:
-                Exchange_Initialize(RankType.UR);
-                break;
+                if (!init5)
+                {
+                    init5 = true;
 
+                    for (int i = 0; i < exchangeContentList_UR.Count; i++)
+                    {
+                        exchangeContentList_UR[i].Initialize(BlockType.Default + 1 + i, RankType.N, this);
+
+                        if (exchangeContentList_UR[i].windCharacterType != GameStateManager.instance.WindCharacterType || exchangeContentList_UR[i].isNone)
+                        {
+                            exchangeContentList_UR[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            exchangeContentList_UR_Sort.Add(exchangeContentList_UR[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exchangeContentList_UR_Sort.Count; i++)
+                    {
+                        exchangeContentList_UR_Sort[i].Initialize();
+                    }
+                }
+
+                break;
         }
     }
 
@@ -627,58 +807,6 @@ public class InventoryManager : MonoBehaviour
         inventoryText[5].text = playerDataBase.BoxPiece_UR.ToString() + "/" + changeBoxCount;
 
         titleManager.CheckGoal();
-    }
-
-    void Exchange_Initialize(RankType rankType)
-    {
-        switch (rankType)
-        {
-            case RankType.N:
-                for (int i = 0; i < exchangeContentList_N.Count; i++)
-                {
-                    if (exchangeContentList_N[i].gameObject.activeSelf)
-                    {
-                        exchangeContentList_N[i].Initialize(BlockType.Default + 1 + i, rankType);
-                    }
-                }
-                break;
-            case RankType.R:
-                for (int i = 0; i < exchangeContentList_R.Count; i++)
-                {
-                    if (exchangeContentList_R[i].gameObject.activeSelf)
-                    {
-                        exchangeContentList_R[i].Initialize(BlockType.Default + 1 + i, rankType);
-                    }
-                }
-                break;
-            case RankType.SR:
-                for (int i = 0; i < exchangeContentList_SR.Count; i++)
-                {
-                    if (exchangeContentList_SR[i].gameObject.activeSelf)
-                    {
-                        exchangeContentList_SR[i].Initialize(BlockType.Default + 1 + i, rankType);
-                    }
-                }
-                break;
-            case RankType.SSR:
-                for (int i = 0; i < exchangeContentList_SSR.Count; i++)
-                {
-                    if (exchangeContentList_SSR[i].gameObject.activeSelf)
-                    {
-                        exchangeContentList_SSR[i].Initialize(BlockType.Default + 1 + i, rankType);
-                    }
-                }
-                break;
-            case RankType.UR:
-                for (int i = 0; i < exchangeContentList_UR.Count; i++)
-                {
-                    if (exchangeContentList_UR[i].gameObject.activeSelf)
-                    {
-                        exchangeContentList_UR[i].Initialize(BlockType.Default + 1 + i, rankType);
-                    }
-                }
-                break;
-        }
     }
 
     public void ChangeBox(int number)
@@ -964,5 +1092,33 @@ public class InventoryManager : MonoBehaviour
     void Delay()
     {
         isDelay = false;
+    }
+
+    public void SuccessFusion(BlockType blockType,RankType rankType)
+    {
+        isSuccessDelay = true;
+
+        successView.SetActive(true);
+
+        successContinue.SetActive(false);
+
+        successBlockUIContent.Initialize(blockType);
+        successBlockUIContent.Initialize_Rank(rankType);
+
+        Invoke("SuccessDelay", 1.0f);
+    }
+
+    void SuccessDelay()
+    {
+        isSuccessDelay = false;
+
+        successContinue.SetActive(true);
+    }
+
+    public void CloseFusion()
+    {
+        if (isSuccessDelay) return;
+
+        successView.SetActive(false);
     }
 }

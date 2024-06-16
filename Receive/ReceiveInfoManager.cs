@@ -83,29 +83,12 @@ public class ReceiveInfoManager : MonoBehaviour
             case RewardType.Box_Normal:
                 mainBackground.sprite = rankBackgroundArray[0];
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Winter");
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Under");
-                        break;
-                }
-
+                titleText.text = LocalizationManager.instance.GetString("Box_Normal");
                 break;
             case RewardType.Box_Epic:
                 mainBackground.sprite = rankBackgroundArray[2];
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Winter");
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Under");
-                        break;
-                }
+                titleText.text = LocalizationManager.instance.GetString("Box_Epic");
 
                 break;
             case RewardType.Box_Speical:

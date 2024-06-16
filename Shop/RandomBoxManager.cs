@@ -1462,46 +1462,7 @@ public class RandomBoxManager : MonoBehaviour
             ItemAnimManager.instance.GetUpgradeTicket(upgradeTicket);
         }
 
-
-        switch (windCharacterType)
-        {
-            case WindCharacterType.Winter:
-                switch (boxType)
-                {
-                    case BoxType.Normal:
-                        playerDataBase.SnowBox_Normal = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 0);
-                        break;
-                    case BoxType.Epic:
-                        playerDataBase.SnowBox_Epic = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 0);
-                        break;
-                    case BoxType.Speical:
-                        playerDataBase.SnowBox_Speical = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", 0);
-                        break;
-                }
-
-                break;
-            case WindCharacterType.UnderWorld:
-                switch (boxType)
-                {
-                    case BoxType.Normal:
-                        playerDataBase.UnderworldBox_Normal = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 0);
-                        break;
-                    case BoxType.Epic:
-                        playerDataBase.UnderworldBox_Epic = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 0);
-                        break;
-                    case BoxType.Speical:
-                        playerDataBase.UnderworldBox_Speical = 0;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", 0);
-                        break;
-                }
-
-                break;
-        }
+        Invoke("ServerDelay", 0.5f);
 
         playerData.Clear();
         playerData.Add("PieceInfo", JsonUtility.ToJson(playerDataBase.PieceInfo));
@@ -1509,7 +1470,35 @@ public class RandomBoxManager : MonoBehaviour
 
         shopManager.Change();
 
-        Debug.Log("조각 서버 저장 완료");
+        Debug.LogError("조각 서버 저장 완료");
+    }
+
+    void ServerDelay()
+    {
+        switch (boxType)
+        {
+            case BoxType.Normal:
+                playerDataBase.SnowBox_Normal = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 0);
+
+                playerDataBase.UnderworldBox_Normal = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 0);
+                break;
+            case BoxType.Epic:
+                playerDataBase.SnowBox_Epic = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 0);
+
+                playerDataBase.UnderworldBox_Epic = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 0);
+                break;
+            case BoxType.Speical:
+                playerDataBase.SnowBox_Speical = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Speical", 0);
+
+                playerDataBase.UnderworldBox_Speical = 0;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Speical", 0);
+                break;
+        }
     }
 
     public void NextButton()

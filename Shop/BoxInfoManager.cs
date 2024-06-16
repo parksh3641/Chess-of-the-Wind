@@ -80,15 +80,7 @@ public class BoxInfoManager : MonoBehaviour
             case 0:
                 rankType = RankType.SSR;
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Winter");
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Under");
-                        break;
-                }
+                titleText.text = LocalizationManager.instance.GetString("Box_Speical");
 
                 PlayfabManager.instance.GetTitleInternalData("RandomBox", InitializePercent);
                 break;

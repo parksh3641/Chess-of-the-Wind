@@ -11,7 +11,7 @@ public class BoxInfoContent : MonoBehaviour
 
     public void Initialize(string title, float number)
     {
-        titleText.text = title;
+        titleText.text = title + " " + LocalizationManager.instance.GetString("Piece");
         percentText.text = number.ToString("N2") + "%";
     }
 
