@@ -22,6 +22,8 @@ public class BlockUIContent : MonoBehaviour
     public Text levelText;
     private int level = 0;
 
+    public Text valueText;
+
     private bool boxInfo = false;
 
     public GameObject gradient;
@@ -50,6 +52,7 @@ public class BlockUIContent : MonoBehaviour
         rankBannerArray = imageDataBase.GetRankBannerArray();
 
         levelText.text = "";
+        valueText.text = "";
 
         gradient.SetActive(false);
 
@@ -103,6 +106,8 @@ public class BlockUIContent : MonoBehaviour
     public void Initialize_RandomBox(RandomBox_Block randomBox_Block)
     {
         shopUIType = ShopUIType.Default;
+
+        valueText.text = "";
 
         switch (randomBox_Block.boxInfoType)
         {
@@ -365,18 +370,22 @@ public class BlockUIContent : MonoBehaviour
             case BoxInfoType.Gold_N:
                 shopUIType = ShopUIType.Gold1;
                 blockClass.rankType = RankType.N;
+                valueText.text = randomBox_Block.value.ToString();
                 break;
             case BoxInfoType.Gold_R:
                 shopUIType = ShopUIType.Gold2;
                 blockClass.rankType = RankType.R;
+                valueText.text = randomBox_Block.value.ToString();
                 break;
             case BoxInfoType.UpgradeTicket_N:
                 shopUIType = ShopUIType.UpgradeTicket1;
                 blockClass.rankType = RankType.N;
+                valueText.text = randomBox_Block.value.ToString();
                 break;
             case BoxInfoType.UpgradeTicket_R:
                 shopUIType = ShopUIType.UpgradeTicket2;
                 blockClass.rankType = RankType.R;
+                valueText.text = randomBox_Block.value.ToString();
                 break;
         }
 

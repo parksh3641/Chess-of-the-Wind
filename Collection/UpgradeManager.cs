@@ -248,7 +248,7 @@ public class UpgradeManager : MonoBehaviour
 
         needTicket = upgradeDataBase.GetNeedTicket(blockClass.level + 1);
 
-        if (blockClass.level >= 6)
+        if (blockClass.level > 0)
         {
             ticketObj.SetActive(true);
 
@@ -653,12 +653,12 @@ public class UpgradeManager : MonoBehaviour
                 upgradeScreenValueName.text = "";
                 upgradeScreenValue.text = "";
 
-                pieceObj.SetActive(true);
+                pieceObj.SetActive(false);
                 pieceImg.sprite = rankBackgroundArray[(int)blockClass.rankType];
 
                 inventoryManager.mainAlarm.SetActive(true);
 
-                ItemAnimManager.instance.GetBoxPiece(blockClass.rankType, 1);
+                //ItemAnimManager.instance.GetBoxPiece(blockClass.rankType, 1);
 
                 equipManager.CheckUnEquip(blockClass.instanceId);
                 collectionManager.CheckUnEquip(blockClass.instanceId);

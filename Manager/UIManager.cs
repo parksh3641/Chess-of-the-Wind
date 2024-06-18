@@ -727,7 +727,6 @@ public class UIManager : MonoBehaviour
         {
             case 0:
                 shopManager.OpenShopView();
-
                 break;
             case 1:
                 challengeManager.CheckingGoal();

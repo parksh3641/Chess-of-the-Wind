@@ -615,6 +615,7 @@ public class RandomBox_Block //당첨된 블럭 정보
 {
     public BoxInfoType boxInfoType = BoxInfoType.RightQueen_2_N;
     public int number = 0;
+    public int value = 0;
 
     private string infoType = "";
     
@@ -678,8 +679,12 @@ public class RandomBoxManager : MonoBehaviour
     private bool isDelay = false;
 
     private float random = 0;
-    private int gold = 0;
-    private int upgradeTicket = 0;
+    private int getGold = 0;
+    private int totalgold = 0;
+    private int getUpgradeTicket = 0;
+    private int totalUpgradeTicket = 0;
+    private int remainder = 0;
+
     private float percentTotal = 0;
     public static bool isActive = true;
 
@@ -699,10 +704,13 @@ public class RandomBoxManager : MonoBehaviour
     private string countStr = "";
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
 
     private Dictionary<string, string> playerData = new Dictionary<string, string>();
 
     public ShopManager shopManager;
+    public InventoryManager inventoryManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -1100,8 +1108,8 @@ public class RandomBoxManager : MonoBehaviour
 
         prize_Block.Clear();
 
-        gold = 0;
-        upgradeTicket = 0;
+        totalgold = 0;
+        totalUpgradeTicket = 0;
 
         for (int i = 0; i < prize.Count; i ++)
         {
@@ -1346,129 +1354,17 @@ public class RandomBoxManager : MonoBehaviour
                 case BoxInfoType.Pawn_Snow_2_SSR:
                     playerDataBase.PieceInfo.AddPiece(BlockType.Pawn_Snow_2, RankType.SSR, prize_Block[i].number);
                     break;
-
-
-                case BoxInfoType.Gold_N:
-                    switch(prize_Block[i].number)
-                    {
-                        case 0:
-                            gold += Random.Range(5000, 10001);
-
-                            break;
-                        case 1:
-                            gold += Random.Range(10000, 20001);
-
-                            break;
-                        case 2:
-                            gold += Random.Range(20000, 30001);
-
-                            break;
-                        case 3:
-                            gold += Random.Range(30000, 40001);
-
-                            break;
-                        case 4:
-                            gold += Random.Range(40000, 50001);
-
-                            break;
-                    }
-                    break;
-                case BoxInfoType.Gold_R:
-                    switch (prize_Block[i].number)
-                    {
-                        case 0:
-                            gold += Random.Range(50000, 60001);
-
-                            break;
-                        case 1:
-                            gold += Random.Range(60000, 70001);
-
-                            break;
-                        case 2:
-                            gold += Random.Range(70000, 80001);
-
-                            break;
-                        case 3:
-                            gold += Random.Range(80000, 90001);
-
-                            break;
-                        case 4:
-                            gold += Random.Range(90000, 100001);
-
-                            break;
-                    }
-                    break;
-                case BoxInfoType.UpgradeTicket_N:
-                    switch (prize_Block[i].number)
-                    {
-                        case 0:
-                            upgradeTicket += 1;
-
-                            break;
-                        case 1:
-                            upgradeTicket += 2;
-
-                            break;
-                        case 2:
-                            upgradeTicket += 3;
-
-                            break;
-                        case 3:
-                            upgradeTicket += 4;
-
-                            break;
-                        case 4:
-                            upgradeTicket += 5;
-
-                            break;
-                    }
-                    break;
-                case BoxInfoType.UpgradeTicket_R:
-                    switch (prize_Block[i].number)
-                    {
-                        case 0:
-                            upgradeTicket += 6;
-
-                            break;
-                        case 1:
-                            upgradeTicket += 7;
-
-                            break;
-                        case 2:
-                            upgradeTicket += 8;
-
-                            break;
-                        case 3:
-                            upgradeTicket += 9;
-
-                            break;
-                        case 4:
-                            upgradeTicket += 10;
-
-                            break;
-                    }
-                    break;
             }
         }
 
-
-        if(gold > 0)
-        {
-            PlayfabManager.instance.UpdateAddGold(gold);
-        }
-
-        if(upgradeTicket > 0)
-        {
-            ItemAnimManager.instance.GetUpgradeTicket(upgradeTicket);
-        }
-
-        Invoke("ServerDelay", 0.5f);
+        Invoke("ServerDelay", 1.0f);
 
         playerData.Clear();
         playerData.Add("PieceInfo", JsonUtility.ToJson(playerDataBase.PieceInfo));
         PlayfabManager.instance.SetPlayerData(playerData);
 
         shopManager.Change();
+        inventoryManager.CheckingFusion();
 
         Debug.LogError("조각 서버 저장 완료");
     }
@@ -1505,7 +1401,10 @@ public class RandomBoxManager : MonoBehaviour
     {
         if (isDelay) return;
 
-        if(boxIndex >= prize.Count)
+        getGold = 0;
+        getUpgradeTicket = 0;
+
+        if (boxIndex >= prize.Count)
         {
             boxOpenView.SetActive(false);
 
@@ -1551,19 +1450,39 @@ public class RandomBoxManager : MonoBehaviour
                         switch(prize_Block[boxIndex].number)
                         {
                             case 0:
-                                countStr = "5000 ~ 10000";
+                                getGold = Random.Range(5000, 10001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 1:
-                                countStr = "10000 ~ 20000";
+                                getGold = Random.Range(10000, 20001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 2:
-                                countStr = "20000 ~ 30000";
+                                getGold = Random.Range(20000, 30001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 3:
-                                countStr = "30000 ~ 40000";
+                                getGold = Random.Range(30000, 40001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 4:
-                                countStr = "40000 ~ 50000";
+                                getGold = Random.Range(40000, 50001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                         }
 
@@ -1572,19 +1491,39 @@ public class RandomBoxManager : MonoBehaviour
                         switch (prize_Block[boxIndex].number)
                         {
                             case 0:
-                                countStr = "50000 ~ 60000";
+                                getGold = Random.Range(50000, 60001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 1:
-                                countStr = "60000 ~ 70000";
+                                getGold = Random.Range(60000, 70001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 2:
-                                countStr = "70000 ~ 80000";
+                                getGold = Random.Range(70000, 80001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 3:
-                                countStr = "80000 ~ 90000";
+                                getGold = Random.Range(80000, 90001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                             case 4:
-                                countStr = "90000 ~ 100000";
+                                getGold = Random.Range(90000, 100001);
+
+                                getGold = RoundToNearestTens(getGold);
+
+                                countStr = getGold.ToString();
                                 break;
                         }
                         break;
@@ -1592,19 +1531,29 @@ public class RandomBoxManager : MonoBehaviour
                         switch (prize_Block[boxIndex].number)
                         {
                             case 0:
-                                countStr = "x1";
+                                getUpgradeTicket = 1;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 1:
-                                countStr = "x2";
+                                getUpgradeTicket = 2;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 2:
-                                countStr = "x3";
+                                getUpgradeTicket = 3;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 3:
-                                countStr = "x4";
+                                getUpgradeTicket = 4;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 4:
-                                countStr = "x5";
+                                getUpgradeTicket = 5;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                         }
                         break;
@@ -1612,23 +1561,49 @@ public class RandomBoxManager : MonoBehaviour
                         switch (prize_Block[boxIndex].number)
                         {
                             case 0:
-                                countStr = "x6";
+                                getUpgradeTicket = 6;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 1:
-                                countStr = "x7";
+                                getUpgradeTicket = 7;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 2:
-                                countStr = "x8";
+                                getUpgradeTicket = 8;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 3:
-                                countStr = "x9";
+                                getUpgradeTicket = 9;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                             case 4:
-                                countStr = "x10";
+                                getUpgradeTicket = 10;
+
+                                countStr = "x" + getUpgradeTicket.ToString();
                                 break;
                         }
                         break;
                 }
+
+                if(getGold > 0)
+                {
+                    totalgold += getGold;
+
+                    prize_Block[boxIndex].value = getGold;
+                }
+
+                if(getUpgradeTicket > 0)
+                {
+                    totalUpgradeTicket += getUpgradeTicket;
+
+                    prize_Block[boxIndex].value = getUpgradeTicket;
+                }
+
+                blockUIContent_Detail.Initialize_RandomBox(prize_Block[boxIndex]);
 
                 blockTitleText.text = LocalizationManager.instance.GetString(titleArray[0]) + "\n" + countStr;
             }
@@ -1681,7 +1656,17 @@ public class RandomBoxManager : MonoBehaviour
             blockUIContentList[i].gameObject.SetActive(false);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        if (totalgold > 0)
+        {
+            PlayfabManager.instance.UpdateAddGold(totalgold);
+        }
+
+        if (totalUpgradeTicket > 0)
+        {
+            ItemAnimManager.instance.GetUpgradeTicket(totalUpgradeTicket);
+        }
+
+        yield return waitForSeconds2;
 
         for (int i = 0; i < prize_Block.Count; i++)
         {
@@ -1693,7 +1678,7 @@ public class RandomBoxManager : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return waitForSeconds2;
 
         tapObj.SetActive(true);
 
@@ -1704,5 +1689,20 @@ public class RandomBoxManager : MonoBehaviour
     void Delay()
     {
         isDelay = false;
+    }
+
+    int RoundToNearestTens(int num)
+    {
+        // 1의 자리에서 반올림
+        remainder = num % 10;
+        if (remainder >= 5)
+        {
+            num += (10 - remainder);
+        }
+        else
+        {
+            num -= remainder;
+        }
+        return num;
     }
 }

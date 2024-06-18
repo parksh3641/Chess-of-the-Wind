@@ -329,6 +329,25 @@ public class MatchingManager : MonoBehaviour
                             PlayfabManager.instance.UpdatePlayerStatisticsInsert("HighRank", playerDataBase.HighRank);
                         }
 
+                        switch(playerDataBase.HighRank)
+                        {
+                            case 4:
+                                OpenPackage(PackageType.Sliver);
+                                break;
+                            case 8:
+                                OpenPackage(PackageType.Gold);
+                                break;
+                            case 12:
+                                OpenPackage(PackageType.Platinum);
+                                break;
+                            case 16:
+                                OpenPackage(PackageType.Diamond);
+                                break;
+                            case 20:
+                                OpenPackage(PackageType.Legend);
+                                break;
+                        }
+
                         Debug.Log("최고 랭크 갱신 !");
                     }
 
@@ -383,7 +402,7 @@ public class MatchingManager : MonoBehaviour
 
                     if (GameStateManager.instance.StoreType != StoreType.OneStore)
                     {
-                        OpenSupplyPackage();
+                        OpenPackage(PackageType.Supply);
                     }
                 }
 
@@ -397,16 +416,6 @@ public class MatchingManager : MonoBehaviour
             GameStateManager.instance.Lose = false;
             GameStateManager.instance.WinStreak = 0;
             GameStateManager.instance.LoseStreak += 1;
-
-            if(GameStateManager.instance.LoseStreak >= 2)
-            {
-                GameStateManager.instance.LoseStreak = 0;
-
-                if (GameStateManager.instance.StoreType != StoreType.OneStore)
-                {
-                    OpenSupplyPackage();
-                }
-            }
 
             starSave = playerDataBase.Star;
 
@@ -985,17 +994,49 @@ public class MatchingManager : MonoBehaviour
     }
 
     [Button]
-    public void OpenSupplyPackage()
+    public void OpenPackage(int number)
     {
-        if(playerDataBase.ShopSupply == 0 && GameStateManager.instance.GameRankType < GameRankType.Sliver_2)
+        switch(number)
         {
-            packageObj.SetActive(true);
-            packageContent.Initialize(packageManager);
+            case 0:
+                OpenPackage(PackageType.Newbie);
+                break;
+            case 1:
+                OpenPackage(PackageType.Supply);
+                break;
+            case 2:
+                OpenPackage(PackageType.Sliver);
+                break;
+            case 3:
+                OpenPackage(PackageType.Gold);
+                break;
+            case 4:
+                OpenPackage(PackageType.Platinum);
+                break;
+            case 5:
+                OpenPackage(PackageType.Diamond);
+                break;
+            case 6:
+                OpenPackage(PackageType.Legend);
+                break;
         }
+    }
+
+
+    public void OpenPackage(PackageType packageType)
+    {
+        packageObj.SetActive(true);
+
+        packageManager.rankUpPackage = true;
+
+        packageContent.packageType = packageType;
+        packageContent.Initialize(packageManager);
     }
 
     public void CloseSupplyPackage()
     {
+        packageManager.rankUpPackage = false;
+
         packageObj.SetActive(false);
     }
 

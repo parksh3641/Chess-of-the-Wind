@@ -26,6 +26,7 @@ public class StateManager : MonoBehaviour
     public OptionManager optionManager;
     public TitleManager titleManager;
     public AttendanceManager attendanceManager;
+    public InventoryManager inventoryManager;
 
     public GameObject penaltyView;
     public Text penaltyValue;
@@ -74,6 +75,7 @@ public class StateManager : MonoBehaviour
     {
         eventManager.Initialize();
         attendanceManager.CheckInitialize();
+        inventoryManager.CheckingFusion();
 
 
         if (GameStateManager.instance.Penalty > 0)

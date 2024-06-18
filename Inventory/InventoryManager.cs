@@ -330,6 +330,7 @@ public class Piece
 {
     public BlockType blockType = BlockType.Default;
     public RankType rankType = RankType.N;
+    public int needPiece = 0;
     public int index1 = 0;
     public int index2 = 0;
     public int index3 = 0;
@@ -337,6 +338,7 @@ public class Piece
     public int index5 = 0;
 
     int[] piece = new int[5];
+    bool check = false;
 
     public void Initialize()
     {
@@ -345,6 +347,66 @@ public class Piece
         index3 = 0;
         index4 = 0;
         index5 = 0;
+
+        switch (blockType)
+        {
+            case BlockType.Default:
+                break;
+            case BlockType.RightQueen_2:
+                needPiece = 4;
+                break;
+            case BlockType.LeftQueen_2:
+                needPiece = 4;
+                break;
+            case BlockType.RightQueen_3:
+                needPiece = 3;
+                break;
+            case BlockType.LeftQueen_3:
+                needPiece = 3;
+                break;
+            case BlockType.RightNight:
+                needPiece = 3;
+                break;
+            case BlockType.LeftNight:
+                needPiece = 3;
+                break;
+            case BlockType.RightDownNight:
+                needPiece = 3;
+                break;
+            case BlockType.LeftDownNight:
+                needPiece = 3;
+                break;
+            case BlockType.Rook_V2:
+                needPiece = 4;
+                break;
+            case BlockType.Pawn_Under:
+                needPiece = 5;
+                break;
+            case BlockType.Pawn_Snow:
+                needPiece = 5;
+                break;
+            case BlockType.Rook_V4:
+                needPiece = 4;
+                break;
+            case BlockType.RightNight_Mirror:
+                needPiece = 3;
+                break;
+            case BlockType.LeftNight_Mirror:
+                needPiece = 3;
+                break;
+            case BlockType.Rook_V4_2:
+                needPiece = 4;
+                break;
+            case BlockType.Rook_V2_2:
+                needPiece = 4;
+                break;
+            case BlockType.Pawn_Under_2:
+                needPiece = 5;
+                break;
+            case BlockType.Pawn_Snow_2:
+                needPiece = 5;
+                break;
+        }
     }
 
     public void PlusPiece(int number)
@@ -388,6 +450,35 @@ public class Piece
 
         return piece;
     }
+
+    public bool CheckingFusion()
+    {
+        check = false;
+
+        switch(needPiece)
+        {
+            case 3:
+                if(index1 > 0 && index2 > 0 && index3 > 0)
+                {
+                    check = true;
+                }
+                break;
+            case 4:
+                if (index1 > 0 && index2 > 0 && index3 > 0 && index4 > 0)
+                {
+                    check = true;
+                }
+                break;
+            case 5:
+                if (index1 > 0 && index2 > 0 && index3 > 0 && index4 > 0 && index5 > 0)
+                {
+                    check = true;
+                }
+                break;
+        }
+
+        return check;
+    }
 }
 
 
@@ -402,6 +493,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject successContinue;
 
     public GameObject mainAlarm;
+    public GameObject[] topAlarm;
 
     [Title("TopMenu")]
     public Image[] topMenuImgArray;
@@ -483,7 +575,12 @@ public class InventoryManager : MonoBehaviour
         changeBoxView.SetActive(false);
         successView.SetActive(false);
 
-        mainAlarm.SetActive(true);
+        mainAlarm.SetActive(false);
+
+        for(int i = 0; i < topAlarm.Length; i ++)
+        {
+            topAlarm[i].SetActive(false);
+        }
 
         init1 = false;
         init2 = false;
@@ -567,6 +664,8 @@ public class InventoryManager : MonoBehaviour
 
             mainAlarm.SetActive(false);
 
+            CheckingFusion();
+
             if (topNumber == -1)
             {
                 ChangeTopMenu(0);
@@ -600,7 +699,9 @@ public class InventoryManager : MonoBehaviour
         topMenuImgArray[number].sprite = topMenuSpriteArray[1];
         scrollView[number].SetActive(true);
 
-        switch(number)
+        topAlarm[number].SetActive(false);
+
+        switch (number)
         {
             case 0:
                 if(topNumber2 == -1)
@@ -1120,5 +1221,56 @@ public class InventoryManager : MonoBehaviour
         if (isSuccessDelay) return;
 
         successView.SetActive(false);
+    }
+    
+    public void CheckingFusion() //합성 가능한게 있는지 확인하기
+    {
+        for(int i = 0; i < playerDataBase.PieceInfo.pieceList_N.Count; i ++)
+        {
+            if(playerDataBase.PieceInfo.pieceList_N[i].CheckingFusion())
+            {
+                mainAlarm.SetActive(true);
+                topAlarm[0].SetActive(true);
+
+                Debug.Log("합성 가능한 N 등급이 있습니다");
+                break;
+            }
+        }
+
+        for (int i = 0; i < playerDataBase.PieceInfo.pieceList_R.Count; i++)
+        {
+            if (playerDataBase.PieceInfo.pieceList_R[i].CheckingFusion())
+            {
+                mainAlarm.SetActive(true);
+                topAlarm[1].SetActive(true);
+
+                Debug.Log("합성 가능한 R 등급이 있습니다");
+                break;
+            }
+        }
+
+        for (int i = 0; i < playerDataBase.PieceInfo.pieceList_SR.Count; i++)
+        {
+            if (playerDataBase.PieceInfo.pieceList_SR[i].CheckingFusion())
+            {
+                mainAlarm.SetActive(true);
+                topAlarm[2].SetActive(true);
+
+                Debug.Log("합성 가능한 SR 등급이 있습니다");
+                break;
+            }
+        }
+
+        for (int i = 0; i < playerDataBase.PieceInfo.pieceList_SSR.Count; i++)
+        {
+            if (playerDataBase.PieceInfo.pieceList_SSR[i].CheckingFusion())
+            {
+                mainAlarm.SetActive(true);
+                topAlarm[3].SetActive(true);
+
+                Debug.Log("합성 가능한 SSR 등급이 있습니다");
+                break;
+            }
+        }
     }
 }

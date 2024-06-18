@@ -16,7 +16,10 @@ public class PackageManager : MonoBehaviour
     public PackageContent[] packageContentArray2;
 
     private int count = 0;
-    bool first = false;
+    private bool first = false;
+    public bool rankUpPackage = false;
+
+    private int gold = 0;
 
     public MatchingManager matchingManager;
 
@@ -269,6 +272,8 @@ public class PackageManager : MonoBehaviour
                 break;
         }
 
+        gold = 0;
+
         for (int i = 0; i < type.receiveInformationList.Count; i++)
         {
             count = type.receiveInformationList[i].count;
@@ -320,7 +325,26 @@ public class PackageManager : MonoBehaviour
                             break;
                     }
                     break;
+                case RewardType.GoldShop1:
+                    gold += Random.Range(7500, 20001);
+
+                    break;
+                case RewardType.GoldShop2:
+                    gold += Random.Range(5000, 100001);
+
+                    break;
+                case RewardType.GoldShop3:
+                    gold += Random.Range(50000, 1000001);
+
+                    break;
             }
+        }
+
+        if (gold > 0)
+        {
+            PlayfabManager.instance.UpdateAddGold(gold);
+
+            gold = 0;
         }
 
         SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
@@ -331,7 +355,7 @@ public class PackageManager : MonoBehaviour
 
     public void OffObj()
     {
-        if(packageType == PackageType.Supply)
+        if(rankUpPackage)
         {
             matchingManager.CloseSupplyPackage();
         }

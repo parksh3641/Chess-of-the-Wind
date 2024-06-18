@@ -307,7 +307,7 @@ public class EventManager : MonoBehaviour
         welcomeContentArray[2].receiveContent.Initialize(RewardType.Box_Normal, 10);
         welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 15000);
         welcomeContentArray[4].receiveContent.Initialize(RewardType.Box_Normal, 20);
-        welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 10);
+        welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 100);
         welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Epic, 10);
     }
 
@@ -382,7 +382,7 @@ public class EventManager : MonoBehaviour
                 }
                 break;
             case 5:
-                ItemAnimManager.instance.GetUpgradeTicket(10);
+                ItemAnimManager.instance.GetUpgradeTicket(100);
                 break;
             case 6:
                 switch (GameStateManager.instance.WindCharacterType)
