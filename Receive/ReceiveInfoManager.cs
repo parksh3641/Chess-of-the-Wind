@@ -92,7 +92,7 @@ public class ReceiveInfoManager : MonoBehaviour
 
                 break;
             case RewardType.Box_Speical:
-                mainBackground.sprite = rankBackgroundArray[4];
+                mainBackground.sprite = rankBackgroundArray[3];
 
                 titleText.text = LocalizationManager.instance.GetString("Box_Speical");
 

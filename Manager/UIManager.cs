@@ -220,6 +220,8 @@ public class UIManager : MonoBehaviour
         }
 #endif
 
+        //GameStateManager.instance.StoreType = StoreType.OneStore;
+
         if (!GameStateManager.instance.PrivacyPolicy)
         {
             privacypolicyView.SetActive(true);
