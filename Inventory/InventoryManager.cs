@@ -670,6 +670,10 @@ public class InventoryManager : MonoBehaviour
             {
                 ChangeTopMenu(0);
             }
+            else
+            {
+                grid2[topNumber].anchoredPosition = new Vector2(0, -9999);
+            }
 
             FirebaseAnalytics.LogEvent("Open_Inventory");
         }

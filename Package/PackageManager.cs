@@ -359,9 +359,5 @@ public class PackageManager : MonoBehaviour
         {
             matchingManager.CloseSupplyPackage();
         }
-        else
-        {
-            packageContentArray[(int)packageType - 1].gameObject.SetActive(false);
-        }
     }
 }

@@ -519,7 +519,7 @@ public class ShopManager : MonoBehaviour
                 SoundManager.instance.PlaySFX(GameSfxType.BuyShopItem);
                 NotionManager.instance.UseNotion(NotionType.GetUpgradeTicket);
 
-                if(number < 11)
+                if(number < 49)
                 {
                     ResetManager.instance.SetResetInfo(ResetType.DailyBuy1);
 

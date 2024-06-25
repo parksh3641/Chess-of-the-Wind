@@ -88,6 +88,7 @@ public class UIManager : MonoBehaviour
     public Text resultGoldText;
     public Text dailyWinText;
     public GameObject resultButton;
+    public Text seasonPassText;
 
     [Space]
     [Title("MainCanvas")]
@@ -106,6 +107,7 @@ public class UIManager : MonoBehaviour
 
     public int index = 0;
     Sprite[] characterArray;
+    private int seasonPass = 0;
 
     string[] strArray = new string[2];
 
@@ -534,6 +536,8 @@ public class UIManager : MonoBehaviour
 
         resultView.SetActive(true);
 
+        seasonPass = 0;
+
         resultButton.SetActive(false);
 
         if (playerDataBase.Formation == 2)
@@ -547,6 +551,8 @@ public class UIManager : MonoBehaviour
 
         if (number == 0)
         {
+            seasonPass += 250;
+
             resultTitleText.text = LocalizationManager.instance.GetString("Win");
 
             if (playerDataBase.Formation == 2)
@@ -562,6 +568,8 @@ public class UIManager : MonoBehaviour
         }
         else if(number == 1)
         {
+            seasonPass += 50;
+
             resultTitleText.text = LocalizationManager.instance.GetString("Lose");
 
             if (playerDataBase.Formation == 2)
@@ -577,6 +585,8 @@ public class UIManager : MonoBehaviour
         }
         else if (number == 2)
         {
+            seasonPass += 200;
+
             resultTitleText.text = LocalizationManager.instance.GetString("Surrender_Enemy");
 
             if (playerDataBase.Formation == 2)
@@ -592,6 +602,8 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            seasonPass += 100;
+
             resultTitleText.text = LocalizationManager.instance.GetString("Tie");
 
             if (playerDataBase.Formation == 2)
@@ -603,6 +615,11 @@ public class UIManager : MonoBehaviour
                 resultTalkText.text = LocalizationManager.instance.GetString("Tie_Winter");
             }
         }
+
+        seasonPassText.text = "+" + seasonPass.ToString();
+
+        playerDataBase.SeasonPassLevel += seasonPass;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SeasonPassLevel", playerDataBase.SeasonPassLevel);
 
         RecordManager.instance.OpenRecord();
 

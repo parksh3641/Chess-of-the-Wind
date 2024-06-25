@@ -208,24 +208,26 @@ public class UpgradeManager : MonoBehaviour
         //keepText.plusText = " : " + upgradeInformation.keep + "%";
         //keepText.ReLoad();
 
-        //downText.localizationName = "LowerPercent";
-        //downText.plusText = " : " + upgradeInformation.down + "%";
-        downText.localizationName = "";
-        downText.plusText = "";
+        downText.localizationName = "LowerPercent";
+        downText.plusText = " : " + upgradeInformation.down + "%";
         downText.ReLoad();
 
-        if(upgradeInformation.destroy > 0)
-        {
-            destroyText.localizationName = "DestroyPercent";
-            destroyText.plusText = " : " + upgradeInformation.destroy + "%";
-            destroyText.ReLoad();
-        }
-        else
-        {
-            destroyText.forwardText = "";
-            destroyText.plusText = "";
-            destroyText.ReLoad();
-        }
+        destroyText.localizationName = "DestroyPercent";
+        destroyText.plusText = " : " + upgradeInformation.destroy + "%";
+        destroyText.ReLoad();
+
+        //if (upgradeInformation.destroy > 0)
+        //{
+        //    destroyText.localizationName = "DestroyPercent";
+        //    destroyText.plusText = " : " + upgradeInformation.destroy + "%";
+        //    destroyText.ReLoad();
+        //}
+        //else
+        //{
+        //    destroyText.forwardText = "";
+        //    destroyText.plusText = "";
+        //    destroyText.ReLoad();
+        //}
 
         valuePlusText.localizationName = "Value";
         valuePlusText.plusText = " : " + MoneyUnitString.ToCurrencyString(upgradeValue.GetValueNumber(blockClass.level)) +
@@ -285,33 +287,36 @@ public class UpgradeManager : MonoBehaviour
         {
             if(blockClass.rankType != RankType.UR)
             {
-                valuePlusText.localizationName = "MaxUpgradeLevel";
-                valuePlusText.plusText = " : " + upgradeDataBase.GetUpgradeValue(blockClass.rankType).maxLevel +
-            "   ▶   <color=#FFCA14>" + upgradeDataBase.GetUpgradeValue(blockClass.rankType + 1).maxLevel + "</color>";
+                valuePlusText.localizationName = "";
+                valuePlusText.plusText = "";
+
+            //    valuePlusText.localizationName = "MaxUpgradeLevel";
+            //    valuePlusText.plusText = " : " + upgradeDataBase.GetUpgradeValue(blockClass.rankType).maxLevel +
+            //"   ▶   <color=#FFCA14>" + upgradeDataBase.GetUpgradeValue(blockClass.rankType + 1).maxLevel + "</color>";
 
 
-                if (blockClass.rankType == RankType.SSR)
-                {
-                    if(blockClass.ssrLevel >= 4)
-                    {
-                        downText.localizationName = "NextSynthesisBlockAbility2";
-                    }
-                    else
-                    {
-                        downText.localizationName = "NextSynthesisInfoSSR";
+                //if (blockClass.rankType == RankType.SSR)
+                //{
+                //    if(blockClass.ssrLevel >= 4)
+                //    {
+                //        downText.localizationName = "NextSynthesisBlockAbility2";
+                //    }
+                //    else
+                //    {
+                //        downText.localizationName = "NextSynthesisInfoSSR";
 
-                        valuePlusText.localizationName = "";
-                        valuePlusText.plusText = "";
-                    }
-                }
-                else if (blockClass.rankType == RankType.SR)
-                {
-                    downText.localizationName = "NextSynthesisBlockAbility1";
-                }
-                else
-                {
-                    downText.localizationName = "NextSynthesisInfo";
-                }
+                //        valuePlusText.localizationName = "";
+                //        valuePlusText.plusText = "";
+                //    }
+                //}
+                //else if (blockClass.rankType == RankType.SR)
+                //{
+                //    downText.localizationName = "NextSynthesisBlockAbility1";
+                //}
+                //else
+                //{
+                //    downText.localizationName = "NextSynthesisInfo";
+                //}
 
                 successText.localizationName = "";
                 successText.plusText = "";
@@ -319,6 +324,7 @@ public class UpgradeManager : MonoBehaviour
                 //keepText.localizationName = "";
                 //keepText.plusText = "";
 
+                downText.localizationName = "";
                 downText.plusText = "";
 
                 destroyText.localizationName = "";
@@ -359,7 +365,7 @@ public class UpgradeManager : MonoBehaviour
         }
         else
         {
-            if (blockClass.level >= 6)
+            if (blockClass.level > 0)
             {
                 if(upgradeTicket >= needTicket && gold >= upgradeInformation.needGold)
                 {
@@ -667,6 +673,9 @@ public class UpgradeManager : MonoBehaviour
 
                 playerDataBase.DestroyBlockCount += 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DestroyBlockCount", playerDataBase.DestroyBlockCount);
+
+                isWait = true;
+                Invoke("Delay", 2.0f);
 
                 FirebaseAnalytics.LogEvent("Play_Upgrade_Destroy");
                 break;

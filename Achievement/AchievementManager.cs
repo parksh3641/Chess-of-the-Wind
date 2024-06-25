@@ -143,7 +143,7 @@ public class AchievementManager : MonoBehaviour
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Millage, 100);
 
-            shopManager.OpenRandomBox(1);
+            shopManager.OpenEpicBox(1);
 
             SoundManager.instance.PlaySFX(GameSfxType.Success);
             NotionManager.instance.UseNotion(NotionType.GetReward);
@@ -152,7 +152,7 @@ public class AchievementManager : MonoBehaviour
         }
         else
         {
-            ReceiveInfoManager.instance.OpenReceiveInfo(RewardType.Box_Normal);
+            ReceiveInfoManager.instance.OpenReceiveInfo(RewardType.Box_Epic);
         }
 
         isWait = true;

@@ -14,6 +14,7 @@ public class LockManager : MonoBehaviour
     public GameObject tutorialObj;
     public GameObject achievementObj;
     public GameObject questObj;
+    public GameObject seasonPassObj;
 
     public GameObject[] collectionGosuObj;
 
@@ -38,6 +39,7 @@ public class LockManager : MonoBehaviour
         tutorialObj.SetActive(true);
         achievementObj.SetActive(false);
         questObj.SetActive(false);
+        seasonPassObj.SetActive(false);
 
         for (int i = 0; i < collectionGosuObj.Length; i ++)
         {
@@ -87,10 +89,11 @@ public class LockManager : MonoBehaviour
             achievementObj.SetActive(true);
             //questObj.SetActive(true);
 
-            if(GameStateManager.instance.StoreType != StoreType.OneStore)
+            if (GameStateManager.instance.StoreType != StoreType.OneStore)
             {
                 UIManager.instance.OpenAppReview();
                 packageObj.SetActive(true);
+                seasonPassObj.SetActive(true);
             }
         }
     }

@@ -96,6 +96,19 @@ public class PlayerDataBase : ScriptableObject
     private int millage = 0;
 
     [Space]
+    [Title("SeasonPass")]
+    [SerializeField]
+    private bool seasonPass = false;
+    [SerializeField]
+    private int seasonPassLevel = 0;
+    [SerializeField]
+    private string seasonPassDay = "";
+    [SerializeField]
+    private string freeSeasonPassData = "";
+    [SerializeField]
+    private string passSeasonPassData = "";
+
+    [Space]
     [Title("User")]
     [SerializeField]
     private int formation = 0;
@@ -436,6 +449,66 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             millage = value;
+        }
+    }
+
+    public bool SeasonPass
+    {
+        get
+        {
+            return seasonPass;
+        }
+        set
+        {
+            seasonPass = value;
+        }
+    }
+
+    public int SeasonPassLevel
+    {
+        get
+        {
+            return seasonPassLevel;
+        }
+        set
+        {
+            seasonPassLevel = value;
+        }
+    }
+
+    public string SeasonPassDay
+    {
+        get
+        {
+            return seasonPassDay;
+        }
+        set
+        {
+            seasonPassDay = value;
+        }
+    }
+
+    public string FreeSeasonPassData
+    {
+        get
+        {
+            return freeSeasonPassData;
+        }
+        set
+        {
+            freeSeasonPassData = value;
+        }
+    }
+
+    public string PassSeasonPassData
+    {
+        get
+        {
+            return passSeasonPassData;
+        }
+        set
+        {
+            passSeasonPassData = value;
         }
     }
 
@@ -1929,6 +2002,12 @@ public class PlayerDataBase : ScriptableObject
         crystal = 0;
         millage = 0;
 
+        seasonPass = false;
+        seasonPassDay = "";
+        seasonPassLevel = 0;
+        freeSeasonPassData = "000000000000000000000000000000";
+        passSeasonPassData = "000000000000000000000000000000";
+
         formation = 0;
         star = 0;
         playTime = 0;
@@ -2824,4 +2903,47 @@ public class PlayerDataBase : ScriptableObject
 
         return number;
     }
+
+    #region SeasonPass
+    public void SaveServerToSeasonPass(SeasonPassType type, string str)
+    {
+        switch (type)
+        {
+            case SeasonPassType.Free:
+                freeSeasonPassData = str;
+                break;
+            case SeasonPassType.Pass:
+                passSeasonPassData = str;
+                break;
+        }
+    }
+
+    public bool GetSeasonPass(SeasonPassType type, int number)
+    {
+        bool check = false;
+        switch (type)
+        {
+            case SeasonPassType.Free:
+                if (freeSeasonPassData.Substring(number, 1).Equals("1")) check = true;
+                break;
+            case SeasonPassType.Pass:
+                if (passSeasonPassData.Substring(number, 1).Equals("1")) check = true;
+                break;
+        }
+        return check;
+    }
+
+    public void UpdateSeasonPass(SeasonPassType type, int number)
+    {
+        switch (type)
+        {
+            case SeasonPassType.Free:
+                freeSeasonPassData = freeSeasonPassData.ReplaceAt(number, char.Parse("1"));
+                break;
+            case SeasonPassType.Pass:
+                passSeasonPassData = passSeasonPassData.ReplaceAt(number, char.Parse("1"));
+                break;
+        }
+    }
+    #endregion
 }

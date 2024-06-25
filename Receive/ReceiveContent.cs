@@ -11,6 +11,8 @@ public class ReceiveContent : MonoBehaviour
     public Image icon;
     public Text countText;
 
+    public GameObject lockedObj;
+
     public GameObject effect;
 
     ImageDataBase imageDataBase;
@@ -27,6 +29,7 @@ public class ReceiveContent : MonoBehaviour
         rankBackgroundArray = imageDataBase.GetRankBackgroundArray();
 
         effect.SetActive(false);
+        lockedObj.SetActive(false);
     }
 
     public void Initialize(RewardType type, int count)
@@ -86,5 +89,15 @@ public class ReceiveContent : MonoBehaviour
     public void OpenInfo()
     {
         ReceiveInfoManager.instance.OpenReceiveInfo(rewardType);
+    }
+
+    public void Locked()
+    {
+        lockedObj.SetActive(true);
+    }
+
+    public void UnLock()
+    {
+        lockedObj.SetActive(false);
     }
 }

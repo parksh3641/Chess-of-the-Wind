@@ -94,15 +94,7 @@ public class ReceiveInfoManager : MonoBehaviour
             case RewardType.Box_Speical:
                 mainBackground.sprite = rankBackgroundArray[4];
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Winter");
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        titleText.text = LocalizationManager.instance.GetString("Box_Under");
-                        break;
-                }
+                titleText.text = LocalizationManager.instance.GetString("Box_Speical");
 
                 break;
             case RewardType.ExclusiveTitle:

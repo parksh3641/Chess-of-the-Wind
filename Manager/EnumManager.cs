@@ -649,3 +649,9 @@ public enum ResetType
     Package_ShopWeekly2,
     Package_ShopWeekly3,
 }
+
+public enum SeasonPassType
+{
+    Free,
+    Pass
+}
