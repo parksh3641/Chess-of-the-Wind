@@ -1302,50 +1302,50 @@ public class PlayfabManager : MonoBehaviour
                        case "IndieFestival2023":
                            playerDataBase.IndieFestival2023 = statistics.Value;
                            break;
-                       case "NaverCafe202310":
-                           playerDataBase.NaverCafe202310 = statistics.Value;
+                       case "Coupon1":
+                           playerDataBase.Coupon1 = statistics.Value;
                            break;
-                       case "NaverCafe202311":
-                           playerDataBase.NaverCafe202311 = statistics.Value;
+                       case "Coupon2":
+                           playerDataBase.Coupon2 = statistics.Value;
                            break;
-                       case "NaverCafe202312":
-                           playerDataBase.NaverCafe202312 = statistics.Value;
+                       case "Coupon3":
+                           playerDataBase.Coupon3 = statistics.Value;
                            break;
-                       case "NaverCafe202401":
-                           playerDataBase.NaverCafe202401 = statistics.Value;
+                       case "Coupon4":
+                           playerDataBase.Coupon4 = statistics.Value;
                            break;
-                       case "NaverCafe202402":
-                           playerDataBase.NaverCafe202402 = statistics.Value;
+                       case "Coupon5":
+                           playerDataBase.Coupon5 = statistics.Value;
                            break;
-                       case "NaverCafe202403":
-                           playerDataBase.NaverCafe202403 = statistics.Value;
+                       case "Coupon6":
+                           playerDataBase.Coupon6 = statistics.Value;
                            break;
-                       case "NaverCafe202404":
-                           playerDataBase.NaverCafe202404 = statistics.Value;
+                       case "Coupon7":
+                           playerDataBase.Coupon7 = statistics.Value;
                            break;
-                       case "NaverCafe202405":
-                           playerDataBase.NaverCafe202405 = statistics.Value;
+                       case "Coupon8":
+                           playerDataBase.Coupon8 = statistics.Value;
                            break;
-                       case "NaverCafe202406":
-                           playerDataBase.NaverCafe202406 = statistics.Value;
+                       case "Coupon9":
+                           playerDataBase.Coupon9 = statistics.Value;
                            break;
-                       case "NaverCafe202407":
-                           playerDataBase.NaverCafe202407 = statistics.Value;
+                       case "Coupon10":
+                           playerDataBase.Coupon10 = statistics.Value;
                            break;
-                       case "NaverCafe202408":
-                           playerDataBase.NaverCafe202408 = statistics.Value;
+                       case "Coupon11":
+                           playerDataBase.Coupon11 = statistics.Value;
                            break;
-                       case "NaverCafe202409":
-                           playerDataBase.NaverCafe202409 = statistics.Value;
+                       case "Coupon12":
+                           playerDataBase.Coupon12 = statistics.Value;
                            break;
-                       case "NaverCafe202410":
-                           playerDataBase.NaverCafe202410 = statistics.Value;
+                       case "Coupon13":
+                           playerDataBase.Coupon13 = statistics.Value;
                            break;
-                       case "NaverCafe202411":
-                           playerDataBase.NaverCafe202411 = statistics.Value;
+                       case "Coupon14":
+                           playerDataBase.Coupon14 = statistics.Value;
                            break;
-                       case "NaverCafe202412":
-                           playerDataBase.NaverCafe202412 = statistics.Value;
+                       case "Coupon15":
+                           playerDataBase.Coupon15 = statistics.Value;
                            break;
                        case "Update":
                            playerDataBase.Update = statistics.Value;

@@ -192,35 +192,35 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int indieFestival2023 = 0;
     [SerializeField]
-    private int naverCafe202310 = 0;
+    private int coupon1 = 0;
     [SerializeField]
-    private int naverCafe202311 = 0;
+    private int coupon2 = 0;
     [SerializeField]
-    private int naverCafe202312 = 0;
+    private int coupon3 = 0;
     [SerializeField]
-    private int naverCafe202401 = 0;
+    private int coupon4 = 0;
     [SerializeField]
-    private int naverCafe202402 = 0;
+    private int coupon5 = 0;
     [SerializeField]
-    private int naverCafe202403 = 0;
+    private int coupon6 = 0;
     [SerializeField]
-    private int naverCafe202404 = 0;
+    private int coupon7 = 0;
     [SerializeField]
-    private int naverCafe202405 = 0;
+    private int coupon8 = 0;
     [SerializeField]
-    private int naverCafe202406 = 0;
+    private int coupon9 = 0;
     [SerializeField]
-    private int naverCafe202407 = 0;
+    private int coupon10 = 0;
     [SerializeField]
-    private int naverCafe202408 = 0;
+    private int coupon11 = 0;
     [SerializeField]
-    private int naverCafe202409 = 0;
+    private int coupon12 = 0;
     [SerializeField]
-    private int naverCafe202410 = 0;
+    private int coupon13 = 0;
     [SerializeField]
-    private int naverCafe202411 = 0;
+    private int coupon14 = 0;
     [SerializeField]
-    private int naverCafe202412 = 0;
+    private int coupon15 = 0;
 
 
     [Space]
@@ -930,183 +930,183 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int NaverCafe202310
+    public int Coupon1
     {
         get
         {
-            return naverCafe202310;
+            return coupon1;
         }
         set
         {
-            naverCafe202310 = value;
+            coupon1 = value;
         }
     }
 
-    public int NaverCafe202311
+    public int Coupon2
     {
         get
         {
-            return naverCafe202311;
+            return coupon2;
         }
         set
         {
-            naverCafe202311 = value;
+            coupon2 = value;
         }
     }
 
-    public int NaverCafe202312
+    public int Coupon3
     {
         get
         {
-            return naverCafe202312;
+            return coupon3;
         }
         set
         {
-            naverCafe202312 = value;
+            coupon3 = value;
         }
     }
 
-    public int NaverCafe202401
+    public int Coupon4
     {
         get
         {
-            return naverCafe202401;
+            return coupon4;
         }
         set
         {
-            naverCafe202401 = value;
+            coupon4 = value;
         }
     }
 
-    public int NaverCafe202402
+    public int Coupon5
     {
         get
         {
-            return naverCafe202402;
+            return coupon5;
         }
         set
         {
-            naverCafe202402 = value;
+            coupon5 = value;
         }
     }
 
-    public int NaverCafe202403
+    public int Coupon6
     {
         get
         {
-            return naverCafe202403;
+            return coupon6;
         }
         set
         {
-            naverCafe202403 = value;
+            coupon6 = value;
         }
     }
 
-    public int NaverCafe202404
+    public int Coupon7
     {
         get
         {
-            return naverCafe202404;
+            return coupon7;
         }
         set
         {
-            naverCafe202404 = value;
+            coupon7 = value;
         }
     }
 
-    public int NaverCafe202405
+    public int Coupon8
     {
         get
         {
-            return naverCafe202405;
+            return coupon8;
         }
         set
         {
-            naverCafe202405 = value;
+            coupon8 = value;
         }
     }
 
-    public int NaverCafe202406
+    public int Coupon9
     {
         get
         {
-            return naverCafe202406;
+            return coupon9;
         }
         set
         {
-            naverCafe202406 = value;
+            coupon9 = value;
         }
     }
 
-    public int NaverCafe202407
+    public int Coupon10
     {
         get
         {
-            return naverCafe202407;
+            return coupon10;
         }
         set
         {
-            naverCafe202407 = value;
+            coupon10 = value;
         }
     }
 
-    public int NaverCafe202408
+    public int Coupon11
     {
         get
         {
-            return naverCafe202408;
+            return coupon11;
         }
         set
         {
-            naverCafe202408 = value;
+            coupon11 = value;
         }
     }
 
-    public int NaverCafe202409
+    public int Coupon12
     {
         get
         {
-            return naverCafe202409;
+            return coupon12;
         }
         set
         {
-            naverCafe202409 = value;
+            coupon12 = value;
         }
     }
 
-    public int NaverCafe202410
+    public int Coupon13
     {
         get
         {
-            return naverCafe202410;
+            return coupon13;
         }
         set
         {
-            naverCafe202410 = value;
+            coupon13 = value;
         }
     }
 
-    public int NaverCafe202411
+    public int Coupon14
     {
         get
         {
-            return naverCafe202411;
+            return coupon14;
         }
         set
         {
-            naverCafe202411 = value;
+            coupon14 = value;
         }
     }
 
-    public int NaverCafe202412
+    public int Coupon15
     {
         get
         {
-            return naverCafe202412;
+            return coupon15;
         }
         set
         {
-            naverCafe202412 = value;
+            coupon15 = value;
         }
     }
 
@@ -2061,21 +2061,21 @@ public class PlayerDataBase : ScriptableObject
 
         comicWorld2023 = 0;
         indieFestival2023 = 0;
-        naverCafe202310 = 0;
-        naverCafe202311 = 0;
-        naverCafe202312 = 0;
-        naverCafe202401 = 0;
-        naverCafe202402 = 0;
-        naverCafe202403 = 0;
-        naverCafe202404 = 0;
-        naverCafe202405 = 0;
-        naverCafe202406 = 0;
-        naverCafe202407 = 0;
-        naverCafe202408 = 0;
-        naverCafe202409 = 0;
-        naverCafe202410 = 0;
-        naverCafe202411 = 0;
-        naverCafe202412 = 0;
+        coupon1 = 0;
+        coupon2 = 0;
+        coupon3 = 0;
+        coupon4 = 0;
+        coupon5 = 0;
+        coupon6 = 0;
+        coupon7 = 0;
+        coupon8 = 0;
+        coupon9 = 0;
+        coupon10 = 0;
+        coupon11 = 0;
+        coupon12 = 0;
+        coupon13 = 0;
+        coupon14 = 0;
+        coupon15 = 0;
 
         achievementInfoList.Clear();
 

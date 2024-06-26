@@ -75,12 +75,13 @@ public class RandomBoxInfo
         return percent;
     }
 
+    [Button]
     public void Initialize()
     {
         randomBox_Winter_List.Clear();
         randomBox_Underworld_List.Clear();
 
-        for (int i = 0; i < 36; i ++)
+        for (int i = 0; i < 36; i++)
         {
             RandomBox randomBox1 = new RandomBox();
             RandomBox randomBox2 = new RandomBox();
@@ -89,391 +90,385 @@ public class RandomBoxInfo
             randomBox_Underworld_List.Add(randomBox2);
         }
 
-        if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
-        {
-            randomBox_Winter_List[0].boxInfoType = BoxInfoType.Pawn_Snow_N; //크리스탈 하임 - 리디아
-            randomBox_Winter_List[1].boxInfoType = BoxInfoType.Pawn_Snow_R;
-            randomBox_Winter_List[2].boxInfoType = BoxInfoType.Pawn_Snow_SR;
-            randomBox_Winter_List[3].boxInfoType = BoxInfoType.Pawn_Snow_SSR;
-
-            randomBox_Winter_List[0].SetPercent(new float[] { 0.195f, 1.17f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
-            randomBox_Winter_List[1].SetPercent(new float[] { 0.05f, 0.3f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
-            randomBox_Winter_List[2].SetPercent(new float[] { 0.025f, 0.15f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
-            randomBox_Winter_List[3].SetPercent(new float[] { 0.01f, 0.06f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
-
-            randomBox_Winter_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-
-            randomBox_Winter_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-
-
-            randomBox_Winter_List[4].boxInfoType = BoxInfoType.Pawn_Snow_2_N; //크리스탈 하임 - 타라
-            randomBox_Winter_List[5].boxInfoType = BoxInfoType.Pawn_Snow_2_R;
-            randomBox_Winter_List[6].boxInfoType = BoxInfoType.Pawn_Snow_2_SR;
-            randomBox_Winter_List[7].boxInfoType = BoxInfoType.Pawn_Snow_2_SSR;
-
-            randomBox_Winter_List[4].SetPercent(new float[] { 1.17f, 0.195f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
-            randomBox_Winter_List[5].SetPercent(new float[] { 0.03f, 0.05f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
-            randomBox_Winter_List[6].SetPercent(new float[] { 0.15f, 0.025f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
-            randomBox_Winter_List[7].SetPercent(new float[] { 0.06f, 0.01f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
-
-            randomBox_Winter_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Winter_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-
-            randomBox_Winter_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Winter_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-
-
-            randomBox_Winter_List[8].boxInfoType = BoxInfoType.LeftQueen_2_N; //크리스탈 하임 - 마르타
-            randomBox_Winter_List[9].boxInfoType = BoxInfoType.LeftQueen_2_R;
-            randomBox_Winter_List[10].boxInfoType = BoxInfoType.LeftQueen_2_SR;
-            randomBox_Winter_List[11].boxInfoType = BoxInfoType.LeftQueen_2_SSR;
-
-            randomBox_Winter_List[8].SetPercent(new float[] { 2, 2, 0.2f, 2, 0 }, BoxType.Normal);
-            randomBox_Winter_List[9].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0.5f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[10].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0.25f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[11].SetPercent(new float[] { 0.075f, 0.075f, 0.01f, 0.075f, 0 }, BoxType.Normal);
-
-            randomBox_Winter_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[11].SetPercent(new float[] { 0.75f, 0.75f, 0.1f, 0.75f, 0 }, BoxType.Epic);
-
-            randomBox_Winter_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[11].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-
-
-            randomBox_Winter_List[12].boxInfoType = BoxInfoType.Rook_V2_N; //크리스탈 하임 - 이레네
-            randomBox_Winter_List[13].boxInfoType = BoxInfoType.Rook_V2_R;
-            randomBox_Winter_List[14].boxInfoType = BoxInfoType.Rook_V2_SR;
-            randomBox_Winter_List[15].boxInfoType = BoxInfoType.Rook_V2_SSR;
-
-            randomBox_Winter_List[12].SetPercent(new float[] { 2, 2, 2, 0.2f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[13].SetPercent(new float[] { 0.5f, 0.5f, 0.5f, 0.05f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[14].SetPercent(new float[] { 0.25f, 0.25f, 0.25f, 0.025f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[15].SetPercent(new float[] { 0.075f, 0.075f, 0.075f, 0.01f, 0 }, BoxType.Normal);
-
-            randomBox_Winter_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Winter_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Winter_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Winter_List[15].SetPercent(new float[] { 0.75f, 0.75f, 0.75f, 0.1f, 0 }, BoxType.Epic);
-
-            randomBox_Winter_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Winter_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Winter_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Winter_List[15].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-
-
-            randomBox_Winter_List[16].boxInfoType = BoxInfoType.Rook_V2_2_N; //크리스탈 하임 - 오펠리아
-            randomBox_Winter_List[17].boxInfoType = BoxInfoType.Rook_V2_2_R;
-            randomBox_Winter_List[18].boxInfoType = BoxInfoType.Rook_V2_2_SR;
-            randomBox_Winter_List[19].boxInfoType = BoxInfoType.Rook_V2_2_SSR;
-
-            randomBox_Winter_List[16].SetPercent(new float[] { 0.2f, 2, 2, 2, 0 }, BoxType.Normal);
-            randomBox_Winter_List[17].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0.5f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[18].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0.25f, 0 }, BoxType.Normal);
-            randomBox_Winter_List[19].SetPercent(new float[] { 0.01f, 0.075f, 0.075f, 0.1f, 0 }, BoxType.Normal);
-
-            randomBox_Winter_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Winter_List[19].SetPercent(new float[] { 0.1f, 0.75f, 0.75f, 1, 0 }, BoxType.Epic);
-
-            randomBox_Winter_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Winter_List[19].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-
+        randomBox_Winter_List[0].boxInfoType = BoxInfoType.Pawn_Snow_N; //크리스탈 하임 - 리디아
+        randomBox_Winter_List[1].boxInfoType = BoxInfoType.Pawn_Snow_R;
+        randomBox_Winter_List[2].boxInfoType = BoxInfoType.Pawn_Snow_SR;
+        randomBox_Winter_List[3].boxInfoType = BoxInfoType.Pawn_Snow_SSR;
+
+        randomBox_Winter_List[0].SetPercent(new float[] { 0.195f, 1.17f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
+        randomBox_Winter_List[1].SetPercent(new float[] { 0.05f, 0.3f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
+        randomBox_Winter_List[2].SetPercent(new float[] { 0.025f, 0.15f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
+        randomBox_Winter_List[3].SetPercent(new float[] { 0.01f, 0.06f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
+
+        randomBox_Winter_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+
+        randomBox_Winter_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+
+
+        randomBox_Winter_List[4].boxInfoType = BoxInfoType.Pawn_Snow_2_N; //크리스탈 하임 - 타라
+        randomBox_Winter_List[5].boxInfoType = BoxInfoType.Pawn_Snow_2_R;
+        randomBox_Winter_List[6].boxInfoType = BoxInfoType.Pawn_Snow_2_SR;
+        randomBox_Winter_List[7].boxInfoType = BoxInfoType.Pawn_Snow_2_SSR;
+
+        randomBox_Winter_List[4].SetPercent(new float[] { 1.17f, 0.195f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
+        randomBox_Winter_List[5].SetPercent(new float[] { 0.03f, 0.05f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
+        randomBox_Winter_List[6].SetPercent(new float[] { 0.15f, 0.025f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
+        randomBox_Winter_List[7].SetPercent(new float[] { 0.06f, 0.01f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
+
+        randomBox_Winter_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Winter_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+
+        randomBox_Winter_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Winter_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+
+
+        randomBox_Winter_List[8].boxInfoType = BoxInfoType.LeftQueen_2_N; //크리스탈 하임 - 마르타
+        randomBox_Winter_List[9].boxInfoType = BoxInfoType.LeftQueen_2_R;
+        randomBox_Winter_List[10].boxInfoType = BoxInfoType.LeftQueen_2_SR;
+        randomBox_Winter_List[11].boxInfoType = BoxInfoType.LeftQueen_2_SSR;
+
+        randomBox_Winter_List[8].SetPercent(new float[] { 2, 2, 0.2f, 2, 0 }, BoxType.Normal);
+        randomBox_Winter_List[9].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0.5f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[10].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0.25f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[11].SetPercent(new float[] { 0.075f, 0.075f, 0.01f, 0.075f, 0 }, BoxType.Normal);
 
+        randomBox_Winter_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[11].SetPercent(new float[] { 0.75f, 0.75f, 0.1f, 0.75f, 0 }, BoxType.Epic);
 
-            randomBox_Winter_List[20].boxInfoType = BoxInfoType.LeftQueen_3_N; //크리스탈 하임 - 카타리나
-            randomBox_Winter_List[21].boxInfoType = BoxInfoType.LeftQueen_3_R;
-            randomBox_Winter_List[22].boxInfoType = BoxInfoType.LeftQueen_3_SR;
-            randomBox_Winter_List[23].boxInfoType = BoxInfoType.LeftQueen_3_SSR;
+        randomBox_Winter_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[11].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+
+
+        randomBox_Winter_List[12].boxInfoType = BoxInfoType.Rook_V2_N; //크리스탈 하임 - 이레네
+        randomBox_Winter_List[13].boxInfoType = BoxInfoType.Rook_V2_R;
+        randomBox_Winter_List[14].boxInfoType = BoxInfoType.Rook_V2_SR;
+        randomBox_Winter_List[15].boxInfoType = BoxInfoType.Rook_V2_SSR;
+
+        randomBox_Winter_List[12].SetPercent(new float[] { 2, 2, 2, 0.2f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[13].SetPercent(new float[] { 0.5f, 0.5f, 0.5f, 0.05f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[14].SetPercent(new float[] { 0.25f, 0.25f, 0.25f, 0.025f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[15].SetPercent(new float[] { 0.075f, 0.075f, 0.075f, 0.01f, 0 }, BoxType.Normal);
+
+        randomBox_Winter_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Winter_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Winter_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Winter_List[15].SetPercent(new float[] { 0.75f, 0.75f, 0.75f, 0.1f, 0 }, BoxType.Epic);
+
+        randomBox_Winter_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Winter_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Winter_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Winter_List[15].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+
+
+        randomBox_Winter_List[16].boxInfoType = BoxInfoType.Rook_V2_2_N; //크리스탈 하임 - 오펠리아
+        randomBox_Winter_List[17].boxInfoType = BoxInfoType.Rook_V2_2_R;
+        randomBox_Winter_List[18].boxInfoType = BoxInfoType.Rook_V2_2_SR;
+        randomBox_Winter_List[19].boxInfoType = BoxInfoType.Rook_V2_2_SSR;
+
+        randomBox_Winter_List[16].SetPercent(new float[] { 0.2f, 2, 2, 2, 0 }, BoxType.Normal);
+        randomBox_Winter_List[17].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0.5f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[18].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0.25f, 0 }, BoxType.Normal);
+        randomBox_Winter_List[19].SetPercent(new float[] { 0.01f, 0.075f, 0.075f, 0.1f, 0 }, BoxType.Normal);
+
+        randomBox_Winter_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Winter_List[19].SetPercent(new float[] { 0.1f, 0.75f, 0.75f, 1, 0 }, BoxType.Epic);
+
+        randomBox_Winter_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Winter_List[19].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
 
-            randomBox_Winter_List[20].SetPercent(new float[] { 2, 0.2f, 2, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[21].SetPercent(new float[] { 0.5f, 0.05f, 0.5f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[22].SetPercent(new float[] { 0.25f, 0.025f, 0.25f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[23].SetPercent(new float[] { 0.1f, 0.01f, 0.1f, 0, 0 }, BoxType.Normal);
 
-            randomBox_Winter_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+
+        randomBox_Winter_List[20].boxInfoType = BoxInfoType.LeftQueen_3_N; //크리스탈 하임 - 카타리나
+        randomBox_Winter_List[21].boxInfoType = BoxInfoType.LeftQueen_3_R;
+        randomBox_Winter_List[22].boxInfoType = BoxInfoType.LeftQueen_3_SR;
+        randomBox_Winter_List[23].boxInfoType = BoxInfoType.LeftQueen_3_SSR;
+
+        randomBox_Winter_List[20].SetPercent(new float[] { 2, 0.2f, 2, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[21].SetPercent(new float[] { 0.5f, 0.05f, 0.5f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[22].SetPercent(new float[] { 0.25f, 0.025f, 0.25f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[23].SetPercent(new float[] { 0.1f, 0.01f, 0.1f, 0, 0 }, BoxType.Normal);
 
-            randomBox_Winter_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
 
+        randomBox_Winter_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+
+
 
-
-            randomBox_Winter_List[24].boxInfoType = BoxInfoType.LeftNight_N; //크리스탈 하임 - 프로에
-            randomBox_Winter_List[25].boxInfoType = BoxInfoType.LeftNight_R;
-            randomBox_Winter_List[26].boxInfoType = BoxInfoType.LeftNight_SR;
-            randomBox_Winter_List[27].boxInfoType = BoxInfoType.LeftNight_SSR;
-
-            randomBox_Winter_List[24].SetPercent(new float[] { 2, 2, 0.2f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[25].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[26].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[27].SetPercent(new float[] { 0.1f, 0.1f, 0.01f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[24].boxInfoType = BoxInfoType.LeftNight_N; //크리스탈 하임 - 프로에
+        randomBox_Winter_List[25].boxInfoType = BoxInfoType.LeftNight_R;
+        randomBox_Winter_List[26].boxInfoType = BoxInfoType.LeftNight_SR;
+        randomBox_Winter_List[27].boxInfoType = BoxInfoType.LeftNight_SSR;
 
-            randomBox_Winter_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[24].SetPercent(new float[] { 2, 2, 0.2f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[25].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[26].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[27].SetPercent(new float[] { 0.1f, 0.1f, 0.01f, 0, 0 }, BoxType.Normal);
+
+        randomBox_Winter_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+
+        randomBox_Winter_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+
 
-            randomBox_Winter_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-
-
-
-            randomBox_Winter_List[28].boxInfoType = BoxInfoType.LeftNight_Mirror_N; //크리스탈 하임 - 프레아
-            randomBox_Winter_List[29].boxInfoType = BoxInfoType.LeftNight_Mirror_R;
-            randomBox_Winter_List[30].boxInfoType = BoxInfoType.LeftNight_Mirror_SR;
-            randomBox_Winter_List[31].boxInfoType = BoxInfoType.LeftNight_Mirror_SSR;
-
-            randomBox_Winter_List[28].SetPercent(new float[] { 0.2f, 2, 2, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[29].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[30].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0, 0 }, BoxType.Normal);
-            randomBox_Winter_List[31].SetPercent(new float[] { 0.01f, 0.1f, 0.1f, 0, 0 }, BoxType.Normal);
-
-            randomBox_Winter_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Winter_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-
-            randomBox_Winter_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Winter_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-
-            randomBox_Winter_List[32].boxInfoType = BoxInfoType.Gold_N; //골드
-            randomBox_Winter_List[33].boxInfoType = BoxInfoType.Gold_R;
-            randomBox_Winter_List[34].boxInfoType = BoxInfoType.UpgradeTicket_N; //티켓
-            randomBox_Winter_List[35].boxInfoType = BoxInfoType.UpgradeTicket_R;
-
-            randomBox_Winter_List[32].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-            randomBox_Winter_List[33].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-            randomBox_Winter_List[34].SetPercent(new float[] { 2.5f, 2.5f, 2.5f, 2.28f, 2 }, BoxType.Normal);
-            randomBox_Winter_List[35].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-
-            randomBox_Winter_List[32].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Winter_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Winter_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Winter_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-
-            randomBox_Winter_List[32].SetPercent(new float[] { 0.6f, 0.5f, 0.5f, 0.5f, 0.5f }, BoxType.Speical);
-            randomBox_Winter_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-            randomBox_Winter_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-            randomBox_Winter_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-
-
-        }
-        else
-        {
-            randomBox_Underworld_List[0].boxInfoType = BoxInfoType.Pawn_Under_N; //지하세계 - 카리아
-            randomBox_Underworld_List[1].boxInfoType = BoxInfoType.Pawn_Under_R;
-            randomBox_Underworld_List[2].boxInfoType = BoxInfoType.Pawn_Under_SR;
-            randomBox_Underworld_List[3].boxInfoType = BoxInfoType.Pawn_Under_SSR;
-
-            randomBox_Underworld_List[0].SetPercent(new float[] { 0.195f, 1.17f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
-            randomBox_Underworld_List[1].SetPercent(new float[] { 0.05f, 0.3f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
-            randomBox_Underworld_List[2].SetPercent(new float[] { 0.025f, 0.15f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
-            randomBox_Underworld_List[3].SetPercent(new float[] { 0.01f, 0.06f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
-
-            randomBox_Underworld_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-
-            randomBox_Underworld_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-
-
-            randomBox_Underworld_List[4].boxInfoType = BoxInfoType.Pawn_Under_2_N; //지하세계 - 코르디아
-            randomBox_Underworld_List[5].boxInfoType = BoxInfoType.Pawn_Under_2_R;
-            randomBox_Underworld_List[6].boxInfoType = BoxInfoType.Pawn_Under_2_SR;
-            randomBox_Underworld_List[7].boxInfoType = BoxInfoType.Pawn_Under_2_SSR;
-
-            randomBox_Underworld_List[4].SetPercent(new float[] { 1.17f, 0.195f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
-            randomBox_Underworld_List[5].SetPercent(new float[] { 0.03f, 0.05f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
-            randomBox_Underworld_List[6].SetPercent(new float[] { 0.15f, 0.025f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
-            randomBox_Underworld_List[7].SetPercent(new float[] { 0.06f, 0.01f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
-
-            randomBox_Underworld_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-            randomBox_Underworld_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
-
-            randomBox_Underworld_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-            randomBox_Underworld_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
-
-
-            randomBox_Underworld_List[8].boxInfoType = BoxInfoType.RightQueen_2_N; //지하세계 - 루시아
-            randomBox_Underworld_List[9].boxInfoType = BoxInfoType.RightQueen_2_R;
-            randomBox_Underworld_List[10].boxInfoType = BoxInfoType.RightQueen_2_SR;
-            randomBox_Underworld_List[11].boxInfoType = BoxInfoType.RightQueen_2_SSR;
-
-            randomBox_Underworld_List[8].SetPercent(new float[] { 2, 2, 0.2f, 2, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[9].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0.5f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[10].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0.25f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[11].SetPercent(new float[] { 0.075f, 0.075f, 0.01f, 0.075f, 0 }, BoxType.Normal);
+
+        randomBox_Winter_List[28].boxInfoType = BoxInfoType.LeftNight_Mirror_N; //크리스탈 하임 - 프레아
+        randomBox_Winter_List[29].boxInfoType = BoxInfoType.LeftNight_Mirror_R;
+        randomBox_Winter_List[30].boxInfoType = BoxInfoType.LeftNight_Mirror_SR;
+        randomBox_Winter_List[31].boxInfoType = BoxInfoType.LeftNight_Mirror_SSR;
 
-            randomBox_Underworld_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[11].SetPercent(new float[] { 0.75f, 0.75f, 0.1f, 0.75f, 0 }, BoxType.Epic);
+        randomBox_Winter_List[28].SetPercent(new float[] { 0.2f, 2, 2, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[29].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[30].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0, 0 }, BoxType.Normal);
+        randomBox_Winter_List[31].SetPercent(new float[] { 0.01f, 0.1f, 0.1f, 0, 0 }, BoxType.Normal);
 
-            randomBox_Underworld_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[11].SetPercent(new float[] { 1f, 1f, 0.1f, 1, 0 }, BoxType.Speical);
-
-
-            randomBox_Underworld_List[12].boxInfoType = BoxInfoType.Rook_V4_N; //지하세계 - 아가타
-            randomBox_Underworld_List[13].boxInfoType = BoxInfoType.Rook_V4_R;
-            randomBox_Underworld_List[14].boxInfoType = BoxInfoType.Rook_V4_SR;
-            randomBox_Underworld_List[15].boxInfoType = BoxInfoType.Rook_V4_SSR;
-
-            randomBox_Underworld_List[12].SetPercent(new float[] { 2, 2, 2, 0.2f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[13].SetPercent(new float[] { 0.5f, 0.5f, 0.5f, 0.05f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[14].SetPercent(new float[] { 0.25f, 0.25f, 0.25f, 0.025f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[15].SetPercent(new float[] { 0.075f, 0.075f, 0.075f, 0.01f, 0 }, BoxType.Normal);
-
-            randomBox_Underworld_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[15].SetPercent(new float[] { 0.75f, 0.75f, 0.75f, 0.1f, 0 }, BoxType.Epic);
-
-            randomBox_Underworld_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[15].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
-
-
-            randomBox_Underworld_List[16].boxInfoType = BoxInfoType.Rook_V2_2_N; //지하세계 - 세베라
-            randomBox_Underworld_List[17].boxInfoType = BoxInfoType.Rook_V2_2_R;
-            randomBox_Underworld_List[18].boxInfoType = BoxInfoType.Rook_V2_2_SR;
-            randomBox_Underworld_List[19].boxInfoType = BoxInfoType.Rook_V2_2_SSR;
-
-            randomBox_Underworld_List[16].SetPercent(new float[] { 0.2f, 2, 2, 2, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[17].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0.5f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[18].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0.25f, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[19].SetPercent(new float[] { 0.01f, 0.075f, 0.075f, 0.1f, 0 }, BoxType.Normal);
-
-            randomBox_Underworld_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[19].SetPercent(new float[] { 0.1f, 0.75f, 0.75f, 1, 0 }, BoxType.Epic);
-
-            randomBox_Underworld_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[19].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
-
-
-
-            randomBox_Underworld_List[20].boxInfoType = BoxInfoType.LeftQueen_3_N; //지하세계 - 베로니카
-            randomBox_Underworld_List[21].boxInfoType = BoxInfoType.LeftQueen_3_R;
-            randomBox_Underworld_List[22].boxInfoType = BoxInfoType.LeftQueen_3_SR;
-            randomBox_Underworld_List[23].boxInfoType = BoxInfoType.LeftQueen_3_SSR;
-
-            randomBox_Underworld_List[20].SetPercent(new float[] { 2, 0.2f, 2, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[21].SetPercent(new float[] { 0.5f, 0.05f, 0.5f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[22].SetPercent(new float[] { 0.25f, 0.025f, 0.25f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[23].SetPercent(new float[] { 0.1f, 0.01f, 0.1f, 0, 0 }, BoxType.Normal);
-
-            randomBox_Underworld_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
-
-            randomBox_Underworld_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
-
-
-            randomBox_Underworld_List[24].boxInfoType = BoxInfoType.RightNight_N; //지하세계 - 요안나
-            randomBox_Underworld_List[25].boxInfoType = BoxInfoType.RightNight_R;
-            randomBox_Underworld_List[26].boxInfoType = BoxInfoType.RightNight_SR;
-            randomBox_Underworld_List[27].boxInfoType = BoxInfoType.RightNight_SSR;
-
-            randomBox_Underworld_List[24].SetPercent(new float[] { 2, 2, 0.2f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[25].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[26].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[27].SetPercent(new float[] { 0.1f, 0.1f, 0.01f, 0, 0 }, BoxType.Normal);
-
-            randomBox_Underworld_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
-
-            randomBox_Underworld_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[27].SetPercent(new float[] { 0.6f, 1, 0.1f, 0, 0 }, BoxType.Speical);
-
-
-
-            randomBox_Underworld_List[28].boxInfoType = BoxInfoType.RightNight_Mirror_N; //지하세계 - 카롤리나
-            randomBox_Underworld_List[29].boxInfoType = BoxInfoType.RightNight_Mirror_R;
-            randomBox_Underworld_List[30].boxInfoType = BoxInfoType.RightNight_Mirror_SR;
-            randomBox_Underworld_List[31].boxInfoType = BoxInfoType.RightNight_Mirror_SSR;
-
-            randomBox_Underworld_List[28].SetPercent(new float[] { 0.2f, 2, 2, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[29].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[30].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0, 0 }, BoxType.Normal);
-            randomBox_Underworld_List[31].SetPercent(new float[] { 0.01f, 0.1f, 0.1f, 0, 0 }, BoxType.Normal);
-
-            randomBox_Underworld_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-            randomBox_Underworld_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
-
-            randomBox_Underworld_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-            randomBox_Underworld_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
-
-            randomBox_Underworld_List[32].boxInfoType = BoxInfoType.Gold_N; //골드
-            randomBox_Underworld_List[33].boxInfoType = BoxInfoType.Gold_R;
-            randomBox_Underworld_List[34].boxInfoType = BoxInfoType.UpgradeTicket_N; //티켓
-            randomBox_Underworld_List[35].boxInfoType = BoxInfoType.UpgradeTicket_R;
-
-            randomBox_Underworld_List[32].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-            randomBox_Underworld_List[33].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-            randomBox_Underworld_List[34].SetPercent(new float[] { 2.5f, 2.5f, 2.5f, 2.28f, 2 }, BoxType.Normal);
-            randomBox_Underworld_List[35].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
-
-            randomBox_Underworld_List[32].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Underworld_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Underworld_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-            randomBox_Underworld_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
-
-            randomBox_Underworld_List[32].SetPercent(new float[] { 0.6f, 0.5f, 0.5f, 0.5f, 0.5f }, BoxType.Speical);
-            randomBox_Underworld_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-            randomBox_Underworld_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-            randomBox_Underworld_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
-        }
+        randomBox_Winter_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Winter_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+
+        randomBox_Winter_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Winter_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+
+        randomBox_Winter_List[32].boxInfoType = BoxInfoType.Gold_N; //골드
+        randomBox_Winter_List[33].boxInfoType = BoxInfoType.Gold_R;
+        randomBox_Winter_List[34].boxInfoType = BoxInfoType.UpgradeTicket_N; //티켓
+        randomBox_Winter_List[35].boxInfoType = BoxInfoType.UpgradeTicket_R;
+
+        randomBox_Winter_List[32].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+        randomBox_Winter_List[33].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+        randomBox_Winter_List[34].SetPercent(new float[] { 2.5f, 2.5f, 2.5f, 2.28f, 2 }, BoxType.Normal);
+        randomBox_Winter_List[35].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+
+        randomBox_Winter_List[32].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Winter_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Winter_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Winter_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+
+        randomBox_Winter_List[32].SetPercent(new float[] { 0.6f, 0.5f, 0.5f, 0.5f, 0.5f }, BoxType.Speical);
+        randomBox_Winter_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
+        randomBox_Winter_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
+        randomBox_Winter_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[0].boxInfoType = BoxInfoType.Pawn_Under_N; //지하세계 - 카리아
+        randomBox_Underworld_List[1].boxInfoType = BoxInfoType.Pawn_Under_R;
+        randomBox_Underworld_List[2].boxInfoType = BoxInfoType.Pawn_Under_SR;
+        randomBox_Underworld_List[3].boxInfoType = BoxInfoType.Pawn_Under_SSR;
+
+        randomBox_Underworld_List[0].SetPercent(new float[] { 0.195f, 1.17f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
+        randomBox_Underworld_List[1].SetPercent(new float[] { 0.05f, 0.3f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
+        randomBox_Underworld_List[2].SetPercent(new float[] { 0.025f, 0.15f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
+        randomBox_Underworld_List[3].SetPercent(new float[] { 0.01f, 0.06f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
+
+        randomBox_Underworld_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+
+        randomBox_Underworld_List[0].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[1].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[2].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[3].SetPercent(new float[] { 0.1f, 0.6f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[4].boxInfoType = BoxInfoType.Pawn_Under_2_N; //지하세계 - 코르디아
+        randomBox_Underworld_List[5].boxInfoType = BoxInfoType.Pawn_Under_2_R;
+        randomBox_Underworld_List[6].boxInfoType = BoxInfoType.Pawn_Under_2_SR;
+        randomBox_Underworld_List[7].boxInfoType = BoxInfoType.Pawn_Under_2_SSR;
+
+        randomBox_Underworld_List[4].SetPercent(new float[] { 1.17f, 0.195f, 1.17f, 1.17f, 1.17f }, BoxType.Normal);
+        randomBox_Underworld_List[5].SetPercent(new float[] { 0.03f, 0.05f, 0.3f, 0.3f, 0.3f }, BoxType.Normal);
+        randomBox_Underworld_List[6].SetPercent(new float[] { 0.15f, 0.025f, 0.15f, 0.15f, 0.15f }, BoxType.Normal);
+        randomBox_Underworld_List[7].SetPercent(new float[] { 0.06f, 0.01f, 0.06f, 0.06f, 0.06f }, BoxType.Normal);
+
+        randomBox_Underworld_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+        randomBox_Underworld_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Epic);
+
+        randomBox_Underworld_List[4].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[5].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[6].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+        randomBox_Underworld_List[7].SetPercent(new float[] { 0.6f, 0.1f, 0.6f, 0.6f, 0.6f }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[8].boxInfoType = BoxInfoType.RightQueen_2_N; //지하세계 - 루시아
+        randomBox_Underworld_List[9].boxInfoType = BoxInfoType.RightQueen_2_R;
+        randomBox_Underworld_List[10].boxInfoType = BoxInfoType.RightQueen_2_SR;
+        randomBox_Underworld_List[11].boxInfoType = BoxInfoType.RightQueen_2_SSR;
+
+        randomBox_Underworld_List[8].SetPercent(new float[] { 2, 2, 0.2f, 2, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[9].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0.5f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[10].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0.25f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[11].SetPercent(new float[] { 0.075f, 0.075f, 0.01f, 0.075f, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[11].SetPercent(new float[] { 0.75f, 0.75f, 0.1f, 0.75f, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[8].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[9].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[10].SetPercent(new float[] { 1, 1, 0.1f, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[11].SetPercent(new float[] { 1f, 1f, 0.1f, 1, 0 }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[12].boxInfoType = BoxInfoType.Rook_V4_N; //지하세계 - 아가타
+        randomBox_Underworld_List[13].boxInfoType = BoxInfoType.Rook_V4_R;
+        randomBox_Underworld_List[14].boxInfoType = BoxInfoType.Rook_V4_SR;
+        randomBox_Underworld_List[15].boxInfoType = BoxInfoType.Rook_V4_SSR;
+
+        randomBox_Underworld_List[12].SetPercent(new float[] { 2, 2, 2, 0.2f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[13].SetPercent(new float[] { 0.5f, 0.5f, 0.5f, 0.05f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[14].SetPercent(new float[] { 0.25f, 0.25f, 0.25f, 0.025f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[15].SetPercent(new float[] { 0.075f, 0.075f, 0.075f, 0.01f, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[15].SetPercent(new float[] { 0.75f, 0.75f, 0.75f, 0.1f, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[12].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[13].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[14].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[15].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[16].boxInfoType = BoxInfoType.Rook_V2_2_N; //지하세계 - 세베라
+        randomBox_Underworld_List[17].boxInfoType = BoxInfoType.Rook_V2_2_R;
+        randomBox_Underworld_List[18].boxInfoType = BoxInfoType.Rook_V2_2_SR;
+        randomBox_Underworld_List[19].boxInfoType = BoxInfoType.Rook_V2_2_SSR;
+
+        randomBox_Underworld_List[16].SetPercent(new float[] { 0.2f, 2, 2, 2, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[17].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0.5f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[18].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0.25f, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[19].SetPercent(new float[] { 0.01f, 0.075f, 0.075f, 0.1f, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[19].SetPercent(new float[] { 0.1f, 0.75f, 0.75f, 1, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[16].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[17].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[18].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[19].SetPercent(new float[] { 0.1f, 1, 1, 1, 0 }, BoxType.Speical);
+
+
+
+        randomBox_Underworld_List[20].boxInfoType = BoxInfoType.LeftQueen_3_N; //지하세계 - 베로니카
+        randomBox_Underworld_List[21].boxInfoType = BoxInfoType.LeftQueen_3_R;
+        randomBox_Underworld_List[22].boxInfoType = BoxInfoType.LeftQueen_3_SR;
+        randomBox_Underworld_List[23].boxInfoType = BoxInfoType.LeftQueen_3_SSR;
+
+        randomBox_Underworld_List[20].SetPercent(new float[] { 2, 0.2f, 2, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[21].SetPercent(new float[] { 0.5f, 0.05f, 0.5f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[22].SetPercent(new float[] { 0.25f, 0.025f, 0.25f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[23].SetPercent(new float[] { 0.1f, 0.01f, 0.1f, 0, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[20].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[21].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[22].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[23].SetPercent(new float[] { 1, 0.1f, 1, 0, 0 }, BoxType.Speical);
+
+
+        randomBox_Underworld_List[24].boxInfoType = BoxInfoType.RightNight_N; //지하세계 - 요안나
+        randomBox_Underworld_List[25].boxInfoType = BoxInfoType.RightNight_R;
+        randomBox_Underworld_List[26].boxInfoType = BoxInfoType.RightNight_SR;
+        randomBox_Underworld_List[27].boxInfoType = BoxInfoType.RightNight_SSR;
+
+        randomBox_Underworld_List[24].SetPercent(new float[] { 2, 2, 0.2f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[25].SetPercent(new float[] { 0.5f, 0.5f, 0.05f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[26].SetPercent(new float[] { 0.25f, 0.25f, 0.025f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[27].SetPercent(new float[] { 0.1f, 0.1f, 0.01f, 0, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[27].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[24].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[25].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[26].SetPercent(new float[] { 1, 1, 0.1f, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[27].SetPercent(new float[] { 0.6f, 1, 0.1f, 0, 0 }, BoxType.Speical);
+
+
+
+        randomBox_Underworld_List[28].boxInfoType = BoxInfoType.RightNight_Mirror_N; //지하세계 - 카롤리나
+        randomBox_Underworld_List[29].boxInfoType = BoxInfoType.RightNight_Mirror_R;
+        randomBox_Underworld_List[30].boxInfoType = BoxInfoType.RightNight_Mirror_SR;
+        randomBox_Underworld_List[31].boxInfoType = BoxInfoType.RightNight_Mirror_SSR;
+
+        randomBox_Underworld_List[28].SetPercent(new float[] { 0.2f, 2, 2, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[29].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[30].SetPercent(new float[] { 0.025f, 0.25f, 0.25f, 0, 0 }, BoxType.Normal);
+        randomBox_Underworld_List[31].SetPercent(new float[] { 0.01f, 0.1f, 0.1f, 0, 0 }, BoxType.Normal);
+
+        randomBox_Underworld_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+        randomBox_Underworld_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Epic);
+
+        randomBox_Underworld_List[28].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[29].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[30].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+        randomBox_Underworld_List[31].SetPercent(new float[] { 0.1f, 1, 1, 0, 0 }, BoxType.Speical);
+
+        randomBox_Underworld_List[32].boxInfoType = BoxInfoType.Gold_N; //골드
+        randomBox_Underworld_List[33].boxInfoType = BoxInfoType.Gold_R;
+        randomBox_Underworld_List[34].boxInfoType = BoxInfoType.UpgradeTicket_N; //티켓
+        randomBox_Underworld_List[35].boxInfoType = BoxInfoType.UpgradeTicket_R;
+
+        randomBox_Underworld_List[32].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+        randomBox_Underworld_List[33].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+        randomBox_Underworld_List[34].SetPercent(new float[] { 2.5f, 2.5f, 2.5f, 2.28f, 2 }, BoxType.Normal);
+        randomBox_Underworld_List[35].SetPercent(new float[] { 2, 2, 2, 2, 2 }, BoxType.Normal);
+
+        randomBox_Underworld_List[32].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Underworld_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Underworld_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+        randomBox_Underworld_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Epic);
+
+        randomBox_Underworld_List[32].SetPercent(new float[] { 0.6f, 0.5f, 0.5f, 0.5f, 0.5f }, BoxType.Speical);
+        randomBox_Underworld_List[33].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
+        randomBox_Underworld_List[34].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
+        randomBox_Underworld_List[35].SetPercent(new float[] { 1, 1, 1, 1, 1 }, BoxType.Speical);
 
         RandomBoxManager.isActive = true;
 

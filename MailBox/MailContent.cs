@@ -49,27 +49,27 @@ public class MailContent : MonoBehaviour
             case "Gold":
                 rewardType = RewardType.Gold;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "CouponInfo";
                 break;
             case "UpgradeTicket":
                 rewardType = RewardType.UpgradeTicket;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "CouponInfo";
                 break;
             case "BoxNormal":
                 rewardType = RewardType.Box_Normal;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "CouponInfo";
                 break;
             case "BoxEpic":
                 rewardType = RewardType.Box_Epic;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "CouponInfo";
                 break;
             case "BoxSpeical":
                 rewardType = RewardType.Box_Speical;
 
-                titleText.localizationName = "GiftInfo";
+                titleText.localizationName = "CouponInfo";
                 break;
             case "IndieFestival2023":
                 rewardType = RewardType.Box_Speical;
@@ -105,6 +105,24 @@ public class MailContent : MonoBehaviour
 
                 playerDataBase.ReviewNumber = 1;
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("ReviewNumber", 1);
+                break;
+            case "Open":
+                rewardType = RewardType.Box_Normal;
+
+                count = 10;
+                titleText.localizationName = "OpenCouponInfo";
+                break;
+            case "Update":
+                rewardType = RewardType.Box_Normal;
+
+                count = 10;
+                titleText.localizationName = "UpdateCouponInfo";
+                break;
+            case "BugFixed":
+                rewardType = RewardType.Box_Normal;
+
+                count = 10;
+                titleText.localizationName = "BugFixedInfo";
                 break;
         }
 

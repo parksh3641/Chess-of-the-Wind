@@ -48,355 +48,358 @@ public class CouponManager : MonoBehaviour
             return;
         }
 
-        if(inputFieldText.text.Contains("-"))
+        switch (inputFieldText.text.ToLower())
         {
-            inputFieldText.text.ToLower();
-
-            GetCoupon();
-        }
-        else
-        {
-            switch(inputFieldText.text)
-            {
-                case "GRANDOPEN":
-                    if (System.DateTime.Now >= new System.DateTime(2023, 10, 1))
+            case "GRANDOPEN":
+                if (System.DateTime.Now >= new System.DateTime(2024, 06, 25))
+                {
+                    if (playerDataBase.Coupon1 == 0)
                     {
-                        if(playerDataBase.NaverCafe202310 == 0)
-                        {
-                            playerDataBase.NaverCafe202310 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202310", 1);
+                        playerDataBase.Coupon1 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon1", 1);
 
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
+                        OpenCoupon();
                     }
                     else
                     {
                         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
                     }
-                    break;
-                case "WINDCHESS":
-                    if (System.DateTime.Now >= new System.DateTime(2023, 11, 1))
-                    {
-                        if (playerDataBase.NaverCafe202311 == 0)
-                        {
-                            playerDataBase.NaverCafe202311 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202311", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "LILIA":
-                    if (System.DateTime.Now >= new System.DateTime(2023, 12, 1))
-                    {
-                        if (playerDataBase.NaverCafe202312 == 0)
-                        {
-                            playerDataBase.NaverCafe202312 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202312", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "CORSIA":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 1, 1))
-                    {
-                        if (playerDataBase.NaverCafe202401 == 0)
-                        {
-                            playerDataBase.NaverCafe202401 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202401", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "THISMUCH":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 2, 1))
-                    {
-                        if (playerDataBase.NaverCafe202402 == 0)
-                        {
-                            playerDataBase.NaverCafe202402 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202402", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "BEGINNER":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 3, 1))
-                    {
-                        if (playerDataBase.NaverCafe202403 == 0)
-                        {
-                            playerDataBase.NaverCafe202403 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202403", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "BRAIN":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 4, 1))
-                    {
-                        if (playerDataBase.NaverCafe202404 == 0)
-                        {
-                            playerDataBase.NaverCafe202404 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202404", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "CONTROLLER":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 5, 1))
-                    {
-                        if (playerDataBase.NaverCafe202405 == 0)
-                        {
-                            playerDataBase.NaverCafe202405 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202405", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "FATE":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 6, 1))
-                    {
-                        if (playerDataBase.NaverCafe202406 == 0)
-                        {
-                            playerDataBase.NaverCafe202406 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202406", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "THEEND":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 7, 1))
-                    {
-                        if (playerDataBase.NaverCafe202407 == 0)
-                        {
-                            playerDataBase.NaverCafe202407 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202407", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "STRUGGLE":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 8, 1))
-                    {
-                        if (playerDataBase.NaverCafe202408 == 0)
-                        {
-                            playerDataBase.NaverCafe202408 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202408", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "BUTT":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 9, 1))
-                    {
-                        if (playerDataBase.NaverCafe202409 == 0)
-                        {
-                            playerDataBase.NaverCafe202409 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202409", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "GOALLOUT":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 10, 1))
-                    {
-                        if (playerDataBase.NaverCafe202410 == 0)
-                        {
-                            playerDataBase.NaverCafe202410 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202410", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "DNA":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 11, 1))
-                    {
-                        if (playerDataBase.NaverCafe202411 == 0)
-                        {
-                            playerDataBase.NaverCafe202411 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202411", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                case "ISTHISRIGHT":
-                    if (System.DateTime.Now >= new System.DateTime(2024, 12, 1))
-                    {
-                        if (playerDataBase.NaverCafe202412 == 0)
-                        {
-                            playerDataBase.NaverCafe202412 = 1;
-                            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NaverCafe202412", 1);
-
-                            NaverCafeCoupon();
-                        }
-                        else
-                        {
-                            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                            NotionManager.instance.UseNotion(NotionType.CouponNotion2);
-                        }
-                    }
-                    else
-                    {
-                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                        NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    }
-                    break;
-                default:
+                }
+                else
+                {
                     SoundManager.instance.PlaySFX(GameSfxType.Wrong);
                     NotionManager.instance.UseNotion(NotionType.CouponNotion3);
-                    break;
-            }
+                }
+                break;
+            case "WINDCHESS":
+                if (System.DateTime.Now >= new System.DateTime(2024, 07, 1))
+                {
+                    if (playerDataBase.Coupon2 == 0)
+                    {
+                        playerDataBase.Coupon2 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon2", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "LILIA":
+                if (System.DateTime.Now >= new System.DateTime(2024, 08, 1))
+                {
+                    if (playerDataBase.Coupon3 == 0)
+                    {
+                        playerDataBase.Coupon3 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon3", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "CORSIA":
+                if (System.DateTime.Now >= new System.DateTime(2024, 09, 1))
+                {
+                    if (playerDataBase.Coupon4 == 0)
+                    {
+                        playerDataBase.Coupon4 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon4", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "THISMUCH":
+                if (System.DateTime.Now >= new System.DateTime(2024, 10, 1))
+                {
+                    if (playerDataBase.Coupon5 == 0)
+                    {
+                        playerDataBase.Coupon5 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon5", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "BEGINNER":
+                if (System.DateTime.Now >= new System.DateTime(2024, 11, 1))
+                {
+                    if (playerDataBase.Coupon6 == 0)
+                    {
+                        playerDataBase.Coupon6 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon6", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "BRAIN":
+                if (System.DateTime.Now >= new System.DateTime(2024, 12, 1))
+                {
+                    if (playerDataBase.Coupon7 == 0)
+                    {
+                        playerDataBase.Coupon7 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon7", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "CONTROLLER":
+                if (System.DateTime.Now >= new System.DateTime(2025, 01, 1))
+                {
+                    if (playerDataBase.Coupon8 == 0)
+                    {
+                        playerDataBase.Coupon8 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon8", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "FATE":
+                if (System.DateTime.Now >= new System.DateTime(2025, 2, 1))
+                {
+                    if (playerDataBase.Coupon9 == 0)
+                    {
+                        playerDataBase.Coupon9 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon9", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "THEEND":
+                if (System.DateTime.Now >= new System.DateTime(2025, 3, 1))
+                {
+                    if (playerDataBase.Coupon10 == 0)
+                    {
+                        playerDataBase.Coupon10 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon10", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "STRUGGLE":
+                if (System.DateTime.Now >= new System.DateTime(2025, 4, 1))
+                {
+                    if (playerDataBase.Coupon11 == 0)
+                    {
+                        playerDataBase.Coupon11 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon11", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "BUTT":
+                if (System.DateTime.Now >= new System.DateTime(2025, 5, 1))
+                {
+                    if (playerDataBase.Coupon12 == 0)
+                    {
+                        playerDataBase.Coupon12 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon12", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "GOALLOUT":
+                if (System.DateTime.Now >= new System.DateTime(2025, 6, 1))
+                {
+                    if (playerDataBase.Coupon13 == 0)
+                    {
+                        playerDataBase.Coupon13 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon13", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "DNA":
+                if (System.DateTime.Now >= new System.DateTime(2025, 7, 1))
+                {
+                    if (playerDataBase.Coupon14 == 0)
+                    {
+                        playerDataBase.Coupon14 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon14", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            case "ISTHISRIGHT":
+                if (System.DateTime.Now >= new System.DateTime(2025, 8, 1))
+                {
+                    if (playerDataBase.Coupon15 == 0)
+                    {
+                        playerDataBase.Coupon15 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon15", 1);
+
+                        NormalCoupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
+            default:
+                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                break;
         }
     }
 
-    void NaverCafeCoupon()
+    void OpenCoupon()
+    {
+        itemList.Clear();
+        itemList.Add("Open_1");
+        PlayfabManager.instance.GrantItemsToUser("Coupon", itemList);
+
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
+        NotionManager.instance.UseNotion(NotionType.CouponNotion4);
+
+        FirebaseAnalytics.LogEvent("Open_Coupon");
+    }
+
+    void NormalCoupon()
     {
         itemList.Clear();
         itemList.Add("BoxNormal_10");
