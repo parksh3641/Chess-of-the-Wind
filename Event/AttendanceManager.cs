@@ -102,15 +102,15 @@ public class AttendanceManager : MonoBehaviour
         price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
 
         attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 1);
+        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 3);
         attendanceContentArray[2].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_Normal, 1);
+        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_Normal, 3);
         attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 1);
+        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 3);
 
         receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
-        receiveContentArray[1].Initialize(RewardType.Box_Normal, 5);
-        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 10);
+        receiveContentArray[1].Initialize(RewardType.Box_Normal, 10);
+        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 50);
     }
 
     public void CheckAttendance()
@@ -171,12 +171,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 1);
+                        playerDataBase.SnowBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 1);
+                        playerDataBase.UnderworldBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
                         break;
                 }
                 break;
@@ -187,12 +187,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 1);
+                        playerDataBase.SnowBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 1);
+                        playerDataBase.UnderworldBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
                         break;
                 }
                 break;
@@ -203,12 +203,12 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 1);
+                        playerDataBase.SnowBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 1;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 1);
+                        playerDataBase.UnderworldBox_Normal = 3;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
                         break;
                 }
                 break;
@@ -218,16 +218,16 @@ public class AttendanceManager : MonoBehaviour
                 switch (GameStateManager.instance.WindCharacterType)
                 {
                     case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 5);
+                        playerDataBase.SnowBox_Normal = 10;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
                         break;
                     case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 5);
+                        playerDataBase.UnderworldBox_Normal = 10;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
                         break;
                 }
 
-                ItemAnimManager.instance.GetUpgradeTicket(10);
+                ItemAnimManager.instance.GetUpgradeTicket(50);
 
                 clearObj.SetActive(true);
 

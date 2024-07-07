@@ -271,7 +271,9 @@ public class UIManager : MonoBehaviour
             testMode.SetActive(true);
         }
 
-        OpenMainCanvas(1);
+        index = -1;
+
+        OpenMainCanvas(2);
 
         titleText.localizationName = playerDataBase.GetMainTitleName();
         titleText.ReLoad();
@@ -748,12 +750,13 @@ public class UIManager : MonoBehaviour
                 shopManager.OpenShopView();
                 break;
             case 1:
-                challengeManager.CheckingGoal();
-                eventManager.CheckingRankUp();
+                collectionManager.OpenCollectionView();
 
                 break;
             case 2:
-                collectionManager.OpenCollectionView();
+                challengeManager.CheckingGoal();
+                eventManager.CheckingRankUp();
+
                 break;
             case 3:
                 inventoryManager.OpenInventoryView();
