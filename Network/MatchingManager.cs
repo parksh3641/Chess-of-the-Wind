@@ -949,6 +949,8 @@ public class MatchingManager : MonoBehaviour
 
         Debug.Log("사람이 없는 관계로 인공지능과 매칭됩니다.");
 
+        GameStateManager.instance.PlayRankType = GameStateManager.instance.GameRankType;
+
         FirebaseAnalytics.LogEvent("Match_Ai");
     }
 

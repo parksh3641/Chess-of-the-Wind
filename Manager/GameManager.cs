@@ -733,6 +733,7 @@ public class GameManager : MonoBehaviour
         if (myLevel > limitLevel)
         {
             myLevel = limitLevel;
+            blockClassNewbie.level = limitLevel;
         }
 
         if (blockClassNewbie.rankType == RankType.SSR)
@@ -812,6 +813,7 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+                    blockClassArmor.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
@@ -854,6 +856,7 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+                    blockClassWeapon.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }
@@ -896,6 +899,7 @@ public class GameManager : MonoBehaviour
                 if (myLevel > limitLevel)
                 {
                     myLevel = limitLevel;
+                    blockClassShield.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
                 }

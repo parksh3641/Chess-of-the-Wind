@@ -16,6 +16,7 @@ public class RankContent : MonoBehaviour
     public Image countryImg;
     public Image rankImg;
     public Text nowRankText;
+    public Text nowScoreText;
 
     private Sprite[] rankIconArray;
 
@@ -54,8 +55,10 @@ public class RankContent : MonoBehaviour
         }
     }
 
-    public void InitState(int index, string country, string nickName, string score, bool checkMy)
+    public void InitState(int index, string country, string nickName, string score, bool checkMy, int type)
     {
+        titleText.text = "-";
+
         if (index <= 3)
         {
             indexRankImg.enabled = true;
@@ -70,12 +73,26 @@ public class RankContent : MonoBehaviour
         }
 
         nickNameText.text = nickName;
-        countryImg.sprite = Resources.Load<Sprite>("Country/" + country);
 
-        rankImg.sprite = rankIconArray[int.Parse(score)];
-        strArray = rankDataBase.rankInformationArray[int.Parse(score)].gameRankType.ToString().Split("_");
-        nowRankText.text = strArray[1];
+        if(type == 0)
+        {
+            countryImg.enabled = true;
+            rankImg.enabled = true;
+            nowScoreText.text = "";
 
+            countryImg.sprite = Resources.Load<Sprite>("Country/" + country);
+            rankImg.sprite = rankIconArray[int.Parse(score)];
+            strArray = rankDataBase.rankInformationArray[int.Parse(score)].gameRankType.ToString().Split("_");
+            nowRankText.text = strArray[1];
+        }
+        else
+        {
+            countryImg.enabled = false;
+            rankImg.enabled = false;
+            nowRankText.text = "";
+
+            nowScoreText.text = MoneyUnitString.ToCurrencyString(int.Parse(score));
+        }
 
         if (index == 999)
         {

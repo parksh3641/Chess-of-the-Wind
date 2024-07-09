@@ -1,8 +1,10 @@
 using Firebase.Analytics;
 using PlayFab.ClientModels;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RankingManager : MonoBehaviour
 {
@@ -11,6 +13,10 @@ public class RankingManager : MonoBehaviour
     public GameObject rankingView;
 
     public GameObject alarm;
+
+    [Title("TopMenu")]
+    public Image[] topMenuImgArray;
+    public Sprite[] topMenuSpriteArray;
 
     public RankContent rankContentPrefab;
     public RankContent myRankContent;
@@ -21,6 +27,9 @@ public class RankingManager : MonoBehaviour
 
     private string recordStr = "";
     private string country = "";
+    private int type = 0;
+
+    private int topNumber = 0;
 
     [Space]
     List<RankContent> rankContentList = new List<RankContent>();
@@ -50,6 +59,8 @@ public class RankingManager : MonoBehaviour
         rankContentParent.anchoredPosition = new Vector2(0, -9999);
 
         alarm.SetActive(true);
+
+        topNumber = -1;
     }
 
     public void OpenRanking()
@@ -60,7 +71,10 @@ public class RankingManager : MonoBehaviour
 
             alarm.SetActive(false);
 
-            Initialize();
+            if (topNumber == -1)
+            {
+                ChangeTopMenu(0);
+            };
 
             FirebaseAnalytics.LogEvent("Open_Ranking");
         }
@@ -73,10 +87,32 @@ public class RankingManager : MonoBehaviour
         }
     }
 
-    void Initialize()
+    public void ChangeTopMenu(int number)
     {
-        isDelay = true;
-        PlayfabManager.instance.GetLeaderboarder("NowRank", 0, SetRanking);
+        if (topNumber != number)
+        {
+            topNumber = number;
+
+            for (int i = 0; i < topMenuImgArray.Length; i++)
+            {
+                topMenuImgArray[i].sprite = topMenuSpriteArray[0];
+            }
+            topMenuImgArray[number].sprite = topMenuSpriteArray[1];
+
+            type = number;
+
+            switch (number)
+            {
+                case 0:
+                    PlayfabManager.instance.GetLeaderboarder("NowRank", 0, SetRanking);
+                    break;
+                case 1:
+                    PlayfabManager.instance.GetLeaderboarder("TotalRaf", 0, SetRanking);
+                    break;
+            }
+
+            isDelay = true;
+        }
     }
 
     public void SetRanking(GetLeaderboardResult result)
@@ -126,7 +162,7 @@ public class RankingManager : MonoBehaviour
 
                 country = location;
 
-                myRankContent.InitState(index, location, nickName, recordStr, false);
+                myRankContent.InitState(index, location, nickName, recordStr, false, type);
             }
             else if (player.DisplayName != null)
             {
@@ -137,11 +173,11 @@ public class RankingManager : MonoBehaviour
 
                     country = location;
 
-                    myRankContent.InitState(index, location, nickName, recordStr, false);
+                    myRankContent.InitState(index, location, nickName, recordStr, false, type);
                 }
             }
 
-            rankContentList[num].InitState(index, location, nickName, recordStr, isMine);
+            rankContentList[num].InitState(index, location, nickName, recordStr, isMine, type);
 
             if (!isDelay2)
             {
@@ -166,7 +202,14 @@ public class RankingManager : MonoBehaviour
 
     void CheckCountry(string code)
     {
-        myRankContent.InitState(999, code, GameStateManager.instance.NickName, playerDataBase.NowRank.ToString(), false);
+        if (type == 0)
+        {
+            myRankContent.InitState(999, code, GameStateManager.instance.NickName, playerDataBase.NowRank.ToString(), false, type);
+        }
+        else 
+        {
+            myRankContent.InitState(999, code, GameStateManager.instance.NickName, playerDataBase.TotalRaf.ToString(), false, type);
+        }
     }
 
     void SetTitle(GetLeaderboardResult result)

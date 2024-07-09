@@ -33,7 +33,7 @@ public class RankDataBase : ScriptableObject
         return rank;
     }
 
-    public int GetRank(int money) //???´ìƒ ?¬ìš©?˜ì? ?ŠìŒ 
+    public int GetRank(int money)
     {
         int count = 0;
 
@@ -48,12 +48,12 @@ public class RankDataBase : ScriptableObject
         return count;
     }
 
-    public int GetNeedStar(int level) //?¤ìŒ ??¬ ?±ê¸‰ ?ìŠ¹???„í•œ ë³„ì´ ëª‡ê°œ ?„ìš”?œê???
+    public int GetNeedStar(int level)
     {
         return rankInformationArray[level].star;
     }
 
-    public int GetLimitLevel(GameRankType type) //????¬?ì„œ ìµœë?ë¡??ˆìš©?˜ëŠ” ?ˆë²¨??ëª‡ì¸ê°€??
+    public int GetLimitLevel(GameRankType type)
     {
         int level = 0;
 
