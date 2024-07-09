@@ -46,7 +46,7 @@ public class WelcomeContent : MonoBehaviour
             switch (index)
             {
                 case 0:
-                    if (playerDataBase.CheckBlockLevel(1))
+                    if (playerDataBase.CheckBlockLevel(3))
                     {
                         lockObj.SetActive(false);
                     }
@@ -58,31 +58,31 @@ public class WelcomeContent : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if(playerDataBase.Coin >= 10000)
+                    if(playerDataBase.Coin >= 25000)
                     {
                         lockObj.SetActive(false);
                     }
                     break;
                 case 3:
-                    if (playerDataBase.CheckBlockLevel(4))
+                    if (playerDataBase.CheckBlockLevel(8))
                     {
                         lockObj.SetActive(false);
                     }
                     break;
                 case 4:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
+                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
                     {
                         lockObj.SetActive(false);
                     }
                     break;
                 case 5:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_3)
+                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
                     {
                         lockObj.SetActive(false);
                     }
                     break;
                 case 6:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
+                    if (GameStateManager.instance.GameRankType > GameRankType.Gold_2)
                     {
                         lockObj.SetActive(false);
                     }

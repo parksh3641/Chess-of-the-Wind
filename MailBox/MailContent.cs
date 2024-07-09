@@ -119,9 +119,9 @@ public class MailContent : MonoBehaviour
                 titleText.localizationName = "UpdateCouponInfo";
                 break;
             case "BugFixed":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Speical;
 
-                count = 10;
+                count = 5;
                 titleText.localizationName = "BugFixedInfo";
                 break;
         }

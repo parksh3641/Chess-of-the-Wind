@@ -77,10 +77,10 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[0];
                 break;
             case RewardType.GoldShop2:
-                mainBackground.sprite = rankBackgroundArray[0];
+                mainBackground.sprite = rankBackgroundArray[2];
                 break;
             case RewardType.GoldShop3:
-                mainBackground.sprite = rankBackgroundArray[0];
+                mainBackground.sprite = rankBackgroundArray[3];
                 effect.SetActive(true);
                 break;
         }

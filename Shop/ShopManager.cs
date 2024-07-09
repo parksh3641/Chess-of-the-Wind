@@ -56,9 +56,6 @@ public class ShopManager : MonoBehaviour
     private int minutes;
     private int seconds;
 
-    List<ShopContent> shopContentGoldList = new List<ShopContent>();
-    List<ShopContent> shopContentList = new List<ShopContent>();
-
     string localization_Reset = "";
     string localization_Days = "";
     string localization_Hours = "";
@@ -137,8 +134,8 @@ public class ShopManager : MonoBehaviour
 
             if (!first)
             {
-                adShopReceiveContents[0].Initialize(RewardType.Gold, rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 2);
-                adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 10);
+                adShopReceiveContents[0].Initialize(RewardType.Gold, rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 3);
+                adShopReceiveContents[1].Initialize(RewardType.UpgradeTicket, 30);
                 adShopReceiveContents[2].Initialize(RewardType.UpgradeTicket, 100);
 
                 first = true;
@@ -751,7 +748,7 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (playerDataBase.ResetInfo.dailyAdsReward == 1) return;
 
-                PlayfabManager.instance.UpdateAddGold(rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 2);
+                PlayfabManager.instance.UpdateAddGold(rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes * 3);
 
                 ResetManager.instance.SetResetInfo(ResetType.DailyAdsReward);
 
@@ -760,7 +757,7 @@ public class ShopManager : MonoBehaviour
             case 3:
                 if (playerDataBase.ResetInfo.dailyAdsReward2 == 1) return;
 
-                ItemAnimManager.instance.GetUpgradeTicket(10);
+                ItemAnimManager.instance.GetUpgradeTicket(30);
 
                 ResetManager.instance.SetResetInfo(ResetType.DailyAdsReward2);
 

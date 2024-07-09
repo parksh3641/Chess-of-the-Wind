@@ -160,7 +160,7 @@ public class RouletteManager : MonoBehaviour
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.5f);
     WaitForSeconds waitForSeconds3 = new WaitForSeconds(0.3f);
     WaitForSeconds waitForSeconds4 = new WaitForSeconds(1.5f);
-    WaitForSeconds waitForSeconds5 = new WaitForSeconds(2.5f);
+    WaitForSeconds waitForSeconds5 = new WaitForSeconds(1.0f);
 
     public PhotonView PV;
 
@@ -1506,7 +1506,7 @@ public class RouletteManager : MonoBehaviour
         {
             Debug.Log("퀸에 당첨되었습니다");
 
-            FirebaseAnalytics.LogEvent("InGame_Check_Queen");
+            FirebaseAnalytics.LogEvent("InGame_Check_Queen_" + GameStateManager.instance.GameType.ToString());
 
             targetQueen.SetActive(true);
 
@@ -1532,7 +1532,7 @@ public class RouletteManager : MonoBehaviour
 
                 Debug.Log("퀸 배팅에 성공했습니다!");
 
-                FirebaseAnalytics.LogEvent("InGame_Success_Queen");
+                FirebaseAnalytics.LogEvent("InGame_Success_Queen_" + GameStateManager.instance.GameType.ToString());
             }
             else
             {
@@ -1542,7 +1542,7 @@ public class RouletteManager : MonoBehaviour
 
                 Debug.Log("퀸 배팅에 실패했습니다.");
 
-                FirebaseAnalytics.LogEvent("InGame_Fail_Queen");
+                FirebaseAnalytics.LogEvent("InGame_Fail_Queen_" + GameStateManager.instance.GameType.ToString());
             }
 
             return;
@@ -1578,7 +1578,7 @@ public class RouletteManager : MonoBehaviour
             playerDataBase.WinNumber += 1;
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WinNumber", playerDataBase.WinNumber);
 
-            FirebaseAnalytics.LogEvent("InGame_Success_Number");
+            FirebaseAnalytics.LogEvent("InGame_Success_Number_" + GameStateManager.instance.GameType.ToString());
 
             Debug.Log("숫자에 당첨되었습니다");
         }
@@ -1588,7 +1588,7 @@ public class RouletteManager : MonoBehaviour
 
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            FirebaseAnalytics.LogEvent("InGame_Fail_Number");
+            FirebaseAnalytics.LogEvent("InGame_Fail_Number_" + GameStateManager.instance.GameType.ToString());
 
             Debug.Log("숫자에 당첨되지 않았습니다");
         }

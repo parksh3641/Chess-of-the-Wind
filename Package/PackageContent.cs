@@ -10,9 +10,10 @@ public class PackageContent : MonoBehaviour
 
     public LocalizationContent titleText;
     public LocalizationContent infoText;
-    public GameObject valueObj;
+    public Text valueText;
 
     public CodelessIAPButton iapButton;
+    public LocalizationContent iapTotalPriceText;
     public LocalizationContent iapPriceText;
 
     public ReceiveContent[] receiveContents;
@@ -52,11 +53,13 @@ public class PackageContent : MonoBehaviour
         titleText.localizationName = "Package_" + packageType.ToString();
         titleText.ReLoad();
 
+        iapTotalPriceText.localizationName = "PackageTotal_" + packageType.ToString();
+        iapTotalPriceText.ReLoad();
+
         iapPriceText.localizationName = "PackagePrice_" + packageType.ToString();
         iapPriceText.ReLoad();
 
         lockedObj.SetActive(false);
-        valueObj.SetActive(true);
 
         infoText.localizationName = "BuyOnce";
 
@@ -66,24 +69,38 @@ public class PackageContent : MonoBehaviour
                 break;
             case PackageType.Newbie:
                 iapButton.productId = "shop.windchess.shopnewbie";
+
+                valueText.text = "400%";
                 break;
             case PackageType.Sliver:
                 iapButton.productId = "shop.windchess.shopsliver";
+
+                valueText.text = "400%";
                 break;
             case PackageType.Gold:
                 iapButton.productId = "shop.windchess.shopgold";
+
+                valueText.text = "400%";
                 break;
             case PackageType.Platinum:
                 iapButton.productId = "shop.windchess.shopplatinum";
+
+                valueText.text = "800%";
                 break;
             case PackageType.Diamond:
                 iapButton.productId = "shop.windchess.shopdiamond";
+
+                valueText.text = "800%";
                 break;
             case PackageType.Legend:
                 iapButton.productId = "shop.windchess.shoplegend";
+
+                valueText.text = "400%";
                 break;
             case PackageType.Supply:
                 iapButton.productId = "shop.windchess.shopsupply";
+
+                valueText.text = "400%";
                 break;
             case PackageType.Trials:
                 break;
@@ -92,7 +109,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyDailyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopDaily1 == 1)
                 {
@@ -104,7 +121,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyDailyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopDaily2 == 1)
                 {
@@ -116,7 +133,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyDailyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopDaily3 == 1)
                 {
@@ -128,7 +145,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyWeeklyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopWeekly1 == 1)
                 {
@@ -140,7 +157,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyWeeklyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopWeekly2 == 1)
                 {
@@ -152,7 +169,7 @@ public class PackageContent : MonoBehaviour
 
                 infoText.localizationName = "BuyWeeklyOne";
 
-                valueObj.SetActive(false);
+                valueText.text = "200%";
 
                 if (playerDataBase.ResetInfo.package_ShopWeekly3 == 1)
                 {

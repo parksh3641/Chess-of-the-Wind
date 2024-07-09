@@ -58,13 +58,13 @@ public class SellManager : MonoBehaviour
                 price *= 10;
                 break;
             case RankType.R:
-                price *= 20;
-                break;
-            case RankType.SR:
                 price *= 50;
                 break;
-            case RankType.SSR:
+            case RankType.SR:
                 price *= 100;
+                break;
+            case RankType.SSR:
+                price *= 250;
                 break;
             case RankType.UR:
                 price *= 500;

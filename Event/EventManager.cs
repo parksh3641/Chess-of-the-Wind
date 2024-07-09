@@ -44,6 +44,7 @@ public class EventManager : MonoBehaviour
 
     public List<RankUpContent> rankUpContentList = new List<RankUpContent>();
 
+    public ShopManager shopManager;
 
 
     string[] strArray = new string[2];
@@ -302,13 +303,13 @@ public class EventManager : MonoBehaviour
 
     public void InitializeWelcome()
     {
-        welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 3000);
-        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 5);
-        welcomeContentArray[2].receiveContent.Initialize(RewardType.Box_Normal, 10);
-        welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 15000);
-        welcomeContentArray[4].receiveContent.Initialize(RewardType.Box_Normal, 20);
+        welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 5000);
+        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_Epic, 5);
+        welcomeContentArray[2].receiveContent.Initialize(RewardType.UpgradeTicket, 30);
+        welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 50000);
+        welcomeContentArray[4].receiveContent.Initialize(RewardType.Box_Epic, 10);
         welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 100);
-        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Epic, 10);
+        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Speical, 10);
     }
 
     public void CheckWelcome()
@@ -337,65 +338,25 @@ public class EventManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddGold(3000);
+                PlayfabManager.instance.UpdateAddGold(5000);
                 break;
             case 1:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 5);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 5;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 5);
-                        break;
-                }
+                shopManager.OpenEpicBox(5);
                 break;
             case 2:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
-                        break;
-                }
+                ItemAnimManager.instance.GetUpgradeTicket(30);
                 break;
             case 3:
-                PlayfabManager.instance.UpdateAddGold(15000);
+                PlayfabManager.instance.UpdateAddGold(50000);
                 break;
             case 4:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 15;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 20);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 15;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 20);
-                        break;
-                }
+                shopManager.OpenEpicBox(10);
                 break;
             case 5:
                 ItemAnimManager.instance.GetUpgradeTicket(100);
                 break;
             case 6:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Epic = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Epic", 10);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Epic = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Epic", 10);
-                        break;
-                }
+                shopManager.OpenRandomBox(10);
                 break;
         }
 

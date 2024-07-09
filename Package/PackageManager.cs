@@ -104,7 +104,7 @@ public class PackageManager : MonoBehaviour
             packageContentArray[4].gameObject.SetActive(false);
         }
 
-        if (playerDataBase.ShopLegend == 0 && GameStateManager.instance.GameRankType == GameRankType.Legend_4)
+        if (playerDataBase.ShopLegend == 0 && GameStateManager.instance.GameRankType > GameRankType.Diamond_1)
         {
             packageContentArray[5].gameObject.SetActive(true);
         }

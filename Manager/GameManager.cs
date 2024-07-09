@@ -979,6 +979,10 @@ public class GameManager : MonoBehaviour
             {
                 gameEventManager.OnEventStart(ht["Event"].ToString());
             }
+            else if (GameStateManager.instance.GameType == GameType.NewBie && GameStateManager.instance.PlayRankType > GameRankType.Bronze_1)
+            {
+                gameEventManager.OnEventStart(ht["Event"].ToString());
+            }
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -1139,13 +1143,13 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("리타이어 승리");
 
-                FirebaseAnalytics.LogEvent("InGame_Win_Retire");
+                FirebaseAnalytics.LogEvent("InGame_Win_Retire_" + GameStateManager.instance.GameType.ToString());
             }
             else
             {
                 Debug.Log("승리");
 
-                FirebaseAnalytics.LogEvent("InGame_Win");
+                FirebaseAnalytics.LogEvent("InGame_Win_" + GameStateManager.instance.GameType.ToString());
             }
 
         }
@@ -1155,7 +1159,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("패배");
 
-            FirebaseAnalytics.LogEvent("InGame_Lose");
+            FirebaseAnalytics.LogEvent("InGame_Lose_" + GameStateManager.instance.GameType.ToString());
         }
         else if (number == 2)
         {
@@ -1163,7 +1167,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("상대방 항복으로 승리");
 
-            FirebaseAnalytics.LogEvent("InGame_Win_Surrender");
+            FirebaseAnalytics.LogEvent("InGame_Win_Surrender_" + GameStateManager.instance.GameType.ToString());
         }
         else
         {
@@ -1171,7 +1175,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("무승부");
 
-            FirebaseAnalytics.LogEvent("InGame_Tie");
+            FirebaseAnalytics.LogEvent("InGame_Tie_" + GameStateManager.instance.GameType.ToString());
         }
 
         timerAnimation.StopAnim();

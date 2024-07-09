@@ -13,6 +13,8 @@ public class PackageContent2 : MonoBehaviour
     public CodelessIAPButton iapButton;
     public LocalizationContent iapPriceText;
 
+    public Text valueText;
+
     public ReceiveContent[] receiveContents;
 
     public GameObject lockedObj;
@@ -52,6 +54,8 @@ public class PackageContent2 : MonoBehaviour
         iapPriceText.ReLoad();
 
         lockedObj.SetActive(true);
+
+        valueText.text = "400%";
 
         switch (type)
         {

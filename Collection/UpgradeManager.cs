@@ -287,7 +287,7 @@ public class UpgradeManager : MonoBehaviour
         {
             if(blockClass.rankType != RankType.UR)
             {
-                valuePlusText.localizationName = "";
+                valuePlusText.localizationName = "MaxLevel";
                 valuePlusText.plusText = "";
 
             //    valuePlusText.localizationName = "MaxUpgradeLevel";
@@ -745,13 +745,13 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        if(blockClass.rankType < RankType.R)
-        {
-            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+        //if(blockClass.rankType < RankType.R)
+        //{
+        //    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
-            NotionManager.instance.UseNotion(NotionType.NotSellBlock);
-            return;
-        }
+        //    NotionManager.instance.UseNotion(NotionType.NotSellBlock);
+        //    return;
+        //}
 
         sellManager.OpenSellView(blockClass, upgradeValue.GetValueNumber(blockClass.level));
     }

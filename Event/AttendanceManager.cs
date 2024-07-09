@@ -33,6 +33,8 @@ public class AttendanceManager : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
+    public ShopManager shopManager;
+
     PlayerDataBase playerDataBase;
     RankDataBase rankDataBase;
 
@@ -102,15 +104,15 @@ public class AttendanceManager : MonoBehaviour
         price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
 
         attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 3);
+        attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 10);
         attendanceContentArray[2].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_Normal, 3);
+        attendanceContentArray[3].receiveContent.Initialize(RewardType.Box_Normal, 10);
         attendanceContentArray[4].receiveContent.Initialize(RewardType.Gold, price);
-        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 3);
+        attendanceContentArray[5].receiveContent.Initialize(RewardType.Box_Normal, 10);
 
         receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
-        receiveContentArray[1].Initialize(RewardType.Box_Normal, 10);
-        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 50);
+        receiveContentArray[1].Initialize(RewardType.Box_Epic, 5);
+        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 100);
     }
 
     public void CheckAttendance()
@@ -168,66 +170,26 @@ public class AttendanceManager : MonoBehaviour
                 PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 1:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
-                        break;
-                }
+                shopManager.OpenNormalBox(10);
                 break;
             case 2:
                 PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 3:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
-                        break;
-                }
+                shopManager.OpenNormalBox(10);
                 break;
             case 4:
                 PlayfabManager.instance.UpdateAddGold(price);
                 break;
             case 5:
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 3);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 3;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 3);
-                        break;
-                }
+                shopManager.OpenNormalBox(10);
                 break;
             case 6:
                 PlayfabManager.instance.UpdateAddGold(price * 2);
 
-                switch (GameStateManager.instance.WindCharacterType)
-                {
-                    case WindCharacterType.Winter:
-                        playerDataBase.SnowBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
-                        break;
-                    case WindCharacterType.UnderWorld:
-                        playerDataBase.UnderworldBox_Normal = 10;
-                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
-                        break;
-                }
+                shopManager.OpenEpicBox(5);
 
-                ItemAnimManager.instance.GetUpgradeTicket(50);
+                ItemAnimManager.instance.GetUpgradeTicket(100);
 
                 clearObj.SetActive(true);
 

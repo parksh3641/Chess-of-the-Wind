@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -143,6 +144,8 @@ public class AchievementManager : MonoBehaviour
 
             PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Millage, 100);
 
+            FirebaseAnalytics.LogEvent("Achievement_OpenBox");
+
             shopManager.OpenEpicBox(1);
 
             SoundManager.instance.PlaySFX(GameSfxType.Success);
@@ -185,6 +188,8 @@ public class AchievementManager : MonoBehaviour
 
         alarmObj.SetActive(false);
         achievementAlarmObj.SetActive(false);
+
+        FirebaseAnalytics.LogEvent("Achievement_" + type.ToString());
     }
 
 

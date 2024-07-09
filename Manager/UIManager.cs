@@ -839,6 +839,7 @@ public class UIManager : MonoBehaviour
         else
         {
             Application.OpenURL("https://play.google.com/store/apps/details?id=com.bluebook.windchess");
+
             Debug.Log("업데이트 에러");
         }
     }
@@ -907,7 +908,7 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
 #endif
 
-        FirebaseAnalytics.LogEvent("Open__AppReview_Event");
+        FirebaseAnalytics.LogEvent("Open_AppReview_Event");
     }
 
     public void OpenReview()
@@ -923,7 +924,7 @@ public class UIManager : MonoBehaviour
         playerDataBase.AppReview = 1;
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("AppReview", 1);
 
-        FirebaseAnalytics.LogEvent("Open__AppReview");
+        FirebaseAnalytics.LogEvent("Open_AppReview");
     }
 
     public void ComingSoon()
