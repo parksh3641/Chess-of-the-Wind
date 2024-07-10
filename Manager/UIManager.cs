@@ -646,7 +646,7 @@ public class UIManager : MonoBehaviour
                 {
                     ResetManager.instance.SetResetInfo(ResetType.DailyWin);
 
-                    dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + " : " + MoneyUnitString.ToCurrencyString(gold)
+                    dailyWinText.text = LocalizationManager.instance.GetString("DailyWin") + "   " + MoneyUnitString.ToCurrencyString(gold)
                         + "  (+" + MoneyUnitString.ToCurrencyString((int)(gold * 0.5f)) + ")";
 
                     gold += (int)(gold * 0.5f);

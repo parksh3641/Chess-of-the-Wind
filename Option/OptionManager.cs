@@ -61,11 +61,19 @@ public class OptionManager : MonoBehaviour
         {
             optionView.SetActive(true);
 
+#if UNITY_EDITOR
+            coupon.SetActive(true);
+            deleteAccount.SetActive(true);
+#elif UNITY_ANDROID
+            coupon.SetActive(true);
+            deleteAccount.SetActive(false);
+#elif UNITY_IOS
             if (!first)
             {
-                PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
                 first = true;
+                PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
             }
+#endif
 
             Initialize();
 
@@ -82,14 +90,7 @@ public class OptionManager : MonoBehaviour
     }
     void CheckVersion(bool check)
     {
-#if UNITY_EDITOR
-        coupon.SetActive(true);
-        deleteAccount.SetActive(true);
-#elif UNITY_ANDROID
-        coupon.SetActive(true);
-        deleteAccount.SetActive(false);
-#elif UNITY_IOS
-        if(check)
+        if (check)
         {
             coupon.SetActive(true);
             deleteAccount.SetActive(false);
@@ -99,7 +100,6 @@ public class OptionManager : MonoBehaviour
             coupon.SetActive(false);
             deleteAccount.SetActive(true);
         }
-#endif
     }
 
     public void OpenOptionView_InGame()
