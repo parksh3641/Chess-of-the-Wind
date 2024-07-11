@@ -303,13 +303,13 @@ public class EventManager : MonoBehaviour
 
     public void InitializeWelcome()
     {
-        welcomeContentArray[0].receiveContent.Initialize(RewardType.Gold, 5000);
-        welcomeContentArray[1].receiveContent.Initialize(RewardType.Box_Epic, 5);
-        welcomeContentArray[2].receiveContent.Initialize(RewardType.UpgradeTicket, 30);
-        welcomeContentArray[3].receiveContent.Initialize(RewardType.Gold, 50000);
-        welcomeContentArray[4].receiveContent.Initialize(RewardType.Box_Epic, 10);
-        welcomeContentArray[5].receiveContent.Initialize(RewardType.UpgradeTicket, 100);
-        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Speical, 10);
+        welcomeContentArray[0].receiveContent.Initialize(RewardType.Box_Epic, 10);
+        welcomeContentArray[1].receiveContent.Initialize(RewardType.UpgradeTicket, 30);
+        welcomeContentArray[2].receiveContent.Initialize(RewardType.Gold, 50000);
+        welcomeContentArray[3].receiveContent.Initialize(RewardType.Box_Speical, 10);
+        welcomeContentArray[4].receiveContent.Initialize(RewardType.UpgradeTicket, 100);
+        welcomeContentArray[5].receiveContent.Initialize(RewardType.Gold, 100000);
+        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Speical, 20);
     }
 
     public void CheckWelcome()
@@ -338,25 +338,25 @@ public class EventManager : MonoBehaviour
         switch (number)
         {
             case 0:
-                PlayfabManager.instance.UpdateAddGold(5000);
-                break;
-            case 1:
-                shopManager.OpenEpicBox(5);
-                break;
-            case 2:
-                ItemAnimManager.instance.GetUpgradeTicket(30);
-                break;
-            case 3:
-                PlayfabManager.instance.UpdateAddGold(50000);
-                break;
-            case 4:
                 shopManager.OpenEpicBox(10);
                 break;
-            case 5:
+            case 1:
+                ItemAnimManager.instance.GetUpgradeTicket(30);
+                break;
+            case 2:
+                PlayfabManager.instance.UpdateAddGold(50000);
+                break;
+            case 3:
+                shopManager.OpenRandomBox(10);
+                break;
+            case 4:
                 ItemAnimManager.instance.GetUpgradeTicket(100);
                 break;
+            case 5:
+                PlayfabManager.instance.UpdateAddGold(100000);
+                break;
             case 6:
-                shopManager.OpenRandomBox(10);
+                shopManager.OpenRandomBox(20);
                 break;
         }
 

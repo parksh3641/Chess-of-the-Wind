@@ -125,6 +125,8 @@ public class PackageManager2 : MonoBehaviour
             {
                 ChangeTopMenu(0);
             }
+
+            FirebaseAnalytics.LogEvent("Open_Package");
         }
         else
         {

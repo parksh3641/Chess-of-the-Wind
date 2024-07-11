@@ -70,19 +70,19 @@ public class WelcomeContent : MonoBehaviour
                     }
                     break;
                 case 4:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
-                    {
-                        lockObj.SetActive(false);
-                    }
-                    break;
-                case 5:
                     if (GameStateManager.instance.GameRankType > GameRankType.Sliver_4)
                     {
                         lockObj.SetActive(false);
                     }
                     break;
+                case 5:
+                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_3)
+                    {
+                        lockObj.SetActive(false);
+                    }
+                    break;
                 case 6:
-                    if (GameStateManager.instance.GameRankType > GameRankType.Gold_2)
+                    if (GameStateManager.instance.GameRankType > GameRankType.Sliver_2)
                     {
                         lockObj.SetActive(false);
                     }

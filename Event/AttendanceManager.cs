@@ -112,7 +112,7 @@ public class AttendanceManager : MonoBehaviour
 
         receiveContentArray[0].Initialize(RewardType.Gold, price * 2);
         receiveContentArray[1].Initialize(RewardType.Box_Epic, 5);
-        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 100);
+        receiveContentArray[2].Initialize(RewardType.UpgradeTicket, 30);
     }
 
     public void CheckAttendance()
@@ -189,7 +189,7 @@ public class AttendanceManager : MonoBehaviour
 
                 shopManager.OpenEpicBox(5);
 
-                ItemAnimManager.instance.GetUpgradeTicket(100);
+                ItemAnimManager.instance.GetUpgradeTicket(30);
 
                 clearObj.SetActive(true);
 

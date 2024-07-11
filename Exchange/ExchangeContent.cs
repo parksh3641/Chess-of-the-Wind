@@ -268,5 +268,8 @@ public class ExchangeContent : MonoBehaviour
         Initialize(blockType, rankType, inventoryManager);
 
         FirebaseAnalytics.LogEvent("Exchange : " +  blockType + "_" + rankType);
+
+        playerDataBase.SynthesisGetBlock += 1;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("SynthesisGetBlock", playerDataBase.SynthesisGetBlock);
     }
 }
