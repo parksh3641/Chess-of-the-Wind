@@ -7,8 +7,6 @@ public class SystemManager : MonoBehaviour
 {
     void Start()
     {
-        QualitySettings.SetQualityLevel(2);
-
         GameStateManager.instance.IsLogin = false;
 
         if (GameStateManager.instance.Language == LanguageType.Default)
@@ -17,10 +15,10 @@ public class SystemManager : MonoBehaviour
             {
                 GameStateManager.instance.Language = LanguageType.Korean;
             }
-            //else if (Application.systemLanguage == SystemLanguage.Japanese)
-            //{
-            //    GameStateManager.instance.Language = LanguageType.Japanese;
-            //}
+            else if (Application.systemLanguage == SystemLanguage.Japanese)
+            {
+                GameStateManager.instance.Language = LanguageType.Japanese;
+            }
             else if (Application.systemLanguage == SystemLanguage.Chinese)
             {
                 GameStateManager.instance.Language = LanguageType.Chinese;
@@ -75,8 +73,8 @@ public class SystemManager : MonoBehaviour
             }
         }
 
-        //PlayerPrefs.SetString("LoadScene", "MainScene");
-        //SceneManager.LoadScene("LoadScene");
+        QualitySettings.SetQualityLevel(2);
+
         SceneManager.LoadScene("MainScene");
     }
 }

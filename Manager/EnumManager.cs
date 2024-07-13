@@ -214,7 +214,8 @@ public enum OptionType
     Music,
     Sfx,
     Vibration,
-    SleepMode
+    SleepMode,
+    Graphics
 }
 
 public enum GameBgmType

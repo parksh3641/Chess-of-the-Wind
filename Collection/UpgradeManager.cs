@@ -791,15 +791,6 @@ public class UpgradeManager : MonoBehaviour
 
     public void EquipButton()
     {
-        //if(blockClass.blockType != BlockType.Pawn_Under)
-        //{
-        //    equipManager.OpenEquipView(blockClass);
-        //}
-        //else
-        //{
-        //    equipManager.ChangeNewbie(blockClass);
-        //}
-
         CloseUpgradeView();
 
         if(unEquip)

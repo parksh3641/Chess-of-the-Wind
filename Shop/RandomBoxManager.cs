@@ -1092,6 +1092,15 @@ public class RandomBoxManager : MonoBehaviour
             }
         }
 
+        if(boxCountSave != prize.Count)
+        {
+            boxCount = boxCountSave - prize.Count;
+            RandomBox();
+
+            Debug.Log("오류가 발생하여 남은 개수만큼 다시 상자를 뽑습니다");
+            return;
+        }
+
         isStart = true;
 
         BoxOff();
@@ -1411,6 +1420,12 @@ public class RandomBoxManager : MonoBehaviour
             boxOpenView.SetActive(true);
 
             blockUIEffect.SetActive(false);
+
+            if(prize_Block[boxIndex] == null)
+            {
+
+                return;
+            }
 
             if (prize_Block[boxIndex].boxInfoType.ToString().Contains(RankType.SSR.ToString()))
             {

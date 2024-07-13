@@ -223,10 +223,10 @@ public class ShopManager : MonoBehaviour
 
     void Initialize_Count()
     {
-        dailyCountText[0].text = playerDataBase.ResetInfo.dailyNormalBox_1 + "/30";
-        dailyCountText[1].text = playerDataBase.ResetInfo.dailyNormalBox_10 + "/3";
-        dailyCountText[2].text = playerDataBase.ResetInfo.dailyEpicBox_1 + "/30";
-        dailyCountText[3].text = playerDataBase.ResetInfo.dailyEpicBox_10 + "/3";
+        dailyCountText[0].text = playerDataBase.ResetInfo.dailyNormalBox_1 + "/10";
+        dailyCountText[1].text = playerDataBase.ResetInfo.dailyNormalBox_10 + "/5";
+        dailyCountText[2].text = playerDataBase.ResetInfo.dailyEpicBox_1 + "/10";
+        dailyCountText[3].text = playerDataBase.ResetInfo.dailyEpicBox_10 + "/5";
     }
 
     public void CloseShopView()
@@ -332,7 +332,7 @@ public class ShopManager : MonoBehaviour
 
     public void Buy_NormalBox(int number)
     {
-        int price = 5000 * number;
+        int price = 25000 * number;
 
         if (number >= 10)
         {

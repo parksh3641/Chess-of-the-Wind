@@ -53,6 +53,15 @@ public class OptionManager : MonoBehaviour
             Application.targetFrameRate = 90;
 #endif
         }
+
+        //if (GameStateManager.instance.Graphics)
+        //{
+        //    QualitySettings.SetQualityLevel(4);
+        //}
+        //else
+        //{
+        //    QualitySettings.SetQualityLevel(2);
+        //}
     }
 
     public void OpenOptionView()
@@ -163,7 +172,6 @@ public class OptionManager : MonoBehaviour
                 break;
             case OptionType.SleepMode:
                 GameStateManager.instance.SleepMode = true;
-
 #if UNITY_EDITOR
 
 #elif UNITY_ANDROID
@@ -171,6 +179,11 @@ public class OptionManager : MonoBehaviour
 #elif UNITY_IOS
             Application.targetFrameRate = 60;
 #endif
+                break;
+            case OptionType.Graphics:
+                GameStateManager.instance.Graphics = true;
+
+                QualitySettings.SetQualityLevel(4);
                 break;
         }
     }
@@ -201,13 +214,18 @@ public class OptionManager : MonoBehaviour
             Application.targetFrameRate = 90;
 #endif
                 break;
+            case OptionType.Graphics:
+                GameStateManager.instance.Graphics = false;
+
+                QualitySettings.SetQualityLevel(2);
+                break;
         }
     }
 
 
     public void RestorePurchase()
     {
-        if(PlayfabManager.instance.isActive) PlayfabManager.instance.RestorePurchases();
+        PlayfabManager.instance.RestorePurchases();
 
         FirebaseAnalytics.LogEvent("RestorePurchase");
     }
@@ -233,13 +251,7 @@ public class OptionManager : MonoBehaviour
 
     public void BugReport()
     {
-#if UNITY_ANDROID
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
-#elif UNITY_IOS
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
-#else
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
-#endif
+        Application.OpenURL("https://forms.gle/CixT4KwjQvQL2yDD7");
 
         FirebaseAnalytics.LogEvent("Open_Feedback");
     }
@@ -247,13 +259,13 @@ public class OptionManager : MonoBehaviour
     public void RateUs()
     {
 #if UNITY_ANDROID
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623");
 #elif UNITY_IOS
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://apps.apple.com/kr/app/windchess-timing-of-destiny/id6455494059");
 #else
-        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=KR");
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623");
 #endif
 
-        FirebaseAnalytics.LogEvent("Open_RateUs");
+        FirebaseAnalytics.LogEvent("Open_MoreGames");
     }
 }

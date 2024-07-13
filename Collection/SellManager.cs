@@ -85,6 +85,14 @@ public class SellManager : MonoBehaviour
             return;
         }
 
+        if(playerDataBase.GetBlockClass().Count == 1)
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+
+            NotionManager.instance.UseNotion(NotionType.DontSellEquipBlock);
+            return;
+        }
+
         upgradeManager.SellBlockOne(blockClass.instanceId);
         PlayfabManager.instance.UpdateAddGold(price);
 

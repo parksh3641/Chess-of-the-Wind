@@ -132,11 +132,6 @@ public class CollectionManager : MonoBehaviour
             }
             else
             {
-                //if (blockList.Count != playerDataBase.GetBlockClass().Count)
-                //{
-                //    UpdateCollection();
-                //}
-
                 if(change)
                 {
                     change = false;
@@ -234,7 +229,7 @@ public class CollectionManager : MonoBehaviour
     {
         blockList = new List<BlockClass>(blockList.Count);
 
-        if(blockList.Count == 0)
+        if(playerDataBase.GetBlockClass().Count == 0)
         {
             if(GameStateManager.instance.WindCharacterType == WindCharacterType.Winter)
             {
@@ -251,6 +246,8 @@ public class CollectionManager : MonoBehaviour
                 PlayfabManager.instance.GrantItemsToUser("Kingdom of the Underworld", itemList);
             }
         }
+
+        Debug.Log("총 블럭 개수 : " + playerDataBase.GetBlockClass().Count);
 
         for (int i = 0; i < playerDataBase.GetBlockClass().Count; i ++)
         {
@@ -303,7 +300,9 @@ public class CollectionManager : MonoBehaviour
     public void UpdateCollection() //변경점이 생겼을 경우 업데이트
     {
         Debug.Log("컬렉션 변경 점 업데이트");
+        Debug.Log("총 블럭 개수 : " + playerDataBase.GetBlockClass().Count);
 
+        blockList.Clear();
         blockList = new List<BlockClass>(blockList.Count);
 
         for (int i = 0; i < playerDataBase.GetBlockClass().Count; i++)

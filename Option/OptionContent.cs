@@ -32,6 +32,9 @@ public class OptionContent : MonoBehaviour
             case OptionType.SleepMode:
                 ChangeState(GameStateManager.instance.SleepMode);
                 break;
+            case OptionType.Graphics:
+                ChangeState(GameStateManager.instance.Graphics);
+                break;
         }
     }
 

@@ -69,6 +69,7 @@ public class GameStateManager : MonoBehaviour
         public bool sfx = true;
         public bool vibration = true;
         public bool sleepMode = false;
+        public bool graphics = false;
         public bool appReview = false;
 
         [Space]
@@ -582,6 +583,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.sleepMode = value;
+            SaveFile();
+        }
+    }
+
+    public bool Graphics
+    {
+        get
+        {
+            return gameSettings.graphics;
+        }
+        set
+        {
+            gameSettings.graphics = value;
             SaveFile();
         }
     }
