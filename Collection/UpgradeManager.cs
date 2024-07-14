@@ -53,6 +53,7 @@ public class UpgradeManager : MonoBehaviour
     public GameObject testMode;
 
     int gold = 0;
+    int needGold = 0;
     int upgradeTicket = 0;
     int level = 0;
     int needTicket = 0;
@@ -244,7 +245,27 @@ public class UpgradeManager : MonoBehaviour
         goldText.localizationName = "NeedGold_Upgrade";
         goldText.ReLoad();
 
-        goldNumberText.text = MoneyUnitString.ToCurrencyString(upgradeInformation.needGold);
+        needGold = upgradeInformation.needGold;
+
+        switch (blockClass.rankType)
+        {
+            case RankType.N:
+                break;
+            case RankType.R:
+                needGold *= 5;
+                break;
+            case RankType.SR:
+                needGold *= 10;
+                break;
+            case RankType.SSR:
+                needGold *= 20;
+                break;
+            case RankType.UR:
+                needGold *= 50;
+                break;
+        }
+
+        goldNumberText.text = MoneyUnitString.ToCurrencyString(needGold);
 
         upgradeTicket = playerDataBase.GetUpgradeTicket(RankType.N);
 
@@ -367,7 +388,7 @@ public class UpgradeManager : MonoBehaviour
         {
             if (blockClass.level > 0)
             {
-                if(upgradeTicket >= needTicket && gold >= upgradeInformation.needGold)
+                if(upgradeTicket >= needTicket && gold >= needGold)
                 {
                     upgradeButton.sprite = upgradeButtonArray[1];
 
@@ -382,7 +403,7 @@ public class UpgradeManager : MonoBehaviour
             {
                 if (playerDataBase.ChallengeCount < 5)
                 {
-                    if (blockClass.level < 1 && gold >= upgradeInformation.needGold)
+                    if (blockClass.level < 1 && gold >= needGold)
                     {
                         upgradeButton.sprite = upgradeButtonArray[1];
 
@@ -395,7 +416,7 @@ public class UpgradeManager : MonoBehaviour
                 }
                 else
                 {
-                    if (gold >= upgradeInformation.needGold)
+                    if (gold >= needGold)
                     {
                         upgradeButton.sprite = upgradeButtonArray[1];
 
@@ -458,7 +479,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        if (gold < upgradeInformation.needGold)
+        if (gold < needGold)
         {
             SoundManager.instance.PlaySFX(GameSfxType.Wrong);
 
@@ -474,7 +495,7 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        PlayfabManager.instance.UpdateSubtractGold(upgradeInformation.needGold);
+        PlayfabManager.instance.UpdateSubtractGold(needGold);
 
         playerDataBase.UseUpgradeTicketCount(RankType.N, needTicket);
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("UpgradeTicket", playerDataBase.GetUpgradeTicket(RankType.N));

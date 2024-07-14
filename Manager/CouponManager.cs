@@ -48,7 +48,7 @@ public class CouponManager : MonoBehaviour
             return;
         }
 
-        switch (inputFieldText.text.ToLower())
+        switch (inputFieldText.text.ToUpper())
         {
             case "GRANDOPEN":
                 if (System.DateTime.Now >= new System.DateTime(2024, 06, 25))

@@ -351,6 +351,77 @@ public class PackageManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.BuyShopItem);
 
         Invoke("OffObj", 0.5f);
+        Invoke("Delay", 0.5f);
+    }
+
+    void Delay()
+    {
+        switch (packageType)
+        {
+            case PackageType.Default:
+                break;
+            case PackageType.Newbie:
+                packageContentArray[0].gameObject.SetActive(false);
+                break;
+            case PackageType.Sliver:
+                packageContentArray[1].gameObject.SetActive(false);
+                break;
+            case PackageType.Gold:
+                packageContentArray[2].gameObject.SetActive(false);
+                break;
+            case PackageType.Platinum:
+                packageContentArray[3].gameObject.SetActive(false);
+                break;
+            case PackageType.Diamond:
+                packageContentArray[4].gameObject.SetActive(false);
+                break;
+            case PackageType.Legend:
+                packageContentArray[5].gameObject.SetActive(false);
+                break;
+
+            case PackageType.Daily1:
+                break;
+            case PackageType.Daily2:
+                break;
+            case PackageType.Daily3:
+                break;
+            case PackageType.Daily4:
+                break;
+            case PackageType.Daily5:
+                break;
+            case PackageType.Weekly1:
+                break;
+            case PackageType.Weekly2:
+                break;
+            case PackageType.Weekly3:
+                break;
+            case PackageType.Weekly4:
+                break;
+            case PackageType.Weekly5:
+                break;
+            case PackageType.Monthly1:
+                break;
+            case PackageType.Monthly2:
+                break;
+            case PackageType.Monthly3:
+                break;
+            case PackageType.Monthly4:
+                break;
+            case PackageType.Monthly5:
+                break;
+            case PackageType.ShopDaily1:
+                break;
+            case PackageType.ShopDaily2:
+                break;
+            case PackageType.ShopDaily3:
+                break;
+            case PackageType.ShopWeekly1:
+                break;
+            case PackageType.ShopWeekly2:
+                break;
+            case PackageType.ShopWeekly3:
+                break;
+        }
     }
 
     public void OffObj()

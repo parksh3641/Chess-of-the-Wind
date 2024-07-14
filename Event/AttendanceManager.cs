@@ -101,7 +101,7 @@ public class AttendanceManager : MonoBehaviour
 
     public void Initialize()
     {
-        price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes;
+        price = rankDataBase.GetRankInformation(GameStateManager.instance.GameRankType).stakes / 2;
 
         attendanceContentArray[0].receiveContent.Initialize(RewardType.Gold, price);
         attendanceContentArray[1].receiveContent.Initialize(RewardType.Box_Normal, 10);

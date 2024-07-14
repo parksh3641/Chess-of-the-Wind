@@ -107,7 +107,7 @@ public class MailContent : MonoBehaviour
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("ReviewNumber", 1);
                 break;
             case "Open":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Epic;
 
                 count = 10;
                 titleText.localizationName = "OpenCouponInfo";
