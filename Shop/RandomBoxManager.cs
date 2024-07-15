@@ -365,10 +365,10 @@ public class RandomBoxInfo
         randomBox_Underworld_List[15].SetPercent(new float[] { 1, 1, 1, 0.1f, 0 }, BoxType.Speical);
 
 
-        randomBox_Underworld_List[16].boxInfoType = BoxInfoType.Rook_V2_2_N; //지하세계 - 세베라
-        randomBox_Underworld_List[17].boxInfoType = BoxInfoType.Rook_V2_2_R;
-        randomBox_Underworld_List[18].boxInfoType = BoxInfoType.Rook_V2_2_SR;
-        randomBox_Underworld_List[19].boxInfoType = BoxInfoType.Rook_V2_2_SSR;
+        randomBox_Underworld_List[16].boxInfoType = BoxInfoType.Rook_V4_2_N; //지하세계 - 세베라
+        randomBox_Underworld_List[17].boxInfoType = BoxInfoType.Rook_V4_2_R;
+        randomBox_Underworld_List[18].boxInfoType = BoxInfoType.Rook_V4_2_SR;
+        randomBox_Underworld_List[19].boxInfoType = BoxInfoType.Rook_V4_2_SSR;
 
         randomBox_Underworld_List[16].SetPercent(new float[] { 0.2f, 2, 2, 2, 0 }, BoxType.Normal);
         randomBox_Underworld_List[17].SetPercent(new float[] { 0.05f, 0.5f, 0.5f, 0.5f, 0 }, BoxType.Normal);
@@ -387,10 +387,10 @@ public class RandomBoxInfo
 
 
 
-        randomBox_Underworld_List[20].boxInfoType = BoxInfoType.LeftQueen_3_N; //지하세계 - 베로니카
-        randomBox_Underworld_List[21].boxInfoType = BoxInfoType.LeftQueen_3_R;
-        randomBox_Underworld_List[22].boxInfoType = BoxInfoType.LeftQueen_3_SR;
-        randomBox_Underworld_List[23].boxInfoType = BoxInfoType.LeftQueen_3_SSR;
+        randomBox_Underworld_List[20].boxInfoType = BoxInfoType.RightQueen_3_N; //지하세계 - 베로니카
+        randomBox_Underworld_List[21].boxInfoType = BoxInfoType.RightQueen_3_R;
+        randomBox_Underworld_List[22].boxInfoType = BoxInfoType.RightQueen_3_SR;
+        randomBox_Underworld_List[23].boxInfoType = BoxInfoType.RightQueen_3_SSR;
 
         randomBox_Underworld_List[20].SetPercent(new float[] { 2, 0.2f, 2, 0, 0 }, BoxType.Normal);
         randomBox_Underworld_List[21].SetPercent(new float[] { 0.5f, 0.05f, 0.5f, 0, 0 }, BoxType.Normal);
