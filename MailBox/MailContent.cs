@@ -113,7 +113,7 @@ public class MailContent : MonoBehaviour
                 titleText.localizationName = "OpenCouponInfo";
                 break;
             case "Update":
-                rewardType = RewardType.Box_Normal;
+                rewardType = RewardType.Box_Epic;
 
                 count = 10;
                 titleText.localizationName = "UpdateCouponInfo";

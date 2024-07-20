@@ -479,6 +479,15 @@ public class Piece
 
         return check;
     }
+
+    public void ResetPiece()
+    {
+        index1 = 0;
+        index2 = 0;
+        index3 = 0;
+        index4 = 0;
+        index5 = 0;
+    }
 }
 
 

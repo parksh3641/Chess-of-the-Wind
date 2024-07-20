@@ -70,6 +70,11 @@ public class OptionManager : MonoBehaviour
         {
             optionView.SetActive(true);
 
+            for (int i = 0; i < bottomContents.Length; i++)
+            {
+                bottomContents[i].SetActive(true);
+            }
+
 #if UNITY_EDITOR
             coupon.SetActive(true);
             deleteAccount.SetActive(true);
@@ -77,19 +82,10 @@ public class OptionManager : MonoBehaviour
             coupon.SetActive(true);
             deleteAccount.SetActive(false);
 #elif UNITY_IOS
-            if (!first)
-            {
-                first = true;
-                PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
-            }
+            PlayfabManager.instance.GetTitleInternalData("Coupon", CheckVersion);
 #endif
 
             Initialize();
-
-            for (int i = 0; i < bottomContents.Length; i++)
-            {
-                bottomContents[i].SetActive(true);
-            }
         }
         else
         {

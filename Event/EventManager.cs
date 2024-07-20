@@ -231,16 +231,13 @@ public class EventManager : MonoBehaviour
             return;
         }
 
-        switch (GameStateManager.instance.WindCharacterType)
+        if(playerDataBase.WelcomeBoxCount < 7)
         {
-            case WindCharacterType.Winter:
-                playerDataBase.SnowBox_Normal = 10;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("SnowBox_Normal", 10);
-                break;
-            case WindCharacterType.UnderWorld:
-                playerDataBase.UnderworldBox_Normal = 10;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("UnderworldBox_Normal", 10);
-                break;
+            shopManager.OpenNormalBox(10);
+        }
+        else
+        {
+            shopManager.OpenNormalBox(20);
         }
 
         playerDataBase.WelcomeBoxCount += 1;
@@ -309,7 +306,7 @@ public class EventManager : MonoBehaviour
         welcomeContentArray[3].receiveContent.Initialize(RewardType.Box_Speical, 10);
         welcomeContentArray[4].receiveContent.Initialize(RewardType.UpgradeTicket, 100);
         welcomeContentArray[5].receiveContent.Initialize(RewardType.Gold, 100000);
-        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Speical, 20);
+        welcomeContentArray[6].receiveContent.Initialize(RewardType.Box_Speical, 10);
     }
 
     public void CheckWelcome()
@@ -356,7 +353,7 @@ public class EventManager : MonoBehaviour
                 PlayfabManager.instance.UpdateAddGold(100000);
                 break;
             case 6:
-                shopManager.OpenRandomBox(20);
+                shopManager.OpenRandomBox(10);
                 break;
         }
 

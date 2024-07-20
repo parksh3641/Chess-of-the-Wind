@@ -1462,12 +1462,36 @@ public class RandomBoxManager : MonoBehaviour
                             case 0:
                                 getGold = Random.Range(5000, 10001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
                                 break;
                             case 1:
                                 getGold = Random.Range(10000, 20001);
+
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
 
                                 getGold = RoundToNearestTens(getGold);
 
@@ -1476,6 +1500,18 @@ public class RandomBoxManager : MonoBehaviour
                             case 2:
                                 getGold = Random.Range(20000, 30001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
@@ -1483,12 +1519,36 @@ public class RandomBoxManager : MonoBehaviour
                             case 3:
                                 getGold = Random.Range(30000, 40001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
                                 break;
                             case 4:
                                 getGold = Random.Range(40000, 50001);
+
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
 
                                 getGold = RoundToNearestTens(getGold);
 
@@ -1503,12 +1563,36 @@ public class RandomBoxManager : MonoBehaviour
                             case 0:
                                 getGold = Random.Range(50000, 60001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
                                 break;
                             case 1:
                                 getGold = Random.Range(60000, 70001);
+
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
 
                                 getGold = RoundToNearestTens(getGold);
 
@@ -1517,6 +1601,18 @@ public class RandomBoxManager : MonoBehaviour
                             case 2:
                                 getGold = Random.Range(70000, 80001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
@@ -1524,12 +1620,36 @@ public class RandomBoxManager : MonoBehaviour
                             case 3:
                                 getGold = Random.Range(80000, 90001);
 
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
+
                                 getGold = RoundToNearestTens(getGold);
 
                                 countStr = getGold.ToString();
                                 break;
                             case 4:
                                 getGold = Random.Range(90000, 100001);
+
+                                switch (boxType)
+                                {
+                                    case BoxType.Normal:
+                                        getGold /= 4;
+                                        break;
+                                    case BoxType.Epic:
+                                        getGold /= 2;
+                                        break;
+                                    case BoxType.Speical:
+                                        break;
+                                }
 
                                 getGold = RoundToNearestTens(getGold);
 
@@ -1599,7 +1719,7 @@ public class RandomBoxManager : MonoBehaviour
                         break;
                 }
 
-                if(getGold > 0)
+                if (getGold > 0)
                 {
                     totalgold += getGold;
 

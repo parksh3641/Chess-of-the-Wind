@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -101,6 +102,10 @@ public class GameManager : MonoBehaviour
     private float plusAiMoney = 0; //Ai가 획득한 돈
     private bool aiMoveBlock = false; //확률적으로 Ai가 0초 남기고 위치를 바꿉니다
     private bool aiEmote = false;
+
+    private float value; //당첨된 금액
+    private float value_Ai;
+    private int blockLevel, compareValue, myNumber, myBlockLevel, myBlockLevel2;
 
     private int halfMoney = 0;
     private int halfOtherMoney = 0;
@@ -726,13 +731,12 @@ public class GameManager : MonoBehaviour
         blockClassNewbie = playerDataBase.GetBlockClass(playerDataBase.Newbie);
 
         limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.PlayRankType) - 1;
-        int myLevel = 0;
 
-        myLevel = blockClassNewbie.level;
+        myBlockLevel = blockClassNewbie.level;
 
-        if (myLevel > limitLevel)
+        if (myBlockLevel > limitLevel)
         {
-            myLevel = limitLevel;
+            myBlockLevel = limitLevel;
             blockClassNewbie.level = limitLevel;
         }
 
@@ -745,11 +749,11 @@ public class GameManager : MonoBehaviour
             windGranularity += 1;
         }
 
-        int value = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myLevel);
+        myBlockLevel2 = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myBlockLevel);
 
-        newbieBlockContent.InGame_Initialize(blockClassNewbie, 3, value);
-        newbieBlockContent.InGame_SetLevel(myLevel);
-        bettingValue[3] = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myLevel);
+        newbieBlockContent.InGame_Initialize(blockClassNewbie, 3, myBlockLevel2);
+        newbieBlockContent.InGame_SetLevel(myBlockLevel);
+        bettingValue[3] = upgradeDataBase.GetUpgradeValue(blockClassNewbie.rankType).GetValueNumber(myBlockLevel);
 
         bettingSizeList[3] = blockDataBase.GetBlockInfomation(blockClassNewbie.blockType).GetSize();
 
@@ -795,7 +799,6 @@ public class GameManager : MonoBehaviour
         //}
 
         limitLevel = rankDataBase.GetLimitLevel(GameStateManager.instance.PlayRankType) - 1;
-        int myLevel = 0;
 
         windMax = 0;
         windGranularity = 0;
@@ -806,13 +809,13 @@ public class GameManager : MonoBehaviour
             {
                 blockClassArmor = playerDataBase.GetBlockClass(playerDataBase.Armor);
 
-                myLevel = blockClassArmor.level;
+                myBlockLevel = blockClassArmor.level;
 
                 blockContentList[0].gameObject.SetActive(true);
 
-                if (myLevel > limitLevel)
+                if (myBlockLevel > limitLevel)
                 {
-                    myLevel = limitLevel;
+                    myBlockLevel = limitLevel;
                     blockClassArmor.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
@@ -828,11 +831,11 @@ public class GameManager : MonoBehaviour
                     windGranularity += 1;
                 }
 
-                int value = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
+                myBlockLevel2 = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myBlockLevel);
 
-                blockContentList[0].InGame_Initialize(blockClassArmor, 0, value);
-                blockContentList[0].InGame_SetLevel(myLevel);
-                bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myLevel);
+                blockContentList[0].InGame_Initialize(blockClassArmor, 0, myBlockLevel2);
+                blockContentList[0].InGame_SetLevel(myBlockLevel);
+                bettingValue[0] = upgradeDataBase.GetUpgradeValue(blockClassArmor.rankType).GetValueNumber(myBlockLevel);
                 bettingSizeList[0] = blockDataBase.GetBlockInfomation(blockClassArmor.blockType).GetSize();
 
                 //Debug.Log("아머를 장착했습니다");
@@ -849,13 +852,13 @@ public class GameManager : MonoBehaviour
             {
                 blockClassWeapon = playerDataBase.GetBlockClass(playerDataBase.Weapon);
 
-                myLevel = blockClassWeapon.level;
+                myBlockLevel = blockClassWeapon.level;
 
                 blockContentList[1].gameObject.SetActive(true);
 
-                if (myLevel > limitLevel)
+                if (myBlockLevel > limitLevel)
                 {
-                    myLevel = limitLevel;
+                    myBlockLevel = limitLevel;
                     blockClassWeapon.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
@@ -871,11 +874,11 @@ public class GameManager : MonoBehaviour
                     windGranularity += 1;
                 }
 
-                int value2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
+                myBlockLevel2 = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myBlockLevel);
 
-                blockContentList[1].InGame_Initialize(blockClassWeapon, 1, value2);
-                blockContentList[1].InGame_SetLevel(myLevel);
-                bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myLevel);
+                blockContentList[1].InGame_Initialize(blockClassWeapon, 1, myBlockLevel2);
+                blockContentList[1].InGame_SetLevel(myBlockLevel);
+                bettingValue[1] = upgradeDataBase.GetUpgradeValue(blockClassWeapon.rankType).GetValueNumber(myBlockLevel);
                 bettingSizeList[1] = blockDataBase.GetBlockInfomation(blockClassWeapon.blockType).GetSize();
 
                 //Debug.Log("검을 장착했습니다");
@@ -892,13 +895,13 @@ public class GameManager : MonoBehaviour
             {
                 blockClassShield = playerDataBase.GetBlockClass(playerDataBase.Shield);
 
-                myLevel = blockClassShield.level;
+                myBlockLevel = blockClassShield.level;
 
                 blockContentList[2].gameObject.SetActive(true);
 
-                if (myLevel > limitLevel)
+                if (myBlockLevel > limitLevel)
                 {
-                    myLevel = limitLevel;
+                    myBlockLevel = limitLevel;
                     blockClassShield.level = limitLevel;
 
                     NotionManager.instance.UseNotion(NotionType.HighLevelLimit);
@@ -914,11 +917,11 @@ public class GameManager : MonoBehaviour
                     windGranularity += 1;
                 }
 
-                int value3 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);
+                myBlockLevel2 = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myBlockLevel);
 
-                blockContentList[2].InGame_Initialize(blockClassShield, 2, value3);
-                blockContentList[2].InGame_SetLevel(myLevel);
-                bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myLevel);
+                blockContentList[2].InGame_Initialize(blockClassShield, 2, myBlockLevel2);
+                blockContentList[2].InGame_SetLevel(myBlockLevel);
+                bettingValue[2] = upgradeDataBase.GetUpgradeValue(blockClassShield.rankType).GetValueNumber(myBlockLevel);
                 bettingSizeList[2] = blockDataBase.GetBlockInfomation(blockClassShield.blockType).GetSize();
 
                 //Debug.Log("쉴드를 장착했습니다");
@@ -2013,25 +2016,25 @@ public class GameManager : MonoBehaviour
         money -= bettingMoney; //내 배팅한 금액만큼 일단 빼기
         otherMoney -= compare[0]; //상대방 배팅한 금액만큼 일단 빼기
 
-        int number = (int)plusMoney - compare[1];
+        this.compareValue = (int)plusMoney - compare[1];
 
-        if (number > 0)
+        if (this.compareValue > 0)
         {
-            moneyAnimation.AddMoneyAnimation(money, otherMoney, number);
+            moneyAnimation.AddMoneyAnimation(money, otherMoney, this.compareValue);
 
-            money += number;
-            otherMoney -= number;
+            money += this.compareValue;
+            otherMoney -= this.compareValue;
 
-            RecordManager.instance.SetRecord(number.ToString());
+            RecordManager.instance.SetRecord(this.compareValue.ToString());
         }
-        else if (number < 0)
+        else if (this.compareValue < 0)
         {
-            moneyAnimation.MinusMoneyAnimation(money, otherMoney, Mathf.Abs(number));
+            moneyAnimation.MinusMoneyAnimation(money, otherMoney, Mathf.Abs(this.compareValue));
 
-            money -= Mathf.Abs(number);
-            otherMoney += Mathf.Abs(number);
+            money -= Mathf.Abs(this.compareValue);
+            otherMoney += Mathf.Abs(this.compareValue);
 
-            RecordManager.instance.SetRecord(number.ToString());
+            RecordManager.instance.SetRecord(this.compareValue.ToString());
         }
         else
         {
@@ -2060,19 +2063,19 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney(BlockClass block, RouletteType type, bool queen)
     {
-        float value = 0;
-        int level = 0;
+        value = 0;
+        blockLevel = 0;
 
-        level = block.level;
+        blockLevel = block.level;
 
-        if (level > limitLevel)
+        if (blockLevel > limitLevel)
         {
-            level = limitLevel;
+            blockLevel = limitLevel;
         }
 
         if (!allIn)
         {
-            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(level) * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
+            value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(blockLevel) * 1.0f / blockDataBase.GetSize(block.blockType) * 1.0f;
         }
         else
         {
@@ -2144,8 +2147,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGetMoney_Ai(BlockClass block, RouletteType type, bool queen)
     {
-        float value = 0;
-        value = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f;
+        value_Ai = 0;
+        value_Ai = upgradeDataBase.GetUpgradeValue(block.rankType).GetValueNumber(block.level) * 1.0f / blockDataBase.GetSize(otherBlockType) * 1.0f;
 
         switch (type)
         {
@@ -2154,44 +2157,44 @@ public class GameManager : MonoBehaviour
             case RouletteType.StraightBet:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queenStraightBet * value;
+                    plusAiMoney += blockMotherInformation.queenStraightBet * value_Ai;
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.straightBet * value;
+                    plusAiMoney += blockMotherInformation.straightBet * value_Ai;
                 }
 
                 break;
             case RouletteType.SplitBet_Horizontal:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensplitBet * (value / 2);
+                    plusAiMoney += blockMotherInformation.queensplitBet * (value_Ai / 2);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.splitBet * (value / 2);
+                    plusAiMoney += blockMotherInformation.splitBet * (value_Ai / 2);
                 }
 
                 break;
             case RouletteType.SplitBet_Vertical:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensplitBet * (value / 2);
+                    plusAiMoney += blockMotherInformation.queensplitBet * (value_Ai / 2);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.splitBet * (value / 2);
+                    plusAiMoney += blockMotherInformation.splitBet * (value_Ai / 2);
                 }
 
                 break;
             case RouletteType.SquareBet:
                 if (queen)
                 {
-                    plusAiMoney += blockMotherInformation.queensquareBet * (value / 4);
+                    plusAiMoney += blockMotherInformation.queensquareBet * (value_Ai / 4);
                 }
                 else
                 {
-                    plusAiMoney += blockMotherInformation.squareBet * (value / 4);
+                    plusAiMoney += blockMotherInformation.squareBet * (value_Ai / 4);
                 }
 
                 break;
@@ -4538,7 +4541,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateMoney()
     {
-        int myNumber = 0;
+        myNumber = 0;
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -4563,7 +4566,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadMoney()
     {
-        int myNumber = 0;
+        myNumber = 0;
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -4685,5 +4688,21 @@ public class GameManager : MonoBehaviour
         nextButton.SetActive(false);
 
         StartCoroutine(WaitTimerCoroution());
+    }
+
+    public void ChangeFormation()
+    {
+        if (playerDataBase.Formation == 1)
+        {
+            playerDataBase.Formation = 2;
+        }
+        else
+        {
+            playerDataBase.Formation = 1;
+        }
+
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Formation", playerDataBase.Formation);
+
+        SceneManager.LoadScene("LoginScene");
     }
 }

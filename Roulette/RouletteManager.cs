@@ -88,6 +88,9 @@ public class RouletteManager : MonoBehaviour
     private float lowPower = 150;
     private float maxPower = 150;
 
+    float[] blow = new float[2];
+    float[] blow_Ai = new float[2];
+
     private bool windDelay = false;
     private bool pinballPower = false;
     private bool pinballPowerReturn = false;
@@ -1166,7 +1169,6 @@ public class RouletteManager : MonoBehaviour
 
             pinballPower = false;
 
-            float[] blow = new float[2];
             blow[0] = power;
             blow[1] = windIndex;
 
@@ -1803,11 +1805,10 @@ public class RouletteManager : MonoBehaviour
         {
             windCount_Ai -= 1;
 
-            float[] blow = new float[2];
-            blow[0] = Random.Range(min, max);
-            blow[1] = index;
+            blow_Ai[0] = Random.Range(min, max);
+            blow_Ai[1] = index;
 
-            PV.RPC("BlowingWind", RpcTarget.All, blow);
+            PV.RPC("BlowingWind", RpcTarget.All, blow_Ai);
         }
 
         if (windCount_Ai == 0)

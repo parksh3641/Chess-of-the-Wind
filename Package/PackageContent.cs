@@ -70,12 +70,12 @@ public class PackageContent : MonoBehaviour
             case PackageType.Newbie:
                 iapButton.productId = "shop.windchess.shopnewbie";
 
-                valueText.text = "400%";
+                valueText.text = "800%";
                 break;
             case PackageType.Sliver:
                 iapButton.productId = "shop.windchess.shopsliver";
 
-                valueText.text = "400%";
+                valueText.text = "800%";
                 break;
             case PackageType.Gold:
                 iapButton.productId = "shop.windchess.shopgold";

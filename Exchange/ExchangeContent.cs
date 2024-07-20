@@ -241,6 +241,14 @@ public class ExchangeContent : MonoBehaviour
     {
         if (lockedObj.activeInHierarchy) return;
 
+        if (!NetworkConnect.instance.CheckConnectInternet())
+        {
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
+
+            return;
+        }
+
         playerDataBase.PieceInfo.MinusPiece(blockType, rankType);
 
         playerData.Clear();
@@ -266,6 +274,8 @@ public class ExchangeContent : MonoBehaviour
         inventoryManager.SuccessFusion(blockType, rankType);
 
         Initialize(blockType, rankType, inventoryManager);
+
+        Debug.Log("Exchange : " + blockType + "_" + rankType);
 
         FirebaseAnalytics.LogEvent("Exchange : " +  blockType + "_" + rankType);
 
