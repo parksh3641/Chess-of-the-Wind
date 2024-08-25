@@ -64,6 +64,9 @@ public class ShopManager : MonoBehaviour
     bool isDelay = false;
     bool first = false;
 
+    private int price;
+    private int boxPrice = 10000;
+
     int random = 0;
 
     public UIManager uIManager;
@@ -332,7 +335,7 @@ public class ShopManager : MonoBehaviour
 
     public void Buy_NormalBox(int number)
     {
-        int price = 25000 * number;
+        price = boxPrice * number;
 
         if (number >= 10)
         {

@@ -1476,7 +1476,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 1:
                                 getGold = Random.Range(10000, 20001);
@@ -1495,7 +1495,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 2:
                                 getGold = Random.Range(20000, 30001);
@@ -1514,7 +1514,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 3:
                                 getGold = Random.Range(30000, 40001);
@@ -1533,7 +1533,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 4:
                                 getGold = Random.Range(40000, 50001);
@@ -1552,7 +1552,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                         }
 
@@ -1577,7 +1577,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 1:
                                 getGold = Random.Range(60000, 70001);
@@ -1596,7 +1596,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 2:
                                 getGold = Random.Range(70000, 80001);
@@ -1615,7 +1615,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 3:
                                 getGold = Random.Range(80000, 90001);
@@ -1634,7 +1634,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                             case 4:
                                 getGold = Random.Range(90000, 100001);
@@ -1653,7 +1653,7 @@ public class RandomBoxManager : MonoBehaviour
 
                                 getGold = RoundToNearestTens(getGold);
 
-                                countStr = getGold.ToString();
+                                countStr = MoneyUnitString.ToCurrencyString(getGold);
                                 break;
                         }
                         break;

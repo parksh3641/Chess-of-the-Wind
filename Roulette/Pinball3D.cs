@@ -25,6 +25,10 @@ public class Pinball3D : MonoBehaviour
     Vector3 sizeUp = new Vector3(0.225f, 0.225f, 0.225f);
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(10f);
+
+    Vector3 defaultGravity = new Vector3(0, -9.81f, 0);
+    Vector3 setGravity = new Vector3(0, -19.62f, 0);
 
     public RouletteManager rouletteManager;
     public PhotonView PV;
@@ -86,6 +90,8 @@ public class Pinball3D : MonoBehaviour
 
     public void StartRotate(int number)
     {
+        Physics.gravity = defaultGravity;
+
         rigid.useGravity = true;
         rigid.isKinematic = false;
 
@@ -149,11 +155,11 @@ public class Pinball3D : MonoBehaviour
 
     IEnumerator GravityCoroution()
     {
-        rigid.mass += 0.02f;
+        yield return waitForSeconds2;
 
-        yield return new WaitForSeconds(0.1f);
+        Physics.gravity = setGravity;
 
-        StartCoroutine(GravityCoroution());
+        Debug.Log("중력 적용");
     }
 
     public void BlowingWind(float defaultPower, float force, int number)
@@ -404,6 +410,8 @@ public class Pinball3D : MonoBehaviour
 
     void EndPinball()
     {
+        Physics.gravity = defaultGravity;
+
         move = false;
         rigid.useGravity = false;
         rigid.isKinematic = true;

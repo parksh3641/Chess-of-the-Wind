@@ -1996,6 +1996,9 @@ public class GameManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
+            blockType = BlockType.Default;
+            otherBlockType = BlockType.Default;
+
             Debug.Log("타이머를 다시 시작합니다");
 
             StartCoroutine(WaitTimerCoroution());

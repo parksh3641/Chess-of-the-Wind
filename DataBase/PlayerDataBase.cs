@@ -188,8 +188,6 @@ public class PlayerDataBase : ScriptableObject
     [Space]
     [Title("Coupon")]
     [SerializeField]
-    private int comicWorld2023 = 0;
-    [SerializeField]
     private int indieFestival2023 = 0;
     [SerializeField]
     private int coupon1 = 0;
@@ -221,6 +219,8 @@ public class PlayerDataBase : ScriptableObject
     private int coupon14 = 0;
     [SerializeField]
     private int coupon15 = 0;
+    [SerializeField]
+    private int kgdcon2024 = 0;
 
 
     [Space]
@@ -906,18 +906,6 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int ComicWorld2023
-    {
-        get
-        {
-            return comicWorld2023;
-        }
-        set
-        {
-            comicWorld2023 = value;
-        }
-    }
-
     public int IndieFestival2023
     {
         get
@@ -1107,6 +1095,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             coupon15 = value;
+        }
+    }
+
+    public int Kgdcon2024
+    {
+        get
+        {
+            return kgdcon2024;
+        }
+        set
+        {
+            kgdcon2024 = value;
         }
     }
 
@@ -2059,8 +2059,9 @@ public class PlayerDataBase : ScriptableObject
             titleSpeicalInformationList.Add(content);
         }
 
-        comicWorld2023 = 0;
         indieFestival2023 = 0;
+        kgdcon2024 = 0;
+
         coupon1 = 0;
         coupon2 = 0;
         coupon3 = 0;

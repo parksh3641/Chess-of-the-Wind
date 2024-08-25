@@ -58,7 +58,7 @@ public class CouponManager : MonoBehaviour
                         playerDataBase.Coupon1 = 1;
                         PlayfabManager.instance.UpdatePlayerStatisticsInsert("Coupon1", 1);
 
-                        OpenCoupon();
+                        GrandOpenCoupon();
                     }
                     else
                     {
@@ -380,6 +380,28 @@ public class CouponManager : MonoBehaviour
                     NotionManager.instance.UseNotion(NotionType.CouponNotion3);
                 }
                 break;
+            case "KGDCON2024":
+                if (System.DateTime.Now >= new System.DateTime(2024, 8, 24))
+                {
+                    if (playerDataBase.Kgdcon2024 == 0)
+                    {
+                        playerDataBase.Kgdcon2024 = 1;
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("Kgdcon2024", 1);
+
+                        KgdCon2024Coupon();
+                    }
+                    else
+                    {
+                        SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                        NotionManager.instance.UseNotion(NotionType.CouponNotion2);
+                    }
+                }
+                else
+                {
+                    SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+                    NotionManager.instance.UseNotion(NotionType.CouponNotion3);
+                }
+                break;
             default:
                 SoundManager.instance.PlaySFX(GameSfxType.Wrong);
                 NotionManager.instance.UseNotion(NotionType.CouponNotion3);
@@ -387,7 +409,7 @@ public class CouponManager : MonoBehaviour
         }
     }
 
-    void OpenCoupon()
+    void GrandOpenCoupon()
     {
         itemList.Clear();
         itemList.Add("Open_1");
@@ -397,6 +419,18 @@ public class CouponManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.CouponNotion4);
 
         FirebaseAnalytics.LogEvent("Open_Coupon");
+    }
+
+    void KgdCon2024Coupon()
+    {
+        itemList.Clear();
+        itemList.Add("Kgdcon2024_1");
+        PlayfabManager.instance.GrantItemsToUser("Coupon", itemList);
+
+        SoundManager.instance.PlaySFX(GameSfxType.Success);
+        NotionManager.instance.UseNotion(NotionType.CouponNotion4);
+
+        FirebaseAnalytics.LogEvent("Open_Kgdcon2024_Coupon");
     }
 
     void NormalCoupon()

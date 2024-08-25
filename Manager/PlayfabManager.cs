@@ -1296,8 +1296,8 @@ public class PlayfabManager : MonoBehaviour
                        case "TitleNumber":
                            playerDataBase.TitleNumber = statistics.Value;
                            break;
-                       case "ComicWorld2023":
-                           playerDataBase.ComicWorld2023 = statistics.Value;
+                       case "Kgdcon2024":
+                           playerDataBase.Kgdcon2024 = statistics.Value;
                            break;
                        case "IndieFestival2023":
                            playerDataBase.IndieFestival2023 = statistics.Value;
@@ -1375,36 +1375,23 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetPlayerData(Dictionary<string, string> data)
     {
-        try
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                var request = new UpdateUserDataRequest() { Data = data, Permission = UserDataPermission.Public };
-                try
-                {
-                    PlayFabClientAPI.UpdateUserData(request, (result) =>
-                    {
-                        Debug.Log("Update Player Data!");
-
-                    }, DisplayPlayfabError);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e.Message);
-                }
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
+            return;
         }
-        catch (Exception e)
+
+        if (!isActive) return;
+
+        var request = new UpdateUserDataRequest() { Data = data, Permission = UserDataPermission.Public };
+
+        PlayFabClientAPI.UpdateUserData(request, (result) =>
         {
-            Debug.LogError(e.Message);
-        }
+            Debug.Log("Update Player Data!");
+
+        }, DisplayPlayfabError);
     }
 
     public void GetPlayerData()
@@ -1499,40 +1486,33 @@ public class PlayfabManager : MonoBehaviour
 
     public void UpdatePlayerStatisticsInsert(string name, int value)
     {
-        try
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "UpdatePlayerStatistics",
-                    FunctionParameter = new
-                    {
-                        Statistics = new List<StatisticUpdate>
+            return;
+        }
+
+        if (!isActive) return;
+
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        {
+            FunctionName = "UpdatePlayerStatistics",
+            FunctionParameter = new
+            {
+                Statistics = new List<StatisticUpdate>
                 {
                     new StatisticUpdate {StatisticName = name, Value = value}
                 }
-                    },
-                    GeneratePlayStreamEvent = true,
-                },
-            result =>
-            {
-                OnCloudUpdateStats(result);
-            }
-            , DisplayPlayfabError);
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
-        }
-        catch (Exception e)
+            },
+            GeneratePlayStreamEvent = true,
+        },
+        result =>
         {
-            Debug.LogError(e.Message);
+            OnCloudUpdateStats(result);
         }
+        , DisplayPlayfabError);
 
     }
 
@@ -1634,46 +1614,40 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
 
-        if (NetworkConnect.instance.CheckConnectInternet())
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            try
-            {
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "AddMoney",
-                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
-                    GeneratePlayStreamEvent = true,
-                }, OnCloudUpdateStats, DisplayPlayfabError);
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                switch (type)
-                {
-                    case MoneyType.CoinA:
-                        moneyAnimation.PlusMoney(number);
-
-                        playerDataBase.CoinA += number;
-                        break;
-                    case MoneyType.Crystal:
-                        playerDataBase.Crystal += number;
-                        break;
-                    case MoneyType.Millage:
-                        playerDataBase.Millage += number;
-                        break;
-                    case MoneyType.CoinB:
-                        playerDataBase.CoinB += number;
-                        break;
-                }
-
-                uiManager.Renewal();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
+            return;
         }
-        else
+
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+            FunctionName = "AddMoney",
+            FunctionParameter = new { currencyType = currentType, currencyAmount = number },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
+
+        switch (type)
+        {
+            case MoneyType.CoinA:
+                moneyAnimation.PlusMoney(number);
+
+                playerDataBase.CoinA += number;
+                break;
+            case MoneyType.Crystal:
+                playerDataBase.Crystal += number;
+                break;
+            case MoneyType.Millage:
+                playerDataBase.Millage += number;
+                break;
+            case MoneyType.CoinB:
+                playerDataBase.CoinB += number;
+                break;
         }
+
+        uiManager.Renewal();
 
     }
     public void UpdateSubtractCurrency(MoneyType type, int number)
@@ -1736,45 +1710,38 @@ public class PlayfabManager : MonoBehaviour
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
     {
-        try
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
-                {
-                    DisplayName = nickname
-                },
-        result =>
-        {
-            Debug.Log("Update NickName : " + result.DisplayName);
-
-            GameStateManager.instance.NickName = result.DisplayName;
-            successAction?.Invoke();
+            return;
         }
-        , error =>
+        
+        if (!isActive) return;
+
+        PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
         {
-            string report = error.GenerateErrorReport();
-            if (report.Contains("Name not available"))
-            {
-                failAction?.Invoke();
-            }
-            Debug.LogError(error.GenerateErrorReport());
+            DisplayName = nickname
+        },
+result =>
+{
+    Debug.Log("Update NickName : " + result.DisplayName);
+
+    GameStateManager.instance.NickName = result.DisplayName;
+    successAction?.Invoke();
+}
+, error =>
+{
+    string report = error.GenerateErrorReport();
+    if (report.Contains("Name not available"))
+    {
+        failAction?.Invoke();
+    }
+    Debug.LogError(error.GenerateErrorReport());
 
             //NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
         });
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
     }
 
     public void UpdateDisplayName(string nickname)
@@ -1949,45 +1916,39 @@ public class PlayfabManager : MonoBehaviour
 
     public void GetServerTime(Action<DateTime> action)
     {
-        if (NetworkConnect.instance.CheckConnectInternet())
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            try
-            {
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "GetServerTime",
-                    GeneratePlayStreamEvent = true,
-                }, result =>
-                {
-                    string date = PlayFabSimpleJson.SerializeObject(result.FunctionResult);
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                    string year = date.Substring(1, 4);
-                    string month = date.Substring(6, 2);
-                    string day = date.Substring(9, 2);
-                    string hour = date.Substring(12, 2);
-                    string minute = date.Substring(15, 2);
-                    string second = date.Substring(18, 2);
-
-                    DateTime serverTime = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), 0, 0, 0);
-
-                    serverTime = serverTime.AddDays(1);
-
-                    DateTime time = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
-
-                    TimeSpan span = serverTime - time;
-
-                    action?.Invoke(DateTime.Parse(span.ToString()));
-                }, DisplayPlayfabError);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
+            return;
         }
-        else
+
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
-        }
+            FunctionName = "GetServerTime",
+            GeneratePlayStreamEvent = true,
+        }, result =>
+        {
+            string date = PlayFabSimpleJson.SerializeObject(result.FunctionResult);
+
+            string year = date.Substring(1, 4);
+            string month = date.Substring(6, 2);
+            string day = date.Substring(9, 2);
+            string hour = date.Substring(12, 2);
+            string minute = date.Substring(15, 2);
+            string second = date.Substring(18, 2);
+
+            DateTime serverTime = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), 0, 0, 0);
+
+            serverTime = serverTime.AddDays(1);
+
+            DateTime time = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
+
+            TimeSpan span = serverTime - time;
+
+            action?.Invoke(DateTime.Parse(span.ToString()));
+        }, DisplayPlayfabError);
     }
 
     //"2022-04-24T22:17:04.548Z"
@@ -2113,72 +2074,44 @@ public class PlayfabManager : MonoBehaviour
 
     public void ConsumeItem(string itemInstanceID)
     {
-        try
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "ConsumeItem",
-                FunctionParameter = new { ConsumeCount = 1, ItemInstanceId = itemInstanceID },
-                GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            FunctionName = "ConsumeItem",
+            FunctionParameter = new { ConsumeCount = 1, ItemInstanceId = itemInstanceID },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
     }
 
     public void DeleteInventoryItem(string itemInstanceID)
     {
-        try
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "DeleteInventoryItem",
-                FunctionParameter = new { ItemInstanceId = itemInstanceID },
-                GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            FunctionName = "DeleteInventoryItem",
+            FunctionParameter = new { ItemInstanceId = itemInstanceID },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
     }
 
     public void DeleteInventoryItems(List<string> itemInstanceID)
     {
-        try
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "DeleteInventoryItems",
-                FunctionParameter = new { ItemsWantToDel = itemInstanceID },
-                GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            FunctionName = "DeleteInventoryItems",
+            FunctionParameter = new { ItemsWantToDel = itemInstanceID },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
     }
 
 #endregion
 
     public void GrantItemToUser(string itemIds, string catalogVersion)
     {
-        try
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "GrantItemToUser",
-                FunctionParameter = new { ItemIds = itemIds, CatalogVersion = catalogVersion },
-                GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            FunctionName = "GrantItemToUser",
+            FunctionParameter = new { ItemIds = itemIds, CatalogVersion = catalogVersion },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
     }
     public void GrantItemsToUser(string catalogversion, List<string> itemIds)
     {
@@ -2193,36 +2126,29 @@ public class PlayfabManager : MonoBehaviour
             }
         }
 
-        try
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if (NetworkConnect.instance.CheckConnectInternet())
-            {
-                if (!isActive) return;
+            SoundManager.instance.PlaySFX(GameSfxType.Wrong);
+            NotionManager.instance.UseNotion(NotionType.CheckInternet);
 
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "GrantItemsToUser",
-                    FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
-                    GeneratePlayStreamEvent = true,
-                }
-            , result =>
-            {
-                grantItemData = true;
-
-                OnCloudUpdateStats(result);
-
-            }, DisplayPlayfabError);
-            }
-            else
-            {
-                SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-                NotionManager.instance.UseNotion(NotionType.CheckInternet);
-            }
+            return;
         }
-        catch (Exception e)
+        
+        if (!isActive) return;
+
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            Debug.LogError(e.Message);
+            FunctionName = "GrantItemsToUser",
+            FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
+            GeneratePlayStreamEvent = true,
         }
+    , result =>
+    {
+        grantItemData = true;
+
+        OnCloudUpdateStats(result);
+
+    }, DisplayPlayfabError);
     }
 
     IEnumerator WaitGrantItemCoroution()
@@ -2300,18 +2226,11 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetInventoryCustomData(string itemInstanceID, Dictionary<string, string> datas)
     {
-        try
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "UpdateUserInventoryItemCustomData",
-                FunctionParameter = new { Data = datas, ItemInstanceId = itemInstanceID },
-                GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            FunctionName = "UpdateUserInventoryItemCustomData",
+            FunctionParameter = new { Data = datas, ItemInstanceId = itemInstanceID },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats, DisplayPlayfabError);
     }
 }

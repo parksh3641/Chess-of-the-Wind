@@ -518,7 +518,7 @@ public class UIManager : MonoBehaviour
 
         if (number == 0)
         {
-            seasonPass += 250;
+            seasonPass += 300;
 
             resultTitleText.text = LocalizationManager.instance.GetString("Win");
 
@@ -552,7 +552,7 @@ public class UIManager : MonoBehaviour
         }
         else if (number == 2)
         {
-            seasonPass += 200;
+            seasonPass += 150;
 
             resultTitleText.text = LocalizationManager.instance.GetString("Surrender_Enemy");
 

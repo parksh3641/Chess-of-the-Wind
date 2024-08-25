@@ -370,22 +370,22 @@ public class BlockUIContent : MonoBehaviour
             case BoxInfoType.Gold_N:
                 shopUIType = ShopUIType.Gold1;
                 blockClass.rankType = RankType.N;
-                valueText.text = randomBox_Block.value.ToString();
+                valueText.text = MoneyUnitString.ToCurrencyString(randomBox_Block.value);
                 break;
             case BoxInfoType.Gold_R:
                 shopUIType = ShopUIType.Gold2;
                 blockClass.rankType = RankType.R;
-                valueText.text = randomBox_Block.value.ToString();
+                valueText.text = MoneyUnitString.ToCurrencyString(randomBox_Block.value);
                 break;
             case BoxInfoType.UpgradeTicket_N:
                 shopUIType = ShopUIType.UpgradeTicket1;
                 blockClass.rankType = RankType.N;
-                valueText.text = randomBox_Block.value.ToString();
+                valueText.text = MoneyUnitString.ToCurrencyString(randomBox_Block.value);
                 break;
             case BoxInfoType.UpgradeTicket_R:
                 shopUIType = ShopUIType.UpgradeTicket2;
                 blockClass.rankType = RankType.R;
-                valueText.text = randomBox_Block.value.ToString();
+                valueText.text = MoneyUnitString.ToCurrencyString(randomBox_Block.value);
                 break;
         }
 

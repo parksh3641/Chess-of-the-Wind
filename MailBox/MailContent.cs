@@ -124,6 +124,12 @@ public class MailContent : MonoBehaviour
                 count = 5;
                 titleText.localizationName = "BugFixedInfo";
                 break;
+            case "Kgdcon2024":
+                rewardType = RewardType.Box_Speical;
+
+                count = 10;
+                titleText.localizationName = "Kgdcon2024Title";
+                break;
         }
 
         titleText.ReLoad();
