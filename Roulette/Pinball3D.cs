@@ -26,6 +26,7 @@ public class Pinball3D : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForSeconds2 = new WaitForSeconds(10f);
+    WaitForSeconds waitForSeconds3 = new WaitForSeconds(20f);
 
     Vector3 defaultGravity = new Vector3(0, -9.81f, 0);
     Vector3 setGravity = new Vector3(0, -19.62f, 0);
@@ -155,11 +156,18 @@ public class Pinball3D : MonoBehaviour
 
     IEnumerator GravityCoroution()
     {
-        yield return waitForSeconds2;
+        if(GameStateManager.instance.GameType == GameType.NewBie)
+        {
+            yield return waitForSeconds3;
+        }
+        else
+        {
+            yield return waitForSeconds2;
+        }
 
         Physics.gravity = setGravity;
 
-        Debug.Log("중력 적용");
+        Debug.Log("공에 중력 적용됩니다");
     }
 
     public void BlowingWind(float defaultPower, float force, int number)
