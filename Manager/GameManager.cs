@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
     [Title("Tip")]
     public GameObject tipObj;
     public LocalizationContent tipText;
+    public GameObject tutorialArrow; //블럭 배치하라는 화살표
+
 
     [Space]
     [Title("MainText")]
@@ -556,6 +558,7 @@ public class GameManager : MonoBehaviour
         targetText.text = "-";
 
         tipObj.SetActive(false);
+        tutorialArrow.SetActive(false);
 
         timer = bettingWaitTime;
         timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
@@ -1464,6 +1467,8 @@ public class GameManager : MonoBehaviour
 
     void CheckTip()
     {
+        tutorialArrow.SetActive(true);
+
         switch (GameStateManager.instance.GameType)
         {
             case GameType.NewBie:
@@ -1493,6 +1498,7 @@ public class GameManager : MonoBehaviour
     {
         tipObj.SetActive(false);
     }
+
 
     IEnumerator TimerCoroution()
     {
@@ -1738,6 +1744,8 @@ public class GameManager : MonoBehaviour
 
         uIManager.CloseRouletteView();
         uIManager.CloseSurrenderView();
+
+        tutorialArrow.SetActive(false);
 
         if (!CheckDeveloper())
         {
@@ -3109,6 +3117,8 @@ public class GameManager : MonoBehaviour
 
     public void EnterBlock(RouletteContent rouletteContent, BlockContent blockContent)
     {
+        tutorialArrow.SetActive(false);
+
         keepCount = 0;
 
         mainRouletteContent = rouletteContent;

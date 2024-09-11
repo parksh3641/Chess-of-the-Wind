@@ -65,7 +65,7 @@ public class MoneyAnimation : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
             monster.transform.SetParent(heartTransform);
@@ -75,7 +75,7 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList.Add(monster);
         }
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             MoneyContent monster = Instantiate(heartPrefab);
             monster.transform.SetParent(heartTransform);

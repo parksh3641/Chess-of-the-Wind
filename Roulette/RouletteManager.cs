@@ -44,6 +44,8 @@ public class RouletteManager : MonoBehaviour
     public Image windButton;
     public Text windCountText;
 
+    public GameObject tutorialArrow;
+
     public Sprite[] windButtonArray;
 
     public Image player1Img;
@@ -85,7 +87,7 @@ public class RouletteManager : MonoBehaviour
     private int power = 0;
     private int upPower = 3;
     private int newBiePower = 30; //연습방 바람 세기
-    private float lowPower = 150;
+    private float lowPower = 80;
     private float maxPower = 150;
 
     float[] blow = new float[2];
@@ -265,8 +267,10 @@ public class RouletteManager : MonoBehaviour
         uIManager.CloseSurrenderView();
         emoteManager.Initialize();
 
-        lowPower = 150 - (150 * (0.01f * gameManager.windGranularity));
+        lowPower = 80 - (80 * (0.01f * gameManager.windGranularity));
         maxPower = 150 + (150 * (0.01f *  gameManager.windMax));
+
+        tutorialArrow.SetActive(false);
 
         ballCheck = false;
 
@@ -854,6 +858,8 @@ public class RouletteManager : MonoBehaviour
 
             windButton.sprite = windButtonArray[1];
 
+            tutorialArrow.SetActive(true);
+
             vectorArray[windIndex].gameObject.SetActive(true);
             vectorArray[windIndex].enabled = false;
 
@@ -1073,7 +1079,9 @@ public class RouletteManager : MonoBehaviour
     public void BlowWindDown()
     {
         gameManager.keepCount = 0;
-        
+
+        tutorialArrow.SetActive(false);
+
         if (aiMode) return;
 
         if (!pinball.PV.IsMine || buttonClick) return;
@@ -1165,7 +1173,7 @@ public class RouletteManager : MonoBehaviour
         if (windCount > 0)
         {
             windCount -= 1;
-            windCountText.text = windCount + "/" + windMaxCount;
+            windCountText.text = windCount + " / " + windMaxCount;
 
             pinballPower = false;
 
