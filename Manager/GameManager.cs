@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     public ButtonScaleAnimation timerAnimation;
     private bool isTimesUp = false;
 
+    public FadeInOut fadeInOut;
+
     [Space]
     [Title("Text")]
     public Text roomText;
@@ -51,7 +53,6 @@ public class GameManager : MonoBehaviour
     public GameObject tipObj;
     public LocalizationContent tipText;
     public GameObject tutorialArrow; //블럭 배치하라는 화살표
-
 
     [Space]
     [Title("MainText")]
@@ -125,11 +126,6 @@ public class GameManager : MonoBehaviour
     string[] deleteBlock = new string[2];
 
     [Space]
-    [Title("Drag")]
-    private Transform dragPos;
-    private bool checkDrag = false;
-
-    [Space]
     [Title("Bool")]
     public bool aiMode = false;
     public bool blockDrag = false;
@@ -186,7 +182,6 @@ public class GameManager : MonoBehaviour
     public RectTransform blockLevelContentTransform_Horizontal;
     public RectTransform blockLevelContentTransform_Square;
 
-
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     [Space]
@@ -213,8 +208,6 @@ public class GameManager : MonoBehaviour
 
     [Space]
     List<BlockLevelContent> allBlockLevelContentList = new List<BlockLevelContent>();
-
-
 
     [Space]
     [Title("Other")]
@@ -1463,6 +1456,8 @@ public class GameManager : MonoBehaviour
 
         moneyAnimation.MinusMoneyAnimationMid(money + halfMoney, halfMoney);
         moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + halfOtherMoney, halfOtherMoney);
+
+        fadeInOut.InGameFadeIn(Color.red);
     }
 
     void CheckTip()
@@ -2033,6 +2028,8 @@ public class GameManager : MonoBehaviour
         {
             moneyAnimation.AddMoneyAnimation(money, otherMoney, this.compareValue);
 
+            fadeInOut.InGameFadeIn(Color.blue);
+
             money += this.compareValue;
             otherMoney -= this.compareValue;
 
@@ -2041,6 +2038,8 @@ public class GameManager : MonoBehaviour
         else if (this.compareValue < 0)
         {
             moneyAnimation.MinusMoneyAnimation(money, otherMoney, Mathf.Abs(this.compareValue));
+
+            fadeInOut.InGameFadeIn(Color.red);
 
             money -= Mathf.Abs(this.compareValue);
             otherMoney += Mathf.Abs(this.compareValue);
@@ -2058,11 +2057,15 @@ public class GameManager : MonoBehaviour
                 if (bettingMoney > 0)
                 {
                     moneyAnimation.MinusMoneyAnimationMid(money + bettingMoney, bettingMoney);
+
+                    fadeInOut.InGameFadeIn(Color.red);
                 }
 
                 if (compare[0] > 0)
                 {
                     moneyAnimation.MinusMoneyAnimationMidEnemy(otherMoney + compare[0], compare[0]);
+
+                    fadeInOut.InGameFadeIn(Color.red);
                 }
             }
 
@@ -3083,37 +3086,6 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    //void Update()
-    //{
-    //    if(blockDrag && targetBlockContent != null)
-    //    {
-    //        if(targetBlockContent.position.y > Screen.height * 0.5f + 450 || targetBlockContent.position.y < Screen.height * 0.5f - 650)
-    //        {
-    //            if (checkDrag)
-    //            {
-    //                checkDrag = false;
-    //                ResetRouletteBackgroundColor();
-    //            }
-    //        }
-    //        else
-    //        {
-    //            if(!checkDrag) checkDrag = true;
-    //        }
-
-    //        if (targetBlockContent.position.x > Screen.width * 0.5f + 520 || targetBlockContent.position.x < Screen.width * 0.5f - 520)
-    //        {
-    //            if(checkDrag)
-    //            {
-    //                checkDrag = false;
-    //                ResetRouletteBackgroundColor();
-    //            }
-    //        }
-    //        else
-    //        {
-    //            if (!checkDrag) checkDrag = true;
-    //        }
-    //    }
-    //}
 
     public void EnterBlock(RouletteContent rouletteContent, BlockContent blockContent)
     {

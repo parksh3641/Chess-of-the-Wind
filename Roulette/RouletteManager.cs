@@ -41,7 +41,7 @@ public class RouletteManager : MonoBehaviour
     public Image[] vectorArray;
 
     public GameObject windGauge;
-    public Image windButton;
+    public Image windButtonImg;
     public Text windCountText;
 
     public GameObject tutorialArrow;
@@ -80,14 +80,17 @@ public class RouletteManager : MonoBehaviour
     Transform leftQueenPoint;
     Transform rightQueenPoint;
 
+    [Title("Button")]
+    public GameObject windButton;
+    public GameObject stopButton;
 
-   [Title("Gauge")]
+
+    [Title("Gauge")]
     public Image powerFillAmount;
 
     private int power = 0;
     private int upPower = 3;
-    private int newBiePower = 30; //연습방 바람 세기
-    private float lowPower = 80;
+    private float lowPower = 100;
     private float maxPower = 150;
 
     float[] blow = new float[2];
@@ -267,7 +270,7 @@ public class RouletteManager : MonoBehaviour
         uIManager.CloseSurrenderView();
         emoteManager.Initialize();
 
-        lowPower = 80 - (80 * (0.01f * gameManager.windGranularity));
+        lowPower = 100 - (100 * (0.01f * gameManager.windGranularity));
         maxPower = 150 + (150 * (0.01f *  gameManager.windMax));
 
         tutorialArrow.SetActive(false);
@@ -841,7 +844,7 @@ public class RouletteManager : MonoBehaviour
 
         aiMode = false;
 
-        windButton.sprite = windButtonArray[0];
+        //windButtonImg.sprite = windButtonArray[0];
 
         vectorArray[0].gameObject.SetActive(false);
         vectorArray[1].gameObject.SetActive(false);
@@ -856,7 +859,7 @@ public class RouletteManager : MonoBehaviour
 
             windCharacterManager.MyWhich(windIndex);
 
-            windButton.sprite = windButtonArray[1];
+            //windButtonImg.sprite = windButtonArray[1];
 
             tutorialArrow.SetActive(true);
 
@@ -1165,11 +1168,6 @@ public class RouletteManager : MonoBehaviour
 
         if (!pinball.PV.IsMine || buttonClick) return;
 
-        //if (GameStateManager.instance.GameType == GameType.NewBie)
-        //{
-        //    return;
-        //}
-
         if (windCount > 0)
         {
             windCount -= 1;
@@ -1191,9 +1189,19 @@ public class RouletteManager : MonoBehaviour
             if (windCount == 0)
             {
                 buttonClick = true;
-                windButton.sprite = windButtonArray[0];
+                windButtonImg.sprite = windButtonArray[0];
             }
         }
+    }
+
+    public void StopSecondHandDown()
+    {
+
+    }
+
+    public void StopSecondHandUp()
+    {
+
     }
 
     void AutoFlicker()
