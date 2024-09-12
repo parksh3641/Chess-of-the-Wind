@@ -52,7 +52,7 @@ public class FadeInOut : MonoBehaviour
     [Button]
     public void InGameFadeIn_Plus()
     {
-        InGameFadeIn(Color.green);
+        InGameFadeIn(Color.blue);
     }
 
     [Button]
