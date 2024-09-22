@@ -113,6 +113,10 @@ public class ReceiveInfoManager : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[3];
                 effect.SetActive(true);
                 break;
+            case RewardType.RemoveAds:
+                mainBackground.sprite = rankBackgroundArray[3];
+                effect.SetActive(true);
+                break;
         }
 
         infoText.text = LocalizationManager.instance.GetString(rewardType.ToString() + "_Info");

@@ -487,6 +487,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             matchingManager.CancelMatching();
 
+            PhotonNetwork.Disconnect();
+
             Debug.Log("방 참가에 실패했습니다.");
         }
     }

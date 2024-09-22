@@ -38,7 +38,7 @@ public class RouletteManager : MonoBehaviour
     public ParticleSystem roulette1Particle;
     public ParticleSystem roulette2Particle;
 
-    public Image[] vectorArray;
+    public CanvasGroup[] vectorArray;
 
     public GameObject windGauge;
     public Image windButtonImg;
@@ -410,6 +410,9 @@ public class RouletteManager : MonoBehaviour
 
         vectorArray[0].gameObject.SetActive(false);
         vectorArray[1].gameObject.SetActive(false);
+
+        windButton.SetActive(false);
+        stopButton.SetActive(false);
 
         if (pinball == null)
         {
@@ -844,10 +847,13 @@ public class RouletteManager : MonoBehaviour
 
         aiMode = false;
 
+        windButton.SetActive(false);
+        stopButton.SetActive(false);
+
         //windButtonImg.sprite = windButtonArray[0];
 
-        vectorArray[0].gameObject.SetActive(false);
-        vectorArray[1].gameObject.SetActive(false);
+        vectorArray[windIndex].gameObject.SetActive(true);
+        vectorArray[windIndex].alpha = 0;
 
         myTurn = false;
 
@@ -859,12 +865,18 @@ public class RouletteManager : MonoBehaviour
 
             windCharacterManager.MyWhich(windIndex);
 
-            //windButtonImg.sprite = windButtonArray[1];
+            if(GameStateManager.instance.GameEventType == GameEventType.GameEvent6)
+            {
+                windButton.SetActive(false);
 
-            tutorialArrow.SetActive(true);
-
-            vectorArray[windIndex].gameObject.SetActive(true);
-            vectorArray[windIndex].enabled = false;
+                vectorArray[windIndex].gameObject.SetActive(false);
+            }
+            else
+            {
+                windButton.SetActive(true);
+                windButtonImg.sprite = windButtonArray[1];
+                tutorialArrow.SetActive(true);
+            }
 
             if(GameStateManager.instance.GameType == GameType.NewBie)
             {
@@ -908,13 +920,15 @@ public class RouletteManager : MonoBehaviour
         {
             if (windIndex == 0)
             {
+                vectorArray[0].gameObject.SetActive(false);
                 vectorArray[1].gameObject.SetActive(true);
-                vectorArray[1].enabled = false;
+                vectorArray[1].alpha = 0;
             }
             else
             {
+                vectorArray[1].gameObject.SetActive(false);
                 vectorArray[0].gameObject.SetActive(true);
-                vectorArray[0].enabled = false;
+                vectorArray[0].alpha = 0;
             }
 
             if (gameManager.aiMode)
@@ -948,6 +962,21 @@ public class RouletteManager : MonoBehaviour
                 }
 
                 StartCoroutine(BlowWindCoroution_Ai());
+            }
+
+            stopButton.SetActive(true);
+
+            if (rouletteIndex == 0)
+            {
+                leftClock[0].MyTurn();
+
+                Debug.Log("내 차례가 아니므로 왼쪽 초침 권한을 가져왔습니다");
+            }
+            else
+            {
+                rightClock[0].MyTurn();
+
+                Debug.Log("내 차례가 아니므로 오른쪽 초침 권한을 가져왔습니다");
             }
 
             windCount = 0;
@@ -1025,7 +1054,7 @@ public class RouletteManager : MonoBehaviour
     {
         if(vectorArray[0].gameObject.activeInHierarchy)
         {
-            vectorArray[0].enabled = true;
+            vectorArray[0].alpha = 1;
 
             if (GameStateManager.instance.GameType == GameType.NewBie && myTurn)
             {
@@ -1035,7 +1064,7 @@ public class RouletteManager : MonoBehaviour
 
         if (vectorArray[1].gameObject.activeInHierarchy)
         {
-            vectorArray[1].enabled = true;
+            vectorArray[1].alpha = 1;
 
             if (GameStateManager.instance.GameType == GameType.NewBie && myTurn)
             {
@@ -1194,14 +1223,38 @@ public class RouletteManager : MonoBehaviour
         }
     }
 
-    public void StopSecondHandDown()
+    public void StopClockSecDown()
     {
+        tutorialArrow.SetActive(false);
 
+        if (rouletteIndex == 0)
+        {
+            if (!leftClock[0].PV.IsMine || buttonClick) return;
+
+            leftClock[0].StopClock();
+        }
+        else
+        {
+            if (!rightClock[0].PV.IsMine || buttonClick) return;
+
+            rightClock[0].StopClock();
+        }
     }
 
-    public void StopSecondHandUp()
+    public void StopClockSecUp()
     {
+        if (rouletteIndex == 0)
+        {
+            if (!leftClock[0].PV.IsMine || buttonClick) return;
 
+            leftClock[0].ResumeClock();
+        }
+        else
+        {
+            if (!rightClock[0].PV.IsMine || buttonClick) return;
+
+            rightClock[0].ResumeClock();
+        }
     }
 
     void AutoFlicker()

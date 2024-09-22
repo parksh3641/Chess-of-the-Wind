@@ -79,6 +79,7 @@ public class PlayfabManager : MonoBehaviour
 
     Dictionary<string, string> defaultCustomData = new Dictionary<string, string>() { { "Level", "0" }, { "SSRLevel", "0" } };
 
+    List<string> itemList = new List<string>();
 
     private void Awake()
     {
@@ -1063,6 +1064,9 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "ReviewNumber":
                            playerDataBase.ReviewNumber = statistics.Value;
+                           break;
+                       case "RemoveAdsCount":
+                           playerDataBase.RemoveAdsCount = statistics.Value;
                            break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
@@ -2178,6 +2182,27 @@ result =>
         UpdatePlayerStatisticsInsert("SeasonPassDay", int.Parse(playerDataBase.SeasonPassDay));
 
         FirebaseAnalytics.LogEvent("Buy_Purchase : SeasonPass");
+    }
+
+    public void PurchaseRemoveAds()
+    {
+        if (playerDataBase.RemoveAdsCount > 0) return;
+
+        playerDataBase.RemoveAdsCount = 29;
+        UpdatePlayerStatisticsInsert("RemoveAdsCount", 29);
+
+        //itemList.Clear();
+        //itemList.Add("BoxNormal_10");
+        //GrantItemsToUser("Coupon", itemList);
+
+        FirebaseAnalytics.LogEvent("Buy_Purchase : RemoveAds");
+    }
+
+    public void GetRemoveAdsBox()
+    {
+        itemList.Clear();
+        itemList.Add("BoxNormal_10");
+        GrantItemsToUser("Coupon", itemList);
     }
 
     public void RestorePurchases()

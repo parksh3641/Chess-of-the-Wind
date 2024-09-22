@@ -176,6 +176,19 @@ public class PackageContent : MonoBehaviour
                     lockedObj.SetActive(true);
                 }
                 break;
+            case PackageType.RemoveAds:
+                iapButton.productId = "shop.windchess.removeads";
+
+                infoText.localizationName = "RemoveAdsInfo";
+
+                valueText.text = "300%";
+
+                if (playerDataBase.RemoveAdsCount > 0)
+                {
+                    lockedObj.SetActive(true);
+                }
+
+                break;
         }
 
         infoText.ReLoad();

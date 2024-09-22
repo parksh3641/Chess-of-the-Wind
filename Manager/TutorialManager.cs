@@ -28,6 +28,8 @@ public class TutorialManager : MonoBehaviour
 
     public Transform talkBarTransform;
 
+    public GameObject tutorialArrow;
+
     public Text npcText;
     public Text talkText;
     public Text nextText;
@@ -150,6 +152,7 @@ public class TutorialManager : MonoBehaviour
         lpPointObj.SetActive(false);
 
         tutorialView.SetActive(false);
+        tutorialArrow.SetActive(false);
 
         index = 0;
         count = 0;
@@ -341,7 +344,9 @@ public class TutorialManager : MonoBehaviour
                 targetBlock.SetActive(true);
                 targetBlock.transform.position = rouletteContentList[6].transform.position;
 
-                targetBlockVector.SetActive(true);
+                //targetBlockVector.SetActive(true);
+
+                tutorialArrow.SetActive(true);
                 break;
             case 32:
                 SetCharacter(1, 0);
@@ -740,6 +745,8 @@ public class TutorialManager : MonoBehaviour
         otherBlockContent.transform.position = rouletteContentList[7].transform.position;
 
         SoundManager.instance.PlaySFX(GameSfxType.Click);
+
+        tutorialArrow.SetActive(false);
 
         Invoke("MyTurn", 1.5f);
     }

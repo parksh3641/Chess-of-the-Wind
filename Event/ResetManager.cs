@@ -436,6 +436,12 @@ public class ResetManager : MonoBehaviour
             playerDataBase.ResetInfo.package_ShopDaily1 = 0;
             playerDataBase.ResetInfo.package_ShopDaily2 = 0;
             playerDataBase.ResetInfo.package_ShopDaily3 = 0;
+
+            if(playerDataBase.RemoveAdsCount > 0)
+            {
+                playerDataBase.RemoveAdsCount -= 1;
+                PlayfabManager.instance.GetRemoveAdsBox();
+            }
         }
 
         if (isNextMonday)
@@ -481,6 +487,7 @@ public class ResetManager : MonoBehaviour
 
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeBoxCheck", 0);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("RemoveAdsCount", playerDataBase.RemoveAdsCount);
 
             playerData.Clear();
             playerData.Add("ResetInfo", JsonUtility.ToJson(playerDataBase.ResetInfo));

@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
 
     public int index = 0;
     Sprite[] characterArray;
-    private int seasonPass = 0;
+    public int seasonPass = 0;
 
     string[] strArray = new string[2];
 
@@ -452,6 +452,12 @@ public class UIManager : MonoBehaviour
     IEnumerator GameEndCoroution()
     {
         yield return new WaitForSeconds(1f);
+
+        if(GameStateManager.instance.GameRankType >= GameRankType.Sliver_3
+            && playerDataBase.RemoveAdsCount == 0)
+        {
+            GoogleAdsManager.instance.admobScreen.ShowAd();
+        }
 
         SoundManager.instance.PlayBGM();
 

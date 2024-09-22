@@ -92,7 +92,7 @@ public class GameEventManager : MonoBehaviour
 
         Debug.LogError("이벤트 설정 완료 : " + GameStateManager.instance.GameEventType);
 
-        FirebaseAnalytics.LogEvent("Event : " + GameStateManager.instance.GameEventType.ToString());
+        FirebaseAnalytics.LogEvent("GameEvent : " + GameStateManager.instance.GameEventType.ToString());
 
         SoundManager.instance.PlaySFX(GameSfxType.Success);
 

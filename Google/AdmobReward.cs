@@ -81,6 +81,28 @@ public class AdmobReward : MonoBehaviour
 
     public void ShowAd(int number)
     {
+        if(playerDataBase.RemoveAdsCount > 0)
+        {
+            if (number == 10)
+            {
+                matchingManager.GetAdReward();
+            }
+            else
+            {
+                shopManager.GetAdReward(number);
+            }
+
+            playerDataBase.AdCount += 1;
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("AdCount", playerDataBase.AdCount);
+
+            LoadRewardedAd();
+
+            Debug.Log("Watch Ad");
+            FirebaseAnalytics.LogEvent("WatchAd");
+
+            return;
+        }
+
         const string rewardMsg =
             "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 

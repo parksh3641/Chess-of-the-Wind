@@ -1554,7 +1554,7 @@ public class GameManager : MonoBehaviour
             }
 
             timerFillAmount.fillAmount = timer / ((bettingTime - 1) * 1.0f);
-            timerText.text = timer.ToString();
+            timerText.text = LocalizationManager.instance.GetString("ReadyToGame") + " : " + timer;
 
             if (aiMode)
             {
@@ -3089,8 +3089,6 @@ public class GameManager : MonoBehaviour
 
     public void EnterBlock(RouletteContent rouletteContent, BlockContent blockContent)
     {
-        tutorialArrow.SetActive(false);
-
         keepCount = 0;
 
         mainRouletteContent = rouletteContent;
@@ -3386,6 +3384,8 @@ public class GameManager : MonoBehaviour
 
     public void ExitBlock(BlockContent blockContent) //내 블럭 배치 및 상대방한테 내 블럭 위치 전송
     {
+        tutorialArrow.SetActive(false);
+
         SoundManager.instance.PlaySFX(GameSfxType.Click);
 
         ResetRouletteBackgroundColor();

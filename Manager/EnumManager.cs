@@ -389,7 +389,9 @@ public enum NotionType
     FailLink,
     WaitTimeNotion,
     ComingSoon,
-    ExchangeNotion
+    ExchangeNotion,
+    DisconnectServerNotion,
+    TryAgainNotion
 }
 
 public enum GameRankType
@@ -457,6 +459,7 @@ public enum PackageType
     ShopWeekly1,
     ShopWeekly2,
     ShopWeekly3,
+    RemoveAds
 }
 
 public enum RewardType
@@ -471,6 +474,7 @@ public enum RewardType
     GoldShop1,
     GoldShop2,
     GoldShop3,
+    RemoveAds
 }
 
 public enum AchievementType
@@ -596,6 +600,7 @@ public enum GameEventType
     GameEvent3,
     GameEvent4,
     GameEvent5,
+    GameEvent6,
 }
 
 public enum EmoteType

@@ -51,10 +51,20 @@ public class Rotation_Clock : MonoBehaviour
         start = false;
     }
 
+    public void ResumeClock()
+    {
+        start = true;
+    }
+
     void Update()
     {
         if (!start) return;
 
         transform.Rotate(vector3 * speed * Time.deltaTime);
+    }
+
+    public void MyTurn()
+    {
+        if (PV != null) PV.RequestOwnership();
     }
 }

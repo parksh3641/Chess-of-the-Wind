@@ -134,6 +134,8 @@ public class PlayerDataBase : ScriptableObject
     private int appReview = 0;
     [SerializeField]
     private int reviewNumber = 0;
+    [SerializeField]
+    private int removeAdsCount = 0;
 
     [Space]
     [Title("Achievement")]
@@ -677,6 +679,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             reviewNumber = value;
+        }
+    }
+
+    public int RemoveAdsCount
+    {
+        get
+        {
+            return removeAdsCount;
+        }
+        set
+        {
+            removeAdsCount = value;
         }
     }
 
@@ -2020,6 +2034,7 @@ public class PlayerDataBase : ScriptableObject
         os = 0;
         appReview = 0;
         reviewNumber = 0;
+        removeAdsCount = 0;
 
         defDestroyTicket = 0;
         winGetMoney = 0;

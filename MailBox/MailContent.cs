@@ -49,27 +49,27 @@ public class MailContent : MonoBehaviour
             case "Gold":
                 rewardType = RewardType.Gold;
 
-                titleText.localizationName = "CouponInfo";
+                titleText.localizationName = "CouponReward";
                 break;
             case "UpgradeTicket":
                 rewardType = RewardType.UpgradeTicket;
 
-                titleText.localizationName = "CouponInfo";
+                titleText.localizationName = "CouponReward";
                 break;
             case "BoxNormal":
                 rewardType = RewardType.Box_Normal;
 
-                titleText.localizationName = "CouponInfo";
+                titleText.localizationName = "CouponReward";
                 break;
             case "BoxEpic":
                 rewardType = RewardType.Box_Epic;
 
-                titleText.localizationName = "CouponInfo";
+                titleText.localizationName = "CouponReward";
                 break;
             case "BoxSpeical":
                 rewardType = RewardType.Box_Speical;
 
-                titleText.localizationName = "CouponInfo";
+                titleText.localizationName = "CouponReward";
                 break;
             case "IndieFestival2023":
                 rewardType = RewardType.Box_Speical;

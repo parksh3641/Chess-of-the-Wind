@@ -571,6 +571,8 @@ public class MatchingManager : MonoBehaviour
             rankUpView.SetActive(false);
 
             dontTouchObj.SetActive(false);
+
+            ItemAnimManager.instance.GetSeasonPass(UIManager.instance.seasonPass);
         }
     }
 
@@ -837,7 +839,7 @@ public class MatchingManager : MonoBehaviour
         matchingView.SetActive(false);
 
         SoundManager.instance.PlaySFX(GameSfxType.Wrong);
-        NotionManager.instance.UseNotion(NotionType.WaitTimeNotion);
+        NotionManager.instance.UseNotion(NotionType.TryAgainNotion);
     }
 
     public void OpenMacthingView()

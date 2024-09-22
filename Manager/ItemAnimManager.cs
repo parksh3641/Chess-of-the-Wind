@@ -12,6 +12,8 @@ public class ItemAnimManager : MonoBehaviour
 
     public ItemAnimation[] boxPieceAnimation;
 
+    public ItemAnimation seasonPassAnimation;
+
     private int random = 0;
 
     PlayerDataBase playerDataBase;
@@ -66,6 +68,10 @@ public class ItemAnimManager : MonoBehaviour
         boxPieceAnimation[(int)type].PlusItem(number);
     }
 
+    public void GetSeasonPass(int number)
+    {
+        seasonPassAnimation.PlusItem(number);
+    }
 
     [Button]
     public void GetUpgradeTicket()

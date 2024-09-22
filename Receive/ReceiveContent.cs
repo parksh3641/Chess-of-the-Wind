@@ -83,6 +83,10 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankBackgroundArray[3];
                 effect.SetActive(true);
                 break;
+            case RewardType.RemoveAds:
+                mainBackground.sprite = rankBackgroundArray[3];
+                effect.SetActive(true);
+                break;
         }
     }
 

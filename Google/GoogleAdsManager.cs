@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GoogleAdsManager : MonoBehaviour
 {
+    public static GoogleAdsManager instance;
+
+    public AdmobScreen admobScreen;
     public AdmobReward boxNR;
     public AdmobReward boxRSR;
     public AdmobReward adShop1;
@@ -17,6 +20,8 @@ public class GoogleAdsManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 

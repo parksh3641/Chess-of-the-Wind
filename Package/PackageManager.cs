@@ -167,6 +167,15 @@ public class PackageManager : MonoBehaviour
             packageContentArray2[5].gameObject.SetActive(false);
         }
 
+        if (playerDataBase.RemoveAdsCount == 0)
+        {
+            packageContentArray2[6].gameObject.SetActive(true);
+        }
+        else
+        {
+            packageContentArray2[6].gameObject.SetActive(false);
+        }
+
         CheckSpeicalShop();
     }
 
@@ -270,6 +279,11 @@ public class PackageManager : MonoBehaviour
 
                 ResetManager.instance.SetResetInfo(ResetType.Package_ShopWeekly3);
                 break;
+            case PackageType.RemoveAds:
+                if (playerDataBase.RemoveAdsCount > 0) return;
+
+                packageContentArray2[6].Locked();
+                break;
         }
 
         gold = 0;
@@ -336,6 +350,9 @@ public class PackageManager : MonoBehaviour
                 case RewardType.GoldShop3:
                     gold += Random.Range(50000, 1000001);
 
+                    break;
+                case RewardType.RemoveAds:
+                    PlayfabManager.instance.PurchaseRemoveAds();
                     break;
             }
         }
