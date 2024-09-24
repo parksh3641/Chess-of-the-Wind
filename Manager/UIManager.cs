@@ -271,6 +271,39 @@ public class UIManager : MonoBehaviour
         Debug.Log("메인화면 갱신");
     }
 
+    [Button]
+    public void TestLoginUI()
+    {
+        loginView.SetActive(true);
+        mainView.SetActive(false);
+
+        loginUI.SetActive(false);
+
+        for (int i = 0; i < loginButtonList.Length; i++)
+        {
+            loginButtonList[i].SetActive(false);
+        }
+
+        loginUI.SetActive(true);
+
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
+        loginButtonList[0].SetActive(true);
+#else
+            loginButtonList[0].SetActive(false);
+#endif
+
+#if UNITY_ANDROID
+        loginButtonList[1].SetActive(true);
+#elif UNITY_IOS
+            loginButtonList[2].SetActive(true);
+#endif
+        if (GameStateManager.instance.StoreType == StoreType.OneStore)
+        {
+            loginButtonList[0].SetActive(true);
+            loginButtonList[1].SetActive(false);
+        }
+    }
+
     public void SetLoginUI()
     {
         loginUI.SetActive(false);

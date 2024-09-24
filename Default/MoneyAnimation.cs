@@ -85,7 +85,7 @@ public class MoneyAnimation : MonoBehaviour
             heartPrefabList_Enemy.Add(monster);
         }
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             MoneyContent monster = Instantiate(moneyPrefab);
             monster.transform.SetParent(moneyTransform);
